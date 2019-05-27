@@ -6,7 +6,7 @@
 </template>
 <script>
 // import FilterButtonGroup from './components/FilterButtonGroup';
-import HomeLayout from './components/DetailsLayout.vue';
+import HomeLayout from './components/DetailsLayout';
 import NavMenu from './NavMenu';
 
 export default {

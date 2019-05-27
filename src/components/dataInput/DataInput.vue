@@ -140,8 +140,8 @@
 </template>
 
 <script>
-import { Rect, Canvas, rectDataContent } from "./move.js";
-import dataTable from "./dataTable";
+import { Rect, Canvas, rectDataContent } from './move.js';
+import dataTable from './dataTable';
 import {
   debounce,
   scan,
@@ -150,7 +150,7 @@ import {
   getNameList,
   insertImg,
   postPicFetch
-} from "../utils";
+} from '../utils';
 import {
   Row,
   Col,
@@ -159,37 +159,37 @@ import {
   Message,
   MessageBox,
   Progress
-} from "element-ui";
-import Vue from "vue";
-import Vlf from "vlf";
+} from 'element-ui';
+import Vue from 'vue';
+import Vlf from 'vlf';
 Vue.use(Row);
 Vue.use(Col);
 Vue.use(Button);
 Vue.use(Card);
 Vue.use(Progress);
 Vue.use(Vlf);
-import loadingC from "../loading.vue";
+import loadingC from '../loading.vue';
 const showServerList = () => ({
-  component: import(/* webpackChunkName: "showServerList" */ "./showServerList.vue"),
+  component: import(/* webpackChunkName: "showServerList" */ './showServerList.vue'),
   loading: loadingC,
   error: loadingC,
   delay: 200,
   timeout: 5000
 });
 export default {
-  name: "DataInput",
+  name: 'DataInput',
   components: {
     dataTable,
     showServerList
   },
   data() {
     return {
-      show: "none",
+      show: 'none',
       canvasWidth: 960,
       canvasHeight: 480,
       hwRadio: 9 / 16, //canvas容器的宽高比
       clipNum: 0, //画框的参数
-      nowHero: "", //当前角色的名字
+      nowHero: '', //当前角色的名字
       settingButtonsShow: false,
       settingModeButtonsShow: false,
       nowModeTempNum: 0,
@@ -199,7 +199,7 @@ export default {
       picData: [],
       scanPercentage: 0,
       loading: false,
-      laodingText: "",
+      laodingText: '',
       nameList: [],
       listsShow: false
     };
@@ -238,20 +238,20 @@ export default {
     }
   },
   async mounted() {
-    this.$emit("load");
-    this.canvas = new Canvas(this.$el.querySelector("canvas"));
+    this.$emit('load');
+    this.canvas = new Canvas(this.$el.querySelector('canvas'));
     this.$refs.dataTable.loadLocalData();
     this.loadLocalPic();
     this.calCanvasSize();
     this.nowModeTempNum =
-      (await this.$vlf.getItem("mode")) || this.nowModeTempNum;
+      (await this.$vlf.getItem('mode')) || this.nowModeTempNum;
     //调整canvas的大小
-    window.addEventListener("resize", throttle(this.calCanvasSize, 70));
+    window.addEventListener('resize', throttle(this.calCanvasSize, 70));
     //监听文件上传
-    const uploadEl = this.$el.querySelector("#uploadPic");
-    uploadEl.addEventListener("change", () => {
+    const uploadEl = this.$el.querySelector('#uploadPic');
+    uploadEl.addEventListener('change', () => {
       this.draw(uploadEl.files[0]);
-      this.show = "block";
+      this.show = 'block';
     });
     this.getNameList();
   },
@@ -259,9 +259,9 @@ export default {
     //移出*************************************************
     insertServerImgs(lists) {
       for (let pic of lists) {
-        const container = document.body.querySelector("#" + pic.name),
+        const container = document.body.querySelector('#' + pic.name),
           img = new Image();
-        img.style.width = "100%";
+        img.style.width = '100%';
         img.src = pic.url;
         if (container.childNodes.length > 0) {
           container.childNodes.forEach(node => node.remove());
@@ -272,15 +272,15 @@ export default {
     editServerData(data) {
       this.$refs.dataTable.loadData(data).then(
         Message({
-          type: "info",
-          message: "读取服务器数据成功"
+          type: 'info',
+          message: '读取服务器数据成功'
         })
       );
     },
     //移出*************************************************
     changeHeroName(e) {
       this.nowHero = e;
-      console.log("更名为  " + e);
+      console.log('更名为  ' + e);
     },
     //移出*************************************************
     getNameList() {
@@ -297,16 +297,16 @@ export default {
     },
     //移出*************************************************
     loadLocalPic() {
-      return this.$vlf.getItem("picData").then(data => {
+      return this.$vlf.getItem('picData').then(data => {
         if (!data) return;
         this.picData = data;
         for (let [key, blob] of Object.entries(data)) {
-          if (key.indexOf("pic-") !== 0) break;
+          if (key.indexOf('pic-') !== 0) break;
           const name = key.slice(4);
           const imgContainer = new Image();
-          imgContainer.style.width = "100%";
+          imgContainer.style.width = '100%';
           imgContainer.src = URL.createObjectURL(blob);
-          const container = document.querySelector("#" + name);
+          const container = document.querySelector('#' + name);
           if (container.childNodes.length > 0) {
             container.childNodes.forEach(node => node.remove());
           }
@@ -316,21 +316,21 @@ export default {
     },
     changeMode() {
       const modeTempNum = this.nowModeTempNum;
-      this.$vlf.setItem("mode", modeTempNum);
+      this.$vlf.setItem('mode', modeTempNum);
       this.settingModeButtonsShow = false;
     },
     async checkSoulBurn(id) {
       console.log(id);
       const targetR = this.canvas.content.find(
-        rect => rect.id === "scan-skill-description"
+        rect => rect.id === 'scan-skill-description'
       );
       if (!targetR) {
-        console.error("没框，你没选技能");
+        console.error('没框，你没选技能');
         return;
       }
       const temp = new Rect(this.canvas, {
-        id: "scan-skill-soulBurn",
-        name: "soulBurn",
+        id: 'scan-skill-soulBurn',
+        name: 'soulBurn',
         x: targetR.x,
         y: targetR.y + targetR.height,
         width: 300,
@@ -348,8 +348,8 @@ export default {
       const arr = [];
       if (!this.nameList) {
         Message({
-          type: "info",
-          message: "获取列表失败，或者还没有录入任何数据"
+          type: 'info',
+          message: '获取列表失败，或者还没有录入任何数据'
         });
         return;
       }
@@ -360,32 +360,32 @@ export default {
       const h = this.$createElement;
       let cancel = false;
       await MessageBox({
-        title: "确认内容",
-        message: h("p", null, [
+        title: '确认内容',
+        message: h('p', null, [
           h(
-            "p",
-            { style: "color: red" },
-            "+++名字+++Importan!     " + JSON.stringify(data.base.name)
+            'p',
+            { style: 'color: red' },
+            '+++名字+++Importan!     ' + JSON.stringify(data.base.name)
           ),
           h(
-            "p",
-            { style: "color: teal" },
-            "属性  " + JSON.stringify(data.base.element)
+            'p',
+            { style: 'color: teal' },
+            '属性  ' + JSON.stringify(data.base.element)
           ),
           h(
-            "p",
-            { style: "color: teal" },
-            "星级  " + JSON.stringify(data.base.stars)
+            'p',
+            { style: 'color: teal' },
+            '星级  ' + JSON.stringify(data.base.stars)
           ),
           h(
-            "p",
-            { style: "color: teal" },
-            "职业  " + JSON.stringify(data.base.class)
+            'p',
+            { style: 'color: teal' },
+            '职业  ' + JSON.stringify(data.base.class)
           )
         ]),
         showCancelButton: true,
-        confirmButtonText: "确定",
-        cancelButtonText: "取消"
+        confirmButtonText: '确定',
+        cancelButtonText: '取消'
       })
         .then(() => postData(data))
         .then(option => {
@@ -393,8 +393,8 @@ export default {
         })
         .catch(err => {
           Message({
-            type: "info",
-            message: "取消上传"
+            type: 'info',
+            message: '取消上传'
           });
           cancel = true;
         });
@@ -402,106 +402,106 @@ export default {
       // console.log(this.picData)
       for (let [key, blob] of Object.entries(this.picData)) {
         const formblob = new FormData();
-        formblob.append("name", data.base.name + "-" + key);
-        formblob.append("avatar", blob);
+        formblob.append('name', data.base.name + '-' + key);
+        formblob.append('avatar', blob);
         try {
           await postPicFetch(formblob);
         } catch (error) {
           console.log(error);
           Message({
-            type: "error",
-            message: "上传失败"
+            type: 'error',
+            message: '上传失败'
           });
           return;
         }
       }
       Message({
-        type: "success",
-        message: "全部上传成功"
+        type: 'success',
+        message: '全部上传成功'
       });
-      this.$vlf.removeItem("heroData"); //全部上传成功，清空缓存
-      this.$vlf.removeItem("picData");
+      this.$vlf.removeItem('heroData'); //全部上传成功，清空缓存
+      this.$vlf.removeItem('picData');
       this.getNameList();
     },
     async recognize() {
       this.canCheck = false;
       const self = this,
         img = this.img,
-        scanArr = this.canvas.content.filter(rect => rect.id.match("scan")),
+        scanArr = this.canvas.content.filter(rect => rect.id.match('scan')),
         switchDefault = this.nowMode.switch,
         loadingOption = {
           lock: true,
-          text: "识别中，稍等",
-          spinner: "el-icon-loading",
-          background: "rgba(0, 0, 0, 0.7)"
+          text: '识别中，稍等',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
         };
       this.scanPercentage = 0;
       this.loading = true;
-      this.laodingText = "识别中";
+      this.laodingText = '识别中';
       await scan({
         scanArr,
         switchDefault,
         img,
         self: this
       }).then(resArr => {
-        this.laodingText = "完成";
+        this.laodingText = '完成';
         setTimeout(() => {
           this.loading = false;
         }, 500);
-        console.log("扫完");
+        console.log('扫完');
         console.log(resArr);
         const table = this.$refs.dataTable;
         for (const res of resArr) {
           switch (res.name) {
-            case "one":
-              table.dataPartOne = res.obj;
-              this.nowHero = res.obj.name;
-              table.activeName = "first";
+          case 'one':
+            table.dataPartOne = res.obj;
+            this.nowHero = res.obj.name;
+            table.activeName = 'first';
+            break;
+          case 'two':
+            table.dataPartTwo = res.obj;
+            break;
+          case 'threePart1':
+            table.dataPartThree.missionName = res.obj.name;
+            table.dataPartThree.missionDesc = res.obj.description;
+            break;
+          case 'threePart2':
+            table.dataPartThree.command = res.obj.command;
+            table.dataPartThree.charm = res.obj.charm;
+            table.dataPartThree.politics = res.obj.politics;
+            break;
+          case 'threePart3':
+            table.dataPartThree.background = res.obj.background;
+            break;
+          case 'skill':
+            table.activeName = 'fourth';
+            let skill = table.dataPartFour[res.obj.id];
+            switch (res.obj.part) {
+            case 0:
+              skill.desc = res.obj.description;
+              skill.name = res.obj.name;
+              skill.soul = res.obj.soul;
+              skill.cd = res.obj.cd;
               break;
-            case "two":
-              table.dataPartTwo = res.obj;
+            case 1:
+              skill.update = res.obj.update;
               break;
-            case "threePart1":
-              table.dataPartThree.missionName = res.obj.name;
-              table.dataPartThree.missionDesc = res.obj.description;
+            case 2:
+              table.soulburn.expend = res.obj.expend;
+              table.soulburn.desc = res.obj.description;
+              this.$nextTick().then(() => {
+                console.log(res.obj.expend);
+              });
               break;
-            case "threePart2":
-              table.dataPartThree.command = res.obj.command;
-              table.dataPartThree.charm = res.obj.charm;
-              table.dataPartThree.politics = res.obj.politics;
-              break;
-            case "threePart3":
-              table.dataPartThree.background = res.obj.background;
-              break;
-            case "skill":
-              table.activeName = "fourth";
-              let skill = table.dataPartFour[res.obj.id];
-              switch (res.obj.part) {
-                case 0:
-                  skill.desc = res.obj.description;
-                  skill.name = res.obj.name;
-                  skill.soul = res.obj.soul;
-                  skill.cd = res.obj.cd;
-                  break;
-                case 1:
-                  skill.update = res.obj.update;
-                  break;
-                case 2:
-                  table.soulburn.expend = res.obj.expend;
-                  table.soulburn.desc = res.obj.description;
-                  this.$nextTick().then(() => {
-                    console.log(res.obj.expend);
-                  });
-                  break;
-              }
-              table.activeSkillName = "skill" + res.obj.id;
+            }
+            table.activeSkillName = 'skill' + res.obj.id;
           }
         }
         const isUplaod = this.nameList.find(item => item.name === this.nowHero);
         if (isUplaod) {
           Message({
-            type: "warning",
-            message: "已经录入过了，不是修改数据的话，不要随便再上传了"
+            type: 'warning',
+            message: '已经录入过了，不是修改数据的话，不要随便再上传了'
           });
         }
       });
@@ -510,21 +510,21 @@ export default {
       const hasUpload = this.nameList.find(name => name === this.nowHero);
       if (hasUpload) {
         Message({
-          type: "warning",
-          message: "这个已经录入了，建议你换一个录入"
+          type: 'warning',
+          message: '这个已经录入了，建议你换一个录入'
         });
       }
       this.cutImg();
     },
     cutImg(img) {
-      const arr = this.canvas.content.filter(rect => rect.id.match("pic"));
+      const arr = this.canvas.content.filter(rect => rect.id.match('pic'));
       if (arr.length === 0) return;
       return insertImg(arr, this.img)
         .then(obj => {
-          console.log("扫图完成");
+          console.log('扫图完成');
           this.picData[obj.id] = obj.blob;
           console.log(this.picData);
-          this.$vlf.setItem("picData", this.picData);
+          this.$vlf.setItem('picData', this.picData);
         })
         .catch(err => console.error(err));
     },
@@ -543,7 +543,7 @@ export default {
         const data = Sarray[i],
           temp = new Rect(this.canvas, data);
         this.canvas.addItem(temp);
-        console.log(i + "sarr");
+        console.log(i + 'sarr');
       }
       for (let i in Parray) {
         const data = Parray[i],
@@ -581,7 +581,7 @@ export default {
     },
     calCanvasSize() {
       //转到canvas类里算
-      this.canvasWidth = this.$el.querySelector("#drop-box").clientWidth;
+      this.canvasWidth = this.$el.querySelector('#drop-box').clientWidth;
       this.canvasHeight = this.canvasWidth * this.hwRadio;
       this.canvas.resize(this.canvasWidth, this.canvasHeight);
       this.$nextTick().then(() => {
@@ -590,16 +590,16 @@ export default {
     },
     draw(file) {
       const reader = new FileReader();
-      if (typeof file === "undefined") {
+      if (typeof file === 'undefined') {
         console.log(typeof file);
         return;
       }
       reader.readAsDataURL(file);
-      reader.addEventListener("load", () => {
+      reader.addEventListener('load', () => {
         const ctx = this.ctx,
           img = (this.img = new Image());
         img.src = reader.result;
-        img.classList.add("img");
+        img.classList.add('img');
         img.onload = () => {
           this.canvas.addBg(img);
           console.log(img.height);
@@ -608,7 +608,7 @@ export default {
           // this.canvasHeight = this.canvas.height;
           this.calCanvasSize();
           //移动端点击适配
-          console.log(this.offsetTop + "    " + this.offsetLeft);
+          console.log(this.offsetTop + '    ' + this.offsetLeft);
           this.canvas.Top = this.offsetTop;
           this.canvas.Left = this.offsetLeft;
         };
@@ -620,15 +620,14 @@ export default {
       const dt = e.dataTransfer,
         file = dt.files[0];
       console.log(file);
-      if (typeof file === "undefined") {
+      if (typeof file === 'undefined') {
         console.log(typeof file);
         return;
       }
-      this.show = "block";
+      this.show = 'block';
       this.draw(file);
     },
     dragstop(e) {
-      // console.log("??????");
       e.stopPropagation();
       e.preventDefault();
     }

@@ -24,7 +24,6 @@ export default {
     };
   },
   mounted() {
-    console.log('???');
     this.getData().then(data => {
       this.data = data;
       this.load = true;

@@ -35,18 +35,18 @@
                   :style="tagHit(item.class) ? 'background-color: #fff': ''"
                 >
                   <el-tag
-                    :type="tagHit(item.class) ? 'warning' : ''"
+                    :type="tagHit(item.position) ? 'warning' : ''"
                     size="mini"
-                  >{{changeClassShort(item.class)}}</el-tag>
+                  >{{item.position === '远程位' ? '远' : '近'}}</el-tag>
                 </div>
                 <div
                   class="tag-container"
                   :style="tagHit(item.class) ? 'background-color: #fff': ''"
                 >
                   <el-tag
-                    :type="tagHit(item.position) ? 'warning' : ''"
+                    :type="tagHit(item.class) ? 'warning' : ''"
                     size="mini"
-                  >{{item.position === '远程位' ? '远' : '近'}}</el-tag>
+                  >{{changeClassShort(item.class)}}</el-tag>
                 </div>
               </div>
             </div>
@@ -66,8 +66,8 @@
 </template>
 
 <script>
-import Image from 'element-ui/packages/image/index.js';
-import { Tag } from 'element-ui';
+// import Image from 'element-ui/packages/image/index.js';
+import { Tag, Image } from 'element-ui';
 import Vue from 'vue';
 import { path, getClass_Short } from '../utils';
 
@@ -200,6 +200,9 @@ export default {
   .img-container {
     width: calc(85px + 1vw);
     height: calc(85px + 1vw);
+  }
+  .tag-wrapper-2 {
+    width: 30px;
   }
 }
 @media screen and (max-width: 400px) {

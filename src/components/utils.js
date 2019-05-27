@@ -197,7 +197,6 @@ const getNameList = () => {
 };
 
 const getProfileList = () => {
-  console.log('/???');
   return fetchGet('/api/arknights/data/shortList')
     .then(res => fetchGet('https' + res.url.slice(4)))
     // .fetchGet(url)
@@ -347,26 +346,76 @@ const TagsArr = [
   { 'text': '召唤', 'value': '召唤', 'short': '召唤' },
   { 'text': '控场', 'value': '控场', 'short': '控场' }];
 
-// const tags = ['治疗',
-//   '支援',
-//   '新手',
-//   '费用回复',
-//   '输出',
-//   '生存',
-//   '防护',
-//   '群攻',
-//   '减速',
-//   '削弱',
-//   '快速复活',
-//   '位移',
-//   '召唤',
-//   '控场',
-// ];
-// tags.forEach(el => {
-//   TagsArr.push({ text: el, value: el, short: el });
-// });
 
 const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
+
+
+const evolveGoldCost = [
+  [
+    -1,
+    -1
+  ],
+  [
+    -1,
+    -1
+  ],
+  [
+    10000,
+    -1
+  ],
+  [
+    15000,
+    60000
+  ],
+  [
+    20000,
+    120000
+  ],
+  [
+    30000,
+    180000
+  ]
+];
+
+const changeDesc = (desc) => {
+  const reg1 = /(<\/>)/g,
+    reg2 = /\\n/g,
+    ccVup = /(<@cc.vup>)/g,
+    ccVdown = /(<@cc.vdown>)/g,
+    ccRem = /(<@cc.rem>)/g,
+    ccKw = /(<@cc.kw>)/g,
+    ccPn = /(<@cc.pn>)/g,
+    ccTalpu = /(<@cc.talpu>)/g,
+    baVup = /(<@ba.vup>)/g,
+    baVdown = /(<@ba.vdown>)/g,
+    baRem = /(<@ba.rem>)/g,
+    baKw = /(<@ba.kw>)/g,
+    baTalpu = /(<@ba.talpu>)/g,
+    baPn = /(<@ba.pn>)/g;
+
+  if (!reg1.test(desc)) return desc;
+  desc = desc
+    .replace(reg1, '</i>')
+    .replace(reg2, '<br/>')
+    .replace(ccVup, '<i style="color=#0098DC;font-style: normal;>')
+    .replace(ccVdown, '<i style="color:#FF6237;font-style: normal;">')
+    .replace(ccRem, '<i style="color:#F49800;font-style: normal;">')
+    .replace(ccKw, '<i style="color:#00B0FF;font-style: normal;">')
+    .replace(ccPn, '<i style="color:#FF6237;">')
+    .replace(ccTalpu, '<i style="color:#FF6237;font-style: normal;">')
+    .replace(baVup, '<i style="color:#F49800;font-style: normal;">')
+    .replace(baVdown, '<i style="color:#FF6237;font-style: normal;">')
+    .replace(baRem, '<i style="color:#F49800;font-style: normal;">')
+    .replace(baKw, '<i style="color:#00B0FF;font-style: normal;">')
+    .replace(baTalpu, '<i style="color:#F49800;font-style: normal;">')
+    .replace(baPn, '<i style="color:#FF6237;">');
+
+
+
+
+  return desc;
+};
+
 
 export {
   debounce,
@@ -388,7 +437,9 @@ export {
   path,
   getClass_Short,
   class_chinese,
-  fetchGet
+  fetchGet,
+  evolveGoldCost,
+  changeDesc
 };
 
 

@@ -126,7 +126,6 @@ export default {
       this.skillPicArr.set(name, file);
     },
     dragstop(e) {
-      // console.log("??????");
       e.stopPropagation();
       e.preventDefault();
     },

@@ -222,8 +222,8 @@
 
 <script>
 // import testData from "./testData.js";
-import heroBaseData from "./heroBaseData";
-import StarChose from "./StarChose";
+import heroBaseData from './heroBaseData';
+import StarChose from './StarChose';
 
 // console.log(heroBaseData);
 import {
@@ -238,9 +238,9 @@ import {
   Tabs,
   TabPane,
   Message
-} from "element-ui";
-import draggable from "vuedraggable";
-import Vue from "vue";
+} from 'element-ui';
+import draggable from 'vuedraggable';
+import Vue from 'vue';
 Vue.use(Input);
 Vue.use(Select);
 Vue.use(Switch);
@@ -257,8 +257,8 @@ const statsRules = (data, str) => {
   console.log(str);
   for (let t of data[str]) {
     arr[t.id] = [
-      { type: "number", message: "必须为数字值", trigger: "blur" },
-      { required: true, message: "不能为空", trigger: "blur" }
+      { type: 'number', message: '必须为数字值', trigger: 'blur' },
+      { required: true, message: '不能为空', trigger: 'blur' }
     ];
   }
   console.log(arr);
@@ -269,29 +269,29 @@ const skillRules = () => {
     skillArr = [];
 
   for (let i = 0; i < 3; i++) {
-    skillArr.push("skill" + i + "name");
-    skillArr.push("skill" + i + "description");
+    skillArr.push('skill' + i + 'name');
+    skillArr.push('skill' + i + 'description');
   }
   for (let d of skillArr) {
-    skillObj[d] = [{ required: true, message: "不能为空", trigger: "blur" }];
+    skillObj[d] = [{ required: true, message: '不能为空', trigger: 'blur' }];
   }
   return skillObj;
 };
 
 const strRules = () => {
   const strs = [
-      "name",
-      "constellation",
-      "class",
-      "element",
-      "intro",
-      "missionName",
-      "missisonDescription",
-      "background"
+      'name',
+      'constellation',
+      'class',
+      'element',
+      'intro',
+      'missionName',
+      'missisonDescription',
+      'background'
     ],
     strObj = {};
   for (let t of strs) {
-    strObj[t] = [{ required: true, message: "不能为空", trigger: "change" }];
+    strObj[t] = [{ required: true, message: '不能为空', trigger: 'change' }];
   }
   return strObj;
 };
@@ -304,16 +304,16 @@ export default {
   data() {
     return {
       starPanel: false,
-      activeName: "first",
-      activeSkillName: "skill1",
+      activeName: 'first',
+      activeSkillName: 'skill1',
       baseData: heroBaseData,
       dragDisabled: true,
       dataPartOne: {
-        name: "",
+        name: '',
         stars: 5,
-        class: "",
-        element: "",
-        intro: ""
+        class: '',
+        element: '',
+        intro: ''
       },
       dataPartTwo: {
         CP: 0,
@@ -327,18 +327,18 @@ export default {
         effectResistance: 0
       },
       dataPartThree: {
-        missionName: "",
-        missionDesc: "",
+        missionName: '',
+        missionDesc: '',
         command: 0,
         charm: 0,
         politics: 0,
-        background: ""
+        background: ''
       },
       dataPartFour: {
         0: {
           id: 0,
-          name: "",
-          desc: "",
+          name: '',
+          desc: '',
           soulburn: false,
           cd: 0,
           soul: 0,
@@ -346,8 +346,8 @@ export default {
         },
         1: {
           id: 1,
-          name: "",
-          desc: "",
+          name: '',
+          desc: '',
           soulburn: false,
 
           cd: 0,
@@ -356,15 +356,15 @@ export default {
         },
         2: {
           id: 2,
-          name: "",
-          desc: "",
+          name: '',
+          desc: '',
           soulburn: false,
           cd: 0,
           soul: 0,
           update: []
         }
       },
-      soulburn: { id: 0, expend: 10, desc: "" },
+      soulburn: { id: 0, expend: 10, desc: '' },
 
       sbDisabled: [false, false, false]
     };
@@ -375,11 +375,9 @@ export default {
   },
   computed: {},
   methods: {
-    deleteUpdate() {
-      console.log("????????????");
-    },
+    deleteUpdate() {},
     changeName() {
-      this.$emit("changeName", this.dataPartOne.name);
+      this.$emit('changeName', this.dataPartOne.name);
     },
 
     saveDataInLocal() {
@@ -389,24 +387,24 @@ export default {
         stats: this.dataPartTwo,
         skills: { ...this.dataPartFour, soulburn: this.soulburn }
       };
-      this.$vlf.setItem("heroData", data);
-      localStorage.setItem("heroData", JSON.stringify(data));
+      this.$vlf.setItem('heroData', data);
+      localStorage.setItem('heroData', JSON.stringify(data));
     },
     async loadLocalData() {
       // const dataStr = localStorage.getItem("heroData");
-      const data = await this.$vlf.getItem("heroData");
+      const data = await this.$vlf.getItem('heroData');
       if (!data) return;
       this.loadData(data)
         .then(() => {
           Message({
-            type: "info",
-            message: "读取缓存数据成功"
+            type: 'info',
+            message: '读取缓存数据成功'
           });
         })
         .catch(err => {
           Message({
-            type: "error",
-            message: "读取缓存数据异常: " + err
+            type: 'error',
+            message: '读取缓存数据异常: ' + err
           });
         });
     },
@@ -427,7 +425,7 @@ export default {
           reject(error);
           return;
         }
-        console.log("读取数据成功");
+        console.log('读取数据成功');
         resolve();
       });
     },
@@ -448,8 +446,8 @@ export default {
       }
       if (!soulburn) {
         Message({
-          type: "error",
-          message: "还没选灵魂燃烧"
+          type: 'error',
+          message: '还没选灵魂燃烧'
         });
         return;
       }
@@ -457,11 +455,11 @@ export default {
       const checkData = data => {
         console.log(data);
         for (const [key, value] of Object.entries(data)) {
-          if (value === "" || value === 0 || value === undefined) {
-            console.log("key: " + key);
+          if (value === '' || value === 0 || value === undefined) {
+            console.log('key: ' + key);
             Message({
-              type: "error",
-              message: "任务和背景还没录" + key + "  现在为  " + value
+              type: 'error',
+              message: '任务和背景还没录' + key + '  现在为  ' + value
             });
             check = false;
             return;
@@ -476,18 +474,18 @@ export default {
         for (const [key, value] of Object.entries(data)) {
           // console.log("key: " + key);
           // console.log(value);
-          if (key === "rate") continue;
+          if (key === 'rate') continue;
 
-          if (value === "") {
+          if (value === '') {
             Message({
-              type: "error",
-              message: "技能" + i++ + "还没录" + key
+              type: 'error',
+              message: '技能' + i++ + '还没录' + key
             });
             check = false;
             return;
           }
           if (value && Object.keys(value).length > 1) {
-            console.log("_______________________key" + key);
+            console.log('_______________________key' + key);
             console.log(value);
             checkSkill(value);
           }
@@ -503,7 +501,7 @@ export default {
         skills: { ...this.dataPartFour, soulburn: this.soulburn }
       };
 
-      this.$emit("uploadData", data);
+      this.$emit('uploadData', data);
     },
     changeStar(e) {
       this.dataPartOne.stars = e;
@@ -511,7 +509,7 @@ export default {
       this.starResovle && this.starResovle();
     },
     clearSoulBurnArr(i, sbDisabled) {
-      console.log("?????????");
+      console.log('?????????');
       const skill = this.dataPartFour,
         arr = [0, 1, 2];
       if (skill[i].soulburn.true) {
@@ -524,11 +522,11 @@ export default {
     clearSoulBurn(state, id) {
       // console.log(state);
       // this.dataPartFour["soulburn" + 1].soulburn = null;
-      console.log("match" + id);
+      console.log('match' + id);
       if (!this.nowChose) {
         Message({
-          type: "error",
-          message: "还没选技能"
+          type: 'error',
+          message: '还没选技能'
         });
         this.dataPartFour[id].soulburn = false;
         return;
@@ -536,18 +534,18 @@ export default {
       let t = this.nowChose.match(id + 1) === null;
       if (t) {
         Message({
-          type: "error",
-          message: "你现在扫的图和你要识别的灵魂燃烧所在的图不是一样的"
+          type: 'error',
+          message: '你现在扫的图和你要识别的灵魂燃烧所在的图不是一样的'
         });
         this.dataPartFour[id].soulburn = false;
         return;
       }
       if (state) {
-        this.$emit("checkSoulBurn", id);
+        this.$emit('checkSoulBurn', id);
       }
       let i = 0; //循环次数
       while (i < 2) {
-        id++ < 2 ? "" : (id = 0);
+        id++ < 2 ? '' : (id = 0);
         this.sbDisabled[id] = state;
         i++;
       }
