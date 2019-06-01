@@ -1,8 +1,22 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
+
 module.exports = merge(common, {
   mode: 'production',
+  // plugins: [
+  //   new ExtractTextPlugin('styles.css'),
+  //   new OptimizeCssAssetsPlugin({
+  //     assetNameRegExp: /\.optimize\.css$/g,
+  //     cssProcessor: require('cssnano'),
+  //     cssProcessorPluginOptions: {
+  //       preset: ['default', { discardComments: { removeAll: true } }],
+  //     },
+  //     canPrint: true
+  //   })
+  // ],
   optimization: {
     minimizer: [
 
@@ -23,4 +37,12 @@ module.exports = merge(common, {
       }),
     ],
   },
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.css$/,
+  //       loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+  //     }
+  //   ]
+  // }
 });

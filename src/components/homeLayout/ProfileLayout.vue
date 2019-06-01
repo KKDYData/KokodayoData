@@ -1,6 +1,6 @@
 <template>
   <div>
-    <transition-group name="flip-list" tag="div" class="profile-container">
+    <div class="profile-container">
       <div
         class="profile-item"
         @click="openDetails(item)"
@@ -61,7 +61,7 @@
         </div>
       </div>
       <div class="fill-item img-container" v-for="item in fillItems" :key="item"></div>
-    </transition-group>
+    </div>
   </div>
 </template>
 

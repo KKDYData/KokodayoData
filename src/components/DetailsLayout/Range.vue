@@ -1,5 +1,5 @@
 <template>
-  <div v-if="girdTable" class="gird-container">
+  <div v-if="girdTable" class="gird-container" :style="containerWidth">
     <div class="gird-row" v-for="row in rows" :key="row">
       <div :style="width" :class="rangeHit(row, col)" v-for="col in cols" :key="col">
         <!-- <div :class>{{row}} : {{col}} {{}} |</div> -->
@@ -27,13 +27,18 @@ export default {
     };
   },
   computed: {
+    containerWidth() {
+      const width =
+        this.cols.length > 2 ? 'auto' : 50 * this.cols.length + 'px';
+      return {
+        width: width
+      };
+    },
     rows() {
-      return this.isRotate
-        ? this.girdTable.cols.reverse()
-        : this.girdTable.rows;
+      return this.girdTable.rows;
     },
     cols() {
-      return this.isRotate ? this.girdTable.rows : this.girdTable.cols;
+      return this.girdTable.cols;
     },
     girdTable() {
       const data = this.data ? this.data : this.rangeData;

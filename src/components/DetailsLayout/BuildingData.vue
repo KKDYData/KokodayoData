@@ -111,6 +111,7 @@ export default {
   display: inline-block;
   flex-grow: 1;
   padding-right: 10px;
+  width: calc(300px + 5%);
 }
 
 .talent-desc-change-button {

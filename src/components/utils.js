@@ -397,7 +397,7 @@ const changeDesc = (desc) => {
   desc = desc
     .replace(reg1, '</i>')
     .replace(reg2, '<br/>')
-    .replace(ccVup, '<i style="color=#0098DC;font-style: normal;>')
+    .replace(ccVup, '<i style="color:#0098DC;font-style: normal;">')
     .replace(ccVdown, '<i style="color:#FF6237;font-style: normal;">')
     .replace(ccRem, '<i style="color:#F49800;font-style: normal;">')
     .replace(ccKw, '<i style="color:#00B0FF;font-style: normal;">')
@@ -414,6 +414,17 @@ const changeDesc = (desc) => {
 
 
   return desc;
+};
+
+const potentialToStatus = {
+  0: 'maxHp',
+  1: 'atk',
+  2: 'def',
+  3: 'magicResitance',
+  4: 'cost',
+  5: 'blockCnt',
+  7: 'baseAttackTime',
+  21: 'respawnTime'
 };
 
 
@@ -439,7 +450,8 @@ export {
   class_chinese,
   fetchGet,
   evolveGoldCost,
-  changeDesc
+  changeDesc,
+  potentialToStatus
 };
 
 

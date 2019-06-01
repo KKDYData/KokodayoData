@@ -131,7 +131,7 @@ export default {
 
 .talent-desc-change-button {
   position: absolute;
-  bottom: 10px;
+  bottom: -1px;
   width: 100%;
   text-align: center;
 }

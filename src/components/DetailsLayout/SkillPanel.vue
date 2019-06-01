@@ -4,7 +4,7 @@
     <div class="skill-container" v-for="(skill, index) in skills" :key="skill.name">
       <div class="skill-title">
         <div class="skill-pic-contianer">
-          <el-image style="height:100%" :src="getSkillPath(skill)" lazy>
+          <el-image style="height:100%;width:100%" :src="getSkillPath(skill)" lazy>
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -136,7 +136,7 @@ export default {
 
 .skill-container {
   border-bottom: 1px solid rgb(235, 238, 245);
-  padding-bottom: 30px;
+  padding-bottom: 38px;
   position: relative;
 }
 .group-container-title {
@@ -186,6 +186,7 @@ export default {
 }
 .skill-name-wrapper {
   text-align: center;
+  font-size: 15px;
 }
 .skill-type {
   word-break: keep-all;

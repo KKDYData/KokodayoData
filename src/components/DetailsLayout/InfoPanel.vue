@@ -1,0 +1,140 @@
+<template>
+  <div>
+    <el-card class="info-wrapper">
+      <div class="group-container-title">
+        <span>干员立绘</span>
+      </div>
+      <div class="info-char-set-wrapper">
+        <el-popover placement="top-start" :width="short ? '330': '1000'" trigger="click">
+          <el-carousel :height="short ? '350px': '1000px'" class="set-container">
+            <el-carousel-item v-for="(pic, index) in halfPic" :key="pic">
+              <p>精英化阶段{{calPhases(list[index])}}</p>
+              <p>长按或者右键可以下载</p>
+              <div>
+                <el-image class="char-set-container" :src="pic">
+                  <div slot="error" class="image-slot">
+                    <i class="el-icon-picture-outline"></i>
+                  </div>
+                </el-image>
+              </div>
+            </el-carousel-item>
+          </el-carousel>
+          <el-button slot="reference">查看立绘</el-button>
+        </el-popover>
+      </div>
+      <div class="info-base-wrapper">
+        <div class="group-container-title">
+          <span>干员资料</span>
+        </div>
+        <div class="info-draw-name">
+          <span>画师：</span>
+          <span>{{data.drawName}}</span>
+        </div>
+        <div class="info-cv-name">
+          <span>CV：</span>
+          <span>{{data.infoName}}</span>
+        </div>
+      </div>
+      <div class="info-story-wrapper">
+        <div v-for="story in data.storyTextAudio" :key="story.storyTitle">
+          <div class="info-story-title">
+            <span>
+              <b>{{story.storyTitle}}</b>
+            </span>
+          </div>
+          <div class="info-story-content-wrapper">
+            <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
+              <div class="info-story-unlock" v-if="p.unLockParam !== ''">
+                <span>解锁需要好感：</span>
+                <span>{{p.unLockParam}}</span>
+              </div>
+              <p v-html="changeText(p.storyText)"></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="info-words-wrapper">
+        <div class="group-container-title">
+          <span>干员语音</span>
+        </div>
+        <div class="info-words-container">
+          <div v-for="word in words" :key="word.charWordId">
+            <div>
+              <span>
+                <b>{{word.voiceTitle}}</b>
+              </span>
+            </div>
+            <p>{{word.voiceText}}</p>
+          </div>
+        </div>
+      </div>
+    </el-card>
+  </div>
+</template>
+
+<script>
+import { path } from '../utils';
+import { Carousel, CarouselItem } from 'element-ui';
+import Vue from 'vue';
+Vue.use(Carousel);
+Vue.use(CarouselItem);
+
+export default {
+  props: {
+    data: {
+      required: true
+    },
+    list: {
+      required: true
+    },
+    short: {
+      required: true
+    },
+    words: {
+      required: true
+    }
+  },
+  data() {
+    return {
+      phases: 1
+    };
+  },
+
+  computed: {
+    halfPic() {
+      if (this.data.charID) {
+        const res = [];
+        this.list.forEach(index => {
+          res.push(
+            path + 'char/set/' + this.data.charID + '_' + index + '.png'
+          );
+        });
+        return res;
+      }
+    }
+  },
+  methods: {
+    changeText(str) {
+      str = str.replace(/(\n)/g, '<br />');
+      return str;
+    },
+    calPhases(index) {
+      if (index === 1) return 0;
+      else if (index === 2) return 2;
+      else return 1;
+    }
+  }
+};
+</script>
+
+
+<style  scoped>
+.info-char-set-wrapper {
+  margin-bottom: 20px;
+}
+
+.info-wrapper {
+  margin-bottom: 200px;
+}
+</style>
+

@@ -3,21 +3,23 @@
     <div class="group-container-title">技能升级消耗</div>
     <div class="skill-container" v-for="(skill, index) in unlockCond" :key="skill.name">
       <div class="skill-title">
-        <div class="skill-pic-contianer">
-          <el-image style="height:100%" :src="getSkillPath(skill.Id)" lazy>
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
+        <div class="skill-pic-container-wrapper">
+          <div>
+            <el-image class="skill-pic-contianer" :src="getSkillPath(skill.Id)" lazy>
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+            </el-image>
+            <div class="skill-name-wrapper">
+              <span>{{skills[index].levels[0].name}}</span>
             </div>
-          </el-image>
-          <div class="skill-name-wrapper">
-            <span>{{skills[index].levels[0].name}}</span>
           </div>
         </div>
         <div class="skill-tiltle-part">
-          <div class="skill-tiltle-part">
+          <div>
             <div class="skill-status">
               <span>
-                需求精英
+                需求：精英
                 <span>{{skill.data[sLevel[index]].unlockCond.phase}}</span>
                 /
                 <span>{{skill.data[sLevel[index]].unlockCond.level}}</span>
@@ -26,20 +28,23 @@
           </div>
           <div class="skill-lvUpCost-wrapper">
             <!-- 改成根据slevelcompute返回当前数据 -->
-            <div
-              class="evolvcost-item-contianer"
-              v-for="(item) in picList[index]"
-              :key="item.IconId"
-            >
-              <div style="text-align: center">
-                <el-image style="width: 50px" :src="itemPic(item.item.iconId)">
+            <div v-for="(skill, index) in picList[index]" :key="index">
+              <div>
+                <el-image
+                  class="evolvcost-item-contianer"
+                  fit="contain"
+                  :src="itemPic(skill.item.iconId)"
+                >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
                 </el-image>
-                <div class="text-align: center;">
-                  <span>X</span>
-                  <span>{{item.count}}</span>
+                <div style="text-align: center;">
+                  <span class="evolvcost-name-wrapper">{{skill.item.name}}</span>
+                  <div>
+                    <span>X</span>
+                    <span>{{skill.count}}</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -76,7 +81,6 @@ export default {
     seven: {}
   },
   mounted() {
-    console.log(this.unlockCond);
     for (let i = 0; i < this.unlockCond.length; i++) {
       this.sLevelAdd(i, 0);
     }
@@ -93,10 +97,9 @@ export default {
       for (let i = 0; i < this.skills.length; i++) {
         res.push({
           Id: this.skills[i],
-          data: [...this.allLevelCost, ...this.seven[0].levelUpCostCond]
+          data: [...this.allLevelCost, ...this.seven[i].levelUpCostCond]
         });
       }
-      console.log(res);
       return res;
     }
   },
@@ -112,8 +115,7 @@ export default {
       if (num < 0) num = 0;
       this.$set(this.sLevel, index, num);
       let p = num < 6 ? 'lvlUpCost' : 'levelUpCost';
-      this.$set(this.picList[index], 'load', false);
-      console.log(num);
+      // this.$set(this.picList[index], 'load', false);
       Promise.all(
         this.unlockCond[index].data[num][p].map(async p => {
           const item = await fetchGet(path + 'item/data/' + p.id + '.json');
@@ -124,7 +126,6 @@ export default {
           return res;
         })
       ).then(arr => {
-        console.log(arr);
         this.$set(this.picList, index, arr);
       });
     },
@@ -163,7 +164,7 @@ export default {
   position: relative;
   display: flex;
   align-items: stretch;
-  margin-top: 20px;
+  margin: 20px 0;
   justify-content: start;
   padding: 0 5px;
   width: calc(100% - 10px);
@@ -224,7 +225,7 @@ export default {
   }
   .skill-tiltle-part {
     flex-wrap: wrap;
-    padding-left: 2vw;
+    padding-left: 5vw;
     width: calc(100% - 100px);
     border: none;
   }
@@ -235,6 +236,7 @@ export default {
   }
   .skill-container {
     padding-bottom: 0px;
+    height: 200px;
   }
   .skill-range-button {
     position: absolute;
@@ -247,6 +249,10 @@ export default {
   }
   .skill-name-wrapper {
     font-size: calc(12px + 0.1vw);
+  }
+  .skill-pic-container-wrapper {
+    display: flex;
+    align-items: center;
   }
 }
 </style>

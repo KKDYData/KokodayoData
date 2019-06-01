@@ -1,9 +1,10 @@
 <template>
   <div class="details-wrapper">
+    <!-- 卡片 -->
     <el-card style=" margin-bottom: 20px; position: relative;">
       <div class="char-card-container" v-if="dataLoad">
         <div class="char-card-pic">
-          <el-image style="height:100%" :src="profile" :details="name">
+          <el-image style="height:100%;width:100%" :src="profile" :details="name">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -37,7 +38,7 @@
         <p class="intro-0">{{data.itemUsage}}</p>
         <p class="intro-1">{{data.itemDesc}}</p>
         <div class="char-camp-pic">
-          <el-image style="height:100%" :src="logo" :details="name">
+          <el-image style="height:100%;width:100%" :src="logo" :details="name">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -76,6 +77,23 @@
               <el-switch v-model="isFavor" active-text="满信赖"></el-switch>
             </div>
           </div>
+          <div class="status-potential-wrapper">
+            <span class="status-phases-text">潜能等级</span>
+            <el-button
+              @click="potentialRanks = -1"
+              size="mini"
+              round
+              :type="potentialRanks === -1 ? 'primary': ''"
+            >1</el-button>
+            <el-button
+              v-for="item in potentailUPList"
+              @click="potentialRanks = item"
+              :key="item"
+              size="mini"
+              round
+              :type="potentialRanks === item ? 'primary': ''"
+            >{{item + 2}}</el-button>
+          </div>
         </div>
         <div class="status-details-wrapper">
           <div v-for="(item, key) in status" :key="key" class="status-details-container">
@@ -84,7 +102,7 @@
                 <span>{{statusToCh(key)}}</span>
               </div>
               <div class="status-details-value">
-                <span>{{item}}</span>
+                <span v-html="item"></span>
               </div>
             </div>
           </div>
@@ -111,7 +129,7 @@
       <div class="potency-container">
         <div v-for="(item, index) in data.potentialRanks" :key="index">
           <p>
-            <span class="potency-lv">潜能{{index + 1}}级:</span>
+            <span class="potency-lv">潜能{{index + 2}}级:</span>
             {{item.description}}
           </p>
         </div>
@@ -130,23 +148,35 @@
           <span>精英阶段{{index + 1}}</span>
         </div>
         <div class="evolvcost-container">
-          <div>
-            <el-image class="cost-money" style="width: 50px" :src="itemPic('GOLD')">
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image>
-            <span>{{data.money}}</span>
-          </div>
-          <div class="evolvcost-item-contianer" v-for="item in data.items" :key="item.IconId">
-            <el-image style="width: 50px" :src="itemPic(item.item.iconId)">
+          <div style="text-align: center">
+            <el-image class="evolvcost-item-contianer" fit="contain" :src="itemPic('GOLD')">
               <div slot="error" class="image-slot">
                 <i class="el-icon-picture-outline"></i>
               </div>
             </el-image>
             <div style="text-align: center">
-              <span>X</span>
-              <span>{{item.cost}}</span>
+              <span class="evolvcost-name-wrapper">龙门币</span>
+              <div>
+                <span>X{{data.money}}</span>
+              </div>
+            </div>
+          </div>
+          <div v-for="item in data.items" :key="item.IconId">
+            <el-image
+              class="evolvcost-item-contianer"
+              fit="contain"
+              :src="itemPic(item.item.iconId)"
+            >
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+            </el-image>
+            <div style="text-align: center">
+              <span class="evolvcost-name-wrapper">{{item.item.name}}</span>
+              <div>
+                <span>X</span>
+                <span>{{item.cost}}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -158,6 +188,14 @@
     <div class="tttt" v-if="dataLoad">
       <building-data :building="data.buildingData"></building-data>
     </div>
+    <el-collapse>
+      <el-collapse-item>
+        <template slot="title">
+          <span style="direction:rtl;width: 100%">干员详细资料</span>
+        </template>
+        <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
+      </el-collapse-item>
+    </el-collapse>
     <el-card class="extra-card">
       <p>待更新</p>
     </el-card>
@@ -171,7 +209,8 @@ import {
   path,
   fetchGet,
   evolveGoldCost,
-  changeDesc
+  changeDesc,
+  potentialToStatus
 } from '../utils';
 import {
   Card,
@@ -190,6 +229,7 @@ import TalentsPanel from './TalentsPanel';
 import SkillPanel from './SkillPanel';
 import SkillUpCost from './SkillUpCost';
 import BuildingData from './BuildingData.vue';
+import InfoPanel from './InfoPanel.vue';
 
 import Vue from 'vue';
 Vue.use(Card);
@@ -217,6 +257,8 @@ export default {
         this.getSkills();
         this.getRange();
         this.getEvolveCost();
+        this.getInfo();
+        this.getWords();
         this.$set(this, 'dataLoad', true);
         // this.$nextTick();
       })
@@ -233,7 +275,8 @@ export default {
     'talents-panel': TalentsPanel,
     'skill-panel': SkillPanel,
     'skill-up-panel': SkillUpCost,
-    'building-data': BuildingData
+    'building-data': BuildingData,
+    'info-panel': InfoPanel
   },
   data() {
     return {
@@ -242,18 +285,24 @@ export default {
       picUrls: {},
       name: '',
       dataLoad: false,
-      sLevel: [1, 1, 1],
-      showTalentPotencailUP: [false, false, false],
       short: false,
       isLvMax: true,
       phases: 0,
       isFavor: true,
+      potentialRanks: -1,
       skills: [],
       rangeData: [],
-      evolveCost: { 0: {}, 1: {} }
+      evolveCost: { 0: {}, 1: {} },
+      info: {},
+      words: []
     };
   },
   computed: {
+    setList() {
+      if (!this.data) return [];
+      if (this.name === 'char_002_amiya') return [1, '1%2B', 2];
+      return this.data.rarity > 2 ? [1, 2] : [1];
+    },
     evoCostArr() {
       if (!this.data || this.data.rarity < 3) return;
       const arr = this.data.rarity === 2 ? [0] : [0, 1];
@@ -331,14 +380,33 @@ export default {
         const newData = {};
         for (let [key, value] of Object.entries(data)) {
           if (!this.statusToCh(key)) continue;
-          let nV = value;
+          let nV = value,
+            addV = 0;
           if (this.isFavor) {
             const v = this.data.favorKeyFrames[1].data[key];
             if (v !== 0) {
-              nV = value + v;
-              nV = nV + '(+' + v + ')';
+              addV += v;
+              nV += v;
             }
           }
+          this.potentailStatusUP.forEach(el => {
+            el.forEach(el => {
+              if (el.type === key) {
+                addV += el.value;
+                nV += el.value;
+              }
+            });
+          });
+
+          const upOrMinus = addV > 0 ? '+' : '';
+          if (addV)
+            nV =
+              nV +
+              '<i style="color: #F49800;font-style: normal;">(' +
+              upOrMinus +
+              '' +
+              addV +
+              ')</i>';
           if (key === 'baseAttackTime' || key === 'respawnTime')
             nV = value + ' s';
           newData[key] = nV;
@@ -346,7 +414,49 @@ export default {
         return newData;
       }
     },
+    potentailUPList() {
+      if (!this.data) return;
+      const res = [];
+      this.data.potentialRanks.forEach((el, index) => {
+        let haveValue = false;
+        if (!el.buff) return;
+        el.buff.attributes.attributeModifiers.forEach(el => {
+          if (el.attributeType) haveValue = true;
+        });
+        res.push(index);
+        return haveValue;
+      });
+      return res;
+    },
+    potentailStatusUP() {
+      const rank = this.potentialRanks;
+      const data = this.data.potentialRanks;
+      if (!data) return;
+      const res = [];
 
+      let i = 0;
+      try {
+        data.forEach(el => {
+          if (i++ > rank || !el.buff) return;
+          if (!el.buff || !el.buff.attributes.attributeModifiers)
+            throw new Error('你是假数据！' + JSON.stringify(el.buff));
+          const temp = [];
+          el.buff.attributes.attributeModifiers.forEach(el => {
+            if (!el.attributeType) return;
+            temp.push({
+              type: potentialToStatus[el.attributeType],
+              value: el.value
+            });
+            // if (!res[el.attributeType]) res[el.attributeType] = el.value;
+            // else res[el.attributeType] += el.value;
+          });
+          res.push(temp);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+      return res;
+    },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
         if (rowIndex % 2 === 0) {
@@ -423,6 +533,16 @@ export default {
           this.$set(this.evolveCost, i, data);
         });
       }
+    },
+    getInfo() {
+      fetchGet(path + 'char/info/' + this.name + '.json').then(data => {
+        this.info = data;
+      });
+    },
+    getWords() {
+      fetchGet(path + 'char/words/' + this.name + '.json').then(data => {
+        this.words = data;
+      });
     }
   }
 };
@@ -524,6 +644,7 @@ export default {
 .char-card-pro-pic {
   vertical-align: middle;
   width: 40px;
+  height: 40px;
 }
 
 /*  */
@@ -550,8 +671,9 @@ export default {
 }
 .status-phases-wrapper {
   padding: 12px 0;
-  left: calc(50% + 10px);
-  width: 220px;
+}
+.status-potential-wrapper {
+  margin-top: 10px;
 }
 .status-phases-text {
   padding-right: 10px;
@@ -559,6 +681,21 @@ export default {
 .status-phases-lv {
   padding-left: 47px;
   padding-top: 10px;
+}
+
+.status-favor-switch,
+.status-phases-lv {
+  padding: 0;
+  display: inline;
+}
+.status-favor-switch {
+  padding-top: 10px;
+  padding-left: 15px;
+}
+
+.status-lv-favor-wrapper {
+  padding: 10px 15px;
+  padding-left: 47px;
 }
 
 .status-details-container {
@@ -584,10 +721,7 @@ export default {
 
   display: flex;
 }
-.status-favor-switch {
-  padding-left: 80px;
-  padding-top: 10px;
-}
+
 .status-range-wrapper {
   min-width: 170px;
   /* min-height: 170px; */
@@ -629,11 +763,16 @@ export default {
 }
 .evolvcost-item-contianer {
   padding: 5px 10px;
+  width: 70px;
+  height: 70px;
 }
 .evolvcost-container-wrapper {
   position: relative;
-  width: 50%;
+  width: calc(50% - 2px);
   min-width: 400px;
+}
+.evolvcost-container-wrapper + .evolvcost-container-wrapper {
+  border-left: 2px solid rgba(56, 56, 56, 0.6);
 }
 .evolvcost-title-wrapper {
   position: absolute;
@@ -642,6 +781,7 @@ export default {
   border-right: 1px solid rgba(158, 158, 158, 0.4);
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 /*  */
@@ -698,6 +838,7 @@ export default {
   .status-phases-wrapper {
     width: 100%;
     padding-left: 10px;
+    border-bottom: 1px solid rgba(158, 158, 158, 0.4);
   }
 
   .status-favor-switch,
@@ -793,14 +934,21 @@ export default {
   /*  */
   .evolvcost-container-wrapper {
     min-width: 350px;
-    padding: 0 10px;
+    padding: 0 10px 20px;
   }
+
+  .evolvcost-container-wrapper + .evolvcost-container-wrapper {
+    border: none;
+    border-top: 1px solid rgb(235, 238, 245);
+    padding-top: 20px;
+  }
+
   .evolvcost-title-wrapper {
     position: relative;
     height: 20px;
-    width: calc(100% - 20px);
     border-right: none;
     border-bottom: 1px solid rgba(158, 158, 158, 0.4);
+    justify-content: start;
   }
   .evolvcost-container {
     position: relative;
@@ -811,6 +959,15 @@ export default {
     align-items: center;
     justify-content: space-between;
     align-content: center;
+  }
+
+  .evolvcost-item-contianer {
+    padding: 5px 10px;
+    width: calc(45px + 2vw);
+    height: 70px;
+  }
+  .evolvcost-name-wrapper {
+    font-size: 14px;
   }
   /*  */
   /*  */
