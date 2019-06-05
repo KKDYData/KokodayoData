@@ -143,7 +143,7 @@ export default {
   flex-wrap: wrap;
   margin: 0 auto;
   width: 100%;
-  justify-content: space-evenly;
+  justify-content: space-around;
 }
 .img-container-wrapper {
   position: relative;

@@ -31,8 +31,13 @@
               {{skill.levels[sLevel[index]-1].duration}}
             </span>
             <span
+              v-if="skill.levels[0].spData.spType !== 8"
               class="skill-type"
-              :style="changeSkillType(skill.levels[0].skillType).color"
+              :style="changeSpType(skill.levels[0].spData.spType).style"
+            >{{changeSpType(skill.levels[0].spData.spType).value}}</span>
+            <span
+              class="skill-type"
+              :style="changeSkillType(skill.levels[0].skillType).style"
             >{{changeSkillType(skill.levels[0].skillType).value}}</span>
           </div>
           <div class="skill-status-desc">
@@ -83,17 +88,54 @@ export default {
       if (num > this.skills[0].levels.length)
         num = this.skills[0].levels.length;
       if (num < 1) num = 1;
-      this.$set(this.sLevel, index, num);
+      if (num < 8) {
+        this.sLevel = [num, num, num];
+      } else this.$set(this.sLevel, index, num);
     },
     getSkillPath(skill) {
       const name = skill.iconId ? skill.iconId : skill.skillId;
       return path + 'skills/pics/skill_icon_' + name + '.png';
     },
+    changeSpType(type) {
+      const typeList = {
+        8: {
+          value: '被动',
+          style: {
+            'background-color': 'rgb(153, 153, 153)'
+          }
+        },
+        1: {
+          value: '自动回复',
+          style: {
+            'background-color': 'rgb(138, 187, 33)'
+          }
+        },
+        2: {
+          value: '攻击回复',
+          style: {
+            'background-color': 'rgb(252, 121, 61)'
+          }
+        },
+        4: {
+          value: '受击回复',
+          style: {
+            'background-color': 'rgb(243, 172, 4)'
+          }
+        }
+      };
+      return typeList[type];
+    },
     changeSkillType(type) {
       const typeList = {
-        0: { value: '被动', color: 'color: grey' },
-        1: { value: '自动回复', color: 'color: green' },
-        2: { value: '攻击回复', color: 'color: red' }
+        0: {
+          value: '被动'
+        },
+        1: {
+          value: '手动触发'
+        },
+        2: {
+          value: '自动触发'
+        }
       };
       return typeList[type];
     },
@@ -111,6 +153,11 @@ export default {
         if (p2.match(/:0.0%/)) {
           p2 = p2.slice(0, -5);
           percent = '%';
+          // factor = 1;
+        }
+        if (p2.match(/:0.0/)) {
+          p2 = p2.slice(0, -4);
+          percent = '';
           // factor = 1;
         }
         if (p2.match(/-/)) {
@@ -175,12 +222,9 @@ export default {
   bottom: 10px;
 }
 .skill-pic-contianer {
-  /* display: inline-block; */
   flex-shrink: 0.5;
   width: 100px;
   height: 100px;
-  /* background: green; */
-  /* font-size: 12px; */
   position: relative;
   vertical-align: middle;
 }
@@ -190,7 +234,13 @@ export default {
 }
 .skill-type {
   word-break: keep-all;
-  padding: 0 !important;
+  color: white;
+  padding: 0px !important;
+  width: 70px;
+  text-align: center;
+  display: inline-block;
+  border-radius: 3px;
+  background-color: rgb(153, 153, 153);
 }
 .skill-status {
   font-size: 14px;
@@ -249,7 +299,7 @@ export default {
     /* display: flex; */
     flex-wrap: wrap;
     padding-left: 2vw;
-    width: calc(100% - 100px);
+    width: calc(100% - 65px - 1vw);
     border: none;
   }
   .skill-name-level {
@@ -264,6 +314,10 @@ export default {
     position: absolute;
     bottom: -25px;
     z-index: 1;
+  }
+  .skill-pic-contianer {
+    width: calc(65px + 1vw);
+    height: calc(65px + 1vw);
   }
 }
 </style>

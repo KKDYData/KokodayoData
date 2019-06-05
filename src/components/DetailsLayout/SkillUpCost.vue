@@ -19,7 +19,7 @@
           <div>
             <div class="skill-status">
               <span>
-                需求：精英
+                精英
                 <span>{{skill.data[sLevel[index]].unlockCond.phase}}</span>
                 /
                 <span>{{skill.data[sLevel[index]].unlockCond.level}}</span>
@@ -29,24 +29,7 @@
           <div class="skill-lvUpCost-wrapper">
             <!-- 改成根据slevelcompute返回当前数据 -->
             <div v-for="(skill, index) in picList[index]" :key="index">
-              <div>
-                <el-image
-                  class="evolvcost-item-contianer"
-                  fit="contain"
-                  :src="itemPic(skill.item.iconId)"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <div style="text-align: center;">
-                  <span class="evolvcost-name-wrapper">{{skill.item.name}}</span>
-                  <div>
-                    <span>X</span>
-                    <span>{{skill.count}}</span>
-                  </div>
-                </div>
-              </div>
+              <item-viewer :short="!short" :item="skill.item" :num="skill.count"></item-viewer>
             </div>
           </div>
         </div>
@@ -56,7 +39,7 @@
         <span class="skill-title-level">
           LV
           <span>{{sLevel[index] + 1}}</span>
-          <i class="el-icon-right"></i>LV
+          <i class="el-icon-right"></i>
           <span>{{sLevel[index] + 2}}</span>
           <span></span>
         </span>
@@ -68,9 +51,13 @@
 </template>
 
 <script>
-import { path, fetchGet } from '../utils';
+import { path, fetchGet, itemBackground } from '../utils';
+import ItemViewer from '../ItemViewer';
 
 export default {
+  components: {
+    'item-viewer': ItemViewer
+  },
   props: {
     skills: {
       required: true
@@ -78,7 +65,8 @@ export default {
     allLevelCost: {
       required: true
     },
-    seven: {}
+    seven: Array,
+    short: Boolean
   },
   mounted() {
     for (let i = 0; i < this.unlockCond.length; i++) {
@@ -104,6 +92,9 @@ export default {
     }
   },
   methods: {
+    itemBackground(rarity) {
+      return itemBackground[rarity];
+    },
     itemPic(id) {
       // console.log(id);
       return path + 'item/pic/' + id + '.png';
@@ -113,9 +104,9 @@ export default {
       if (num > this.unlockCond[index].data.length - 1)
         num = this.unlockCond[index].data.length - 1;
       if (num < 0) num = 0;
-      this.$set(this.sLevel, index, num);
       let p = num < 6 ? 'lvlUpCost' : 'levelUpCost';
       // this.$set(this.picList[index], 'load', false);
+
       Promise.all(
         this.unlockCond[index].data[num][p].map(async p => {
           const item = await fetchGet(path + 'item/data/' + p.id + '.json');
@@ -126,7 +117,13 @@ export default {
           return res;
         })
       ).then(arr => {
-        this.$set(this.picList, index, arr);
+        if (p === 'lvlUpCost') {
+          this.picList = [arr, arr, arr];
+          this.sLevel = [num, num, num];
+        } else {
+          this.$set(this.picList, index, arr);
+          this.$set(this.sLevel, index, num);
+        }
       });
     },
     getSkillPath(skill) {
@@ -164,10 +161,11 @@ export default {
   position: relative;
   display: flex;
   align-items: stretch;
-  margin: 20px 0;
+  margin: 20px 0 0 0;
   justify-content: start;
   padding: 0 5px;
   width: calc(100% - 10px);
+  min-height: 123px;
 }
 
 .skill-tiltle-part {
@@ -181,8 +179,7 @@ export default {
 }
 .skill-name-level {
   position: absolute;
-  margin-top: 2vw;
-  margin-bottom: 2vw;
+
   right: 0px;
   bottom: 10px;
 }
@@ -200,6 +197,7 @@ export default {
 .skill-status {
   font-size: 14px;
 }
+
 .skill-status-desc {
   font-size: 16px;
   color: #606266;
@@ -208,15 +206,23 @@ export default {
   padding-right: 5px;
 }
 
+.evolvcost-item-count {
+  text-align: center;
+  font-size: 15px;
+}
+
 @media screen and (max-width: 700px) {
   .skill-status {
-    font-size: calc(12px + 0.5vw);
+    font-size: calc(12px + 0.7vw);
   }
   .skill-status-desc {
     font-size: calc(13px + 0.5vw);
   }
   .talents-effects-desc {
     font-size: calc(12px + 0.5vw);
+  }
+  .skill-title {
+    margin-top: 10px;
   }
   .skill-title-level {
     display: inline-block;
@@ -232,11 +238,11 @@ export default {
   .skill-name-level {
     position: absolute;
     right: 20px;
-    bottom: 0px;
+    bottom: 10px;
   }
   .skill-container {
     padding-bottom: 0px;
-    height: 200px;
+    height: 195px;
   }
   .skill-range-button {
     position: absolute;
@@ -253,6 +259,16 @@ export default {
   .skill-pic-container-wrapper {
     display: flex;
     align-items: center;
+  }
+  .skill-lvUpCost-wrapper {
+    margin-top: 10px;
+  }
+  .group-container-title {
+    margin-bottom: 5px;
+  }
+
+  .evolvcost-item-count {
+    font-size: calc(12px + 0.5vw);
   }
 }
 </style>

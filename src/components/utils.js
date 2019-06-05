@@ -181,20 +181,6 @@ const postData = (data) => {
       console.log(err);
     });
 };
-const getNameList = () => {
-  return fetchGet('/api/arknights/data/nameList')
-    .then(res => {
-      res.forEach(hero => {
-        if (hero.url)
-          hero.url = 'https' + hero.url.slice(4);
-      });
-      return res;
-    })
-    .catch(err => {
-      console.log(err);
-      return [];
-    });
-};
 
 const getProfileList = () => {
   return fetchGet('/api/arknights/data/shortList')
@@ -213,21 +199,8 @@ const getProfileList = () => {
     });
 };
 
-const getMoraleList = () => {
-  return fetchGet('/api/epic7/data/morale')
-    .then(res => fetchGet('https' + res.url.slice(4)));
-};
 
-const getHeroPic = name => {
-  return fetchGet('/api/epic7/data/pic?name=' + name)
-    .catch(err => {
-      console.error(err);
-      return [];
-    });
-};
-const getHeroDataByName = name => {
-  return fetchGet('/api/arknights/data/data?name=' + name);
-};
+
 const getHeroData = name => {
   return fetchGet(path + 'char/data/' + name + '.json')
     .catch(err => console.error(err));
@@ -420,11 +393,114 @@ const potentialToStatus = {
   0: 'maxHp',
   1: 'atk',
   2: 'def',
-  3: 'magicResitance',
+  3: 'magicResistance',
   4: 'cost',
   5: 'blockCnt',
   7: 'baseAttackTime',
   21: 'respawnTime'
+};
+
+const itemBackground = {
+  0: {
+    'border-color': 'rgb(160, 160, 160)',
+    'background-color': 'rgb(157, 157, 157)',
+    'box-shadow': `rgb(5, 1, 0) 0px 0px 0px 2px inset, 
+                   rgb(164, 164, 164) 0 0 5px 4px inset,
+                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
+  },
+  1: {
+    'border-color': 'rgb(160, 160, 160)',
+    'background-color': 'rgb(157, 157, 157)',
+    'box-shadow': `rgb(5, 1, 0) 0px 0px 0px 2px inset, 
+                   rgb(164, 164, 164) 0 0 5px 4px inset,
+                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
+  },
+  2: {
+    'border-color': 'rgb(9, 177, 242)',
+    'background-color': 'rgb(165, 165, 165)',
+    'box-shadow': `rgb(3, 0, 0) 0px 0px 0px 2px inset, 
+                   rgb(165, 165, 165)' 0 0 5px 4px inset,
+                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
+  },
+  3: {
+    'border-color': 'rgb(215, 198, 216)',
+    'background-color': 'rgb(128, 128, 128)',
+    'box-shadow': `rgb(44, 29, 62) 0px 0px 0px 2px inset, 
+                  rgb(110, 107, 116) 0px 0px 5px 4px inset,
+                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
+  },
+  4: {
+    'border-color': 'rgb(251, 201, 17)',
+    'background-color': 'grey',
+    'box-shadow': `rgb(51, 41, 6) 0px 0px 0px 2px inset, 
+                   rgb(153, 138, 88) 0 0 5px 4px inset,
+                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
+  },
+  5: {
+    'border-color': 'rgb(75, 41, 23)',
+    'background-color': 'rgb(247, 212, 139)',
+    'box-shadow': `rgb(75, 41, 23) 0px 0px 0px 2px inset, 
+                  rgb(250, 215, 138) 0 0 5px 4px inset,
+                  0 0 1px 0px rgba(128, 128, 128, 0.37)`
+  },
+};
+
+const GOLD = {
+  'itemId': '4001',
+  'name': '龙门币',
+  'description': '经济危机发生后，经济的衰退与政权之间的对立让贸易参与者们举步维艰。龙门币的流通使商业复兴成为可能。',
+  'rarity': 3,
+  'iconId': 'GOLD',
+  'overrideBkg': null,
+  'stackIconId': 'GOLD_STACK',
+  'sortId': 4,
+  'usage': '由龙门发行的货币，用途广泛。',
+  'obtainApproach': null,
+  'itemType': 'GOLD',
+  'stageDropList': [
+    {
+      'stageId': 'wk_melee_1',
+      'occPer': 'ALWAYS'
+    },
+    {
+      'stageId': 'main_01-01',
+      'occPer': 'ALWAYS'
+    },
+    {
+      'stageId': 'sub_02-02',
+      'occPer': 'ALWAYS'
+    },
+    {
+      'stageId': 'main_02-07',
+      'occPer': 'ALWAYS'
+    },
+    {
+      'stageId': 'main_03-06',
+      'occPer': 'ALWAYS'
+    },
+    {
+      'stageId': 'main_04-01',
+      'occPer': 'ALWAYS'
+    },
+    {
+      'stageId': 'sub_04-2-3',
+      'occPer': 'ALWAYS'
+    }
+  ],
+  'buildingProductList': []
+};
+
+const occPer_chinese = {
+  ALWAYS: '固定掉落',
+  SOMETIMES: '罕见',
+  OFTEN: '小概率',
+  USUAL: '概率掉率',
+  ALMOST: '大概率'
+};
+
+const roomType = {
+  WORKSHOP: '加工站',
+  MANUFACTURE: '制造站'
 };
 
 
@@ -433,16 +509,12 @@ export {
   throttle,
   scan,
   postData,
-  getNameList,
   insertImg,
   postPicFetch,
   getHeroData,
-  getHeroPic,
   sort,
   sortByTime,
   getProfileList,
-  getHeroDataByName,
-  getMoraleList,
   getClass_Chinese,
   TagsArr,
   path,
@@ -451,7 +523,11 @@ export {
   fetchGet,
   evolveGoldCost,
   changeDesc,
-  potentialToStatus
+  potentialToStatus,
+  itemBackground,
+  GOLD,
+  occPer_chinese,
+  roomType
 };
 
 
