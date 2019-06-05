@@ -1,15 +1,15 @@
 <template>
   <div>
-    <el-card class="info-wrapper">
-      <div class="group-container-title">
-        <span>干员立绘</span>
-      </div>
+    <div class="char-half-container-wrapper">
+      <el-image class="char-half-container" :src="halfPics" fit="contain">
+        <div slot="error" class="image-slot">
+          <i class="el-icon-picture-outline"></i>
+        </div>
+      </el-image>
       <div class="info-char-set-wrapper">
         <el-popover placement="top-start" :width="short ? '330': '1000'" trigger="click">
-          <el-carousel :height="short ? '350px': '1000px'" class="set-container">
-            <el-carousel-item v-for="(pic, index) in halfPic" :key="pic">
-              <p>精英化阶段{{calPhases(list[index])}}</p>
-              <p>长按或者右键可以下载</p>
+          <el-carousel :height="short ? '380px': '1050px'" class="char-set-container-wrapper">
+            <el-carousel-item v-for="(pic, index) in charSets" :key="pic" style="font-size:13px">
               <div>
                 <el-image class="char-set-container" :src="pic">
                   <div slot="error" class="image-slot">
@@ -17,58 +17,60 @@
                   </div>
                 </el-image>
               </div>
+              <p>
+                精英化阶段{{calPhases(list[index])}}
+                <span>长按或者右键可以下载</span>
+              </p>
             </el-carousel-item>
           </el-carousel>
-          <el-button slot="reference">查看立绘</el-button>
+          <el-button size="mini" slot="reference">查看立绘</el-button>
         </el-popover>
       </div>
-      <div class="info-base-wrapper">
-        <div class="group-container-title">
-          <span>干员资料</span>
+      <div class="info-draw-name">
+        <span>画师：</span>
+        <span>{{data.drawName}}</span>
+      </div>
+      <div class="info-cv-name">
+        <span>CV：</span>
+        <span>{{data.infoName}}</span>
+      </div>
+    </div>
+    <div class="info-story-wrapper">
+      <div v-for="(story,index) in data.storyTextAudio" :key="story.storyTitle">
+        <div class="info-story-title" :style="index === 0 ? 'margin-left: 160px': ''">
+          <span>
+            <b>{{story.storyTitle}}</b>
+          </span>
         </div>
-        <div class="info-draw-name">
-          <span>画师：</span>
-          <span>{{data.drawName}}</span>
-        </div>
-        <div class="info-cv-name">
-          <span>CV：</span>
-          <span>{{data.infoName}}</span>
+        <div
+          class="info-story-content-wrapper"
+          :style="index === 0 ? 'margin: 0px 0px 40px 160px': ''"
+        >
+          <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
+            <div class="info-story-unlock" v-if="p.unLockParam !== ''">
+              <span>解锁需要好感：</span>
+              <span>{{p.unLockParam}}</span>
+            </div>
+            <p v-html="changeText(p.storyText)"></p>
+          </div>
         </div>
       </div>
-      <div class="info-story-wrapper">
-        <div v-for="story in data.storyTextAudio" :key="story.storyTitle">
-          <div class="info-story-title">
+    </div>
+    <div class="info-words-wrapper">
+      <div class="group-container-title">
+        <span>干员语音</span>
+      </div>
+      <div class="info-words-container">
+        <div v-for="word in words" :key="word.charWordId">
+          <div>
             <span>
-              <b>{{story.storyTitle}}</b>
+              <b>{{word.voiceTitle}}</b>
             </span>
           </div>
-          <div class="info-story-content-wrapper">
-            <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
-              <div class="info-story-unlock" v-if="p.unLockParam !== ''">
-                <span>解锁需要好感：</span>
-                <span>{{p.unLockParam}}</span>
-              </div>
-              <p v-html="changeText(p.storyText)"></p>
-            </div>
-          </div>
+          <p>{{word.voiceText}}</p>
         </div>
       </div>
-      <div class="info-words-wrapper">
-        <div class="group-container-title">
-          <span>干员语音</span>
-        </div>
-        <div class="info-words-container">
-          <div v-for="word in words" :key="word.charWordId">
-            <div>
-              <span>
-                <b>{{word.voiceTitle}}</b>
-              </span>
-            </div>
-            <p>{{word.voiceText}}</p>
-          </div>
-        </div>
-      </div>
-    </el-card>
+    </div>
   </div>
 </template>
 
@@ -101,7 +103,7 @@ export default {
   },
 
   computed: {
-    halfPic() {
+    charSets() {
       if (this.data.charID) {
         const res = [];
         this.list.forEach(index => {
@@ -110,6 +112,17 @@ export default {
           );
         });
         return res;
+      }
+    },
+    halfPics() {
+      if (this.data.charID) {
+        const res = [];
+        this.list.forEach(index => {
+          res.push(
+            path + 'char/halfPic/' + this.data.charID + '_' + index + '.png'
+          );
+        });
+        return res[0];
       }
     }
   },
@@ -130,11 +143,31 @@ export default {
 
 <style  scoped>
 .info-char-set-wrapper {
-  margin-bottom: 20px;
+  text-align: center;
+}
+.info-story-wrapper {
+  padding: 0 10px;
 }
 
 .info-wrapper {
   margin-bottom: 200px;
+}
+
+.char-half-container {
+  width: 120px;
+  height: 210px;
+}
+
+.char-half-container-wrapper {
+  float: left;
+  width: 120px;
+  margin: 10px 10px;
+  overflow: hidden;
+}
+
+.info-draw-name,
+.info-cv-name {
+  margin-left: 0px;
 }
 </style>
 

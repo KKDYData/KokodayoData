@@ -98,9 +98,7 @@ export default {
   border-right: 1px solid rgba(158, 158, 158, 0.4);
   display: flex;
   align-items: center;
-}
-.talent-name-wrapper span {
-  padding-left: 10px;
+  justify-content: center;
 }
 
 /* 天赋内容 */
@@ -161,6 +159,11 @@ export default {
     width: calc(100% - 20px);
     border-right: none;
     border-bottom: 1px solid rgba(158, 158, 158, 0.4);
+    justify-content: start;
+  }
+
+  .talent-name-wrapper span {
+    padding-left: 10px;
   }
 
   /* 天赋内容 */

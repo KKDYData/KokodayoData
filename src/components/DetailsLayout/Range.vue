@@ -105,6 +105,7 @@ export default {
 .gird-container {
   position: relative;
   background-color: rgba(78, 78, 78, 0.5);
+  border-radius: 1px;
   padding: 2px;
   margin: 0 auto;
 }

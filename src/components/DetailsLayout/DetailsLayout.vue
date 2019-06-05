@@ -62,7 +62,6 @@
             @click="phases = index"
             :key="index"
             size="mini"
-            round
             :type="phases === index ? 'primary': ''"
           >{{index}}</el-button>
           <div class="status-lv-favor-wrapper">
@@ -82,7 +81,6 @@
             <el-button
               @click="potentialRanks = -1"
               size="mini"
-              round
               :type="potentialRanks === -1 ? 'primary': ''"
             >1</el-button>
             <el-button
@@ -90,7 +88,6 @@
               @click="potentialRanks = item"
               :key="item"
               size="mini"
-              round
               :type="potentialRanks === item ? 'primary': ''"
             >{{item + 2}}</el-button>
           </div>
@@ -103,6 +100,7 @@
               </div>
               <div class="status-details-value">
                 <span v-html="item"></span>
+                <span v-if="key === 'baseAttackTime' || key === 'respawnTime'">s</span>
               </div>
             </div>
           </div>
@@ -135,7 +133,7 @@
         </div>
       </div>
     </div>
-    <div class="group-container-title">
+    <div v-if="Object.keys(evolveCost).length > 0" class="group-container-title">
       <span>精英化材料消耗</span>
     </div>
     <div class="evolvcost-wrapper">
@@ -148,36 +146,9 @@
           <span>精英阶段{{index + 1}}</span>
         </div>
         <div class="evolvcost-container">
-          <div style="text-align: center">
-            <el-image class="evolvcost-item-contianer" fit="contain" :src="itemPic('GOLD')">
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image>
-            <div style="text-align: center">
-              <span class="evolvcost-name-wrapper">龙门币</span>
-              <div>
-                <span>X{{data.money}}</span>
-              </div>
-            </div>
-          </div>
+          <item-viewer :short="short" :item="GOLD" :num="data.money"></item-viewer>
           <div v-for="item in data.items" :key="item.IconId">
-            <el-image
-              class="evolvcost-item-contianer"
-              fit="contain"
-              :src="itemPic(item.item.iconId)"
-            >
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image>
-            <div style="text-align: center">
-              <span class="evolvcost-name-wrapper">{{item.item.name}}</span>
-              <div>
-                <span>X</span>
-                <span>{{item.cost}}</span>
-              </div>
-            </div>
+            <item-viewer :short="short" :item="item.item" :num="item.cost"></item-viewer>
           </div>
         </div>
       </div>
@@ -189,15 +160,19 @@
       <building-data :building="data.buildingData"></building-data>
     </div>
     <el-collapse>
+      <div class="group-container-title" style="margin-bottom: 0">
+        <span>干员资料</span>
+      </div>
       <el-collapse-item>
         <template slot="title">
-          <span style="direction:rtl;width: 100%">干员详细资料</span>
+          <span style="direction:rtl;width: 100%">打开</span>
         </template>
         <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
       </el-collapse-item>
     </el-collapse>
-    <el-card class="extra-card">
+    <el-card>
       <p>待更新</p>
+      <p>。。。</p>
     </el-card>
   </div>
 </template>
@@ -210,7 +185,9 @@ import {
   fetchGet,
   evolveGoldCost,
   changeDesc,
-  potentialToStatus
+  potentialToStatus,
+  itemBackground,
+  GOLD
 } from '../utils';
 import {
   Card,
@@ -228,8 +205,9 @@ import Range from './Range';
 import TalentsPanel from './TalentsPanel';
 import SkillPanel from './SkillPanel';
 import SkillUpCost from './SkillUpCost';
-import BuildingData from './BuildingData.vue';
-import InfoPanel from './InfoPanel.vue';
+import BuildingData from './BuildingData';
+import InfoPanel from './InfoPanel';
+import ItemViewer from '../ItemViewer';
 
 import Vue from 'vue';
 Vue.use(Card);
@@ -276,7 +254,8 @@ export default {
     'skill-panel': SkillPanel,
     'skill-up-panel': SkillUpCost,
     'building-data': BuildingData,
-    'info-panel': InfoPanel
+    'info-panel': InfoPanel,
+    'item-viewer': ItemViewer
   },
   data() {
     return {
@@ -292,9 +271,10 @@ export default {
       potentialRanks: -1,
       skills: [],
       rangeData: [],
-      evolveCost: { 0: {}, 1: {} },
-      info: {},
-      words: []
+      evolveCost: {},
+      info: null,
+      words: [],
+      GOLD: GOLD
     };
   },
   computed: {
@@ -389,9 +369,11 @@ export default {
               nV += v;
             }
           }
+          // console.log(key);
           this.potentailStatusUP.forEach(el => {
             el.forEach(el => {
               if (el.type === key) {
+                console.log(el.type);
                 addV += el.value;
                 nV += el.value;
               }
@@ -407,8 +389,8 @@ export default {
               '' +
               addV +
               ')</i>';
-          if (key === 'baseAttackTime' || key === 'respawnTime')
-            nV = value + ' s';
+          // if (key === 'baseAttackTime' || key === 'respawnTime')
+          //   nV = value + ' s';
           newData[key] = nV;
         }
         return newData;
@@ -543,6 +525,9 @@ export default {
       fetchGet(path + 'char/words/' + this.name + '.json').then(data => {
         this.words = data;
       });
+    },
+    itemBackground(rarity) {
+      return itemBackground[rarity];
     }
   }
 };
@@ -657,7 +642,6 @@ export default {
   position: relative;
   display: flex;
   justify-content: space-evenly;
-  align-content: center;
   align-items: center;
   flex-wrap: wrap;
   height: 180px;
@@ -675,12 +659,74 @@ export default {
 .status-potential-wrapper {
   margin-top: 10px;
 }
+
+/* 改button颜色 */
+.status-phases-wrapper .el-button--mini {
+  background-color: rgba(172, 172, 172, 0.34);
+  /* border-color: rgb(153, 153, 153); */
+  border: none;
+  border-bottom: 2px solid;
+  color: rgb(255, 255, 255);
+}
+
+.status-phases-wrapper .el-button--primary:focus,
+.el-button--primary:hover {
+  color: rgb(255, 208, 75);
+  background-color: rgb(84, 92, 100);
+  border-bottom-color: rgb(255, 208, 75);
+}
+
+.status-phases-wrapper .el-button--primary {
+  color: rgb(255, 208, 75);
+  background-color: rgb(84, 92, 100);
+  border-bottom: 2px solid rgb(255, 208, 75);
+}
+
+.status-potential-wrapper .el-button--mini {
+  background-color: rgba(172, 172, 172, 0.34);
+  /* border-color: rgb(153, 153, 153); */
+  border: none;
+  border-bottom: 2px solid;
+  color: rgb(255, 255, 255);
+}
+
+.status-potential-wrapper .el-button--primary:focus,
+.el-button--primary:hover {
+  color: rgb(255, 208, 75);
+  background-color: rgb(84, 92, 100);
+  border-bottom-color: rgb(255, 208, 75);
+}
+.status-potential-wrapper .el-button--primary {
+  color: rgb(255, 208, 75);
+  background-color: rgb(84, 92, 100);
+  border-bottom: 2px solid rgb(255, 208, 75);
+}
 .status-phases-text {
   padding-right: 10px;
 }
 .status-phases-lv {
   padding-left: 47px;
   padding-top: 10px;
+}
+.status-phases-lv .el-switch.is-checked .el-switch__core {
+  color: rgb(255, 208, 75);
+  background-color: rgb(84, 92, 100);
+  border-color: rgb(84, 92, 100);
+  /* border-bottom: 2px solid rgb(255, 208, 75); */
+}
+
+.status-phases-lv .el-switch__label.is-active {
+  color: #f49800;
+}
+.status-favor-switch,
+.el-switch__label.is-active {
+  color: #f49800;
+}
+
+.status-favor-switch .el-switch.is-checked .el-switch__core {
+  color: rgb(255, 208, 75);
+  background-color: rgb(84, 92, 100);
+  border-color: rgb(84, 92, 100);
 }
 
 .status-favor-switch,
@@ -705,10 +751,14 @@ export default {
 }
 .status-details-title {
   color: white;
-  background-color: black;
+  background-color: rgb(78, 82, 86);
+  border-radius: 2px;
   width: calc(80px + 0.5vw);
   text-align: center;
   display: inline-block;
+  font-size: 100%;
+  line-height: 100%;
+  padding: 2px 0;
 }
 .status-details-value {
   display: inline-block;
@@ -761,11 +811,26 @@ export default {
 .cost-money {
   vertical-align: middle;
 }
+/*  */
 .evolvcost-item-contianer {
-  padding: 5px 10px;
+  margin: 5px 10px;
   width: 70px;
   height: 70px;
+  display: block;
+  box-sizing: border-box;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px black;
+  background: grey;
+  border: 2px solid rgb(249, 198, 19);
 }
+
+.evolvcost-item-contianer img {
+  width: 130%;
+  height: 130%;
+  margin-top: -15%;
+  margin-left: -15%;
+}
+
 .evolvcost-container-wrapper {
   position: relative;
   width: calc(50% - 2px);
@@ -799,10 +864,12 @@ export default {
 @media screen and (max-width: 900px) {
   .status-wrapper {
     height: auto;
+    justify-content: space-between;
   }
   .status-details-wrapper {
     width: 50%;
     padding-left: 5px;
+    padding-top: 20px;
     height: auto;
   }
   .status-phases-text {
@@ -823,14 +890,10 @@ export default {
 
     display: flex;
   }
-  .char-card-pro-pic {
-    width: 20px;
-  }
 
   /* part 2 */
 
   .status-wrapper {
-    margin-bottom: 5vw;
     position: relative;
     height: auto;
   }
@@ -860,6 +923,7 @@ export default {
   .status-range-wrapper {
     width: calc(45% - 20px);
     min-width: auto;
+    margin-right: 10px;
   }
 }
 
@@ -962,9 +1026,9 @@ export default {
   }
 
   .evolvcost-item-contianer {
-    padding: 5px 10px;
+    /* padding: 5px 10px; */
     width: calc(45px + 2vw);
-    height: 70px;
+    height: calc(45px + 2vw);
   }
   .evolvcost-name-wrapper {
     font-size: 14px;
