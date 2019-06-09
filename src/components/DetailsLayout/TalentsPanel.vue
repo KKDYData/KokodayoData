@@ -36,7 +36,7 @@
             </div>
             <div v-else class="talent-desc-content">
               <span v-html="talent.potentailUP.description"></span>
-              <span>(需要潜能{{talent.potentailUP.requiredPotentialRank}}级)</span>
+              <span>(需要潜能{{talent.potentailUP.requiredPotentialRank + 1}}级)</span>
             </div>
           </div>
         </div>
