@@ -37,11 +37,19 @@ export default {
     };
   },
   mounted() {
-    MessageBox('访问异常请及时联系我,qq736693980。', '被DDOS攻击中')
-      .then(() => {
+    const isOpen = localStorage.getItem('isOpen')
+    if(!isOpen){
 
+      MessageBox('访问异常请及时联系我,qq736693980。', '被DDOS攻击中')
+      .then(() => {
+        
         this.linkStart()
       })
+      localStorage.setItem('isOpen', true)
+    }else{
+        this.linkStart()
+
+    }
   },
   methods: {
     linkStart(){
