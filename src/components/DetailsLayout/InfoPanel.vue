@@ -10,7 +10,7 @@
         <el-popover placement="top-start" :width="short ? '330': '1000'" trigger="click">
           <el-carousel :height="short ? '380px': '1050px'" class="char-set-container-wrapper">
             <el-carousel-item v-for="(pic, index) in charSets" :key="pic" style="font-size:13px">
-              <div>
+              <div v-if="showSet">
                 <el-image class="char-set-container" :src="pic">
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
@@ -23,7 +23,7 @@
               </p>
             </el-carousel-item>
           </el-carousel>
-          <el-button size="mini" slot="reference">查看立绘</el-button>
+          <el-button @click="showSet=true" size="mini" slot="reference">查看立绘</el-button>
         </el-popover>
       </div>
       <div class="info-draw-name">
@@ -98,7 +98,8 @@ export default {
   },
   data() {
     return {
-      phases: 1
+      phases: 1,
+      showSet: false
     };
   },
 

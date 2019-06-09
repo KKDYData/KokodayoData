@@ -65,8 +65,8 @@
 </template>
 
 <script>
-import { path, changeDesc } from '../utils';
-import Range from './Range';
+import { path, changeDesc } from "../utils";
+import Range from "./Range";
 
 export default {
   components: {
@@ -76,6 +76,9 @@ export default {
     skills: {
       required: true
     }
+  },
+  mounted() {
+    console.log(this.skills);
   },
   data() {
     return {
@@ -94,32 +97,32 @@ export default {
     },
     getSkillPath(skill) {
       const name = skill.iconId ? skill.iconId : skill.skillId;
-      return path + 'skills/pics/skill_icon_' + name + '.png';
+      return path + "skills/pics/skill_icon_" + name + ".png";
     },
     changeSpType(type) {
       const typeList = {
         8: {
-          value: '被动',
+          value: "被动",
           style: {
-            'background-color': 'rgb(153, 153, 153)'
+            "background-color": "rgb(153, 153, 153)"
           }
         },
         1: {
-          value: '自动回复',
+          value: "自动回复",
           style: {
-            'background-color': 'rgb(138, 187, 33)'
+            "background-color": "rgb(138, 187, 33)"
           }
         },
         2: {
-          value: '攻击回复',
+          value: "攻击回复",
           style: {
-            'background-color': 'rgb(252, 121, 61)'
+            "background-color": "rgb(252, 121, 61)"
           }
         },
         4: {
-          value: '受击回复',
+          value: "受击回复",
           style: {
-            'background-color': 'rgb(243, 172, 4)'
+            "background-color": "rgb(243, 172, 4)"
           }
         }
       };
@@ -128,36 +131,36 @@ export default {
     changeSkillType(type) {
       const typeList = {
         0: {
-          value: '被动'
+          value: "被动"
         },
         1: {
-          value: '手动触发'
+          value: "手动触发"
         },
         2: {
-          value: '自动触发'
+          value: "自动触发"
         }
       };
       return typeList[type];
     },
     changeSkillDesc(skill) {
       const str = changeDesc(skill.description);
-      const res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
-        let percent = '',
+      let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
+        let percent = "",
           minus = false,
-          res = '',
+          res = "",
           factor = 100;
         if (p2.match(/:0%/)) {
           p2 = p2.slice(0, -3);
-          percent = '%';
+          percent = "%";
         }
         if (p2.match(/:0.0%/)) {
           p2 = p2.slice(0, -5);
-          percent = '%';
+          percent = "%";
           // factor = 1;
         }
         if (p2.match(/:0.0/)) {
           p2 = p2.slice(0, -4);
-          percent = '';
+          percent = "";
           // factor = 1;
         }
         if (p2.match(/-/)) {
@@ -172,6 +175,26 @@ export default {
         }
         return res + percent;
       });
+      const skill_time_text = res.match(/攻击间隔/);
+      if (skill_time_text) {
+        const skill_base_time = skill.blackboard.find(
+          el => el.key === "base_attack_time"
+        );
+        const text = skill_time_text
+          ? res.slice(skill_time_text.index + 4).match(/(<.*?>)(.*?)(<\/.*?>)/)
+          : ["text"];
+        // console.log(text);
+        // console.log(skill_time_text);
+        // console.log(skill_time_text.index + 4 + text[0].length);
+        const temp = res.split("");
+        temp.splice(
+          skill_time_text.index + 4 + text[0].length,
+          0,
+          `(${skill_base_time.value}s)`
+        );
+
+        res = temp.join("");
+      }
       return res;
     }
   }
