@@ -8,7 +8,7 @@
         :key="item.name"
         :title="item.name"
       >
-        <div class="img-container-wrapper">
+        <div class="profile-item-inner-wrapper">
           <el-image fit="cover" class="img-container" :alt="item.name" :src="profilePath(item.No)">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
@@ -17,59 +17,50 @@
           <transition name="slide-fade">
             <div class="tag-wrapper-1" v-if="showTags">
               <div v-for="tag in item.tags" :key="tag">
-                <div class="tag-container" :style="tagHit(tag) ? 'background-color: #fff': ''">
+                <div class="tag-container">
                   <el-tag
-                    :type="tagHit(tag) ? 'warning' : ''"
+                    effect="plain"
+                    :type="tagHit(tag) ? 'warning' : 'info'"
                     size="medium"
                     v-if="tag !== '' && tag !== 'null'"
                   >{{tag}}</el-tag>
                 </div>
               </div>
-            </div>
-          </transition>
-          <transition name="slide-fade">
-            <div class="tag-wrapper-2" v-if="showTags">
               <div>
-                <div
-                  class="tag-container"
-                  :style="tagHit(item.class) ? 'background-color: #fff': ''"
-                >
+                <div class="tag-container">
                   <el-tag
-                    :type="tagHit(item.position) ? 'warning' : ''"
+                    :type="tagHit(item.position) ? 'warning' : 'info'"
                     size="mini"
+                    effect="dark"
                   >{{item.position === '远程位' ? '远' : '近'}}</el-tag>
                 </div>
-                <div
-                  class="tag-container"
-                  :style="tagHit(item.class) ? 'background-color: #fff': ''"
-                >
+                <div class="tag-container">
                   <el-tag
-                    :type="tagHit(item.class) ? 'warning' : ''"
+                    :type="tagHit(item.class) ? 'warning' : 'info'"
                     size="mini"
+                    :effect="tagHit(item.class) ? 'dark' : ''"
                   >{{changeClassShort(item.class)}}</el-tag>
                 </div>
               </div>
             </div>
           </transition>
-        </div>
-        <div width="100%" style="text-align:center">
-          <p
-            class="name"
-            :style="item.name.split('').length > 6 ? 'font-size: 12px;': '' "
-          >{{item.name}}</p>
-          <span class="name" v-if="showKey">{{showKey}}:{{item.stats[showKey]}}</span>
+
+          <div :class="showTags? 'name-tag-show name ' : 'name'">
+            <span :style="item.name.split('').length > 6 ? 'font-size: 12px;': '' ">{{item.name}}</span>
+            <span class="name" v-if="showKey">{{showKey}}:{{item.stats[showKey]}}</span>
+          </div>
         </div>
       </div>
-      <div class="fill-item img-container" v-for="item in fillItems" :key="item"></div>
+      <div class="fill-item img-container" :style="fillItemWidth" v-for="item in fillItems" :key="item"></div>
     </div>
   </div>
 </template>
 
 <script>
 // import Image from 'element-ui/packages/image/index.js';
-import { Tag, Image } from 'element-ui';
-import Vue from 'vue';
-import { path, getClass_Short } from '../utils';
+import { Tag, Image } from "element-ui";
+import Vue from "vue";
+import { path, getClass_Short } from "../utils";
 
 Vue.use(Image);
 Vue.use(Tag);
@@ -85,30 +76,31 @@ export default {
   data() {
     return {
       fillItems: [],
-      moraleMode: false
+      moraleMode: false,
+      fillItemWidth: {width:'100px'}
     };
   },
   mounted() {
     const self = this;
     this.calFillAmount();
-    window.addEventListener('resize', self.calFillAmount);
+    window.addEventListener("resize", self.calFillAmount);
   },
   methods: {
     async openDetails(item) {
       console.log(item.name);
       if (this.moraleMode) {
-        this.$emit('chose', item.name);
+        this.$emit("chose", item.name);
         return;
       }
       // await this.$vlf.setItem('dataUrl', item.url);
       // await this.$vlf.getItem('dataUrl');
-      this.$router.push('/details/' + item.No);
+      this.$router.push("/details/" + item.No);
     },
     calFillAmount() {
       if (!this.data) return;
       const width = this.$el.clientWidth,
-        cWidth = this.$el.querySelector('.profile-item').clientWidth;
-
+        cWidth = this.$el.querySelector(".profile-item").clientWidth;
+      this.fillItemWidth = {width: cWidth +'px'}
       let size = Math.floor(width / cWidth);
       size = size - (this.data.length % size);
       const arr = [];
@@ -121,7 +113,7 @@ export default {
       return this.tags.find(el => el.value === tag);
     },
     profilePath(name) {
-      return path + 'char/profile/' + name + '.png';
+      return path + "char/profile/" + name + ".png?x-oss-process=style/small-test";
     },
     changeClassShort(c) {
       return getClass_Short(c);
@@ -130,10 +122,6 @@ export default {
 };
 </script>
 <style >
-.profile-item {
-  position: relative;
-  box-sizing: border-box;
-}
 .flip-list-move {
   transition: transform 1s;
 }
@@ -145,42 +133,54 @@ export default {
   width: 100%;
   justify-content: space-around;
 }
-.img-container-wrapper {
+.profile-item {
   position: relative;
+  box-sizing: border-box;
+}
+.profile-item-inner-wrapper {
+  padding: 10px;
+  height: 130px;
+  position: relative;
+  display: flex;
+}
+
+.img-container-wrapper {
+  display: flex;
 }
 
 .img-container {
   width: 100px;
   height: 100px;
-  padding: 10px;
 }
 .img-container img {
   width: 100%;
+  background-color: rgb(51, 51, 51, 0.65);
 }
 
 .name {
   text-overflow: ellipsis;
-  width: 100%;
+  width: calc(100% - 20px);
   white-space: nowrap;
   overflow: hidden;
-  padding: 0;
-  margin: 0;
+  text-align: center;
+  position: absolute;
+  top: 108px;
+  /* left:50% */
 }
 
 .tag-wrapper-1 {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  direction: rtl;
+  margin-left: 10px;
+  width: 65px;
 }
-.tag-wrapper-2 {
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
+.name-tag-show {
+  top: -15px !important;
+  text-align: left;
+  color: white;
+  width: 40%;
+  background: linear-gradient(to right, rgb(2, 2, 2), rgb(255, 255, 255));
 }
 
 .tag-container {
-  background-color: rgba(255, 255, 255, 0.8);
   display: inline-block;
   border-radius: 2px;
   font-size: 0;
@@ -200,6 +200,9 @@ export default {
   .img-container {
     width: calc(85px + 1vw);
     height: calc(85px + 1vw);
+  }
+  .name {
+    top: calc(90px + 1vw);
   }
   .tag-wrapper-2 {
     width: 30px;
