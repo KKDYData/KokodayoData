@@ -52,36 +52,16 @@
                 style="padding: 0 25px"
               >2.但【仅公招】和【星级】除外，选了这个两个，就会先把列表变成满足条件后(去掉不满足的)，再进行职业，Tags，位置筛选。</p>
               <p style="padding: 0 25px">3.关闭列表后，就会变成普通的筛选模式</p>
-              <p style="padding: 0 25px">4.没怎么测试过，有问题请在群里@我</p>
+              <p style="padding: 0 25px">
+                <del>4.动画又加回来了，如果感觉不合适，之后还会调整</del>
+              </p>
+              <p>4.Tags的折叠版活不到12号！</p>
+              <p style="padding: 0 25px">5.Tags补充一个【爆发】</p>
             </el-collapse-item>
           </el-collapse>
         </el-collapse-item>
       </el-collapse>
     </div>
-    <!-- <div class="sort-group-wrapper">
-      <el-button round type="info" :size="short? 'mini':'medium'" @click="sortData()">排序</el-button>
-      <el-button round :size="short? 'mini':'medium'" @click="sortData('health')">
-        Hp
-        <i
-          v-if="showKey === 'health'"
-          :class="!sortDe.health ? 'el-icon-sort-down': 'el-icon-sort-up'"
-        ></i>
-      </el-button>
-      <el-button round :size="short? 'mini':'medium'" @click="sortData('defense')">
-        Defense
-        <i
-          v-if="showKey === 'defense'"
-          :class="!sortDe.defense ? 'el-icon-sort-down': 'el-icon-sort-up'"
-        ></i>
-      </el-button>
-      <el-button round :size="short? 'mini':'medium'" @click="sortData('attack')">
-        Attack
-        <i
-          v-if="showKey === 'attack'"
-          :class="!sortDe.attack ? 'el-icon-sort-down': 'el-icon-sort-up'"
-        ></i>
-      </el-button>
-    </div>-->
     <profile-layout :showTags="showTag" ref="profile-layout" :tags="SelectedTag" :data="data"></profile-layout>
   </div>
 </template>
@@ -90,12 +70,10 @@ import FilterButtonGroup from '../FilterButtonGroup';
 import ProfileLayout from './ProfileLayout';
 import { sort, TagsArr, class_chinese } from '../utils';
 import Vue from 'vue';
-import { Button, Table, TableColumn, Collapse, CollapseItem } from 'element-ui';
+import { Button, Collapse, CollapseItem } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Button);
-Vue.use(TableColumn);
-Vue.use(Table);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
 
@@ -252,13 +230,11 @@ export default {
       if (!this.showTag) {
         this.filterGroups.tags = [];
         this.$refs['tagFilter'].choseAll();
-        setTimeout(() => {
-          if (this.filterGroups.gkzm.length > 0) this.$refs['gkzm'].choseAll();
-        }, 500);
+        if (this.filterGroups.gkzm.length > 0) this.$refs['gkzm'].choseAll();
+        // setTimeout(() => {}, 500);
       } else {
-        setTimeout(() => {
-          if (this.filterGroups.gkzm.length < 1) this.$refs['gkzm'].choseAll();
-        }, 500);
+        if (this.filterGroups.gkzm.length < 1) this.$refs['gkzm'].choseAll();
+        // setTimeout(() => {}, 500);
       }
     }
   }

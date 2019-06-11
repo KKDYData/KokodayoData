@@ -5,7 +5,7 @@
       placement="top"
       :title="item.name"
       :width="!isShort? 350 : 250"
-      trigger="click"
+      trigger="hover"
     >
       <div slot="reference">
         <el-image
@@ -18,7 +18,7 @@
             <i class="el-icon-picture-outline"></i>
           </div>
         </el-image>
-        <div style="text-align: center">
+        <div style="text-align: center" v-if="num">
           <span class="evolvcost-name-wrapper">{{item.name}}</span>
           <div style="color:rgb(86, 86, 86)">
             <span>X{{num}}</span>
@@ -55,10 +55,11 @@
 
 <script>
 import { itemBackground, path, occPer_chinese, roomType } from './utils';
-import { Popover, Divider } from 'element-ui';
+import { Popover, Divider, Image } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Popover);
 Vue.use(Divider);
+Vue.use(Image);
 
 const stageList = () =>
   import(/* webpackChunkName: "stageList" */ './stageList.json');
@@ -68,9 +69,7 @@ export default {
     item: {
       required: true
     },
-    num: {
-      required: true
-    },
+    num: Number,
     short: Boolean
   },
   mounted() {
@@ -104,9 +103,9 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .evolvcost-item-contianer {
-  margin: 5px 10px;
+  /* margin: 5px 10px; */
   width: 70px;
   height: 70px;
   display: block;
@@ -118,10 +117,10 @@ export default {
 }
 
 .evolvcost-item-contianer img {
-  width: 130%;
-  height: 130%;
-  margin-top: -15%;
-  margin-left: -15%;
+  width: 128%;
+  height: 128%;
+  margin-top: -14%;
+  margin-left: -14%;
 }
 
 .item-occper {

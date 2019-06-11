@@ -51,10 +51,6 @@
       -moz-osx-font-smoothing: grayscale;
     }
 
-    /* .el-collapse-item__header {
-      height: auto !important;
-    } */
-
     .item-popover-class .el-popover__title {
       font-weight: bold;
     }
@@ -62,13 +58,26 @@
     .item-popover-class {
       padding: 20px !important;
     }
+
+    .fade-enter-active,
+    .fade-leave-active {
+      transition: opacity .3s;
+    }
+
+    .fade-enter,
+    .fade-leave-to
+
+    /* .fade-leave-active below version 2.1.8 */
+      {
+      opacity: 0;
+    }
   </style>
 </head>
 
 <body>
   <div id="nav-menu"></div>
   <div id="app">
-    <router-view></router-view>
+    <!-- <router-view></router-view> -->
   </div>
 
 </body>

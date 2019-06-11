@@ -1,33 +1,28 @@
 <template>
   <div class="home-wrapper" style>
-    <nav-menu></nav-menu>
-    <el-alert show-icon="" type='error' 
-    title="服务器流量异常，暂时先关闭几天"
-    description="被DDOS攻击中!访问异常请及时联系我,qq736693980。"></el-alert>
+    <!-- <el-alert show-icon type="success" title="你现在访问的是稳定版" description>
+      <el-link
+        href="https://somedata.top/ArknightsBeta"
+        type="info"
+      >Beta版链接somedata.top/ArknightsBeta</el-link>，更新频繁，多Bug。Beta版更新频率在一天左右，稳定版大概在3-4天。为了资料站的健康发展，欢迎加入反馈群799872783。你的意见对我们很重要！
+    </el-alert>-->
+    <el-alert show-icon type="warning" title="这是Beta版,可能会有Bug" description>
+      <el-link href="https://somedata.top/Arknights" type="success">somedata.top/Arknights</el-link>已经恢复，这是稳定版，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
+    </el-alert>
     <home-layout v-if="load" :profileList="data"></home-layout>
   </div>
 </template>
 <script>
 import { getProfileList } from './components/utils';
-import NavMenu from './NavMenu';
-import { Alert, MessageBox } from "element-ui";
-import Vue from 'vue'
-import loadingC from "./components/loading";
-
-const HomeLayout = () => ({
-  component: import(/* webpackChunkName: "HomeLayout" */'./components/homeLayout'),
-  loading: loadingC,
-  error: loadingC,
-  delay: 200,
-  timeout: 5000
-})
-
-Vue.use(Alert)
+import { Alert, link } from 'element-ui';
+import HomeLayout from './components/homeLayout';
+import Vue from 'vue';
+Vue.use(link);
+Vue.use(Alert);
 
 export default {
   components: {
-    'home-layout': HomeLayout,
-    'nav-menu': NavMenu
+    'home-layout': HomeLayout
   },
   data() {
     return {
@@ -37,26 +32,20 @@ export default {
     };
   },
   mounted() {
-    const isOpen = localStorage.getItem('isOpen')
-    if(!isOpen){
-
-      MessageBox('访问异常请及时联系我,qq736693980。', '被DDOS攻击中')
-      .then(() => {
-        
-        this.linkStart()
-      })
-      localStorage.setItem('isOpen', true)
-    }else{
-        this.linkStart()
-
-    }
+    this.linkStart();
+    // const isOpen = localStorage.getItem('isOpen');
+    // if (!isOpen) {
+    //   localStorage.setItem('isOpen', true);
+    // } else {
+    //   this.linkStart();
+    // }
   },
   methods: {
-    linkStart(){
+    linkStart() {
       this.getData().then(data => {
-      this.data = data;
-      this.load = true;
-    });
+        this.data = data;
+        this.load = true;
+      });
     },
     getData() {
       return getProfileList().then(source => {

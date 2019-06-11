@@ -37,18 +37,18 @@
 </template>
 
 <script>
-import Vue from "vue";
-import scanArr from "./components/scanArr";
-import loadingC from "./components/loading";
-import { Col, Row, Loading } from "element-ui";
-import { getHeroData, getHeroPic } from "./components/utils";
+import Vue from 'vue';
+import scanArr from './components/scanArr';
+import loadingC from './components/loading';
+import { Col, Row, Loading } from 'element-ui';
+import { getHeroData, getHeroPic } from './components/utils';
 
 Vue.use(Col);
 Vue.use(Row);
 Vue.use(Loading);
 
 const DataInput = () => ({
-  component: import(/* webpackChunkName: "dataInput" */ "./components/dataInput"),
+  component: import(/* webpackChunkName: "dataInput" */ './components/dataInput'),
   loading: loadingC,
   error: loadingC,
   delay: 200,
@@ -56,7 +56,7 @@ const DataInput = () => ({
 });
 
 export default {
-  name: "app",
+  name: 'app',
   components: {
     DataInput
   },
@@ -74,16 +74,16 @@ export default {
   },
   watch: {
     $route(to, from) {
-      console.log(to + " || " + from);
+      console.log(to + ' || ' + from);
     }
   },
   methods: {
     showDetail() {
       this.isShoDetail = !this.isShoDetail;
-      console.log("//");
+      console.log('//');
     },
     dataInputLoad() {
-      console.log("???");
+      console.log('???');
       // let ref = this.$refs.datainput;
       // ref.offsetTop = this.$el.querySelector("#data-input-container").offsetTop;
       // ref.offsetLeft = this.$el.querySelector(
@@ -100,10 +100,10 @@ export default {
       if (this.$route.params) {
         this.$route.params.name &&
           this.$vlf
-            .getItem("dataUrl")
+            .getItem('dataUrl')
             .then(url => {
               if (url) return getHeroData(url);
-              else return Promise.reject("no url");
+              else return Promise.reject('no url');
             })
             .then(data => this.$refs.datainput.editServerData(data))
             .then(() => {
