@@ -7,12 +7,23 @@ import Vue from 'vue';
 
 
 import VueRouter from 'vue-router';
+import NavMenu from './NavMenu';
 
 
 Vue.use(VueRouter);
 
 Vue.config.productionTip = false;
 
+
+// import loadingC from './components/loading';
+
+// const Home = () => ({
+//   component: import(/* webpackChunkName: "Home" */'./Home'),
+//   loading: loadingC,
+//   error: loadingC,
+//   delay: 4000,
+//   timeout: 5000
+// });
 
 const Home = () => import(/* webpackChunkName: "Home" */'./Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./Details');
@@ -31,13 +42,26 @@ const routes = [
   { path: '/details/:name', component: Details }
 ];
 const router = new VueRouter({
-  routes
+  routes,
+
 });
 
 
 new Vue({
   mode: 'history',
-  router
+  router,
+  components: {
+    'nav-menu': NavMenu
+  },
+  template: `
+  <div id="app">
+  <nav-menu />
+
+    <transition name="fade" mode="out-in">
+      <router-view class="view"></router-view>
+    </transition>
+  </div>
+`
 }).$mount('#app');
 
 

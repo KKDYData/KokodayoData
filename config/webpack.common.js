@@ -15,11 +15,6 @@ module.exports = {
       template: 'src/index.html',
     }),
     new webpack.NamedModulesPlugin(),
-    new webpack.HotModuleReplacementPlugin(),
-    new webpack.optimize.SplitChunksPlugin({
-      name: 'common' // 指定公共 bundle 的名称。
-    }),
-
     new VueLoaderPlugin()
 
   ],
@@ -28,9 +23,10 @@ module.exports = {
     hot: true
   },
   output: {
-    filename: 'bundle.js',
-    chunkFilename: '[name].bundle.js',
     path: path.resolve('dist')
+  },
+  optimization: {
+
   },
   module: {
     rules: [

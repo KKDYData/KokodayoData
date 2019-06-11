@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="profile-container">
+      <!-- <transition-group name="flip-list" class="profile-container"> -->
       <div
         class="profile-item"
         @click="openDetails(item)"
@@ -51,16 +52,23 @@
           </div>
         </div>
       </div>
-      <div class="fill-item img-container" :style="fillItemWidth" v-for="item in fillItems" :key="item"></div>
+
+      <div
+        class="fill-item img-container"
+        :style="fillItemWidth"
+        v-for="item in fillItems"
+        :key="item"
+      ></div>
     </div>
+    <!-- </transition-group> -->
   </div>
 </template>
 
 <script>
 // import Image from 'element-ui/packages/image/index.js';
-import { Tag, Image } from "element-ui";
-import Vue from "vue";
-import { path, getClass_Short } from "../utils";
+import { Tag, Image } from 'element-ui';
+import Vue from 'vue';
+import { path, getClass_Short } from '../utils';
 
 Vue.use(Image);
 Vue.use(Tag);
@@ -77,30 +85,30 @@ export default {
     return {
       fillItems: [],
       moraleMode: false,
-      fillItemWidth: {width:'100px'}
+      fillItemWidth: { width: '100px' }
     };
   },
   mounted() {
     const self = this;
     this.calFillAmount();
-    window.addEventListener("resize", self.calFillAmount);
+    window.addEventListener('resize', self.calFillAmount);
   },
   methods: {
     async openDetails(item) {
       console.log(item.name);
       if (this.moraleMode) {
-        this.$emit("chose", item.name);
+        this.$emit('chose', item.name);
         return;
       }
       // await this.$vlf.setItem('dataUrl', item.url);
       // await this.$vlf.getItem('dataUrl');
-      this.$router.push("/details/" + item.No);
+      this.$router.push('/details/' + item.No);
     },
     calFillAmount() {
       if (!this.data) return;
       const width = this.$el.clientWidth,
-        cWidth = this.$el.querySelector(".profile-item").clientWidth;
-      this.fillItemWidth = {width: cWidth +'px'}
+        cWidth = this.$el.querySelector('.profile-item').clientWidth;
+      this.fillItemWidth = { width: cWidth + 'px' };
       let size = Math.floor(width / cWidth);
       size = size - (this.data.length % size);
       const arr = [];
@@ -113,7 +121,9 @@ export default {
       return this.tags.find(el => el.value === tag);
     },
     profilePath(name) {
-      return path + "char/profile/" + name + ".png?x-oss-process=style/small-test";
+      return (
+        path + 'char/profile/' + name + '.png?x-oss-process=style/small-test'
+      );
     },
     changeClassShort(c) {
       return getClass_Short(c);
@@ -124,6 +134,7 @@ export default {
 <style >
 .flip-list-move {
   transition: transform 1s;
+  transition-delay: 0.3;
 }
 
 .profile-container {
@@ -134,6 +145,7 @@ export default {
   justify-content: space-around;
 }
 .profile-item {
+  --imgWidth: 100px;
   position: relative;
   box-sizing: border-box;
 }
@@ -149,12 +161,12 @@ export default {
 }
 
 .img-container {
-  width: 100px;
-  height: 100px;
+  width: var(--imgWidth);
+  height: var(--imgWidth);
 }
 .img-container img {
   width: 100%;
-  background-color: rgb(51, 51, 51, 0.65);
+  background-color: rgba(51, 51, 51, 0.65);
 }
 
 .name {
@@ -174,10 +186,20 @@ export default {
 }
 .name-tag-show {
   top: -15px !important;
+  padding-left: 5px;
   text-align: left;
   color: white;
-  width: 40%;
-  background: linear-gradient(to right, rgb(2, 2, 2), rgb(255, 255, 255));
+  width: var(--imgWidth);
+  background-color: rgb(146, 145, 141);
+  box-sizing: border-box;
+  /* background-image: linear-gradient(
+    to right,
+    rgb(21, 16, 3),
+    rgb(255, 255, 255)
+  ); */
+  /* transition: top 0.5s cubic-bezier(0.33, 1.01, 0.98, 0.99),
+    background-color 0.3s 0.3s cubic-bezier(0.33, 1.01, 0.98, 0.99),
+    color 0.3s 0.3s cubic-bezier(0.33, 1.01, 0.98, 0.99); */
 }
 
 .tag-container {
@@ -189,23 +211,26 @@ export default {
   transition: all 0.3s ease;
 }
 .slide-fade-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
+  /* transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1); */
 }
 .slide-fade-enter, .slide-fade-leave-to
 /* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(10px);
+  transform: translateX(-10px);
   opacity: 0;
 }
 @media screen and (max-width: 700px) {
-  .img-container {
-    width: calc(85px + 1vw);
-    height: calc(85px + 1vw);
+  .profile-item {
+    --imgWidth: calc(85px + 1vw);
   }
+
   .name {
-    top: calc(90px + 1vw);
+    top: calc(100px + 1vw);
   }
   .tag-wrapper-2 {
     width: 30px;
+  }
+  .profile-item-inner-wrapper {
+    height: calc(100px + 5vw);
   }
 }
 @media screen and (max-width: 400px) {

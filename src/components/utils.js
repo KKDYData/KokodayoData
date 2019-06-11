@@ -19,11 +19,14 @@ const throttle = function (action, delay) {
     }
   };
 };
-// let api = process.env.NODE_ENV !== "production" ? "/api" : "";
+// let api = process.env.NODE_ENV !== 'production' ? '/api' : '';
 const baseUrl = '/api/arknights/',
   regPicUrl = baseUrl + 'regPic',
   picUrl = baseUrl + 'data/pic/skill',
   postDataUrl = baseUrl + 'data';
+
+const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
+
 
 
 //识别文字
@@ -154,9 +157,6 @@ const makeNewCanvas = (rect, img, callback) => {
 
 };
 
-//更新角色数据函数
-// const testUrl = 'https://epic7-test-demo.oss-cn-beijing.aliyuncs.com/epic7/charactor/%E9%BA%97%E8%BF%AA%E5%8D%A1/stats.json?Expires=1551970837&OSSAccessKeyId=TMP.AQGAqOIjt29HIZw1xZMPKVMR--Nsv89KqmdLCZKbo3-H95Ua2GkQsJJ1PWKlMC4CFQD1MyVcPruPjJ_e-lXmL0TNiFK-BAIVAPsBGP7dlCs-p2wkGIv8JD3nRy1k&Signature=0HkBFFX9o%2Bizinl7rPULQBNy2Hs%3D'
-
 
 const postData = (data) => {
   return fetch(postDataUrl, {
@@ -165,7 +165,6 @@ const postData = (data) => {
       'Content-type': 'application/json; charset=utf-8'
     }),
     body: JSON.stringify(data)
-    // mode: 'cors'
   })
     .then(res => {
       return res.text().then(text => {
@@ -174,7 +173,6 @@ const postData = (data) => {
           type: res.status === 200 ? 'success' : 'error'
         };
         return result;
-        // const a = JSON.stringify(json)
       });
     })
     .catch(err => {
@@ -317,10 +315,10 @@ const TagsArr = [
   { 'text': '快速复活', 'value': '快速复活', 'short': '快速复活' },
   { 'text': '位移', 'value': '位移', 'short': '位移' },
   { 'text': '召唤', 'value': '召唤', 'short': '召唤' },
+  { 'text': '爆发', 'value': '爆发', 'short': '爆发' },
   { 'text': '控场', 'value': '控场', 'short': '控场' }];
 
 
-const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
 
 
 const evolveGoldCost = [
@@ -446,48 +444,48 @@ const itemBackground = {
 };
 
 const GOLD = {
-  'itemId': '4001',
-  'name': '龙门币',
-  'description': '经济危机发生后，经济的衰退与政权之间的对立让贸易参与者们举步维艰。龙门币的流通使商业复兴成为可能。',
-  'rarity': 3,
-  'iconId': 'GOLD',
-  'overrideBkg': null,
-  'stackIconId': 'GOLD_STACK',
-  'sortId': 4,
-  'usage': '由龙门发行的货币，用途广泛。',
-  'obtainApproach': null,
-  'itemType': 'GOLD',
-  'stageDropList': [
+  itemId: '4001',
+  name: '龙门币',
+  description: '经济危机发生后，经济的衰退与政权之间的对立让贸易参与者们举步维艰。龙门币的流通使商业复兴成为可能。',
+  rarity: 3,
+  iconId: 'GOLD',
+  overrideBkg: null,
+  stackIconId: 'GOLD_STACK',
+  sortId: 4,
+  usage: '由龙门发行的货币，用途广泛。',
+  obtainApproach: null,
+  itemType: 'GOLD',
+  stageDropList: [
     {
-      'stageId': 'wk_melee_1',
-      'occPer': 'ALWAYS'
+      stageId: 'wk_melee_1',
+      occPer: 'ALWAYS'
     },
     {
-      'stageId': 'main_01-01',
-      'occPer': 'ALWAYS'
+      stageId: 'main_01-01',
+      occPer: 'ALWAYS'
     },
     {
-      'stageId': 'sub_02-02',
-      'occPer': 'ALWAYS'
+      stageId: 'sub_02-02',
+      occPer: 'ALWAYS'
     },
     {
-      'stageId': 'main_02-07',
-      'occPer': 'ALWAYS'
+      stageId: 'main_02-07',
+      occPer: 'ALWAYS'
     },
     {
-      'stageId': 'main_03-06',
-      'occPer': 'ALWAYS'
+      stageId: 'main_03-06',
+      occPer: 'ALWAYS'
     },
     {
-      'stageId': 'main_04-01',
-      'occPer': 'ALWAYS'
+      stageId: 'main_04-01',
+      occPer: 'ALWAYS'
     },
     {
-      'stageId': 'sub_04-2-3',
-      'occPer': 'ALWAYS'
+      stageId: 'sub_04-2-3',
+      occPer: 'ALWAYS'
     }
   ],
-  'buildingProductList': []
+  buildingProductList: []
 };
 
 const occPer_chinese = {
@@ -501,6 +499,132 @@ const occPer_chinese = {
 const roomType = {
   WORKSHOP: '加工站',
   MANUFACTURE: '制造站'
+};
+
+const exp_cards = {
+  2001: {
+    exp: 200,
+    itemId: '2001',
+    name: '基础作战记录',
+    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了数场战斗的录像。',
+    rarity: 1,
+    iconId: 'sprite_exp_card_t1',
+    overrideBkg: null,
+    stackIconId: 'sprite_exp_card_stack_t1',
+    sortId: 15,
+    usage: '记录了作战录像的存储装置，可以些微增加干员的经验值。',
+    obtainApproach: null,
+    itemType: 'CARD_EXP',
+    stageDropList: [
+      {
+        stageId: 'wk_kc_1',
+        occPer: 'ALWAYS'
+      },
+      {
+        stageId: 'sub_02-03',
+        occPer: 'ALWAYS'
+      },
+      {
+        stageId: 'main_00-10',
+        occPer: 'ALWAYS'
+      }
+    ],
+    buildingProductList: [
+      {
+        roomType: 'MANUFACTURE',
+        formulaId: '1'
+      }
+    ]
+  },
+  2002: {
+    exp: 400,
+    itemId: '2002',
+    name: '初级作战记录',
+    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了多场战斗的录像与详细数据分析资料。附送了三小时的花絮与访谈。',
+    rarity: 2,
+    iconId: 'sprite_exp_card_t2',
+    overrideBkg: null,
+    stackIconId: 'sprite_exp_card_stack_t2',
+    sortId: 14,
+    usage: '记录了作战录像的存储装置，可以少许增加干员的经验值。',
+    obtainApproach: null,
+    itemType: 'CARD_EXP',
+    stageDropList: [
+      {
+        stageId: 'wk_kc_1',
+        occPer: 'ALWAYS'
+      },
+      {
+        stageId: 'main_03-05',
+        occPer: 'ALWAYS'
+      },
+      {
+        stageId: 'sub_02-10',
+        occPer: 'ALWAYS'
+      }
+    ],
+    buildingProductList: [
+      {
+        roomType: 'MANUFACTURE',
+        formulaId: '2'
+      }
+    ]
+  },
+  2003: {
+    exp: 1000,
+    itemId: '2003',
+    name: '中级作战记录',
+    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了多个录像集锦，夹带了一张录像人的签名版。',
+    rarity: 3,
+    iconId: 'sprite_exp_card_t3',
+    overrideBkg: null,
+    stackIconId: 'sprite_exp_card_stack_t3',
+    sortId: 13,
+    usage: '记录了作战录像的存储装置，可以大幅增加干员的经验值。',
+    obtainApproach: null,
+    itemType: 'CARD_EXP',
+    stageDropList: [
+      {
+        stageId: 'wk_kc_1',
+        occPer: 'ALWAYS'
+      },
+      {
+        stageId: 'main_04-03',
+        occPer: 'ALWAYS'
+      },
+      {
+        stageId: 'sub_04-3-3',
+        occPer: 'ALWAYS'
+      }
+    ],
+    buildingProductList: [
+      {
+        roomType: 'MANUFACTURE',
+        formulaId: '3'
+      }
+    ]
+  },
+  2004: {
+    exp: 2000,
+    itemId: '2004',
+    name: '高级作战记录',
+    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n追加了总集篇。附带高清版、高清重制版、威力加强版、导演剪辑版、年度黄金版……',
+    rarity: 4,
+    iconId: 'sprite_exp_card_t4',
+    overrideBkg: null,
+    stackIconId: 'sprite_exp_card_stack_t4',
+    sortId: 12,
+    usage: '记录了作战录像的存储装置，可以极大增加干员的经验值。',
+    obtainApproach: null,
+    itemType: 'CARD_EXP',
+    stageDropList: [
+      {
+        stageId: 'wk_kc_1',
+        occPer: 'ALWAYS'
+      }
+    ],
+    buildingProductList: []
+  },
 };
 
 
@@ -527,7 +651,8 @@ export {
   itemBackground,
   GOLD,
   occPer_chinese,
-  roomType
+  roomType,
+  exp_cards
 };
 
 
