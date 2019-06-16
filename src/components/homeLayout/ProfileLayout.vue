@@ -20,8 +20,8 @@
               <div v-for="tag in item.tags" :key="tag">
                 <div class="tag-container">
                   <el-tag
-                    effect="plain"
-                    :type="tagHit(tag) ? 'warning' : 'info'"
+                    :type="tagHit(tag) ? 'info' : 'info'"
+                    :effect="tagHit(tag) ? 'dark' : 'plain'"
                     size="medium"
                     v-if="tag !== '' && tag !== 'null'"
                   >{{tag}}</el-tag>
@@ -30,23 +30,32 @@
               <div>
                 <div class="tag-container">
                   <el-tag
-                    :type="tagHit(item.position) ? 'warning' : 'info'"
+                    :type="tagHit(item.position) ? 'info' : 'info'"
                     size="mini"
-                    effect="dark"
+                    :effect="tagHit(item.position) ? 'dark' : 'plain'"
                   >{{item.position === '远程位' ? '远' : '近'}}</el-tag>
                 </div>
-                <div class="tag-container">
-                  <el-tag
+                <div class="tag-container class-icon">
+                  <el-image
+                    class="img-container"
+                    :style="tagHit(item.class) ? '' : 'opacity: 0.2'"
+                    :alt="item.class"
+                    :src="class_icon(item.class)"
+                  ></el-image>
+                  <!-- <el-tag
                     :type="tagHit(item.class) ? 'warning' : 'info'"
                     size="mini"
                     :effect="tagHit(item.class) ? 'dark' : ''"
-                  >{{changeClassShort(item.class)}}</el-tag>
+                  >{{changeClassShort(item.class)}}</el-tag>-->
                 </div>
               </div>
             </div>
           </transition>
 
-          <div :class="showTags? 'name-tag-show name ' : 'name'">
+          <div
+            :class="showTags? 'name-tag-show name ' : 'name'"
+            :style="showTags && item.star > 3 ? 'color: #ecc12d' : ''"
+          >
             <span :style="item.name.split('').length > 6 ? 'font-size: 12px;': '' ">{{item.name}}</span>
             <span class="name" v-if="showKey">{{showKey}}:{{item.stats[showKey]}}</span>
           </div>
@@ -94,6 +103,9 @@ export default {
     window.addEventListener('resize', self.calFillAmount);
   },
   methods: {
+    class_icon(c) {
+      return path + 'others/icon_profession_' + c.toLowerCase() + '.png';
+    },
     async openDetails(item) {
       console.log(item.name);
       if (this.moraleMode) {
@@ -190,7 +202,7 @@ export default {
   text-align: left;
   color: white;
   width: var(--imgWidth);
-  background-color: rgb(146, 145, 141);
+  background-color: rgba(0, 0, 0, 0.63);
   box-sizing: border-box;
   /* background-image: linear-gradient(
     to right,
@@ -206,6 +218,7 @@ export default {
   display: inline-block;
   border-radius: 2px;
   font-size: 0;
+  margin-bottom: 1px;
 }
 .slide-fade-enter-active {
   transition: all 0.3s ease;
@@ -217,6 +230,11 @@ export default {
 /* .slide-fade-leave-active for below version 2.1.8 */ {
   transform: translateX(-10px);
   opacity: 0;
+}
+
+.class-icon {
+  --imgWidth: 20px;
+  vertical-align: middle;
 }
 @media screen and (max-width: 700px) {
   .profile-item {
