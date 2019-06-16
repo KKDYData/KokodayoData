@@ -3,15 +3,14 @@
     <div class="home-filter-wrapper" id="profile-panel">
       <filter-group
         label="职业"
-        :filters="classData()"
+        :filters="filterGroups.class"
         :short="short"
         @filter="resetFilter($event, 'class')"
       ></filter-group>
       <filter-group
         :short="short"
         label="星级"
-        :filters="[{text:1, value:'0', short:1}, {text:2, value:'1', short:2},{text:3, value:'2', short:3},
-        {text:4, value: '3', short: 4},{text:5, value:'4', short:5},{text:6, value:'5', short:6},]"
+        :filters="filterGroups.star"
         @filter="resetFilter($event, 'star')"
       ></filter-group>
 
@@ -23,21 +22,20 @@
           <filter-group
             :short="short"
             label="Tgas"
-            :filters="Tags"
+            :filters="filterGroups.tags"
             @filter="resetFilter($event, 'tags')"
             ref="tagFilter"
           ></filter-group>
           <filter-group
             :short="short"
             label="位置"
-            :filters="[{text: '远程位', value: '远程位', short: '远程位'},
-            {text: '近战位', value: '近战位', short: '近战位'}]"
+            :filters="filterGroups.position"
             @filter="resetFilter($event, 'position')"
           ></filter-group>
           <filter-group
             :short="short"
             label="公招"
-            :filters="[{text: '仅公招', value: true, short: '公招'}]"
+            :filters="filterGroups.gkzm"
             :single="true"
             @filter="resetFilter($event, 'gkzm')"
             ref="gkzm"
@@ -68,7 +66,7 @@
 <script>
 import FilterButtonGroup from '../FilterButtonGroup';
 import ProfileLayout from './ProfileLayout';
-import { sort, TagsArr, class_chinese } from '../utils';
+import { sort, TagsArr, StarArr, class_chinese } from '../utils';
 import Vue from 'vue';
 import { Button, Collapse, CollapseItem } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
@@ -76,6 +74,14 @@ Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Button);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
+import Vlf from 'vlf';
+Vue.use(Vlf);
+
+const gkzm = [{ text: '仅公招', value: true, short: '公招' }];
+const position = [
+  { text: '远程位', value: '远程位', short: '远程位' },
+  { text: '近战位', value: '近战位', short: '近战位' }
+];
 
 export default {
   components: {
@@ -88,19 +94,15 @@ export default {
   data() {
     return {
       short: false,
-      data: this.profileList,
+      data: null,
       rowData: this.profileList,
-      filterGroups: {
-        gkzm: [],
-        tags: [],
-        star: [],
-        class: [],
-        position: []
-      },
+
       showKey: '',
       filtersLength: 0,
       sortDe: [],
-      showTag: false
+      showTag: false,
+      store: null,
+      SelectedTag: []
     };
   },
   created() {
@@ -109,15 +111,52 @@ export default {
       this.short = window.innerWidth < 500 ? true : false;
     });
   },
-  mounted() {},
+  mounted() {
+    this.$vlf
+      .createInstance({
+        name: 'testDB'
+      })
+      .then(async store => {
+        this.store = store;
+        const filterGroups = await store.getItem('filterGroups').then(data => {
+          console.log(data);
+          return data;
+        });
+        console.log(`filterGroups: ${filterGroups}`);
+        if (filterGroups) {
+          // this.$set(this, 'filterGroups', filterGroups);
+          Object.keys(filterGroups).forEach(el => {
+            console.log(el);
+            this.$set(this.filterGroups, el, filterGroups[el]);
+          });
+        }
+        this.resetFilter();
+      });
+  },
   computed: {
-    Tags() {
-      return TagsArr;
+    filterGroups() {
+      return {
+        gkzm: gkzm,
+        star: StarArr,
+        position: position,
+        class: Object.values(class_chinese),
+        tags: TagsArr
+      };
     },
-    SelectedTag() {
-      return Object.values(this.filterGroups).reduce((pre, cur) =>
-        pre.concat(cur)
-      );
+    // SelectedTag() {
+    //   return Object.values(this.filterGroups)
+    //     .map(el => {
+    //       const res = el.filter(el => {
+    //         console.log(el);
+    //         return el.chosed;
+    //       });
+    //       console.log(res);
+    //       return res;
+    //     })
+    //     .reduce((pre, cur) => pre.concat(cur));
+    // },
+    orAgents() {
+      return this.rowData.filter(el => el.gkzm);
     }
   },
   methods: {
@@ -133,46 +172,58 @@ export default {
       this.data = [...sort(this.data, less)];
     },
     resetFilter(group, p) {
-      this.$set(this.filterGroups, p, group);
+      // if (p) this.$set(this.filterGroups, p, group);
+      this.store.setItem('filterGroups', this.filterGroups).then(async err => {
+        // console.log(err);
+        // const filterGroups = await this.store
+        //   .getItem('filterGroups')
+        //   .then(data => {
+        //     console.log(data);
+        //     return data;
+        //   });
+        // console.log(filterGroups);
+      });
+      // console.log(this.filterGroups);
+      // console.log(this.store);
+      //判定是否是公招模式
+      let targetData = this.filterGroups.gkzm[0].chosed
+        ? this.orAgents
+        : this.rowData;
+      // debugger;
+      console.log(targetData.length);
+      //如果筛选为空则跳过筛选，返回原值
+      const filters = Object.keys(this.filterGroups).map(el => [
+        el,
+        this.filterGroups[el].filter(el => el.chosed)
+      ]);
+      console.log(filters);
+      this.SelectedTag = [...filters.map(el => el[1])].flat(10);
 
-      let targetData = this.rowData;
+      console.log(this.SelectedTag);
+      let isFilter = filters
+        .map(el => el[1].length)
+        .reduce((pre, cur) => pre + cur);
 
-      if (this.filterGroups.gkzm.length > 0) {
-        targetData = targetData.filter(el => {
-          return el.gkzm;
-        });
-      }
-      if (this.filterGroups.star.length > 0) {
-        targetData = targetData.filter(el => {
-          return this.filterGroups.star.find(
-            star => star.value === String(el.star)
-          );
-        });
-      }
+      if (this.filterGroups.gkzm[0].chosed) isFilter -= 1;
 
-      if (
-        this.filterGroups.tags.length > 0 ||
-        this.filterGroups.class.length > 0 ||
-        this.filterGroups.position.length > 0
-      ) {
+      console.log(isFilter);
+      if (isFilter > 0) {
         //重新筛选， 重置tagHit
         targetData.forEach(el => this.$set(el, 'tagHit', 0));
 
         targetData = targetData.filter(el => {
           let find = !this.showTag;
 
-          for (let key of Object.keys(this.filterGroups)) {
-            if (
-              this.filterGroups[key].length < 1 ||
-              key === 'star' ||
-              key === 'gkzm'
-            ) {
+          for (let data of filters) {
+            const group = data[1];
+
+            //没有、或者是星级、公开招募则跳过判定
+            if (group.length < 1 || data[0] === 'gkzm') {
               continue;
             }
-            const group = this.filterGroups[key];
 
             //多选筛选，不需要break
-            if (this.showTag && key === 'tags') {
+            if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
                 if (group.find(t => t.value === tag)) {
                   find = true;
@@ -183,7 +234,7 @@ export default {
             }
 
             //单选筛选，需要break
-            const propertys = key.split('.');
+            const propertys = data[0].split('.');
             let groupFind = false;
             for (let i in group) {
               let key = el;
@@ -192,7 +243,7 @@ export default {
               }
 
               if (String(key) === String(group[i].value)) {
-                ++el.tagHit;
+                el.tagHit++;
                 groupFind = true;
                 break;
               }
@@ -222,20 +273,22 @@ export default {
       });
     },
 
-    classData() {
-      return Object.values(class_chinese);
-    },
     OpenTagsPanel() {
       this.showTag = !this.showTag;
       if (!this.showTag) {
-        this.filterGroups.tags = [];
-        this.$refs['tagFilter'].choseAll();
-        if (this.filterGroups.gkzm.length > 0) this.$refs['gkzm'].choseAll();
+        // this.filterGroups.tags = [];
+        // this.$refs['tagFilter'].choseAll();
+        // if (this.filterGroups.gkzm.length > 0) this.$refs['gkzm'].choseAll();
+        // this.filterGroups.gkzm[0].chosed = true;
+        this.$set(this.filterGroups.gkzm[0], 'chosed', false);
+
         // setTimeout(() => {}, 500);
       } else {
-        if (this.filterGroups.gkzm.length < 1) this.$refs['gkzm'].choseAll();
+        this.$set(this.filterGroups.gkzm[0], 'chosed', true);
+        // if (this.filterGroups.gkzm.length < 1) this.$refs['gkzm'].choseAll();
         // setTimeout(() => {}, 500);
       }
+      this.resetFilter();
     }
   }
 };

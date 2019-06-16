@@ -33,16 +33,34 @@ Vue.use(Button);
 
 export default {
   props: ['filters', 'short', 'label', 'single'],
-  data: function() {
+  data() {
     return {
       lists: this.filters.map(obj => {
-        obj.chosed = false;
+        if (!obj.chosed) obj.chosed = false;
         return obj;
       })
     };
   },
+  watch: {
+    filters: function(newFilter, old) {
+      const res = newFilter.map(obj => {
+        if (!obj.chosed) obj.chosed = false;
+        return obj;
+      });
+      // console.log(res);
+      // console.log(this);
+      this.lists = res;
+    }
+  },
   computed: {
+    // lists() {
+    //   return this.filters.map(obj => {
+    //     if (!obj.chosed) obj.chosed = false;
+    //     return obj;
+    //   });
+    // },
     allChosed() {
+      if (!this.lists) return;
       const l = this.lists.filter(key => key.chosed).length;
       if (this.single) {
         return l === 0;
@@ -72,16 +90,16 @@ export default {
       this.$emit('filter', fArr);
     },
     choseAll() {
+      console.log('全选');
+
       if (this.single && this.allChosed) {
-        this.$emit('filter', this.lists);
         this.lists.forEach(key => this.$set(key, 'chosed', true));
+        this.$emit('filter', this.lists);
 
         return;
       }
-      if (!this.allChosed) {
-        this.lists.forEach(key => this.$set(key, 'chosed', false));
-        this.$emit('filter', []);
-      }
+      this.lists.forEach(key => this.$set(key, 'chosed', false));
+      this.$emit('filter', []);
     }
   }
 };

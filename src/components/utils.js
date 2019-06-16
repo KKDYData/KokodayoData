@@ -318,7 +318,8 @@ const TagsArr = [
   { 'text': '爆发', 'value': '爆发', 'short': '爆发' },
   { 'text': '控场', 'value': '控场', 'short': '控场' }];
 
-
+const StarArr = [{ text: 1, value: '0', short: 1 }, { text: 2, value: '1', short: 2 }, { text: 3, value: '2', short: 3 },
+  { text: 4, value: '3', short: 4 }, { text: 5, value: '4', short: 5 }, { text: 6, value: '5', short: 6 },];
 
 
 const evolveGoldCost = [
@@ -641,6 +642,7 @@ export {
   getProfileList,
   getClass_Chinese,
   TagsArr,
+  StarArr,
   path,
   getClass_Short,
   class_chinese,
