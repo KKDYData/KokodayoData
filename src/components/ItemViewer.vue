@@ -5,7 +5,7 @@
       placement="top"
       :title="item.name"
       :width="!isShort? 350 : 250"
-      trigger="hover"
+      trigger="click"
     >
       <div slot="reference">
         <el-image
@@ -33,7 +33,10 @@
             <span>关卡掉落</span>
           </el-divider>
           <p class="item-stage-container" v-for="stage in item.stageDropList" :key="stage.stageId">
-            <span class="item-stage-name">{{stageId(stage.stageId)}}</span>
+            <span
+              :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'"
+              class="item-stage-name"
+            >{{stageId(stage.stageId)}}</span>
             <span class="item-occper">{{occper(stage.occPer)}}</span>
           </p>
         </div>
@@ -145,6 +148,9 @@ export default {
   left: 20px;
   padding: 0;
 }
+.weekly {
+  width: auto;
+}
 
 @media screen and (max-width: 700px) {
   .evolvcost-item-contianer {
@@ -168,7 +174,7 @@ export default {
     padding: 10px;
   }
   .item-popover .el-divider--horizontal {
-    width: calc(100% - 20px);
+    width: calc(100% - 10px);
   }
 }
 </style>

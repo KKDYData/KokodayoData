@@ -1,24 +1,37 @@
 <template>
-  <div class="home-wrapper" style>
-    <!-- <el-alert show-icon type="success" title="你现在访问的是稳定版" description>
+  <div class="home-wrapper">
+    <el-alert show-icon type="success" title="你现在访问的是稳定版" description>
       <el-link
         href="https://somedata.top/ArknightsBeta"
         type="info"
-      >Beta版链接somedata.top/ArknightsBeta</el-link>，更新频繁，多Bug。Beta版更新频率在一天左右，稳定版大概在3-4天。为了资料站的健康发展，欢迎加入反馈群799872783。你的意见对我们很重要！
-    </el-alert>-->
-    <el-alert show-icon type="warning" title="这是Beta版,可能会有Bug" description>
-      <el-link href="https://somedata.top/Arknights" type="success">somedata.top/Arknights</el-link>已经恢复，这是稳定版，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
+      >Beta版链接somedata.top/ArknightsBeta</el-link>2019年6月16日。调整了一些UI，修复了经验计算器的严重bug。
+      反馈群799872783。
     </el-alert>
-    <home-layout v-if="load" :profileList="data"></home-layout>
+    <!-- <el-alert show-icon type="warning" title="这是Beta版,可能会有Bug" description>
+      <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
+    </el-alert>-->
+    <transition name="fade" mode="out-in">
+      <home-layout v-if="load" :profileList="data"></home-layout>
+    </transition>
   </div>
 </template>
 <script>
 import { getProfileList } from './components/utils';
 import { Alert, link } from 'element-ui';
-import HomeLayout from './components/homeLayout';
+// import HomeLayout from './components/homeLayout';
 import Vue from 'vue';
 Vue.use(link);
 Vue.use(Alert);
+
+import loadingC from './components/loading';
+
+const HomeLayout = () => ({
+  component: import(/* webpackChunkName: "HomeLayout" */ './components/homeLayout'),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
 
 export default {
   components: {

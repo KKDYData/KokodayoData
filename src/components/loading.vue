@@ -1,5 +1,7 @@
 <template>
-  <div v-loading.fullscreen.lock="true"></div>
+  <div class="loading-body">
+    <div v-loading.lock="true"></div>
+  </div>
 </template>
 <script>
 import { Loading } from 'element-ui';
@@ -8,3 +10,12 @@ Vue.use(Loading);
 
 export default {};
 </script>
+
+<style scoped>
+.loading-body {
+  height: 50vh;
+  display: flex;
+  justify-content: center;
+}
+</style>
+
