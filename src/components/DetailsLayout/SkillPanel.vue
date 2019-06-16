@@ -3,16 +3,7 @@
     <div class="group-container-title">技能</div>
     <div class="skill-container" v-for="(skill, index) in skills" :key="skill.name">
       <div class="skill-title">
-        <div class="skill-pic-contianer">
-          <el-image style="height:100%;width:100%" :src="getSkillPath(skill)" lazy>
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
-          <div class="skill-name-wrapper">
-            <span>{{skill.levels[0].name}}</span>
-          </div>
-        </div>
+        <skill-container :skill="skills[index]"></skill-container>
         <div class="skill-tiltle-part" v-if="skill.levels[sLevel[index]-1]">
           <div class="skill-status" v-if="skill.levels[sLevel[index]-1]">
             <span>
@@ -65,12 +56,14 @@
 </template>
 
 <script>
-import { path, changeDesc } from "../utils";
-import Range from "./Range";
+import { path, changeDesc } from '../utils';
+import Range from './Range';
+import SkillContainer from './SkillContainer';
 
 export default {
   components: {
-    range: Range
+    range: Range,
+    'skill-container': SkillContainer
   },
   props: {
     skills: {
@@ -97,32 +90,32 @@ export default {
     },
     getSkillPath(skill) {
       const name = skill.iconId ? skill.iconId : skill.skillId;
-      return path + "skills/pics/skill_icon_" + name + ".png";
+      return path + 'skills/pics/skill_icon_' + name + '.png';
     },
     changeSpType(type) {
       const typeList = {
         8: {
-          value: "被动",
+          value: '被动',
           style: {
-            "background-color": "rgb(153, 153, 153)"
+            'background-color': 'rgb(153, 153, 153)'
           }
         },
         1: {
-          value: "自动回复",
+          value: '自动回复',
           style: {
-            "background-color": "rgb(138, 187, 33)"
+            'background-color': 'rgb(138, 187, 33)'
           }
         },
         2: {
-          value: "攻击回复",
+          value: '攻击回复',
           style: {
-            "background-color": "rgb(252, 121, 61)"
+            'background-color': 'rgb(252, 121, 61)'
           }
         },
         4: {
-          value: "受击回复",
+          value: '受击回复',
           style: {
-            "background-color": "rgb(243, 172, 4)"
+            'background-color': 'rgb(243, 172, 4)'
           }
         }
       };
@@ -131,13 +124,13 @@ export default {
     changeSkillType(type) {
       const typeList = {
         0: {
-          value: "被动"
+          value: '被动'
         },
         1: {
-          value: "手动触发"
+          value: '手动触发'
         },
         2: {
-          value: "自动触发"
+          value: '自动触发'
         }
       };
       return typeList[type];
@@ -145,22 +138,22 @@ export default {
     changeSkillDesc(skill) {
       const str = changeDesc(skill.description);
       let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
-        let percent = "",
+        let percent = '',
           minus = false,
-          res = "",
+          res = '',
           factor = 100;
         if (p2.match(/:0%/)) {
           p2 = p2.slice(0, -3);
-          percent = "%";
+          percent = '%';
         }
         if (p2.match(/:0.0%/)) {
           p2 = p2.slice(0, -5);
-          percent = "%";
+          percent = '%';
           // factor = 1;
         }
         if (p2.match(/:0.0/)) {
           p2 = p2.slice(0, -4);
-          percent = "";
+          percent = '';
           // factor = 1;
         }
         if (p2.match(/-/)) {
@@ -178,22 +171,26 @@ export default {
       const skill_time_text = res.match(/攻击间隔/);
       if (skill_time_text) {
         const skill_base_time = skill.blackboard.find(
-          el => el.key === "base_attack_time"
+          el => el.key === 'base_attack_time'
         );
-        const text = skill_time_text
-          ? res.slice(skill_time_text.index + 4).match(/(<.*?>)(.*?)(<\/.*?>)/)
-          : ["text"];
-        // console.log(text);
+        const text = res
+          .slice(skill_time_text.index + 4)
+          .match(/(<.*?>)(.*?)(<\/.*?>)/);
+
+        console.log(text[2]);
         // console.log(skill_time_text);
         // console.log(skill_time_text.index + 4 + text[0].length);
-        const temp = res.split("");
+        const unit = text[2] !== '极大幅度缩短' ? 's' : '%';
+        let value = skill_base_time.value;
+        if (unit === '%') value *= 100;
+        const temp = res.split('');
         temp.splice(
           skill_time_text.index + 4 + text[0].length,
           0,
-          `(${skill_base_time.value}s)`
+          `(${value}${unit})`
         );
 
-        res = temp.join("");
+        res = temp.join('');
       }
       return res;
     }
@@ -244,17 +241,7 @@ export default {
   right: 0px;
   bottom: 10px;
 }
-.skill-pic-contianer {
-  flex-shrink: 0.5;
-  width: 100px;
-  height: 100px;
-  position: relative;
-  vertical-align: middle;
-}
-.skill-name-wrapper {
-  text-align: center;
-  font-size: 15px;
-}
+
 .skill-type {
   word-break: keep-all;
   color: white;
@@ -337,10 +324,6 @@ export default {
     position: absolute;
     bottom: -25px;
     z-index: 1;
-  }
-  .skill-pic-contianer {
-    width: calc(65px + 1vw);
-    height: calc(65px + 1vw);
   }
 }
 </style>

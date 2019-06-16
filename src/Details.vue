@@ -1,15 +1,23 @@
 <template>
   <div class="home-wrapper" style>
-    <home-layout></home-layout>
+    <details-layout></details-layout>
   </div>
 </template>
 <script>
 // import FilterButtonGroup from './components/FilterButtonGroup';
-import HomeLayout from './components/DetailsLayout';
+import loadingC from './components/loading';
+
+const DetailsLayout = () => ({
+  component: import(/* webpackChunkName: "DetailsLayout" */ './components/DetailsLayout'),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
 
 export default {
   components: {
-    'home-layout': HomeLayout
+    'details-layout': DetailsLayout
   },
   data() {
     return {

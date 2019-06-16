@@ -4,16 +4,7 @@
     <div class="skill-container" v-for="(skill, index) in unlockCond" :key="skill.name">
       <div class="skill-title">
         <div class="skill-pic-container-wrapper">
-          <div>
-            <el-image class="skill-pic-contianer" :src="getSkillPath(skill.Id)" lazy>
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image>
-            <div class="skill-name-wrapper">
-              <span>{{skills[index].levels[0].name}}</span>
-            </div>
-          </div>
+          <skill-container :skill="skills[index]"></skill-container>
         </div>
         <div class="skill-tiltle-part">
           <div>
@@ -53,10 +44,12 @@
 <script>
 import { path, fetchGet, itemBackground } from '../utils';
 import ItemViewer from '../ItemViewer';
+import SkillContainer from './SkillContainer';
 
 export default {
   components: {
-    'item-viewer': ItemViewer
+    'item-viewer': ItemViewer,
+    'skill-container': SkillContainer
   },
   props: {
     skills: {

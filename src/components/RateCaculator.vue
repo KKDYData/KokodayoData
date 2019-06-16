@@ -139,8 +139,8 @@
 </template>
 
 <script>
-import { Select, Option, Input, Autocomplete } from "element-ui";
-import Vue from "vue";
+import { Select, Option, Input, Autocomplete } from 'element-ui';
+import Vue from 'vue';
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(Input);
@@ -155,7 +155,7 @@ export default {
     return {
       selectedSkill: 0,
       attack: this.stats.base.attack.value,
-      selectedSkillRank: "0",
+      selectedSkillRank: '0',
       Bs: this.stats.extra.criticalHitDamage.value.match(/\d+/)[0],
       hp: this.stats.base.health.value,
       hp_scaling: 0,
@@ -192,13 +192,13 @@ export default {
       );
     },
     pow() {
-      let p = /^[\d]+$/.test(this.skills[this.selectedSkill].rate["pow!"])
-        ? this.skills[this.selectedSkill].rate["pow!"]
-        : this.skills[this.selectedSkill].rate["pow!"].match(/[\d|.]+/)[0];
+      let p = /^[\d]+$/.test(this.skills[this.selectedSkill].rate['pow!'])
+        ? this.skills[this.selectedSkill].rate['pow!']
+        : this.skills[this.selectedSkill].rate['pow!'].match(/[\d|.]+/)[0];
       let pow = Number(p);
       for (let i = 0; i < this.selectedSkillRank; i++) {
         if (
-          this.skills[this.selectedSkill].update[i].match("傷害量增加") !== null
+          this.skills[this.selectedSkill].update[i].match('傷害量增加') !== null
         ) {
           console.log(this.skills[this.selectedSkill].update[i]);
           pow +=
@@ -218,21 +218,21 @@ export default {
   methods: {
     getAttackSug(queryString, cb) {
       var results = [
-        { value: "1000" },
-        { value: "2000" },
-        { value: "3000" },
-        { value: "4000" }
+        { value: '1000' },
+        { value: '2000' },
+        { value: '3000' },
+        { value: '4000' }
       ];
       // 调用 callback 返回建议列表的数据
       cb(results);
     },
     getBsSug(queryString, cb) {
       var results = [
-        { value: "150" },
-        { value: "200" },
-        { value: "250" },
-        { value: "300" },
-        { value: "350" }
+        { value: '150' },
+        { value: '200' },
+        { value: '250' },
+        { value: '300' },
+        { value: '350' }
       ];
       // 调用 callback 返回建议列表的数据
       cb(results);
