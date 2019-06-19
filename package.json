@@ -4,7 +4,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack --config config/webpack.prod.js --profile --json > stats.json",
+    "build": "webpack --config config/webpack.prod.js --profile --json > stats.json ",
     "server": "node config/server.js",
     "start": "webpack-dev-server --config config/webpack.dev.js",
     "dev": "webpack --config config/webpack.dev.js --profile --json > stats.json"
@@ -47,6 +47,7 @@
     "style-loader": "^0.23.1",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.2",
+    "terser-webpack-plugin": "^1.3.0",
     "uglifyjs-webpack-plugin": "^2.1.3",
     "vue-loader": "^15.6.4",
     "vue-template-compiler": "^2.6.10",

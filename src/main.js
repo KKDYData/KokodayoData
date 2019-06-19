@@ -32,6 +32,7 @@ const router = new VueRouter({
 
 
 new Vue({
+  el: '#app',
   mode: 'history',
   router,
   components: {
@@ -45,7 +46,7 @@ new Vue({
     </transition>
   </div>
 `
-}).$mount('#app');
+});
 
 
 
