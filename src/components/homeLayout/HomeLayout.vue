@@ -13,15 +13,29 @@
         :filters="filterGroups.star"
         @filter="resetFilter($event, 'star')"
       ></filter-group>
+      <div class="tags-popover-wrapper">
+        <el-popover popper-class="tags-popover-container" placement="bottom-start" trigger="click">
+          <div slot="reference">
+            <div class="tags-selected-container">
+              <el-button
+                :type="SelectedTagGz.length > 0 ?  'warning' : 'info'"
+                size="medium"
+                round
+                @change="OpenTagsPanel"
+              >标签</el-button>
+              <div
+                v-for="tag in SelectedTagGz"
+                :key="tag.value"
+                class="tags-selected-inner-container"
+              >
+                <el-tag @close="handleClose(tag)" closable>{{tag.text}}</el-tag>
+              </div>
+            </div>
+          </div>
 
-      <el-collapse @change="OpenTagsPanel">
-        <el-collapse-item>
-          <template slot="title">
-            <span style="direction:rtl;width: 100%">Tags</span>
-          </template>
           <filter-group
             :short="short"
-            label="Tgas"
+            label="tgas"
             :filters="filterGroups.tags"
             @filter="resetFilter($event, 'tags')"
             ref="tagFilter"
@@ -40,25 +54,18 @@
             @filter="resetFilter($event, 'gkzm')"
             ref="gkzm"
           ></filter-group>
-          <el-collapse>
-            <el-collapse-item title="说明">
-              <template slot="title">
-                <span style="margin-left: 20px;width: 100%">说明</span>
-              </template>
-              <p style="padding: 0 25px">1.打开这个面板之后，筛选会从符合所有条件就出现，变成，只要符合其中一个就出现。</p>
-              <p
-                style="padding: 0 25px"
-              >2.但【仅公招】和【星级】除外，选了这个两个，就会先把列表变成满足条件后(去掉不满足的)，再进行职业，Tags，位置筛选。</p>
-              <p style="padding: 0 25px">3.关闭列表后，就会变成普通的筛选模式</p>
-              <p style="padding: 0 25px">
-                <del>4.动画又加回来了，如果感觉不合适，之后还会调整</del>
-              </p>
-              <p>4.Tags的折叠版活不到12号！</p>
-              <p style="padding: 0 25px">5.Tags补充一个【爆发】</p>
-            </el-collapse-item>
-          </el-collapse>
-        </el-collapse-item>
-      </el-collapse>
+        </el-popover>
+      </div>
+
+      <p>
+        <h3 style="margin-left: 20px;width: 100%">说明</h3>
+      </p>
+      <div style="padding: 0 25px">
+        <p>1.点击标签会出现标签面板，点选后会进行筛选， 所选标签数不为0时，筛选将从符合所有条件才出现，变成，只要符合其中一个就出现，并且根据符合标签的数量排序</p>
+        <p>2.但【仅公招】和【星级】除外，选了这个两个，就会先把列表变成满足条件后(去掉不满足的)，再进行职业，Tags，位置筛选。</p>
+        <p>3.关闭列表后，就会变成普通的筛选模式</p>
+        <p>4.配色还在调整</p>
+      </div>
     </div>
     <profile-layout :showTags="showTag" ref="profile-layout" :tags="SelectedTag" :data="data"></profile-layout>
   </div>
@@ -68,12 +75,14 @@ import FilterButtonGroup from '../FilterButtonGroup';
 import ProfileLayout from './ProfileLayout';
 import { sort, TagsArr, StarArr, class_chinese } from '../utils';
 import Vue from 'vue';
-import { Button, Collapse, CollapseItem } from 'element-ui';
+import { Button, Collapse, CollapseItem, Popover, Tag } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Button);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
+Vue.use(Popover);
+Vue.use(Tag);
 import Vlf from 'vlf';
 Vue.use(Vlf);
 
@@ -102,7 +111,8 @@ export default {
       sortDe: [],
       showTag: false,
       store: null,
-      SelectedTag: []
+      SelectedTag: [],
+      SelectedTagGz: []
     };
   },
   created() {
@@ -143,23 +153,15 @@ export default {
         tags: TagsArr
       };
     },
-    // SelectedTag() {
-    //   return Object.values(this.filterGroups)
-    //     .map(el => {
-    //       const res = el.filter(el => {
-    //         console.log(el);
-    //         return el.chosed;
-    //       });
-    //       console.log(res);
-    //       return res;
-    //     })
-    //     .reduce((pre, cur) => pre.concat(cur));
-    // },
     orAgents() {
       return this.rowData.filter(el => el.gkzm);
     }
   },
   methods: {
+    handleClose(tag) {
+      tag.chosed = false;
+      this.resetFilter();
+    },
     sortData(key) {
       const less = this.showTag
         ? (a, b) => {
@@ -172,19 +174,8 @@ export default {
       this.data = [...sort(this.data, less)];
     },
     resetFilter(group, p) {
-      // if (p) this.$set(this.filterGroups, p, group);
-      this.store.setItem('filterGroups', this.filterGroups).then(async err => {
-        // console.log(err);
-        // const filterGroups = await this.store
-        //   .getItem('filterGroups')
-        //   .then(data => {
-        //     console.log(data);
-        //     return data;
-        //   });
-        // console.log(filterGroups);
-      });
-      // console.log(this.filterGroups);
-      // console.log(this.store);
+      this.store.setItem('filterGroups', this.filterGroups);
+
       //判定是否是公招模式
       let targetData = this.filterGroups.gkzm[0].chosed
         ? this.orAgents
@@ -196,8 +187,17 @@ export default {
         el,
         this.filterGroups[el].filter(el => el.chosed)
       ]);
+
       console.log(filters);
-      this.SelectedTag = [...filters.map(el => el[1])].flat(10);
+      this.SelectedTag = [...filters.map(el => el[1])].flat(1);
+
+      this.SelectedTagGz = [
+        ...filters
+          .filter(el => el[0] !== 'star' && el[0] !== 'class')
+          .map(el => el[1])
+      ].flat(1);
+      //this.filterGroups.tags.filter(el => el.chosed);
+      this.showTag = this.SelectedTagGz.length > 0 ? true : false;
 
       console.log(this.SelectedTag);
       let isFilter = filters
@@ -308,6 +308,31 @@ export default {
 .home-layout-wrapper {
   padding-top: 20px;
   max-width: 1000px;
+  min-height: 500px;
   margin: 0 auto;
+}
+
+.tags-popover-wrapper {
+  margin-left: 10px;
+}
+
+.tags-selected-inner-container {
+  display: inline-block;
+  margin: 5px 10px;
+}
+.tags-selected-inner-container + .tags-selected-inner-container {
+  margin: 5px 5px;
+}
+
+.filter-wrapper .el-button--warning,
+.tags-popover-wrapper .el-button--warning {
+  background-color: #ca3e47;
+  border-color: #ca3e479a;
+}
+
+.filter-wrapper .el-button--info,
+.tags-popover-wrapper .el-button--info {
+  background-color: #313131;
+  border-color: #3131318a;
 }
 </style>

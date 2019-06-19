@@ -1,8 +1,8 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
-
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
@@ -37,27 +37,18 @@ module.exports = merge(common, {
       }
     },
     minimizer: [
-      new UglifyJsPlugin({
+      new TerserPlugin({
         cache: true,
         parallel: true,
-        sourceMap: true,
-        uglifyOptions: {
-          warnings: false,
-          parse: {},
-          compress: {},
-          mangle: true, // Note `mangle.properties` is `false` by default.
-          toplevel: false,
-          nameCache: null,
-          ie8: false,
-          keep_fnames: false,
-          output: {
-            comments: false,
-          },
-        },
       }),
     ],
   },
   output: {
     filename: '[name].[contenthash].js',
+  },
+  resolve: {
+    alias: {
+      'vue': 'vue/dist/vue.min.js'
+    }
   }
 });

@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div class="profile-container">
-      <!-- <transition-group name="flip-list" class="profile-container"> -->
+    <!-- <div class="profile-container"> -->
+    <transition-group name="flip-list" class="profile-container">
       <div
         class="profile-item"
         @click="openDetails(item)"
@@ -42,11 +42,6 @@
                     :alt="item.class"
                     :src="class_icon(item.class)"
                   ></el-image>
-                  <!-- <el-tag
-                    :type="tagHit(item.class) ? 'warning' : 'info'"
-                    size="mini"
-                    :effect="tagHit(item.class) ? 'dark' : ''"
-                  >{{changeClassShort(item.class)}}</el-tag>-->
                 </div>
               </div>
             </div>
@@ -68,8 +63,8 @@
         v-for="item in fillItems"
         :key="item"
       ></div>
-    </div>
-    <!-- </transition-group> -->
+      <!-- </div> -->
+    </transition-group>
   </div>
 </template>
 

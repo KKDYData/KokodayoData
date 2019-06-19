@@ -5,7 +5,7 @@
         <el-button
           :size="short? 'mini' :'medium'"
           @click="choseAll"
-          :type="allChosed ? 'info': 'success'"
+          :type="allChosed ? 'info': 'warning'"
           round
         >{{label}}</el-button>
       </div>

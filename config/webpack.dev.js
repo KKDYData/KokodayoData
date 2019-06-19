@@ -19,5 +19,10 @@ module.exports = merge(common, {
     allowedHosts: [
       '192.168.31.179'
     ]
+  },
+  resolve: {
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js'
+    },
   }
 });
