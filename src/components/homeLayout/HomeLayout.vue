@@ -19,7 +19,7 @@
             <div class="tags-selected-container">
               <el-button
                 :type="SelectedTagGz.length > 0 ?  'warning' : 'info'"
-                size="medium"
+                :size="short? 'mini' :'medium'"
                 round
                 @change="OpenTagsPanel"
               >标签</el-button>
@@ -30,6 +30,10 @@
               >
                 <el-tag @close="handleClose(tag)" closable>{{tag.text}}</el-tag>
               </div>
+              <span
+                style="margin-left: 10px; color:rgb(160, 160, 160)"
+                v-if="SelectedTagGz.length === 0 "
+              >点击左边打开标签面板</span>
             </div>
           </div>
 
@@ -54,18 +58,34 @@
             @filter="resetFilter($event, 'gkzm')"
             ref="gkzm"
           ></filter-group>
+          <div style="direction: rtl">
+            <el-button @click="$el.click()" type="danger" :size="short? 'mini' :'medium'" round>
+              <i class="el-icon-close"></i> 关闭
+            </el-button>
+          </div>
         </el-popover>
       </div>
 
-      <p>
-        <h3 style="margin-left: 20px;width: 100%">说明</h3>
-      </p>
-      <div style="padding: 0 25px">
-        <p>1.点击标签会出现标签面板，点选后会进行筛选， 所选标签数不为0时，筛选将从符合所有条件才出现，变成，只要符合其中一个就出现，并且根据符合标签的数量排序</p>
-        <p>2.但【仅公招】和【星级】除外，选了这个两个，就会先把列表变成满足条件后(去掉不满足的)，再进行职业，Tags，位置筛选。</p>
-        <p>3.关闭列表后，就会变成普通的筛选模式</p>
-        <p>4.配色还在调整</p>
-      </div>
+      <el-collapse :value="showExplain" class="explain-container">
+        <!-- <h3 style="margin-left: 20px;width: 100%"></h3> -->
+        <el-collapse-item title="说明" name="1">
+          <el-alert show-icon type="warning" description>
+            <div slot="title">
+              这是Beta版,可能会有Bug
+              <el-link
+                href="https://somedata.top/Arknights"
+                type="success"
+              >这是稳定版somedata.top/Arknights</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
+            </div>
+          </el-alert>
+          <div style="padding: 0 25px">
+            <p>1.点击标签会出现标签面板，点选后会进行筛选， 所选标签数不为0时，筛选将从符合所有条件才出现，变成，只要符合其中一个就出现，并且根据符合标签的数量排序</p>
+            <p>2.但【仅公招】和【星级】除外，选了这个两个，就会先把列表变成满足条件后(去掉不满足的)，再进行职业，Tags，位置筛选。</p>
+            <p>3.关闭列表后，就会变成普通的筛选模式</p>
+            <p>4.配色还在调整</p>
+          </div>
+        </el-collapse-item>
+      </el-collapse>
     </div>
     <profile-layout :showTags="showTag" ref="profile-layout" :tags="SelectedTag" :data="data"></profile-layout>
   </div>
@@ -92,6 +112,11 @@ const position = [
   { text: '近战位', value: '近战位', short: '近战位' }
 ];
 
+if (typeof Array.prototype.flat !== 'function') {
+  Array.prototype.flat = function(num) {
+    return this.reduce((pre, cur) => pre.concat(cur));
+  };
+}
 export default {
   components: {
     'filter-group': FilterButtonGroup,
@@ -112,11 +137,13 @@ export default {
       showTag: false,
       store: null,
       SelectedTag: [],
-      SelectedTagGz: []
+      SelectedTagGz: [],
+      showExplain: ['1']
     };
   },
   created() {
     this.short = window.innerWidth < 500 ? true : false;
+    if (this.short) this.showExplain = [];
     window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
     });
@@ -296,7 +323,7 @@ export default {
 <style>
 .home-filter-wrapper {
   margin-bottom: 20px;
-  border-bottom: 1px solid rgba(158, 158, 158, 0.4);
+  /* border-bottom: 1px solid rgba(158, 158, 158, 0.4); */
 }
 .sort-group-wrapper {
   margin-left: 10px;
@@ -334,5 +361,9 @@ export default {
 .tags-popover-wrapper .el-button--info {
   background-color: #313131;
   border-color: #3131318a;
+}
+.explain-container {
+  margin-top: 15px;
+  padding: 0 10px;
 }
 </style>
