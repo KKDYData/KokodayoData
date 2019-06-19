@@ -7,10 +7,7 @@
       >Beta版链接somedata.top/ArknightsBeta</el-link>2019年6月16日。调整了一些UI，修复了经验计算器的严重bug。
       反馈群799872783。
     </el-alert>-->
-    <el-alert show-icon type="warning" title="这是Beta版,可能会有Bug" description>
-      <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
-      <b style="color: black">也许你没有发现，其实这里也是可以进行公开招募筛选的</b>
-    </el-alert>
+
     <transition name="fade" mode="out-in">
       <home-layout v-if="load" :profileList="data"></home-layout>
     </transition>
