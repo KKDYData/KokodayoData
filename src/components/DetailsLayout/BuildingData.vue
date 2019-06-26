@@ -48,17 +48,14 @@ export default {
 
 <style scoped>
 .group-container-title {
-  border-bottom: 1px solid rgb(235, 238, 245);
   font-weight: bold;
   color: white;
   margin-bottom: 20px;
   background-color: #414141;
   padding-left: 1vw;
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
 }
 
-.tttt {
-  margin-bottom: 20px;
-}
 .talent-name-wrapper,
 .talent-container-wrapper {
   display: flex;

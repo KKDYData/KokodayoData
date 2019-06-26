@@ -21,15 +21,16 @@
                   </span>
                 </div>
                 <div>
-                  <span class="char-card-title-class">
+                  <div class="char-card-title-class">
                     <el-image class="char-card-pro-pic" :src="professionPic" :details="name">
                       <div slot="error" class="image-slot">
                         <i class="el-icon-picture-outline"></i>
                       </div>
                     </el-image>
                     <span>{{ profession }}</span>
-                    <span class="char-card-stars">{{'⭐'.repeat(Number(data.rarity) + 1)}}</span>
-                  </span>
+                    <el-image class="char-card-star-pic" :src="rarityPath" fit="contain"></el-image>
+                    <!-- <span class="char-card-stars">{{'⭐'.repeat(Number(data.rarity) + 1)}}</span> -->
+                  </div>
                   <div class="intro-2-wrapper">
                     <span class="intro-2" v-html="desc"></span>
                   </div>
@@ -45,7 +46,7 @@
               <span>{{data.itemDesc}}</span>
             </p>
             <div class="char-camp-pic" :style="`--logo-link: url(${logo})`">
-              <div v-if="data.team > -1">
+              <div v-if="data.team > -1" style="box-shadow:rgba(82, 82, 82, 0.4) 0px 1px 1px 0px">
                 <span
                   :style="`padding: 0 5px;background-color: #${team.color};color: ${team.color !== 'ffffff' ? '#fff' : ''}; border-radius: 2px;opacity: 0.7`"
                 >{{team.teamName}}</span>
@@ -133,10 +134,13 @@
         </div>
         <!-- 天赋面板 -->
         <div class="tttt">
+          <div class="group-container-title">天赋</div>
           <talents-panel :talents="talents"></talents-panel>
         </div>
         <!-- 技能面板 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
+          <div class="group-container-title">技能</div>
+
           <skill-panel :skills="skills"></skill-panel>
         </div>
         <!-- 潜能面板 -->
@@ -185,6 +189,7 @@
 
         <!-- 技能升级消耗 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
+          <div class="group-container-title">技能升级消耗</div>
           <skill-up-panel :allLevelCost="data.allSkillLvlup" :skills="skills" :seven="data.skills"></skill-up-panel>
         </div>
 
@@ -316,6 +321,10 @@ export default {
     };
   },
   computed: {
+    rarityPath() {
+      if (!this.data) return '';
+      return path + 'others/rarity_' + this.data.rarity + '.png';
+    },
     team() {
       if (!this.data) return '';
       return Team[this.data.team];
@@ -585,12 +594,12 @@ export default {
 }
 /*  */
 .group-container-title {
-  border-bottom: 1px solid rgb(235, 238, 245);
   font-weight: bold;
   color: white;
   margin-bottom: 20px;
   background-color: #414141;
   padding-left: 1vw;
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
 }
 .el-image img {
   width: 100%;
@@ -610,6 +619,7 @@ export default {
   align-self: stretch;
   position: relative;
   height: 150px;
+  z-index: 1;
 }
 .char-card-pic {
   display: inline-block;
@@ -623,8 +633,13 @@ export default {
 }
 
 .char-card-title-class {
-  font-size: 40px;
-  vertical-align: 0%;
+  font-size: 0;
+  display: flex;
+  align-items: center;
+}
+.char-card-title-class span {
+  font-size: 38px;
+  word-break: keep-all;
 }
 .char-card-title-wrapper {
   margin-left: 20px;
@@ -704,7 +719,9 @@ export default {
   background-color: #414141;
   border-color: #414141;
 }
-
+.details-wrapper-fixed {
+  z-index: 0;
+}
 /*  */
 /*  */
 /*  */
@@ -809,6 +826,7 @@ export default {
   font-size: 100%;
   line-height: 100%;
   padding: 2px 0;
+  box-shadow: 1px 1px 2px 1px #0000005e;
 }
 .status-details-value {
   display: inline-block;
@@ -994,8 +1012,8 @@ export default {
     height: auto;
     flex-grow: 0;
   }
-  .char-card-title-class {
-    font-size: 20px;
+  .char-card-title-class span {
+    font-size: calc(15px + 0.5vw);
   }
   .char-card-title-name {
     font-size: 20px;
@@ -1061,6 +1079,11 @@ export default {
   .char-camp-pic::before {
     opacity: 0.4;
   }
+
+  .char-card-star-pic {
+    height: calc(15px + 0.5vw);
+  }
+
   /*  */
   .evolvcost-item-container {
     min-width: 80px;

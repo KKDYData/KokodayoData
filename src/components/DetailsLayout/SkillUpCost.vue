@@ -1,6 +1,5 @@
 <template>
   <div v-if="skills.length > 0" class="skill-container-wrapper">
-    <div class="group-container-title">技能升级消耗</div>
     <div class="skill-container" v-for="(skill, index) in unlockCond" :key="skill.name">
       <div class="skill-title">
         <div class="skill-pic-container-wrapper">
