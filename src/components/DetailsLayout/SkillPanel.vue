@@ -199,21 +199,24 @@ export default {
 </script>
 
 <style scoped>
-/* part 4 */
-
-.skill-container {
-  border-bottom: 1px solid rgb(235, 238, 245);
-  padding-bottom: 38px;
-  position: relative;
+.skill-container-wrapper {
+  margin-bottom: 20px;
 }
+/* part 4 */
 .group-container-title {
   border-bottom: 1px solid rgb(235, 238, 245);
   font-weight: bold;
   color: white;
   margin-bottom: 20px;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding-left: 10px;
+  background-color: #414141;
+  padding-left: 1vw;
 }
+.skill-container {
+  border-bottom: 1px solid rgb(235, 238, 245);
+  padding-bottom: 38px;
+  position: relative;
+}
+
 .skill-title {
   position: relative;
   display: flex;
@@ -246,7 +249,7 @@ export default {
   word-break: keep-all;
   color: white;
   padding: 0px !important;
-  width: 70px;
+  width: calc(64px + 1vw);
   text-align: center;
   display: inline-block;
   border-radius: 3px;
@@ -258,9 +261,8 @@ export default {
 .skill-status-desc {
   font-size: 16px;
   color: #606266;
-  font-size: 16px;
-  color: #606266;
-  height: calc(100% - 20px);
+  /* height: calc(100% - 20px); */
+  padding-top: 20px;
   display: flex;
   align-items: center;
 }
@@ -294,19 +296,12 @@ export default {
     font-size: calc(12px + 0.5vw);
   }
   .skill-title-level {
-    /* padding-left: 2vw; */
     display: inline-block;
-    /* position: absolute; */
-    /* right: 2vw; */
-    /* position: absolute; */
     left: 0;
     padding-left: 35vw;
     padding-right: 2vw;
-    /* width: calc(100%-100px); */
   }
   .skill-tiltle-part {
-    /* display: inline-block; */
-    /* display: flex; */
     flex-wrap: wrap;
     padding-left: 2vw;
     width: calc(100% - 65px - 1vw);
@@ -315,7 +310,7 @@ export default {
   .skill-name-level {
     position: relative;
     right: -90px;
-    top: 0;
+    top: 5px;
   }
   .skill-container {
     padding-bottom: 0px;

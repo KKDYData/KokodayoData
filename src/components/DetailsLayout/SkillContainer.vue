@@ -6,7 +6,9 @@
       </div>
     </el-image>
     <div class="skill-name-wrapper">
-      <span>{{skill.levels[0].name}}</span>
+      <span
+        :style="skill.levels[0].name.length > 6 ? 'font-size: 13px': ''"
+      >{{skill.levels[0].name}}</span>
     </div>
   </div>
 </template>

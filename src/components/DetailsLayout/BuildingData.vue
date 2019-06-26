@@ -47,6 +47,15 @@ export default {
 </script>
 
 <style scoped>
+.group-container-title {
+  border-bottom: 1px solid rgb(235, 238, 245);
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+  background-color: #414141;
+  padding-left: 1vw;
+}
+
 .tttt {
   margin-bottom: 20px;
 }

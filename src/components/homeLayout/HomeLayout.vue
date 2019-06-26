@@ -1,5 +1,6 @@
 <template>
   <div class="home-layout-wrapper">
+    <!-- <p>{{OsText}} | {{webpOk}}</p> -->
     <div class="home-filter-wrapper" id="profile-panel">
       <filter-group
         label="职业"
@@ -13,8 +14,14 @@
         :filters="filterGroups.star"
         @filter="resetFilter($event, 'star')"
       ></filter-group>
+
       <div class="tags-popover-wrapper">
-        <el-popover popper-class="tags-popover-container" placement="bottom-start" trigger="click">
+        <el-popover
+          popper-class="tags-popover-container"
+          placement="bottom-start"
+          trigger="click"
+          :visible-arrow="false"
+        >
           <div slot="reference">
             <div class="tags-selected-container">
               <el-button
@@ -23,23 +30,30 @@
                 round
                 @change="OpenTagsPanel"
               >标签</el-button>
-              <div
-                v-for="tag in SelectedTagGz"
-                :key="tag.value"
-                class="tags-selected-inner-container"
-              >
-                <el-tag @close="handleClose(tag)" closable>{{tag.text}}</el-tag>
+              <div class="tag-selected-content-container" style>
+                <div
+                  v-for="tag in SelectedTagGz"
+                  :key="tag.value"
+                  class="tags-selected-inner-container"
+                >
+                  <el-tag
+                    :size="short? 'medium' :'normal'"
+                    @close="handleClose(tag)"
+                    closable
+                    effect="dark"
+                  >{{tag.text}}</el-tag>
+                </div>
+                <span
+                  style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
+                  v-if="SelectedTagGz.length === 0 "
+                >点击打开标签面板</span>
               </div>
-              <span
-                style="margin-left: 10px; color:rgb(160, 160, 160)"
-                v-if="SelectedTagGz.length === 0 "
-              >点击左边打开标签面板</span>
             </div>
           </div>
 
           <filter-group
             :short="short"
-            label="tgas"
+            label="Tgas"
             :filters="filterGroups.tags"
             @filter="resetFilter($event, 'tags')"
             ref="tagFilter"
@@ -49,6 +63,12 @@
             label="位置"
             :filters="filterGroups.position"
             @filter="resetFilter($event, 'position')"
+          ></filter-group>
+          <filter-group
+            :short="short"
+            label="性别"
+            :filters="filterGroups.sex"
+            @filter="resetFilter($event, 'sex')"
           ></filter-group>
           <filter-group
             :short="short"
@@ -65,29 +85,37 @@
           </div>
         </el-popover>
       </div>
-
-      <el-collapse :value="showExplain" class="explain-container">
-        <!-- <h3 style="margin-left: 20px;width: 100%"></h3> -->
-        <el-collapse-item title="说明" name="1">
-          <el-alert show-icon type="warning" description>
-            <div slot="title">
-              这是Beta版,可能会有Bug
-              <el-link
-                href="https://somedata.top/Arknights"
-                type="success"
-              >这是稳定版somedata.top/Arknights</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
-            </div>
-          </el-alert>
-          <div style="padding: 0 25px">
-            <p>1.点击标签会出现标签面板，点选后会进行筛选， 所选标签数不为0时，筛选将从符合所有条件才出现，变成，只要符合其中一个就出现，并且根据符合标签的数量排序</p>
-            <p>2.但【仅公招】和【星级】除外，选了这个两个，就会先把列表变成满足条件后(去掉不满足的)，再进行职业，Tags，位置筛选。</p>
-            <p>3.关闭列表后，就会变成普通的筛选模式</p>
-            <p>4.配色还在调整</p>
-          </div>
-        </el-collapse-item>
-      </el-collapse>
     </div>
-    <profile-layout :showTags="showTag" ref="profile-layout" :tags="SelectedTag" :data="data"></profile-layout>
+
+    <el-tabs @tab-click="switchToNormal" style="padding: 0px" :value="currentMode">
+      <el-tab-pane label="一般模式" name="profile-layout">
+        <profile-layout
+          :show-tags="showTag"
+          ref="profile-layout"
+          :tags="SelectedTag"
+          :filter-groups="filterGroups"
+          :data="data"
+          :webpOk="webpOk"
+        ></profile-layout>
+      </el-tab-pane>
+      <el-tab-pane name="new-profile-layout" label="排列组合">
+        <new-profile-layout
+          :webp-ok="webpOk"
+          :tags="SelectedTag"
+          :filterGroups="filterGroups"
+          :data="data"
+        ></new-profile-layout>
+      </el-tab-pane>
+      <el-tab-pane name="expalain" label="说明">
+        <div style="padding: 0 10px">
+          <p>1.选了标签（公招）的Tag之后，筛选模式会发生变化</p>
+          <p>2.【职业】、【星级】这些分类名，点击可以取消全部选择。</p>
+          <p>3.还没想到要说什么。。。对了，这个说明面板还要改</p>
+          <p>4.配色还在调整</p>
+          <p>5.反馈群799872783！</p>
+        </div>
+      </el-tab-pane>
+    </el-tabs>
   </div>
 </template>
 <script>
@@ -95,21 +123,38 @@ import FilterButtonGroup from '../FilterButtonGroup';
 import ProfileLayout from './ProfileLayout';
 import { sort, TagsArr, StarArr, class_chinese } from '../utils';
 import Vue from 'vue';
-import { Button, Collapse, CollapseItem, Popover, Tag } from 'element-ui';
+import { Button, MessageBox, Popover, Tag, Tabs, TabPane } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Button);
-Vue.use(Collapse);
-Vue.use(CollapseItem);
 Vue.use(Popover);
 Vue.use(Tag);
+Vue.use(Tabs);
+Vue.use(TabPane);
+
 import Vlf from 'vlf';
 Vue.use(Vlf);
+import loadingC from '../Loading';
 
-const gkzm = [{ text: '仅公招', value: true, short: '公招' }];
+const newProfileLayout = () => ({
+  component: import(/* webpackChunkName: "newProfileLayout" */ './newProfileLayout'),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
+
+import UaParser from 'ua-parser-js';
+
+const gkzm = [{ isTag: false, text: '仅公招', value: true, short: '公招' }];
 const position = [
-  { text: '远程位', value: '远程位', short: '远程位' },
-  { text: '近战位', value: '近战位', short: '近战位' }
+  { isTag: false, text: '远程位', value: '远程位', short: '远程位' },
+  { isTag: false, text: '近战位', value: '近战位', short: '近战位' }
+];
+
+const sex = [
+  { isTag: false, text: '男性干员', value: '男', short: '男' },
+  { isTag: false, text: '女性干员', value: '女', short: '女' }
 ];
 
 if (typeof Array.prototype.flat !== 'function') {
@@ -117,10 +162,14 @@ if (typeof Array.prototype.flat !== 'function') {
     return this.reduce((pre, cur) => pre.concat(cur));
   };
 }
+
+const explain = '';
+
 export default {
   components: {
     'filter-group': FilterButtonGroup,
-    'profile-layout': ProfileLayout
+    'profile-layout': ProfileLayout,
+    'new-profile-layout': newProfileLayout
   },
   props: {
     profileList: Array
@@ -130,7 +179,6 @@ export default {
       short: false,
       data: null,
       rowData: this.profileList,
-
       showKey: '',
       filtersLength: 0,
       sortDe: [],
@@ -138,7 +186,11 @@ export default {
       store: null,
       SelectedTag: [],
       SelectedTagGz: [],
-      showExplain: ['1']
+      showExplain: ['1'],
+      showOtherPanel: false,
+      currentMode: 'profile-layout',
+      webpOk: true,
+      OsText: ''
     };
   },
   created() {
@@ -147,6 +199,19 @@ export default {
     window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
     });
+    const ua = new UaParser();
+    const OS = ua.getOS();
+    const Browser = ua.getBrowser();
+    console.log(OS);
+    console.log(Browser);
+    if (
+      OS.name === 'iOS' ||
+      (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
+      (Browser.name === 'Edge' && Browser.version < '18')
+    ) {
+      this.webpOk = false;
+    }
+    this.OsText = OS.name + ' | ' + Browser.name + ' | ' + Browser.version;
   },
   mounted() {
     this.$vlf
@@ -155,16 +220,15 @@ export default {
       })
       .then(async store => {
         this.store = store;
-        const filterGroups = await store.getItem('filterGroups').then(data => {
-          console.log(data);
-          return data;
-        });
-        console.log(`filterGroups: ${filterGroups}`);
+        const filterGroups = await store.getItem('filterGroups');
         if (filterGroups) {
           // this.$set(this, 'filterGroups', filterGroups);
           Object.keys(filterGroups).forEach(el => {
-            console.log(el);
-            this.$set(this.filterGroups, el, filterGroups[el]);
+            if (filterGroups[el][0].isTag === undefined)
+              console.log('不读缓存， 更新数据' + el);
+            else {
+              this.$set(this.filterGroups, el, filterGroups[el]);
+            }
           });
         }
         this.resetFilter();
@@ -177,7 +241,8 @@ export default {
         star: StarArr,
         position: position,
         class: Object.values(class_chinese),
-        tags: TagsArr
+        tags: TagsArr,
+        sex: sex
       };
     },
     orAgents() {
@@ -185,6 +250,17 @@ export default {
     }
   },
   methods: {
+    switchToNormal(tab) {
+      if (this.currentMode === 'profile-layout')
+        this.$nextTick().then(() => {
+          this.$refs['profile-layout'].calFillAmount();
+        });
+    },
+    openExpain() {
+      MessageBox.alert(explain, {
+        dangerouslyUseHTMLString: true
+      });
+    },
     handleClose(tag) {
       tag.chosed = false;
       this.resetFilter();
@@ -200,44 +276,48 @@ export default {
 
       this.data = [...sort(this.data, less)];
     },
-    resetFilter(group, p) {
+    async resetFilter(group, p) {
       this.store.setItem('filterGroups', this.filterGroups);
 
       //判定是否是公招模式
       let targetData = this.filterGroups.gkzm[0].chosed
         ? this.orAgents
         : this.rowData;
-      // debugger;
-      console.log(targetData.length);
-      //如果筛选为空则跳过筛选，返回原值
+
+      const starFilter = this.filterGroups.star.filter(el => el.chosed);
+      targetData =
+        starFilter.length > 0
+          ? targetData.filter(
+            el =>
+              starFilter.findIndex(star => Number(star.value) === el.star) >
+                -1
+          )
+          : targetData;
       const filters = Object.keys(this.filterGroups).map(el => [
         el,
         this.filterGroups[el].filter(el => el.chosed)
       ]);
 
-      console.log(filters);
+      //所有选择的标签，包括公招、星级、职业、Tags
       this.SelectedTag = [...filters.map(el => el[1])].flat(1);
 
+      //公招用的Tags,用于显示在角色头像旁边
       this.SelectedTagGz = [
         ...filters
           .filter(el => el[0] !== 'star' && el[0] !== 'class')
           .map(el => el[1])
       ].flat(1);
-      //this.filterGroups.tags.filter(el => el.chosed);
+
       this.showTag = this.SelectedTagGz.length > 0 ? true : false;
 
-      console.log(this.SelectedTag);
-      let isFilter = filters
-        .map(el => el[1].length)
+      //是否过滤
+      const isFilter = filters
+        .map(el => el[1].length && el[0] !== 'star' && el[0] !== 'gkzm')
         .reduce((pre, cur) => pre + cur);
 
-      if (this.filterGroups.gkzm[0].chosed) isFilter -= 1;
-
-      console.log(isFilter);
       if (isFilter > 0) {
         //重新筛选， 重置tagHit
         targetData.forEach(el => this.$set(el, 'tagHit', 0));
-
         targetData = targetData.filter(el => {
           let find = !this.showTag;
 
@@ -245,11 +325,11 @@ export default {
             const group = data[1];
 
             //没有、或者是星级、公开招募则跳过判定
-            if (group.length < 1 || data[0] === 'gkzm') {
+            if (group.length < 1 || data[0] === 'gkzm' || data[0] === 'star') {
               continue;
             }
 
-            //多选筛选，不需要break
+            //多选筛选(公招模式)，不需要break
             if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
                 if (group.find(t => t.value === tag)) {
@@ -292,28 +372,23 @@ export default {
       }
 
       this.data = targetData;
-      this.$nextTick().then(() => {
-        if (targetData.length > 0) {
-          this.sortData(targetData);
-          this.$refs['profile-layout'].calFillAmount();
-        }
-      });
+      this.sortData(targetData);
+      await this.$nextTick();
+      if (targetData.length > 0) {
+        //等tag消失的动画结束
+        setTimeout(() => {
+          if (this.currentMode === 'profile-layout')
+            this.$refs['profile-layout'].calFillAmount();
+        }, 10);
+      }
     },
 
     OpenTagsPanel() {
       this.showTag = !this.showTag;
       if (!this.showTag) {
-        // this.filterGroups.tags = [];
-        // this.$refs['tagFilter'].choseAll();
-        // if (this.filterGroups.gkzm.length > 0) this.$refs['gkzm'].choseAll();
-        // this.filterGroups.gkzm[0].chosed = true;
         this.$set(this.filterGroups.gkzm[0], 'chosed', false);
-
-        // setTimeout(() => {}, 500);
       } else {
         this.$set(this.filterGroups.gkzm[0], 'chosed', true);
-        // if (this.filterGroups.gkzm.length < 1) this.$refs['gkzm'].choseAll();
-        // setTimeout(() => {}, 500);
       }
       this.resetFilter();
     }
@@ -343,27 +418,85 @@ export default {
   margin-left: 10px;
 }
 
+.tags-selected-container button {
+  vertical-align: top;
+  margin-top: 3px;
+}
+
 .tags-selected-inner-container {
   display: inline-block;
-  margin: 5px 10px;
-}
-.tags-selected-inner-container + .tags-selected-inner-container {
   margin: 5px 5px;
 }
 
 .filter-wrapper .el-button--warning,
 .tags-popover-wrapper .el-button--warning {
   background-color: #ca3e47;
-  border-color: #ca3e479a;
+  border-color: rgba(202, 62, 71, 0.6);
 }
 
-.filter-wrapper .el-button--info,
 .tags-popover-wrapper .el-button--info {
   background-color: #313131;
-  border-color: #3131318a;
+  border-color: rgba(49, 49, 49, 0.54);
 }
 .explain-container {
   margin-top: 15px;
   padding: 0 10px;
+}
+
+.other-masking {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: -1;
+}
+
+.control-container {
+  margin: 10px;
+  border-bottom: 1px solid #414141;
+}
+
+.tag-selected-content-container {
+  display: inline-block;
+  width: calc(100% - 80px);
+}
+
+.tags-selected-inner-container > .el-tag--dark {
+  background-color: #414141;
+  border-color: #414141;
+}
+
+.el-button:focus,
+.el-button:hover {
+  background-color: hsla(356, 57%, 52%, 0.5);
+  border-color: hsla(356, 57%, 52%, 0.1);
+  color: #fff;
+}
+
+.home-layout-wrapper .el-tabs__nav-scroll {
+  padding: 0 10px;
+}
+
+.home-layout-wrapper .el-tabs__item.is-active {
+  color: hsla(45, 134%, 60%, 1);
+}
+
+.home-layout-wrapper .el-tabs__item:hover {
+  color: hsla(45, 134%, 60%, 0.8);
+}
+.home-layout-wrapper .el-tabs__active-bar {
+  background-color: hsla(45, 134%, 60%, 0.8);
+}
+
+@media screen and (max-width: 495px) {
+  .tag-selected-content-container {
+    display: inline-block;
+    width: calc(100% - 62px);
+  }
+
+  .tags-selected-container button {
+    margin-top: 6px;
+  }
 }
 </style>

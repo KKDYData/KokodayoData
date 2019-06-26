@@ -5,7 +5,7 @@
 </template>
 <script>
 // import FilterButtonGroup from './components/FilterButtonGroup';
-import loadingC from './components/loading';
+import loadingC from './components/Loading';
 
 const DetailsLayout = () => ({
   component: import(/* webpackChunkName: "DetailsLayout" */ './components/DetailsLayout'),

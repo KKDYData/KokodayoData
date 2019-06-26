@@ -337,7 +337,7 @@ export default {
   }
 
   .my-form-item-wrapper {
-    width: 110px;
+    width: 106px;
   }
   .my-form-item {
     max-width: 100px;
@@ -345,10 +345,10 @@ export default {
 
   .extra-exp {
     height: calc(150px + 5vw);
-    justify-content: center;
+    justify-content: space-between;
   }
   .extra-exp .my-form-item-wrapper {
-    width: calc(50vw - 5vw);
+    width: calc(50vw - 23px);
   }
 
   .extra-exp .my-form-item {

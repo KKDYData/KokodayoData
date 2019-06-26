@@ -95,6 +95,6 @@ module.exports = {
   },
   resolve: {
 
-    extensions: ['.js', '.styl', '.vue']
+    extensions: ['.js', '.styl', '.vue', '.json']
   },
 };
