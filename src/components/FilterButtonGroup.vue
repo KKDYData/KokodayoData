@@ -71,7 +71,6 @@ export default {
   methods: {
     filter(key) {
       this.$set(key, 'chosed', !key.chosed);
-      console.log(key.chosed);
       const fArr = this.lists.filter(key => key.chosed);
       if (!this.single) {
         if (fArr.length === 0) {
@@ -122,5 +121,9 @@ export default {
 .filter-button {
   margin-bottom: 5px;
   margin-left: 10px;
+}
+.filter-button-wrapper > .el-button--primary {
+  background-color: #ca3e47;
+  border-color: rgba(202, 62, 71, 0.6);
 }
 </style>

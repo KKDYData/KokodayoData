@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Arknights Data Beta 0.2.3</title>
+  <title>Arknights Data 0.2.7</title>
   <style>
     html {
       overflow-y: scroll;
@@ -22,6 +22,7 @@
 
     body {
       width: 100vw;
+      min-height: 100vh;
       overflow: hidden;
       margin: 0;
       background-color: white
@@ -61,7 +62,7 @@
 
     .fade-enter-active,
     .fade-leave-active {
-      transition: opacity .3s;
+      transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1);
     }
 
     .fade-enter,
@@ -74,7 +75,23 @@
 
     .tags-popover-container {
       /* left: calc(50vw - 500px) !important */
-      max-width: 1000px;
+      max-width: 959px;
+    }
+
+
+
+    .status-lv-favor-wrapper .el-switch__label.is-active {
+      color: #f49800;
+    }
+
+    @media screen and (min-width: 1000px) {
+      .el-message-box {
+        min-width: 700px
+      }
+
+      .el-message-box__message p {
+        margin: 10px !important
+      }
     }
   </style>
 </head>

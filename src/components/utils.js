@@ -14,6 +14,7 @@ const throttle = function (action, delay) {
   return function () {
     var curr = +new Date();
     if (curr - last > delay) {
+      console.log('hit  ' + (curr - last));
       action.apply(this, arguments);
       last = curr;
     }
@@ -282,14 +283,14 @@ const sortByTime = data => {
 };
 
 const class_chinese = {
-  MEDIC: { text: '医疗', value: 'MEDIC', short: '医' },
-  CASTER: { text: '术士', value: 'CASTER', short: '术' },
-  SNIPER: { text: '狙击', value: 'SNIPER', short: '狙' },
-  WARRIOR: { text: '近卫', value: 'WARRIOR', short: '战' },
-  PIONEER: { text: '先锋', value: 'PIONEER', short: '先' },
-  TANK: { text: '重装', value: 'TANK', short: '重' },
-  SPECIAL: { text: '特种', value: 'SPECIAL', short: '特' },
-  SUPPORT: { text: '辅助', value: 'SUPPORT', short: '辅' },
+  MEDIC: { isTag: false, text: '医疗', value: 'MEDIC', short: '医' },
+  CASTER: { isTag: false, text: '术士', value: 'CASTER', short: '术' },
+  SNIPER: { isTag: false, text: '狙击', value: 'SNIPER', short: '狙' },
+  WARRIOR: { isTag: false, text: '近卫', value: 'WARRIOR', short: '战' },
+  PIONEER: { isTag: false, text: '先锋', value: 'PIONEER', short: '先' },
+  TANK: { isTag: false, text: '重装', value: 'TANK', short: '重' },
+  SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL', short: '特' },
+  SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT', short: '辅' },
 
 };
 
@@ -302,24 +303,29 @@ const getClass_Short = en => {
 };
 
 const TagsArr = [
-  { 'text': '治疗', 'value': '治疗', 'short': '治疗' },
-  { 'text': '支援', 'value': '支援', 'short': '支援' },
-  { 'text': '新手', 'value': '新手', 'short': '新手' },
-  { 'text': '费用回复', 'value': '费用回复', 'short': '费用回复' },
-  { 'text': '输出', 'value': '输出', 'short': '输出' },
-  { 'text': '生存', 'value': '生存', 'short': '生存' },
-  { 'text': '防护', 'value': '防护', 'short': '防护' },
-  { 'text': '群攻', 'value': '群攻', 'short': '群攻' },
-  { 'text': '减速', 'value': '减速', 'short': '减速' },
-  { 'text': '削弱', 'value': '削弱', 'short': '削弱' },
-  { 'text': '快速复活', 'value': '快速复活', 'short': '快速复活' },
-  { 'text': '位移', 'value': '位移', 'short': '位移' },
-  { 'text': '召唤', 'value': '召唤', 'short': '召唤' },
-  { 'text': '爆发', 'value': '爆发', 'short': '爆发' },
-  { 'text': '控场', 'value': '控场', 'short': '控场' }];
+  { isTag: true, text: '治疗', value: '治疗', short: '治疗' },
+  { isTag: true, text: '支援', value: '支援', short: '支援' },
+  { isTag: true, text: '新手', value: '新手', short: '新手' },
+  { isTag: true, text: '费用回复', value: '费用回复', short: '费用回复' },
+  { isTag: true, text: '输出', value: '输出', short: '输出' },
+  { isTag: true, text: '生存', value: '生存', short: '生存' },
+  { isTag: true, text: '防护', value: '防护', short: '防护' },
+  { isTag: true, text: '群攻', value: '群攻', short: '群攻' },
+  { isTag: true, text: '减速', value: '减速', short: '减速' },
+  { isTag: true, text: '削弱', value: '削弱', short: '削弱' },
+  { isTag: true, text: '快速复活', value: '快速复活', short: '快速复活' },
+  { isTag: true, text: '位移', value: '位移', short: '位移' },
+  { isTag: true, text: '召唤', value: '召唤', short: '召唤' },
+  { isTag: true, text: '爆发', value: '爆发', short: '爆发' },
+  { isTag: true, text: '控场', value: '控场', short: '控场' }];
 
-const StarArr = [{ text: 1, value: '0', short: 1 }, { text: 2, value: '1', short: 2 }, { text: 3, value: '2', short: 3 },
-  { text: 4, value: '3', short: 4 }, { text: 5, value: '4', short: 5 }, { text: 6, value: '5', short: 6 },];
+const StarArr = [
+  { isTag: false, text: 1, value: '0', short: 1 },
+  { isTag: false, text: 2, value: '1', short: 2 },
+  { isTag: false, text: 3, value: '2', short: 3 },
+  { isTag: false, text: 4, value: '3', short: 4 },
+  { isTag: false, text: 5, value: '4', short: 5 },
+  { isTag: false, text: 6, value: '5', short: 6 },];
 
 
 const evolveGoldCost = [
@@ -628,6 +634,14 @@ const exp_cards = {
   },
 };
 
+const getProfilePath = (name, webpOk) => {
+  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/small-test`
+    : `${path}char/profile-compress/${name}.png`;
+};
+
+const getClass_icon = (c) => {
+  return path + 'others/icon_profession_' + c.toLowerCase() + '.png';
+};
 
 export {
   debounce,
@@ -654,7 +668,9 @@ export {
   GOLD,
   occPer_chinese,
   roomType,
-  exp_cards
+  exp_cards,
+  getProfilePath,
+  getClass_icon
 };
 
 

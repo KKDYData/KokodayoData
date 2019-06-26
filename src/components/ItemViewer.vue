@@ -8,20 +8,25 @@
       trigger="click"
     >
       <div slot="reference">
-        <el-image
-          class="evolvcost-item-contianer"
-          :style="itemBackground"
-          fit="contain"
-          :src="itemPic"
-        >
-          <div slot="error" class="image-slot">
-            <i class="el-icon-picture-outline"></i>
-          </div>
-        </el-image>
+        <div style>
+          <el-image
+            class="evolvcost-item-contianer"
+            :style="itemBackground"
+            fit="contain"
+            :src="itemPic"
+          >
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
+        </div>
         <div style="text-align: center" v-if="num">
-          <span class="evolvcost-name-wrapper">{{item.name}}</span>
+          <span
+            class="evolvcost-name-wrapper"
+            :style="item.name.length > 6 ? 'font-size: 12px' : ''"
+          >{{item.name}}</span>
           <div style="color:rgb(86, 86, 86)">
-            <span>X{{num}}</span>
+            <span>x{{num}}</span>
           </div>
         </div>
       </div>
@@ -117,6 +122,8 @@ export default {
   box-shadow: inset 0 0 0 2px black;
   background: grey;
   border: 2px solid rgb(249, 198, 19);
+  overflow: visible;
+  margin: 0 auto;
 }
 
 .evolvcost-item-contianer img {
@@ -155,8 +162,8 @@ export default {
 @media screen and (max-width: 700px) {
   .evolvcost-item-contianer {
     /* padding: 5px 10px; */
-    width: calc(45px + 2vw);
-    height: calc(45px + 2vw);
+    width: calc(40px + 1vw);
+    height: calc(40px + 1vw);
   }
 
   .evolvcost-name-wrapper {

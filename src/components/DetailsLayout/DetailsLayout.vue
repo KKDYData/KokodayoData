@@ -1,179 +1,213 @@
 <template>
   <div class="details-wrapper">
     <!-- 卡片 -->
-    <el-card style=" margin-bottom: 20px; position: relative;">
-      <div class="char-card-container" v-if="dataLoad">
-        <div class="char-card-pic">
-          <el-image style="height:100%;width:100%" :src="profile" :details="name">
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
+    <transition name="fade" mode="out-in">
+      <data-loading v-if="!dataLoad" style></data-loading>
+      <div v-if="dataLoad">
+        <el-card style=" margin-bottom: 20px; position: relative;">
+          <div class="char-card-container">
+            <div class="char-card-pic">
+              <el-image style="height:100%;width:100%" :src="profile" :details="name">
+                <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
             </div>
-          </el-image>
-        </div>
-        <div class="char-card-title-wrapper">
-          <div class="title-first">
-            <div>
-              <span class="char-card-title-name">
-                <span>{{data.name}}</span>
-              </span>
-            </div>
-            <div>
-              <span class="char-card-title-class">
-                <el-image class="char-card-pro-pic" :src="professionPic" :details="name">
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
+            <div class="char-card-title-wrapper">
+              <div class="title-first">
+                <div>
+                  <span class="char-card-title-name">
+                    <span>{{data.name}}</span>
+                  </span>
+                </div>
+                <div>
+                  <span class="char-card-title-class">
+                    <el-image class="char-card-pro-pic" :src="professionPic" :details="name">
+                      <div slot="error" class="image-slot">
+                        <i class="el-icon-picture-outline"></i>
+                      </div>
+                    </el-image>
+                    <span>{{ profession }}</span>
+                    <span class="char-card-stars">{{'⭐'.repeat(Number(data.rarity) + 1)}}</span>
+                  </span>
+                  <div class="intro-2-wrapper">
+                    <span class="intro-2" v-html="desc"></span>
                   </div>
-                </el-image>
-                <span>{{ profession }}</span>
-                <span class="char-card-stars">{{'⭐'.repeat(Number(data.rarity) + 1)}}</span>
-              </span>
-              <div class="intro-2-wrapper">
-                <span class="intro-2" v-html="desc"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="details-wrapper-fixed">
+            <p class="intro-0">
+              <span>{{data.itemUsage}}</span>
+            </p>
+            <p class="intro-1">
+              <span>{{data.itemDesc}}</span>
+            </p>
+            <div class="char-camp-pic" :style="`--logo-link: url(${logo})`">
+              <div v-if="data.team > -1">
+                <span
+                  :style="`padding: 0 5px;background-color: #${team.color};color: ${team.color !== 'ffffff' ? '#fff' : ''}; border-radius: 2px;opacity: 0.7`"
+                >{{team.teamName}}</span>
+              </div>
+            </div>
+          </div>
+          <div class="char-card-tags">
+            <el-tag
+              :size="short? 'mini' :'medium'"
+              effect="dark"
+              type="info"
+              v-for="tag in  data.tagList"
+              :key="tag"
+            >{{tag}}</el-tag>
+          </div>
+        </el-card>
+        <!-- 属性面板 -->
+        <div class="stats-wrapper">
+          <div class="group-container-title">
+            <span>属性</span>
+          </div>
+          <div class="status-wrapper">
+            <div class="status-phases-wrapper">
+              <span class="status-phases-text">精英阶段</span>
+              <el-button
+                v-for="(item, index) in data.phases"
+                @click="phases = index"
+                :key="index"
+                size="mini"
+                :type="phases === index ? 'primary': ''"
+              >{{index}}</el-button>
+              <div class="status-lv-favor-wrapper">
+                <div class="status-phases-lv">
+                  <el-switch
+                    v-model="isLvMax"
+                    :active-text="data.phases[phases].maxLevel + '级'"
+                    inactive-text="1级"
+                    active-color="#313131"
+                    acitve-te
+                  ></el-switch>
+                </div>
+                <div class="status-favor-switch">
+                  <el-switch active-color="#313131" v-model="isFavor" active-text="满信赖"></el-switch>
+                </div>
+              </div>
+              <div class="status-potential-wrapper">
+                <span class="status-phases-text">潜能等级</span>
+                <div style="display: inline; font-size: 0px">
+                  <el-button
+                    @click="potentialRanks = -1"
+                    size="mini"
+                    :type="potentialRanks === -1 ? 'primary': ''"
+                  >1</el-button>
+                  <el-button
+                    v-for="item in potentailUPList"
+                    @click="potentialRanks = item"
+                    :key="item"
+                    size="mini"
+                    :type="potentialRanks === item ? 'primary': ''"
+                  >{{item + 2}}</el-button>
+                </div>
+              </div>
+            </div>
+            <div class="status-details-wrapper">
+              <div v-for="(item, key) in status" :key="key" class="status-details-container">
+                <div>
+                  <div class="status-details-title">
+                    <span>{{statusToCh(key)}}</span>
+                  </div>
+                  <div class="status-details-value">
+                    <span v-html="item"></span>
+                    <span v-if="key === 'baseAttackTime' || key === 'respawnTime'">s</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div v-if="rangeData.length > 0" class="status-range-wrapper">
+              <range :data="rangeData[phases]"></range>
+              <div style="text-align: center;font-size: 14px">
+                <span>攻击范围</span>
+              </div>
+            </div>
+            <div v-else class="status-range-fill"></div>
+          </div>
+        </div>
+        <!-- 天赋面板 -->
+        <div class="tttt">
+          <talents-panel :talents="talents"></talents-panel>
+        </div>
+        <!-- 技能面板 -->
+        <div v-if="skills.length > 0" class="skill-container-wrapper">
+          <skill-panel :skills="skills"></skill-panel>
+        </div>
+        <!-- 潜能面板 -->
+        <div>
+          <div class="group-container-title">潜能</div>
+          <div v-if="data.potentialRanks && data.potentialRanks.length" class="potency-container">
+            <div v-for="(item, index) in data.potentialRanks" :key="index">
+              <p>
+                <span class="potency-lv">潜能{{index + 2}}级:</span>
+                {{item.description}}
+              </p>
+            </div>
+          </div>
+          <div v-else style="margin-bottom: 20px;">
+            <span>竟然没有潜能！</span>
+          </div>
+        </div>
+        <!-- 精英化材料消耗 -->
+        <div v-if="Object.keys(evolveCost).length > 0">
+          <div class="group-container-title">
+            <span>精英化材料消耗</span>
+          </div>
+          <div class="evolvcost-wrapper">
+            <div
+              class="evolvcost-container-wrapper"
+              v-for="(data, key, index) in evolveCost"
+              :key="index"
+            >
+              <div class="evolvcost-title-wrapper">
+                <span>精英阶段{{index + 1}}</span>
+              </div>
+              <div class="evolvcost-container">
+                <item-viewer
+                  :short="short"
+                  :item="GOLD"
+                  :num="data.money"
+                  class="evolvcost-item-container"
+                ></item-viewer>
+                <div v-for="item in data.items" :key="item.IconId" class="evolvcost-item-container">
+                  <item-viewer :short="short" :item="item.item" :num="item.cost"></item-viewer>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div class="details-wrapper-fixed" v-if="dataLoad">
-        <p class="intro-0">{{data.itemUsage}}</p>
-        <p class="intro-1">{{data.itemDesc}}</p>
-        <div class="char-camp-pic">
-          <el-image style="height:100%;width:100%" :src="logo" :details="name">
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
-        </div>
-      </div>
-      <div v-if="dataLoad" class="char-card-tags">
-        <el-tag type="info" v-for="tag in  data.tagList" :key="tag">{{tag}}</el-tag>
-      </div>
-    </el-card>
 
-    <div class="stats-wrapper" v-if="dataLoad">
-      <div class="group-container-title">
-        <span>属性</span>
-      </div>
-      <div class="status-wrapper">
-        <div class="status-phases-wrapper">
-          <span class="status-phases-text">精英阶段</span>
-          <el-button
-            v-for="(item, index) in data.phases"
-            @click="phases = index"
-            :key="index"
-            size="mini"
-            :type="phases === index ? 'primary': ''"
-          >{{index}}</el-button>
-          <div class="status-lv-favor-wrapper">
-            <div class="status-phases-lv">
-              <el-switch
-                v-model="isLvMax"
-                :active-text="data.phases[phases].maxLevel + '级'"
-                inactive-text="1级"
-              ></el-switch>
-            </div>
-            <div class="status-favor-switch">
-              <el-switch v-model="isFavor" active-text="满信赖"></el-switch>
-            </div>
+        <!-- 技能升级消耗 -->
+        <div v-if="skills.length > 0" class="skill-container-wrapper">
+          <skill-up-panel :allLevelCost="data.allSkillLvlup" :skills="skills" :seven="data.skills"></skill-up-panel>
+        </div>
+
+        <div class="tttt">
+          <building-data :building="data.buildingData"></building-data>
+        </div>
+        <el-collapse>
+          <div class="group-container-title" style="margin-bottom: 0">
+            <span>干员资料</span>
           </div>
-          <div class="status-potential-wrapper">
-            <span class="status-phases-text">潜能等级</span>
-            <el-button
-              @click="potentialRanks = -1"
-              size="mini"
-              :type="potentialRanks === -1 ? 'primary': ''"
-            >1</el-button>
-            <el-button
-              v-for="item in potentailUPList"
-              @click="potentialRanks = item"
-              :key="item"
-              size="mini"
-              :type="potentialRanks === item ? 'primary': ''"
-            >{{item + 2}}</el-button>
-          </div>
-        </div>
-        <div class="status-details-wrapper">
-          <div v-for="(item, key) in status" :key="key" class="status-details-container">
-            <div>
-              <div class="status-details-title">
-                <span>{{statusToCh(key)}}</span>
-              </div>
-              <div class="status-details-value">
-                <span v-html="item"></span>
-                <span v-if="key === 'baseAttackTime' || key === 'respawnTime'">s</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div v-if="rangeData.length > 0" class="status-range-wrapper">
-          <range :data="rangeData[phases]"></range>
-          <div style="text-align: center;font-size: 14px">
-            <span>攻击范围</span>
-          </div>
-        </div>
-        <div v-else class="status-range-fill"></div>
+          <el-collapse-item>
+            <template slot="title">
+              <span style="direction:rtl;width: 100%">打开</span>
+            </template>
+            <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
+          </el-collapse-item>
+        </el-collapse>
+        <el-card>
+          <p>待更新</p>
+          <p>。。。</p>
+        </el-card>
       </div>
-    </div>
-    <!-- 天赋面板 -->
-    <div class="tttt" v-if="dataLoad">
-      <talents-panel :talents="talents"></talents-panel>
-    </div>
-    <!-- 技能面板 -->
-    <div v-if="skills.length > 0" class="skill-container-wrapper">
-      <skill-panel :skills="skills"></skill-panel>
-    </div>
-    <div v-if="dataLoad">
-      <div class="group-container-title">潜能</div>
-      <div class="potency-container">
-        <div v-for="(item, index) in data.potentialRanks" :key="index">
-          <p>
-            <span class="potency-lv">潜能{{index + 2}}级:</span>
-            {{item.description}}
-          </p>
-        </div>
-      </div>
-    </div>
-    <div v-if="Object.keys(evolveCost).length > 0" class="group-container-title">
-      <span>精英化材料消耗</span>
-    </div>
-    <div class="evolvcost-wrapper">
-      <div
-        class="evolvcost-container-wrapper"
-        v-for="(data, key, index) in evolveCost"
-        :key="index"
-      >
-        <div class="evolvcost-title-wrapper">
-          <span>精英阶段{{index + 1}}</span>
-        </div>
-        <div class="evolvcost-container">
-          <item-viewer :short="short" :item="GOLD" :num="data.money"></item-viewer>
-          <div v-for="item in data.items" :key="item.IconId">
-            <item-viewer :short="short" :item="item.item" :num="item.cost"></item-viewer>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div v-if="skills.length > 0" class="skill-container-wrapper">
-      <skill-up-panel :allLevelCost="data.allSkillLvlup" :skills="skills" :seven="data.skills"></skill-up-panel>
-    </div>
-    <div class="tttt" v-if="dataLoad">
-      <building-data :building="data.buildingData"></building-data>
-    </div>
-    <el-collapse>
-      <div class="group-container-title" style="margin-bottom: 0">
-        <span>干员资料</span>
-      </div>
-      <el-collapse-item>
-        <template slot="title">
-          <span style="direction:rtl;width: 100%">打开</span>
-        </template>
-        <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
-      </el-collapse-item>
-    </el-collapse>
-    <el-card>
-      <p>待更新</p>
-      <p>。。。</p>
-    </el-card>
+    </transition>
   </div>
 </template>
 
@@ -208,6 +242,8 @@ import SkillUpCost from './SkillUpCost';
 import BuildingData from './BuildingData';
 import InfoPanel from './InfoPanel';
 import ItemViewer from '../ItemViewer';
+import Loading from '../Loading';
+import Team from './handbook_team_table.json';
 
 import Vue from 'vue';
 Vue.use(Card);
@@ -223,6 +259,7 @@ Vue.use(Tag);
 export default {
   created() {
     this.name = this.$route.params.name;
+
     getHeroData(this.name)
       .catch(err => {
         console.log(err);
@@ -255,7 +292,8 @@ export default {
     'skill-up-panel': SkillUpCost,
     'building-data': BuildingData,
     'info-panel': InfoPanel,
-    'item-viewer': ItemViewer
+    'item-viewer': ItemViewer,
+    'data-loading': Loading
   },
   data() {
     return {
@@ -278,6 +316,10 @@ export default {
     };
   },
   computed: {
+    team() {
+      if (!this.data) return '';
+      return Team[this.data.team];
+    },
     setList() {
       if (!this.data) return [];
       if (this.name === 'char_002_amiya') return [1, '1%2B', 2];
@@ -302,7 +344,9 @@ export default {
     },
     profile() {
       const name = this.$route.params.name;
-      return path + 'char/profile/' + name + '.png';
+      return (
+        path + 'char/profile/' + name + '.png?x-oss-process=style/profile-test'
+      );
     },
     desc() {
       if (this.data) {
@@ -533,7 +577,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 /*  extra  */
 .desc-extra {
   color: rebeccapurple;
@@ -545,14 +589,14 @@ export default {
   font-weight: bold;
   color: white;
   margin-bottom: 20px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: #414141;
   padding-left: 1vw;
 }
 .el-image img {
   width: 100%;
 }
 .details-wrapper {
-  min-width: 350px;
+  min-width: 340px;
   max-width: 1200px;
   /* min-width: 1200px; */
   background-color: white;
@@ -595,12 +639,13 @@ export default {
 .intro-0 {
   margin: 0;
   font-size: 14px;
-  opacity: 0.5;
+  /* opacity: 0.5; */
   position: absolute;
   right: 0;
   bottom: -10%;
   z-index: 1;
   bottom: 5%;
+  color: rgb(168, 168, 168);
 }
 .intro-0 {
   position: relative;
@@ -615,21 +660,49 @@ export default {
 .char-camp-pic {
   position: absolute;
   width: 200px;
+  height: 200px;
   right: 20px;
   top: -20px;
   z-index: 0;
-  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.char-camp-pic::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  z-index: -1;
+  background-size: contain;
+  background-image: var(--logo-link);
 }
 
 .char-card-tags {
   position: absolute;
   right: 0;
   top: 0;
+  font-size: 0;
 }
 .char-card-pro-pic {
   vertical-align: middle;
   width: 40px;
   height: 40px;
+}
+
+.char-card-tags span + span {
+  margin-left: 5px;
+}
+.char-card-tags span {
+  border-radius: 2px;
+}
+
+.char-card-tags > .el-tag--dark {
+  background-color: #414141;
+  border-color: #414141;
 }
 
 /*  */
@@ -656,9 +729,6 @@ export default {
 .status-phases-wrapper {
   padding: 12px 0;
 }
-.status-potential-wrapper {
-  margin-top: 10px;
-}
 
 /* 改button颜色 */
 .status-phases-wrapper .el-button--mini {
@@ -669,64 +739,49 @@ export default {
   color: rgb(255, 255, 255);
 }
 
-.status-phases-wrapper .el-button--primary:focus,
-.el-button--primary:hover {
-  color: rgb(255, 208, 75);
-  background-color: rgb(84, 92, 100);
-  border-bottom-color: rgb(255, 208, 75);
-}
-
-.status-phases-wrapper .el-button--primary {
-  color: rgb(255, 208, 75);
-  background-color: rgb(84, 92, 100);
-  border-bottom: 2px solid rgb(255, 208, 75);
+/* 潜能 */
+.status-potential-wrapper {
+  margin-top: 10px;
+  font-size: 0px;
 }
 
 .status-potential-wrapper .el-button--mini {
   background-color: rgba(172, 172, 172, 0.34);
-  /* border-color: rgb(153, 153, 153); */
   border: none;
   border-bottom: 2px solid;
   color: rgb(255, 255, 255);
 }
 
-.status-potential-wrapper .el-button--primary:focus,
-.el-button--primary:hover {
+.status-phases-wrapper .el-button--primary:focus,
+.status-potential-wrapper .el-button--primary:focus {
   color: rgb(255, 208, 75);
   background-color: rgb(84, 92, 100);
   border-bottom-color: rgb(255, 208, 75);
 }
+
+.status-phases-wrapper .el-button:hover,
+.status-phases-wrapper .el-button--primary,
+.status-potential-wrapper .el-button:hover,
 .status-potential-wrapper .el-button--primary {
   color: rgb(255, 208, 75);
-  background-color: rgb(84, 92, 100);
+  background-color: #313131;
   border-bottom: 2px solid rgb(255, 208, 75);
 }
+
 .status-phases-text {
   padding-right: 10px;
+  font-size: 1rem;
 }
-.status-phases-lv {
+
+.status-lv-favor-wrapper {
+  padding: 10px 15px;
   padding-left: 47px;
+}
+/* switch 颜色 */
+
+.status-phases-lv {
   padding-top: 10px;
-}
-.status-phases-lv .el-switch.is-checked .el-switch__core {
-  color: rgb(255, 208, 75);
-  background-color: rgb(84, 92, 100);
-  border-color: rgb(84, 92, 100);
-  /* border-bottom: 2px solid rgb(255, 208, 75); */
-}
-
-.status-phases-lv .el-switch__label.is-active {
-  color: #f49800;
-}
-.status-favor-switch,
-.el-switch__label.is-active {
-  color: #f49800;
-}
-
-.status-favor-switch .el-switch.is-checked .el-switch__core {
-  color: rgb(255, 208, 75);
-  background-color: rgb(84, 92, 100);
-  border-color: rgb(84, 92, 100);
+  padding-left: 47px;
 }
 
 .status-favor-switch,
@@ -739,11 +794,6 @@ export default {
   padding-left: 15px;
 }
 
-.status-lv-favor-wrapper {
-  padding: 10px 15px;
-  padding-left: 47px;
-}
-
 .status-details-container {
   flex-grow: 0.5;
   width: 50%;
@@ -751,7 +801,7 @@ export default {
 }
 .status-details-title {
   color: white;
-  background-color: rgb(78, 82, 86);
+  background-color: #313131;
   border-radius: 2px;
   width: calc(80px + 0.5vw);
   text-align: center;
@@ -789,7 +839,7 @@ export default {
 /*  */
 /*  */
 .skill-container-wrapper {
-  margin-top: 30px;
+  margin-top: 10px;
 }
 /*  */
 /* part 5 */
@@ -812,7 +862,7 @@ export default {
   vertical-align: middle;
 }
 /*  */
-.evolvcost-item-contianer {
+/* .evolvcost-item-contianer {
   margin: 5px 10px;
   width: 70px;
   height: 70px;
@@ -822,19 +872,23 @@ export default {
   box-shadow: inset 0 0 0 2px black;
   background: grey;
   border: 2px solid rgb(249, 198, 19);
+} */
+
+.evolvcost-item-container {
+  min-width: 120px;
 }
 
-.evolvcost-item-contianer img {
+/* .evolvcost-item-contianer img {
   width: 130%;
   height: 130%;
   margin-top: -15%;
   margin-left: -15%;
-}
+} */
 
 .evolvcost-container-wrapper {
   position: relative;
   width: calc(50% - 2px);
-  min-width: 400px;
+  min-width: 340px;
 }
 .evolvcost-container-wrapper + .evolvcost-container-wrapper {
   border-left: 2px solid rgba(56, 56, 56, 0.6);
@@ -862,6 +916,9 @@ export default {
 }
 
 @media screen and (max-width: 900px) {
+  .el-button + .el-button {
+    margin-left: calc(3px + 1vw);
+  }
   .status-wrapper {
     height: auto;
     justify-content: space-between;
@@ -956,6 +1013,7 @@ export default {
   .details-wrapper-fixed {
     margin-top: 10px;
   }
+  .intro-0 span,
   .intro-2 {
     font-size: 13px;
     background-color: rgba(255, 255, 255, 0.8);
@@ -965,7 +1023,7 @@ export default {
     font-size: 13px;
     padding: 0;
     position: relative;
-    background-color: rgba(255, 255, 255, 0.8);
+    /* background-color: rgba(255, 255, 255, 0.8); */
   }
   .intro-1 {
     left: -15px;
@@ -973,7 +1031,11 @@ export default {
     position: relative;
     padding-top: 10px;
   }
-
+  .char-card-pro-pic {
+    vertical-align: middle;
+    width: 20px;
+    height: 20px;
+  }
   .char-card-pic {
     display: inline-block;
     width: calc(100px + 5vw);
@@ -988,17 +1050,25 @@ export default {
     vertical-align: middle;
   }
   .char-camp-pic {
-    width: 200px;
+    width: 150px;
+    height: 150px;
     right: 5px;
-    bottom: -60px;
-    opacity: 0.7;
+    bottom: 0px;
     top: auto;
+    align-items: flex-end;
+  }
+
+  .char-camp-pic::before {
+    opacity: 0.4;
   }
   /*  */
+  .evolvcost-item-container {
+    min-width: 80px;
+  }
   /*  */
   .evolvcost-container-wrapper {
-    min-width: 350px;
-    padding: 0 10px 20px;
+    min-width: 340px;
+    padding: 0 0 20px 10px;
   }
 
   .evolvcost-container-wrapper + .evolvcost-container-wrapper {
@@ -1013,23 +1083,24 @@ export default {
     border-right: none;
     border-bottom: 1px solid rgba(158, 158, 158, 0.4);
     justify-content: start;
+    font-size: calc(13px + 0.5vw);
   }
   .evolvcost-container {
     position: relative;
     min-width: 250px;
     width: calc(100% - 20px);
-    margin-left: 10px;
+    margin-left: 0px;
+    margin-top: 10px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     align-content: center;
   }
-
+  /* 
   .evolvcost-item-contianer {
-    /* padding: 5px 10px; */
     width: calc(45px + 2vw);
     height: calc(45px + 2vw);
-  }
+  } */
   .evolvcost-name-wrapper {
     font-size: 14px;
   }

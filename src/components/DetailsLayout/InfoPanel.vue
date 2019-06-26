@@ -44,7 +44,7 @@
         </div>
         <div
           class="info-story-content-wrapper"
-          :style="index === 0 ? 'margin: 0px 0px 40px 160px': ''"
+          :style="index === 0 ? 'margin-left: 160px; min-height: 267px': ''"
         >
           <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
             <div class="info-story-unlock" v-if="p.unLockParam !== ''">
@@ -162,7 +162,7 @@ export default {
 .char-half-container-wrapper {
   float: left;
   width: 120px;
-  margin: 10px 10px;
+  padding-left: 10px;
   overflow: hidden;
 }
 

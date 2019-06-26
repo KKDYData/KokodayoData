@@ -2,23 +2,45 @@
   <div>
     <!-- <div class="profile-container"> -->
     <transition-group name="flip-list" class="profile-container">
-      <div
-        class="profile-item"
-        @click="openDetails(item)"
-        v-for="item in data"
-        :key="item.name"
-        :title="item.name"
-      >
+      <div class="profile-item" v-for="agent in data" :key="agent.name" :title="agent.name">
         <div class="profile-item-inner-wrapper">
-          <el-image fit="cover" class="img-container" :alt="item.name" :src="profilePath(item.No)">
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
+          <router-link :to="'/details/' + agent.No">
+            <el-image
+              @click="openDetails(agent)"
+              fit="cover"
+              class="img-container"
+              :alt="agent.name"
+              :src="profilePath(agent.No)"
+            >
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+            </el-image>
+          </router-link>
           <transition name="slide-fade">
             <div class="tag-wrapper-1" v-if="showTags">
-              <div v-for="tag in item.tags" :key="tag">
+              <div style="margin-bottom: 4px">
+                <div class="tag-container class-icon">
+                  <el-image
+                    class="img-container"
+                    :style="tagHit(agent.class) ? '' : 'opacity: 0.2'"
+                    :alt="agent.class"
+                    :title="changeClassShort(agent.class)"
+                    :src="class_icon(agent.class)"
+                  ></el-image>
+                </div>
                 <div class="tag-container">
+                  <el-tag
+                    :type="tagHit(agent.position) ? 'info' : 'info'"
+                    size="mini"
+                    :title="agent.position"
+                    :effect="tagHit(agent.position) ? 'dark' : 'plain'"
+                  >{{agent.position === '远程位' ? '远' : '近'}}</el-tag>
+                </div>
+              </div>
+
+              <div v-for="tag in agent.tags" :key="tag">
+                <div class="tag-container long-tag">
                   <el-tag
                     :type="tagHit(tag) ? 'info' : 'info'"
                     :effect="tagHit(tag) ? 'dark' : 'plain'"
@@ -27,32 +49,22 @@
                   >{{tag}}</el-tag>
                 </div>
               </div>
-              <div>
-                <div class="tag-container">
-                  <el-tag
-                    :type="tagHit(item.position) ? 'info' : 'info'"
-                    size="mini"
-                    :effect="tagHit(item.position) ? 'dark' : 'plain'"
-                  >{{item.position === '远程位' ? '远' : '近'}}</el-tag>
-                </div>
-                <div class="tag-container class-icon">
-                  <el-image
-                    class="img-container"
-                    :style="tagHit(item.class) ? '' : 'opacity: 0.2'"
-                    :alt="item.class"
-                    :src="class_icon(item.class)"
-                  ></el-image>
-                </div>
-              </div>
             </div>
           </transition>
 
           <div
             :class="showTags? 'name-tag-show name ' : 'name'"
-            :style="showTags && item.star > 3 ? 'color: #ecc12d' : ''"
+            :style="showTags && agent.star > 3 ? 'color: #ecc12d' : ''"
           >
-            <span :style="item.name.split('').length > 6 ? 'font-size: 12px;': '' ">{{item.name}}</span>
-            <span class="name" v-if="showKey">{{showKey}}:{{item.stats[showKey]}}</span>
+            <router-link :id="agent.No" :to="'/details/' + agent.No">
+              <span
+                :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
+              >{{agent.name}}</span>
+              <span
+                v-if="showTags"
+                :style="agent.sex === '女' ? 'color: pink;' : 'color : #fff'"
+              >{{agent.sex === '女' ? '♀' : '♂'}}</span>
+            </router-link>
           </div>
         </div>
       </div>
@@ -72,7 +84,7 @@
 // import Image from 'element-ui/packages/image/index.js';
 import { Tag, Image } from 'element-ui';
 import Vue from 'vue';
-import { path, getClass_Short } from '../utils';
+import { getClass_Chinese, getProfilePath, getClass_icon } from '../utils';
 
 Vue.use(Image);
 Vue.use(Tag);
@@ -82,7 +94,8 @@ export default {
     data: Array,
     showKey: String,
     tags: Array,
-    showTags: Boolean
+    showTags: Boolean,
+    webpOk: Boolean
   },
   components: {},
   data() {
@@ -99,7 +112,7 @@ export default {
   },
   methods: {
     class_icon(c) {
-      return path + 'others/icon_profession_' + c.toLowerCase() + '.png';
+      return getClass_icon(c);
     },
     async openDetails(item) {
       console.log(item.name);
@@ -128,12 +141,10 @@ export default {
       return this.tags.find(el => el.value === tag);
     },
     profilePath(name) {
-      return (
-        path + 'char/profile/' + name + '.png?x-oss-process=style/small-test'
-      );
+      return getProfilePath(name, this.webpOk);
     },
     changeClassShort(c) {
-      return getClass_Short(c);
+      return getClass_Chinese(c);
     }
   }
 };
@@ -147,7 +158,7 @@ export default {
 .profile-container {
   display: flex;
   flex-wrap: wrap;
-  margin: 0 auto;
+  margin: 50px auto;
   width: 100%;
   justify-content: space-around;
 }
@@ -173,7 +184,7 @@ export default {
 }
 .img-container img {
   width: 100%;
-  background-color: rgba(51, 51, 51, 0.65);
+  background-color: #525252;
 }
 
 .name {
@@ -189,6 +200,7 @@ export default {
 
 .tag-wrapper-1 {
   margin-left: 10px;
+  margin-top: -27px;
   width: 65px;
 }
 .name-tag-show {
@@ -197,16 +209,16 @@ export default {
   text-align: left;
   color: white;
   width: var(--imgWidth);
-  background-color: rgba(0, 0, 0, 0.63);
+  background-color: #414141;
   box-sizing: border-box;
-  /* background-image: linear-gradient(
-    to right,
-    rgb(21, 16, 3),
-    rgb(255, 255, 255)
-  ); */
-  /* transition: top 0.5s cubic-bezier(0.33, 1.01, 0.98, 0.99),
-    background-color 0.3s 0.3s cubic-bezier(0.33, 1.01, 0.98, 0.99),
-    color 0.3s 0.3s cubic-bezier(0.33, 1.01, 0.98, 0.99); */
+  height: 20px;
+  line-height: 19px;
+}
+.name a {
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  display: inline-block;
 }
 
 .tag-container {
@@ -215,6 +227,7 @@ export default {
   font-size: 0;
   margin-bottom: 1px;
 }
+
 .slide-fade-enter-active {
   transition: all 0.3s ease;
 }
@@ -231,14 +244,35 @@ export default {
   --imgWidth: 20px;
   vertical-align: middle;
 }
+
+.tag-container > .el-tag--dark {
+  background-color: #313131;
+  border-color: #313131;
+}
+
+.long-tag .el-tag--info {
+  min-width: 48px;
+  /* background-color: #ca3e47; */
+}
+
 @media screen and (max-width: 700px) {
+  .profile-container {
+    margin-top: 20px;
+  }
   .profile-item {
-    --imgWidth: calc(85px + 1vw);
+    --imgWidth: calc(80px + 1vw);
   }
 
   .name {
     top: calc(100px + 1vw);
   }
+
+  .tag-wrapper-1 {
+    margin-left: 10px;
+    margin-top: calc(-24px - 1vw);
+    width: 65px;
+  }
+
   .tag-wrapper-2 {
     width: 30px;
   }

@@ -7,19 +7,13 @@
           <skill-container :skill="skills[index]"></skill-container>
         </div>
         <div class="skill-tiltle-part">
-          <div>
-            <div class="skill-status">
-              <span>
-                精英
-                <span>{{skill.data[sLevel[index]].unlockCond.phase}}</span>
-                /
-                <span>{{skill.data[sLevel[index]].unlockCond.level}}</span>
-              </span>
-            </div>
-          </div>
           <div class="skill-lvUpCost-wrapper">
             <!-- 改成根据slevelcompute返回当前数据 -->
-            <div v-for="(skill, index) in picList[index]" :key="index">
+            <div
+              v-for="(skill, index) in picList[index]"
+              :key="index"
+              class="item-viwer-flex-default"
+            >
               <item-viewer :short="!short" :item="skill.item" :num="skill.count"></item-viewer>
             </div>
           </div>
@@ -27,15 +21,28 @@
       </div>
 
       <div class="skill-name-level">
-        <span class="skill-title-level">
-          LV
-          <span>{{sLevel[index] + 1}}</span>
-          <i class="el-icon-right"></i>
-          <span>{{sLevel[index] + 2}}</span>
-          <span></span>
-        </span>
-        <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
-        <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
+        <div class="skill-status">
+          需要：
+          <span>
+            精英
+            <span
+              :style="skill.data[sLevel[index]].unlockCond.phase > 0 ?  'color: #f49800' : ''"
+            >{{skill.data[sLevel[index]].unlockCond.phase}}</span>
+            /
+            <span>{{skill.data[sLevel[index]].unlockCond.level}}</span>
+          </span>
+        </div>
+        <div>
+          <span class="skill-title-level">
+            LV
+            <span>{{sLevel[index] + 1}}</span>
+            <i class="el-icon-right"></i>
+            <span>{{sLevel[index] + 2}}</span>
+            <span></span>
+          </span>
+          <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
+          <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
+        </div>
       </div>
     </div>
   </div>
@@ -131,9 +138,22 @@ export default {
 <style scoped>
 /* part 4 */
 
+.group-container-title {
+  border-bottom: 1px solid rgb(235, 238, 245);
+  font-weight: bold;
+  color: white;
+  margin-bottom: 20px;
+  background-color: #414141;
+  padding-left: 1vw;
+}
+
 .skill-lvUpCost-wrapper {
   display: flex;
   align-items: center;
+  flex-basis: 80px;
+}
+.item-viwer-flex-default {
+  min-width: 100px;
 }
 
 .skill-container {
@@ -141,29 +161,25 @@ export default {
   padding-bottom: 30px;
   position: relative;
   height: 140px;
+  display: flex;
+  margin: 20px 0 0 0;
 }
-.group-container-title {
-  border-bottom: 1px solid rgb(235, 238, 245);
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
-  background-color: rgba(0, 0, 0, 0.5);
-  padding-left: 1vw;
-}
+
 .skill-title {
   position: relative;
   display: flex;
-  align-items: stretch;
-  margin: 20px 0 0 0;
+  /* align-items: center; */
   justify-content: start;
   padding: 0 5px;
-  width: calc(100% - 10px);
+  width: calc(70% - 10px);
   min-height: 123px;
+  border-right: 1px solid rgba(158, 158, 158, 0.4);
 }
 
 .skill-tiltle-part {
   padding-left: 20px;
-  width: auto;
+  padding-top: 10px;
+  width: calc(70% - 100px);
 }
 .skill-title-level {
   display: inline-block;
@@ -171,10 +187,9 @@ export default {
   padding-right: 2vw;
 }
 .skill-name-level {
-  position: absolute;
-
-  right: 0px;
-  bottom: 10px;
+  text-align: right;
+  padding-bottom: 20px;
+  width: 30%;
 }
 .skill-pic-contianer {
   flex-shrink: 0.5;
@@ -187,8 +202,9 @@ export default {
   text-align: center;
 }
 
-.skill-status {
-  font-size: 14px;
+.skill-status,
+.skill-status + div {
+  height: 50%;
 }
 
 .skill-status-desc {
@@ -205,8 +221,22 @@ export default {
 }
 
 @media screen and (max-width: 700px) {
+  .item-viwer-flex-default {
+    min-width: 80px;
+  }
+  .skill-lvUpCost-wrapper {
+    flex-basis: 70px;
+  }
+  .skill-container {
+    display: block;
+  }
   .skill-status {
     font-size: calc(12px + 0.7vw);
+    display: inline;
+  }
+  .skill-status + div {
+    font-size: calc(12px + 0.7vw);
+    display: inline;
   }
   .skill-status-desc {
     font-size: calc(13px + 0.5vw);
@@ -215,11 +245,12 @@ export default {
     font-size: calc(12px + 0.5vw);
   }
   .skill-title {
-    margin-top: 10px;
+    margin-top: 15px;
+    border: none;
   }
   .skill-title-level {
     display: inline-block;
-    padding-left: 35vw;
+    padding-left: 10vw;
     padding-right: 2vw;
   }
   .skill-tiltle-part {
@@ -229,13 +260,12 @@ export default {
     border: none;
   }
   .skill-name-level {
-    position: absolute;
-    right: 20px;
-    bottom: 10px;
+    text-align: left;
+    width: auto;
   }
   .skill-container {
     padding-bottom: 0px;
-    height: 195px;
+    height: 165px;
   }
   .skill-range-button {
     position: absolute;
@@ -243,19 +273,13 @@ export default {
     z-index: 1;
   }
   .skill-pic-contianer {
-    width: calc(70px + 1vw);
-    height: calc(70px + 1vw);
+    width: calc(65px + 1vw);
+    height: calc(65px + 1vw);
   }
   .skill-name-wrapper {
     font-size: calc(12px + 0.1vw);
   }
-  .skill-pic-container-wrapper {
-    display: flex;
-    align-items: center;
-  }
-  .skill-lvUpCost-wrapper {
-    margin-top: 10px;
-  }
+
   .group-container-title {
     margin-bottom: 5px;
   }
