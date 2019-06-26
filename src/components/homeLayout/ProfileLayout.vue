@@ -9,6 +9,7 @@
               @click="openDetails(agent)"
               fit="cover"
               class="img-container"
+              style="box-shadow: 1px 1px 2px 1px rgba(102, 102, 102, 0.7);"
               :alt="agent.name"
               :src="profilePath(agent.No)"
             >
@@ -54,7 +55,7 @@
 
           <div
             :class="showTags? 'name-tag-show name ' : 'name'"
-            :style="showTags && agent.star > 3 ? 'color: #ecc12d' : ''"
+            :style="showTags ?  'box-shadow: rgba(102, 102, 102, 0.78) 1px 1px 3px 0px;' : ''"
           >
             <router-link :id="agent.No" :to="'/details/' + agent.No">
               <span

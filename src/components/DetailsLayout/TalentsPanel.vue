@@ -1,8 +1,5 @@
 <template>
   <div class="tttt">
-    <div class="group-container-title">
-      <span>天赋</span>
-    </div>
     <div class="talent-container-wrapper">
       <div v-for="(item, index) in talents" :key="item.name" class="talent-container">
         <div class="talent-name-wrapper">

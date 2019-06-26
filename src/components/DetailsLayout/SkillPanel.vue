@@ -1,6 +1,5 @@
 <template>
   <div v-if="skills.length > 0" class="skill-container-wrapper">
-    <div class="group-container-title">技能</div>
     <div class="skill-container" v-for="(skill, index) in skills" :key="skill.name">
       <div class="skill-title">
         <skill-container :skill="skills[index]"></skill-container>
@@ -46,7 +45,7 @@
       <div class="skill-name-level">
         <span class="skill-title-level">
           LV
-          <span>{{sLevel[index]}}</span>
+          {{sLevel[index]}}
         </span>
         <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
         <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
@@ -254,6 +253,7 @@ export default {
   display: inline-block;
   border-radius: 3px;
   background-color: rgb(153, 153, 153);
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
 }
 .skill-status {
   font-size: 14px;
@@ -311,6 +311,9 @@ export default {
     position: relative;
     right: -90px;
     top: 5px;
+  }
+  .skill-name-level span {
+    vertical-align: -5%;
   }
   .skill-container {
     padding-bottom: 0px;
