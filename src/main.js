@@ -1,11 +1,4 @@
-
 import Vue from 'vue';
-
-// import app from './app';
-
-// new Vue(girds).$mount('#app');
-
-
 import VueRouter from 'vue-router';
 import NavMenu from './NavMenu';
 
@@ -19,21 +12,27 @@ const Home = () => import(/* webpackChunkName: "Home" */'./Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');
 
+import Mode from './stats';
+
+const isDev = process.env.NODE_ENV === 'development' ? '/' : Mode + '/';
+
 
 const routes = [
-  { path: '/', component: Home },
-  { path: '/computer', component: Computer },
-  { path: '/details/:name', component: Details }
+  { path: isDev, component: Home },
+  { path: isDev + 'computer', component: Computer },
+  { path: isDev + 'details/:name', component: Details }
 ];
 const router = new VueRouter({
+  mode: 'history',
   routes,
-
+  scrollBehavior(to, from, savedPosition) {
+    return { x: 0, y: 0 };
+  }
 });
 
 
 new Vue({
   el: '#app',
-  mode: 'history',
   router,
   components: {
     'nav-menu': NavMenu

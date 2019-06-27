@@ -412,6 +412,7 @@ export default {
         ].data;
         const newData = {};
         for (let [key, value] of Object.entries(data)) {
+          console.log(key);
           if (!this.statusToCh(key)) continue;
           let nV = value,
             addV = 0;
@@ -731,7 +732,7 @@ export default {
 .status-wrapper {
   position: relative;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
   height: 180px;
@@ -905,12 +906,10 @@ export default {
 
 .evolvcost-container-wrapper {
   position: relative;
-  width: calc(50% - 2px);
   min-width: 340px;
+  margin: 30px 0;
 }
-.evolvcost-container-wrapper + .evolvcost-container-wrapper {
-  border-left: 2px solid rgba(56, 56, 56, 0.6);
-}
+
 .evolvcost-title-wrapper {
   position: absolute;
   height: 100%;
@@ -931,6 +930,12 @@ export default {
 }
 .potency-lv {
   padding-right: 5px;
+}
+
+@media screen and (min-width: 1200px) {
+  .evolvcost-container-wrapper + .evolvcost-container-wrapper {
+    border-left: 2px solid rgba(56, 56, 56, 0.6);
+  }
 }
 
 @media screen and (max-width: 900px) {
@@ -1092,6 +1097,7 @@ export default {
   .evolvcost-container-wrapper {
     min-width: 340px;
     padding: 0 0 20px 10px;
+    margin: 0;
   }
 
   .evolvcost-container-wrapper + .evolvcost-container-wrapper {

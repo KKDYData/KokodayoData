@@ -47,6 +47,10 @@ export default {
 </script>
 
 <style scoped>
+.tttt {
+  margin: 20px 0;
+}
+
 .group-container-title {
   font-weight: bold;
   color: white;

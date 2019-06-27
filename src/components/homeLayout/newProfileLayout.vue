@@ -26,7 +26,7 @@
           >
             <el-popover trigger="click">
               <div class="other-mode-popover">
-                <router-link :to="'/details/' + agent.No">
+                <router-link :to="path + '/details/' + agent.No">
                   <el-image
                     fit="cover"
                     class="img-container"
@@ -40,7 +40,7 @@
                 </router-link>
                 <div class="other-mode-popover-details">
                   <div class="other-mode-popover-details-title other-mode-link">
-                    <router-link :to="'/details/' + agent.No">
+                    <router-link :to="path + '/details/' + agent.No">
                       <span class="other-mode-popover-details-title-name">{{agent.name}}</span>
                       <span
                         :style="agent.sex === '女' ? 'color: pink;' : ''"
@@ -100,6 +100,8 @@ import Vue from 'vue';
 Vue.use(Card);
 Vue.use(Tag);
 
+import Mode from '../../stats';
+
 export default {
   props: {
     data: Array,
@@ -112,6 +114,9 @@ export default {
   },
 
   computed: {
+    path() {
+      return process.env.NODE_ENV === 'development' ? '' : Mode;
+    },
     sortData() {
       if (!this.data || this.tags.length === 0) return;
       let res = new Map();
