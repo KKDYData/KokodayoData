@@ -4,9 +4,8 @@
     <transition-group name="flip-list" class="profile-container">
       <div class="profile-item" v-for="agent in data" :key="agent.name" :title="agent.name">
         <div class="profile-item-inner-wrapper">
-          <router-link :to="'/details/' + agent.No">
+          <router-link :to="path + '/details/' + agent.No">
             <el-image
-              @click="openDetails(agent)"
               fit="cover"
               class="img-container"
               style="box-shadow: 1px 1px 2px 1px rgba(102, 102, 102, 0.7);"
@@ -57,7 +56,7 @@
             :class="showTags? 'name-tag-show name ' : 'name'"
             :style="showTags ?  'box-shadow: rgba(102, 102, 102, 0.78) 1px 1px 3px 0px;' : ''"
           >
-            <router-link :id="agent.No" :to="'/details/' + agent.No">
+            <router-link :id="agent.No" :to="path + '/details/' + agent.No">
               <span
                 :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
               >{{agent.name}}</span>
@@ -90,6 +89,8 @@ import { getClass_Chinese, getProfilePath, getClass_icon } from '../utils';
 Vue.use(Image);
 Vue.use(Tag);
 
+import Mode from '../../stats';
+
 export default {
   props: {
     data: Array,
@@ -105,6 +106,11 @@ export default {
       moraleMode: false,
       fillItemWidth: { width: '100px' }
     };
+  },
+  computed: {
+    path() {
+      return process.env.NODE_ENV === 'development' ? '' : Mode;
+    }
   },
   mounted() {
     const self = this;
@@ -123,7 +129,7 @@ export default {
       }
       // await this.$vlf.setItem('dataUrl', item.url);
       // await this.$vlf.getItem('dataUrl');
-      this.$router.push('/details/' + item.No);
+      this.$router.push(this.path + '/details/' + item.No);
     },
     calFillAmount() {
       if (!this.data) return;
@@ -195,8 +201,7 @@ export default {
   overflow: hidden;
   text-align: center;
   position: absolute;
-  top: 108px;
-  /* left:50% */
+  top: 112px;
 }
 
 .tag-wrapper-1 {

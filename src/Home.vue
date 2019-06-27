@@ -1,17 +1,17 @@
 <template>
   <div class="home-wrapper">
-    <el-alert show-icon type="success" title="你现在访问的是稳定版" description>
+    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
       <el-link
         href="https://somedata.top/ArknightsBeta"
         type="info"
-      >Beta版链接somedata.top/ArknightsBeta</el-link>。适配了一众dpi360的国产机型
+      >Beta版链接somedata.top/ArknightsBeta</el-link>。适配了dpi360的|苹果系的机型|切换成H5 history模式
     </el-alert>
-    <!-- <el-alert show-icon type="warning" description>
+    <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,可能会有Bug
         <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
       </div>
-    </el-alert>-->
+    </el-alert>
     <transition name="fade" mode="out-in">
       <home-layout v-if="load" :profileList="data"></home-layout>
     </transition>
@@ -26,6 +26,7 @@ Vue.use(link);
 Vue.use(Alert);
 
 import loadingC from './components/Loading';
+import Mode from './stats';
 
 const HomeLayout = () => ({
   component: import(/* webpackChunkName: "HomeLayout" */ './components/homeLayout'),
@@ -43,7 +44,8 @@ export default {
     return {
       short: false,
       data: [],
-      load: false
+      load: false,
+      isBeta: Mode === '/ArknightsBeta'
     };
   },
   mounted() {

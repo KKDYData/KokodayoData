@@ -5,7 +5,7 @@
       placement="top"
       :title="item.name"
       :width="!isShort? 350 : 250"
-      trigger="click"
+      :trigger="isHover"
     >
       <div slot="reference">
         <div style>
@@ -86,7 +86,8 @@ export default {
   data() {
     return {
       stageList: [],
-      isShort: this.short
+      isShort: this.short,
+      isHover: process.env.NODE_ENV === 'development' ? 'click' : 'hover'
     };
   },
   computed: {

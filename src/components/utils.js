@@ -27,6 +27,7 @@ const baseUrl = '/api/arknights/',
   postDataUrl = baseUrl + 'data';
 
 const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
+// const path = 'https://andata.somedata.top/dataX/';
 
 
 

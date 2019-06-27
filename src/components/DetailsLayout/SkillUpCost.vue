@@ -19,7 +19,7 @@
         </div>
       </div>
 
-      <div class="skill-name-level">
+      <div class="skill-control-container">
         <div class="skill-status">
           需要：
           <span>
@@ -159,9 +159,10 @@ export default {
   border-bottom: 1px solid rgb(235, 238, 245);
   padding-bottom: 30px;
   position: relative;
-  height: 140px;
+  /* height: 140px; */
   display: flex;
   margin: 20px 0 0 0;
+  align-items: stretch;
 }
 
 .skill-title {
@@ -185,9 +186,8 @@ export default {
   left: 0;
   padding-right: 2vw;
 }
-.skill-name-level {
+.skill-control-container {
   text-align: right;
-  padding-bottom: 20px;
   width: 30%;
 }
 .skill-pic-contianer {
@@ -258,7 +258,7 @@ export default {
     width: calc(100% - 100px);
     border: none;
   }
-  .skill-name-level {
+  .skill-control-container {
     text-align: left;
     width: auto;
   }

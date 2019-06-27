@@ -254,26 +254,26 @@ export default {
       if (level > maxLv) level = maxLv;
       let need = 0;
       for (let i = this.char.phases_now; i < phases + 1; i++) {
-        console.log(`now phases: ${i}, targetP: ${phases}}`);
+        // console.log(`now phases: ${i}, targetP: ${phases}}`);
         for (
           let j = i === this.char.phases_now ? this.char.level_now - 1 : 0;
           j < this.data.maxLevel[star][i] - 1;
           j++
         ) {
           if (i === phases && j > level - 1) break;
-          console.log(`i:${i}, phases: ${phases}`);
+          // console.log(`i:${i}, phases: ${phases}`);
           need += this.data[target][i][j];
           // console.log(`j: ${j}, maxlv: ${level}, need: ${need}`);
         }
       }
       if (target === 'characterUpgradeCostMap') {
         // debugger;
-        console.log(need);
+        // console.log(need);
         for (let i = this.char.phases_now; i < phases; i++) {
           need += this.data.evolveGoldCost[star][i];
         }
       }
-      console.log('need_____' + need);
+      // console.log('need_____' + need);
       return need;
     }
   }

@@ -289,6 +289,9 @@ export default {
   .skill-status {
     font-size: calc(12px + 0.5vw);
   }
+  .skill-status span + span {
+    padding: 0;
+  }
   .skill-status-desc {
     font-size: calc(13px + 0.5vw);
   }
