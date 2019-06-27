@@ -8,7 +8,6 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 
 module.exports = {
-  mode: 'development',
   entry: './src/main.js',
   plugins: [
     new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
