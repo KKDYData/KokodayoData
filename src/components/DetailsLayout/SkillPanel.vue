@@ -210,16 +210,14 @@ export default {
   padding-left: 1vw;
 }
 
-.group-container-title + .group-container-title {
-  border-bottom: 1px solid rgb(235, 238, 245);
-}
-
 .skill-container {
-  border-bottom: 1px solid rgb(235, 238, 245);
   padding-bottom: 38px;
   position: relative;
 }
 
+.skill-container + .skill-container {
+  border-bottom: 1px solid rgb(235, 238, 245);
+}
 .skill-title {
   position: relative;
   display: flex;

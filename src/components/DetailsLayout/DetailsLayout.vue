@@ -7,7 +7,7 @@
       title="404"
       effect="dark"
       :closable="false"
-    >获取数据失败，请联系管理员</el-alert>
+    >获取数据失败，弱多次刷新无效，请联系管理员</el-alert>
     <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
@@ -174,6 +174,7 @@
             <div
               class="evolvcost-container-wrapper"
               v-for="(data, key, index) in evolveCost"
+              :style="Object.keys(evolveCost).length && !short === 1 ? 'margin: 0 0 10px' : ''"
               :key="index"
             >
               <div class="evolvcost-title-wrapper">

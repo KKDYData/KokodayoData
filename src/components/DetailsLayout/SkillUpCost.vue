@@ -144,7 +144,8 @@ export default {
   background-color: #414141;
   padding-left: 1vw;
 }
-.group-container-title + .group-container-title {
+
+.skill-container + .skill-container {
   border-bottom: 1px solid rgb(235, 238, 245);
 }
 
@@ -158,7 +159,6 @@ export default {
 }
 
 .skill-container {
-  border-bottom: 1px solid rgb(235, 238, 245);
   padding-bottom: 30px;
   position: relative;
   /* height: 140px; */
