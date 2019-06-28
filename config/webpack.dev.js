@@ -24,45 +24,33 @@ module.exports = merge(common, {
       rewrites: [
         {
           from: /^\/$/, to: context => {
-            console.log('1:');
-            console.log(context.parsedUrl.pathname);
             return '';
           }
         },
         //详情页面
         {
           from: /^\/details\/(?!char).*$/, to: context => {
-            console.log('2:');
-            // console.log(context.parsedUrl);
-            console.log(context.parsedUrl.pathname.slice(9));
             return '/' + context.parsedUrl.pathname.slice(9);
           }
         },
         {
           from: /^\/details\/(char)?/, to: context => {
-            console.log('2.1:');
-            console.log(context.parsedUrl.pathname);
             return '/index.html';
           }
         },
         {
           from: /^\/computer$/, to: context => {
-            console.log('2.1:');
-            console.log(context.parsedUrl.pathname);
             return '/index.html';
           }
         },
 
         {
           from: /^\/.*$/, to: context => {
-            console.log('/:');
-            console.log(context.parsedUrl.pathname);
             return '/' + context.parsedUrl.pathname;
           }
         },
         {
           from: /./, to: context => {
-            console.log('404: ' + context.parsedUrl.pathname);
             return '/views/error.pug';
           }
         }]

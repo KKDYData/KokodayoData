@@ -1,8 +1,15 @@
 <template>
   <div class="details-wrapper">
     <!-- 卡片 -->
+    <el-alert
+      v-if="loadingFail"
+      type="error"
+      title="404"
+      effect="dark"
+      :closable="false"
+    >获取数据失败，请联系管理员</el-alert>
+    <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
-      <data-loading v-if="!dataLoad" style></data-loading>
       <div v-if="dataLoad">
         <el-card style=" margin-bottom: 20px; position: relative;">
           <div class="char-card-container">
@@ -135,7 +142,7 @@
         <!-- 天赋面板 -->
         <div class="tttt">
           <div class="group-container-title">天赋</div>
-          <talents-panel :talents="talents"></talents-panel>
+          <talents-panel :talents="talents" :short="short"></talents-panel>
         </div>
         <!-- 技能面板 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
@@ -237,7 +244,8 @@ import {
   Button,
   Image,
   Popover,
-  Tag
+  Tag,
+  Alert
 } from 'element-ui';
 
 import Range from './Range';
@@ -260,6 +268,7 @@ Vue.use(Switch);
 Vue.use(Button);
 Vue.use(Popover);
 Vue.use(Tag);
+Vue.use(Alert);
 
 export default {
   created() {
@@ -279,11 +288,12 @@ export default {
         this.getEvolveCost();
         this.getInfo();
         this.getWords();
-        this.$set(this, 'dataLoad', true);
-        // this.$nextTick();
+        this.dataLoad = true;
+        // this.loadingFail = true;
       })
       .catch(err => {
         console.log(err);
+        this.loadingFail = true;
       });
     this.short = window.innerWidth < 500 ? true : false;
     window.addEventListener('resize', () => {
@@ -302,6 +312,7 @@ export default {
   },
   data() {
     return {
+      loadingFail: false,
       data: null,
       puLoad: false,
       picUrls: {},
