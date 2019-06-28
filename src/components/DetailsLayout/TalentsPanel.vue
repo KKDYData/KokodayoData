@@ -3,7 +3,7 @@
     <div class="talent-container-wrapper">
       <div v-for="(item, index) in talents" :key="item.name" class="talent-container">
         <div class="talent-name-wrapper">
-          <span>{{item.name}}</span>
+          <span :style="!short && item.name.length > 5 ? 'font-size: 13px': ''">{{item.name}}</span>
           <div class="talent-desc-change-button">
             <el-button
               v-if="item.condidate[0].potentailUP"
@@ -47,7 +47,8 @@ export default {
   props: {
     talents: {
       required: true
-    }
+    },
+    short: Boolean
   },
   mounted() {
     console.log(this.talents);
@@ -86,7 +87,7 @@ export default {
 }
 
 .talent-container {
-  width: calc(50% - 2px);
+  width: calc(50% - 7px);
   min-width: 350px;
   display: flex;
   flex-wrap: wrap;
@@ -95,8 +96,9 @@ export default {
   position: relative;
 }
 
-.talent-container + .talent-container {
+.talent-container:nth-child(2n) {
   border-left: 2px solid rgba(56, 56, 56, 0.6);
+  padding-left: 10px;
 }
 
 /* 天赋名字 */

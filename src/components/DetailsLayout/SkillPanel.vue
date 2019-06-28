@@ -203,13 +203,17 @@ export default {
 }
 /* part 4 */
 .group-container-title {
-  border-bottom: 1px solid rgb(235, 238, 245);
   font-weight: bold;
   color: white;
   margin-bottom: 20px;
   background-color: #414141;
   padding-left: 1vw;
 }
+
+.group-container-title + .group-container-title {
+  border-bottom: 1px solid rgb(235, 238, 245);
+}
+
 .skill-container {
   border-bottom: 1px solid rgb(235, 238, 245);
   padding-bottom: 38px;
