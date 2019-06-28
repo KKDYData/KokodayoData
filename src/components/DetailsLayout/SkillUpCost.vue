@@ -1,11 +1,14 @@
 <template>
-  <div v-if="skills.length > 0" class="skill-container-wrapper">
+  <div v-if="skills.length > 0" class="skill-container--inner-wrapper">
     <div class="skill-container" v-for="(skill, index) in unlockCond" :key="skill.name">
       <div class="skill-title">
         <div class="skill-pic-container-wrapper">
           <skill-container :skill="skills[index]"></skill-container>
         </div>
         <div class="skill-tiltle-part">
+          <div class="skill-title-text">
+            <span>所需材料：</span>
+          </div>
           <div class="skill-lvUpCost-wrapper">
             <!-- 改成根据slevelcompute返回当前数据 -->
             <div
@@ -135,6 +138,9 @@ export default {
 </script>
 
 <style scoped>
+.skill-container--inner-wrapper {
+  margin-top: 30px;
+}
 /* part 4 */
 
 .group-container-title {
@@ -143,10 +149,6 @@ export default {
   margin-bottom: 20px;
   background-color: #414141;
   padding-left: 1vw;
-}
-
-.skill-container + .skill-container {
-  border-bottom: 1px solid rgb(235, 238, 245);
 }
 
 .skill-lvUpCost-wrapper {
@@ -159,12 +161,17 @@ export default {
 }
 
 .skill-container {
-  padding-bottom: 30px;
+  padding-bottom: 10px;
   position: relative;
   /* height: 140px; */
   display: flex;
   margin: 20px 0 0 0;
   align-items: stretch;
+}
+
+.skill-container + .skill-container {
+  border-top: 1px solid rgb(235, 238, 245);
+  padding-top: 30px;
 }
 
 .skill-title {
@@ -180,7 +187,6 @@ export default {
 
 .skill-tiltle-part {
   padding-left: 20px;
-  padding-top: 10px;
   width: calc(70% - 100px);
 }
 .skill-title-level {
@@ -191,6 +197,7 @@ export default {
 .skill-control-container {
   text-align: right;
   width: 30%;
+  padding-right: 20px;
 }
 .skill-pic-contianer {
   flex-shrink: 0.5;
@@ -221,7 +228,14 @@ export default {
   font-size: 15px;
 }
 
+.skill-title-text {
+  padding-bottom: 20px;
+}
+
 @media screen and (max-width: 700px) {
+  .skill-container--inner-wrapper {
+    margin-bottom: 30px;
+  }
   .item-viwer-flex-default {
     min-width: 80px;
   }
@@ -262,12 +276,19 @@ export default {
   }
   .skill-control-container {
     text-align: left;
+    padding-top: 10px;
     width: auto;
   }
   .skill-container {
+    margin-top: 10px;
     padding-bottom: 0px;
-    height: 165px;
+    height: 160px;
   }
+
+  .skill-container + .skill-container {
+    padding: 10px 0;
+  }
+
   .skill-range-button {
     position: absolute;
     bottom: -25px;
@@ -287,6 +308,11 @@ export default {
 
   .evolvcost-item-count {
     font-size: calc(12px + 0.5vw);
+  }
+
+  .skill-title-text {
+    font-size: calc(13px + 0.5vw);
+    padding-bottom: 5px;
   }
 }
 </style>

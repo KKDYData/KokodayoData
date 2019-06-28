@@ -1,5 +1,5 @@
 <template>
-  <div v-if="skills.length > 0" class="skill-container-wrapper">
+  <div v-if="skills.length > 0" class="skill-container--inner-wrapper">
     <div class="skill-container" v-for="(skill, index) in skills" :key="skill.name">
       <div class="skill-title">
         <skill-container :skill="skills[index]"></skill-container>
@@ -40,15 +40,19 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <div class="skill-name-level">
-        <span class="skill-title-level">
-          LV
-          {{sLevel[index]}}
-        </span>
-        <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
-        <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
+        <div class="skill-name-level">
+          <div style="display: flex; align-items: center; width: 100%; justify-content: flex-end">
+            <div class="skill-title-level">
+              <span>LV</span>
+              <span>{{sLevel[index]}}</span>
+            </div>
+            <div>
+              <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
+              <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -197,10 +201,8 @@ export default {
 };
 </script>
 
+
 <style scoped>
-.skill-container-wrapper {
-  margin-bottom: 20px;
-}
 /* part 4 */
 .group-container-title {
   font-weight: bold;
@@ -209,19 +211,22 @@ export default {
   background-color: #414141;
   padding-left: 1vw;
 }
-
+.skill-container--inner-wrapper {
+  margin-top: 30px;
+}
 .skill-container {
   padding-bottom: 38px;
   position: relative;
 }
 
 .skill-container + .skill-container {
-  border-bottom: 1px solid rgb(235, 238, 245);
+  border-top: 1px solid rgb(235, 238, 245);
 }
 .skill-title {
   position: relative;
   display: flex;
   align-items: stretch;
+  flex-wrap: wrap;
   margin-top: 20px;
   justify-content: start;
   padding: 0 5px;
@@ -234,16 +239,13 @@ export default {
   border-right: 1px solid rgba(158, 158, 158, 0.4);
 }
 .skill-title-level {
-  display: inline-block;
-  left: 0;
-  padding-right: 2vw;
+  margin: 0 20px;
 }
 .skill-name-level {
-  position: absolute;
-  margin-top: 2vw;
-  margin-bottom: 2vw;
-  right: 0px;
-  bottom: 10px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 20px;
+  flex-grow: 1;
 }
 
 .skill-type {
@@ -264,7 +266,7 @@ export default {
   font-size: 16px;
   color: #606266;
   /* height: calc(100% - 20px); */
-  padding-top: 20px;
+  padding: 20px 10px;
   display: flex;
   align-items: center;
 }
@@ -288,11 +290,15 @@ export default {
 }
 
 @media screen and (max-width: 700px) {
+  .skill-container--inner-wrapper {
+    margin-bottom: 20px;
+  }
+
   .skill-status {
     font-size: calc(12px + 0.5vw);
   }
   .skill-status span + span {
-    padding: 0;
+    padding: 0px;
   }
   .skill-status-desc {
     font-size: calc(13px + 0.5vw);
@@ -309,19 +315,17 @@ export default {
   .skill-tiltle-part {
     flex-wrap: wrap;
     padding-left: 2vw;
-    width: calc(100% - 65px - 1vw);
+    width: calc(100% - 65px - 3vw);
     border: none;
   }
   .skill-name-level {
-    position: relative;
-    right: -90px;
-    top: 5px;
+    width: 100%;
   }
   .skill-name-level span {
     vertical-align: -5%;
   }
   .skill-container {
-    padding-bottom: 0px;
+    padding-bottom: 10px;
   }
   .skill-range-button {
     position: absolute;

@@ -151,7 +151,7 @@
           <skill-panel :skills="skills"></skill-panel>
         </div>
         <!-- 潜能面板 -->
-        <div>
+        <div style="margin-bottom: 20px">
           <div class="group-container-title">潜能</div>
           <div v-if="data.potentialRanks && data.potentialRanks.length" class="potency-container">
             <div v-for="(item, index) in data.potentialRanks" :key="index">
@@ -870,7 +870,7 @@ export default {
 /*  */
 /*  */
 .skill-container-wrapper {
-  margin-top: 10px;
+  margin-top: 20px;
 }
 /*  */
 /* part 5 */
