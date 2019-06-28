@@ -174,7 +174,7 @@
             <div
               class="evolvcost-container-wrapper"
               v-for="(data, key, index) in evolveCost"
-              :style="Object.keys(evolveCost).length && !short === 1 ? 'margin: 0 0 10px' : ''"
+              :style="Object.keys(evolveCost).length === 1  && !short? 'margin: 0 0 10px' : ''"
               :key="index"
             >
               <div class="evolvcost-title-wrapper">
