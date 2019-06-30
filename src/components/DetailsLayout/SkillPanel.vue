@@ -329,7 +329,7 @@ export default {
   }
   .skill-range-button {
     position: absolute;
-    bottom: -25px;
+    bottom: 25px;
     z-index: 1;
   }
 }
