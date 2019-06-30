@@ -44,13 +44,9 @@
           <span>{{data.itemDesc}}</span>
         </p>
         <div class="char-camp-pic" :style="`--logo-link: url(${logo})`">
-          <div class="agent-card-camp-container">
+          <div class="agent-card-camp-container" v-if="data.team > -1">
             <div class="agent-card-camp-en">{{team.teamKey.toUpperCase()}}</div>
-            <div
-              v-if="data.team > -1"
-              class="agent-card-camp-chinese"
-              :style="`background-color: #${team.color}`"
-            >
+            <div class="agent-card-camp-chinese" :style="`background-color: #${team.color}`">
               <span
                 :style="`padding: 0 5px;color: ${team.color !== 'ffffff' ? '#fff' : 'rgb(136,136,136)'}`"
               >{{team.teamName}}</span>
