@@ -1,14 +1,15 @@
 <template>
-  <div class="home-wrapper" style>
+  <div class="home-wrapper">
     <details-layout></details-layout>
   </div>
 </template>
 <script>
-// import FilterButtonGroup from './components/FilterButtonGroup';
 import loadingC from './components/Loading';
 
 const DetailsLayout = () => ({
-  component: import(/* webpackChunkName: "DetailsLayout" */ './components/DetailsLayout'),
+  component: import(
+    /* webpackChunkName: "DetailsLayout" */ './components/DetailsLayout'
+  ),
   loading: loadingC,
   error: loadingC,
   delay: 200,

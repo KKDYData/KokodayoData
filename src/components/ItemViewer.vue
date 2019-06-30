@@ -6,6 +6,7 @@
       :title="item.name"
       :width="!isShort? 350 : 250"
       :trigger="isHover"
+      :open-delay="500"
     >
       <div slot="reference">
         <div style>
