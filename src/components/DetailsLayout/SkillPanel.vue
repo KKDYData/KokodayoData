@@ -73,9 +73,6 @@ export default {
       required: true
     }
   },
-  mounted() {
-    console.log(this.skills);
-  },
   data() {
     return {
       sLevel: [1, 1, 1]
@@ -180,7 +177,6 @@ export default {
           .slice(skill_time_text.index + 4)
           .match(/(<.*?>)(.*?)(<\/.*?>)/);
 
-        console.log(text[2]);
         // console.log(skill_time_text);
         // console.log(skill_time_text.index + 4 + text[0].length);
         const unit = text[2] !== '极大幅度缩短' ? 's' : '%';

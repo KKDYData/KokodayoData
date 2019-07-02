@@ -50,9 +50,6 @@ export default {
     },
     short: Boolean
   },
-  mounted() {
-    console.log(this.talents);
-  },
   data() {
     return {
       showTalentPotencailUP: [false, false, false]
