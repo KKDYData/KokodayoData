@@ -276,7 +276,7 @@ export default {
         }
         : (a, b) => a.index > b.index;
 
-      this.data = [...sort(this.data, less)];
+      this.data = [...sort(key, less)];
     },
     async resetFilter(group, p) {
       this.store.setItem('filterGroups', this.filterGroups);
@@ -373,7 +373,6 @@ export default {
         });
       }
 
-      this.data = targetData;
       this.sortData(targetData);
       await this.$nextTick();
       if (targetData.length > 0) {
@@ -381,7 +380,7 @@ export default {
         setTimeout(() => {
           if (this.currentMode === 'profile-layout')
             this.$refs['profile-layout'].calFillAmount();
-        }, 10);
+        }, 500);
       }
     },
 
