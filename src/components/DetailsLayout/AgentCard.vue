@@ -317,6 +317,8 @@ export default {
 
   .agent-card-camp-chinese {
     box-shadow: rgba(82, 82, 82, 0.4) 0px 0px 2px 0px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
   }
   .char-camp-pic {
     width: 150px;
