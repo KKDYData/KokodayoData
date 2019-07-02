@@ -137,7 +137,9 @@ Vue.use(Vlf);
 import loadingC from '../Loading';
 
 const newProfileLayout = () => ({
-  component: import(/* webpackChunkName: "newProfileLayout" */ './newProfileLayout'),
+  component: import(
+    /* webpackChunkName: "newProfileLayout" */ './newProfileLayout'
+  ),
   loading: loadingC,
   error: loadingC,
   delay: 200,
@@ -274,7 +276,7 @@ export default {
         }
         : (a, b) => a.index > b.index;
 
-      this.data = [...sort(this.data, less)];
+      this.data = [...sort(key, less)];
     },
     async resetFilter(group, p) {
       this.store.setItem('filterGroups', this.filterGroups);
@@ -371,7 +373,6 @@ export default {
         });
       }
 
-      this.data = targetData;
       this.sortData(targetData);
       await this.$nextTick();
       if (targetData.length > 0) {
@@ -379,7 +380,7 @@ export default {
         setTimeout(() => {
           if (this.currentMode === 'profile-layout')
             this.$refs['profile-layout'].calFillAmount();
-        }, 10);
+        }, 500);
       }
     },
 
@@ -472,21 +473,6 @@ export default {
   background-color: hsla(356, 57%, 52%, 0.5);
   border-color: hsla(356, 57%, 52%, 0.1);
   color: #fff;
-}
-
-.home-layout-wrapper .el-tabs__nav-scroll {
-  padding: 0 10px;
-}
-
-.home-layout-wrapper .el-tabs__item.is-active {
-  color: hsla(45, 134%, 60%, 1);
-}
-
-.home-layout-wrapper .el-tabs__item:hover {
-  color: hsla(45, 134%, 60%, 0.8);
-}
-.home-layout-wrapper .el-tabs__active-bar {
-  background-color: hsla(45, 134%, 60%, 0.8);
 }
 
 @media screen and (max-width: 495px) {

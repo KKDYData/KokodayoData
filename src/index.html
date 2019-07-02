@@ -66,26 +66,44 @@
     }
 
     .fade-enter,
-    .fade-leave-to
-
-    /* .fade-leave-active below version 2.1.8 */
-      {
+    .fade-leave-to {
       opacity: 0;
     }
 
     .tags-popover-container {
-      /* left: calc(50vw - 500px) !important */
       max-width: 959px;
     }
 
-
+    .el-image img {
+      width: 100%;
+    }
 
     .status-lv-favor-wrapper .el-switch__label.is-active {
       color: #f49800;
     }
 
-    .char-card-star-pic .el-image__inner {
+    .agent-card-star-pic .el-image__inner {
       width: auto;
+    }
+
+    .info-panel-container .el-tabs__nav-scroll,
+    .home-layout-wrapper .el-tabs__nav-scroll {
+      padding: 0 10px;
+    }
+
+    .info-panel-container .el-tabs__item.is-active,
+    .home-layout-wrapper .el-tabs__item.is-active {
+      color: hsla(45, 134%, 60%, 1);
+    }
+
+    .info-panel-container .el-tabs__item:hover,
+    .home-layout-wrapper .el-tabs__item:hover {
+      color: hsla(45, 134%, 60%, 0.8);
+    }
+
+    .info-panel-container .el-tabs__active-bar,
+    .home-layout-wrapper .el-tabs__active-bar {
+      background-color: hsla(45, 134%, 60%, 0.8);
     }
 
     @media screen and (min-width: 1000px) {
@@ -95,6 +113,13 @@
 
       .el-message-box__message p {
         margin: 10px !important
+      }
+    }
+
+    @media screen and (max-width: 700px) {
+
+      .agent-card-container-wrapper .el-card__body {
+        padding-bottom: 30px;
       }
     }
   </style>

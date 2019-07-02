@@ -11,65 +11,7 @@
     <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
-        <el-card style=" margin-bottom: 20px; position: relative;">
-          <div class="char-card-container">
-            <div class="char-card-pic">
-              <el-image style="height:100%;width:100%" :src="profile" :details="name">
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
-            </div>
-            <div class="char-card-title-wrapper">
-              <div class="title-first">
-                <div>
-                  <span class="char-card-title-name">
-                    <span>{{data.name}}</span>
-                  </span>
-                </div>
-                <div>
-                  <div class="char-card-title-class">
-                    <el-image class="char-card-pro-pic" :src="professionPic" :details="name">
-                      <div slot="error" class="image-slot">
-                        <i class="el-icon-picture-outline"></i>
-                      </div>
-                    </el-image>
-                    <span>{{ profession }}</span>
-                    <el-image class="char-card-star-pic" :src="rarityPath" fit="contain"></el-image>
-                    <!-- <span class="char-card-stars">{{'⭐'.repeat(Number(data.rarity) + 1)}}</span> -->
-                  </div>
-                  <div class="intro-2-wrapper">
-                    <span class="intro-2" v-html="desc"></span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="details-wrapper-fixed">
-            <p class="intro-0">
-              <span>{{data.itemUsage}}</span>
-            </p>
-            <p class="intro-1">
-              <span>{{data.itemDesc}}</span>
-            </p>
-            <div class="char-camp-pic" :style="`--logo-link: url(${logo})`">
-              <div v-if="data.team > -1" style="box-shadow:rgba(82, 82, 82, 0.4) 0px 1px 1px 0px">
-                <span
-                  :style="`padding: 0 5px;background-color: #${team.color};color: ${team.color !== 'ffffff' ? '#fff' : ''}; border-radius: 2px;opacity: 0.7`"
-                >{{team.teamName}}</span>
-              </div>
-            </div>
-          </div>
-          <div class="char-card-tags">
-            <el-tag
-              :size="short? 'mini' :'medium'"
-              effect="dark"
-              type="info"
-              v-for="tag in  data.tagList"
-              :key="tag"
-            >{{tag}}</el-tag>
-          </div>
-        </el-card>
+        <agent-card :data="data" :short="short"></agent-card>
         <!-- 属性面板 -->
         <div class="stats-wrapper">
           <div class="group-container-title">
@@ -204,17 +146,13 @@
         <div class="tttt">
           <building-data :building="data.buildingData"></building-data>
         </div>
-        <el-collapse>
-          <div class="group-container-title" style="margin-bottom: 0">
-            <span>干员资料</span>
-          </div>
-          <el-collapse-item>
-            <template slot="title">
-              <span style="direction:rtl;width: 100%">打开</span>
-            </template>
-            <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
-          </el-collapse-item>
-        </el-collapse>
+        <div class="group-container-title" style="margin-bottom: 0">
+          <span>干员资料</span>
+        </div>
+        <template slot="title">
+          <span style="direction:rtl;width: 100%">打开</span>
+        </template>
+        <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
         <el-card>
           <p>待更新</p>
           <p>。。。</p>
@@ -227,7 +165,6 @@
 <script>
 import {
   getHeroData,
-  getClass_Chinese,
   path,
   fetchGet,
   evolveGoldCost,
@@ -249,6 +186,7 @@ import {
   Alert
 } from 'element-ui';
 
+import AgentCard from './AgentCard';
 import Range from './Range';
 import TalentsPanel from './TalentsPanel';
 import SkillPanel from './SkillPanel';
@@ -256,8 +194,8 @@ import SkillUpCost from './SkillUpCost';
 import BuildingData from './BuildingData';
 import InfoPanel from './InfoPanel';
 import ItemViewer from '../ItemViewer';
+
 import Loading from '../Loading';
-import Team from './handbook_team_table.json';
 
 import Vue from 'vue';
 Vue.use(Card);
@@ -274,7 +212,7 @@ Vue.use(Alert);
 export default {
   created() {
     this.name = this.$route.params.name;
-
+    console.log('getting data...');
     getHeroData(this.name)
       .catch(err => {
         console.log(err);
@@ -309,7 +247,8 @@ export default {
     'building-data': BuildingData,
     'info-panel': InfoPanel,
     'item-viewer': ItemViewer,
-    'data-loading': Loading
+    'data-loading': Loading,
+    AgentCard
   },
   data() {
     return {
@@ -333,14 +272,6 @@ export default {
     };
   },
   computed: {
-    rarityPath() {
-      if (!this.data) return '';
-      return path + 'others/rarity_' + this.data.rarity + '.png';
-    },
-    team() {
-      if (!this.data) return '';
-      return Team[this.data.team];
-    },
     setList() {
       if (!this.data) return [];
       if (this.name === 'char_002_amiya') return [1, '1%2B', 2];
@@ -351,38 +282,6 @@ export default {
       const arr = this.data.rarity === 2 ? [0] : [0, 1];
       return arr;
     },
-    professionPic() {
-      if (this.data)
-        return (
-          path +
-          'others/icon_profession_' +
-          this.data.profession.toLowerCase() +
-          '_lighten.png'
-        );
-    },
-    logo() {
-      return path + 'logo/' + this.data.displayLogo + '.png';
-    },
-    profile() {
-      const name = this.$route.params.name;
-      return (
-        path + 'char/profile/' + name + '.png?x-oss-process=style/profile-test'
-      );
-    },
-    desc() {
-      if (this.data) {
-        let desc = this.data.description;
-        desc = changeDesc(desc);
-
-        return desc;
-      }
-    },
-    profession() {
-      if (this.data) {
-        return getClass_Chinese(this.data.profession);
-      }
-    },
-
     talents() {
       if (this.data) {
         const arr = [];
@@ -424,7 +323,6 @@ export default {
         ].data;
         const newData = {};
         for (let [key, value] of Object.entries(data)) {
-          console.log(key);
           if (!this.statusToCh(key)) continue;
           let nV = value,
             addV = 0;
@@ -614,9 +512,6 @@ export default {
   padding-left: 1vw;
   box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
 }
-.el-image img {
-  width: 100%;
-}
 .details-wrapper {
   min-width: 340px;
   max-width: 1200px;
@@ -625,117 +520,7 @@ export default {
   margin: 0 auto;
   padding: 20px;
 }
-/* part 1 */
-.char-card-container {
-  display: flex;
-  align-items: stretch;
-  align-self: stretch;
-  position: relative;
-  height: 150px;
-  z-index: 1;
-}
-.char-card-pic {
-  display: inline-block;
-  width: 150px;
-  font-size: 12px;
-  position: relative;
-  vertical-align: middle;
-}
-.char-card-stars {
-  letter-spacing: -30px;
-}
 
-.char-card-title-class {
-  font-size: 0;
-  display: flex;
-  align-items: center;
-}
-.char-card-title-class span {
-  font-size: 38px;
-  word-break: keep-all;
-}
-.char-card-title-wrapper {
-  margin-left: 20px;
-}
-.char-card-title-name {
-  font-size: 50px;
-  margin: 0;
-  font-weight: bold;
-}
-
-.intro-1,
-.intro-0 {
-  margin: 0;
-  font-size: 14px;
-  /* opacity: 0.5; */
-  position: absolute;
-  right: 0;
-  bottom: -10%;
-  z-index: 1;
-  bottom: 5%;
-  color: rgb(168, 168, 168);
-}
-.intro-0 {
-  position: relative;
-  bottom: 0%;
-  padding-top: 20px;
-}
-.intro-2 {
-  font-size: 14px;
-  bottom: 20%;
-  margin: 5px 0;
-}
-.char-camp-pic {
-  position: absolute;
-  width: 200px;
-  height: 200px;
-  right: 20px;
-  top: -20px;
-  z-index: 0;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-}
-.char-camp-pic::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0.4;
-  z-index: -1;
-  background-size: contain;
-  background-image: var(--logo-link);
-}
-
-.char-card-tags {
-  position: absolute;
-  right: 0;
-  top: 0;
-  font-size: 0;
-}
-.char-card-pro-pic {
-  vertical-align: middle;
-  width: 40px;
-  height: 40px;
-}
-
-.char-card-tags span + span {
-  margin-left: 5px;
-}
-.char-card-tags span {
-  border-radius: 2px;
-}
-
-.char-card-tags > .el-tag--dark {
-  background-color: #414141;
-  border-color: #414141;
-}
-.details-wrapper-fixed {
-  z-index: 0;
-}
-/*  */
 /*  */
 /*  */
 /*  */
@@ -1022,83 +807,6 @@ export default {
 @media screen and (max-width: 700px) {
   .details-wrapper {
     padding: 10px 10px;
-  }
-  /* part 1 */
-  .char-card-container {
-    min-height: calc(90px + 2vw);
-    height: auto;
-    flex-grow: 0;
-  }
-  .char-card-title-class span {
-    font-size: calc(15px + 0.5vw);
-  }
-  .char-card-title-name {
-    font-size: 20px;
-  }
-  .char-card-title-wrapper {
-    /* padding-left: 2; */
-    margin-left: calc(100px + 5vw);
-    z-index: 1;
-  }
-
-  .char-card-stars {
-    letter-spacing: -12px;
-  }
-
-  .details-wrapper-fixed {
-    margin-top: 10px;
-  }
-  .intro-0 span,
-  .intro-2 {
-    font-size: 13px;
-    background-color: rgba(255, 255, 255, 0.8);
-  }
-  .intro-0 {
-    left: -15px;
-    font-size: 13px;
-    padding: 0;
-    position: relative;
-    /* background-color: rgba(255, 255, 255, 0.8); */
-  }
-  .intro-1 {
-    left: -15px;
-    font-size: 12px;
-    position: relative;
-    padding-top: 10px;
-  }
-  .char-card-pro-pic {
-    vertical-align: middle;
-    width: 20px;
-    height: 20px;
-  }
-  .char-card-pic {
-    display: inline-block;
-    width: calc(100px + 5vw);
-    height: calc(100px + 5vw);
-    font-size: 12px;
-    position: absolute;
-    /* position: relative; */
-    flex-shrink: 1;
-    flex-grow: 1;
-    top: -20px;
-    left: -20px;
-    vertical-align: middle;
-  }
-  .char-camp-pic {
-    width: 150px;
-    height: 150px;
-    right: 5px;
-    bottom: 0px;
-    top: auto;
-    align-items: flex-end;
-  }
-
-  .char-camp-pic::before {
-    opacity: 0.4;
-  }
-
-  .char-card-star-pic {
-    height: calc(15px + 0.5vw);
   }
 
   /*  */
