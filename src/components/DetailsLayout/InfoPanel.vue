@@ -72,7 +72,7 @@
                 <b>{{word.voiceTitle}}</b>
               </span>
               <audio
-                preload="none"
+                preload="metadata"
                 class="info-word-audio-control"
                 controls="true"
                 :src="audioPath(word)"
