@@ -71,7 +71,12 @@
               <span>
                 <b>{{word.voiceTitle}}</b>
               </span>
-              <audio d class="info-word-audio-control" controls="true" :src="audioPath(word)">播放</audio>
+              <audio
+                preload="none"
+                class="info-word-audio-control"
+                controls="true"
+                :src="audioPath(word)"
+              >播放</audio>
             </div>
             <p>{{word.voiceText | docter}}</p>
           </div>
