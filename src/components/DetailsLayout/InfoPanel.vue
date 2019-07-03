@@ -66,15 +66,14 @@
 
       <el-tab-pane label="语音记录" name="second">
         <div class="info-words-wrapper">
-          <div class="info-words-container">
-            <div v-for="word in words" :key="word.charWordId">
-              <div>
-                <span>
-                  <b>{{word.voiceTitle}}</b>
-                </span>
-              </div>
-              <p>{{word.voiceText}}</p>
+          <div v-for="word in words" :key="word.charWordId" class="info-word-container">
+            <div class="info-word-audio-title">
+              <span>
+                <b>{{word.voiceTitle}}</b>
+              </span>
+              <audio d class="info-word-audio-control" controls="true" :src="audioPath(word)">播放</audio>
             </div>
+            <p>{{word.voiceText | docter}}</p>
           </div>
         </div>
       </el-tab-pane>
@@ -114,7 +113,11 @@ export default {
       activeName: 'first'
     };
   },
-
+  filters: {
+    docter(value) {
+      return value.replace(/{@nickname}/, '阿凡提');
+    }
+  },
   computed: {
     charSets() {
       if (this.data.charID) {
@@ -140,6 +143,11 @@ export default {
     }
   },
   methods: {
+    audioPath(data) {
+      return (
+        path + 'char/voice/' + this.data.charID + '/' + data.voiceId + '.wav'
+      );
+    },
     changeText(str) {
       str = str.replace(/(\n)/g, '<br />');
       return str;
@@ -181,6 +189,32 @@ export default {
 .info-draw-name,
 .info-cv-name {
   margin-left: 0px;
+}
+
+.info-word-audio-control {
+  height: 30px;
+  vertical-align: middle;
+  padding-left: 20px;
+}
+
+.info-word-audio-title {
+  padding-top: 20px;
+}
+
+.info-word-container + .info-word-container {
+  border-top: 1px solid #e4e7ed;
+}
+
+.info-words-wrapper {
+  padding: 0 10px;
+}
+
+@media screen and (max-width: 700px) {
+  .info-word-audio-control {
+    padding-left: 10px;
+    padding-top: 5px;
+    display: block;
+  }
 }
 </style>
 
