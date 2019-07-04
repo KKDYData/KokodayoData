@@ -66,16 +66,21 @@
 
       <el-tab-pane label="语音记录" name="second">
         <div class="info-words-wrapper">
-          <div v-for="word in words" :key="word.charWordId" class="info-word-container">
+          <div v-for="(word, index) in words" :key="word.charWordId" class="info-word-container">
             <div class="info-word-audio-title">
               <span>
                 <b>{{word.voiceTitle}}</b>
               </span>
+
               <audio
-                preload="metadata"
+                style="opacity: 0.5"
+                :autoplay="false"
+                preload="none"
                 class="info-word-audio-control"
-                controls="true"
                 :src="audioPath(word)"
+                :ref="'word_'+ index"
+                :id="'word_'+ index"
+                v-if="0"
               >播放</audio>
             </div>
             <p>{{word.voiceText | docter}}</p>
