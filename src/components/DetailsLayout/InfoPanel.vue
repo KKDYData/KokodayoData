@@ -73,7 +73,7 @@
                   <b>{{word.voiceTitle}}</b>
                 </span>
               </div>
-              <p>{{word.voiceText}}</p>
+              <p>{{word.voiceText | docter}}</p>
             </div>
           </div>
         </div>
@@ -83,9 +83,9 @@
 </template>
 
 <script>
-import { path } from '../utils';
-import { Carousel, CarouselItem, Tabs, TabPane, Button } from 'element-ui';
-import Vue from 'vue';
+import { path } from "../utils";
+import { Carousel, CarouselItem, Tabs, TabPane, Button } from "element-ui";
+import Vue from "vue";
 Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(Tabs);
@@ -111,7 +111,7 @@ export default {
     return {
       phases: 1,
       showSet: false,
-      activeName: 'first'
+      activeName: "first"
     };
   },
 
@@ -121,7 +121,7 @@ export default {
         const res = [];
         this.list.forEach(index => {
           res.push(
-            path + 'char/set/' + this.data.charID + '_' + index + '.png'
+            path + "char/set/" + this.data.charID + "_" + index + ".png"
           );
         });
         return res;
@@ -132,17 +132,21 @@ export default {
         const res = [];
         this.list.forEach(index => {
           res.push(
-            path + 'char/halfPic/' + this.data.charID + '_' + index + '.png'
+            path + "char/halfPic/" + this.data.charID + "_" + index + ".png"
           );
         });
         return res[0];
       }
     }
   },
+  filters: {
+    docter: str => {
+      return str.replace(/{@nickname}/, "阿凡提");
+    }
+  },
   methods: {
     changeText(str) {
-      str = str.replace(/(\n)/g, '<br />');
-      return str;
+      return str.replace(/(\n)/g, "<br />");
     },
     calPhases(index) {
       if (index === 1) return 0;
