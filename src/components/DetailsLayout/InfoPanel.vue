@@ -71,7 +71,12 @@
               <span>
                 <b>{{word.voiceTitle}}</b>
               </span>
-
+              <div class="word-control-button">
+                <i class="el-icon-video-play"></i>
+              </div>
+              <div class="word-control-button">
+                <i class="el-icon-video-pause"></i>
+              </div>
               <audio
                 style="opacity: 0.5"
                 :autoplay="false"
@@ -80,7 +85,7 @@
                 :src="audioPath(word)"
                 :ref="'word_'+ index"
                 :id="'word_'+ index"
-                v-if="0"
+                v-if="voice[index]"
               >播放</audio>
             </div>
             <p>{{word.voiceText | docter}}</p>
@@ -221,6 +226,15 @@ export default {
 
 .info-words-wrapper {
   padding: 0 10px;
+}
+
+.word-control-button {
+  display: inline-block;
+}
+.word-control-button i {
+  font-size: 20px;
+  vertical-align: middle;
+  cursor: pointer;
 }
 
 @media screen and (max-width: 700px) {
