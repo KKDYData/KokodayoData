@@ -66,27 +66,36 @@
 
       <el-tab-pane label="语音记录" name="second">
         <div class="info-words-wrapper">
+          <div style="display: flex; align-items: center">
+            <div style="padding-right: 10px">
+              <span>volume:</span>
+            </div>
+            <div style="display:inline-block;width: 100px">
+              <el-slider
+                @change="e => voiceVolume = e"
+                v-model="voiceVolume"
+                color="#ca3e47"
+                :show-text="false"
+              ></el-slider>
+            </div>
+          </div>
           <div v-for="(word, index) in words" :key="word.charWordId" class="info-word-container">
             <div class="info-word-audio-title">
-              <span>
-                <b>{{word.voiceTitle}}</b>
-              </span>
-              <div class="word-control-button">
+              <div style="padding-right: 5px;">
+                <b style="line-height:20px">{{word.voiceTitle}}</b>
+              </div>
+              <div @click="playVoice(index)" class="word-control-button">
                 <i class="el-icon-video-play"></i>
               </div>
-              <div class="word-control-button">
+              <div @click="pausePlayVoice(index)" class="word-control-button">
                 <i class="el-icon-video-pause"></i>
               </div>
-              <audio
-                style="opacity: 0.5"
-                :autoplay="false"
-                preload="none"
-                class="info-word-audio-control"
+              <audio-container
+                ref="word"
+                v-if="currentVoice === index"
+                :volume="voiceVolume"
                 :src="audioPath(word)"
-                :ref="'word_'+ index"
-                :id="'word_'+ index"
-                v-if="voice[index]"
-              >播放</audio>
+              ></audio-container>
             </div>
             <p>{{word.voiceText | docter}}</p>
           </div>
@@ -98,15 +107,29 @@
 
 <script>
 import { path } from "../utils";
-import { Carousel, CarouselItem, Tabs, TabPane, Button } from "element-ui";
+import {
+  Carousel,
+  CarouselItem,
+  Tabs,
+  TabPane,
+  Button,
+  Progress,
+  Slider
+} from "element-ui";
 import Vue from "vue";
 Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(Tabs);
 Vue.use(TabPane);
 Vue.use(Button);
+Vue.use(Progress);
+Vue.use(Slider);
+import AudioContainer from "./AudioContainer";
 
 export default {
+  components: {
+    AudioContainer
+  },
   props: {
     data: {
       required: true
@@ -125,7 +148,10 @@ export default {
     return {
       phases: 1,
       showSet: false,
-      activeName: "first"
+      activeName: "first",
+      currentVoice: null,
+      voicePercentage: 0,
+      voiceVolume: 100
     };
   },
   filters: {
@@ -163,6 +189,17 @@ export default {
     }
   },
   methods: {
+    async playVoice(index) {
+      this.currentVoice = index;
+      await this.$nextTick();
+      const a = this.$refs["word"];
+      a[0].play();
+    },
+    pausePlayVoice(index) {
+      if (index !== this.currentVoice) return;
+      const a = this.$refs["word"];
+      if (a[0]) a[0].pause();
+    },
     audioPath(data) {
       return (
         path + "char/voice/" + this.data.charID + "/" + data.voiceId + ".wav"
@@ -218,6 +255,8 @@ export default {
 
 .info-word-audio-title {
   padding-top: 20px;
+  display: flex;
+  align-items: center;
 }
 
 .info-word-container + .info-word-container {
@@ -229,7 +268,8 @@ export default {
 }
 
 .word-control-button {
-  display: inline-block;
+  font-size: 0;
+  margin: 0 5px;
 }
 .word-control-button i {
   font-size: 20px;
