@@ -45,7 +45,9 @@
         </p>
         <div class="char-camp-pic" :style="`--logo-link: url(${logo})`">
           <div class="agent-card-camp-container" v-if="data.team > -1">
-            <div class="agent-card-camp-en">{{team.teamKey.toUpperCase()}}</div>
+            <div class="agent-card-camp-en">
+              <span>{{team.teamKey.toUpperCase()}}</span>
+            </div>
             <div class="agent-card-camp-chinese" :style="`background-color: #${team.color}`">
               <span
                 :style="`padding: 0 5px;color: ${team.color !== 'ffffff' ? '#fff' : 'rgb(136,136,136)'}`"
@@ -69,14 +71,14 @@
 
 
 <script>
-import { Card, Tag, Image } from 'element-ui';
-import Vue from 'vue';
+import { Card, Tag, Image } from "element-ui";
+import Vue from "vue";
 Vue.use(Card);
 Vue.use(Tag);
 Vue.use(Image);
 
-import Team from './handbook_team_table.json';
-import { getClass_Chinese, path, changeDesc } from '../utils';
+import Team from "./handbook_team_table.json";
+import { getClass_Chinese, path, changeDesc } from "../utils";
 
 export default {
   props: {
@@ -93,30 +95,30 @@ export default {
     profile() {
       return (
         path +
-        'char/profile/' +
+        "char/profile/" +
         this.$route.params.name +
-        '.png?x-oss-process=style/profile-test'
+        ".png?x-oss-process=style/profile-test"
       );
     },
     professionPic() {
       return (
         path +
-        'others/icon_profession_' +
+        "others/icon_profession_" +
         this.data.profession.toLowerCase() +
-        '_lighten.png'
+        "_lighten.png"
       );
     },
     profession() {
       return getClass_Chinese(this.data.profession);
     },
     rarityPath() {
-      return path + 'others/rarity_' + this.data.rarity + '.png';
+      return path + "others/rarity_" + this.data.rarity + ".png";
     },
     desc() {
       return changeDesc(this.data.description);
     },
     logo() {
-      return path + 'logo/' + this.data.displayLogo + '.png';
+      return path + "logo/" + this.data.displayLogo + ".png";
     },
     team() {
       return Team[this.data.team];
@@ -236,26 +238,23 @@ export default {
   font-size: 0;
   box-shadow: rgba(82, 82, 82, 0.4) 1px 1px 1px 1px;
   border: 1px solid rgb(82, 82, 82);
-  /* word-break: keep-all; */
   width: auto;
   right: 0;
   display: flex;
   flex-wrap: nowrap;
+  align-items: center
 }
 
-.agent-card-camp-chinese,
-.agent-card-camp-en {
+.agent-card-camp-chinese span,
+.agent-card-camp-en span{
   font-size: 1.5rem;
   word-break: keep-all;
 }
 
-.agent-card-camp-en {
+.agent-card-camp-en span{
   padding: 0 5px;
-  display: inline-block;
 }
-.agent-card-camp-chinese {
-  display: inline-block;
-}
+
 
 @media screen and (max-width: 700px) {
   .agent-card-container {
