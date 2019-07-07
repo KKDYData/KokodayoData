@@ -183,16 +183,17 @@ const postData = (data) => {
 };
 
 const getProfileList = () => {
-  return fetchGet('/api/arknights/data/shortList')
-    .then(res => fetchGet('https' + res.url.slice(4)))
-    // .fetchGet(url)
-    .then(res => {
-      res.forEach(hero => {
-        if (hero.url)
-          hero.url = 'https' + hero.url.slice(4);
-      });
-      return res;
-    })
+  // return fetchGet('/api/arknights/data/shortList')
+  // .then(res => fetchGet('https' + res.url.slice(4)))
+  // .fetchGet(url)
+  return fetchGet('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/shortList/1561195772558.json')
+    // .then(res => {
+    //   res.forEach(hero => {
+    //     if (hero.url)
+    //       hero.url = 'https' + hero.url.slice(4);
+    //   });
+    //   return res;
+    // })
     .catch(err => {
       console.log(err);
       return [];
@@ -635,13 +636,38 @@ const exp_cards = {
   },
 };
 
-const getProfilePath = (name, webpOk) => {
-  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/small-test`
-    : `${path}char/profile-compress/${name}.png`;
-};
+
 
 const getClass_icon = (c) => {
   return path + 'others/icon_profession_' + c.toLowerCase() + '.png';
+};
+
+import UaParser from 'ua-parser-js';
+
+const getWebpOk = () => {
+
+  const ua = new UaParser();
+  const OS = ua.getOS();
+  const Browser = ua.getBrowser();
+  console.log(OS);
+  console.log(Browser);
+  if (
+    OS.name === 'iOS' ||
+    (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
+    (Browser.name === 'Edge' && Browser.version < '18')
+  ) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+
+const webpOk = getWebpOk();
+
+const getProfilePath = name => {
+  return webpOk ? `${path}char/profile-compress/${name}.png?x-oss-process=style/small-test`
+    : `${path}char/profile-compress/${name}.png`;
 };
 
 export {
@@ -671,7 +697,8 @@ export {
   roomType,
   exp_cards,
   getProfilePath,
-  getClass_icon
+  getClass_icon,
+  webpOk
 };
 
 

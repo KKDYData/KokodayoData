@@ -148,7 +148,7 @@ export default {
       return this.tags.find(el => el.value === tag);
     },
     profilePath(name) {
-      return getProfilePath(name, this.webpOk);
+      return getProfilePath(name);
     },
     changeClassShort(c) {
       return getClass_Chinese(c);

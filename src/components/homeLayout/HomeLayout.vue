@@ -1,6 +1,5 @@
 <template>
   <div class="home-layout-wrapper">
-    <!-- <p>{{OsText}} | {{webpOk}}</p> -->
     <div class="home-filter-wrapper" id="profile-panel">
       <filter-group
         label="职业"
@@ -121,7 +120,7 @@
 <script>
 import FilterButtonGroup from '../FilterButtonGroup';
 import ProfileLayout from './ProfileLayout';
-import { sort, TagsArr, StarArr, class_chinese } from '../utils';
+import { sort, TagsArr, StarArr, class_chinese, webpOk } from '../utils';
 import Vue from 'vue';
 import { Button, MessageBox, Popover, Tag, Tabs, TabPane } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
@@ -145,8 +144,6 @@ const newProfileLayout = () => ({
   delay: 200,
   timeout: 5000
 });
-
-import UaParser from 'ua-parser-js';
 
 const gkzm = [{ isTag: false, text: '仅公招', value: true, short: '公招' }];
 const position = [
@@ -191,8 +188,7 @@ export default {
       showExplain: ['1'],
       showOtherPanel: false,
       currentMode: 'profile-layout',
-      webpOk: true,
-      OsText: ''
+      webpOk: webpOk
     };
   },
   created() {
@@ -201,19 +197,6 @@ export default {
     window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
     });
-    const ua = new UaParser();
-    const OS = ua.getOS();
-    const Browser = ua.getBrowser();
-    console.log(OS);
-    console.log(Browser);
-    if (
-      OS.name === 'iOS' ||
-      (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
-      (Browser.name === 'Edge' && Browser.version < '18')
-    ) {
-      this.webpOk = false;
-    }
-    this.OsText = OS.name + ' | ' + Browser.name + ' | ' + Browser.version;
   },
   mounted() {
     this.$vlf

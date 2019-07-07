@@ -71,14 +71,14 @@
 
 
 <script>
-import { Card, Tag, Image } from "element-ui";
-import Vue from "vue";
+import { Card, Tag, Image } from 'element-ui';
+import Vue from 'vue';
 Vue.use(Card);
 Vue.use(Tag);
 Vue.use(Image);
 
-import Team from "./handbook_team_table.json";
-import { getClass_Chinese, path, changeDesc } from "../utils";
+import Team from './handbook_team_table.json';
+import { getClass_Chinese, path, changeDesc, getProfilePath } from '../utils';
 
 export default {
   props: {
@@ -89,36 +89,34 @@ export default {
     short: {
       type: Boolean,
       required: true
-    }
+    },
+    webpOk: Boolean
   },
+
+  created() {},
   computed: {
     profile() {
-      return (
-        path +
-        "char/profile/" +
-        this.$route.params.name +
-        ".png?x-oss-process=style/profile-test"
-      );
+      return getProfilePath(this.$route.params.name);
     },
     professionPic() {
       return (
         path +
-        "others/icon_profession_" +
+        'others/icon_profession_' +
         this.data.profession.toLowerCase() +
-        "_lighten.png"
+        '_lighten.png'
       );
     },
     profession() {
       return getClass_Chinese(this.data.profession);
     },
     rarityPath() {
-      return path + "others/rarity_" + this.data.rarity + ".png";
+      return path + 'others/rarity_' + this.data.rarity + '.png';
     },
     desc() {
       return changeDesc(this.data.description);
     },
     logo() {
-      return path + "logo/" + this.data.displayLogo + ".png";
+      return path + 'logo/' + this.data.displayLogo + '.png';
     },
     team() {
       return Team[this.data.team];
@@ -242,19 +240,18 @@ export default {
   right: 0;
   display: flex;
   flex-wrap: nowrap;
-  align-items: center
+  align-items: center;
 }
 
 .agent-card-camp-chinese span,
-.agent-card-camp-en span{
+.agent-card-camp-en span {
   font-size: 1.5rem;
   word-break: keep-all;
 }
 
-.agent-card-camp-en span{
+.agent-card-camp-en span {
   padding: 0 5px;
 }
-
 
 @media screen and (max-width: 700px) {
   .agent-card-container {
@@ -327,8 +324,8 @@ export default {
     top: auto;
     align-items: flex-end;
   }
-  .agent-card-camp-chinese,
-  .agent-card-camp-en {
+  .agent-card-camp-chinese span,
+  .agent-card-camp-en span {
     font-size: 1rem;
   }
 

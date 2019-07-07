@@ -11,7 +11,7 @@
     <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
-        <agent-card :data="data" :short="short"></agent-card>
+        <agent-card :webpOk="webpOk" :data="data" :short="short"></agent-card>
         <!-- 属性面板 -->
         <div class="stats-wrapper">
           <div class="group-container-title">
@@ -152,7 +152,14 @@
         <template slot="title">
           <span style="direction:rtl;width: 100%">打开</span>
         </template>
-        <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
+        <info-panel
+          :webpOk="webpOk"
+          v-if="info"
+          :data="info"
+          :short="short"
+          :list="setList"
+          :words="words"
+        ></info-panel>
         <el-card>
           <p>待更新</p>
           <p>。。。</p>
@@ -171,7 +178,8 @@ import {
   changeDesc,
   potentialToStatus,
   itemBackground,
-  GOLD
+  GOLD,
+  webpOk
 } from '../utils';
 import {
   Card,
@@ -268,7 +276,8 @@ export default {
       evolveCost: {},
       info: null,
       words: [],
-      GOLD: GOLD
+      GOLD: GOLD,
+      webpOk: webpOk
     };
   },
   computed: {

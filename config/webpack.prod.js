@@ -38,6 +38,7 @@ module.exports = merge(common, {
     },
     minimizer: [
       new TerserPlugin({
+        test: /\.m?js$/,
         cache: true,
         parallel: true,
       }),
