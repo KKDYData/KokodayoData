@@ -4,7 +4,10 @@ const CleanWebPackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const devMode = process.env.NODE_ENV !== 'production';
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+const WorkboxPlugin = require('workbox-webpack-plugin');
+
+
 
 
 module.exports = {
@@ -23,7 +26,49 @@ module.exports = {
       filename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash].css',
       // chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
     }),
+    new WebpackPwaManifest({
+      name: 'Arknights Data @Beta',
+      short_name: 'AnD@Beta',
+      description: '一个平平无奇的明日方舟资料站',
+      background_color: '#525252',
+      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
+      start_url: '.',
+      icons: [
+        {
+          src: path.resolve('src/assets/icon.png'),
+          sizes: [96, 128, 192, 256, 384, 512], // multiple sizes
+          ios: true
+        },
+        {
+          src: path.resolve('src/assets/icon_big.png'),
+          size: '1024x1024', // you can also use the specifications pattern
+          ios: true
 
+        }
+      ]
+    }),
+    new WorkboxPlugin.GenerateSW({
+      swDest: 'sw.js',
+      clientsClaim: true,
+      skipWaiting: true,
+      include: [/\.html$/, /\.js$/, /\.json/],
+      runtimeCaching: [{
+        urlPattern: /(http:\/\/localhost:8080\/|https:somedata.top\/ArknightsBeta)/,
+        handler: 'StaleWhileRevalidate'
+
+      },
+      {
+        // To match cross-origin requests, use a RegExp that matches
+        // the start of the origin:
+        urlPattern: new RegExp('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'),
+        handler: 'StaleWhileRevalidate',
+        options: {
+          cacheableResponse: {
+            statuses: [0, 200]
+          }
+        }
+      }]
+    })
   ],
   devServer: {
     contentBase: './dist',

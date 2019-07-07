@@ -194,7 +194,7 @@ export default {
       return colors[star];
     },
     profilePath(name) {
-      return getProfilePath(name, this.webpOk);
+      return getProfilePath(name);
     }
   }
 };
