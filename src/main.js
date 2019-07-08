@@ -1,12 +1,16 @@
+import { Browser } from './components/utils';
+if (Browser.name === 'IE') {
+  document.body.querySelector('#app').innerHTML = '不支持IE，请使用现代浏览器。';
+
+}
+
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import NavMenu from './NavMenu';
 
-
 Vue.use(VueRouter);
 
 Vue.config.productionTip = false;
-
 
 const Home = () => import(/* webpackChunkName: "Home" */'./Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./Details');

@@ -88,7 +88,8 @@ export default {
     return {
       stageList: [],
       isShort: this.short,
-      isHover: process.env.NODE_ENV === 'development' ? 'click' : 'hover'
+      isHover:
+        process.env.NODE_ENV === 'development' || this.short ? 'click' : 'hover'
     };
   },
   computed: {

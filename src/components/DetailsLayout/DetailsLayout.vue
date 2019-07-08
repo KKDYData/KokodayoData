@@ -4,10 +4,10 @@
     <el-alert
       v-if="loadingFail"
       type="error"
-      title="404"
+      title="Network Error"
       effect="dark"
       :closable="false"
-    >获取数据失败，弱多次刷新无效，请联系管理员</el-alert>
+    >获取数据失败，若多次刷新无效，请联系管理员</el-alert>
     <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
@@ -346,7 +346,7 @@ export default {
           this.potentailStatusUP.forEach(el => {
             el.forEach(el => {
               if (el.type === key) {
-                console.log(el.type);
+                // console.log(el.type);
                 addV += el.value;
                 nV += el.value;
               }

@@ -173,7 +173,7 @@ export default {
         const style = !this.webpOk
           ? '.png'
           : '.png?x-oss-process=style/small-test';
-        console.log(path);
+        // console.log(path);
         this.list.forEach(index => {
           res.push(
             path + 'char/halfPic/' + this.data.charID + '_' + index + style
@@ -202,7 +202,7 @@ export default {
     },
     audioPath(data) {
       return (
-        path + 'char/voice/' + this.data.charID + '/' + data.voiceId + '.wav'
+        path + 'char/voice/' + this.data.charID + '/' + data.voiceId + '.mp3'
       );
     },
     changeText(str) {
