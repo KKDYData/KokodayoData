@@ -131,8 +131,8 @@ Vue.use(Tag);
 Vue.use(Tabs);
 Vue.use(TabPane);
 
-import Vlf from 'vlf';
-Vue.use(Vlf);
+import localforage from 'localforage';
+
 import loadingC from '../Loading';
 
 const newProfileLayout = () => ({
@@ -199,25 +199,23 @@ export default {
     });
   },
   mounted() {
-    this.$vlf
-      .createInstance({
-        name: 'testDB'
-      })
-      .then(async store => {
-        this.store = store;
-        const filterGroups = await store.getItem('filterGroups');
-        if (filterGroups) {
-          // this.$set(this, 'filterGroups', filterGroups);
-          Object.keys(filterGroups).forEach(el => {
-            if (filterGroups[el][0].isTag === undefined)
-              console.log('不读缓存， 更新数据' + el);
-            else {
-              this.$set(this.filterGroups, el, filterGroups[el]);
-            }
-          });
-        }
+    this.store = localforage.createInstance({
+      name: 'testDB'
+    });
+
+    this.store.getItem('filterGroups').then(filterGroups => {
+      if (filterGroups) {
+        // this.$set(this, 'filterGroups', filterGroups);
+        Object.keys(filterGroups).forEach(el => {
+          if (filterGroups[el][0].isTag === undefined)
+            console.log('不读缓存， 更新数据' + el);
+          else {
+            this.$set(this.filterGroups, el, filterGroups[el]);
+          }
+        });
         this.resetFilter();
-      });
+      }
+    });
   },
   computed: {
     filterGroups() {

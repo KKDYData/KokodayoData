@@ -33,6 +33,7 @@ module.exports = {
       background_color: '#525252',
       crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
       start_url: '.',
+      navigationPreload: true,
       icons: [
         {
           src: path.resolve('src/assets/icon.png'),
@@ -51,23 +52,28 @@ module.exports = {
       swDest: 'sw.js',
       clientsClaim: true,
       skipWaiting: true,
-      include: [/\.html$/, /\.js$/, /\.json/],
-      runtimeCaching: [{
-        urlPattern: /(http:\/\/localhost:8080\/|https:somedata.top\/ArknightsBeta)/,
-        handler: 'StaleWhileRevalidate'
-
-      },
-      {
-        // To match cross-origin requests, use a RegExp that matches
-        // the start of the origin:
-        urlPattern: new RegExp('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'),
-        handler: 'StaleWhileRevalidate',
-        options: {
-          cacheableResponse: {
-            statuses: [0, 200]
+      exclude: [/^icon.*?\.png$/],
+      runtimeCaching: [
+        {
+          urlPattern: /api\/arknights/,
+          handler: 'NetworkFirst'
+        },
+        {
+          urlPattern: /\.ico$/,
+          handler: 'CacheFirst'
+        },
+        {
+          // To match cross-origin requests, use a RegExp that matches
+          // the start of the origin:
+          urlPattern: new RegExp('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'),
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
           }
         }
-      }]
+      ]
     })
   ],
   devServer: {

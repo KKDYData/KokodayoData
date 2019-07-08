@@ -14,80 +14,14 @@ const throttle = function (action, delay) {
   return function () {
     var curr = +new Date();
     if (curr - last > delay) {
-      console.log('hit  ' + (curr - last));
+      // console.log('hit  ' + (curr - last));
       action.apply(this, arguments);
       last = curr;
     }
   };
 };
-// let api = process.env.NODE_ENV !== 'production' ? '/api' : '';
-const baseUrl = '/api/arknights/',
-  regPicUrl = baseUrl + 'regPic',
-  picUrl = baseUrl + 'data/pic/skill',
-  postDataUrl = baseUrl + 'data';
 
 const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
-// const path = 'https://andata.somedata.top/dataX/';
-
-
-
-//识别文字
-const RegconizeFetch = imgData => {
-  return fetch(regPicUrl, {
-    method: 'POST',
-    body: imgData,
-    headers: new Headers({
-      'Content-Type': 'text/plain'
-    })
-  })
-    .then(res => {
-      return new Promise((resolve, reject) => {
-        setTimeout(() => {
-          try {
-            // const temp = ;
-            resolve(res.json());
-            // console.log(temp);
-          } catch (err) {
-            console.log(err);
-            reject(err);
-          }
-        }, 300);
-      });
-    })
-    .catch(error => console.error('Error:', error));
-};
-
-const scan = async (data, insertCB) => {
-  // switch 共用一个i
-  const scanArr = data.scanArr,
-    switchDefault = data.switchDefault,
-    img = data.img;
-  let temp = [], i = 0;
-  for (let rect of scanArr) {
-    console.log(rect.id);
-    const tempCanvas = makeNewCanvas(rect, img, insertCB);
-    const imgData = tempCanvas.toDataURL().split(',')[1];
-
-    const result = await RegconizeFetch(imgData);
-    data.self.scanPercentage = ++i / scanArr.length * 100;
-    temp.push(switchDefault(rect, result));
-  }
-
-  return temp;
-};
-
-
-//上传图片
-const postPicFetch = formData => {
-  console.log(formData);
-  return fetch(picUrl, {
-    method: 'PUT',
-    body: formData
-  })
-    .catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
-};
-
 
 const insertImg = (picArr, baseImg) => {
   return new Promise((resolve, reject) => {
@@ -160,40 +94,11 @@ const makeNewCanvas = (rect, img, callback) => {
 };
 
 
-const postData = (data) => {
-  return fetch(postDataUrl, {
-    method: 'PUT',
-    headers: new Headers({
-      'Content-type': 'application/json; charset=utf-8'
-    }),
-    body: JSON.stringify(data)
-  })
-    .then(res => {
-      return res.text().then(text => {
-        const result = {
-          message: text,
-          type: res.status === 200 ? 'success' : 'error'
-        };
-        return result;
-      });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-};
-
 const getProfileList = () => {
-  // return fetchGet('/api/arknights/data/shortList')
-  // .then(res => fetchGet('https' + res.url.slice(4)))
-  // .fetchGet(url)
-  return fetchGet('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/shortList/1561195772558.json')
-    // .then(res => {
-    //   res.forEach(hero => {
-    //     if (hero.url)
-    //       hero.url = 'https' + hero.url.slice(4);
-    //   });
-    //   return res;
-    // })
+  return fetchGet('/api/arknights/data/shortList')
+    .then(res => fetchGet('https' + res.url.slice(4)))
+    // .fetchGet(url)
+    // return fetchGet('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/shortList/1561195772558.json')
     .catch(err => {
       console.log(err);
       return [];
@@ -389,9 +294,6 @@ const changeDesc = (desc) => {
     .replace(baKw, '<i style="color:#00B0FF;font-style: normal;">')
     .replace(baTalpu, '<i style="color:#F49800;font-style: normal;">')
     .replace(baPn, '<i style="color:#FF6237;">');
-
-
-
 
   return desc;
 };
@@ -644,11 +546,11 @@ const getClass_icon = (c) => {
 
 import UaParser from 'ua-parser-js';
 
-const getWebpOk = () => {
+const ua = new UaParser();
+const OS = ua.getOS();
+const Browser = ua.getBrowser();
 
-  const ua = new UaParser();
-  const OS = ua.getOS();
-  const Browser = ua.getBrowser();
+const getWebpOk = () => {
   console.log(OS);
   console.log(Browser);
   if (
@@ -662,8 +564,8 @@ const getWebpOk = () => {
   }
 };
 
-
 const webpOk = getWebpOk();
+
 
 const getProfilePath = name => {
   return webpOk ? `${path}char/profile-compress/${name}.png?x-oss-process=style/small-test`
@@ -673,10 +575,7 @@ const getProfilePath = name => {
 export {
   debounce,
   throttle,
-  scan,
-  postData,
   insertImg,
-  postPicFetch,
   getHeroData,
   sort,
   sortByTime,
@@ -698,7 +597,8 @@ export {
   exp_cards,
   getProfilePath,
   getClass_icon,
-  webpOk
+  webpOk,
+  Browser
 };
 
 

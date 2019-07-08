@@ -127,8 +127,6 @@ export default {
         this.$emit('chose', item.name);
         return;
       }
-      // await this.$vlf.setItem('dataUrl', item.url);
-      // await this.$vlf.getItem('dataUrl');
       this.$router.push(this.path + '/details/' + item.No);
     },
     calFillAmount() {

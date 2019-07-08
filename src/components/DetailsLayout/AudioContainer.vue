@@ -4,7 +4,6 @@
       <el-progress :show-text="false" :percentage="voicePercentage" color="rgb(82, 82, 82)"></el-progress>
     </div>
     <audio
-      :volume="1"
       :autoplay="false"
       preload="none"
       class="info-word-audio-control"
@@ -36,6 +35,9 @@ export default {
     return {
       voicePercentage: 0
     };
+  },
+  mounted() {
+    this.$refs.word.volume = this.volume / 100;
   },
   watch: {
     volume: function(e) {
