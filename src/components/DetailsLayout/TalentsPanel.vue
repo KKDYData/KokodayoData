@@ -126,6 +126,7 @@ export default {
 .talent-condition-wrapper {
   padding-right: 10px;
   width: 100px;
+  word-break: keep-all;
 }
 
 .talent-desc-content-wrapper {
