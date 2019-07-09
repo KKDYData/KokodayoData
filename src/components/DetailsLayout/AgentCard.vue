@@ -78,7 +78,12 @@ Vue.use(Tag);
 Vue.use(Image);
 
 import Team from './handbook_team_table.json';
-import { getClass_Chinese, path, changeDesc, getProfilePath } from '../utils';
+import {
+  getClass_Chinese,
+  path,
+  changeDesc,
+  getDetailsProfilePath
+} from '../utils';
 
 export default {
   props: {
@@ -96,7 +101,7 @@ export default {
   created() {},
   computed: {
     profile() {
-      return getProfilePath(this.$route.params.name);
+      return getDetailsProfilePath(this.$route.params.name);
     },
     professionPic() {
       return (
