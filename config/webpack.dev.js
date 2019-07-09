@@ -39,7 +39,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/computer$/, to: context => {
+          from: /^\/(computer|enemydata)$/, to: context => {
             return '/index.html';
           }
         },

@@ -29,7 +29,9 @@ import loadingC from './components/Loading';
 import Mode from './stats';
 
 const HomeLayout = () => ({
-  component: import(/* webpackChunkName: "HomeLayout" */ './components/homeLayout'),
+  component: import(
+    /* webpackChunkName: "HomeLayout" */ './components/homeLayout'
+  ),
   loading: loadingC,
   error: loadingC,
   delay: 200,
@@ -50,12 +52,6 @@ export default {
   },
   mounted() {
     this.linkStart();
-    // const isOpen = localStorage.getItem('isOpen');
-    // if (!isOpen) {
-    //   localStorage.setItem('isOpen', true);
-    // } else {
-    //   this.linkStart();
-    // }
   },
   methods: {
     linkStart() {

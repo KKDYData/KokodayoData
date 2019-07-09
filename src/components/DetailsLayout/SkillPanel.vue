@@ -179,8 +179,8 @@ export default {
 
         // console.log(skill_time_text);
         // console.log(skill_time_text.index + 4 + text[0].length);
-        const unit = text[2] !== '极大幅度缩短' ? 's' : '%';
         let value = skill_base_time.value;
+        const unit = text[2] !== '极大幅度缩短' && value < 0 ? 's' : '%';
         if (unit === '%') value *= 100;
         const temp = res.split('');
         temp.splice(
