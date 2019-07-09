@@ -807,9 +807,9 @@ export default {
   /*  */
 
   .status-range-wrapper {
-    width: calc(45% - 20px);
+    width: calc(30% - 20px);
     min-width: auto;
-    margin-right: 10px;
+    margin-right: calc(10% + 10px);
   }
 }
 
@@ -861,6 +861,12 @@ export default {
   } */
   .evolvcost-name-wrapper {
     font-size: 14px;
+  }
+
+  .status-range-wrapper {
+    width: calc(45% - 20px);
+    min-width: auto;
+    margin-right: calc(2.5% + 3px);
   }
   /*  */
   /*  */

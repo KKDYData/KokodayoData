@@ -15,6 +15,7 @@ Vue.config.productionTip = false;
 const Home = () => import(/* webpackChunkName: "Home" */'./Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');
+const EnemyData = () => import(/* webpackChunkName: "EnemyData" */'./EnemyData');
 
 import Mode from './stats';
 
@@ -24,7 +25,8 @@ const isDev = process.env.NODE_ENV === 'development' ? '/' : Mode + '/';
 const routes = [
   { path: isDev, component: Home },
   { path: isDev + 'computer', component: Computer },
-  { path: isDev + 'details/:name', component: Details }
+  { path: isDev + 'details/:name', component: Details },
+  { path: isDev + 'enemydata', component: EnemyData }
 ];
 const router = new VueRouter({
   mode: 'history',

@@ -97,14 +97,20 @@ const makeNewCanvas = (rect, img, callback) => {
 const getProfileList = () => {
   return fetchGet('/api/arknights/data/shortList')
     .then(res => fetchGet('https' + res.url.slice(4)))
-    // .fetchGet(url)
-    // return fetchGet('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/shortList/1561195772558.json')
     .catch(err => {
       console.log(err);
       return [];
     });
 };
 
+const getEnemyList = () => {
+  return fetchGet('/api/arknights/data/enemyList')
+    .then(res => fetchGet('https' + res.url.slice(4)))
+    .catch(err => {
+      console.log(err);
+      return [];
+    });
+};
 
 
 const getHeroData = name => {
@@ -573,9 +579,11 @@ const getProfilePath = name => {
 };
 
 const getDetailsProfilePath = name => {
-  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/small-test`
+  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/profile-test`
     : `${path}char/profile/${name}.png`;
 };
+
+
 
 export {
   debounce,
@@ -604,7 +612,8 @@ export {
   getDetailsProfilePath,
   getClass_icon,
   webpOk,
-  Browser
+  Browser,
+  getEnemyList
 };
 
 
