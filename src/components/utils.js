@@ -572,6 +572,11 @@ const getProfilePath = name => {
     : `${path}char/profile-compress/${name}.png`;
 };
 
+const getDetailsProfilePath = name => {
+  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/small-test`
+    : `${path}char/profile/${name}.png`;
+};
+
 export {
   debounce,
   throttle,
@@ -596,6 +601,7 @@ export {
   roomType,
   exp_cards,
   getProfilePath,
+  getDetailsProfilePath,
   getClass_icon,
   webpOk,
   Browser
