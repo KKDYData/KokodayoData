@@ -189,7 +189,6 @@ export default {
 }
 .img-container img {
   width: 100%;
-  background-color: #525252;
 }
 
 .name {
