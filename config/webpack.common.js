@@ -48,33 +48,33 @@ module.exports = {
         }
       ]
     }),
-    // new WorkboxPlugin.GenerateSW({
-    //   swDest: 'sw.js',
-    //   clientsClaim: true,
-    //   skipWaiting: true,
-    //   exclude: [/^icon.*?\.png$/],
-    //   runtimeCaching: [
-    //     {
-    //       urlPattern: /api\/arknights/,
-    //       handler: 'NetworkFirst'
-    //     },
-    //     {
-    //       urlPattern: /\.ico$/,
-    //       handler: 'CacheFirst'
-    //     },
-    //     {
-    //       // To match cross-origin requests, use a RegExp that matches
-    //       // the start of the origin:
-    //       urlPattern: new RegExp('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'),
-    //       handler: 'StaleWhileRevalidate',
-    //       options: {
-    //         cacheableResponse: {
-    //           statuses: [0, 200]
-    //         }
-    //       }
-    //     }
-    //   ]
-    // })
+    new WorkboxPlugin.GenerateSW({
+      swDest: 'sw.js',
+      clientsClaim: true,
+      skipWaiting: true,
+      exclude: [/^icon.*?\.png$/],
+      runtimeCaching: [
+        {
+          urlPattern: /api\/arknights/,
+          handler: 'NetworkFirst'
+        },
+        {
+          urlPattern: /\.ico$/,
+          handler: 'CacheFirst'
+        },
+        {
+          // To match cross-origin requests, use a RegExp that matches
+          // the start of the origin:
+          urlPattern: new RegExp('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'),
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        }
+      ]
+    })
   ],
   devServer: {
     contentBase: './dist',
