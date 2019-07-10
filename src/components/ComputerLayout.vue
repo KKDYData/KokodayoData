@@ -355,5 +355,11 @@ export default {
     max-width: 100px;
   }
 }
+
+@media screen and (max-width: 600px) {
+  .extra-exp .my-form-item-wrapper {
+    width: calc(50vw - 23px);
+  }
+}
 </style>
 
