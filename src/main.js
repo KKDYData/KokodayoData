@@ -57,11 +57,10 @@ const swPath = process.env.NODE_ENV === 'development' ? '/sw.js' : Mode + '/sw.j
 
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register(swPath).then(registration => {
-      console.log('SW registered: ', registration);
-    }).catch(registrationError => {
-      console.log('SW registration failed: ', registrationError);
-    });
+  window.addEventListener('load', async () => {
+    const { Workbox } = await import('workbox-window');
+    const wb = new Workbox(swPath);
+
+    wb.register();
   });
 }

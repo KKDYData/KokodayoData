@@ -143,7 +143,14 @@ export default {
   text-align: center;
 }
 .talent-desc-change-button .el-button--mini {
-  padding: 0;
+  padding: 2px 4px 2px 8px;
+  border-radius: 2px;
+}
+
+.talent-desc-change-button .el-button--warning:focus,
+.talent-desc-change-button .el-button--warning:hover {
+  background-color: #f49800;
+  border-color: #f49800;
 }
 
 @media screen and (max-width: 700px) {
@@ -209,6 +216,7 @@ export default {
   .talent-desc-change-button {
     right: 0px;
     width: auto;
+    top: -3px;
     /* text-align: right; */
   }
 }

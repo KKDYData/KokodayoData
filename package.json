@@ -25,7 +25,8 @@
     "vue-essentials": "^0.1.49",
     "vue-router": "^3.0.6",
     "vuedraggable": "^2.19.2",
-    "workbox-precaching": "^4.3.1"
+    "workbox-precaching": "^4.3.1",
+    "workbox-window": "^4.3.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",

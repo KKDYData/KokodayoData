@@ -449,8 +449,8 @@ export default {
   border-color: #414141;
 }
 
-.el-button:focus,
-.el-button:hover {
+.home-layout-wrapper .el-button:focus,
+.home-layout-wrapper .el-button:hover {
   background-color: hsla(356, 57%, 52%, 0.5);
   border-color: hsla(356, 57%, 52%, 0.1);
   color: #fff;
