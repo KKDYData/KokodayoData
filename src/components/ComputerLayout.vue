@@ -348,7 +348,8 @@ export default {
     justify-content: space-between;
   }
   .extra-exp .my-form-item-wrapper {
-    width: calc(50vw - 23px);
+    width: calc(50vw - 150px);
+    padding: 0 40px;
   }
 
   .extra-exp .my-form-item {
@@ -359,6 +360,7 @@ export default {
 @media screen and (max-width: 600px) {
   .extra-exp .my-form-item-wrapper {
     width: calc(50vw - 23px);
+    padding: 0;
   }
 }
 </style>
