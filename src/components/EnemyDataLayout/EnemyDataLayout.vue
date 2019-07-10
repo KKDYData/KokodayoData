@@ -1,7 +1,7 @@
 <template>
   <div class="enemy-data-layout">
     <div v-for="(enemy, key) in data" :key="enemy.enemyId">
-      <el-popover :trigger="isHover" :width="500" open-delay="500">
+      <el-popover :trigger="isHover" :width="500" :open-delay="500">
         <div slot="reference" class="enemy-container">
           <div class="enemy-img-container">
             <div class="enemy-index-container">

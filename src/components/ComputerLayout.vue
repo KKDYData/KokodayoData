@@ -348,11 +348,17 @@ export default {
     justify-content: space-between;
   }
   .extra-exp .my-form-item-wrapper {
-    width: calc(50vw - 23px);
+    width: calc(50vw - 50px);
   }
 
   .extra-exp .my-form-item {
     max-width: 100px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .extra-exp .my-form-item-wrapper {
+    width: calc(50vw - 23px);
   }
 }
 </style>
