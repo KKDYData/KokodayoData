@@ -25,7 +25,7 @@
           :key="index"
           size="mini"
           :type="level === index ? 'primary': ''"
-        >{{index}}</el-button>
+        >{{index === status.length - 1 ? '突袭' : index}}</el-button>
       </p>
 
       <div v-if="skills.length > 0">
@@ -37,16 +37,21 @@
             <div style="margin: 10px 0">
               <span style="font-size: 1.2em">{{skill.prefabKey.toUpperCase()}}</span>
             </div>
-            <div :style="short? 'display: flex' : ''">
+            <div
+              class="enemy-skill-container"
+              :style="short? 'display: flex; flex-wrap: wrap' : ''"
+            >
               <div :style="short? 'margin-left: 10px' : ''">
                 <span>冷却时间:</span>
                 <span>{{skill.cooldown}}</span>
+                <span>s</span>
               </div>
               <div :style="short? 'margin-left: 10px' : ''">
                 <span>初始冷却</span>
                 <span>{{skill.initCooldown}}</span>
+                <span>s</span>
               </div>
-              <div v-if="skill.spCost > 0">
+              <div :style="short? 'width: 100%; margin-left: 10px' : ''" v-if="skill.spCost > 0">
                 <span>SP消耗</span>
                 <span>{{skill.spCost}}</span>
               </div>
@@ -57,7 +62,7 @@
                   <b style="opacity: 0.5">效果</b>
                 </span>
               </div>
-              <div :style="short? 'display: flex' : ''">
+              <div :style="short? 'display: flex;' : ''">
                 <div
                   :style="short? 'margin-left: 10px' : ''"
                   v-for="data in skill.blackboard"
@@ -65,6 +70,7 @@
                 >
                   <span>{{changeBlackboardToCh(data.key)}}</span>
                   <span>{{data.value}}</span>
+                  <span v-if="timeKey.includes(data.key)">s</span>
                 </div>
               </div>
             </div>
@@ -125,14 +131,17 @@ export default {
           ['攻击', '???'],
           ['防御', '???'],
           ['法术抵抗', '???'],
-          ['部署费用', '???'],
-          ['阻挡数', '???'],
+          ['移动速度', '???'],
           ['攻击间隔', '???'],
-          ['生命回复/秒', '???']
+          ['生命回复/秒', '???'],
+          ['重量', '???'],
+          ['攻击范围', '???'],
+          ['LifePoint', '???']
         ]
       ],
       skills: [],
-      Tag: []
+      Tag: [],
+      timeKey: ['attack_speed', 'duration', 'dist']
     };
   },
   watch: {
@@ -148,7 +157,7 @@ export default {
           if (name) {
             let keyIndex = i;
             if (i > 0) {
-              keyIndex = entries[1].m_value > 0 ? i : i - 1;
+              keyIndex = entries[1].m_value > 0 ? i : 0;
             }
             res.push([
               name,
@@ -167,7 +176,7 @@ export default {
           keyIndex = list.enemyData.rangeRadius.m_value > 0 ? i : i - 1;
         }
         res.push([
-          '攻击范围',
+          '攻击范围/格',
           this.data[keyIndex].enemyData.rangeRadius.m_value
         ]);
         res.push([
@@ -199,7 +208,8 @@ export default {
         attack_speed: '攻速',
         duration: '持续时间',
         range_radius: '范围/格',
-        move_speed: '移动速度'
+        move_speed: '移动速度',
+        dist: '消失'
       };
       return Key[key] || key;
     }
@@ -207,7 +217,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .enemy-status-wrapper {
   display: flex;
   position: relative;
@@ -218,6 +228,7 @@ export default {
   display: flex;
   flex-wrap: wrap;
   width: 50%;
+  align-content: center;
   /* border: 1px solid black; */
   /* height: 180px; */
   /* border-right: 1px solid rgba(158, 158, 158, 0.4); */
@@ -282,7 +293,17 @@ export default {
   box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.66);
   padding: 0 10px;
   margin: 10px 0;
-  font-size: 18px;
+  font-size: 16px;
+}
+
+.status-phases-text {
+  margin-right: 10px;
+}
+
+@media screen and (min-width: 700px) {
+  .enemy-skill-container + .enemy-skill-container {
+    border-left: 1px solid rgba(158, 158, 158, 0.4);
+  }
 }
 
 @media screen and (max-width: 700px) {
@@ -293,6 +314,9 @@ export default {
   }
   .enemy-data-tag {
     margin: 10px;
+  }
+  .status-details-wrapper {
+    width: 100%;
   }
 }
 </style>

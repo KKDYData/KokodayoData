@@ -226,7 +226,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .enemy-data-layout {
   display: flex;
   flex-wrap: wrap;
@@ -333,9 +333,7 @@ export default {
   .enemy-status-wrapper {
     flex-wrap: wrap;
   }
-  .status-details-wrapper {
-    width: 100%;
-  }
+
   .status-phases-wrapper {
     width: 100%;
   }
