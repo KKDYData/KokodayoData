@@ -1,6 +1,6 @@
 <template>
   <div class="home-wrapper">
-    <enemy-data-layout :short="short" v-if="load" :data="data"></enemy-data-layout>
+    <enemy-data-layout ref="layout" :short="short" v-if="load" :data="data"></enemy-data-layout>
   </div>
 </template>
 <script>
@@ -35,12 +35,13 @@ export default {
     if (this.short) this.showExplain = [];
     window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
+      this.$refs.layout.calFillAmount();
+      // console.log(this.$refs);
     });
   },
   methods: {
     linkStart() {
       this.getData().then(data => {
-        console.log('??????');
         this.data = data;
         this.load = true;
       });

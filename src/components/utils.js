@@ -118,6 +118,11 @@ const getHeroData = name => {
     .catch(err => console.error(err));
 };
 
+const getEnemyData = key => {
+  return fetchGet(path + 'enemy/data/details/' + key + '.json')
+    .catch(err => console.error(err));
+};
+
 //包装fetch，使用get
 const fetchGet = (url) => {
   return fetch(url, {
@@ -613,7 +618,8 @@ export {
   getClass_icon,
   webpOk,
   Browser,
-  getEnemyList
+  getEnemyList,
+  getEnemyData
 };
 
 

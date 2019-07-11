@@ -78,8 +78,8 @@
             ref="gkzm"
           ></filter-group>
           <div style="direction: rtl">
-            <el-button @click="$el.click()" type="danger" :size="short? 'mini' :'medium'" round>
-              <i class="el-icon-close"></i> 关闭
+            <el-button class="close-button" @click="$el.click()" type="danger" size="mini">
+              <i class="el-icon-close"></i>
             </el-button>
           </div>
         </el-popover>
