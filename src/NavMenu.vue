@@ -71,8 +71,7 @@ export default {
   },
   watch: {
     '$route.path': function(val, oldVal) {
-      console.log(val);
-      if (this.$route.path.length > 1)
+      if (this.$route.path.length > 1 && !/^\/details/.test(val))
         this.moreText = this.routes[val.slice(1)].text;
     }
   },
