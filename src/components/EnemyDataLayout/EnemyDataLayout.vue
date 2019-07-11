@@ -7,7 +7,6 @@
         :open-delay="500"
         @show="openDetails(key)"
         @hide="currentData = null"
-        placement="top"
         :popper-options="{Defaults:{positionFixed:true}}"
         :visible-arrow="!short"
       >
@@ -16,7 +15,7 @@
             <div class="enemy-index-container">
               <span>{{enemy.enemyIndex}}</span>
             </div>
-            <el-image :src="path +  key + '.png'" lazy></el-image>
+            <el-image :src="path +  key + '.png?x-oss-process=style/jpg-test'" lazy></el-image>
             <div>
               <span>{{enemy.name}}</span>
             </div>
@@ -88,7 +87,10 @@
             <div class="enemy-status-abc-container">
               <div>
                 <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image style="width: 13px; " :src="smallPicPath +  'nj.png'"></el-image>
+                  <el-image
+                    style="width: 13px; "
+                    :src="smallPicPath +  'nj.png?x-oss-process=style/jpg-test'"
+                  ></el-image>
                   <div class="enemy-status-abc-title-text">耐久</div>
                 </div>
               </div>
@@ -96,7 +98,10 @@
             </div>
             <div class="enemy-status-abc-container">
               <div class="enemy-status-abc-title" style="margin: 0">
-                <el-image style="width: 13px; " :src="smallPicPath +  'gj.png'"></el-image>
+                <el-image
+                  style="width: 13px; "
+                  :src="smallPicPath +  'gj.png?x-oss-process=style/jpg-test'"
+                ></el-image>
                 <div class="enemy-status-abc-title-text">攻击力</div>
               </div>
               <h1>{{enemy.attack}}</h1>
@@ -104,7 +109,10 @@
             <div class="enemy-status-abc-container">
               <div>
                 <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image style="width: 13px; " :src="smallPicPath +  'fy.png'"></el-image>
+                  <el-image
+                    style="width: 13px; "
+                    :src="smallPicPath +  'fy.png?x-oss-process=style/jpg-test'"
+                  ></el-image>
                   <div class="enemy-status-abc-title-text">防御力</div>
                 </div>
               </div>
@@ -113,7 +121,10 @@
             <div class="enemy-status-abc-container">
               <div>
                 <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image style="width: 13px; " :src="smallPicPath +  'fk.png'"></el-image>
+                  <el-image
+                    style="width: 13px; "
+                    :src="smallPicPath +  'fk.png?x-oss-process=style/jpg-test'"
+                  ></el-image>
                   <div class="enemy-status-abc-title-text">法术抗性</div>
                 </div>
               </div>
@@ -239,7 +250,6 @@ export default {
 .enemy-container {
   display: flex;
   margin: 30px 0;
-  /* max-width: calc(50vw - 20px); */
   min-width: 120px;
 }
 

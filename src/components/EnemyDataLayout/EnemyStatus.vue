@@ -1,5 +1,18 @@
 <template>
-  <div class="enemy-status-wrapper" style="display: flex">
+  <div class="enemy-status-wrapper" style="padding-bottom: 20px">
+    <p class="status-phases-wrapper" v-if="status.length > 1 && short">
+      <span class="status-phases-text">Level</span>
+      <el-button
+        v-for="(item, index) in status"
+        @click="level = index"
+        :key="index"
+        size="mini"
+        :type="level === index ? 'primary': ''"
+      >{{index === status.length - 1 ? '突袭' : index}}</el-button>
+    </p>
+    <div class="enemy-data-tag-container">
+      <div class="enemy-data-tag" v-for="tag in Tag" :key="tag">{{tag}}</div>
+    </div>
     <div class="status-details-wrapper">
       <div class="status-details-container" v-for="data in status[level]" :key="data[0]">
         <div class="status-details-title">
@@ -10,14 +23,23 @@
             <span>{{data[1]}}</span>
           </transition>
           <span v-if="data[0] === '攻击间隔'">s</span>
+          <span v-if="data[0] === 'LifePoint'">
+            <el-tooltip
+              popper-class="enemy-tooltip-item"
+              class="enemy-status-tip"
+              effect="dark"
+              :content="'对基地造成的伤害，例如普通图基地生命有3点，这个敌人进去之后就会扣掉'+ data[1] + '点生命.'"
+              placement="top-start"
+            >
+              <i class="el-icon-info"></i>
+            </el-tooltip>
+          </span>
         </div>
       </div>
     </div>
-    <div class="enemy-data-tag-container">
-      <div class="enemy-data-tag" v-for="tag in Tag" :key="tag">{{tag}}</div>
-    </div>
+
     <div class="status-phases-wrapper">
-      <p v-if="status.length > 1">
+      <p v-if="status.length > 1 && !short">
         <span class="status-phases-text">Level</span>
         <el-button
           v-for="(item, index) in status"
@@ -28,19 +50,21 @@
         >{{index === status.length - 1 ? '突袭' : index}}</el-button>
       </p>
 
-      <div v-if="skills.length > 0">
+      <div v-if="skills.length > 0 && !short">
         <div>
           <b>Extra</b>
         </div>
         <div :style="short ? '' :'display: flex'">
-          <div v-for="(skill, index) in skills[level]" :key="index" style="margin-left: 10px">
+          <div
+            class="enemy-skill-container"
+            v-for="(skill, index) in skills[level]"
+            :key="index"
+            style
+          >
             <div style="margin: 10px 0">
               <span style="font-size: 1.2em">{{skill.prefabKey.toUpperCase()}}</span>
             </div>
-            <div
-              class="enemy-skill-container"
-              :style="short? 'display: flex; flex-wrap: wrap' : ''"
-            >
+            <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
               <div :style="short? 'margin-left: 10px' : ''">
                 <span>冷却时间:</span>
                 <span>{{skill.cooldown}}</span>
@@ -83,18 +107,17 @@
 
 <script>
 // import { getEnemyData } from '../utils';
-import { Button } from 'element-ui';
+
+import { Button, Tooltip } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Button);
+Vue.use(Tooltip);
 
 const statusToCh = key => {
   const t = {
     maxHp: '生命上限',
-    // respawnTime: '再部署',
     atk: '攻击',
-    // cost: '部署费用',
     def: '防御',
-    // blockCnt: '阻挡数',
     moveSpeed: '移动速度',
     magicResistance: '法术抵抗',
     baseAttackTime: '攻击间隔',
@@ -141,7 +164,7 @@ export default {
       ],
       skills: [],
       Tag: [],
-      timeKey: ['attack_speed', 'duration', 'dist']
+      timeKey: ['duration', 'dist']
     };
   },
   watch: {
@@ -299,17 +322,23 @@ export default {
 .status-phases-text {
   margin-right: 10px;
 }
+.enemy-skill-container {
+  margin-left: 15px;
+}
 
-@media screen and (min-width: 700px) {
-  .enemy-skill-container + .enemy-skill-container {
-    border-left: 1px solid rgba(158, 158, 158, 0.4);
-  }
+.enemy-skill-container + .enemy-skill-container {
+  border-left: 1px solid rgba(158, 158, 158, 0.4);
+  padding-left: 15px;
+}
+
+.enemy-status-tip {
+  margin-left: 20px;
 }
 
 @media screen and (max-width: 700px) {
   .enemy-data-tag-container {
     right: 0px;
-    top: 200px;
+    top: -20px;
     bottom: auto;
   }
   .enemy-data-tag {
