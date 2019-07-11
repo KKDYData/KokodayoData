@@ -75,8 +75,10 @@ export default {
       const index =
         process.env.NODE_ENV === 'development' ? 1 : devMode.length + 1;
       // console.log(val + ' ' + index);
-      if (this.$route.path.length > index && !/^\/details/.test(val))
-        this.moreText = this.routes[val.slice(index)].text;
+      this.moreText =
+        this.$route.path.length > index && !/^\/details/.test(val)
+          ? this.routes[val.slice(index)].text
+          : '更多';
     }
   },
   methods: {},

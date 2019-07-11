@@ -106,7 +106,7 @@
         ></new-profile-layout>
       </el-tab-pane>
       <el-tab-pane name="expalain" label="说明">
-        <div style="padding: 0 10px">
+        <div style="padding: 0 20px">
           <p>1.选了标签（公招）的Tag之后，筛选模式会发生变化</p>
           <p>2.【职业】、【星级】这些分类名，点击可以取消全部选择。</p>
           <p>3.还没想到要说什么。。。对了，这个说明面板还要改</p>
