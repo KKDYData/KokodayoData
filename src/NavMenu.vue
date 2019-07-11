@@ -27,6 +27,7 @@
 
 <script>
 import { Menu, MenuItem, Submenu } from 'element-ui';
+import devMode from './stats';
 import Vue from 'vue';
 Vue.use(Menu);
 Vue.use(MenuItem);
@@ -71,8 +72,11 @@ export default {
   },
   watch: {
     '$route.path': function(val, oldVal) {
-      if (this.$route.path.length > 1 && !/^\/details/.test(val))
-        this.moreText = this.routes[val.slice(1)].text;
+      const index =
+        process.env.NODE_ENV === 'development' ? 1 : devMode.length + 1;
+      // console.log(val + ' ' + index);
+      if (this.$route.path.length > index && !/^\/details/.test(val))
+        this.moreText = this.routes[val.slice(index)].text;
     }
   },
   methods: {},
