@@ -84,18 +84,20 @@
               <div style="padding-right: 5px;">
                 <b style="line-height:20px">{{word.voiceTitle}}</b>
               </div>
-              <div @click="playVoice(index)" class="word-control-button">
-                <i class="el-icon-video-play"></i>
-              </div>
-              <div @click="pausePlayVoice(index)" class="word-control-button">
-                <i class="el-icon-video-pause"></i>
-              </div>
-              <audio-container
-                ref="word"
-                v-if="currentVoice === index"
-                :volume="voiceVolume"
-                :src="audioPath(word)"
-              ></audio-container>
+              <template v-if="data.infoName !== '--'">
+                <div @click="playVoice(index)" class="word-control-button">
+                  <i class="el-icon-video-play"></i>
+                </div>
+                <div @click="pausePlayVoice(index)" class="word-control-button">
+                  <i class="el-icon-video-pause"></i>
+                </div>
+                <audio-container
+                  ref="word"
+                  v-if="currentVoice === index"
+                  :volume="voiceVolume"
+                  :src="audioPath(word)"
+                ></audio-container>
+              </template>
             </div>
             <p>{{word.voiceText | docter}}</p>
           </div>

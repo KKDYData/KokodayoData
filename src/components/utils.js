@@ -112,9 +112,23 @@ const getEnemyList = () => {
     });
 };
 
+const getEneAppearMap = () => {
+  return fetchGet('/api/arknights/data/enemyAppearMap')
+    .then(res => fetchGet('https' + res.url.slice(4)))
+    .catch(err => {
+      console.log(err);
+      return [];
+    });
+};
+
 
 const getHeroData = name => {
   return fetchGet(path + 'char/data/' + name + '.json')
+    .catch(err => console.error(err));
+};
+
+const getEnemyData = key => {
+  return fetchGet(path + 'enemy/data/details/' + key + '.json')
     .catch(err => console.error(err));
 };
 
@@ -222,8 +236,8 @@ const TagsArr = [
   { isTag: true, text: '费用回复', value: '费用回复', short: '费用回复' },
   { isTag: true, text: '输出', value: '输出', short: '输出' },
   { isTag: true, text: '生存', value: '生存', short: '生存' },
-  { isTag: true, text: '防护', value: '防护', short: '防护' },
   { isTag: true, text: '群攻', value: '群攻', short: '群攻' },
+  { isTag: true, text: '防护', value: '防护', short: '防护' },
   { isTag: true, text: '减速', value: '减速', short: '减速' },
   { isTag: true, text: '削弱', value: '削弱', short: '削弱' },
   { isTag: true, text: '快速复活', value: '快速复活', short: '快速复活' },
@@ -613,7 +627,9 @@ export {
   getClass_icon,
   webpOk,
   Browser,
-  getEnemyList
+  getEnemyList,
+  getEnemyData,
+  getEneAppearMap
 };
 
 

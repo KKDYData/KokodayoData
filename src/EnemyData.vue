@@ -1,16 +1,22 @@
 <template>
   <div class="home-wrapper">
-    <enemy-data-layout :short="short" v-if="load" :data="data"></enemy-data-layout>
+    <el-alert show-icon type="warning" description>
+      <div slot="title">注意</div>
+      <p>敌人数据由这里的数据和地图加成计算得出, 暂时把boss的单列出来</p>
+    </el-alert>
+    <enemy-data-layout ref="layout" :short="short" v-if="load" :data="data" :appear-map="appearMap"></enemy-data-layout>
   </div>
 </template>
 <script>
 import loadingC from './components/Loading';
-
-import { getEnemyList } from './components/utils';
+import { Alert } from 'element-ui';
+import Vue from 'vue';
+Vue.use(Alert);
+import { getEnemyList, getEneAppearMap } from './components/utils';
 
 const EnemyDataLayout = () => ({
   component: import(
-    /* webpackChunkName: "DetailsLayout" */ './components/EnemyDataLayout'
+    /* webpackChunkName: "EnemyDataLayout" */ './components/EnemyDataLayout'
   ),
   loading: loadingC,
   error: loadingC,
@@ -26,7 +32,8 @@ export default {
     return {
       short: false,
       data: [],
-      load: false
+      load: false,
+      appearMap: null
     };
   },
   created() {
@@ -35,18 +42,20 @@ export default {
     if (this.short) this.showExplain = [];
     window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
+      this.$refs.layout.calFillAmount();
+      // console.log(this.$refs);
     });
   },
   methods: {
     linkStart() {
       this.getData().then(data => {
-        console.log('??????');
-        this.data = data;
+        this.data = data[0];
+        this.appearMap = data[1];
         this.load = true;
       });
     },
     getData() {
-      return getEnemyList();
+      return Promise.all([getEnemyList(), getEneAppearMap()]);
     }
   }
 };
