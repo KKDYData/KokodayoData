@@ -347,8 +347,13 @@ export default {
             el.forEach(el => {
               if (el.type === key) {
                 // console.log(el.type);
-                addV += el.value;
-                nV += el.value;
+                if (key === 'baseAttackTime') {
+                  addV += el.value;
+                  nV = Math.floor((nV / (el.value / 100 + 1)) * 100) / 100;
+                } else {
+                  addV += el.value;
+                  nV += el.value;
+                }
               }
             });
           });
