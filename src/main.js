@@ -19,14 +19,16 @@ const EnemyData = () => import(/* webpackChunkName: "EnemyData" */'./EnemyData')
 
 import Mode from './stats';
 
-const isDev = process.env.NODE_ENV === 'development' ? '/' : Mode + '/';
+const isDev = process.env.NODE_ENV === 'development';
+
+const path = isDev ? '/' : Mode + '/';
 
 
 const routes = [
-  { path: isDev, component: Home },
-  { path: isDev + 'computer', component: Computer },
-  { path: isDev + 'details/:name', component: Details },
-  { path: isDev + 'enemydata', component: EnemyData }
+  { path: path, component: Home },
+  { path: path + 'computer', component: Computer },
+  { path: path + 'details/:name', component: Details },
+  { path: path + 'enemydata', component: EnemyData }
 ];
 const router = new VueRouter({
   mode: 'history',
@@ -49,14 +51,14 @@ new Vue({
     <transition name="fade" mode="out-in">
       <router-view class="view"></router-view>
     </transition>
-  </div>
-`
+    </div>
+    `
 });
 
-const swPath = process.env.NODE_ENV === 'development' ? '/sw.js' : Mode + '/sw.js';
+const swPath = isDev ? '/sw.js' : Mode + '/sw.js';
 
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator && !isDev) {
   window.addEventListener('load', async () => {
     const { Workbox } = await import('workbox-window');
     const wb = new Workbox(swPath);
