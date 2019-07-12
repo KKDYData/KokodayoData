@@ -51,7 +51,8 @@
 
     <div class="enemy-status-wrapper" style="padding-bottom: 20px">
       <div class="enemy-data-tag-container">
-        <div class="enemy-data-tag" v-for="tag in Tag" :key="tag">{{tag}}</div>
+        <div class="enemy-data-tag" v-if="Tag.stunImmune.value">{{Tag.stunImmune.text}}</div>
+        <div class="enemy-data-tag" v-if="Tag.silenceImmune.value">{{Tag.silenceImmune.text}}</div>
       </div>
 
       <div class="status-details-talents-wrapper">
@@ -206,7 +207,16 @@ export default {
         ]
       ],
       skills: [],
-      Tag: [],
+      Tag: {
+        stunImmune: {
+          text: '眩晕免疫',
+          value: false
+        },
+        silenceImmune: {
+          text: '沉默免疫',
+          value: false
+        }
+      },
       timeKey: ['duration', 'dist', 'stun'],
       talents: [],
       currentMap: ''
@@ -216,44 +226,49 @@ export default {
     data() {
       if (!this.data) return [];
       const tagKey = { stunImmune: '免疫眩晕', silenceImmune: '免疫沉默' };
-      let i = 0;
-      this.Tag = [];
       this.talents = [];
-      this.status = this.data.map(list => {
+
+      this.status = this.data.map((list, i) => {
         const res = [];
-        Object.entries(list.enemyData.attributes).forEach(entries => {
+        const attrArr = Object.entries(list.enemyData.attributes);
+
+        const findDefinedValue = (key, curI) => {
+          if (curI < 0) return false;
+          const target =
+            this.data[curI].enemyData[key] ||
+            this.data[curI].enemyData.attributes[key];
+          if (target.m_defined) return target.m_value;
+          else return findDefinedValue(key, curI - 1);
+        };
+
+        attrArr.forEach(entries => {
           const name = statusToCh(entries[0]);
           if (name) {
-            let keyIndex = i;
-            keyIndex = entries[1].m_defined > 0 ? i : 0;
-            res.push([
-              name,
-              this.data[keyIndex].enemyData.attributes[entries[0]].m_value,
-              entries[0]
-            ]);
+            res.push([name, findDefinedValue(entries[0], i), entries[0]]);
           } else if (i === 0) {
-            if (tagKey[entries[0]] && entries[1].m_value) {
-              this.Tag.push(tagKey[entries[0]]);
+            if (tagKey[entries[0]]) {
+              this.Tag[entries[0]].value = findDefinedValue(entries[0], i);
             }
           }
         });
-        let keyIndex = i;
 
-        if (i > 0) {
-          keyIndex = list.enemyData.rangeRadius.m_value > 0 ? i : 0;
-        }
-        if (this.data[keyIndex].enemyData.talentBlackboard)
-          this.talents.push(this.data[keyIndex].enemyData.talentBlackboard);
+        // const findDefinedTalent = (key, curI) => {
+        //   if (curI < 0) throw Error('definedValue迭代查询出问题 | ' + key);
+        //   const target =
+        //     this.data[curI].enemyData[key] ||
+        //     this.data[curI].enemyData.attributes[key];
+        //   if (target.m_defined) return target.m_value;
+        //   else return findDefinedValue(key, curI - 1);
+        // };
+
+        if (list.enemyData.talentBlackboard)
+          this.talents.push(list.enemyData.talentBlackboard);
         res.push([
           '攻击范围/格',
-          this.data[keyIndex].enemyData.rangeRadius.m_value,
+          findDefinedValue('rangeRadius', i),
           'rangeScale'
         ]);
-        res.push([
-          'LifePoint',
-          this.data[keyIndex].enemyData.lifePointReduce.m_value
-        ]);
-        i++;
+        res.push(['LifePoint', findDefinedValue('lifePointReduce', i)]);
 
         return res;
       });
@@ -315,7 +330,13 @@ export default {
       });
     },
     filterTalents() {
-      const row = this.talents[this.level];
+      const findTalent = key => {
+        if (key < 0) throw Error('天赋查询失败');
+        if (this.talents[key]) return this.talents[key];
+        else return findTalent(key - 1);
+      };
+      const row = findTalent(this.level);
+      console.log(row);
       return row.map(el => {
         let v = el.value;
         if (/(duration)/.exec(el.key)) {
