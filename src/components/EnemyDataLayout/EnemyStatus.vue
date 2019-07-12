@@ -24,23 +24,32 @@
             <i class="el-icon-info"></i>
           </el-tooltip>
         </div>
-        <div v-if="maps">
+        <div>
           <span class="status-phases-text">
             <b>出现章节</b>
           </span>
-          <el-button
-            v-for="map in maps"
-            :key="map"
-            @click="currentMap = map"
-            size="mini"
-            :type="currentMap === map ? 'primary': ''"
-          >{{currentMap === map ? map + '突袭' : map}}</el-button>
-          <div
-            @click="currentMap = ''"
-            style="padding: 0 5px; margin-left: 10px; display: inline-block; cursor: pointer"
-          >
-            <i v-if="currentMap !== ''" class="el-icon-close"></i>
-          </div>
+          <template v-if="maps">
+            <el-button
+              v-for="map in maps"
+              :key="map"
+              @click="currentMap = map"
+              size="mini"
+              :type="currentMap === map ? 'primary': ''"
+            >{{currentMap === map ? map + '突袭' : map}}</el-button>
+            <div
+              @click="currentMap = ''"
+              style="margin-left: 10px; display: inline-block; cursor: pointer"
+            >
+              <i v-if="currentMap !== ''" class="el-icon-close"></i>
+            </div>
+          </template>
+          <template v-else>
+            <el-button
+              size="mini"
+              style="margin-left: 10px; display: inline-block; cursor: pointer"
+            >???</el-button>
+            <!-- <span>???</span> -->
+          </template>
         </div>
       </div>
       <!-- {{filterKeys}} -->
