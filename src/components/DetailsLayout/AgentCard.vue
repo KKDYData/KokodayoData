@@ -2,7 +2,7 @@
   <div class="agent-card-container-wrapper">
     <el-card style=" margin-bottom: 20px; position: relative;">
       <div class="agent-card-container">
-        <div class="agent-card-pic">
+        <div class="agent-card-pic" :style="`--logo-link: url(${logo})`">
           <el-image style="height:100%;width:100%" :src="profile" :details="data.name">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
@@ -145,6 +145,19 @@ export default {
   font-size: 12px;
   position: relative;
   vertical-align: middle;
+}
+
+.agent-card-pic::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  z-index: -1;
+  background-size: contain;
+  background-image: var(--logo-link);
 }
 
 .agent-card-title-class {
