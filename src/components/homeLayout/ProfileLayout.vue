@@ -5,10 +5,10 @@
       <div class="profile-item" v-for="agent in data" :key="agent.name" :title="agent.name">
         <div class="profile-item-inner-wrapper">
           <router-link :to="path + '/details/' + agent.No">
+            <!-- style="box-shadow: 1px 1px 2px 1px rgba(102, 102, 102, 0.7);" -->
             <el-image
               fit="cover"
               class="img-container"
-              style="box-shadow: 1px 1px 2px 1px rgba(102, 102, 102, 0.7);"
               :alt="agent.name"
               :src="profilePath(agent.No)"
             >
