@@ -374,6 +374,40 @@ const itemBackground = {
   },
 };
 
+const charBorderColor = {
+  0: {
+    'border-color': 'rgb(160, 160, 160)',
+    // 'background-color': 'rgb(157, 157, 157)',
+
+  },
+  1: {
+    'border-color': 'rgb(160, 160, 160)',
+    // 'background-color': 'rgb(157, 157, 157)',
+
+  },
+  2: {
+    'border-color': 'rgb(9, 177, 242)',
+    // 'background-color': 'rgb(165, 165, 165)',
+
+  },
+  3: {
+    'border-color': 'rgb(215, 198, 216)',
+    // 'background-color': 'rgb(128, 128, 128)',
+
+  },
+  4: {
+    'border-color': 'rgb(251, 201, 17)',
+    // 'background-color': 'grey',
+
+  },
+  5: {
+    'border-color': 'rgb(75, 41, 23)',
+    // 'background-color': 'rgb(247, 212, 139)',
+
+  },
+};
+
+
 const GOLD = {
   itemId: '4001',
   name: '龙门币',
@@ -588,8 +622,8 @@ const webpOk = getWebpOk();
 
 
 const getProfilePath = name => {
-  return webpOk ? `${path}char/profile-compress/${name}.png?x-oss-process=style/small-test`
-    : `${path}char/profile-compress/${name}.png`;
+  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/small-test`
+    : `${path}char/profile/${name}.png`;
 };
 
 const getDetailsProfilePath = name => {
@@ -629,7 +663,8 @@ export {
   Browser,
   getEnemyList,
   getEnemyData,
-  getEneAppearMap
+  getEneAppearMap,
+  charBorderColor
 };
 
 
