@@ -330,8 +330,7 @@ export default {
     top: 112px;
     top: 92px;
     color: white;
-    left: 20px;
-    /* font-weight: bold; */
+    left: 6px;
     font-size: 17px;
     font-family: "FZYaSong-H-GBK";
     overflow: visible;

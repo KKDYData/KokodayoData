@@ -377,12 +377,12 @@ const itemBackground = {
 const charBorderColor = {
   0: {
     'border-color': 'rgb(160, 160, 160)',
-    // 'background-color': 'rgb(157, 157, 157)',
+    'background-color': 'rgb(218, 218, 218)',
 
   },
   1: {
     'border-color': 'rgb(160, 160, 160)',
-    // 'background-color': 'rgb(157, 157, 157)',
+    'background-color': 'rgb(218, 218, 218)',
 
   },
   2: {
@@ -391,12 +391,12 @@ const charBorderColor = {
 
   },
   3: {
-    'border-color': 'rgb(215, 198, 216)',
+    'border-color': 'hsla(297, 50%, 85%, 1)',
     // 'background-color': 'rgb(128, 128, 128)',
 
   },
   4: {
-    'border-color': 'rgb(251, 201, 17)',
+    'border-color': 'hsla(40, 100%, 50%, 1)',
     // 'background-color': 'grey',
 
   },
