@@ -5,7 +5,7 @@
         href="https://somedata.top/ArknightsBeta"
         type="info"
       >Beta版链接somedata.top/ArknightsBeta</el-link>。顶部菜单的更多里放了
-      <b>敌人图鉴</b>和原来的计算器。预计下次更新家具图鉴之后，就会带了一个新首页了。
+      <b>敌人图鉴</b>和原来的计算器。预计下次更新家具图鉴之后，就会带来一个新首页了。
     </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">

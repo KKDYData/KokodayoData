@@ -380,30 +380,31 @@ const starColor = [
   [213, 53, 20],
   [282, 35, 15],
   [40, 100, 50],
-  [46, 93, 53]
+  [25, 95, 55]
+  //hsl(25, 95%, 55%)
 ];
 
 const charNameColor = {
   0: {
-    background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2]}%, 1), transparent)`,
+    background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2] + 13}%, 1), transparent)`,
 
   },
   1: {
 
-    background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2]}%, 1), transparent)`,
+    background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2] + 13}%, 1), transparent)`,
 
 
   },
   2: {
 
-    background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1]}%, ${starColor[2][2]}%, 1), transparent)`,
+    background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1] - 27}%, ${starColor[2][2] + 15}%, 1), transparent)`,
 
 
 
   },
   3: {
 
-    background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2]}%, 1),transparent)`,
+    background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2] + 17}%, 1),transparent)`,
 
 
 
@@ -423,34 +424,31 @@ const charNameColor = {
 
 const charBorderColor = {
   0: {
-
     background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2]}%, 1), hsla(0, 0%, 95%, 1))`,
-    'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
-
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
   },
   1: {
     background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2]}%, 1), hsla(0, 0%, 95%, 1))`,
-    'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
-
-
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
   },
   2: {
     background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1]}%, ${starColor[2][2]}%, 1), hsla(213, 53%, 95%, 1))`,
-    'box-shadow': '1px 1px 2px 1px #1d3552c7'
-
-
-
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(213, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': '1px 1px 2px 1px #1d3552c7'
   },
   3: {
     background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2]}%, 1), hsla(282, 35%, 95%, 1))`,
-    'box-shadow': 'rgba(63, 53, 82, 0.78) 1px 1px 2px 1px'
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(282, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': 'rgba(63, 53, 82, 0.78) 1px 1px 2px 1px'
   },
   4: {
     background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), hsla(40, 100%, 95%, 1))`,
-    'box-shadow': 'rgba(79, 79, 79, 0.5) 1px 1px 2px 1px, rgba(210, 202, 173, 0.2) 1px 1px 1px 1px'
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(40, 20%, 50%, 0.3) 1px 1px 1px 1px'
   },
   5: {
-    'box-shadow': 'hsla(0, 0%, 31%, 0.5) 1px 1px 2px 1px, hsla(47, 29%, 75%, 0.2) 1px 1px 1px 1px'
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
   },
 };
 

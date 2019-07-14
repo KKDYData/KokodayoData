@@ -192,8 +192,8 @@ export default {
     'item-viewer': ItemViewer
   },
   created() {
+    console.log('下面是计算用的数据，可以复制去自己用');
     console.log(this.data);
-
     this.short = window.innerWidth < 600 ? true : false;
     window.addEventListener('resize', () => {
       this.short = window.innerWidth < 600 ? true : false;

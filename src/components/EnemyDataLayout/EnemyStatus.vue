@@ -2,9 +2,24 @@
   <div>
     <div v-if="short">
       <slot></slot>
+      <div v-if="talents.length > 0" :style="short ? 'margin: 10px 0' : 'margin-bottom: 20px'">
+        <div>
+          <b>能力·Blackboard</b>
+        </div>
+        <div
+          v-for="(t) in filterTalents"
+          :key="t.key"
+          :style="short?  'margin-bottom: 10px' : 'margin-bottom: 20px'"
+        >
+          <div class="status-details-title enemy-status-talent">
+            <span>{{t.key}}</span>
+          </div>
+          <span>{{t.value}}</span>
+        </div>
+      </div>
     </div>
     <div style="display: flex; align-items: center; margin: 10px 0">
-      <div class="status-phases-wrapper" :style="short ? 'width: auto': ''">
+      <div class :style="short ? 'width: auto': ''">
         <div style="margin-bottom: 15px">
           <span class="status-phases-text">Level</span>
           <el-button
@@ -39,14 +54,25 @@
             <div
               @click="currentMap = ''"
               style="margin-left: 10px; display: inline-block; cursor: pointer"
+              v-if="currentMap !== ''"
             >
-              <i v-if="currentMap !== ''" class="el-icon-close"></i>
+              <i class="el-icon-close"></i>
             </div>
+            <el-tooltip
+              class="enemy-status-tip"
+              effect="dark"
+              :content="'点一下左边，显示突袭数据'"
+              placement="top-start"
+            >
+              <i class="el-icon-info"></i>
+            </el-tooltip>
           </template>
           <template v-else>
             <el-button
               size="mini"
               style="margin-left: 10px; display: inline-block; cursor: pointer"
+              class="no-map"
+              disabled
             >???</el-button>
             <!-- <span>???</span> -->
           </template>
@@ -83,7 +109,7 @@
                   :content="'对基地造成的伤害，例如普通图基地生命有3点，这个敌人进去之后就会扣掉'+ data[1] + '点生命.'"
                   placement="top-start"
                 >
-                  <i class="el-icon-info"></i>
+                  <i class="el-icon-info" style="margin-right:0"></i>
                 </el-tooltip>
               </span>
             </div>
@@ -92,7 +118,10 @@
       </div>
 
       <div :style="short ? '' :'width: 50%'">
-        <div v-if="talents.length > 0" :style="short ? 'margin: 10px 0' : 'margin-bottom: 20px'">
+        <div
+          v-if="talents.length > 0 && !short"
+          :style="short ? 'margin: 10px 0' : 'margin-bottom: 20px'"
+        >
           <div>
             <b>能力·Blackboard</b>
           </div>
@@ -103,7 +132,7 @@
             <span>{{t.value}}</span>
           </div>
         </div>
-        <div v-if="skills.length > 0">
+        <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
           <div>
             <b>Extra·技能</b>
           </div>
@@ -134,7 +163,7 @@
                     <b style="opacity: 0.5">效果</b>
                   </span>
                 </div>
-                <div :style="short? 'display: flex;' : ''">
+                <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
                   <div
                     :style="short? 'margin-left: 10px' : ''"
                     v-for="data in skill.blackboard"
@@ -260,15 +289,6 @@ export default {
             }
           }
         });
-
-        // const findDefinedTalent = (key, curI) => {
-        //   if (curI < 0) throw Error('definedValue迭代查询出问题 | ' + key);
-        //   const target =
-        //     this.data[curI].enemyData[key] ||
-        //     this.data[curI].enemyData.attributes[key];
-        //   if (target.m_defined) return target.m_value;
-        //   else return findDefinedValue(key, curI - 1);
-        // };
 
         if (list.enemyData.talentBlackboard)
           this.talents.push(list.enemyData.talentBlackboard);
@@ -503,7 +523,7 @@ export default {
 }
 
 .enemy-status-tip {
-  margin-left: 20px;
+  margin: 0 40px 0 20px;
 }
 
 .status-details-title.enemy-status-talent {
@@ -511,6 +531,10 @@ export default {
   padding: 2px 10px;
   margin: 5px 5px 5px 0;
   max-width: 150px;
+}
+
+.el-button.no-map:hover {
+  border: 1px solid #ebeef5;
 }
 
 @media screen and (max-width: 700px) {

@@ -42,7 +42,7 @@ export default {
     if (this.short) this.showExplain = [];
     window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
-      this.$refs.layout.calFillAmount();
+      this.$refs.layout && this.$refs.layout.calFillAmount();
       // console.log(this.$refs);
     });
   },
