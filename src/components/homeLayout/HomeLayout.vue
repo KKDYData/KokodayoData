@@ -176,7 +176,7 @@ export default {
   data() {
     return {
       short: false,
-      data: null,
+      data: this.profileList,
       rowData: this.profileList,
       showKey: '',
       filtersLength: 0,
