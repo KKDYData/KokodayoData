@@ -178,7 +178,7 @@ export default {
   data() {
     return {
       short: false,
-      data: null,
+      data: this.profileList,
       rowData: this.profileList,
       showKey: '',
       filtersLength: 0,
@@ -215,7 +215,7 @@ export default {
             this.$set(this.filterGroups, el, filterGroups[el]);
           }
         });
-        this.resetFilter();
+        // this.resetFilter();
       }
     });
   },
