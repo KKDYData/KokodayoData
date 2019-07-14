@@ -95,6 +95,7 @@
           :filter-groups="filterGroups"
           :data="data"
           :webpOk="webpOk"
+          :short="short"
         ></profile-layout>
       </el-tab-pane>
       <el-tab-pane name="new-profile-layout" label="排列组合">
@@ -117,6 +118,7 @@
     </el-tabs>
   </div>
 </template>
+
 <script>
 import FilterButtonGroup from '../FilterButtonGroup';
 import ProfileLayout from './ProfileLayout';
@@ -451,9 +453,9 @@ export default {
 
 .home-layout-wrapper .el-button:focus,
 .home-layout-wrapper .el-button:hover {
-  background-color: hsla(356, 57%, 52%, 0.5);
-  border-color: hsla(356, 57%, 52%, 0.1);
-  color: #fff;
+  color: rgb(82, 82, 82);
+  background-color: #fff;
+  border-color: rgba(49, 49, 49);
 }
 
 @media screen and (max-width: 495px) {
