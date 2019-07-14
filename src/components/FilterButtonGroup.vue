@@ -14,7 +14,6 @@
           v-for="key in lists"
           :key="key.value"
           @click="filter(key)"
-          :round="short"
           :size="short? 'mini' :'medium'"
           :type="key.chosed ? 'primary': ''"
           class="filter-button"
@@ -123,7 +122,7 @@ export default {
   margin-left: 10px;
 }
 .filter-button-wrapper > .el-button--primary {
-  background-color: #ca3e47;
-  border-color: rgba(202, 62, 71, 0.6);
+  background-color: rgb(49, 49, 49);
+  border-color: rgb(49, 49, 49);
 }
 </style>
