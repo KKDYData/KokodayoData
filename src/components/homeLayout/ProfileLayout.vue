@@ -13,7 +13,6 @@
           :style="bgColor(agent.star)"
         >
           <router-link :to="path + '/details/' + agent.No">
-            <!-- style="box-shadow: 1px 1px 2px 1px rgba(102, 102, 102, 0.7);" -->
             <el-image
               fit="cover"
               class="img-container"
@@ -32,7 +31,7 @@
                   <el-tag
                     type="info"
                     :effect="tagHit(tag) ? 'dark' : 'plain'"
-                    size="medium"
+                    size="mini"
                     v-if="tag !== '' && tag !== 'null'"
                   >{{tag}}</el-tag>
                 </div>
@@ -63,14 +62,15 @@
               <span
                 :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
               >{{agent.name}}</span>
-              <span
-                v-if="showTags"
-                :style="agent.sex === '女' ? 'color: pink;' : 'color : #fff'"
-              >{{agent.sex === '女' ? '♀' : '♂'}}</span>
             </div>
             <div
-              style="font-size: 10px;font-weight: normal;line-height: 12px;font-family: sans-serif;padding-left: 6px"
-            >{{agent.en}}</div>
+              style="font-size: 12px;font-weight: normal;line-height: 12px;font-family: sans-serif;padding-left: 6px"
+            >
+              {{agent.en}}
+              <span
+                v-if="showTags && tagHit(agent.sex)"
+              >{{agent.sex === '女' ? '♀' : '♂'}}</span>
+            </div>
             <div class="name-slide-logo">
               <el-image
                 fit="cover"
@@ -87,15 +87,13 @@
       </div>
 
       <div class="fill-item" :style="fillItemWidth" v-for="item in fillItems" :key="item"></div>
-      <!-- </div> -->
     </transition-group>
   </div>
 </template>
 
 <script>
-// import Image from 'element-ui/packages/image/index.js';
-import { Tag, Image } from 'element-ui';
-import Vue from 'vue';
+import { Tag, Image } from "element-ui";
+import Vue from "vue";
 import {
   getClass_Chinese,
   getProfilePath,
@@ -103,12 +101,12 @@ import {
   path,
   charBorderColor,
   charNameColor
-} from '../utils';
+} from "../utils";
 
 Vue.use(Image);
 Vue.use(Tag);
 
-import Mode from '../../stats';
+import Mode from "../../stats";
 
 export default {
   props: {
@@ -124,19 +122,25 @@ export default {
     return {
       fillItems: [],
       moraleMode: false,
-      fillItemWidth: { width: '100px' },
+      fillItemWidth: { width: "100px" },
       rowPath: path
     };
   },
+  watch: {
+    showTags: function(v) {
+      console.log("show? " + v);
+      this.calFillAmount();
+    }
+  },
   computed: {
     path() {
-      return process.env.NODE_ENV === 'development' ? '' : Mode;
+      return process.env.NODE_ENV === "development" ? "" : Mode;
     }
   },
   mounted() {
     const self = this;
     this.calFillAmount();
-    window.addEventListener('resize', self.calFillAmount);
+    window.addEventListener("resize", self.calFillAmount);
   },
   methods: {
     bgColor(star) {
@@ -151,28 +155,27 @@ export default {
     async openDetails(item) {
       console.log(item.name);
       if (this.moraleMode) {
-        this.$emit('chose', item.name);
+        this.$emit("chose", item.name);
         return;
       }
-      this.$router.push(this.path + '/details/' + item.No);
+      this.$router.push(this.path + "/details/" + item.No);
     },
     calFillAmount() {
-      if (!this.data) return;
       const width = this.$el.clientWidth;
-      let cWidth = this.short ? 96 : 100;
-      console.log(cWidth);
+      let cWidth = this.short ? 116 : 140;
       cWidth = this.showTags
         ? this.short
-          ? cWidth + 65
-          : cWidth + 90
-        : cWidth + 40;
-      this.fillItemWidth = { width: cWidth + 'px' };
+          ? cWidth + 45
+          : cWidth + 50
+        : cWidth;
+      this.fillItemWidth = { width: cWidth + "px" };
       let size = Math.floor(width / cWidth);
-      size = size - (this.data.length % size);
+      // size = size - (this.data.length % size);
       const arr = [];
       for (let i = 0; i < size; i++) {
         arr.push(i);
       }
+      console.log(size);
       this.fillItems = arr;
     },
     tagHit(tag) {
@@ -187,17 +190,7 @@ export default {
   }
 };
 </script>
-<style >
-@font-face {
-  font-family: "FZYaSong-H-GBK";
-  src: url("fzty_gbk.woff") format("woff"),
-    /* chrome, firefox */ url("fzty_gbk.ttf") format("truetype"),
-    /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
-      url("fzty_gbk.svg#FZYaSong-H-GBK") format("svg"); /* iOS 4.1- */
-  font-style: normal;
-  font-weight: normal;
-}
-
+<style scoped>
 .flip-list-move {
   transition: transform 1s;
   transition-delay: 0.3;
@@ -206,7 +199,7 @@ export default {
 .profile-container {
   display: flex;
   flex-wrap: wrap;
-  margin: 50px auto;
+  margin: 20px auto 50px;
   width: 100%;
   justify-content: space-around;
 }
@@ -217,7 +210,7 @@ export default {
   margin: 10px 20px;
 }
 .profile-item-inner-wrapper {
-  height: 124px;
+  height: 121px;
   width: 100px;
   position: relative;
   display: flex;
@@ -257,10 +250,16 @@ export default {
   position: absolute;
   top: 85px;
   color: white;
-  font-size: 17px;
+  font-size: 0;
   font-family: "FZYaSong-H-GBK";
   overflow: visible;
   z-index: 10;
+}
+.name a {
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  display: inline-block;
 }
 
 .tag-wrapper-1 {
@@ -279,12 +278,6 @@ export default {
   height: 20px;
   line-height: 19px;
 }
-.name a {
-  color: inherit;
-  text-decoration: none;
-  width: 100%;
-  display: inline-block;
-}
 
 .tag-container {
   display: inline-block;
@@ -297,12 +290,16 @@ export default {
 }
 
 .slide-fade-enter-active {
-  transition: all 0.3s ease;
+  transition: all 0.7s ease;
+}
+
+.slide-fade-leave-active {
+  transition: all 0.7s ease;
 }
 
 .slide-fade-enter,
 .slide-fade-leave-to {
-  transform: translateX(-10px);
+  transform: translateX(-59px);
   opacity: 0;
 }
 
@@ -311,7 +308,7 @@ export default {
   vertical-align: middle;
 }
 
-.tag-container > .el-tag--dark {
+.tag-container >>> .el-tag--dark {
   background-color: #313131;
   border-color: #313131;
 }
@@ -347,21 +344,17 @@ export default {
 
 .bg-6 {
   background: url("./star_6.png");
+  background-size: cover;
 }
 
 .name-inner-wrapper {
   min-width: 50px;
   display: inline-block;
-  /* background-color: rgba(73, 73, 73, 0.5); */
   padding-left: 6px;
-  /* background: linear-gradient(45deg, #7676766e 70%, transparent); */
+  font-size: 17px;
 }
 
 @media screen and (max-width: 700px) {
-  .profile-item {
-    /* --imgWidth: calc(55px + 11vw); */
-  }
-
   .img-container {
     width: calc(var(--imgWidth) + 8px);
     height: calc(var(--imgWidth) + 8px);
@@ -378,37 +371,6 @@ export default {
   .profile-item {
     margin: 10px;
   }
-  /* .profile-container {
-    margin-top: 20px;
-  }
-
-  .name {
-    text-overflow: ellipsis;
-    width: calc(100% - 20px);
-    white-space: nowrap;
-    overflow: hidden;
-    position: absolute;
-    top: 112px;
-    top: 92px;
-    color: white;
-    left: 6px;
-    font-size: 17px;
-    overflow: visible;
-  }
-
-  .tag-wrapper-1 {
-    margin-left: 10px;
-    margin-top: calc(-24px - 1vw);
-    width: 65px;
-  }
-
-  .tag-wrapper-2 {
-    width: 30px;
-  }
-  .profile-item-inner-wrapper {
-    height: 112px;
-    margin: 20px 5px;
-  } */
 }
 @media screen and (max-width: 360px) {
   .name {

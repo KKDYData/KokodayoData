@@ -17,9 +17,10 @@
       <div class="tags-popover-wrapper">
         <el-popover
           popper-class="tags-popover-container"
-          placement="bottom-start"
+          placement="top"
           trigger="click"
           :visible-arrow="false"
+          :width="short ? getClientWidth() : ''"
         >
           <div slot="reference">
             <div class="tags-selected-container">
@@ -27,7 +28,6 @@
                 :type="SelectedTagGz.length > 0 ?  'warning' : 'info'"
                 :size="short? 'mini' :'medium'"
                 round
-                @change="OpenTagsPanel"
               >标签</el-button>
               <div class="tag-selected-content-container" style>
                 <div
@@ -57,26 +57,28 @@
             @filter="resetFilter($event, 'tags')"
             ref="tagFilter"
           ></filter-group>
-          <filter-group
-            :short="short"
-            label="位置"
-            :filters="filterGroups.position"
-            @filter="resetFilter($event, 'position')"
-          ></filter-group>
-          <filter-group
-            :short="short"
-            label="性别"
-            :filters="filterGroups.sex"
-            @filter="resetFilter($event, 'sex')"
-          ></filter-group>
-          <filter-group
-            :short="short"
-            label="公招"
-            :filters="filterGroups.gkzm"
-            :single="true"
-            @filter="resetFilter($event, 'gkzm')"
-            ref="gkzm"
-          ></filter-group>
+          <div style="display:flex">
+            <filter-group
+              :short="short"
+              label="位置"
+              :filters="filterGroups.position"
+              @filter="resetFilter($event, 'position')"
+            ></filter-group>
+            <filter-group
+              :short="short"
+              label="性别"
+              :filters="filterGroups.sex"
+              @filter="resetFilter($event, 'sex')"
+            ></filter-group>
+            <filter-group
+              :short="short"
+              label="公招"
+              :filters="filterGroups.gkzm"
+              :single="true"
+              @filter="resetFilter($event, 'gkzm')"
+              ref="gkzm"
+            ></filter-group>
+          </div>
           <div style="direction: rtl">
             <el-button class="close-button" @click="$el.click()" type="danger" size="mini">
               <i class="el-icon-close"></i>
@@ -178,7 +180,7 @@ export default {
   data() {
     return {
       short: false,
-      data: this.profileList,
+      data: null,
       rowData: this.profileList,
       showKey: '',
       filtersLength: 0,
@@ -194,13 +196,6 @@ export default {
     };
   },
   created() {
-    this.short = window.innerWidth < 500 ? true : false;
-    if (this.short) this.showExplain = [];
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 500 ? true : false;
-    });
-  },
-  mounted() {
     this.store = localforage.createInstance({
       name: 'testDB'
     });
@@ -215,8 +210,19 @@ export default {
             this.$set(this.filterGroups, el, filterGroups[el]);
           }
         });
-        // this.resetFilter();
+        this.resetFilter();
+      } else {
+        this.data = this.profileList;
       }
+    });
+  },
+  mounted() {
+    this.short = window.innerWidth < 500 ? true : false;
+    if (this.short) this.showExplain = [];
+    window.addEventListener('resize', () => {
+      this.short = window.innerWidth < 500 ? true : false;
+      this.$refs['profile-layout'] &&
+        this.$refs['profile-layout'].calFillAmount();
     });
   },
   computed: {
@@ -235,10 +241,14 @@ export default {
     }
   },
   methods: {
+    getClientWidth() {
+      return this.$el.clientWidth - 40;
+    },
     switchToNormal(tab) {
       if (this.currentMode === 'profile-layout')
         this.$nextTick().then(() => {
-          this.$refs['profile-layout'].calFillAmount();
+          this.$refs['profile-layout'] &&
+            this.$refs['profile-layout'].calFillAmount();
         });
     },
     openExpain() {
@@ -261,6 +271,7 @@ export default {
 
       this.data = [...sort(key, less)];
     },
+
     async resetFilter(group, p) {
       this.store.setItem('filterGroups', this.filterGroups);
 
@@ -314,7 +325,7 @@ export default {
               continue;
             }
 
-            //多选筛选(公招模式)，不需要break
+            //多选筛选(公招模式)，不需要break, Tags
             if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
                 if (group.find(t => t.value === tag)) {
@@ -357,25 +368,21 @@ export default {
       }
 
       this.sortData(targetData);
-      await this.$nextTick();
-      if (targetData.length > 0) {
-        //等tag消失的动画结束
-        setTimeout(() => {
-          if (this.currentMode === 'profile-layout')
-            this.$refs['profile-layout'].calFillAmount();
-        }, 500);
-      }
-    },
-
-    OpenTagsPanel() {
-      this.showTag = !this.showTag;
-      if (!this.showTag) {
-        this.$set(this.filterGroups.gkzm[0], 'chosed', false);
-      } else {
-        this.$set(this.filterGroups.gkzm[0], 'chosed', true);
-      }
-      this.resetFilter();
     }
+
+    //废弃
+    // OpenTagsPanel() {
+    //   this.showTag = !this.showTag;
+    //   console.log('????????_______________0');
+    //   if (!this.showTag) {
+    //     this.$set(this.filterGroups.gkzm[0], 'chosed', false);
+    //     console.log('???___________1');
+    //   } else {
+    //     this.$set(this.filterGroups.gkzm[0], 'chosed', true);
+    //     console.log('???___________2');
+    //   }
+    //   this.resetFilter();
+    // }
   }
 };
 </script>
@@ -449,13 +456,6 @@ export default {
 .tags-selected-inner-container > .el-tag--dark {
   background-color: #414141;
   border-color: #414141;
-}
-
-.home-layout-wrapper .el-button:focus,
-.home-layout-wrapper .el-button:hover {
-  color: rgb(82, 82, 82);
-  background-color: #fff;
-  border-color: rgba(49, 49, 49);
 }
 
 @media screen and (max-width: 495px) {

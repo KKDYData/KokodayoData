@@ -6,8 +6,10 @@
           :size="short? 'mini' :'medium'"
           @click="choseAll"
           :type="allChosed ? 'info': 'warning'"
-          round
-        >{{label}}</el-button>
+        >
+          {{label}}
+          <i v-if="!allChosed" class="el-icon-close"></i>
+        </el-button>
       </div>
       <div class="filter-button-wrapper">
         <el-button
@@ -16,6 +18,7 @@
           @click="filter(key)"
           :size="short? 'mini' :'medium'"
           :type="key.chosed ? 'primary': ''"
+          :plain="!key.chosed"
           class="filter-button"
         >{{key.text}}</el-button>
       </div>
@@ -120,9 +123,5 @@ export default {
 .filter-button {
   margin-bottom: 5px;
   margin-left: 10px;
-}
-.filter-button-wrapper > .el-button--primary {
-  background-color: rgb(49, 49, 49);
-  border-color: rgb(49, 49, 49);
 }
 </style>
