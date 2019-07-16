@@ -170,7 +170,10 @@
                     :key="data.key"
                   >
                     <span>{{changeBlackboardToCh(data.key)}}</span>
-                    <span>{{data.key === 'atk_scale'? data.value * 100 + '%' :data.value}}</span>
+                    <span>
+                      {{data.key === 'atk_scale'? data.value * 100 + '%' : data.key === 'range_radius'
+                      ? data.value * skillRangeRadius : data.value}}
+                    </span>
                     <span v-if="timeKey.includes(data.key)">s</span>
                   </div>
                 </div>
@@ -257,10 +260,14 @@ export default {
       },
       timeKey: ['duration', 'dist', 'stun'],
       talents: [],
-      currentMap: ''
+      currentMap: '',
+      skillRangeRadius: 1
     };
   },
   watch: {
+    currentMap(v) {
+      if (v === '') this.skillRangeRadius = 1;
+    },
     data() {
       if (!this.data) return [];
       const tagKey = { stunImmune: '免疫眩晕', silenceImmune: '免疫沉默' };
@@ -271,7 +278,7 @@ export default {
         const attrArr = Object.entries(list.enemyData.attributes);
 
         const findDefinedValue = (key, curI) => {
-          if (curI < 0) return false;
+          if (curI < 0) return 0;
           const target =
             this.data[curI].enemyData[key] ||
             this.data[curI].enemyData.attributes[key];
@@ -297,6 +304,7 @@ export default {
           findDefinedValue('rangeRadius', i),
           'rangeScale'
         ]);
+        console.log(findDefinedValue('rangeRadius', i) + '|range');
         res.push(['LifePoint', findDefinedValue('lifePointReduce', i)]);
 
         return res;
@@ -343,10 +351,20 @@ export default {
             const key = changeKey(el.key);
             res[key] = res[key] ? res[key] * el.value : el.value;
           });
+        } else if (/radius/.exec(data.key)) {
+          if (!/skill/.exec(data.key)) {
+            res.rangeScale = res.rangeScale
+              ? res.rangeScale * data.blackboard[0].value
+              : data.blackboard[0].value;
+          } else {
+            this.skillRangeRadius = data.blackboard[0].value;
+          }
         } else {
           data.blackboard.forEach(el => {
             const key = changeKey(el.key);
+            console.log('key ' + key + ' ' + res[key] + '  ' + el.value);
             res[key] = res[key] ? res[key] * el.value : el.value;
+            console.log(res[key]);
           });
         }
       });
@@ -365,7 +383,6 @@ export default {
         else return findTalent(key - 1);
       };
       const row = findTalent(this.level);
-      console.log(row);
       return row.map(el => {
         let v = el.value;
         if (/(duration)/.exec(el.key)) {
