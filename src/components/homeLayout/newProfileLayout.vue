@@ -19,10 +19,10 @@
         <div>{{item[0]}}</div>
         <div>
           <div
-            v-for="agent in item[1].agents.sort((a, b) => b.star - a.star)"
+            v-for="agent in item[1].agents.sort((a, b) => b.tags[0] - a.tags[0])"
             :key="agent.name"
             class="other-mode-agent"
-            :style="bgColor(agent.star)"
+            :style="bgColor(agent.tags[0])"
           >
             <el-popover trigger="click">
               <div class="other-mode-popover">
@@ -43,8 +43,8 @@
                     <router-link :to="path + '/details/' + agent.No">
                       <span class="other-mode-popover-details-title-name">{{agent.name}}</span>
                       <span
-                        :style="agent.sex === '女' ? 'color: pink;' : ''"
-                      >{{agent.sex === '女' ? '♀' : '♂'}}</span>
+                        :style="agent.tags[1] === '女' ? 'color: pink;' : ''"
+                      >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
                       <el-image
                         class="other-mode-popover-class-icon"
                         :alt="agent.class"
@@ -54,13 +54,15 @@
                     </router-link>
                   </div>
                   <div style="margin-top: 10px;">
-                    <el-tag
-                      class="other-mode-popover-tag"
-                      v-for="tag in agent.tags"
-                      :key="tag"
-                      effect="dark"
-                      type="info"
-                    >{{tag}}</el-tag>
+                    <template v-for="(tag, index) in agent.tags">
+                      <el-tag
+                        v-if="index === 0 && tag > 3 || index > 1"
+                        class="other-mode-popover-tag"
+                        :key="tag"
+                        effect="dark"
+                        type="info"
+                      >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
+                    </template>
                   </div>
                   <!-- <span>{{agent.tags}}</span> -->
                 </div>
@@ -93,7 +95,8 @@ import {
   sort,
   getClass_Chinese,
   getProfilePath,
-  getClass_icon
+  getClass_icon,
+  starColor
 } from '../utils';
 import { Card, Tag } from 'element-ui';
 import Vue from 'vue';
@@ -183,15 +186,13 @@ export default {
       return getClass_Chinese(c);
     },
     bgColor(star) {
-      const colors = {
-        0: 'background-color: rgb(84, 92, 100);',
-        1: 'background-color: rgb(84, 92, 100);',
-        2: 'background-color: hsla(223, 25%, 65%, 1);',
-        3: 'background-color:  hsla(223, 81%, 65%, 1);',
-        4: 'background-color: hsla(36, 100%, 65%, 1);',
-        5: 'background-color: rgb(255, 208, 75);'
+      const targetColor = starColor[star];
+
+      return {
+        'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${
+          targetColor[2]
+        }%, 1)`
       };
-      return colors[star];
     },
     profilePath(name) {
       return getProfilePath(name);

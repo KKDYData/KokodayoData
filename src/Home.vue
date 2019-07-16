@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { getProfileList } from './components/utils';
+import { getDevList } from './components/utils';
 import { Alert, link } from 'element-ui';
 // import HomeLayout from './components/homeLayout';
 import Vue from 'vue';
@@ -62,12 +62,12 @@ export default {
       });
     },
     getData() {
-      return getProfileList().then(source => {
+      return getDevList().then(source => {
         source.forEach((el, index) => {
           el.index = index;
           el.tagHit = 0;
         });
-        return source.filter(el => el.position).reverse();
+        return source.filter(el => el.logo).reverse();
       });
     }
   }

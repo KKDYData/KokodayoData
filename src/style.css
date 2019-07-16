@@ -67,7 +67,7 @@ body {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 0.3s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: opacity 0.3s ease;
 }
 
 .fade-enter,

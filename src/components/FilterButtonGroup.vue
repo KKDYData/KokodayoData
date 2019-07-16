@@ -1,17 +1,21 @@
 <template>
   <div class="filter-wrapper" style>
     <div class="filter">
-      <div>
+      <div class="filter-button-wrapper">
         <el-button
           :size="short? 'mini' :'medium'"
           @click="choseAll"
           :type="allChosed ? 'info': 'warning'"
+          :style="short ? 'margin-left: 10px; ' : ''"
+          :class="!allChosed ? 'filter-button filter-button-closeable' : 'filter-button'"
         >
           {{label}}
-          <i v-if="!allChosed" class="el-icon-close"></i>
+          <transition name="fade">
+            <span v-if="!allChosed" class="filter-close-icon">
+              <i class="el-icon-close"></i>
+            </span>
+          </transition>
         </el-button>
-      </div>
-      <div class="filter-button-wrapper">
         <el-button
           v-for="key in lists"
           :key="key.value"
@@ -109,19 +113,44 @@ export default {
 <style scoped>
 .filter-wrapper {
   margin-bottom: 10px;
+  padding-right: 10px;
 }
 
 .filter {
   display: flex;
   margin-left: 10px;
-  text-align: center;
 }
 .filter-button-wrapper {
   display: flex;
   flex-wrap: wrap;
 }
+.filter-close-icon {
+  /* float: right; */
+  position: absolute;
+  left: 8px;
+}
 .filter-button {
   margin-bottom: 5px;
-  margin-left: 10px;
+  margin-top: 5px;
+  min-width: 50px;
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+  min-width: 70px;
+  position: relative;
 }
+.filter-button-closeable {
+  min-width: 80px;
+}
+
+@media screen and (max-width: 500px) {
+  .filter-button {
+    min-width: 56px;
+  }
+  .filter-button-closeable {
+    min-width: 68px;
+  }
+}
+/* .filter-button:first-of-type {
+  margin-left: 0px;
+} */
 </style>

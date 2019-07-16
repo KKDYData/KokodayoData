@@ -6,11 +6,11 @@
         v-for="agent in data"
         :key="agent.name"
         :title="agent.name"
-        :style="showTags ? short ? 'margin: 10px 0; width: 165px' : 'width: 170px; margin: 10px' : ''"
+        :style="showTags ? short ? ' width: 165px' : 'width: 170px; ' : ''"
       >
         <div
-          :class="agent.star === 5 ? 'profile-item-inner-wrapper bg-6' : 'profile-item-inner-wrapper'"
-          :style="bgColor(agent.star)"
+          :class="agent.tags[0] === 5 ? 'profile-item-inner-wrapper bg-6' : 'profile-item-inner-wrapper'"
+          :style="bgColor(agent.tags[0])"
         >
           <router-link :to="path + '/details/' + agent.No">
             <el-image
@@ -26,31 +26,24 @@
           </router-link>
           <transition name="slide-fade">
             <div class="tag-wrapper-1" v-if="showTags">
-              <div v-for="tag in agent.tags" :key="tag">
-                <div class="tag-container long-tag">
+              <div v-for="(tag, index) in agent.tags" :key="tag">
+                <div class="tag-container long-tag" v-if="index > 2 || index === 0 &&  tag > 3">
                   <el-tag
                     type="info"
-                    :effect="tagHit(tag) ? 'dark' : 'plain'"
+                    :effect="tagHit(String(tag)) ? 'dark' : 'plain'"
                     size="mini"
-                    v-if="tag !== '' && tag !== 'null'"
-                  >{{tag}}</el-tag>
+                  >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
                 </div>
               </div>
               <div class="tag-container long-tag double-tag-container">
-                <el-tag
-                  effect="plain"
-                  type="info"
-                  size="mini"
-                  :title="agent.position"
-                  style="text-align: center"
-                >
+                <el-tag effect="plain" type="info" size="mini" style="text-align: center">
                   <span
                     class="double-tag"
                     :style="tagHit(agent.class) ? 'background-color: #313131; color: #fff': ''"
                   >{{changeClassShort(agent.class)}}</span>
                   <span
                     class="double-tag"
-                    :style="tagHit(agent.position) ? 'background-color: #313131; color: #fff': ''"
+                    :style="tagHit(agent.tags[2]) ? 'background-color: #313131; color: #fff': ''"
                   >{{agent.position === '近战位' ? '近' : '远'}}</span>
                 </el-tag>
               </div>
@@ -58,7 +51,7 @@
           </transition>
 
           <div class="name">
-            <div class="name-inner-wrapper" :style="nameColor(agent.star)">
+            <div class="name-inner-wrapper" :style="nameColor(agent.tags[0])">
               <span
                 :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
               >{{agent.name}}</span>
@@ -68,8 +61,8 @@
             >
               {{agent.en}}
               <span
-                v-if="showTags && tagHit(agent.sex)"
-              >{{agent.sex === '女' ? '♀' : '♂'}}</span>
+                v-if="showTags && tagHit(agent.tags[1])"
+              >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
             </div>
             <div class="name-slide-logo">
               <el-image
@@ -92,8 +85,8 @@
 </template>
 
 <script>
-import { Tag, Image } from "element-ui";
-import Vue from "vue";
+import { Tag, Image } from 'element-ui';
+import Vue from 'vue';
 import {
   getClass_Chinese,
   getProfilePath,
@@ -101,12 +94,12 @@ import {
   path,
   charBorderColor,
   charNameColor
-} from "../utils";
+} from '../utils';
 
 Vue.use(Image);
 Vue.use(Tag);
 
-import Mode from "../../stats";
+import Mode from '../../stats';
 
 export default {
   props: {
@@ -122,25 +115,28 @@ export default {
     return {
       fillItems: [],
       moraleMode: false,
-      fillItemWidth: { width: "100px" },
+      fillItemWidth: { width: '100px' },
       rowPath: path
     };
   },
   watch: {
     showTags: function(v) {
-      console.log("show? " + v);
+      console.log('show? ' + v);
+      this.calFillAmount();
+    },
+    short: function(v) {
       this.calFillAmount();
     }
   },
   computed: {
     path() {
-      return process.env.NODE_ENV === "development" ? "" : Mode;
+      return process.env.NODE_ENV === 'development' ? '' : Mode;
     }
   },
   mounted() {
     const self = this;
     this.calFillAmount();
-    window.addEventListener("resize", self.calFillAmount);
+    window.addEventListener('resize', self.calFillAmount);
   },
   methods: {
     bgColor(star) {
@@ -155,20 +151,21 @@ export default {
     async openDetails(item) {
       console.log(item.name);
       if (this.moraleMode) {
-        this.$emit("chose", item.name);
+        this.$emit('chose', item.name);
         return;
       }
-      this.$router.push(this.path + "/details/" + item.No);
+      this.$router.push(this.path + '/details/' + item.No);
     },
     calFillAmount() {
+      //通过css控制填充的margin？
       const width = this.$el.clientWidth;
-      let cWidth = this.short ? 116 : 140;
+      let cWidth = this.short ? 106 : 120;
       cWidth = this.showTags
         ? this.short
-          ? cWidth + 45
-          : cWidth + 50
+          ? cWidth + 69
+          : cWidth + 70
         : cWidth;
-      this.fillItemWidth = { width: cWidth + "px" };
+      this.fillItemWidth = { width: cWidth + 'px' };
       let size = Math.floor(width / cWidth);
       // size = size - (this.data.length % size);
       const arr = [];
@@ -192,8 +189,43 @@ export default {
 </script>
 <style scoped>
 .flip-list-move {
-  transition: transform 1s;
-  transition-delay: 0.3;
+  transition: transform 1s ease-in-out;
+  transition-delay: 1s;
+}
+
+.flip-list-enter,
+.flip-list-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.flip-list-leave-active {
+  position: absolute;
+}
+
+.profile-item {
+  transition: all 1s ease-in-out;
+  display: inline-block;
+}
+
+.tag-container {
+  display: inline-block;
+  font-size: 0;
+  margin-bottom: 1px;
+}
+
+.tag-container .el-tag {
+  border-radius: 2px;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.5s ease-in-out;
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(-59px);
+  opacity: 0;
 }
 
 .profile-container {
@@ -205,9 +237,9 @@ export default {
 }
 .profile-item {
   --imgWidth: 88px;
-  position: relative;
+  /* position: relative; */
   box-sizing: border-box;
-  margin: 10px 20px;
+  margin: 10px;
 }
 .profile-item-inner-wrapper {
   height: 121px;
@@ -227,7 +259,7 @@ export default {
 }
 .img-container::after {
   content: "";
-  background-image: url("bg_1_lastbreath.png");
+  background-image: url("bg_1_lastbreath_optimized.png");
   background-size: contain;
   width: var(--imgWidth);
   height: var(--imgWidth);
@@ -279,30 +311,6 @@ export default {
   line-height: 19px;
 }
 
-.tag-container {
-  display: inline-block;
-  font-size: 0;
-  margin-bottom: 1px;
-}
-
-.tag-container .el-tag {
-  border-radius: 2px;
-}
-
-.slide-fade-enter-active {
-  transition: all 0.7s ease;
-}
-
-.slide-fade-leave-active {
-  transition: all 0.7s ease;
-}
-
-.slide-fade-enter,
-.slide-fade-leave-to {
-  transform: translateX(-59px);
-  opacity: 0;
-}
-
 .class-icon {
   --imgWidth: 20px;
   vertical-align: middle;
@@ -343,7 +351,7 @@ export default {
 }
 
 .bg-6 {
-  background: url("./star_6.png");
+  background: url("./star_6_optimized.png");
   background-size: cover;
 }
 
@@ -369,7 +377,7 @@ export default {
   }
 
   .profile-item {
-    margin: 10px;
+    margin: 10px 5px;
   }
 }
 @media screen and (max-width: 360px) {
