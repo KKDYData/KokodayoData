@@ -2,7 +2,7 @@
   <div class="agent-card-container-wrapper">
     <el-card style=" margin-bottom: 20px; position: relative;">
       <div class="agent-card-container">
-        <div class="agent-card-pic">
+        <div class="agent-card-pic" :style="`--logo-link: url(${logo})`">
           <el-image style="height:100%;width:100%" :src="profile" :details="data.name">
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
@@ -13,7 +13,7 @@
           <div class="title-first">
             <div>
               <span class="agent-card-title-name">
-                <span style="color: rgb(49, 49, 49)">{{data.name}}</span>
+                <span style="color: rgb(49, 49, 49);font-family:FZYaSong-H-GBK;">{{data.name}}</span>
                 <span
                   style="font-size: 0.7em; color: rgb(150, 150, 150);font-weight: normal"
                 >{{data.appellation}}</span>
@@ -26,7 +26,7 @@
                     <i class="el-icon-picture-outline"></i>
                   </div>
                 </el-image>
-                <span>{{ profession }}</span>
+                <span style="font-family:FZYaSong-H-GBK;">{{ profession }}</span>
                 <el-image class="agent-card-star-pic" :src="rarityPath" fit="contain"></el-image>
               </div>
               <div class="intro-2-wrapper">
@@ -147,6 +147,19 @@ export default {
   vertical-align: middle;
 }
 
+.agent-card-pic::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.4;
+  z-index: -1;
+  background-size: contain;
+  background-image: var(--logo-link);
+}
+
 .agent-card-title-class {
   font-size: 0;
   display: flex;
@@ -155,6 +168,7 @@ export default {
 .agent-card-title-class span {
   font-size: 38px;
   word-break: keep-all;
+  line-height: 40px;
 }
 .agent-card-title-wrapper {
   margin-left: 20px;
@@ -162,7 +176,6 @@ export default {
 .agent-card-title-name {
   font-size: 50px;
   margin: 0;
-  font-weight: bold;
 }
 
 .intro-1,
@@ -263,6 +276,9 @@ export default {
     min-height: calc(90px + 2vw);
     height: auto;
     flex-grow: 0;
+  }
+  .agent-card-container-wrapper >>> .el-card__body {
+    padding-bottom: 30px;
   }
   .agent-card-title-class span {
     font-size: calc(15px + 0.5vw);

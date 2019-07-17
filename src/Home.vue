@@ -2,10 +2,10 @@
   <div class="home-wrapper">
     <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
       <el-link
+        style="vertical-align: baseline;"
         href="https://somedata.top/ArknightsBeta"
         type="info"
-      >Beta版链接somedata.top/ArknightsBeta</el-link>。顶部菜单的更多里放了
-      <b>敌人图鉴</b>和原来的计算器。预计下次更新家具图鉴之后，就会带了一个新首页了。
+      >Beta版</el-link>|7/16更新：新的列表UI，更刘畅的动画。
     </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
@@ -19,7 +19,7 @@
   </div>
 </template>
 <script>
-import { getProfileList } from './components/utils';
+import { getDevList } from './components/utils';
 import { Alert, link } from 'element-ui';
 // import HomeLayout from './components/homeLayout';
 import Vue from 'vue';
@@ -62,12 +62,12 @@ export default {
       });
     },
     getData() {
-      return getProfileList().then(source => {
+      return getDevList().then(source => {
         source.forEach((el, index) => {
           el.index = index;
           el.tagHit = 0;
         });
-        return source.filter(el => el.position).reverse();
+        return source.filter(el => el.logo).reverse();
       });
     }
   }

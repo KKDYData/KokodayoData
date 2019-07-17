@@ -13,13 +13,21 @@
         :filters="filterGroups.star"
         @filter="resetFilter($event, 'star')"
       ></filter-group>
-
+      <filter-group
+        :short="short"
+        label="公招"
+        :filters="filterGroups.gkzm"
+        :single="true"
+        @filter="resetFilter($event, 'gkzm')"
+        ref="gkzm"
+      ></filter-group>
       <div class="tags-popover-wrapper">
         <el-popover
           popper-class="tags-popover-container"
-          placement="bottom-start"
+          placement="top"
           trigger="click"
           :visible-arrow="false"
+          :width="short ? 320 : 800"
         >
           <div slot="reference">
             <div class="tags-selected-container">
@@ -27,25 +35,29 @@
                 :type="SelectedTagGz.length > 0 ?  'warning' : 'info'"
                 :size="short? 'mini' :'medium'"
                 round
-                @change="OpenTagsPanel"
+                :style="short ? 'margin-left: 10px' : ''"
               >标签</el-button>
               <div class="tag-selected-content-container" style>
-                <div
-                  v-for="tag in SelectedTagGz"
-                  :key="tag.value"
-                  class="tags-selected-inner-container"
-                >
-                  <el-tag
-                    :size="short? 'medium' :'normal'"
-                    @close="handleClose(tag)"
-                    closable
-                    effect="dark"
-                  >{{tag.text}}</el-tag>
-                </div>
-                <span
-                  style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
-                  v-if="SelectedTagGz.length === 0 "
-                >点击打开标签面板</span>
+                <transition name="fade" mode="out-in">
+                  <div v-if="SelectedTagGz.length !== 0 ">
+                    <div
+                      v-for="tag in SelectedTagGz"
+                      :key="tag.value"
+                      class="tags-selected-inner-container"
+                    >
+                      <el-tag
+                        :size="short? 'medium' :'normal'"
+                        @close="handleClose(tag)"
+                        closable
+                        effect="dark"
+                      >{{tag.text}}</el-tag>
+                    </div>
+                  </div>
+                  <span
+                    style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
+                    v-else
+                  >点击打开标签面板</span>
+                </transition>
               </div>
             </div>
           </div>
@@ -57,26 +69,7 @@
             @filter="resetFilter($event, 'tags')"
             ref="tagFilter"
           ></filter-group>
-          <filter-group
-            :short="short"
-            label="位置"
-            :filters="filterGroups.position"
-            @filter="resetFilter($event, 'position')"
-          ></filter-group>
-          <filter-group
-            :short="short"
-            label="性别"
-            :filters="filterGroups.sex"
-            @filter="resetFilter($event, 'sex')"
-          ></filter-group>
-          <filter-group
-            :short="short"
-            label="公招"
-            :filters="filterGroups.gkzm"
-            :single="true"
-            @filter="resetFilter($event, 'gkzm')"
-            ref="gkzm"
-          ></filter-group>
+          <div style="display:flex"></div>
           <div style="direction: rtl">
             <el-button class="close-button" @click="$el.click()" type="danger" size="mini">
               <i class="el-icon-close"></i>
@@ -95,6 +88,7 @@
           :filter-groups="filterGroups"
           :data="data"
           :webpOk="webpOk"
+          :short="short"
         ></profile-layout>
       </el-tab-pane>
       <el-tab-pane name="new-profile-layout" label="排列组合">
@@ -117,12 +111,21 @@
     </el-tabs>
   </div>
 </template>
+
 <script>
 import FilterButtonGroup from '../FilterButtonGroup';
 import ProfileLayout from './ProfileLayout';
-import { sort, TagsArr, StarArr, class_chinese, webpOk } from '../utils';
+import {
+  sort,
+  TagsArr,
+  StarArr,
+  class_chinese,
+  webpOk,
+  throttle,
+  isMoblie
+} from '../utils';
 import Vue from 'vue';
-import { Button, MessageBox, Popover, Tag, Tabs, TabPane } from 'element-ui';
+import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Button);
@@ -146,15 +149,6 @@ const newProfileLayout = () => ({
 });
 
 const gkzm = [{ isTag: false, text: '仅公招', value: true, short: '公招' }];
-const position = [
-  { isTag: false, text: '远程位', value: '远程位', short: '远程位' },
-  { isTag: false, text: '近战位', value: '近战位', short: '近战位' }
-];
-
-const sex = [
-  { isTag: false, text: '男性干员', value: '男', short: '男' },
-  { isTag: false, text: '女性干员', value: '女', short: '女' }
-];
 
 if (typeof Array.prototype.flat !== 'function') {
   Array.prototype.flat = function(num) {
@@ -162,7 +156,7 @@ if (typeof Array.prototype.flat !== 'function') {
   };
 }
 
-const explain = '';
+const version = 190715;
 
 export default {
   components: {
@@ -175,8 +169,8 @@ export default {
   },
   data() {
     return {
-      short: false,
-      data: this.profileList,
+      short: isMoblie,
+      data: null,
       rowData: this.profileList,
       showKey: '',
       filtersLength: 0,
@@ -185,36 +179,36 @@ export default {
       store: null,
       SelectedTag: [],
       SelectedTagGz: [],
-      showExplain: ['1'],
       showOtherPanel: false,
       currentMode: 'profile-layout',
       webpOk: webpOk
     };
   },
   created() {
-    this.short = window.innerWidth < 500 ? true : false;
-    if (this.short) this.showExplain = [];
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 500 ? true : false;
-    });
-  },
-  mounted() {
     this.store = localforage.createInstance({
       name: 'testDB'
     });
-
     this.store.getItem('filterGroups').then(filterGroups => {
-      if (filterGroups) {
-        // this.$set(this, 'filterGroups', filterGroups);
-        Object.keys(filterGroups).forEach(el => {
-          if (filterGroups[el][0].isTag === undefined)
-            console.log('不读缓存， 更新数据' + el);
-          else {
-            this.$set(this.filterGroups, el, filterGroups[el]);
-          }
+      if (filterGroups && filterGroups._version >= version) {
+        Object.keys(filterGroups).forEach(key => {
+          if (key !== '_version')
+            this.$set(this.filterGroups, key, filterGroups[key]);
         });
+        console.log('reset');
+        this.data = this.profileList;
         this.resetFilter();
+      } else {
+        console.log('???????_noVersion');
+        this.store.setItem('_filterVersion', version);
+        this.data = this.profileList;
       }
+    });
+  },
+  mounted() {
+    window.addEventListener('resize', () => {
+      this.short = window.innerWidth < 500 ? true : false;
+      this.$refs['profile-layout'] &&
+        this.$refs['profile-layout'].calFillAmount();
     });
   },
   computed: {
@@ -222,10 +216,8 @@ export default {
       return {
         gkzm: gkzm,
         star: StarArr,
-        position: position,
         class: Object.values(class_chinese),
-        tags: TagsArr,
-        sex: sex
+        tags: TagsArr
       };
     },
     orAgents() {
@@ -233,16 +225,15 @@ export default {
     }
   },
   methods: {
+    getClientWidth() {
+      return this.$el.clientWidth - 50;
+    },
     switchToNormal(tab) {
       if (this.currentMode === 'profile-layout')
         this.$nextTick().then(() => {
-          this.$refs['profile-layout'].calFillAmount();
+          this.$refs['profile-layout'] &&
+            this.$refs['profile-layout'].calFillAmount();
         });
-    },
-    openExpain() {
-      MessageBox.alert(explain, {
-        dangerouslyUseHTMLString: true
-      });
     },
     handleClose(tag) {
       tag.chosed = false;
@@ -256,11 +247,18 @@ export default {
             : a.tagHit > b.tagHit;
         }
         : (a, b) => a.index > b.index;
-
       this.data = [...sort(key, less)];
     },
+
     async resetFilter(group, p) {
-      this.store.setItem('filterGroups', this.filterGroups);
+      const saveTask = () => {
+        this.store
+          .setItem('filterGroups', { ...this.filterGroups, _version: version })
+          .then(res => {
+            console.log(res);
+          });
+      };
+      throttle(saveTask(), 1000);
 
       //判定是否是公招模式
       let targetData = this.filterGroups.gkzm[0].chosed
@@ -272,8 +270,9 @@ export default {
         starFilter.length > 0
           ? targetData.filter(
             el =>
-              starFilter.findIndex(star => Number(star.value) === el.star) >
-                -1
+              starFilter.findIndex(
+                star => Number(star.value) === el.tags[0]
+              ) > -1
           )
           : targetData;
       const filters = Object.keys(this.filterGroups).map(el => [
@@ -292,7 +291,6 @@ export default {
       ].flat(1);
 
       this.showTag = this.SelectedTagGz.length > 0 ? true : false;
-
       //是否过滤
       const isFilter = filters
         .map(el => el[1].length && el[0] !== 'star' && el[0] !== 'gkzm')
@@ -312,7 +310,7 @@ export default {
               continue;
             }
 
-            //多选筛选(公招模式)，不需要break
+            //多选筛选(公招模式)，不需要break, Tags
             if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
                 if (group.find(t => t.value === tag)) {
@@ -353,33 +351,29 @@ export default {
           return find;
         });
       }
-
       this.sortData(targetData);
-      await this.$nextTick();
-      if (targetData.length > 0) {
-        //等tag消失的动画结束
-        setTimeout(() => {
-          if (this.currentMode === 'profile-layout')
-            this.$refs['profile-layout'].calFillAmount();
-        }, 500);
-      }
-    },
-
-    OpenTagsPanel() {
-      this.showTag = !this.showTag;
-      if (!this.showTag) {
-        this.$set(this.filterGroups.gkzm[0], 'chosed', false);
-      } else {
-        this.$set(this.filterGroups.gkzm[0], 'chosed', true);
-      }
-      this.resetFilter();
     }
+
+    //废弃
+    // OpenTagsPanel() {
+    //   this.showTag = !this.showTag;
+    //   console.log('????????_______________0');
+    //   if (!this.showTag) {
+    //     this.$set(this.filterGroups.gkzm[0], 'chosed', false);
+    //     console.log('???___________1');
+    //   } else {
+    //     this.$set(this.filterGroups.gkzm[0], 'chosed', true);
+    //     console.log('???___________2');
+    //   }
+    //   this.resetFilter();
+    // }
   }
 };
 </script>
 <style>
 .home-filter-wrapper {
   margin-bottom: 20px;
+  padding: 10px;
   /* border-bottom: 1px solid rgba(158, 158, 158, 0.4); */
 }
 .sort-group-wrapper {
@@ -449,21 +443,19 @@ export default {
   border-color: #414141;
 }
 
-.home-layout-wrapper .el-button:focus,
-.home-layout-wrapper .el-button:hover {
-  background-color: hsla(356, 57%, 52%, 0.5);
-  border-color: hsla(356, 57%, 52%, 0.1);
-  color: #fff;
+.tags-selected-container button {
+  margin: 5px 0;
 }
 
 @media screen and (max-width: 495px) {
   .tag-selected-content-container {
     display: inline-block;
-    width: calc(100% - 62px);
+    width: calc(100% - 80px);
   }
+  .home-filter-wrapper {
+    padding: 0px;
 
-  .tags-selected-container button {
-    margin-top: 6px;
+    /* border-bottom: 1px solid rgba(158, 158, 158, 0.4); */
   }
 }
 </style>

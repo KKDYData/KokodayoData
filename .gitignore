@@ -3,3 +3,4 @@ dist
 stats.json
 package-lock.json
 yarn.lock
+theme

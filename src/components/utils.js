@@ -121,6 +121,16 @@ const getEneAppearMap = () => {
     });
 };
 
+const getDevList = () => {
+  return fetchGet('/api/arknights/data/devList')
+    .then(res => fetchGet('https' + res.url.slice(4)))
+    .catch(err => {
+      console.log('error');
+      console.log(err);
+      return [];
+    });
+};
+
 
 const getHeroData = name => {
   return fetchGet(path + 'char/data/' + name + '.json')
@@ -230,21 +240,28 @@ const getClass_Short = en => {
 };
 
 const TagsArr = [
-  { isTag: true, text: '治疗', value: '治疗', short: '治疗' },
-  { isTag: true, text: '支援', value: '支援', short: '支援' },
-  { isTag: true, text: '新手', value: '新手', short: '新手' },
-  { isTag: true, text: '费用回复', value: '费用回复', short: '费用回复' },
-  { isTag: true, text: '输出', value: '输出', short: '输出' },
-  { isTag: true, text: '生存', value: '生存', short: '生存' },
-  { isTag: true, text: '群攻', value: '群攻', short: '群攻' },
-  { isTag: true, text: '防护', value: '防护', short: '防护' },
-  { isTag: true, text: '减速', value: '减速', short: '减速' },
-  { isTag: true, text: '削弱', value: '削弱', short: '削弱' },
-  { isTag: true, text: '快速复活', value: '快速复活', short: '快速复活' },
-  { isTag: true, text: '位移', value: '位移', short: '位移' },
-  { isTag: true, text: '召唤', value: '召唤', short: '召唤' },
-  { isTag: true, text: '爆发', value: '爆发', short: '爆发' },
-  { isTag: true, text: '控场', value: '控场', short: '控场' }];
+  { isTag: true, text: '快速复活', value: '快速复活' },
+  { isTag: true, text: '费用回复', value: '费用回复' },
+  { isTag: true, text: '治疗', value: '治疗' },
+  { isTag: true, text: '新手', value: '新手' },
+  { isTag: true, text: '支援', value: '支援' },
+  { isTag: true, text: '输出', value: '输出' },
+  { isTag: true, text: '生存', value: '生存' },
+  { isTag: true, text: '群攻', value: '群攻' },
+  { isTag: true, text: '防护', value: '防护' },
+  { isTag: true, text: '减速', value: '减速' },
+  { isTag: true, text: '削弱', value: '削弱' },
+  { isTag: true, text: '位移', value: '位移' },
+  { isTag: true, text: '召唤', value: '召唤' },
+  { isTag: true, text: '爆发', value: '爆发' },
+  { isTag: true, text: '控场', value: '控场' },
+  { isTag: true, text: '远程位', value: '远程位' },
+  { isTag: true, text: '近战位', value: '近战位' },
+  { isTag: true, text: '男性干员', value: '男' },
+  { isTag: true, text: '女性干员', value: '女' },
+  { isTag: true, text: '资深干员', value: '4' },
+  { isTag: true, text: '高级资深干员', value: '5' },
+];
 
 const StarArr = [
   { isTag: false, text: 1, value: '0', short: 1 },
@@ -252,7 +269,8 @@ const StarArr = [
   { isTag: false, text: 3, value: '2', short: 3 },
   { isTag: false, text: 4, value: '3', short: 4 },
   { isTag: false, text: 5, value: '4', short: 5 },
-  { isTag: false, text: 6, value: '5', short: 6 },];
+  { isTag: false, text: 6, value: '5', short: 6 },
+];
 
 
 const evolveGoldCost = [
@@ -373,6 +391,56 @@ const itemBackground = {
                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
   },
 };
+
+const starColor = [
+  [0, 0, 20],
+  [0, 0, 20],
+  [213, 53, 20],
+  [282, 35, 15],
+  [40, 100, 50],
+  [25, 95, 55]
+  //hsl(25, 95%, 55%)
+];
+
+const charNameColor = {
+  0: { background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2] + 13}%, 1), transparent)`, },
+  1: { background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2] + 13}%, 1), transparent)` },
+  2: { background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1] - 27}%, ${starColor[2][2] + 15}%, 1), transparent)` },
+  3: { background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2] + 17}%, 1),transparent)` },
+  4: { background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), transparent)`, },
+  5: { background: `linear-gradient(16deg, hsla(${starColor[5][0]}, ${starColor[5][1]}%, ${starColor[5][2]}%, 1), transparent)`, },
+};
+
+const charBorderColor = {
+  0: {
+    background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2]}%, 1), hsla(0, 0%, 95%, 1))`,
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
+  },
+  1: {
+    background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2]}%, 1), hsla(0, 0%, 95%, 1))`,
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
+  },
+  2: {
+    background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1]}%, ${starColor[2][2]}%, 1), hsla(213, 53%, 95%, 1))`,
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(213, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': '1px 1px 2px 1px #1d3552c7'
+  },
+  3: {
+    background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2]}%, 1), hsla(282, 35%, 95%, 1))`,
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(282, 20%, 50%, 0.3) 1px 1px 1px 1px'
+    // 'box-shadow': 'rgba(63, 53, 82, 0.78) 1px 1px 2px 1px'
+  },
+  4: {
+    background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), hsla(40, 100%, 95%, 1))`,
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(40, 20%, 50%, 0.3) 1px 1px 1px 1px'
+  },
+  5: {
+    'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
+  },
+};
+
 
 const GOLD = {
   itemId: '4001',
@@ -569,6 +637,7 @@ import UaParser from 'ua-parser-js';
 const ua = new UaParser();
 const OS = ua.getOS();
 const Browser = ua.getBrowser();
+const isMoblie = ua.getDevice().type === 'mobile';
 
 const getWebpOk = () => {
   console.log(OS);
@@ -588,12 +657,12 @@ const webpOk = getWebpOk();
 
 
 const getProfilePath = name => {
-  return webpOk ? `${path}char/profile-compress/${name}.png?x-oss-process=style/small-test`
-    : `${path}char/profile-compress/${name}.png`;
+  return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
+    : `${path}char/profile/${name}.png`;
 };
 
 const getDetailsProfilePath = name => {
-  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/profile-test`
+  return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/profile-test`
     : `${path}char/profile/${name}.png`;
 };
 
@@ -629,7 +698,12 @@ export {
   Browser,
   getEnemyList,
   getEnemyData,
-  getEneAppearMap
+  getEneAppearMap,
+  charBorderColor,
+  charNameColor,
+  getDevList,
+  starColor,
+  isMoblie
 };
 
 
