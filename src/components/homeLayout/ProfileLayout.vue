@@ -1,11 +1,18 @@
 <template>
   <div>
-    <!-- <div class="profile-container"> -->
     <transition-group name="flip-list" class="profile-container">
-      <div class="profile-item" v-for="agent in data" :key="agent.name" :title="agent.name">
-        <div class="profile-item-inner-wrapper">
+      <div
+        class="profile-item"
+        v-for="agent in data"
+        :key="agent.name"
+        :title="agent.name"
+        :style="showTags ? short ? ' width: 165px' : 'width: 170px; ' : ''"
+      >
+        <div
+          :class="agent.tags[0] === 5 ? 'profile-item-inner-wrapper bg-6' : 'profile-item-inner-wrapper'"
+          :style="bgColor(agent.tags[0])"
+        >
           <router-link :to="path + '/details/' + agent.No">
-            <!-- style="box-shadow: 1px 1px 2px 1px rgba(102, 102, 102, 0.7);" -->
             <el-image
               fit="cover"
               class="img-container"
@@ -19,72 +26,75 @@
           </router-link>
           <transition name="slide-fade">
             <div class="tag-wrapper-1" v-if="showTags">
-              <div style="margin-bottom: 4px">
-                <div class="tag-container class-icon">
-                  <el-image
-                    class="img-container"
-                    :style="tagHit(agent.class) ? '' : 'opacity: 0.2'"
-                    :alt="agent.class"
-                    :title="changeClassShort(agent.class)"
-                    :src="class_icon(agent.class)"
-                  ></el-image>
-                </div>
-                <div class="tag-container">
+              <div v-for="(tag, index) in agent.tags" :key="tag">
+                <div class="tag-container long-tag" v-if="index > 2 || index === 0 &&  tag > 3">
                   <el-tag
-                    :type="tagHit(agent.position) ? 'info' : 'info'"
+                    type="info"
+                    :effect="tagHit(String(tag)) ? 'dark' : 'plain'"
                     size="mini"
-                    :title="agent.position"
-                    :effect="tagHit(agent.position) ? 'dark' : 'plain'"
-                  >{{agent.position === '远程位' ? '远' : '近'}}</el-tag>
+                  >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
                 </div>
               </div>
-
-              <div v-for="tag in agent.tags" :key="tag">
-                <div class="tag-container long-tag">
-                  <el-tag
-                    :type="tagHit(tag) ? 'info' : 'info'"
-                    :effect="tagHit(tag) ? 'dark' : 'plain'"
-                    size="medium"
-                    v-if="tag !== '' && tag !== 'null'"
-                  >{{tag}}</el-tag>
-                </div>
+              <div class="tag-container long-tag double-tag-container">
+                <el-tag effect="plain" type="info" size="mini" style="text-align: center">
+                  <span
+                    class="double-tag"
+                    :style="tagHit(agent.class) ? 'background-color: #313131; color: #fff': ''"
+                  >{{changeClassShort(agent.class)}}</span>
+                  <span
+                    class="double-tag"
+                    :style="tagHit(agent.tags[2]) ? 'background-color: #313131; color: #fff': ''"
+                  >{{agent.position === '近战位' ? '近' : '远'}}</span>
+                </el-tag>
               </div>
             </div>
           </transition>
 
-          <div
-            :class="showTags? 'name-tag-show name ' : 'name'"
-            :style="showTags ?  'box-shadow: rgba(102, 102, 102, 0.78) 1px 1px 3px 0px;' : ''"
-          >
-            <router-link :id="agent.No" :to="path + '/details/' + agent.No">
+          <div class="name">
+            <div class="name-inner-wrapper" :style="nameColor(agent.tags[0])">
               <span
                 :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
               >{{agent.name}}</span>
+            </div>
+            <div
+              style="font-size: 12px;font-weight: normal;line-height: 12px;font-family: sans-serif;padding-left: 6px"
+            >
+              {{agent.en}}
               <span
-                v-if="showTags"
-                :style="agent.sex === '女' ? 'color: pink;' : 'color : #fff'"
-              >{{agent.sex === '女' ? '♀' : '♂'}}</span>
-            </router-link>
+                v-if="showTags && tagHit(agent.tags[1])"
+              >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
+            </div>
+            <div class="name-slide-logo">
+              <el-image
+                fit="cover"
+                :alt="agent.name"
+                :src="rowPath + 'logo/' + agent.logo + '.png'"
+              >
+                <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
+            </div>
           </div>
         </div>
       </div>
 
-      <div
-        class="fill-item img-container"
-        :style="fillItemWidth"
-        v-for="item in fillItems"
-        :key="item"
-      ></div>
-      <!-- </div> -->
+      <div class="fill-item" :style="fillItemWidth" v-for="item in fillItems" :key="item"></div>
     </transition-group>
   </div>
 </template>
 
 <script>
-// import Image from 'element-ui/packages/image/index.js';
 import { Tag, Image } from 'element-ui';
 import Vue from 'vue';
-import { getClass_Chinese, getProfilePath, getClass_icon } from '../utils';
+import {
+  getClass_Chinese,
+  getProfilePath,
+  getClass_icon,
+  path,
+  charBorderColor,
+  charNameColor
+} from '../utils';
 
 Vue.use(Image);
 Vue.use(Tag);
@@ -97,15 +107,26 @@ export default {
     showKey: String,
     tags: Array,
     showTags: Boolean,
-    webpOk: Boolean
+    webpOk: Boolean,
+    short: Boolean
   },
   components: {},
   data() {
     return {
       fillItems: [],
       moraleMode: false,
-      fillItemWidth: { width: '100px' }
+      fillItemWidth: { width: '100px' },
+      rowPath: path
     };
+  },
+  watch: {
+    showTags: function(v) {
+      console.log('show? ' + v);
+      this.calFillAmount();
+    },
+    short: function(v) {
+      this.calFillAmount();
+    }
   },
   computed: {
     path() {
@@ -118,6 +139,12 @@ export default {
     window.addEventListener('resize', self.calFillAmount);
   },
   methods: {
+    bgColor(star) {
+      return charBorderColor[star];
+    },
+    nameColor(star) {
+      return charNameColor[star];
+    },
     class_icon(c) {
       return getClass_icon(c);
     },
@@ -130,16 +157,22 @@ export default {
       this.$router.push(this.path + '/details/' + item.No);
     },
     calFillAmount() {
-      if (!this.data) return;
-      const width = this.$el.clientWidth,
-        cWidth = this.$el.querySelector('.profile-item').clientWidth;
+      //通过css控制填充的margin？
+      const width = this.$el.clientWidth;
+      let cWidth = this.short ? 106 : 120;
+      cWidth = this.showTags
+        ? this.short
+          ? cWidth + 69
+          : cWidth + 70
+        : cWidth;
       this.fillItemWidth = { width: cWidth + 'px' };
       let size = Math.floor(width / cWidth);
-      size = size - (this.data.length % size);
+      // size = size - (this.data.length % size);
       const arr = [];
       for (let i = 0; i < size; i++) {
         arr.push(i);
       }
+      console.log(size);
       this.fillItems = arr;
     },
     tagHit(tag) {
@@ -154,27 +187,63 @@ export default {
   }
 };
 </script>
-<style >
+<style scoped>
 .flip-list-move {
-  transition: transform 1s;
-  transition-delay: 0.3;
+  transition: transform 1s ease-in-out;
+  transition-delay: 1s;
+}
+
+.flip-list-enter,
+.flip-list-leave-to {
+  opacity: 0;
+  transform: translateX(-50px);
+}
+
+.flip-list-leave-active {
+  position: absolute;
+}
+
+.profile-item {
+  transition: all 1s ease-in-out;
+  display: inline-block;
+}
+
+.tag-container {
+  display: inline-block;
+  font-size: 0;
+  margin-bottom: 1px;
+}
+
+.tag-container .el-tag {
+  border-radius: 2px;
+}
+
+.slide-fade-enter-active {
+  transition: all 0.5s ease-in-out;
+}
+
+.slide-fade-enter,
+.slide-fade-leave-to {
+  transform: translateX(-59px);
+  opacity: 0;
 }
 
 .profile-container {
   display: flex;
   flex-wrap: wrap;
-  margin: 50px auto;
+  margin: 20px auto 50px;
   width: 100%;
   justify-content: space-around;
 }
 .profile-item {
-  --imgWidth: 100px;
-  position: relative;
+  --imgWidth: 88px;
+  /* position: relative; */
   box-sizing: border-box;
+  margin: 10px;
 }
 .profile-item-inner-wrapper {
-  padding: 10px;
-  height: 130px;
+  height: 121px;
+  width: 100px;
   position: relative;
   display: flex;
 }
@@ -184,8 +253,21 @@ export default {
 }
 
 .img-container {
+  width: calc(var(--imgWidth) + 12px);
+  height: calc(var(--imgWidth) + 12px);
+  z-index: 1;
+}
+.img-container::after {
+  content: "";
+  background-image: url("bg_1_lastbreath_optimized.png");
+  background-size: contain;
   width: var(--imgWidth);
   height: var(--imgWidth);
+  display: inline-block;
+  z-index: -1;
+  position: absolute;
+  top: 6px;
+  left: 6px;
 }
 .img-container img {
   width: 100%;
@@ -193,18 +275,29 @@ export default {
 
 .name {
   text-overflow: ellipsis;
-  width: calc(100% - 20px);
+  width: 100px;
+  box-sizing: border-box;
   white-space: nowrap;
   overflow: hidden;
-  text-align: center;
   position: absolute;
-  top: 112px;
+  top: 85px;
+  color: white;
+  font-size: 0;
+  font-family: "FZYaSong-H-GBK";
+  overflow: visible;
+  z-index: 10;
+}
+.name a {
+  color: inherit;
+  text-decoration: none;
+  width: 100%;
+  display: inline-block;
 }
 
 .tag-wrapper-1 {
-  margin-left: 10px;
-  margin-top: -27px;
+  margin-left: -2px;
   width: 65px;
+  z-index: -10;
 }
 .name-tag-show {
   top: -15px !important;
@@ -217,75 +310,79 @@ export default {
   height: 20px;
   line-height: 19px;
 }
-.name a {
-  color: inherit;
-  text-decoration: none;
-  width: 100%;
-  display: inline-block;
-}
-
-.tag-container {
-  display: inline-block;
-  border-radius: 2px;
-  font-size: 0;
-  margin-bottom: 1px;
-}
-
-.slide-fade-enter-active {
-  transition: all 0.3s ease;
-}
-.slide-fade-leave-active {
-  /* transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1); */
-}
-.slide-fade-enter, .slide-fade-leave-to
-/* .slide-fade-leave-active for below version 2.1.8 */ {
-  transform: translateX(-10px);
-  opacity: 0;
-}
 
 .class-icon {
   --imgWidth: 20px;
   vertical-align: middle;
 }
 
-.tag-container > .el-tag--dark {
+.tag-container >>> .el-tag--dark {
   background-color: #313131;
   border-color: #313131;
 }
 
 .long-tag .el-tag--info {
   min-width: 48px;
-  /* background-color: #ca3e47; */
+}
+
+.name-slide-logo {
+  width: 47px;
+  top: -18px;
+  position: absolute;
+  right: -10px;
+  z-index: -1;
+}
+
+.double-tag {
+  display: inline-block;
+  height: 100%;
+  font-size: 12px;
+  padding: 0 5px;
+}
+.double-tag-container .el-tag--mini.el-tag--info {
+  padding: 0;
+  font-size: 0;
+  overflow: hidden;
+  border-radius: 3px;
+}
+
+.double-tag:first-child {
+  border-right: 1px solid rgb(153, 153, 153);
+}
+
+.bg-6 {
+  background: url("./star_6_optimized.png");
+  background-size: cover;
+}
+
+.name-inner-wrapper {
+  min-width: 50px;
+  display: inline-block;
+  padding-left: 6px;
+  font-size: 17px;
 }
 
 @media screen and (max-width: 700px) {
-  .profile-container {
-    margin-top: 20px;
-  }
-  .profile-item {
-    --imgWidth: calc(80px + 1vw);
+  .img-container {
+    width: calc(var(--imgWidth) + 8px);
+    height: calc(var(--imgWidth) + 8px);
   }
 
-  .name {
-    top: calc(100px + 1vw);
-  }
-
-  .tag-wrapper-1 {
-    margin-left: 10px;
-    margin-top: calc(-24px - 1vw);
-    width: 65px;
-  }
-
-  .tag-wrapper-2 {
-    width: 30px;
+  .img-container::after {
+    top: 4px;
+    left: 4px;
   }
   .profile-item-inner-wrapper {
-    height: calc(100px + 5vw);
+    width: calc(var(--imgWidth) + 8px);
+  }
+
+  .profile-item {
+    margin: 10px 5px;
   }
 }
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 360px) {
   .name {
-    font-size: 13px;
+    font-size: 16px;
   }
 }
 </style>
