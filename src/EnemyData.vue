@@ -2,7 +2,7 @@
   <div class="home-wrapper">
     <el-alert show-icon type="warning" description>
       <div slot="title">注意</div>
-      <p>敌人数据由这里的数据和地图加成计算得出, 暂时把boss的单列出来</p>
+      <p>敌人的突袭数据由这里的数据和地图加成计算得出</p>
     </el-alert>
     <enemy-data-layout ref="layout" :short="short" v-if="load" :data="data" :appear-map="appearMap"></enemy-data-layout>
   </div>
