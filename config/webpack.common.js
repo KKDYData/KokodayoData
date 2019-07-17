@@ -20,15 +20,14 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] : [
     icons: [
       {
         src: path.resolve('src/assets/icon.png'),
-        sizes: [96, 128, 192, 256, 384, 512], // multiple sizes
+        sizes: [96, 128], // multiple sizes
         ios: true
       },
-      {
-        src: path.resolve('src/assets/icon_big.png'),
-        size: '1024x1024', // you can also use the specifications pattern
-        ios: true
-
-      }
+      // {
+      //   src: path.resolve('src/assets/icon_big.png'),
+      //   size: '1024x1024', // you can also use the specifications pattern
+      //   ios: true
+      // }
     ]
   }),
   new WorkboxPlugin.GenerateSW({
@@ -74,7 +73,7 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash].css',
-      // chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      // chunkFilename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
     }),
     ...swPlugins
   ],

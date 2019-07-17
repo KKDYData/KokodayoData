@@ -189,23 +189,23 @@
 <script>
 // import { getEnemyData } from '../utils';
 
-import { Button, Tooltip } from "element-ui";
-import Vue from "vue";
+import { Button, Tooltip } from 'element-ui';
+import Vue from 'vue';
 Vue.use(Button);
 Vue.use(Tooltip);
 
 const statusToCh = key => {
   const t = {
-    maxHp: "生命上限",
-    atk: "攻击",
-    def: "防御",
-    moveSpeed: "移动速度",
-    magicResistance: "法术抵抗",
-    baseAttackTime: "攻击间隔",
-    hpRecoveryPerSec: "生命回复/秒",
+    maxHp: '生命上限',
+    atk: '攻击',
+    def: '防御',
+    moveSpeed: '移动速度',
+    magicResistance: '法术抵抗',
+    baseAttackTime: '攻击间隔',
+    hpRecoveryPerSec: '生命回复/秒',
     // spRecoveryPerSec: '每秒Sp回复'
     // maxDeployCount: '最大部署数',
-    massLevel: "重量"
+    massLevel: '重量'
     // stunImmune: '免疫打断',
     // silenceImmune: '免疫沉默'
     // massLevel: '重量等级',
@@ -219,7 +219,7 @@ export default {
     data: {
       type: Array,
       default: function() {
-        return { message: "hello" };
+        return { message: 'hello' };
       }
     },
     appearMap: {
@@ -235,42 +235,42 @@ export default {
       level: 0,
       status: [
         [
-          ["生命上限", "???"],
-          ["攻击", "???"],
-          ["防御", "???"],
-          ["法术抵抗", "???"],
-          ["移动速度", "???"],
-          ["攻击间隔", "???"],
-          ["生命回复/秒", "???"],
-          ["重量", "???"],
-          ["攻击范围", "???"],
-          ["LifePoint", "???"]
+          ['生命上限', '???'],
+          ['攻击', '???'],
+          ['防御', '???'],
+          ['法术抵抗', '???'],
+          ['移动速度', '???'],
+          ['攻击间隔', '???'],
+          ['生命回复/秒', '???'],
+          ['重量', '???'],
+          ['攻击范围', '???'],
+          ['LifePoint', '???']
         ]
       ],
       skills: [],
       Tag: {
         stunImmune: {
-          text: "眩晕免疫",
+          text: '眩晕免疫',
           value: false
         },
         silenceImmune: {
-          text: "沉默免疫",
+          text: '沉默免疫',
           value: false
         }
       },
-      timeKey: ["duration", "dist", "stun"],
+      timeKey: ['duration', 'dist', 'stun'],
       talents: [],
-      currentMap: "",
+      currentMap: '',
       skillRangeRadius: 1
     };
   },
   watch: {
     currentMap(v) {
-      if (v === "") this.skillRangeRadius = 1;
+      if (v === '') this.skillRangeRadius = 1;
     },
     data() {
       if (!this.data) return [];
-      const tagKey = { stunImmune: "免疫眩晕", silenceImmune: "免疫沉默" };
+      const tagKey = { stunImmune: '免疫眩晕', silenceImmune: '免疫沉默' };
       this.talents = [];
 
       this.status = this.data.map((list, i) => {
@@ -300,12 +300,12 @@ export default {
         if (list.enemyData.talentBlackboard)
           this.talents.push(list.enemyData.talentBlackboard);
         res.push([
-          "攻击范围/格",
-          findDefinedValue("rangeRadius", i),
-          "rangeScale"
+          '攻击范围/格',
+          findDefinedValue('rangeRadius', i),
+          'rangeScale'
         ]);
-        console.log(findDefinedValue("rangeRadius", i) + "|range");
-        res.push(["LifePoint", findDefinedValue("lifePointReduce", i)]);
+        console.log(findDefinedValue('rangeRadius', i) + '|range');
+        res.push(['LifePoint', findDefinedValue('lifePointReduce', i)]);
 
         return res;
       });
@@ -324,7 +324,7 @@ export default {
     filterKeys() {
       const res = {};
       if (
-        this.currentMap === "" ||
+        this.currentMap === '' ||
         !this.appearMap[this.keyName] ||
         !this.appearMap[this.keyName][this.level]
       )
@@ -335,17 +335,17 @@ export default {
       const changeKey = key => {
         const test = /_/.exec(key);
         if (test) {
-          const temp = key.split("");
+          const temp = key.split('');
           temp.splice(test.index, 1);
           temp[test.index] = temp[test.index].toUpperCase();
-          return temp.join("");
+          return temp.join('');
         } else {
           return key;
         }
       };
 
       target.runes.forEach(data => {
-        if (data.blackboard[0].key === "enemy") {
+        if (data.blackboard[0].key === 'enemy') {
           if (data.blackboard[0].valueStr !== this.keyName) return;
           data.blackboard.forEach(el => {
             const key = changeKey(el.key);
@@ -362,7 +362,7 @@ export default {
         } else {
           data.blackboard.forEach(el => {
             const key = changeKey(el.key);
-            console.log("key " + key + " " + res[key] + "  " + el.value);
+            console.log('key ' + key + ' ' + res[key] + '  ' + el.value);
             res[key] = res[key] ? res[key] * el.value : el.value;
             console.log(res[key]);
           });
@@ -378,7 +378,7 @@ export default {
     },
     filterTalents() {
       const findTalent = key => {
-        if (key < 0) throw Error("天赋查询失败");
+        if (key < 0) throw Error('天赋查询失败');
         if (this.talents[key]) return this.talents[key];
         else return findTalent(key - 1);
       };
@@ -386,10 +386,10 @@ export default {
       return row.map(el => {
         let v = el.value;
         if (/(duration)/.exec(el.key)) {
-          v = v + "s";
+          v = v + 's';
         }
         if (/up|down|scale|healaura|reborn\.atk/.exec(el.key)) {
-          v = v * 100 + "%";
+          v = v * 100 + '%';
         }
         return {
           key: this.changeTalentsBlackBordtoCh(el.key),
@@ -412,32 +412,32 @@ export default {
   methods: {
     changeBlackboardToCh(key) {
       const Key = {
-        atk_scale: "倍率",
-        max_cnt: "最大数量",
-        attack_speed: "攻速",
-        duration: "持续时间",
-        range_radius: "范围/格",
-        move_speed: "移动速度",
-        dist: "消失",
-        branch_id: "地图装置ID",
-        stun: "眩晕"
+        atk_scale: '倍率',
+        max_cnt: '最大数量',
+        attack_speed: '攻速',
+        duration: '持续时间',
+        range_radius: '范围/格',
+        move_speed: '移动速度',
+        dist: '消失',
+        branch_id: '地图装置ID',
+        stun: '眩晕'
       };
       return Key[key] || key;
     },
     changeTalentsBlackBordtoCh(key) {
       const Key = {
-        "invincible.duration": "隐身时间",
-        "healaura.hp_recovery_per_sec": "治愈光环",
-        "reborn.duration": "复活·时间",
-        "atkup.atk": "攻击提升",
-        "atkup.hp_ratio": "攻击提升·Hp%",
-        "defdown.def": "防御降低·防御",
-        "atkSpeedDown.attack_speed": "攻击速度下降·攻击速度",
-        "defup.range_radius": "防御提升·范围",
-        "antiinvi.range_radius": "侦擦范围",
-        "defup.def": "防御提升·防御",
-        "boom.atk_scale": "爆炸·倍率",
-        "reborn.atk": "复活·攻击"
+        'invincible.duration': '隐身时间',
+        'healaura.hp_recovery_per_sec': '治愈光环',
+        'reborn.duration': '复活·时间',
+        'atkup.atk': '攻击提升',
+        'atkup.hp_ratio': '攻击提升·Hp%',
+        'defdown.def': '防御降低·防御',
+        'atkSpeedDown.attack_speed': '攻击速度下降·攻击速度',
+        'defup.range_radius': '防御提升·范围',
+        'antiinvi.range_radius': '侦擦范围',
+        'defup.def': '防御提升·防御',
+        'boom.atk_scale': '爆炸·倍率',
+        'reborn.atk': '复活·攻击'
       };
       return Key[key] || key;
     }
