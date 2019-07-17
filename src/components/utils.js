@@ -637,7 +637,7 @@ import UaParser from 'ua-parser-js';
 const ua = new UaParser();
 const OS = ua.getOS();
 const Browser = ua.getBrowser();
-const isMoblie = ua.getDevice() === 'mobile';
+const isMoblie = ua.getDevice().type === 'mobile';
 
 const getWebpOk = () => {
   console.log(OS);
@@ -657,12 +657,12 @@ const webpOk = getWebpOk();
 
 
 const getProfilePath = name => {
-  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/small-test`
+  return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
     : `${path}char/profile/${name}.png`;
 };
 
 const getDetailsProfilePath = name => {
-  return webpOk ? `${path}char/profile/${name}.png?x-oss-process=style/profile-test`
+  return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/profile-test`
     : `${path}char/profile/${name}.png`;
 };
 
