@@ -23,48 +23,6 @@ const throttle = function (action, delay) {
 
 const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
 
-const insertImg = (picArr, baseImg) => {
-  return new Promise((resolve, reject) => {
-    if (picArr.length === 0) {
-      return;
-    }
-    for (const rect of picArr) {
-      const canvas = makeNewCanvas(rect, baseImg);
-      let name = rect.id.split('-')[1];
-
-      canvas.toBlob(blob => {
-        const imgContainer = new Image();
-        imgContainer.style.width = '100%';
-
-        imgContainer.onload = function () {
-          console.log(imgContainer);
-        };
-        imgContainer.src = URL.createObjectURL(blob);
-        console.log(name);
-        if (name === 'skill') {
-          const id = rect.id.split('-')[2];
-          name = 'skill-' + id;
-        }
-
-        const container = document.querySelector('#' + name);
-        if (!container) reject('id error');
-        removeChildNode(container);
-        container.appendChild(imgContainer);
-
-        resolve({ id: 'pic-' + name, blob });
-        function removeChildNode(container) {
-          if (container.childNodes.length > 0) {
-            container.childNodes.forEach(node => node.remove());
-          }
-        }
-      });
-
-    }
-  });
-
-};
-
-
 const makeNewCanvas = (rect, img, callback) => {
   const _canvas = document.createElement('canvas'),
     r = img.width / 1280,
@@ -671,7 +629,6 @@ const getDetailsProfilePath = name => {
 export {
   debounce,
   throttle,
-  insertImg,
   getHeroData,
   sort,
   sortByTime,
