@@ -24,6 +24,7 @@
     "vlf": "^1.0.3",
     "vue": "^2.6.10",
     "vue-essentials": "^0.1.49",
+    "vue-meta": "^2.0.5",
     "vue-router": "^3.0.6",
     "vuedraggable": "^2.19.2",
     "workbox-precaching": "^4.3.1",

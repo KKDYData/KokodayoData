@@ -8,12 +8,15 @@ import './style.css';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import NavMenu from './NavMenu';
+import VueMeta from 'vue-meta'
 
+
+Vue.use(VueMeta)
 Vue.use(VueRouter);
 
 Vue.config.productionTip = false;
 
+import NavMenu from './NavMenu';
 const Home = () => import(/* webpackChunkName: "Home" */'./Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');

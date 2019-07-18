@@ -19,19 +19,19 @@
   </div>
 </template>
 <script>
-import { getDevList } from './components/utils';
-import { Alert, link } from 'element-ui';
+import { getDevList } from "./components/utils";
+import { Alert, link } from "element-ui";
 // import HomeLayout from './components/homeLayout';
-import Vue from 'vue';
+import Vue from "vue";
 Vue.use(link);
 Vue.use(Alert);
 
-import loadingC from './components/Loading';
-import Mode from './stats';
+import loadingC from "./components/Loading";
+import Mode from "./stats";
 
 const HomeLayout = () => ({
   component: import(
-    /* webpackChunkName: "HomeLayout" */ './components/homeLayout'
+    /* webpackChunkName: "HomeLayout" */ "./components/homeLayout"
   ),
   loading: loadingC,
   error: loadingC,
@@ -40,15 +40,22 @@ const HomeLayout = () => ({
 });
 
 export default {
+  metaInfo() {
+    const title = "ArknightsData 一个平平无奇的明日方舟数据库 0.3.0.5";
+    const mode = Mode === "/ArknightsBeta" ? " | Beta版" : "";
+    return {
+      title: title + mode
+    };
+  },
   components: {
-    'home-layout': HomeLayout
+    "home-layout": HomeLayout
   },
   data() {
     return {
       short: false,
       data: [],
       load: false,
-      isBeta: Mode === '/ArknightsBeta'
+      isBeta: Mode === "/ArknightsBeta"
     };
   },
   mounted() {

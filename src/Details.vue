@@ -4,11 +4,11 @@
   </div>
 </template>
 <script>
-import loadingC from './components/Loading';
+import loadingC from "./components/Loading";
 
 const DetailsLayout = () => ({
   component: import(
-    /* webpackChunkName: "DetailsLayout" */ './components/DetailsLayout'
+    /* webpackChunkName: "DetailsLayout" */ "./components/DetailsLayout"
   ),
   loading: loadingC,
   error: loadingC,
@@ -17,8 +17,11 @@ const DetailsLayout = () => ({
 });
 
 export default {
+  metaInfo: {
+    titleTemplate: "%s | 干员详情 | 明日方舟"
+  },
   components: {
-    'details-layout': DetailsLayout
+    "details-layout": DetailsLayout
   },
   data() {
     return {
