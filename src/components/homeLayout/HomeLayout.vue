@@ -87,17 +87,11 @@
           :tags="SelectedTag"
           :filter-groups="filterGroups"
           :data="data"
-          :webpOk="webpOk"
           :short="short"
         ></profile-layout>
       </el-tab-pane>
       <el-tab-pane name="new-profile-layout" label="排列组合">
-        <new-profile-layout
-          :webp-ok="webpOk"
-          :tags="SelectedTag"
-          :filterGroups="filterGroups"
-          :data="data"
-        ></new-profile-layout>
+        <new-profile-layout :tags="SelectedTag" :filterGroups="filterGroups" :data="data"></new-profile-layout>
       </el-tab-pane>
       <el-tab-pane name="expalain" label="说明">
         <div style="padding: 0 20px">
@@ -113,20 +107,19 @@
 </template>
 
 <script>
-import FilterButtonGroup from '../FilterButtonGroup';
-import ProfileLayout from './ProfileLayout';
+import FilterButtonGroup from "../FilterButtonGroup";
+import ProfileLayout from "./ProfileLayout";
 import {
   sort,
   TagsArr,
   StarArr,
   class_chinese,
-  webpOk,
   throttle,
   isMoblie
-} from '../utils';
-import Vue from 'vue';
-import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui';
-import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
+} from "../utils";
+import Vue from "vue";
+import { Button, Popover, Tag, Tabs, TabPane } from "element-ui";
+import CollapseTransition from "element-ui/lib/transitions/collapse-transition";
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Button);
 Vue.use(Popover);
@@ -134,13 +127,13 @@ Vue.use(Tag);
 Vue.use(Tabs);
 Vue.use(TabPane);
 
-import localforage from 'localforage';
+import localforage from "localforage";
 
-import loadingC from '../Loading';
+import loadingC from "../Loading";
 
 const newProfileLayout = () => ({
   component: import(
-    /* webpackChunkName: "newProfileLayout" */ './newProfileLayout'
+    /* webpackChunkName: "newProfileLayout" */ "./newProfileLayout"
   ),
   loading: loadingC,
   error: loadingC,
@@ -148,9 +141,9 @@ const newProfileLayout = () => ({
   timeout: 5000
 });
 
-const gkzm = [{ isTag: false, text: '仅公招', value: true, short: '公招' }];
+const gkzm = [{ isTag: false, text: "仅公招", value: true, short: "公招" }];
 
-if (typeof Array.prototype.flat !== 'function') {
+if (typeof Array.prototype.flat !== "function") {
   Array.prototype.flat = function(num) {
     return this.reduce((pre, cur) => pre.concat(cur));
   };
@@ -160,19 +153,18 @@ const version = 190715;
 
 export default {
   components: {
-    'filter-group': FilterButtonGroup,
-    'profile-layout': ProfileLayout,
-    'new-profile-layout': newProfileLayout
+    "filter-group": FilterButtonGroup,
+    "profile-layout": ProfileLayout,
+    "new-profile-layout": newProfileLayout
   },
   props: {
     profileList: Array
   },
   data() {
     return {
-      short: isMoblie,
       data: null,
       rowData: this.profileList,
-      showKey: '',
+      showKey: "",
       filtersLength: 0,
       sortDe: [],
       showTag: false,
@@ -180,35 +172,37 @@ export default {
       SelectedTag: [],
       SelectedTagGz: [],
       showOtherPanel: false,
-      currentMode: 'profile-layout',
-      webpOk: webpOk
+      currentMode: "profile-layout",
+      short: false
     };
   },
-  created() {
+  created() {},
+  beforeMount() {
+    this.short = isMoblie();
     this.store = localforage.createInstance({
-      name: 'testDB'
+      name: "testDB"
     });
-    this.store.getItem('filterGroups').then(filterGroups => {
+    this.store.getItem("filterGroups").then(filterGroups => {
       if (filterGroups && filterGroups._version >= version) {
         Object.keys(filterGroups).forEach(key => {
-          if (key !== '_version')
+          if (key !== "_version")
             this.$set(this.filterGroups, key, filterGroups[key]);
         });
-        console.log('reset');
+        console.log("reset");
         this.data = this.profileList;
         this.resetFilter();
       } else {
-        console.log('???????_noVersion');
-        this.store.setItem('_filterVersion', version);
+        console.log("???????_noVersion");
+        this.store.setItem("_filterVersion", version);
         this.data = this.profileList;
       }
     });
   },
   mounted() {
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       this.short = window.innerWidth < 500 ? true : false;
-      this.$refs['profile-layout'] &&
-        this.$refs['profile-layout'].calFillAmount();
+      this.$refs["profile-layout"] &&
+        this.$refs["profile-layout"].calFillAmount();
     });
   },
   computed: {
@@ -229,10 +223,10 @@ export default {
       return this.$el.clientWidth - 50;
     },
     switchToNormal(tab) {
-      if (this.currentMode === 'profile-layout')
+      if (this.currentMode === "profile-layout")
         this.$nextTick().then(() => {
-          this.$refs['profile-layout'] &&
-            this.$refs['profile-layout'].calFillAmount();
+          this.$refs["profile-layout"] &&
+            this.$refs["profile-layout"].calFillAmount();
         });
     },
     handleClose(tag) {
@@ -242,21 +236,20 @@ export default {
     sortData(key) {
       const less = this.showTag
         ? (a, b) => {
-          return a.tagHit === b.tagHit
-            ? a.index > b.index
-            : a.tagHit > b.tagHit;
-        }
+            return a.tagHit === b.tagHit
+              ? a.index > b.index
+              : a.tagHit > b.tagHit;
+          }
         : (a, b) => a.index > b.index;
       this.data = [...sort(key, less)];
     },
 
     async resetFilter(group, p) {
       const saveTask = () => {
-        this.store
-          .setItem('filterGroups', { ...this.filterGroups, _version: version })
-          .then(res => {
-            console.log(res);
-          });
+        this.store.setItem("filterGroups", {
+          ...this.filterGroups,
+          _version: version
+        });
       };
       throttle(saveTask(), 1000);
 
@@ -269,11 +262,11 @@ export default {
       targetData =
         starFilter.length > 0
           ? targetData.filter(
-            el =>
-              starFilter.findIndex(
-                star => Number(star.value) === el.tags[0]
-              ) > -1
-          )
+              el =>
+                starFilter.findIndex(
+                  star => Number(star.value) === el.tags[0]
+                ) > -1
+            )
           : targetData;
       const filters = Object.keys(this.filterGroups).map(el => [
         el,
@@ -286,19 +279,19 @@ export default {
       //公招用的Tags,用于显示在角色头像旁边
       this.SelectedTagGz = [
         ...filters
-          .filter(el => el[0] !== 'star' && el[0] !== 'class')
+          .filter(el => el[0] !== "star" && el[0] !== "class")
           .map(el => el[1])
       ].flat(1);
 
       this.showTag = this.SelectedTagGz.length > 0 ? true : false;
       //是否过滤
       const isFilter = filters
-        .map(el => el[1].length && el[0] !== 'star' && el[0] !== 'gkzm')
+        .map(el => el[1].length && el[0] !== "star" && el[0] !== "gkzm")
         .reduce((pre, cur) => pre + cur);
 
       if (isFilter > 0) {
         //重新筛选， 重置tagHit
-        targetData.forEach(el => this.$set(el, 'tagHit', 0));
+        targetData.forEach(el => this.$set(el, "tagHit", 0));
         targetData = targetData.filter(el => {
           let find = !this.showTag;
 
@@ -306,12 +299,12 @@ export default {
             const group = data[1];
 
             //没有、或者是星级、公开招募则跳过判定
-            if (group.length < 1 || data[0] === 'gkzm' || data[0] === 'star') {
+            if (group.length < 1 || data[0] === "gkzm" || data[0] === "star") {
               continue;
             }
 
             //多选筛选(公招模式)，不需要break, Tags
-            if (this.showTag && data[0] === 'tags') {
+            if (this.showTag && data[0] === "tags") {
               el.tags.forEach(tag => {
                 if (group.find(t => t.value === tag)) {
                   find = true;
@@ -322,7 +315,7 @@ export default {
             }
 
             //单选筛选，需要break
-            const propertys = data[0].split('.');
+            const propertys = data[0].split(".");
             let groupFind = false;
             for (let i in group) {
               let key = el;

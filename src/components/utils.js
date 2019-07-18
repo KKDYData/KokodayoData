@@ -592,12 +592,14 @@ const getClass_icon = (c) => {
 
 import UaParser from 'ua-parser-js';
 
-const ua = new UaParser();
-const OS = ua.getOS();
-const Browser = ua.getBrowser();
-const isMoblie = ua.getDevice().type === 'mobile';
+const Browser = () => new UaParser().getBrowser();
+const isMoblie = () => new UaParser().getDevice().type === 'mobile';
 
 const getWebpOk = () => {
+  const ua = new UaParser();
+  const OS = ua.getOS();
+  const Browser = ua.getBrowser()
+  const isMoblie = ua.getDevice().type === 'mobile'
   console.log(OS);
   console.log(Browser);
   if (
@@ -605,13 +607,13 @@ const getWebpOk = () => {
     (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
     (Browser.name === 'Edge' && Browser.version < '18')
   ) {
-    return false;
+    return { ok: false, mobile: isMoblie };
   } else {
-    return true;
+    return { ok: false, mobile: isMoblie };
   }
 };
 
-const webpOk = getWebpOk();
+const webpOk = getWebpOk().ok;
 
 
 const getProfilePath = name => {

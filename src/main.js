@@ -1,5 +1,5 @@
 import { Browser } from './components/utils';
-if (Browser.name === 'IE') {
+if (Browser().name === 'IE') {
   document.body.querySelector('#app').innerHTML = '不支持IE，请使用现代浏览器。';
 }
 

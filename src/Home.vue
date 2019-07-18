@@ -10,7 +10,7 @@
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,可能会有Bug
-        <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
+        <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>压缩了css，体积少了20kb
       </div>
     </el-alert>
     <transition name="fade" mode="out-in">

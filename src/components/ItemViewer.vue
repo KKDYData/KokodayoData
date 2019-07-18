@@ -63,15 +63,15 @@
 
 
 <script>
-import { itemBackground, path, occPer_chinese, roomType } from './utils';
-import { Popover, Divider, Image } from 'element-ui';
-import Vue from 'vue';
+import { itemBackground, path, occPer_chinese, roomType } from "./utils";
+import { Popover, Divider, Image } from "element-ui";
+import Vue from "vue";
 Vue.use(Popover);
 Vue.use(Divider);
 Vue.use(Image);
 
 const stageList = () =>
-  import(/* webpackChunkName: "stageList" */ './stageList.json');
+  import(/* webpackChunkName: "stageList" */ "./stageList.json");
 
 export default {
   props: {
@@ -89,7 +89,7 @@ export default {
       stageList: [],
       isShort: this.short,
       isHover:
-        process.env.NODE_ENV === 'development' || this.short ? 'click' : 'hover'
+        process.env.NODE_ENV === "development" || this.short ? "click" : "hover"
     };
   },
   computed: {
@@ -97,7 +97,7 @@ export default {
       return itemBackground[this.item.rarity];
     },
     itemPic() {
-      return path + 'item/pic/' + this.item.iconId + '.png';
+      return path + "item/pic/" + this.item.iconId + "_optimized.png";
     }
   },
   methods: {

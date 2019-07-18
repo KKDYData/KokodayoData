@@ -108,7 +108,7 @@
 </template>
 
 <script>
-import { path } from '../utils';
+import { path, webpOk } from "../utils";
 import {
   Carousel,
   CarouselItem,
@@ -117,8 +117,8 @@ import {
   Button,
   Progress,
   Slider
-} from 'element-ui';
-import Vue from 'vue';
+} from "element-ui";
+import Vue from "vue";
 Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(Tabs);
@@ -126,7 +126,7 @@ Vue.use(TabPane);
 Vue.use(Button);
 Vue.use(Progress);
 Vue.use(Slider);
-import AudioContainer from './AudioContainer';
+import AudioContainer from "./AudioContainer";
 
 export default {
   components: {
@@ -144,14 +144,13 @@ export default {
     },
     words: {
       required: true
-    },
-    webpOk: Boolean
+    }
   },
   data() {
     return {
       phases: 1,
       showSet: false,
-      activeName: 'first',
+      activeName: "first",
       currentVoice: null,
       voicePercentage: 0,
       voiceVolume: 100
@@ -163,7 +162,7 @@ export default {
         const res = [];
         this.list.forEach(index => {
           res.push(
-            path + 'char/set/' + this.data.charID + '_' + index + '.png'
+            path + "char/set/" + this.data.charID + "_" + index + ".png"
           );
         });
         return res;
@@ -172,13 +171,13 @@ export default {
     halfPics() {
       if (this.data.charID) {
         const res = [];
-        const style = !this.webpOk
-          ? '.png'
-          : '.png?x-oss-process=style/small-test';
+        const style = webpOk.ok
+          ? "_optimized.png"
+          : "_optimized.png?x-oss-process=style/small-test";
         // console.log(path);
         this.list.forEach(index => {
           res.push(
-            path + 'char/halfPic/' + this.data.charID + '_' + index + style
+            path + "char/halfPic/" + this.data.charID + "_" + index + style
           );
         });
         return res[0];
@@ -187,28 +186,28 @@ export default {
   },
   filters: {
     docter: str => {
-      return str.replace(/{@nickname}/, '阿凡提');
+      return str.replace(/{@nickname}/, "阿凡提");
     }
   },
   methods: {
     async playVoice(index) {
       this.currentVoice = index;
       await this.$nextTick();
-      const a = this.$refs['word'];
+      const a = this.$refs["word"];
       a[0].play();
     },
     pausePlayVoice(index) {
       if (index !== this.currentVoice) return;
-      const a = this.$refs['word'];
+      const a = this.$refs["word"];
       if (a[0]) a[0].pause();
     },
     audioPath(data) {
       return (
-        path + 'char/voice/' + this.data.charID + '/' + data.voiceId + '.mp3'
+        path + "char/voice/" + this.data.charID + "/" + data.voiceId + ".mp3"
       );
     },
     changeText(str) {
-      return str.replace(/(\n)/g, '<br />');
+      return str.replace(/(\n)/g, "<br />");
     },
     calPhases(index) {
       if (index === 1) return 0;
