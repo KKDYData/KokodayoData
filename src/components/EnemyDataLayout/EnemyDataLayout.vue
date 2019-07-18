@@ -27,7 +27,7 @@
           </el-button>
           <div style="display: flex">
             <div class="enemy-img-container">
-              <el-image :src="path +  key + '.png'"></el-image>
+              <el-image :src="path +  key + '.png?x-oss-process=style/jpg-test'"></el-image>
             </div>
             <div>
               <div style="display: flex">
@@ -49,7 +49,7 @@
                 <div class="enemy-status-abc-container">
                   <div>
                     <div class="enemy-status-abc-title" style="margin: 0">
-                      <el-image style="width: 13px; " :src="smallPicPath +  'nj.png'"></el-image>
+                      <el-image style="width: 13px; " :src="smallPicPath +  'nj_optimized.png'"></el-image>
                       <div class="enemy-status-abc-title-text">耐久</div>
                     </div>
                   </div>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="enemy-status-abc-container">
                   <div class="enemy-status-abc-title" style="margin: 0">
-                    <el-image style="width: 13px; " :src="smallPicPath +  'gj.png'"></el-image>
+                    <el-image style="width: 13px; " :src="smallPicPath +  'gj_optimized.png'"></el-image>
                     <div class="enemy-status-abc-title-text">攻击力</div>
                   </div>
                   <h1>{{enemy.attack}}</h1>
@@ -65,7 +65,7 @@
                 <div class="enemy-status-abc-container">
                   <div>
                     <div class="enemy-status-abc-title" style="margin: 0">
-                      <el-image style="width: 13px; " :src="smallPicPath +  'fy.png'"></el-image>
+                      <el-image style="width: 13px; " :src="smallPicPath +  'fy_optimized.png'"></el-image>
                       <div class="enemy-status-abc-title-text">防御力</div>
                     </div>
                   </div>
@@ -74,7 +74,7 @@
                 <div class="enemy-status-abc-container">
                   <div>
                     <div class="enemy-status-abc-title" style="margin: 0">
-                      <el-image style="width: 13px; " :src="smallPicPath +  'fk.png'"></el-image>
+                      <el-image style="width: 13px; " :src="smallPicPath +  'fk_optimized.png'"></el-image>
                       <div class="enemy-status-abc-title-text">法术抗性</div>
                     </div>
                   </div>
@@ -89,7 +89,7 @@
                 <div class="enemy-status-abc-title" style="margin: 0">
                   <el-image
                     style="width: 13px; "
-                    :src="smallPicPath +  'nj.png?x-oss-process=style/jpg-test'"
+                    :src="smallPicPath +  'nj_optimized.png?x-oss-process=style/jpg-test'"
                   ></el-image>
                   <div class="enemy-status-abc-title-text">耐久</div>
                 </div>
@@ -100,7 +100,7 @@
               <div class="enemy-status-abc-title" style="margin: 0">
                 <el-image
                   style="width: 13px; "
-                  :src="smallPicPath +  'gj.png?x-oss-process=style/jpg-test'"
+                  :src="smallPicPath +  'gj_optimized.png?x-oss-process=style/jpg-test'"
                 ></el-image>
                 <div class="enemy-status-abc-title-text">攻击力</div>
               </div>
@@ -111,7 +111,7 @@
                 <div class="enemy-status-abc-title" style="margin: 0">
                   <el-image
                     style="width: 13px; "
-                    :src="smallPicPath +  'fy.png?x-oss-process=style/jpg-test'"
+                    :src="smallPicPath +  'fy_optimized.png?x-oss-process=style/jpg-test'"
                   ></el-image>
                   <div class="enemy-status-abc-title-text">防御力</div>
                 </div>
@@ -123,7 +123,7 @@
                 <div class="enemy-status-abc-title" style="margin: 0">
                   <el-image
                     style="width: 13px; "
-                    :src="smallPicPath +  'fk.png?x-oss-process=style/jpg-test'"
+                    :src="smallPicPath +  'fk_optimized.png?x-oss-process=style/jpg-test'"
                   ></el-image>
                   <div class="enemy-status-abc-title-text">法术抗性</div>
                 </div>
@@ -174,14 +174,14 @@
 </template>
 
 <script>
-import { Image, Popover } from 'element-ui';
-import Vue from 'vue';
+import { Image, Popover } from "element-ui";
+import Vue from "vue";
 Vue.use(Image);
 Vue.use(Popover);
 
-import EnemyStatus from './EnemyStatus';
+import EnemyStatus from "./EnemyStatus";
 
-import { path, getEnemyData } from '../utils';
+import { path, getEnemyData } from "../utils";
 
 export default {
   components: { EnemyStatus },
@@ -198,15 +198,15 @@ export default {
   },
   data() {
     return {
-      path: path + 'enemy/pic/',
+      path: path + "enemy/pic/",
       isHover:
-        process.env.NODE_ENV === 'development' || this.short
-          ? 'click'
-          : 'hover',
-      showKey: '',
+        process.env.NODE_ENV === "development" || this.short
+          ? "click"
+          : "hover",
+      showKey: "",
       currentData: [],
-      smallPicPath: path + 'others/',
-      fillItemWidth: { width: '100px' },
+      smallPicPath: path + "others/",
+      fillItemWidth: { width: "100px" },
       fillItems: [],
       shortWidth: 350
     };
@@ -219,20 +219,20 @@ export default {
     async openDetails(key) {
       this.showKey = key;
       // setTimeout(async () => {}, 100);
-      if (key !== 'enemy_1503_talula')
+      if (key !== "enemy_1503_talula")
         this.currentData = await getEnemyData(key);
       // this.showDetails = true;
     },
     calFillAmount() {
       if (!this.data) return;
       const width = this.$el.clientWidth,
-        cWidth = this.$el.querySelector('.enemy-container').clientWidth;
-      this.fillItemWidth = { width: cWidth + 'px' };
+        cWidth = this.$el.querySelector(".enemy-container").clientWidth;
+      this.fillItemWidth = { width: cWidth + "px" };
       let size = Math.floor(width / cWidth);
       size = size - (Object.keys(this.data).length % size);
       const arr = [];
       if (size > 10) {
-        throw new Error('Some thing wrong!');
+        throw new Error("Some thing wrong!");
       }
       for (let i = 0; i < size; i++) {
         arr.push(i);

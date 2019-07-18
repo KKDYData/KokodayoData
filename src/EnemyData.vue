@@ -8,15 +8,15 @@
   </div>
 </template>
 <script>
-import loadingC from './components/Loading';
-import { Alert } from 'element-ui';
-import Vue from 'vue';
+import loadingC from "./components/Loading";
+import { Alert } from "element-ui";
+import Vue from "vue";
 Vue.use(Alert);
-import { getEnemyList, getEneAppearMap } from './components/utils';
+import { getEnemyList, getEneAppearMap, isMoblie } from "./components/utils";
 
 const EnemyDataLayout = () => ({
   component: import(
-    /* webpackChunkName: "EnemyDataLayout" */ './components/EnemyDataLayout'
+    /* webpackChunkName: "EnemyDataLayout" */ "./components/EnemyDataLayout"
   ),
   loading: loadingC,
   error: loadingC,
@@ -38,12 +38,12 @@ export default {
   },
   created() {
     this.linkStart();
-    this.short = window.innerWidth < 500 ? true : false;
-    if (this.short) this.showExplain = [];
-    window.addEventListener('resize', () => {
+  },
+  beforeMount() {
+    this.short = isMoblie();
+    window.addEventListener("resize", () => {
       this.short = window.innerWidth < 500 ? true : false;
       this.$refs.layout && this.$refs.layout.calFillAmount();
-      // console.log(this.$refs);
     });
   },
   methods: {

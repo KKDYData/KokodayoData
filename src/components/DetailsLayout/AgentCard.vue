@@ -71,19 +71,19 @@
 
 
 <script>
-import { Card, Tag, Image } from 'element-ui';
-import Vue from 'vue';
+import { Card, Tag, Image } from "element-ui";
+import Vue from "vue";
 Vue.use(Card);
 Vue.use(Tag);
 Vue.use(Image);
 
-import Team from './handbook_team_table.json';
+import Team from "./handbook_team_table.json";
 import {
   getClass_Chinese,
   path,
   changeDesc,
   getDetailsProfilePath
-} from '../utils';
+} from "../utils";
 
 export default {
   props: {
@@ -94,8 +94,7 @@ export default {
     short: {
       type: Boolean,
       required: true
-    },
-    webpOk: Boolean
+    }
   },
 
   created() {},
@@ -106,22 +105,22 @@ export default {
     professionPic() {
       return (
         path +
-        'others/icon_profession_' +
+        "others/icon_profession_" +
         this.data.profession.toLowerCase() +
-        '_lighten.png'
+        "_lighten.png"
       );
     },
     profession() {
       return getClass_Chinese(this.data.profession);
     },
     rarityPath() {
-      return path + 'others/rarity_' + this.data.rarity + '.png';
+      return path + "others/rarity_" + this.data.rarity + "_optimized.png";
     },
     desc() {
       return changeDesc(this.data.description);
     },
     logo() {
-      return path + 'logo/' + this.data.displayLogo + '.png';
+      return path + "logo/" + this.data.displayLogo + "_optimized.png";
     },
     team() {
       return Team[this.data.team];

@@ -68,7 +68,7 @@
               <el-image
                 fit="cover"
                 :alt="agent.name"
-                :src="rowPath + 'logo/' + agent.logo + '.png'"
+                :src="rowPath + 'logo/' + agent.logo + '_optimized.png'"
               >
                 <div slot="error" class="image-slot">
                   <i class="el-icon-picture-outline"></i>
@@ -85,8 +85,8 @@
 </template>
 
 <script>
-import { Tag, Image } from 'element-ui';
-import Vue from 'vue';
+import { Tag, Image } from "element-ui";
+import Vue from "vue";
 import {
   getClass_Chinese,
   getProfilePath,
@@ -94,12 +94,12 @@ import {
   path,
   charBorderColor,
   charNameColor
-} from '../utils';
+} from "../utils";
 
 Vue.use(Image);
 Vue.use(Tag);
 
-import Mode from '../../stats';
+import Mode from "../../stats";
 
 export default {
   props: {
@@ -107,7 +107,6 @@ export default {
     showKey: String,
     tags: Array,
     showTags: Boolean,
-    webpOk: Boolean,
     short: Boolean
   },
   components: {},
@@ -115,13 +114,13 @@ export default {
     return {
       fillItems: [],
       moraleMode: false,
-      fillItemWidth: { width: '100px' },
+      fillItemWidth: { width: "100px" },
       rowPath: path
     };
   },
   watch: {
     showTags: function(v) {
-      console.log('show? ' + v);
+      console.log("show? " + v);
       this.calFillAmount();
     },
     short: function(v) {
@@ -130,13 +129,14 @@ export default {
   },
   computed: {
     path() {
-      return process.env.NODE_ENV === 'development' ? '' : Mode;
+      return process.env.NODE_ENV === "development" ? "" : Mode;
     }
   },
+
   mounted() {
     const self = this;
     this.calFillAmount();
-    window.addEventListener('resize', self.calFillAmount);
+    window.addEventListener("resize", self.calFillAmount);
   },
   methods: {
     bgColor(star) {
@@ -151,10 +151,10 @@ export default {
     async openDetails(item) {
       console.log(item.name);
       if (this.moraleMode) {
-        this.$emit('chose', item.name);
+        this.$emit("chose", item.name);
         return;
       }
-      this.$router.push(this.path + '/details/' + item.No);
+      this.$router.push(this.path + "/details/" + item.No);
     },
     calFillAmount() {
       //通过css控制填充的margin？
@@ -165,14 +165,12 @@ export default {
           ? cWidth + 69
           : cWidth + 70
         : cWidth;
-      this.fillItemWidth = { width: cWidth + 'px' };
+      this.fillItemWidth = { width: cWidth + "px" };
       let size = Math.floor(width / cWidth);
-      // size = size - (this.data.length % size);
       const arr = [];
       for (let i = 0; i < size; i++) {
         arr.push(i);
       }
-      console.log(size);
       this.fillItems = arr;
     },
     tagHit(tag) {

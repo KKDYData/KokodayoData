@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import { Image } from 'element-ui';
-import { path } from '../utils';
-import Vue from 'vue';
+import { Image } from "element-ui";
+import { path } from "../utils";
+import Vue from "vue";
 Vue.use(Image);
 
 export default {
@@ -30,7 +30,7 @@ export default {
       if (!this.skill) return;
       const skill = this.skill;
       const name = skill.iconId ? skill.iconId : skill.skillId;
-      return path + 'skills/pics/skill_icon_' + name + '.png';
+      return path + "skills/pics/skill_icon_" + name + "_optimized.png";
     }
   }
 };
