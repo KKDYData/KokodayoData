@@ -14,7 +14,6 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] : [
     short_name: 'AnD@Beta',
     description: '一个平平无奇的明日方舟资料站',
     background_color: '#525252',
-    theme_color: '#525252',
     crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
     start_url: '.',
     navigationPreload: true,
@@ -115,7 +114,7 @@ module.exports = {
             hmr: process.env.NODE_ENV === 'development',
           },
         },
-          'css-loader', 'stylus-loader'],
+        'css-loader', 'stylus-loader'],
       },
       {
         test: /\.(png|svg|jpg|gif|woff2?|eot|ttf|otf)$/,
