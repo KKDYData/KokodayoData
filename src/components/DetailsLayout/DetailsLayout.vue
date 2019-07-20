@@ -211,14 +211,6 @@ Vue.use(Tag);
 Vue.use(Alert);
 
 export default {
-  metaInfo() {
-    const title = this.data && this.data.name;
-    const content = this.data && this.data.itemUsage;
-    return {
-      title,
-      meta: [{ vmid: "description", name: "Description", content: content }]
-    };
-  },
   created() {
     this.name = this.$route.params.name;
     console.log("getting data...");

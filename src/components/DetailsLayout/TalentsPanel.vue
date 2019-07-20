@@ -3,7 +3,7 @@
     <div class="talent-container-wrapper">
       <div v-for="(item, index) in talents" :key="item.name" class="talent-container">
         <div class="talent-name-wrapper">
-          <span :style="!short && item.name.length > 5 ? 'font-size: 12px': ''">{{item.name}}</span>
+          <span :style="!short && item.name.length > 5 ? 'font-size: 13px': ''">{{item.name}}</span>
           <div class="talent-desc-change-button">
             <el-button
               v-if="item.condidate[0].potentailUP"
@@ -22,22 +22,18 @@
           class="talent-desc-container"
           v-for="talent in item.condidate"
           :key="talent.description"
-          :style="talent.description.length > 25 ? 'height: 80px' : ''"
         >
           <div class="talent-condition-wrapper">
             <span>精英{{talent.unlockCondition.phase}}/{{talent.unlockCondition.level}}级</span>
           </div>
 
           <div class="talent-desc-content-wrapper">
-            <div
-              class="talent-desc-content"
-              :style="!short && talent.description.length> 18 ? 'font-size: 14px' : ''"
-            >
-              <span v-if="!showTalentPotencailUP[index]">{{talent.description}}</span>
-              <template v-else>
-                <span v-html="talent.potentailUP.description"></span>
-                <span>(需要潜能{{talent.potentailUP.requiredPotentialRank + 1}}级)</span>
-              </template>
+            <div v-if="!showTalentPotencailUP[index]" class="talent-desc-content">
+              <span>{{talent.description}}</span>
+            </div>
+            <div v-else class="talent-desc-content">
+              <span v-html="talent.potentailUP.description"></span>
+              <span>(需要潜能{{talent.potentailUP.requiredPotentialRank + 1}}级)</span>
             </div>
           </div>
         </div>
