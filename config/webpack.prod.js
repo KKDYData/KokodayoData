@@ -13,7 +13,7 @@ module.exports = merge(common, {
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all',
       minSize: 30000,
       minChunks: 1,
       maxAsyncRequests: 5,
@@ -27,9 +27,15 @@ module.exports = merge(common, {
           minChunks: 2
         },
         vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          test: /[\\/]node_modules[\\/](vue|vue-router|vue-meta|vuex)[\\/]/,
+          name: 'vendor_vue',
+          chunks: 'all'
         },
+        // vendors: {
+        //   test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+        //   name: 'vendor_element',
+        //   chunks: 'async'
+        // },
         default: {
           minChunks: 2,
           priority: -20,
