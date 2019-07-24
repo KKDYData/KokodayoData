@@ -5,7 +5,7 @@
         style="vertical-align: baseline;"
         href="https://somedata.top/ArknightsBeta"
         type="info"
-      >Beta版</el-link>|7/16更新：新的列表UI，更刘畅的动画。
+      >Beta版</el-link>|7/24, 修复部分技能攻速显示的bug，增加白金2技能攻速降低的数值（-20）。
     </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
