@@ -22,6 +22,7 @@ const throttle = function (action, delay) {
 };
 
 const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
+// const path = 'https://andata.somedata.top/dataX/';
 
 const makeNewCanvas = (rect, img, callback) => {
   const _canvas = document.createElement('canvas'),
@@ -314,7 +315,7 @@ const itemBackground = {
                    0 0 1px 0px rgba(128, 128, 128, 0.37)`
   },
   1: {
-    'border-color': 'rgb(160, 160, 160)',
+    'border-color': 'rgb(220, 227, 61)',
     'background-color': 'rgb(157, 157, 157)',
     'box-shadow': `rgb(5, 1, 0) 0px 0px 0px 2px inset, 
                    rgb(164, 164, 164) 0 0 5px 4px inset,

@@ -172,21 +172,39 @@ export default {
         const text = res
           .slice(skill_time_text.index + 4)
           .match(/(<.*?>)(.*?)(<\/.*?>)/);
-
-        // console.log(skill_time_text);
-        // console.log(skill_time_text.index + 4 + text[0].length);
         let value = skill_base_time.value;
-        const unit = text[2] !== "极大幅度缩短" && value < 0 ? "s" : "%";
+        console.log(value);
+        const unit = text[2] !== "极大幅度缩短" ? "s" : "%";
         if (unit === "%") value *= 100;
         const temp = res.split("");
         temp.splice(
-          skill_time_text.index + 4 + text[0].length,
+          skill_time_text.index + 4 + text.index + text[0].length,
           0,
           `(${value}${unit})`
         );
 
         res = temp.join("");
       }
+
+      const skill_attack_speed = res.match(/攻击速度(?!-|\++|\<)/);
+      if (skill_attack_speed) {
+        const attack_speed = skill.blackboard.find(
+          el => el.key === "attack_speed"
+        );
+        if (!attack_speed) return;
+        const text = res
+          .slice(skill_attack_speed.index + 4)
+          .match(/(<.*?>)(.*?)(<\/.*?>)/);
+        let value = attack_speed.value;
+        const temp = res.split("");
+        temp.splice(
+          skill_attack_speed.index + 4 + text.index + text[0].length,
+          0,
+          `(${value})`
+        );
+        res = temp.join("");
+      }
+
       return res;
     }
   }

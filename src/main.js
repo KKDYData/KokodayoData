@@ -5,12 +5,14 @@ if (Browser().name === 'IE') {
 
 import './style.css';
 
-
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import VueMeta from 'vue-meta'
 import NavMenu from './NavMenu';
+import Mode from './stats';
 
 Vue.use(VueRouter);
+Vue.use(VueMeta)
 
 Vue.config.productionTip = false;
 
@@ -19,7 +21,6 @@ const Details = () => import(/* webpackChunkName: "Details" */'./Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');
 const EnemyData = () => import(/* webpackChunkName: "EnemyData" */'./EnemyData');
 
-import Mode from './stats';
 
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -57,15 +58,7 @@ new Vue({
     `
 });
 
-const swPath = isDev ? '/sw.js' : Mode + '/sw.js';
 
-
-if ('serviceWorker' in navigator && !isDev) {
-  window.addEventListener('load', async () => {
-    const { Workbox } = await import('workbox-window');
-    const wb = new Workbox(swPath);
-
-    wb.register();
-  });
-}
-
+!isDev && import(/* webpackChunkName: "loadSw" */'./loadSw').then(res => {
+  res.default()
+})
