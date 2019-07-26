@@ -72,13 +72,16 @@
                 </div>
               </div>
             </div>
-            <div v-if="rangeData.length > 0" class="status-range-wrapper">
-              <range :data="rangeData[phases]"></range>
-              <div style="text-align: center;font-size: 14px">
-                <span>攻击范围</span>
+            <div class="status-range-wrapper">
+              <div v-if="rangeData.length > 0" class="status-range-inner-wrapper">
+                <range :data="rangeData[phases]"></range>
+                <div style="text-align: center;font-size: 14px">
+                  <span>攻击范围</span>
+                </div>
               </div>
+              <!-- <div v-else class="status-range-fill"></div> -->
             </div>
-            <div v-else class="status-range-fill"></div>
+            <!-- <div style="width: 30%"></div> -->
           </div>
         </div>
         <!-- 天赋面板 -->
@@ -655,8 +658,13 @@ export default {
 }
 
 .status-range-wrapper {
+  width: 20%;
+  margin-right: 5%;
+  display: flex;
+  justify-content: center;
+}
+.status-range-inner-wrapper {
   min-width: 170px;
-  /* min-height: 170px; */
   max-height: 200px;
 }
 .status-range-fill {
