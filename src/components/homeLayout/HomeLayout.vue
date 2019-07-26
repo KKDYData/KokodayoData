@@ -64,7 +64,7 @@
 
           <filter-group
             :short="short"
-            label="Tgas"
+            label="Tags"
             :filters="filterGroups.tags"
             @filter="resetFilter($event, 'tags')"
             ref="tagFilter"

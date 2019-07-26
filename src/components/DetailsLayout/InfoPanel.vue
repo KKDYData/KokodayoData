@@ -10,13 +10,17 @@
           </el-image>
           <div class="info-char-set-wrapper">
             <el-popover placement="top-start" :width="short ? '330': '1000'" trigger="click">
-              <el-carousel :height="short ? '380px': '1050px'" class="char-set-container-wrapper">
+              <el-carousel
+                :autoplay="false"
+                :height="short ? '380px': '1050px'"
+                class="char-set-container-wrapper"
+              >
                 <el-carousel-item
                   v-for="(pic, index) in charSets"
                   :key="pic"
                   style="font-size:13px"
                 >
-                  <div v-if="showSet">
+                  <div v-if="showSet" style="background: rgba(255, 255, 255, 0.85);">
                     <el-image class="char-set-container" :src="pic">
                       <div slot="error" class="image-slot">
                         <i class="el-icon-picture-outline"></i>
@@ -29,16 +33,22 @@
                   </p>
                 </el-carousel-item>
               </el-carousel>
-              <el-button @click="showSet=true" size="mini" slot="reference">查看立绘</el-button>
+              <el-button
+                style="background: rgba(255, 255, 255, 0.85);"
+                @click="showSet=true"
+                size="mini"
+                slot="reference"
+                plain
+              >查看立绘</el-button>
             </el-popover>
           </div>
           <div class="info-draw-name">
-            <span>画师：</span>
-            <span>{{data.drawName}}</span>
+            <span style="width: 32px; display: inline-block">画师</span>
+            <span>: {{data.drawName}}</span>
           </div>
           <div class="info-cv-name">
-            <span>CV：</span>
-            <span>{{data.infoName}}</span>
+            <span style="width: 32px; display: inline-block">CV</span>
+            <span>: {{data.infoName}}</span>
           </div>
         </div>
         <div class="info-story-wrapper">
@@ -221,7 +231,9 @@ export default {
 
 <style  scoped>
 .info-char-set-wrapper {
-  text-align: center;
+  position: absolute;
+  bottom: 45px;
+  right: 1px;
 }
 .info-story-wrapper {
   padding: 0 10px;
@@ -241,6 +253,7 @@ export default {
   width: 120px;
   padding-left: 10px;
   overflow: hidden;
+  position: relative;
 }
 
 .info-draw-name,

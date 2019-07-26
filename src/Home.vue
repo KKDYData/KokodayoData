@@ -5,12 +5,12 @@
         style="vertical-align: baseline;"
         href="https://somedata.top/ArknightsBeta"
         type="info"
-      >Beta版</el-link>|7/16更新：新的列表UI，更刘畅的动画。
+      >Beta版链接</el-link>
     </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,可能会有Bug
-        <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>压缩了css，体积少了20kb
+        <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>
       </div>
     </el-alert>
     <transition name="fade" mode="out-in">

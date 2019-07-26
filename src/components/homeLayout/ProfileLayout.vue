@@ -44,7 +44,7 @@
                   <span
                     class="double-tag"
                     :style="tagHit(agent.tags[2]) ? 'background-color: #313131; color: #fff': ''"
-                  >{{agent.position === '近战位' ? '近' : '远'}}</span>
+                  >{{agent.tags[2] === '近战位' ? '近' : '远'}}</span>
                 </el-tag>
               </div>
             </div>

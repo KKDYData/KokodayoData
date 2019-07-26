@@ -344,12 +344,12 @@ export default {
   }
 
   .extra-exp {
-    height: calc(150px + 5vw);
+    height: auto;
     justify-content: space-between;
   }
   .extra-exp .my-form-item-wrapper {
     width: calc(50vw - 150px);
-    padding: 0 40px;
+    margin: 15px 40px;
   }
 
   .extra-exp .my-form-item {
@@ -360,7 +360,8 @@ export default {
 @media screen and (max-width: 600px) {
   .extra-exp .my-form-item-wrapper {
     width: calc(50vw - 23px);
-    padding: 0;
+    /* padding: 0; */
+    margin: 15px 0;
   }
 }
 </style>
