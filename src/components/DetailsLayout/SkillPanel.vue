@@ -145,12 +145,10 @@ export default {
         if (p2.match(/:0.0%/)) {
           p2 = p2.slice(0, -5);
           percent = "%";
-          // factor = 1;
         }
         if (p2.match(/:0.0/)) {
           p2 = p2.slice(0, -4);
           percent = "";
-          // factor = 1;
         }
         if (p2.match(/-/)) {
           p2 = p2.slice(1);
