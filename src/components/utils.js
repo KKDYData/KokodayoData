@@ -117,7 +117,7 @@ const fetchGet = (url) => {
 function sort(array, less) {
 
   function swap(i, j) {
-    var t = array[i];
+    const t = array[i];
     array[i] = array[j];
     array[j] = t;
   }
@@ -125,7 +125,8 @@ function sort(array, less) {
   function quicksort(left, right) {
 
     if (left < right) {
-      var pivot = array[left + Math.floor((right - left) / 2)],
+      const pivot = array[left + Math.floor((right - left) / 2)]
+      let
         left_new = left,
         right_new = right;
 
