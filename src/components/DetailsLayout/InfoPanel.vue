@@ -259,6 +259,7 @@ export default {
 .info-draw-name,
 .info-cv-name {
   margin-left: 0px;
+  white-space: nowrap;
 }
 
 .info-word-audio-control {
