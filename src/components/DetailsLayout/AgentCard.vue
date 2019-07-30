@@ -97,7 +97,6 @@ export default {
     }
   },
 
-  created() {},
   computed: {
     profile() {
       return getDetailsProfilePath(this.$route.params.name);

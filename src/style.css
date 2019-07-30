@@ -1,11 +1,9 @@
-
 @font-face {
   font-family: "FZYaSong-H-GBK";
   src: url("./assets/fzty_gbk.ttf") format("truetype");
   font-style: normal;
   font-weight: normal;
 }
-
 
 html {
   overflow-y: scroll;
@@ -60,13 +58,11 @@ body {
   padding: 20px !important;
 }
 
-.fade-enter-active,
-.fade-leave-active {
+.fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s ease;
 }
 
-.fade-enter,
-.fade-leave-to {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 
@@ -86,11 +82,9 @@ body {
   width: auto;
 }
 
-.info-panel-container .el-tabs__nav-scroll,
-.home-layout-wrapper .el-tabs__nav-scroll {
+.info-panel-container .el-tabs__nav-scroll, .home-layout-wrapper .el-tabs__nav-scroll {
   padding: 0 10px;
 }
-
 
 .el-button--danger.el-button--mini.close-button {
   position: absolute;
@@ -107,18 +101,27 @@ body {
   width: 200px;
 }
 
+.el-dialog__wrapper {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  overflow: auto;
+  margin: 0;
+}
+
 @media screen and (min-width: 1000px) {
   .el-message-box {
     min-width: 700px
   }
-
   .el-message-box__message p {
     margin: 10px !important
   }
 }
 
-@media screen and (max-width: 700px){
-  .alert-update-msg{
+@media screen and (max-width: 700px) {
+  .alert-update-msg {
     width: 100%;
   }
 }
