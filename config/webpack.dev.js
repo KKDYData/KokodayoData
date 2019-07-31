@@ -9,6 +9,15 @@ module.exports = merge(common, {
 
 
   ],
+  // module: {
+  //   rules: [
+  //     {
+  //       test: /\.styl|stylus|css$/,
+  //       use: [
+  //         'css-loader', 'stylus-loader'],
+  //     },
+  //   ]
+  // },
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
@@ -30,7 +39,7 @@ module.exports = merge(common, {
         //详情页面
         {
           from: /^\/details\/(?!char).*$/, to: context => {
-            return '/' + context.parsedUrl.pathname.slice(9);
+            return '/' + context.parsedUrl.path.slice(9);
           }
         },
         {
@@ -46,7 +55,7 @@ module.exports = merge(common, {
 
         {
           from: /^\/.*$/, to: context => {
-            return '/' + context.parsedUrl.pathname;
+            return '/' + context.parsedUrl.path;
           }
         },
         {
@@ -58,7 +67,7 @@ module.exports = merge(common, {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.esm.js',
     },
-  }
+  },
 });

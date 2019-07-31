@@ -92,30 +92,17 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.(styl|stylus|css)$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              // publicPath: '../',
               hmr: process.env.NODE_ENV === 'development',
             },
           },
-          'css-loader',
-          // 'postcss-loader',
-          // 'sass-loader',
-        ],
-      },
-      {
-        test: /\.(styl|stylus)$/,
-        use: [{
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            // you can specify a publicPath here
-            // by default it uses publicPath in webpackOptions.output
-            // publicPath: '../',
-            hmr: process.env.NODE_ENV === 'development',
-          },
-        },
           'css-loader', 'stylus-loader'],
       },
       {

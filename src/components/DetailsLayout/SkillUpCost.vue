@@ -10,14 +10,14 @@
             <span>所需材料：</span>
           </div>
           <div class="skill-lvUpCost-wrapper">
-            <!-- 改成根据slevelcompute返回当前数据 -->
-            <div
+            <item-viewer
               v-for="(skill, index) in picList[index]"
               :key="index"
               class="item-viwer-flex-default"
-            >
-              <item-viewer :short="!short" :item="skill.item" :num="skill.count"></item-viewer>
-            </div>
+              :short="short"
+              :item="skill.item"
+              :num="skill.count"
+            ></item-viewer>
           </div>
         </div>
       </div>

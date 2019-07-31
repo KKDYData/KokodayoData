@@ -15,7 +15,7 @@
             <div class="enemy-index-container">
               <span>{{enemy.enemyIndex}}</span>
             </div>
-            <el-image :src="path +  key + '.png?x-oss-process=style/jpg-test'" lazy></el-image>
+            <el-image :src="path +  key + '.png?x-oss-process=style/jpg-test'"></el-image>
             <div>
               <span>{{enemy.name}}</span>
             </div>
@@ -181,7 +181,7 @@ Vue.use(Popover);
 
 import EnemyStatus from "./EnemyStatus";
 
-import { path, getEnemyData } from "../utils";
+import { path, getEnemyData, isMoblie } from "../utils";
 
 export default {
   components: { EnemyStatus },
@@ -191,9 +191,6 @@ export default {
     },
     appearMap: {
       type: Object
-    },
-    short: {
-      default: false
     }
   },
   data() {
@@ -210,6 +207,9 @@ export default {
       fillItems: [],
       shortWidth: 350
     };
+  },
+  beforeMount() {
+    this.short = isMoblie();
   },
   mounted() {
     this.calFillAmount();
@@ -233,7 +233,7 @@ export default {
         cWidth = this.$el.querySelector(".enemy-container").clientWidth;
       this.fillItemWidth = { width: cWidth + "px" };
       let size = Math.floor(width / cWidth);
-      size = size - (Object.keys(this.data).length % size);
+      // size = size - (Object.keys(this.data).length % size);
       const arr = [];
       if (size > 10) {
         throw new Error("Some thing wrong!");
@@ -251,10 +251,10 @@ export default {
 .enemy-data-layout {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  /* justify-content: start; */
   margin: 0 auto;
   max-width: 1200px;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .enemy-container {
@@ -343,12 +343,13 @@ export default {
 }
 
 @media screen and (max-width: 1000px) {
-  .enemy-data-layout {
-    padding: 0 15px;
-  }
 }
 
 @media screen and (max-width: 700px) {
+  .enemy-data-layout {
+    padding: 0;
+    justify-content: center;
+  }
   .enemy-status-container {
     margin: 10px 0;
   }
@@ -367,7 +368,13 @@ export default {
 
 @media screen and (max-width: 400px) {
   .enemy-container {
-    min-width: calc(90px + 5vw);
+    min-width: calc(88px + 5vw);
+  }
+  .enemy-img-container {
+    --imgW: calc(80px + 5vw);
+    height: var(--imgW);
+    width: var(--imgW);
+    min-width: var(--imgW);
   }
 }
 </style>
