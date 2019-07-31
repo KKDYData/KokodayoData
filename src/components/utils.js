@@ -101,6 +101,11 @@ const getEnemyData = key => {
     .catch(err => console.error(err));
 };
 
+const getMapData = name => {
+  return fetchGet(path + 'map/data/' + name + '.json')
+    .catch(err => console.error(err));
+};
+
 //包装fetch，使用get
 const fetchGet = (url) => {
   return fetch(url, {
@@ -629,6 +634,17 @@ const getDetailsProfilePath = name => {
 };
 
 
+const mapOptionsKey = {
+  characterLimit: '可部署干员数量',
+  maxLifePoint: '最大生命',
+  initialCost: '初始部署费用',
+  maxCost: '最大部署费用',
+  costIncreaseTime: "部署费用回复/s",
+  moveMultiplier: '移速系数',
+  // isTrainingLevel: '训练？',
+  // functionDisableMask: 'mask？'
+}
+
 
 export {
   debounce,
@@ -664,7 +680,9 @@ export {
   charNameColor,
   getDevList,
   starColor,
-  isMoblie
+  isMoblie,
+  getMapData,
+  mapOptionsKey
 };
 
 

@@ -9,8 +9,8 @@
     </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
-        这是Beta版,可能会有Bug
-        <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>
+        这是Beta版,可能会有Bug, 敌人图鉴有更新
+        <el-link href="https://somedata.top/Arknights" type="success">稳定版链接</el-link>
       </div>
     </el-alert>
     <transition name="fade" mode="out-in">
@@ -19,19 +19,19 @@
   </div>
 </template>
 <script>
-import { getDevList } from './components/utils';
-import { Alert, link } from 'element-ui';
+import { getDevList } from "./components/utils";
+import { Alert, link } from "element-ui";
 // import HomeLayout from './components/homeLayout';
-import Vue from 'vue';
+import Vue from "vue";
 Vue.use(link);
 Vue.use(Alert);
 
-import loadingC from './components/Loading';
-import Mode from './stats';
+import loadingC from "./components/Loading";
+import Mode from "./stats";
 
 const HomeLayout = () => ({
   component: import(
-    /* webpackChunkName: "HomeLayout" */ './components/homeLayout'
+    /* webpackChunkName: "HomeLayout" */ "./components/homeLayout"
   ),
   loading: loadingC,
   error: loadingC,
@@ -41,14 +41,14 @@ const HomeLayout = () => ({
 
 export default {
   components: {
-    'home-layout': HomeLayout
+    "home-layout": HomeLayout
   },
   data() {
     return {
       short: false,
       data: [],
       load: false,
-      isBeta: Mode === '/ArknightsBeta'
+      isBeta: Mode === "/ArknightsBeta"
     };
   },
   mounted() {

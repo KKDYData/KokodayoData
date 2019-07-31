@@ -8,7 +8,7 @@ module.exports = merge(common, {
   mode: 'production',
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
-    new OptimizeCssAssetsPlugin({})
+    new OptimizeCssAssetsPlugin({}),
   ],
   optimization: {
     runtimeChunk: 'single',
