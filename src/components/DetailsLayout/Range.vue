@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { sort, fetchGet, path } from '../utils';
+import { sort, fetchGet, path } from '../../utils';
 
 export default {
   async mounted() {

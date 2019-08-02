@@ -85,21 +85,21 @@
 </template>
 
 <script>
-import { Tag, Image } from "element-ui";
-import Vue from "vue";
+import { Tag, Image } from 'element-ui';
+import Vue from 'vue';
 import {
   getClass_Chinese,
   getProfilePath,
   getClass_icon,
-  path,
-  charBorderColor,
-  charNameColor
-} from "../utils";
+  path
+} from '../../utils';
+
+import { charBorderColor, charNameColor } from '../../utils/string';
 
 Vue.use(Image);
 Vue.use(Tag);
 
-import Mode from "../../stats";
+import Mode from '../../stats';
 
 export default {
   props: {
@@ -114,13 +114,13 @@ export default {
     return {
       fillItems: [],
       moraleMode: false,
-      fillItemWidth: { width: "100px" },
+      fillItemWidth: { width: '100px' },
       rowPath: path
     };
   },
   watch: {
     showTags: function(v) {
-      console.log("show? " + v);
+      console.log('show? ' + v);
       this.calFillAmount();
     },
     short: function(v) {
@@ -129,14 +129,14 @@ export default {
   },
   computed: {
     path() {
-      return process.env.NODE_ENV === "development" ? "" : Mode;
+      return process.env.NODE_ENV === 'development' ? '' : Mode;
     }
   },
 
   mounted() {
     const self = this;
     this.calFillAmount();
-    window.addEventListener("resize", self.calFillAmount);
+    window.addEventListener('resize', self.calFillAmount);
   },
   methods: {
     bgColor(star) {
@@ -151,10 +151,10 @@ export default {
     async openDetails(item) {
       console.log(item.name);
       if (this.moraleMode) {
-        this.$emit("chose", item.name);
+        this.$emit('chose', item.name);
         return;
       }
-      this.$router.push(this.path + "/details/" + item.No);
+      this.$router.push(this.path + '/details/' + item.No);
     },
     calFillAmount() {
       //通过css控制填充的margin？
@@ -165,7 +165,7 @@ export default {
           ? cWidth + 69
           : cWidth + 70
         : cWidth;
-      this.fillItemWidth = { width: cWidth + "px" };
+      this.fillItemWidth = { width: cWidth + 'px' };
       let size = Math.floor(width / cWidth);
       const arr = [];
       for (let i = 0; i < size; i++) {

@@ -11,19 +11,21 @@
     "dev": "webpack --config config/webpack.dev.js --profile --json > stats.json"
   },
   "dependencies": {
+    "@babel/polyfill": "^7.4.4",
     "@babel/runtime": "^7.3.4",
     "@babel/runtime-corejs2": "^7.3.4",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0-beta.2",
     "@vue/babel-preset-jsx": "^1.0.0-beta.2",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.5",
-    "element-theme": "^2.0.1",
+    "core-js": "^3.1.4",
     "element-ui": "^2.10.1",
     "localforage": "^1.7.3",
     "ua-parser-js": "^0.7.20",
     "vlf": "^1.0.3",
     "vue": "^2.6.10",
     "vue-essentials": "^0.1.49",
+    "vue-meta": "^2.2.0",
     "vue-router": "^3.0.6",
     "vuedraggable": "^2.19.2",
     "workbox-precaching": "^4.3.1",
@@ -68,15 +70,11 @@
   "author": "odex_2100@outlook.com",
   "license": "ISC",
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/odex21/VueDemo.git"
+    "type": "git"
   },
   "keywords": [
     "just a Demo"
   ],
-  "bugs": {
-    "url": "https://github.com/odex21/VueDemo/issues"
-  },
-  "homepage": "https://github.com/odex21/VueDemo#readme",
+  "bugs": {},
   "description": ""
 }

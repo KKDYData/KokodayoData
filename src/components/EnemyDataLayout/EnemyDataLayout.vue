@@ -151,6 +151,7 @@
               :data="currentData"
               :short="short"
               :key-name="key"
+              :map-level="enemy.level"
               :appear-map="appearMap"
             >
               <div v-if="enemy.ability">
@@ -174,14 +175,14 @@
 </template>
 
 <script>
-import { Image, Popover, Drawer } from "element-ui";
-import Vue from "vue";
+import { Image, Popover } from 'element-ui';
+import Vue from 'vue';
 Vue.use(Image);
 Vue.use(Popover);
 
-import EnemyStatus from "./EnemyStatus";
+import EnemyStatus from './EnemyStatus';
 
-import { path, getEnemyData, isMoblie } from "../utils";
+import { path, getEnemyData, isMoblie } from '../../utils';
 
 export default {
   components: { EnemyStatus },
@@ -195,15 +196,15 @@ export default {
   },
   data() {
     return {
-      path: path + "enemy/pic/",
+      path: path + 'enemy/pic/',
       isHover:
-        process.env.NODE_ENV === "development" || this.short
-          ? "click"
-          : "hover",
-      showKey: "",
+        process.env.NODE_ENV === 'development' || this.short
+          ? 'click'
+          : 'hover',
+      showKey: '',
       currentData: [],
-      smallPicPath: path + "others/",
-      fillItemWidth: { width: "100px" },
+      smallPicPath: path + 'others/',
+      fillItemWidth: { width: '100px' },
       fillItems: [],
       shortWidth: 350
     };
@@ -213,7 +214,7 @@ export default {
   },
   mounted() {
     this.calFillAmount();
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
       this.calFillAmount();
     });
@@ -223,20 +224,20 @@ export default {
     async openDetails(key) {
       this.showKey = key;
       // setTimeout(async () => {}, 100);
-      if (key !== "enemy_1503_talula")
+      if (key !== 'enemy_1503_talula')
         this.currentData = await getEnemyData(key);
       // this.showDetails = true;
     },
     calFillAmount() {
       if (!this.data) return;
       const width = this.$el.clientWidth,
-        cWidth = this.$el.querySelector(".enemy-container").clientWidth;
-      this.fillItemWidth = { width: cWidth + "px" };
+        cWidth = this.$el.querySelector('.enemy-container').clientWidth;
+      this.fillItemWidth = { width: cWidth + 'px' };
       let size = Math.floor(width / cWidth);
       // size = size - (Object.keys(this.data).length % size);
       const arr = [];
       if (size > 10) {
-        throw new Error("Some thing wrong!");
+        throw new Error('Some thing wrong!');
       }
       for (let i = 0; i < size; i++) {
         arr.push(i);

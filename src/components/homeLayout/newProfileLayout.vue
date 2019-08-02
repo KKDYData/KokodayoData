@@ -95,15 +95,17 @@ import {
   sort,
   getClass_Chinese,
   getProfilePath,
-  getClass_icon,
-  starColor
-} from "../utils";
-import { Card, Tag } from "element-ui";
-import Vue from "vue";
+  getClass_icon
+} from '../../utils';
+
+import { starColor } from '../../utils/string';
+
+import { Card, Tag } from 'element-ui';
+import Vue from 'vue';
 Vue.use(Card);
 Vue.use(Tag);
 
-import Mode from "../../stats";
+import Mode from '../../stats';
 
 export default {
   props: {
@@ -117,14 +119,14 @@ export default {
 
   computed: {
     path() {
-      return process.env.NODE_ENV === "development" ? "" : Mode;
+      return process.env.NODE_ENV === 'development' ? '' : Mode;
     },
     sortData() {
       if (!this.data || this.tags.length === 0) return;
       let res = new Map();
       const resData = this.data.filter(el => el.gkzm);
       const filterGroups = Object.keys(this.filterGroups)
-        .filter(el => el !== "gkzm")
+        .filter(el => el !== 'gkzm')
         .map(key => ({
           key: key,
           filters: this.filterGroups[key].filter(el => el.chosed)
@@ -156,7 +158,7 @@ export default {
         let i = resArr.length;
         while (i-- > 0) {
           const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join(
-            ","
+            ','
           );
           if (!res.get(key)) {
             res.set(key, { agents: [agent], keys: resArr[i] });
@@ -188,7 +190,7 @@ export default {
       const targetColor = starColor[star];
 
       return {
-        "background-color": `hsla(${targetColor[0]},${targetColor[1]}%, ${
+        'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${
           targetColor[2]
         }%, 1)`
       };

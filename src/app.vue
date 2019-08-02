@@ -24,7 +24,7 @@
         @add="added"
       >-->
       <div class="chars-container">
-        <div v-for="(skill, i) in skills" :key="skill.name" class="skill-container">
+        <div v-for="(skill) in skills" :key="skill.name" class="skill-container">
           <p>{{ skill.name }}</p>
           <div
             :id="skill.name"
@@ -74,7 +74,7 @@ import { Canvas } from './components/dataInput/move';
 chars.forEach(element => {
   element.skills = [];
 });
-import { postPicFetch } from './components/utils';
+import { postPicFetch } from './utils';
 
 export default {
   components: { draggable },

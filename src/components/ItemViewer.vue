@@ -11,7 +11,7 @@
       <div slot="reference">
         <div style>
           <el-image
-            class="evolvcost-item-contianer"
+            :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
             :style="itemBackground"
             fit="contain"
             :src="itemPic"
@@ -33,7 +33,7 @@
       </div>
 
       <p>{{item.usage}}</p>
-      <div class="item-popover">
+      <div v-if="type !== 'FURN'" class="item-popover">
         <div v-if="item.stageDropList.length > 0">
           <el-divider content-position="left">
             <span>关卡掉落</span>
@@ -63,15 +63,18 @@
 
 
 <script>
-import { itemBackground, path, occPer_chinese, roomType } from "./utils";
-import { Popover, Divider, Image } from "element-ui";
-import Vue from "vue";
+import { path } from '../utils';
+
+import { itemBackground, occPer_chinese, roomType } from '../utils/string';
+
+import { Popover, Divider, Image } from 'element-ui';
+import Vue from 'vue';
 Vue.use(Popover);
 Vue.use(Divider);
 Vue.use(Image);
 
 const stageList = () =>
-  import(/* webpackChunkName: "stageList" */ "./stageList.json");
+  import(/* webpackChunkName: "stageList" */ './stageList.json');
 
 export default {
   props: {
@@ -79,7 +82,8 @@ export default {
       required: true
     },
     num: Number,
-    short: Boolean
+    short: Boolean,
+    type: String
   },
   mounted() {
     stageList().then(res => (this.stageList = res));
@@ -89,15 +93,20 @@ export default {
       stageList: [],
       isShort: this.short,
       isHover:
-        process.env.NODE_ENV === "development" || this.short ? "click" : "hover"
+        process.env.NODE_ENV === 'development' || this.short ? 'click' : 'hover'
     };
   },
   computed: {
     itemBackground() {
-      return itemBackground[this.item.rarity];
+      return this.type !== 'FURN' ? itemBackground[this.item.rarity] : {};
     },
     itemPic() {
-      return path + "item/pic/" + this.item.iconId + "_optimized.png";
+      return (
+        path +
+        (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') +
+        this.item.iconId +
+        '_optimized.png'
+      );
     }
   },
   methods: {
@@ -114,77 +123,100 @@ export default {
 };
 </script>
 
-<style>
-.evolvcost-item-contianer {
-  /* margin: 5px 10px; */
-  width: 70px;
-  height: 70px;
-  display: block;
-  box-sizing: border-box;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 2px black;
-  background: grey;
-  border: 2px solid rgb(249, 198, 19);
-  overflow: visible;
-  margin: 0 auto;
-}
+ <style lang="stylus" scoped>
+ .evolvcost-item-contianer {
+   /* margin: 5px 10px; */
+   width: 70px;
+   height: 70px;
+   display: block;
+   box-sizing: border-box;
+   border-radius: 50%;
+   box-shadow: inset 0 0 0 2px black;
+   background: grey;
+   border: 2px solid rgb(249, 198, 19);
+   overflow: visible;
+   margin: 0 auto;
+ }
 
-.evolvcost-item-contianer img {
-  width: 128%;
-  height: 128%;
-  margin-top: -14%;
-  margin-left: -14%;
-}
+ .evolvcost-item-contianer img {
+   width: 128%;
+   height: 128%;
+   margin-top: -14%;
+   margin-left: -14%;
+ }
 
-.item-occper {
-  background-color: rgb(128, 128, 128);
-  color: white;
-  padding: 0 6px;
-  border-radius: 3px;
-}
+ .item-occper {
+   background-color: rgb(128, 128, 128);
+   color: white;
+   padding: 0 6px;
+   border-radius: 3px;
+ }
 
-.item-stage-name {
-  width: 50px;
-  display: inline-block;
-}
-.item-viewer-container {
-  text-align: center;
-}
+ .item-stage-name {
+   width: 50px;
+   display: inline-block;
+ }
 
-.item-stage-container {
-  padding-left: 40px;
-}
-.item-popover .is-left {
-  left: 20px;
-  padding: 0;
-}
-.weekly {
-  width: auto;
-}
+ .item-viewer-container {
+   text-align: center;
+ }
 
-@media screen and (max-width: 700px) {
-  .evolvcost-item-contianer {
-    /* padding: 5px 10px; */
-    width: calc(40px + 1vw);
-    height: calc(40px + 1vw);
-  }
+ .item-stage-container {
+   padding-left: 40px;
+ }
 
-  .evolvcost-name-wrapper {
-    font-size: 14px;
-  }
-  .item-stage-container {
-    padding-left: 30px;
-  }
+ .item-popover .is-left {
+   left: 20px;
+   padding: 0;
+ }
 
-  .item-popover {
-    max-height: 150px;
-    overflow-y: scroll;
-  }
-  .item-popover .is-left {
-    padding: 10px;
-  }
-  .item-popover .el-divider--horizontal {
-    width: calc(100% - 10px);
-  }
-}
+ .weekly {
+   width: auto;
+ }
+
+ .furn-item {
+   width: 70px;
+   display: block;
+   box-sizing: border-box;
+   border-radius: 3px;
+   box-shadow: inset 0px 6px 13px 0px #4a4a4a;
+   background: #808080;
+   overflow: visible;
+   margin: 0 auto;
+   padding: 9px 0;
+
+   & >>> img {
+     width: calc(100% - 1px);
+     box-shadow: 1px 1px 0px 1px #6b6b6b63, 1px -1px 0px 0px #fff;
+   }
+ }
+
+ @media screen and (max-width: 700px) {
+   .evolvcost-item-contianer {
+     /* padding: 5px 10px; */
+     width: calc(40px + 1vw);
+     height: calc(40px + 1vw);
+   }
+
+   .evolvcost-name-wrapper {
+     font-size: 14px;
+   }
+
+   .item-stage-container {
+     padding-left: 30px;
+   }
+
+   .item-popover {
+     max-height: 150px;
+     overflow-y: scroll;
+   }
+
+   .item-popover .is-left {
+     padding: 10px;
+   }
+
+   .item-popover .el-divider--horizontal {
+     width: calc(100% - 10px);
+   }
+ }
 </style>

@@ -3,7 +3,7 @@
     <div class="basePanel">
       <class-count name="战士" :num="warriorNum" total="31"></class-count>
       <class-count name="魔导士" :num="mageNum" total="27"></class-count>
-      <class-count name="骑士" :num="knightNum" total="21"/>
+      <class-count name="骑士" :num="knightNum" total="21" />
       <class-count name="盗贼" :num="thiefNum" total="22"></class-count>
       <class-count name="射手" :num="rangerNum" total="14"></class-count>
       <class-count name="精灵使" :num="soulWeaverNum" total="19"></class-count>
@@ -104,7 +104,7 @@
 </template>
 
 <script>
-import { postData } from './utils';
+import { postData } from '../../utils';
 import Vue from 'vue';
 import {
   // Row,
@@ -197,8 +197,6 @@ export default {
       this.$refs.nameInput.blur();
       // if (this.submiting) return;
       // this.submiting = true;
-      const h = this.$createElement,
-        self = this;
       MessageBox.confirm(`${data.base.name_en}`, '确认英文名', {
         // message: h("p", { style: "color: #67C23A" }, data.base.name_en),
         // showCancelButton: true,

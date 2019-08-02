@@ -51,14 +51,14 @@
 </template>
 
 <script>
-import { path, fetchGet, itemBackground } from "../utils";
-import ItemViewer from "../ItemViewer";
-import SkillContainer from "./SkillContainer";
+import { path, fetchGet, itemBackground } from '../../utils';
+import ItemViewer from '../ItemViewer';
+import SkillContainer from './SkillContainer';
 
 export default {
   components: {
-    "item-viewer": ItemViewer,
-    "skill-container": SkillContainer
+    'item-viewer': ItemViewer,
+    'skill-container': SkillContainer
   },
   props: {
     skills: {
@@ -102,12 +102,12 @@ export default {
       if (num > this.unlockCond[index].data.length - 1)
         num = this.unlockCond[index].data.length - 1;
       if (num < 0) num = 0;
-      let p = num < 6 ? "lvlUpCost" : "levelUpCost";
+      let p = num < 6 ? 'lvlUpCost' : 'levelUpCost';
       // this.$set(this.picList[index], 'load', false);
 
       Promise.all(
         this.unlockCond[index].data[num][p].map(async p => {
-          const item = await fetchGet(path + "item/data/" + p.id + ".json");
+          const item = await fetchGet(path + 'item/data/' + p.id + '.json');
           const res = {
             item: item,
             count: p.count
@@ -115,7 +115,7 @@ export default {
           return res;
         })
       ).then(arr => {
-        if (p === "lvlUpCost") {
+        if (p === 'lvlUpCost') {
           this.picList = [arr, arr, arr];
           this.sLevel = [num, num, num];
         } else {
