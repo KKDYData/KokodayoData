@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { changeDesc } from '../utils';
+import { changeDesc } from '../../utils';
 
 export default {
   props: {

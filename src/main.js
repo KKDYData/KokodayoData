@@ -1,4 +1,4 @@
-import { Browser } from './components/utils';
+import { Browser } from './utils';
 if (Browser().name === 'IE') {
   document.body.querySelector('#app').innerHTML = '不支持IE，请使用现代浏览器。';
 }
@@ -7,12 +7,12 @@ import './style.css';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
-import VueMeta from 'vue-meta'
+import VueMeta from 'vue-meta';
 import NavMenu from './NavMenu';
 import Mode from './stats';
 
 Vue.use(VueRouter);
-Vue.use(VueMeta)
+Vue.use(VueMeta);
 
 Vue.config.productionTip = false;
 
@@ -60,5 +60,5 @@ new Vue({
 
 
 !isDev && import(/* webpackChunkName: "loadSw" */'./loadSw').then(res => {
-  res.default()
-})
+  res.default();
+});

@@ -166,17 +166,15 @@
 </template>
 
 <script>
+import { getHeroData, path, fetchGet, changeDesc, isMoblie } from '../../utils';
+
 import {
-  getHeroData,
-  path,
-  fetchGet,
   evolveGoldCost,
-  changeDesc,
   potentialToStatus,
   itemBackground,
-  GOLD,
-  isMoblie
-} from "../utils";
+  GOLD
+} from '../../utils/string';
+
 import {
   Card,
   Collapse,
@@ -188,20 +186,20 @@ import {
   Popover,
   Tag,
   Alert
-} from "element-ui";
+} from 'element-ui';
 
-import AgentCard from "./AgentCard";
-import Range from "./Range";
-import TalentsPanel from "./TalentsPanel";
-import SkillPanel from "./SkillPanel";
-import SkillUpCost from "./SkillUpCost";
-import BuildingData from "./BuildingData";
-import InfoPanel from "./InfoPanel";
-import ItemViewer from "../ItemViewer";
+import AgentCard from './AgentCard';
+import Range from './Range';
+import TalentsPanel from './TalentsPanel';
+import SkillPanel from './SkillPanel';
+import SkillUpCost from './SkillUpCost';
+import BuildingData from './BuildingData';
+import InfoPanel from './InfoPanel';
+import ItemViewer from '../ItemViewer';
 
-import Loading from "../Loading";
+import Loading from '../Loading';
 
-import Vue from "vue";
+import Vue from 'vue';
 Vue.use(Card);
 Vue.use(Collapse);
 Vue.use(CollapseItem);
@@ -216,11 +214,11 @@ Vue.use(Alert);
 export default {
   created() {
     this.name = this.$route.params.name;
-    console.log("getting data...");
+    console.log('getting data...');
     getHeroData(this.name)
       .catch(err => {
         console.log(err);
-        return Promise.reject("no charactor");
+        return Promise.reject('no charactor');
       })
       .then(data => {
         this.data = data;
@@ -241,19 +239,19 @@ export default {
   },
   beforeMount() {
     this.short = isMoblie();
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       this.short = window.innerWidth < 500 ? true : false;
     });
   },
   components: {
     range: Range,
-    "talents-panel": TalentsPanel,
-    "skill-panel": SkillPanel,
-    "skill-up-panel": SkillUpCost,
-    "building-data": BuildingData,
-    "info-panel": InfoPanel,
-    "item-viewer": ItemViewer,
-    "data-loading": Loading,
+    'talents-panel': TalentsPanel,
+    'skill-panel': SkillPanel,
+    'skill-up-panel': SkillUpCost,
+    'building-data': BuildingData,
+    'info-panel': InfoPanel,
+    'item-viewer': ItemViewer,
+    'data-loading': Loading,
     AgentCard
   },
   data() {
@@ -262,7 +260,7 @@ export default {
       data: null,
       puLoad: false,
       picUrls: {},
-      name: "",
+      name: '',
       dataLoad: false,
       short: false,
       isLvMax: true,
@@ -280,7 +278,7 @@ export default {
   computed: {
     setList() {
       if (!this.data) return [];
-      if (this.name === "char_002_amiya") return [1, "1%2B", 2];
+      if (this.name === 'char_002_amiya') return [1, '1%2B', 2];
       return this.data.rarity > 2 ? [1, 2] : [1];
     },
     evoCostArr() {
@@ -344,7 +342,7 @@ export default {
             el.forEach(el => {
               if (el.type === key) {
                 // console.log(el.type);
-                if (key === "baseAttackTime") {
+                if (key === 'baseAttackTime') {
                   addV += el.value;
                   nV = Math.floor((nV / (el.value / 100 + 1)) * 100) / 100;
                 } else {
@@ -355,15 +353,15 @@ export default {
             });
           });
 
-          const upOrMinus = addV > 0 ? "+" : "";
+          const upOrMinus = addV > 0 ? '+' : '';
           if (addV)
             nV =
               nV +
               '<i style="color: #F49800;font-style: normal;">(' +
               upOrMinus +
-              "" +
+              '' +
               addV +
-              ")</i>";
+              ')</i>';
           // if (key === 'baseAttackTime' || key === 'respawnTime')
           //   nV = value + ' s';
           newData[key] = nV;
@@ -396,7 +394,7 @@ export default {
         data.forEach(el => {
           if (i++ > rank || !el.buff) return;
           if (!el.buff || !el.buff.attributes.attributeModifiers)
-            throw new Error("你是假数据！" + JSON.stringify(el.buff));
+            throw new Error('你是假数据！' + JSON.stringify(el.buff));
           const temp = [];
           el.buff.attributes.attributeModifiers.forEach(el => {
             if (!el.attributeType) return;
@@ -436,14 +434,14 @@ export default {
     },
     statusToCh(key) {
       const t = {
-        maxHp: "生命上限",
-        respawnTime: "再部署",
-        atk: "攻击",
-        cost: "部署费用",
-        def: "防御",
-        blockCnt: "阻挡数",
-        magicResistance: "法术抵抗",
-        baseAttackTime: "攻击间隔"
+        maxHp: '生命上限',
+        respawnTime: '再部署',
+        atk: '攻击',
+        cost: '部署费用',
+        def: '防御',
+        blockCnt: '阻挡数',
+        magicResistance: '法术抵抗',
+        baseAttackTime: '攻击间隔'
       };
       return t[key];
     },
@@ -453,7 +451,7 @@ export default {
       const data = [...this.data.skills];
       Promise.all(
         data.map(skill => {
-          return fetchGet(path + "skills/data/" + skill.skillId + ".json");
+          return fetchGet(path + 'skills/data/' + skill.skillId + '.json');
         })
       ).then(arr => {
         this.skills = arr;
@@ -464,14 +462,14 @@ export default {
       const data = [...this.data.phases];
       Promise.all(
         data.map(p => {
-          return fetchGet(path + "range/" + p.rangeId + ".json");
+          return fetchGet(path + 'range/' + p.rangeId + '.json');
         })
       ).then(arr => {
         this.rangeData = arr;
       });
     },
     itemPic(id) {
-      return path + "item/pic/" + id + ".png";
+      return path + 'item/pic/' + id + '.png';
     },
     getEvolveCost() {
       if (!this.data) return;
@@ -479,7 +477,7 @@ export default {
       for (let i = 0; i < data.length - 1; i++) {
         Promise.all(
           data[i + 1].evolveCost.map(async p => {
-            const item = await fetchGet(path + "item/data/" + p.id + ".json");
+            const item = await fetchGet(path + 'item/data/' + p.id + '.json');
             return { cost: p.count, item: item };
           })
         ).then(arr => {
@@ -492,12 +490,12 @@ export default {
       }
     },
     getInfo() {
-      fetchGet(path + "char/info/" + this.name + ".json").then(data => {
+      fetchGet(path + 'char/info/' + this.name + '.json').then(data => {
         this.info = data;
       });
     },
     getWords() {
-      fetchGet(path + "char/words/" + this.name + ".json").then(data => {
+      fetchGet(path + 'char/words/' + this.name + '.json').then(data => {
         this.words = data;
       });
     },
