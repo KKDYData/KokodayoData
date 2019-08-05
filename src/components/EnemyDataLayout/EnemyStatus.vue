@@ -1,16 +1,12 @@
 <template>
   <div>
-    <div v-if="short">
+    <div>
       <slot></slot>
       <div v-if="talents.length > 0" :style="short ? 'margin: 30px 0' : 'margin-bottom: 20px'">
         <div>
           <b>能力·Blackboard</b>
         </div>
-        <div
-          v-for="(t) in filterTalents"
-          :key="t.key"
-          :style="short? 'margin-bottom: 10px' : 'margin-bottom: 20px'"
-        >
+        <div v-for="(t) in filterTalents" :key="t.key" style="margin-bottom: 0px">
           <div class="status-details-title enemy-status-talent">
             <span>{{t.key}}</span>
           </div>
@@ -18,8 +14,8 @@
         </div>
       </div>
     </div>
-    <div v-if="mapLevel < 0" style="display: flex; align-items: center; margin: 10px 0">
-      <div class :style="short ? 'width: auto': ''">
+    <div style="display: flex; align-items: center; margin: 10px 0">
+      <div v-if="mapLevel < 0" class :style="short ? 'width: auto': ''">
         <div style="margin-bottom: 15px">
           <span class="status-phases-text">Level</span>
           <el-button
@@ -78,10 +74,6 @@
           </template>
         </div>
       </div>
-      <!-- {{filterKeys}} -->
-      <div v-if="!short" style="width: 50%">
-        <slot></slot>
-      </div>
     </div>
 
     <div class="enemy-status-wrapper" style="padding-bottom: 20px">
@@ -92,11 +84,18 @@
 
       <div class="status-details-talents-wrapper">
         <div class="status-details-wrapper">
-          <div class="status-details-container" v-for="data in filterKeys" :key="data[0]">
-            <div class="status-details-title">
+          <content-slot
+            class="status-details-container"
+            :no-wrap="true"
+            :long="true"
+            v-for="data in filterKeys"
+            :key="data[0]"
+            :width="100"
+          >
+            <template slot="title">
               <span>{{data[0]}}</span>
-            </div>
-            <div class="status-details-value">
+            </template>
+            <template slot="content">
               <transition name="fade">
                 <span>{{data[1]}}</span>
               </transition>
@@ -112,26 +111,12 @@
                   <i class="el-icon-info" style="margin-right:0"></i>
                 </el-tooltip>
               </span>
-            </div>
-          </div>
+            </template>
+          </content-slot>
         </div>
       </div>
 
-      <div :style="short ? '' :'width: 50%'">
-        <div
-          v-if="talents.length > 0 && !short"
-          :style="short ? 'margin: 10px 0' : 'margin-bottom: 20px'"
-        >
-          <div>
-            <b>能力·Blackboard</b>
-          </div>
-          <div v-for="(t) in filterTalents" :key="t.key">
-            <div class="status-details-title enemy-status-talent">
-              <span>{{t.key}}</span>
-            </div>
-            <span>{{t.value}}</span>
-          </div>
-        </div>
+      <div>
         <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
           <div>
             <b>Extra·技能</b>
@@ -158,7 +143,7 @@
                 </div>
               </div>
               <div>
-                <div style="margin: 10px 0">
+                <div style="margin: 20px 0 10px">
                   <span>
                     <b style="opacity: 0.5">效果</b>
                   </span>
@@ -192,27 +177,15 @@ import Vue from 'vue';
 Vue.use(Button);
 Vue.use(Tooltip);
 
-const statusToCh = key => {
-  const t = {
-    maxHp: '生命上限',
-    atk: '攻击',
-    def: '防御',
-    moveSpeed: '移动速度',
-    magicResistance: '法术抵抗',
-    baseAttackTime: '攻击间隔',
-    hpRecoveryPerSec: '生命回复/秒',
-    // spRecoveryPerSec: '每秒Sp回复'
-    // maxDeployCount: '最大部署数',
-    massLevel: '重量'
-    // stunImmune: '免疫打断',
-    // silenceImmune: '免疫沉默'
-    // massLevel: '重量等级',
-    // baseForeLevel: '力量等级'
-  };
-  return t[key];
-};
+import ContentSlot from '../ContentSlot';
+
+import { changeKey } from '../../utils';
+import { statusToCh } from '../../utils/string';
 
 export default {
+  components: {
+    ContentSlot
+  },
   props: {
     data: {
       type: Array,
@@ -228,8 +201,15 @@ export default {
       default: false
     },
     mapLevel: {
-      tyep: Number,
+      type: Number,
       default: -1
+    },
+    mapData: {
+      type: Object
+    },
+    runesMode: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -324,27 +304,22 @@ export default {
   computed: {
     filterKeys() {
       const res = {};
-      if (this.mapLevel > -1) return this.status[this.mapLevel];
+      if (this.mapLevel > -1 && !this.runesMode) {
+        return this.status[this.mapLevel];
+      }
       if (
-        this.currentMap === '' ||
-        !this.appearMap[this.keyName] ||
-        !this.appearMap[this.keyName][this.level]
-      )
+        !this.runesMode &&
+        (this.currentMap === '' ||
+          !this.appearMap[this.keyName] ||
+          !this.appearMap[this.keyName][this.level])
+      ) {
         return this.status[this.level];
-      const target = this.appearMap[this.keyName][this.level].find(el =>
-        new RegExp(el.key).test(this.currentMap)
-      );
-      const changeKey = key => {
-        const test = /_/.exec(key);
-        if (test) {
-          const temp = key.split('');
-          temp.splice(test.index, 1);
-          temp[test.index] = temp[test.index].toUpperCase();
-          return temp.join('');
-        } else {
-          return key;
-        }
-      };
+      }
+      const target = this.runesMode
+        ? this.mapData
+        : this.appearMap[this.keyName][this.level].find(el =>
+          new RegExp(el.key).test(this.currentMap)
+        );
 
       target.runes.forEach(data => {
         if (data.blackboard[0].key === 'enemy') {
@@ -364,9 +339,7 @@ export default {
         } else {
           data.blackboard.forEach(el => {
             const key = changeKey(el.key);
-            console.log('key ' + key + ' ' + res[key] + '  ' + el.value);
             res[key] = res[key] ? res[key] * el.value : el.value;
-            console.log(res[key]);
           });
         }
       });
@@ -450,7 +423,7 @@ export default {
 
 <style scoped>
 .enemy-status-wrapper {
-  display: flex;
+  /* display: flex; */
   position: relative;
   /* border: 1px solid black; */
 }
@@ -464,8 +437,7 @@ export default {
   /* border-right: 1px solid rgba(158, 158, 158, 0.4); */
 }
 .status-details-talents-wrapper {
-  display: flex;
-  width: 50%;
+  margin-bottom: 20px;
 }
 
 .status-details-container {
@@ -533,8 +505,10 @@ export default {
 .status-phases-text {
   margin-right: 10px;
 }
-/* .enemy-skill-container {
-} */
+.enemy-skill-container {
+  flex-grow: 0.5;
+  flex-shrink: 0.5;
+}
 
 .enemy-skill-container + .enemy-skill-container {
   border-left: 1px solid rgba(158, 158, 158, 0.4);
@@ -573,6 +547,12 @@ export default {
 
   .status-details-talents-wrapper {
     width: 100%;
+  }
+}
+
+@media screen and (max-width: 360px) {
+  .enemy-status-tip {
+    margin-left: 10px;
   }
 }
 </style>

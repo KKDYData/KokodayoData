@@ -8,6 +8,7 @@
       text-color="#fff"
       active-text-color="#ffd04b"
       router
+      ref="nav-menu"
     >
       <el-menu-item :index="routes.home.path">{{routes.home.text}}</el-menu-item>
       <template v-if="!short">
@@ -27,7 +28,6 @@
 
 <script>
 import { Menu, MenuItem, Submenu } from 'element-ui';
-import devMode from './stats';
 import Vue from 'vue';
 Vue.use(Menu);
 Vue.use(MenuItem);
@@ -72,13 +72,23 @@ export default {
   },
   watch: {
     '$route.path': function(val, oldVal) {
-      const index =
-        process.env.NODE_ENV === 'development' ? 1 : devMode.length + 1;
-      // console.log(val + ' ' + index);
-      this.moreText =
-        this.$route.path.length > index && !/\/details/.test(val)
-          ? this.routes[val.slice(index)].text
-          : '更多';
+      //修复移动端菜单不回收的bug
+      setTimeout(() => {
+        console.log('hello');
+        this.$refs['nav-menu'].close('2');
+      }, 100);
+
+      const arr = Object.keys(this.routes);
+      let i = 0;
+      while (i < arr.length) {
+        const temp = arr[i];
+        if (new RegExp(temp).test(this.$route.path)) {
+          this.moreText = this.routes[arr[i]].text;
+          return;
+        }
+        i++;
+      }
+      this.moreText = '更多';
     }
   },
   methods: {},

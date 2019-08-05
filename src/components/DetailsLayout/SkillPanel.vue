@@ -157,7 +157,6 @@ export default {
         if (temp) {
           res = temp.value;
           if (minus) res *= -1;
-          console.log(res);
           if (percent) res = Math.floor(res * 10 * 10);
         }
         return res + percent;
@@ -171,7 +170,6 @@ export default {
           .slice(skill_time_text.index + 4)
           .match(/(<.*?>)(.*?)(<\/.*?>)/);
         let value = skill_base_time.value;
-        console.log(value);
         const unit = text[2] !== '极大幅度缩短' ? 's' : '%';
         if (unit === '%') value *= 100;
         const temp = res.split('');

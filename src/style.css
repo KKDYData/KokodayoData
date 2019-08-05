@@ -124,4 +124,13 @@ body {
   .alert-update-msg {
     width: 100%;
   }
+  /* drawer 在移动端 */
+  .el-dialog__wrapper .mobile-drawer-scroll {
+    overflow-y: scroll;
+    margin-right: 0px;
+    padding-right: 0px;
+  }
+  .enemy-drawer {
+    min-height: 80vh;
+  }
 }

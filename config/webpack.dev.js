@@ -9,15 +9,6 @@ module.exports = merge(common, {
 
 
   ],
-  // module: {
-  //   rules: [
-  //     {
-  //       test: /\.styl|stylus|css$/,
-  //       use: [
-  //         'css-loader', 'stylus-loader'],
-  //     },
-  //   ]
-  // },
   devtool: 'inline-source-map',
   devServer: {
     contentBase: './dist',
@@ -39,7 +30,24 @@ module.exports = merge(common, {
         //详情页面
         {
           from: /^\/details\/(?!char).*$/, to: context => {
+            console.log(context.parsedUrl.path.slice(9));
             return '/' + context.parsedUrl.path.slice(9);
+          }
+        },
+        {
+          from: /^\/enemydata\/(?!main_|hard|camp).*$/, to: context => {
+            console.log(context.parsedUrl.path);
+
+            console.log(context.parsedUrl.path.slice(11) + ' ttt');
+            // return context.parsedUrl.path;
+            return '/' + context.parsedUrl.path.slice(11);
+          }
+        },
+        {
+          from: /^\/enemydata\/(main|hard|camp)?/, to: context => {
+            console.log(context.parsedUrl.path);
+            console.log(context.parsedUrl.path.slice(11) + ' eee');
+            return '/index.html';
           }
         },
         {
@@ -49,12 +57,14 @@ module.exports = merge(common, {
         },
         {
           from: /^\/(computer|enemydata)$/, to: context => {
+            console.log(context.parsedUrl.path);
             return '/index.html';
           }
         },
 
         {
           from: /^\/.*$/, to: context => {
+            console.log(context.parsedUrl.path + '???????');
             return '/' + context.parsedUrl.path;
           }
         },

@@ -9,11 +9,18 @@
             </div>
           </el-image>
           <div class="info-char-set-wrapper">
-            <el-popover placement="top-start" :width="short ? '330': '1000'" trigger="click">
+            <el-popover
+              :visible-arrow="false"
+              placement="top-start"
+              :width="short ? '330': '1000'"
+              trigger="click"
+            >
               <el-carousel
                 :autoplay="false"
                 :height="short ? '380px': '1050px'"
                 class="char-set-container-wrapper"
+                indicator-position="outside"
+                :loop="false"
               >
                 <el-carousel-item
                   v-for="(pic, index) in charSets"

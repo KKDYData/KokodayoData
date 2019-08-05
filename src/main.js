@@ -31,7 +31,8 @@ const routes = [
   { path: path, component: Home },
   { path: path + 'computer', component: Computer },
   { path: path + 'details/:name', component: Details },
-  { path: path + 'enemydata', component: EnemyData }
+  { path: path + 'enemydata', component: EnemyData },
+  { path: path + 'enemydata/:map', component: EnemyData }
 ];
 const router = new VueRouter({
   mode: 'history',

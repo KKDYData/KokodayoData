@@ -1,57 +1,88 @@
 <template>
-  <div class="home-wrapper">
+  <div class="home-wrapper" v-loading.fullscreen.lock="load">
     <el-drawer
       ref="chapter-selecter"
       title="章节选择"
       :visible.sync="drawer"
-      :size="short ? '70%' : '30%'"
+      :size="short ? '70%' : '25%'"
       direction="ltr"
       :props="selMapNode"
+      :show-close="false"
     >
+      <template slot="title">
+        <span>章节选择</span>
+        <el-button v-if="selMapData" type="danger" size="small" @click="clearMap">取消选择</el-button>
+      </template>
       <div class="chapter-wrapper">
         <el-tree
+          ref="chapter-tree"
           @node-click="choseMap"
           :data="stageList"
           accordion
+          node-key="path"
           :highlight-current="true"
           :auto-expand-parent="true"
+          :render-after-expand="false"
         ></el-tree>
       </div>
     </el-drawer>
     <el-alert show-icon type="warning" description>
       <div slot="title">注意</div>
-      <p>敌人的突袭数据由这里的数据和地图加成计算得出</p>
+      <p>即将更新敌人路线、所有敌人的出现地图、其它地图数据...</p>
     </el-alert>
     <div class="map-wrapper">
-      <div class="map-title-part">
+      <div ref="map-title-part" class="map-title-part">
         <div>
           <el-button @click="drawer = true" type="primary">
             {{selectedMap !== '' ? selectedMap : '选择地图'}}
             <i class="el-icon-edit-outline"></i>
           </el-button>
+
+          <el-button
+            @click="loadRunes"
+            v-if="selMapDataEx && selMapDataEx.stageType === 'MAIN'"
+            :type="!runesMode ? '': 'warning'"
+            :plain="!runesMode"
+            class="runes-mode-button"
+          >突袭</el-button>
         </div>
-        <p v-if="selMapDataEx" v-html="mapDesc"></p>
+        <p ref="map-desc" v-if="selMapDataEx" :key="runesMode" v-html="mapDesc"></p>
       </div>
       <div class="map-data-wrapper">
         <div class="map-data-container">
-          <div class="map-left-panel">
-            <el-image class="map-pic-contianer" fit="fill" :src="mapPath"></el-image>
+          <div :style="!mapCode ? {width: 'auto'} : {}" class="map-left-panel">
+            <div
+              v-if="mapCode"
+              v-loading="mapPicLoad"
+              element-loading-background="rgba(0, 0, 0, 0.5)"
+            >
+              <el-image
+                @load="mapPicLoad = false"
+                class="map-pic-contianer"
+                fit="fill"
+                :src="mapPath"
+              ></el-image>
+            </div>
             <div class="left-layout">
               <my-title style="margin: 20px 0 0;" :title="selectedMap === '' ? '所有敌人' : '出现敌人'"></my-title>
               <enemy-data-layout
                 ref="layout"
                 :short="short"
-                v-if="load"
+                v-if="data"
                 :data="data"
                 :appear-map="appearMap"
+                :map-data="selMapData"
+                :runes-mode="runesMode"
               ></enemy-data-layout>
             </div>
           </div>
           <div v-if="mapCode" class="map-option-container-wrapper">
+            <my-title title="地图信息"></my-title>
             <div class="map-option-container">
               <content-slot
                 class="map-option-content"
                 :long="true"
+                :no-wrap="true"
                 :width="126"
                 v-for="([k,v]) in options"
                 :key="k"
@@ -62,20 +93,27 @@
             </div>
 
             <div class="map-drop-container-wrapper">
-              <drop-list v-if="firstDrop.length > 0" :list="firstDrop" :short="short" title="首次掉落"></drop-list>
-              <drop-list
-                v-if="commonDrop.length > 0"
-                :list="commonDrop"
-                :short="short"
-                title="常规掉落"
-              ></drop-list>
+              <div class="map-drop-list-wrapper">
+                <drop-list
+                  v-if="firstDrop.length > 0"
+                  :list="firstDrop"
+                  :short="short"
+                  title="首次掉落"
+                ></drop-list>
+                <drop-list
+                  v-if="commonDrop.length > 0"
+                  :list="commonDrop"
+                  :short="short"
+                  title="常规掉落"
+                ></drop-list>
 
-              <drop-list
-                v-if="rarityDrop.length > 0"
-                :list="rarityDrop"
-                :short="short"
-                title="稀有掉落"
-              ></drop-list>
+                <drop-list
+                  v-if="rarityDrop.length > 0"
+                  :list="rarityDrop"
+                  :short="short"
+                  title="稀有掉落"
+                ></drop-list>
+              </div>
               <drop-list
                 v-if="almostDrop.length > 0"
                 :list="almostDrop"
@@ -93,19 +131,17 @@
 import loadingC from './components/Loading';
 import MyTitle from './components/MyTitle';
 import ContentSlot from './components/ContentSlot';
-// import ItemViewer from './components/ItemViewer';
-import DropList from './DropLIst';
+import DropList from './components/DropLIst';
 
-import { Alert, Tree, Drawer, Button, Image } from 'element-ui';
+import { Alert, Tree, Drawer, Button, Image, Loading } from 'element-ui';
 
 import Vue from 'vue';
+Vue.use(Loading);
 Vue.use(Alert);
 Vue.use(Button);
 Vue.use(Tree);
 Vue.use(Drawer);
 Vue.use(Image);
-
-import mapPic from '../assets/wk_fly_1.png';
 
 import {
   getEnemyList,
@@ -118,7 +154,9 @@ import {
   fetchGet
 } from './utils';
 
-import { mapOptionsKey, campToCode } from './utils/string';
+import Mode from './stats';
+
+import { mapOptionsKey } from './utils/string';
 
 import StageList from './components/stageListPro';
 
@@ -152,7 +190,7 @@ export default {
   data() {
     return {
       short: false,
-      data: [],
+      data: null,
       rowData: [],
       load: false,
       appearMap: null,
@@ -162,10 +200,19 @@ export default {
       mapCode: '',
       selMapDataEx: null,
       selMapNode: null,
-      detailsDropList: []
+      detailsDropList: [],
+      runesMode: false,
+      pTranisitionTemp: 0,
+      treeId: '',
+      mapPicLoad: true
     };
   },
   computed: {
+    path() {
+      return (
+        (process.env.NODE_ENV === 'development' ? '' : Mode) + '/enemydata/'
+      );
+    },
     firstDrop() {
       return this.detailsDropList.filter(el => el.dropType === 1);
     },
@@ -179,14 +226,15 @@ export default {
       return this.detailsDropList.filter(el => el.dropType === 4);
     },
     mapDesc() {
-      console.log(changeDesc(this.selectedMap.description));
-      console.log(this.selectedMap.description);
       return this.selMapDataEx ? changeDesc(this.selMapDataEx.description) : '';
     },
     mapPath() {
       return this.mapCode
-        ? path + 'map/pic/' + this.mapCode + '_optimized.png'
-        : mapPic;
+        ? path +
+            'map/pic/' +
+            this.mapCode +
+            '_optimized.png?x-oss-process=style/jpg-test'
+        : '';
     },
     options() {
       return !this.selMapData
@@ -215,8 +263,13 @@ export default {
                       };
                     }) //change(el.data)
                   };
+                } else {
+                  const keys = el.split(' ');
+                  return {
+                    label: keys.slice(0, 2).join(' '),
+                    path: keys[2]
+                  };
                 }
-                return { label: el };
               })
             };
           } else {
@@ -240,86 +293,80 @@ export default {
   },
   mounted() {},
   methods: {
-    async testMap() {
-      const parent = 'hard_05-04';
-      this.mapCode = parent;
-      const [mapData, exData] = await Promise.all([
-        getMapData('level_' + parent),
-        getMapDataLsitVer(parent)
-      ]);
-
-      console.log(mapData);
-      if (mapData) {
-        exData.stageDropInfo &&
-          this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
-            data => (this.detailsDropList = data)
-          );
-
-        this.selectedMap = parent;
-        this.selMapData = mapData;
-        this.selMapDataEx = exData;
-        const temp = {};
-        Object.entries(this.rowData).forEach(([k, v]) => {
-          const target = mapData.enemyDbRefs.find(el => el.id === k);
-          if (target) {
-            temp[k] = Object.assign(v, {
-              level: target.level
-            });
-          }
-        });
-        this.data = temp;
+    clearMap() {
+      this.data = this.rowData;
+      this.mapCode = '';
+      this.selectedMap = '';
+      this.selMapData = null;
+      this.selMapDataEx = null;
+      this.runesMode = false;
+      this.$refs['chapter-selecter'].closeDrawer();
+      this.pTransition();
+      this.$router.push(this.path);
+    },
+    async loadRunes() {
+      // const target = this.$refs['map-title-part'];
+      this.pTranisitionTemp = window.getComputedStyle(
+        this.$refs['map-title-part']
+      ).height;
+      // target.style.transition = 'none'; // 本行2015-05-20新增，mac Safari下，貌似auto也会触发transition, 故要none下~
+      if (!this.runesMode) {
+        this.selMapDataEx = await getMapDataLsitVer(this.mapCode + '%23f%23');
+        this.runesMode = true;
+      } else {
+        this.runesMode = false;
+        this.selMapDataEx = await getMapDataLsitVer(this.mapCode);
+      }
+      this.pTransition();
+    },
+    async pTransition() {
+      const target = this.$refs['map-title-part'];
+      target.style.height = 'auto';
+      await this.$nextTick();
+      const targetHeight = window.getComputedStyle(target).height;
+      target.style.height = +this.pTranisitionTemp.replace('px', '') + 'px';
+      setTimeout(() => {
+        target.style.height = targetHeight.replace('px', '') + 'px';
+      }, 50);
+    },
+    async loadMap() {
+      const parent = this.$route.params.map; //|| 'main_05-10';
+      if (!parent) return;
+      const treeIndex = {
+        hard: 0,
+        camp: 1,
+        main: 2,
+        sub: 2
+      };
+      const splitTemp = parent.split('_');
+      const pIndex = treeIndex[splitTemp[0]];
+      if (pIndex === 2) {
+        const chapter = splitTemp[1].split('-');
+        const nodes = this.stageList[pIndex].children[+chapter[0]];
+        const targetData = nodes.children[+chapter[1] - 1];
+        this.choseMap(targetData);
       }
     },
-    async choseMap(data, node) {
-      const oneToTwo = n => {
-        if (n.charAt(0) === 'H') n = '0' + n.substring(1);
-        return n.length < 2 ? '0' + n : n;
-      };
+    async choseMap(data) {
+      this.pTranisitionTemp = window.getComputedStyle(
+        this.$refs['map-title-part']
+      ).height;
+
       if (!data.children) {
+        this.runesMode = false;
         this.selMapNode = data;
-        const type = {};
-        Object.entries(StageType).forEach(([key, text]) => (type[text] = key));
-        let parent = '';
-
-        while (node.parent) {
-          let labelIndex = /剿灭作战/.test(node.data.label) ? 1 : 0;
-          let label =
-            type[node.data.label] || node.data.label.split(' ')[labelIndex];
-
-          const sp = label.split('-');
-          if (sp.length > 1) {
-            label = oneToTwo(sp[0]) + '-' + oneToTwo(sp[1]);
-          }
-          if (/\d/.test(label) && label.length === 2) {
-            label = '';
-          } else if (!/sub/.test(parent)) {
-            parent = parent === '' ? label : label + '_' + parent;
-          } else if (/sub/.test(parent)) {
-            parent = data.path;
-            break;
-          }
-          node = node.parent;
-          console.log(parent);
-        }
-
-        if (/camp/.test(parent)) {
-          parent = parent
-            .split('_')
-            .map((el, index) => {
-              console.log(index + ' ' + el);
-              return index === 1 ? campToCode[el] : el;
-            })
-            .join('_');
-        }
-        this.mapCode = parent;
-
-        this.$refs['chapter-selecter'].closeDrawer();
-
+        let parent = data.path;
         console.log(parent);
+        this.mapCode = parent;
+        this.$refs['chapter-selecter'].closeDrawer();
+        this.load = true;
+        this.mapPicLoad = true;
         const [mapData, exData] = await Promise.all([
           getMapData('level_' + parent),
           getMapDataLsitVer(parent)
         ]);
+        this.load = false;
+        this.$router.push(this.path + parent);
 
         console.log(exData);
         if (mapData) {
@@ -341,20 +388,16 @@ export default {
             }
           });
           this.data = temp;
-          // Object.fromEntries(
-          //   Object.entries(this.rowData).filter(([key]) =>
-          //     mapData.enemyDbRefs.find(el => el.id === key)
-          //   )
-          // );
+
+          this.pTransition();
         }
       }
     },
     linkStart() {
       return this.getData().then(data => {
         this.data = this.rowData = data[0];
-        // this.appearMap = data[1];
-        this.load = true;
-        // this.testMap();
+        this.appearMap = data[1];
+        this.loadMap();
       });
     },
     getData() {
@@ -390,12 +433,14 @@ export default {
 
 .map-wrapper {
   margin: 20px auto 0;
-  max-width: 1500px;
+  max-width: 1200px;
   padding: 20px;
-  min-width: 1000px;
+  min-width: 1100px;
+  min-height: 100vh;
 
   .map-title-part {
     margin: 0 0 20px;
+    transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
   }
 
   .map-data-wrapper {
@@ -409,7 +454,7 @@ export default {
   }
 
   .map-option-container-wrapper {
-    margin-left: 20px;
+    margin-left: 5vw;
     max-width: 450px;
     min-width: 385px;
 
@@ -441,42 +486,45 @@ export default {
   }
 }
 
-@media screen and (min-width: 1800px) {
+.map-drop-list-wrapper {
+  display: flex;
+}
+
+.runes-mode-button {
+  padding-top: 7px;
+  padding-bottom: 4px;
+  vertical-align: bottom;
+  border-radius: 2px;
+}
+
+@media screen and (min-width: 1350px) {
   .map-wrapper {
-    --height: 500px;
+    min-width: 100%;
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (min-width: 1500px) {
   .map-wrapper {
-    --height: calc(62.5vw - 36px);
+    --height: 500px;
+    min-width: 1500px;
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .map-wrapper {
+    --height: calc(52.8vw);
     min-width: 360px;
     box-sizing: border-box;
     padding: 3vw;
 
-    // .map-option-container-wrapper {
-    // margin-left: 20px;
-    // max-width: 450px;
-    // min-width: 385px;
-
-    // .map-option-container {
-    // display: flex;
-    // justify-content: space-between;
-    // flex-wrap: wrap;
-    // align-content: start;
-
-    // .map-option-content {
-    // margin: 0 0 20px;
-    // width: calc(50% - 40px);
-    // }
-    // }
-    // }
     .map-option-container-wrapper {
       min-width: auto;
+      max-width: inherit;
       margin: 20px 0;
 
       .map-option-container {
         min-width: auto;
+        margin-left: 2vw;
 
         .map-option-content {
           margin: 0 10px 10px 0;
@@ -484,6 +532,21 @@ export default {
         }
       }
     }
+  }
+
+  .map-drop-container-wrapper {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .map-drop-container-wrapper {
+    margin-top: 0px;
+  }
+
+  .runes-mode-button {
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 }
 </style>
