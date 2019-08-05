@@ -51,7 +51,9 @@
 </template>
 
 <script>
-import { path, fetchGet, itemBackground } from '../../utils';
+import { path, fetchGet } from '../../utils';
+import { itemBackground } from '../../utils/string';
+
 import ItemViewer from '../ItemViewer';
 import SkillContainer from './SkillContainer';
 

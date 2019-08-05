@@ -1,7 +1,7 @@
 const debounce = function (action, idle) {
-  var last;
+  let last;
   return function () {
-    var ctx = this,
+    const ctx = this,
       args = arguments;
     clearTimeout(last);
     last = setTimeout(function () {
@@ -9,6 +9,9 @@ const debounce = function (action, idle) {
     }, idle);
   };
 };
+
+
+
 const throttle = function (action, delay) {
   var last = 0;
   return function () {
@@ -25,7 +28,23 @@ const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
 
 // import 'core-js/modules/es.object.from-entries';
 
+const fetchPut = (url, data) => {
+  return fetch(url, {
+    method: 'PUT',
+    body: JSON.stringify(data),
+    headers: new Headers({
+      'Content-Type': 'application/json'
+    })
+  }).then(res => res.json())
+    .catch(err => Promise.reject(err));
 
+};
+
+const submitFeedback = content => {
+  return fetchPut('/api/arknights/feedback', content)
+    .catch(err => console.error(err))
+    .then(res => Promise.resolve(res));
+};
 
 //包装fetch，使用get
 const fetchGet = (url) => {
@@ -95,6 +114,7 @@ const getMapData = name => {
 };
 
 const getMapDataLsitVer = name => {
+  console.log(name);
   return fetchGet(path + 'map/exData/' + name + '.json')
     .catch(err => console.error(err));
 };
@@ -206,9 +226,9 @@ const changeDesc = (desc) => {
     baRem = /(<@ba\.rem>)/g,
     baKw = /(<@ba\.kw>)/g,
     baTalpu = /(<@ba\.talpu>)/g,
-    lvItem = /<@lv\.(item|rem)>/g;
+    lvItem = /<@lv\.(item|rem|fs)>/g;
 
-  if (!reg1.test(desc)) return desc;
+  if (!reg1.test(desc) && !reg2.test(desc)) return desc;
   desc = desc
     .replace(reg1, '</i>')
     .replace(reg2, '<br/>')
@@ -270,8 +290,17 @@ const getDetailsProfilePath = name => {
     : `${path}char/profile/${name}.png`;
 };
 
-
-
+const changeKey = key => {
+  const test = /_/.exec(key);
+  if (test) {
+    const temp = key.split('');
+    temp.splice(test.index, 1);
+    temp[test.index] = temp[test.index].toUpperCase();
+    return temp.join('');
+  } else {
+    return key;
+  }
+};
 
 
 export {
@@ -298,7 +327,9 @@ export {
   getDevList,
   isMoblie,
   getMapData,
-  getMapDataLsitVer
+  getMapDataLsitVer,
+  changeKey,
+  submitFeedback
 };
 
 

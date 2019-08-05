@@ -125,7 +125,7 @@ export default {
 
  <style lang="stylus" scoped>
  .evolvcost-item-contianer {
-   /* margin: 5px 10px; */
+   /*margin: 5px 10px;*/
    width: 70px;
    height: 70px;
    display: block;
@@ -138,7 +138,7 @@ export default {
    margin: 0 auto;
  }
 
- .evolvcost-item-contianer img {
+ .evolvcost-item-contianer>>>img {
    width: 128%;
    height: 128%;
    margin-top: -14%;
@@ -155,10 +155,6 @@ export default {
  .item-stage-name {
    width: 50px;
    display: inline-block;
- }
-
- .item-viewer-container {
-   text-align: center;
  }
 
  .item-stage-container {
@@ -180,8 +176,9 @@ export default {
    box-sizing: border-box;
    border-radius: 3px;
    box-shadow: inset 0px 6px 13px 0px #4a4a4a;
-   background: #808080;
-   overflow: visible;
+   background: url('../assets/bbbj_optimized.png');
+   background-size: cover;
+   /*overflow: visible;*/
    margin: 0 auto;
    padding: 9px 0;
 
@@ -193,7 +190,7 @@ export default {
 
  @media screen and (max-width: 700px) {
    .evolvcost-item-contianer {
-     /* padding: 5px 10px; */
+     /*padding: 5px 10px;*/
      width: calc(40px + 1vw);
      height: calc(40px + 1vw);
    }

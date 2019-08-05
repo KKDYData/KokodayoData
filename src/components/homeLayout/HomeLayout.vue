@@ -90,29 +90,17 @@
           :short="short"
         ></profile-layout>
       </el-tab-pane>
-      <el-tab-pane name="new-profile-layout" label="排列组合">
+      <el-tab-pane name="new-profile-layout" label="排列组合" lazy>
         <new-profile-layout :tags="SelectedTag" :filterGroups="filterGroups" :data="data"></new-profile-layout>
       </el-tab-pane>
-      <el-tab-pane name="expalain" label="说明">
-        <div style="padding: 0 20px">
-          <p>1.选了标签（公招）的Tag之后，筛选模式会发生变化</p>
-          <p>2.【职业】、【星级】这些分类名，点击可以取消全部选择。</p>
-          <p>3.还没想到要说什么。。。对了，这个说明面板还要改</p>
-          <p>4.配色还在调整</p>
-          <p>5.反馈群799872783！</p>
-        </div>
+      <el-tab-pane name="expalain" label="说明&反馈" lazy>
+        <my-feedback :store="store"></my-feedback>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import FilterButtonGroup from '../FilterButtonGroup';
-import ProfileLayout from './ProfileLayout';
-import { sort, class_chinese, throttle, isMoblie } from '../../utils';
-
-import { TagsArr, StarArr } from '../../utils/string';
-
 import Vue from 'vue';
 import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
@@ -123,6 +111,12 @@ Vue.use(Tag);
 Vue.use(Tabs);
 Vue.use(TabPane);
 
+import FilterButtonGroup from '../FilterButtonGroup';
+import ProfileLayout from './ProfileLayout';
+import { sort, class_chinese, throttle, isMoblie } from '../../utils';
+
+import { TagsArr, StarArr } from '../../utils/string';
+
 import localforage from 'localforage';
 
 import loadingC from '../Loading';
@@ -131,6 +125,14 @@ const newProfileLayout = () => ({
   component: import(
     /* webpackChunkName: "newProfileLayout" */ './newProfileLayout'
   ),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
+
+const myFeedback = () => ({
+  component: import(/* webpackChunkName: "newProfileLayout" */ './feedback'),
   loading: loadingC,
   error: loadingC,
   delay: 200,
@@ -151,7 +153,8 @@ export default {
   components: {
     'filter-group': FilterButtonGroup,
     'profile-layout': ProfileLayout,
-    'new-profile-layout': newProfileLayout
+    'new-profile-layout': newProfileLayout,
+    myFeedback
   },
   props: {
     profileList: Array
@@ -284,7 +287,6 @@ export default {
       const isFilter = filters
         .map(el => el[1].length && el[0] !== 'star' && el[0] !== 'gkzm')
         .reduce((pre, cur) => pre + cur);
-
       if (isFilter > 0) {
         //重新筛选， 重置tagHit
         targetData.forEach(el => this.$set(el, 'tagHit', 0));
@@ -302,7 +304,7 @@ export default {
             //多选筛选(公招模式)，不需要break, Tags
             if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
-                if (group.find(t => t.value === tag)) {
+                if (group.find(t => t.value === tag + '')) {
                   find = true;
                   el.tagHit++;
                 }
@@ -342,20 +344,6 @@ export default {
       }
       this.sortData(targetData);
     }
-
-    //废弃
-    // OpenTagsPanel() {
-    //   this.showTag = !this.showTag;
-    //   console.log('????????_______________0');
-    //   if (!this.showTag) {
-    //     this.$set(this.filterGroups.gkzm[0], 'chosed', false);
-    //     console.log('???___________1');
-    //   } else {
-    //     this.$set(this.filterGroups.gkzm[0], 'chosed', true);
-    //     console.log('???___________2');
-    //   }
-    //   this.resetFilter();
-    // }
   }
 };
 </script>

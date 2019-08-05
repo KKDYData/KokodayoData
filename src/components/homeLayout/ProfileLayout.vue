@@ -188,13 +188,11 @@ export default {
 <style scoped>
 .flip-list-move {
   transition: transform 1s ease-in-out;
-  transition-delay: 1s;
 }
 
 .flip-list-enter,
 .flip-list-leave-to {
   opacity: 0;
-  transform: translateX(-50px);
 }
 
 .flip-list-leave-active {

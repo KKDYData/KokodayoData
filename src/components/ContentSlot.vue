@@ -13,21 +13,22 @@
 export default {
   props: {
     width: Number,
-    long: Boolean
+    long: Boolean,
+    noWrap: Boolean
   },
   computed: {
     titleStyle() {
       const res = {};
       if (this.width) {
-        res.width = this.width + "px";
+        res.width = this.width + 'px';
       }
-      if (this.long) {
-        res.display = "inline-block";
+      if (this.noWrap) {
+        res.display = 'inline-block';
       }
       return res;
     },
     contentStyle() {
-      return this.long ? { width: "auto" } : {};
+      return this.long ? { width: 'auto' } : {};
     }
   }
 };

@@ -1,169 +1,173 @@
 <template>
   <div class="enemy-data-layout">
-    <div v-for="(enemy, key) in data" :key="enemy.enemyId">
-      <el-popover
-        :trigger="isHover"
-        :width="short? shortWidth : 700"
-        :open-delay="500"
-        @show="openDetails(key)"
-        @hide="currentData = null"
-        :popper-options="{Defaults:{positionFixed:true}}"
-        :visible-arrow="!short"
-      >
-        <div slot="reference" class="enemy-container">
+    <!-- 一个敌人详情面板 -->
+    <el-drawer
+      :direction="short ? 'btt' : 'rtl'"
+      :visible.sync="detailsOpen"
+      :size="short ? '85%': drawerSize"
+      custom-class="mobile-drawer-scroll"
+      :destroy-on-close="true"
+      :title="'敌人数据' +  (runesMode ? '[突袭]': '' )"
+    >
+      <div v-if="currEnemy" class="enemy-drawer">
+        <div style="display: flex;">
           <div class="enemy-img-container">
-            <div class="enemy-index-container">
-              <span>{{enemy.enemyIndex}}</span>
+            <el-image :src="path +  showKey + '.png?x-oss-process=style/jpg-test'"></el-image>
+          </div>
+          <div>
+            <div style="display: flex">
+              <div class="enemy-details-type-index-container">
+                <span>{{currEnemy.enemyIndex}}</span>
+              </div>
+              <div>
+                <h1 style="margin: 0">
+                  {{currEnemy.name}}
+                  <span style="font-size: 0.5em">Level {{currEnemy.level}}</span>
+                </h1>
+                <h3 style="margin: 0">{{currEnemy.enemyRace}}</h3>
+              </div>
             </div>
-            <el-image :src="path +  key + '.png?x-oss-process=style/jpg-test'"></el-image>
-            <div>
-              <span>{{enemy.name}}</span>
+            <div v-if="short" style="margin-left: 10px">
+              <p>
+                <span>攻击方式</span>
+                <span style="color: #000">{{currEnemy.attackType}}</span>
+              </p>
+            </div>
+            <!-- 原pc布局 -->
+            <div v-if="!short" class="enemy-status-container">
+              <div class="enemy-status-abc-container">
+                <div>
+                  <div class="enemy-status-abc-title" style="margin: 0">
+                    <el-image style="width: 13px; " :src="smallPicPath +  'nj_optimized.png'"></el-image>
+                    <div class="enemy-status-abc-title-text">耐久</div>
+                  </div>
+                </div>
+                <h1>{{currEnemy.endure}}</h1>
+              </div>
+              <div class="enemy-status-abc-container">
+                <div class="enemy-status-abc-title" style="margin: 0">
+                  <el-image style="width: 13px; " :src="smallPicPath +  'gj_optimized.png'"></el-image>
+                  <div class="enemy-status-abc-title-text">攻击力</div>
+                </div>
+                <h1>{{currEnemy.attack}}</h1>
+              </div>
+              <div class="enemy-status-abc-container">
+                <div>
+                  <div class="enemy-status-abc-title" style="margin: 0">
+                    <el-image style="width: 13px; " :src="smallPicPath +  'fy_optimized.png'"></el-image>
+                    <div class="enemy-status-abc-title-text">防御力</div>
+                  </div>
+                </div>
+                <h1>{{currEnemy.defence}}</h1>
+              </div>
+              <div class="enemy-status-abc-container">
+                <div>
+                  <div class="enemy-status-abc-title" style="margin: 0">
+                    <el-image style="width: 13px; " :src="smallPicPath +  'fk_optimized.png'"></el-image>
+                    <div class="enemy-status-abc-title-text">法术抗性</div>
+                  </div>
+                </div>
+                <h1>{{currEnemy.resistance}}</h1>
+              </div>
             </div>
           </div>
         </div>
-        <div v-if="showKey === key" class="enemy-content-container">
-          <el-button @click="$el.click()" type="danger" size="mini" class="close-button">
-            <i class="el-icon-close"></i>
-          </el-button>
-          <div style="display: flex">
-            <div class="enemy-img-container">
-              <el-image :src="path +  key + '.png?x-oss-process=style/jpg-test'"></el-image>
-            </div>
+
+        <div v-if="short" class="enemy-status-container">
+          <div class="enemy-status-abc-container">
             <div>
-              <div style="display: flex">
-                <div class="enemy-details-type-index-container">
-                  <span>{{enemy.enemyIndex}}</span>
-                </div>
-                <div>
-                  <h1 style="margin: 0">{{enemy.name}}</h1>
-                  <h3 style="margin: 0">{{enemy.enemyRace}}</h3>
-                </div>
-              </div>
-              <div v-if="short" style="margin-left: 10px">
-                <p>
-                  <span>攻击方式</span>
-                  <span style="color: #000">{{enemy.attackType}}</span>
-                </p>
-              </div>
-              <div v-if="!short" class="enemy-status-container">
-                <div class="enemy-status-abc-container">
-                  <div>
-                    <div class="enemy-status-abc-title" style="margin: 0">
-                      <el-image style="width: 13px; " :src="smallPicPath +  'nj_optimized.png'"></el-image>
-                      <div class="enemy-status-abc-title-text">耐久</div>
-                    </div>
-                  </div>
-                  <h1>{{enemy.endure}}</h1>
-                </div>
-                <div class="enemy-status-abc-container">
-                  <div class="enemy-status-abc-title" style="margin: 0">
-                    <el-image style="width: 13px; " :src="smallPicPath +  'gj_optimized.png'"></el-image>
-                    <div class="enemy-status-abc-title-text">攻击力</div>
-                  </div>
-                  <h1>{{enemy.attack}}</h1>
-                </div>
-                <div class="enemy-status-abc-container">
-                  <div>
-                    <div class="enemy-status-abc-title" style="margin: 0">
-                      <el-image style="width: 13px; " :src="smallPicPath +  'fy_optimized.png'"></el-image>
-                      <div class="enemy-status-abc-title-text">防御力</div>
-                    </div>
-                  </div>
-                  <h1>{{enemy.defence}}</h1>
-                </div>
-                <div class="enemy-status-abc-container">
-                  <div>
-                    <div class="enemy-status-abc-title" style="margin: 0">
-                      <el-image style="width: 13px; " :src="smallPicPath +  'fk_optimized.png'"></el-image>
-                      <div class="enemy-status-abc-title-text">法术抗性</div>
-                    </div>
-                  </div>
-                  <h1>{{enemy.resistance}}</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div v-if="short" class="enemy-status-container">
-            <div class="enemy-status-abc-container">
-              <div>
-                <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image
-                    style="width: 13px; "
-                    :src="smallPicPath +  'nj_optimized.png?x-oss-process=style/jpg-test'"
-                  ></el-image>
-                  <div class="enemy-status-abc-title-text">耐久</div>
-                </div>
-              </div>
-              <h1>{{enemy.endure}}</h1>
-            </div>
-            <div class="enemy-status-abc-container">
               <div class="enemy-status-abc-title" style="margin: 0">
                 <el-image
                   style="width: 13px; "
-                  :src="smallPicPath +  'gj_optimized.png?x-oss-process=style/jpg-test'"
+                  :src="smallPicPath +  'nj_optimized.png?x-oss-process=style/jpg-test'"
                 ></el-image>
-                <div class="enemy-status-abc-title-text">攻击力</div>
+                <div class="enemy-status-abc-title-text">耐久</div>
               </div>
-              <h1>{{enemy.attack}}</h1>
             </div>
-            <div class="enemy-status-abc-container">
-              <div>
-                <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image
-                    style="width: 13px; "
-                    :src="smallPicPath +  'fy_optimized.png?x-oss-process=style/jpg-test'"
-                  ></el-image>
-                  <div class="enemy-status-abc-title-text">防御力</div>
-                </div>
-              </div>
-              <h1>{{enemy.defence}}</h1>
-            </div>
-            <div class="enemy-status-abc-container">
-              <div>
-                <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image
-                    style="width: 13px; "
-                    :src="smallPicPath +  'fk_optimized.png?x-oss-process=style/jpg-test'"
-                  ></el-image>
-                  <div class="enemy-status-abc-title-text">法术抗性</div>
-                </div>
-              </div>
-              <h1>{{enemy.resistance}}</h1>
-            </div>
+            <h1>{{currEnemy.endure}}</h1>
           </div>
-          <div v-if="!short">
-            <p>
-              <span>攻击方式</span>
-              <span style="color: #000">{{enemy.attackType}}</span>
-            </p>
+          <div class="enemy-status-abc-container">
+            <div class="enemy-status-abc-title" style="margin: 0">
+              <el-image
+                style="width: 13px; "
+                :src="smallPicPath +  'gj_optimized.png?x-oss-process=style/jpg-test'"
+              ></el-image>
+              <div class="enemy-status-abc-title-text">攻击力</div>
+            </div>
+            <h1>{{currEnemy.attack}}</h1>
           </div>
-
-          <div>
+          <div class="enemy-status-abc-container">
             <div>
-              <b>描述</b>
-            </div>
-            <p>{{enemy.description}}</p>
-          </div>
-
-          <div>
-            <enemy-status
-              v-loading="key !== 'enemy_1503_talula' && !currentData"
-              :data="currentData"
-              :short="short"
-              :key-name="key"
-              :map-level="enemy.level"
-              :appear-map="appearMap"
-            >
-              <div v-if="enemy.ability">
-                <div>
-                  <b>能力</b>
-                </div>
-                <p>{{enemy.ability}}</p>
+              <div class="enemy-status-abc-title" style="margin: 0">
+                <el-image
+                  style="width: 13px; "
+                  :src="smallPicPath +  'fy_optimized.png?x-oss-process=style/jpg-test'"
+                ></el-image>
+                <div class="enemy-status-abc-title-text">防御力</div>
               </div>
-            </enemy-status>
+            </div>
+            <h1>{{currEnemy.defence}}</h1>
+          </div>
+          <div class="enemy-status-abc-container">
+            <div>
+              <div class="enemy-status-abc-title" style="margin: 0">
+                <el-image
+                  style="width: 13px; "
+                  :src="smallPicPath +  'fk_optimized.png?x-oss-process=style/jpg-test'"
+                ></el-image>
+                <div class="enemy-status-abc-title-text">法术抗性</div>
+              </div>
+            </div>
+            <h1>{{currEnemy.resistance}}</h1>
           </div>
         </div>
-      </el-popover>
+        <div>
+          <div>
+            <b>描述</b>
+          </div>
+          <p>{{currEnemy.description}}</p>
+        </div>
+
+        <div>
+          <enemy-status
+            v-loading="!currentData"
+            :data="currentData"
+            :short="short"
+            :key-name="showKey"
+            :map-level="currEnemy.level"
+            :appear-map="appearMap"
+            :map-data="mapData"
+            :runes-mode="runesMode"
+          >
+            <div v-if="currEnemy.ability">
+              <div>
+                <b>能力</b>
+              </div>
+              <p>{{currEnemy.ability}}</p>
+            </div>
+          </enemy-status>
+        </div>
+      </div>
+    </el-drawer>
+
+    <div v-for="(enemy, key) in data" :key="enemy.enemyId">
+      <div
+        slot="reference"
+        class="enemy-container"
+        @mouseover="mouseHoverOpen(key, enemy)"
+        @mouseleave="cancelOpen"
+        @click="openDetails(key, enemy)"
+      >
+        <div class="enemy-img-container">
+          <div class="enemy-index-container">
+            <span>{{enemy.enemyIndex}}</span>
+          </div>
+          <el-image :src="path +  key + '.png?x-oss-process=style/jpg-test'"></el-image>
+          <div>
+            <span :style="enemy.name.length > 6 ? 'font-size: 14px' : ''">{{enemy.name}}</span>
+          </div>
+        </div>
+      </div>
     </div>
     <div
       class="fill-item img-container"
@@ -175,14 +179,15 @@
 </template>
 
 <script>
-import { Image, Popover } from 'element-ui';
+import { Image, Popover, Drawer } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Image);
 Vue.use(Popover);
+Vue.use(Drawer);
 
 import EnemyStatus from './EnemyStatus';
 
-import { path, getEnemyData, isMoblie } from '../../utils';
+import { path, getEnemyData, isMoblie, debounce } from '../../utils';
 
 export default {
   components: { EnemyStatus },
@@ -192,21 +197,28 @@ export default {
     },
     appearMap: {
       type: Object
+    },
+    mapData: {
+      type: Object
+    },
+    runesMode: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
       path: path + 'enemy/pic/',
-      isHover:
-        process.env.NODE_ENV === 'development' || this.short
-          ? 'click'
-          : 'hover',
       showKey: '',
       currentData: [],
       smallPicPath: path + 'others/',
       fillItemWidth: { width: '100px' },
       fillItems: [],
-      shortWidth: 350
+      shortWidth: 350,
+      detailsOpen: false,
+      currEnemy: null,
+      drawerSize: '30%',
+      debounceOpen: null
     };
   },
   beforeMount() {
@@ -214,19 +226,37 @@ export default {
   },
   mounted() {
     this.calFillAmount();
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 500 ? true : false;
-      this.calFillAmount();
-    });
+    this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
+    // console.log(this.drawerSize);
+
+    window.addEventListener(
+      'resize',
+      debounce(function() {
+        this.short = window.innerWidth < 500 ? true : false;
+        this.calFillAmount();
+        this.drawerSize =
+          Math.floor((600 / document.body.clientWidth) * 100) + '%';
+        // console.log(this.drawerSize);
+      }, 1000).bind(this)
+    );
     this.shortWidth = this.$el.clientWidth - 30;
   },
   methods: {
-    async openDetails(key) {
+    async openDetails(key, v) {
       this.showKey = key;
-      // setTimeout(async () => {}, 100);
+      this.detailsOpen = true;
+      this.currEnemy = v;
       if (key !== 'enemy_1503_talula')
         this.currentData = await getEnemyData(key);
-      // this.showDetails = true;
+    },
+    mouseHoverOpen(k, v) {
+      clearTimeout(this.debounceOpen);
+      this.debounceOpen = setTimeout(() => {
+        this.openDetails(k, v);
+      }, 1000);
+    },
+    cancelOpen() {
+      clearTimeout(this.debounceOpen);
     },
     calFillAmount() {
       if (!this.data) return;
@@ -248,7 +278,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 .enemy-data-layout {
   display: flex;
   flex-wrap: wrap;
@@ -256,6 +286,13 @@ export default {
   margin: 0 auto;
   max-width: 1200px;
   padding: 0 20px;
+
+  // Drawer的实现有问题 以后可能要改
+  &>>>.el-drawer {
+    overflow-y: scroll;
+    margin-right: -17px;
+    padding-right: 17px;
+  }
 }
 
 .enemy-container {
@@ -280,6 +317,7 @@ export default {
   left: -2px;
   padding: 2px 5px;
 }
+
 .enemy-status-container {
   margin: 10px;
   display: flex;
@@ -298,12 +336,14 @@ export default {
 .enemy-details-type-index-container span {
   font-size: 1.6em;
 }
+
 .enemy-status-abc-container {
   border: 4px solid rgb(82, 82, 82);
   width: 65px;
   height: 48px;
   color: rgb(82, 82, 82);
 }
+
 .enemy-status-abc-container + .enemy-status-abc-container {
   margin-left: 5px;
 }
@@ -334,13 +374,14 @@ export default {
   overflow: hidden;
   opacity: 1;
 }
+
 .slide-enter {
   height: 0;
   opacity: 0;
 }
 
-.enemy-content-container {
-  min-height: 300px;
+.enemy-drawer {
+  padding: 0 20px 30px;
 }
 
 @media screen and (max-width: 1000px) {
@@ -351,9 +392,11 @@ export default {
     padding: 0;
     justify-content: center;
   }
+
   .enemy-status-container {
     margin: 10px 0;
   }
+
   .enemy-status-wrapper {
     flex-wrap: wrap;
   }
@@ -361,16 +404,13 @@ export default {
   .status-phases-wrapper {
     width: 100%;
   }
-  .enemy-content-container {
-    max-height: 80vh;
-    overflow-y: scroll;
-  }
 }
 
 @media screen and (max-width: 400px) {
   .enemy-container {
     min-width: calc(88px + 5vw);
   }
+
   .enemy-img-container {
     --imgW: calc(80px + 5vw);
     height: var(--imgW);

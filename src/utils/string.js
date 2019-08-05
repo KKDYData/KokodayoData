@@ -1,13 +1,13 @@
 const mapOptionsKey = {
-  characterLimit: '可部署干员数量',
-  maxLifePoint: '最大生命',
+  characterLimit: '可部署干员数',
+  maxLifePoint: 'LifePoint',
   initialCost: '初始部署费用',
   maxCost: '最大部署费用',
   costIncreaseTime: '部署费用回复/s',
-  moveMultiplier: '移速系数',
+  // moveMultiplier: '移速系数',
   apCost: '理智消耗',
   apFailReturn: '失败返还理智',
-  // completeFavor: '完成好感增加',
+  completeFavor: '干员好感增加',
   // difficulty: '难度',
   expGain: '经验获得',
   goldGain: '龙门币获得',
@@ -371,6 +371,26 @@ const campToCode = {
   龙门市区: '03'
 };
 
+const statusToCh = key => {
+  const t = {
+    maxHp: '生命上限',
+    atk: '攻击',
+    def: '防御',
+    moveSpeed: '移动速度',
+    magicResistance: '法术抵抗',
+    baseAttackTime: '攻击间隔',
+    hpRecoveryPerSec: '生命回复/秒',
+    // spRecoveryPerSec: '每秒Sp回复'
+    // maxDeployCount: '最大部署数',
+    massLevel: '重量'
+    // stunImmune: '免疫打断',
+    // silenceImmune: '免疫沉默'
+    // massLevel: '重量等级',
+    // baseForeLevel: '力量等级'
+  };
+  return t[key];
+};
+
 export {
   StarArr,
   TagsArr,
@@ -385,5 +405,6 @@ export {
   roomType,
   charBorderColor,
   starColor,
-  campToCode
+  campToCode,
+  statusToCh
 };
