@@ -111,6 +111,12 @@ body {
   margin: 0;
 }
 
+.el-dialog__wrapper .mobile-drawer-scroll {
+  overflow-y: scroll;
+  margin-right: -17px;
+  padding-right: 17px;
+}
+
 @media screen and (min-width: 1000px) {
   .el-message-box {
     min-width: 700px
@@ -126,7 +132,6 @@ body {
   }
   /* drawer 在移动端 */
   .el-dialog__wrapper .mobile-drawer-scroll {
-    overflow-y: scroll;
     margin-right: 0px;
     padding-right: 0px;
   }

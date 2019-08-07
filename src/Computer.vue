@@ -13,7 +13,9 @@ Vue.use(Alert);
 import loadingC from './components/Loading';
 
 const ComputerLayout = () => ({
-  component: import(/* webpackChunkName: "ComputerLayout" */ './components/ComputerLayout'),
+  component: import(
+    /* webpackChunkName: "ComputerLayout" */ './components/ComputerLayout'
+  ),
   loading: loadingC,
   error: loadingC,
   delay: 200,
@@ -21,6 +23,9 @@ const ComputerLayout = () => ({
 });
 
 export default {
+  metaInfo: {
+    title: '升级消耗计算器 | 明日方舟'
+  },
   components: {
     'computer-layout': ComputerLayout
   }
