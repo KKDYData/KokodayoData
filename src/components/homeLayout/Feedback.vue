@@ -128,6 +128,8 @@ export default {
         })
         .then(res => {
           Message.success('反馈成功，感谢你的支持');
+          this.feedback = '';
+          this.store.setItem('tempFeedback', '');
         });
     }
   }

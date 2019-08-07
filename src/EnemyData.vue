@@ -181,6 +181,20 @@ const EnemyDataLayout = () => ({
 });
 
 export default {
+  metaInfo() {
+    return {
+      titleTemplate: `${
+        this.selectedMap ? this.selectedMap + ' |' : ''
+      }敌人图鉴 | 明日方舟`,
+      meta: [
+        {
+          vmid: 'description',
+          name: 'Description',
+          content: '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
+        }
+      ]
+    };
+  },
   components: {
     EnemyDataLayout,
     MyTitle,
