@@ -22,6 +22,7 @@
     "element-ui": "^2.10.1",
     "localforage": "^1.7.3",
     "phy-touch": "^0.1.0",
+    "spritejs": "^2.29.5",
     "ua-parser-js": "^0.7.20",
     "vlf": "^1.0.3",
     "vue": "^2.6.10",

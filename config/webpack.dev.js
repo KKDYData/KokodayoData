@@ -35,7 +35,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/enemydata\/(?!main_|hard|camp).*$/, to: context => {
+          from: /^\/enemydata\/(?!main_|sub_|hard|camp).*$/, to: context => {
             console.log(context.parsedUrl.path);
 
             console.log(context.parsedUrl.path.slice(11) + ' ttt');

@@ -1,3 +1,3 @@
-// const devMode = '/ArknightsBeta';
-const devMode = '/Arknights';
+const devMode = '/ArknightsBeta';
+// const devMode = '/Arknights';
 export default devMode;
