@@ -19,7 +19,7 @@ Vue.config.productionTip = false;
 const Home = () => import(/* webpackChunkName: "Home" */'./Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');
-const EnemyData = () => import(/* webpackChunkName: "EnemyData" */'./EnemyData');
+const EnemyData = () => import(/* webpackChunkName: "Enemy" */'./Enemy');
 
 
 const isDev = process.env.NODE_ENV === 'development';

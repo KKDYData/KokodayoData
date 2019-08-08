@@ -50,11 +50,15 @@
       </div>
       <div class="map-data-wrapper">
         <div class="map-data-container">
-          <div :style="!mapCode ? {width: 'auto'} : {}" class="map-left-panel">
+          <div
+            :style="!mapCode ? {width: 'auto', 'min-width': '300px'} : {}"
+            class="map-left-panel"
+          >
             <div
               v-if="mapCode"
               v-loading="mapPicLoad"
               element-loading-background="rgba(0, 0, 0, 0.5)"
+              style="position: relative; font-size: 0"
             >
               <el-image
                 @load="mapPicLoad = false"
@@ -62,6 +66,7 @@
                 fit="fill"
                 :src="mapPath"
               ></el-image>
+              <div id="map-canvas-container"></div>
             </div>
             <div class="left-layout">
               <my-title style="margin: 20px 0 0;" :title="selectedMap === '' ? '所有敌人' : '出现敌人'"></my-title>
@@ -128,10 +133,10 @@
   </div>
 </template>
 <script>
-import loadingC from './components/Loading';
-import MyTitle from './components/MyTitle';
-import ContentSlot from './components/ContentSlot';
-import DropList from './components/DropLIst';
+import loadingC from '../Loading';
+import MyTitle from '../MyTitle';
+import ContentSlot from '../ContentSlot';
+import DropList from '../DropLIst';
 
 import { Alert, Tree, Drawer, Button, Image, Loading } from 'element-ui';
 
@@ -152,13 +157,15 @@ import {
   getMapDataLsitVer,
   changeDesc,
   fetchGet
-} from './utils';
+} from '../../utils';
 
-import Mode from './stats';
+import Mode from '../../stats';
 
-import { mapOptionsKey } from './utils/string';
+import { mapOptionsKey } from '../../utils/string';
 
-import StageList from './components/stageListPro';
+import StageList from '../stageListPro';
+
+import { normalPath } from './draw';
 
 const StageType = {
   main: '主线',
@@ -172,7 +179,7 @@ const StageType = {
 
 const EnemyDataLayout = () => ({
   component: import(
-    /* webpackChunkName: "EnemyDataLayout" */ './components/EnemyDataLayout'
+    /* webpackChunkName: "EnemyDataLayout" */ './EnemyDataLayout'
   ),
   loading: loadingC,
   error: loadingC,
@@ -344,20 +351,43 @@ export default {
       }, 50);
     },
     async loadMap() {
-      const parent = this.$route.params.map; //|| 'main_05-10';
+      // test
+      const parent = this.$route.params.map || 'main_05-10';
+      console.log(parent);
       if (!parent) return;
+      // this.choseMap({ path: parent });
+
       const treeIndex = {
         hard: 0,
         camp: 1,
         main: 2,
-        sub: 2
+        sub: 3
       };
       const splitTemp = parent.split('_');
       const pIndex = treeIndex[splitTemp[0]];
-      if (pIndex === 2) {
-        const chapter = splitTemp[1].split('-');
-        const nodes = this.stageList[pIndex].children[+chapter[0]];
-        const targetData = nodes.children[+chapter[1] - 1];
+      const chapter = splitTemp[1].split('-');
+      if (pIndex > 1) {
+        if (pIndex < 3) {
+          const nodes = this.stageList[2].children[+chapter[0]];
+          const targetData = nodes.children[+chapter[1] - 1];
+          this.choseMap(targetData);
+        } else {
+          const temp = this.stageList[2].children[+chapter[0]];
+          const nodes = temp.children[temp.children.length - 1];
+          console.log(chapter, pIndex, chapter, temp, nodes);
+
+          const targetData = nodes.children[+chapter[1] - 1];
+
+          this.choseMap(targetData);
+        }
+      } else {
+        const index = chapter[chapter.length - 1] - 1;
+        console.log(chapter, pIndex, chapter, index);
+        console.log(this.stageList[pIndex]);
+        console.log(this.stageList[pIndex].children);
+        const targetData = this.stageList[pIndex].children[index];
+
+        console.log(targetData);
         this.choseMap(targetData);
       }
     },
@@ -402,8 +432,12 @@ export default {
             }
           });
           this.data = temp;
-
           this.pTransition();
+          normalPath(
+            '#map-canvas-container',
+            mapData.routes.filter(el => el),
+            mapData.mapData
+          );
         }
       }
     },
@@ -497,6 +531,7 @@ export default {
     width: calc(var(--height) * 1.78);
     box-sizing: border-box;
     border: 2px solid #313131;
+    opacity: 0.5;
   }
 }
 
@@ -511,15 +546,28 @@ export default {
   border-radius: 2px;
 }
 
+#map-canvas-container {
+  border: 1px red solid;
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  border: 2px solid red;
+  transform: perspective(500px) rotateX(18deg) translate3d(0px, -10px, -20px);
+}
+
 @media screen and (min-width: 1350px) {
   .map-wrapper {
     min-width: 100%;
   }
+
+  --height: 68vw;
 }
 
 @media screen and (min-width: 1500px) {
   .map-wrapper {
     --height: 500px;
+    --height: 50vw;
     min-width: 1500px;
   }
 }

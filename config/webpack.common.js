@@ -75,7 +75,7 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash].css',
-      // chunkFilename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
+      chunkFilename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
     }),
     ...swPlugins
   ],
@@ -101,6 +101,7 @@ module.exports = {
               // by default it uses publicPath in webpackOptions.output
               // publicPath: '../',
               hmr: process.env.NODE_ENV === 'development',
+              reloadAll: true,
             },
           },
           'css-loader', 'stylus-loader'],
