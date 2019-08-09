@@ -344,20 +344,34 @@ export default {
       }, 50);
     },
     async loadMap() {
-      const parent = this.$route.params.map; //|| 'main_05-10';
+      const parent = this.$route.params.map || 'main_05-10';
       if (!parent) return;
       const treeIndex = {
         hard: 0,
         camp: 1,
         main: 2,
-        sub: 2
+        sub: 3
       };
       const splitTemp = parent.split('_');
       const pIndex = treeIndex[splitTemp[0]];
-      if (pIndex === 2) {
-        const chapter = splitTemp[1].split('-');
-        const nodes = this.stageList[pIndex].children[+chapter[0]];
-        const targetData = nodes.children[+chapter[1] - 1];
+      const chapter = splitTemp[1].split('-');
+      if (pIndex > 1) {
+        if (pIndex < 3) {
+          const nodes = this.stageList[2].children[+chapter[0]];
+          const targetData = nodes.children[+chapter[1] - 1];
+          this.choseMap(targetData);
+        } else {
+          const temp = this.stageList[2].children[+chapter[0]];
+          const nodes = temp.children[temp.children.length - 1];
+          console.log(chapter, pIndex, chapter, temp, nodes);
+
+          const targetData = nodes.children[+chapter[1] - 1];
+
+          this.choseMap(targetData);
+        }
+      } else {
+        const index = chapter[chapter.length - 1] - 1;
+        const targetData = this.stageList[pIndex].children[index];
         this.choseMap(targetData);
       }
     },
