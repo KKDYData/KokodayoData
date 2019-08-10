@@ -1,12 +1,19 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common');
 const webpack = require('webpack');
+const CleanWebPackPlugin = require('clean-webpack-plugin');
+const path = require('path');
 
 module.exports = merge(common, {
   mode: 'development',
   plugins: [
+    new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
     new webpack.HotModuleReplacementPlugin(),
-
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(false),
+      VERSION: JSON.stringify(new Date()),
+      // 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
 
   ],
   devtool: 'inline-source-map',
