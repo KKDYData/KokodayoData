@@ -524,7 +524,7 @@ export default {
   width: auto;
   padding: 2px 10px;
   margin: 5px 5px 5px 0;
-  max-width: 150px;
+  max-width: 180px;
 }
 
 .el-button.no-map:hover {

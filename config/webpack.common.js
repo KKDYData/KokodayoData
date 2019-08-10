@@ -1,6 +1,5 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebPackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
@@ -25,11 +24,6 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           sizes: [96, 128], // multiple sizes
           ios: true
         },
-        // {
-        //   src: path.resolve('src/assets/icon_big.png'),
-        //   size: '1024x1024', // you can also use the specifications pattern
-        //   ios: true
-        // }
       ]
     }),
     new WorkboxPlugin.GenerateSW({
@@ -56,7 +50,24 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
               statuses: [0, 200]
             }
           }
+        },
+        {
+          // To match cross-origin requests, use a RegExp that matches
+          // the start of the origin:
+          urlPattern: new RegExp('https://penguin-stats.io/PenguinStats/api/'),
+          handler: 'CacheFirst',
+          options: {
+            cacheableResponse: {
+              statuses: [0, 200]
+            },
+            cacheName: 'penguin-api-cache',
+            expiration: {
+              maxEntries: 5,
+              maxAgeSeconds: 60 * 60,
+            },
+          }
         }
+        //
       ]
     })
   ];
@@ -64,7 +75,6 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
 module.exports = {
   entry: './src/main.js',
   plugins: [
-    new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
     new HtmlWebpackPlugin({
       title: 'test!',
       template: 'src/index.html',
@@ -77,12 +87,11 @@ module.exports = {
       filename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash].css',
       // chunkFilename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
     }),
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(new Date()),
+    }),
     ...swPlugins
   ],
-  devServer: {
-    contentBase: './dist',
-    hot: true
-  },
   output: {
     path: path.resolve('dist')
   },
@@ -101,6 +110,7 @@ module.exports = {
               // by default it uses publicPath in webpackOptions.output
               // publicPath: '../',
               hmr: process.env.NODE_ENV === 'development',
+              reloadAll: true
             },
           },
           'css-loader', 'stylus-loader'],

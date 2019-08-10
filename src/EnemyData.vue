@@ -344,7 +344,7 @@ export default {
       }, 50);
     },
     async loadMap() {
-      const parent = this.$route.params.map || 'main_05-10';
+      const parent = this.$route.params.map; //|| 'main_05-10';
       if (!parent) return;
       const treeIndex = {
         hard: 0,
@@ -396,7 +396,7 @@ export default {
         this.load = false;
         this.$router.push(this.path + parent);
 
-        console.log(exData);
+        // console.log(exData);
         if (mapData) {
           exData.stageDropInfo &&
             this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
@@ -455,127 +455,102 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.chapter-wrapper {
-  padding-left: 20px;
-}
+.chapter-wrapper
+  padding-left: 20px
 
-.map-wrapper {
-  margin: 20px auto 0;
-  max-width: 1200px;
-  padding: 20px;
-  min-width: 1100px;
-  min-height: 100vh;
+.map-wrapper
+  margin: 20px auto 0
+  max-width: 1200px
+  padding: 20px
+  //min-height: 100vh删了看看
+  min-width: 1100px
 
-  .map-title-part {
-    margin: 0 0 20px;
-    transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  }
+  .map-title-part
+    margin: 0 0 20px
+    transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55)
 
-  .map-data-wrapper {
-    margin-bottom: 20px;
+  .map-data-wrapper
+    margin-bottom: 20px
 
-    .map-data-container {
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-    }
-  }
+    .map-data-container
+      margin-bottom: 20px
+      display: flex
+      flex-wrap: wrap
 
-  .map-option-container-wrapper {
-    margin-left: 5vw;
-    max-width: 450px;
-    min-width: 385px;
+  .map-option-container-wrapper
+    margin-left: 5vw
+    max-width: 450px
+    min-width: 385px
 
-    .map-option-container {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      align-content: start;
+    .map-option-container
+      display: flex
+      justify-content: space-between
+      flex-wrap: wrap
+      align-content: start
 
-      .map-option-content {
-        margin: 0 0 20px;
-        width: calc(50% - 40px);
-      }
-    }
-  }
+      .map-option-content
+        margin: 0 0 20px
+        width: calc(50% - 40px)
 
-  --height: 28vw;
+  --height: 28vw
 
-  .map-left-panel {
-    width: calc(var(--height) * 1.78);
-    box-sizing: border-box;
-  }
+  .map-left-panel
+    width: calc(var(--height) * 1.78)
+    box-sizing: border-box
 
-  .map-pic-contianer {
-    height: var(--height);
-    width: calc(var(--height) * 1.78);
-    box-sizing: border-box;
-    border: 2px solid #313131;
-  }
-}
+  .map-pic-contianer
+    height: var(--height)
+    width: calc(var(--height) * 1.78)
+    box-sizing: border-box
+    border: 2px solid #313131
 
-.map-drop-list-wrapper {
-  display: flex;
-}
+.map-drop-list-wrapper
+  display: flex
 
-.runes-mode-button {
-  padding-top: 7px;
-  padding-bottom: 4px;
-  vertical-align: bottom;
-  border-radius: 2px;
-}
+.runes-mode-button
+  padding-top: 7px
+  padding-bottom: 4px
+  vertical-align: bottom
+  border-radius: 2px
 
-@media screen and (min-width: 1350px) {
-  .map-wrapper {
-    min-width: 100%;
-  }
-}
+@media screen and (min-width: 1350px)
+  .map-wrapper
+    min-width: 100%
 
-@media screen and (min-width: 1500px) {
-  .map-wrapper {
-    --height: 500px;
-    min-width: 1500px;
-  }
-}
+@media screen and (min-width: 1500px)
+  .map-wrapper
+    --height: 500px
+    min-width: 1500px
 
-@media screen and (max-width: 800px) {
-  .map-wrapper {
-    --height: calc(52.8vw);
-    min-width: 360px;
-    box-sizing: border-box;
-    padding: 3vw;
+@media screen and (max-width: 800px)
+  .map-wrapper
+    --height: calc(52.8vw)
+    min-width: 360px
+    box-sizing: border-box
+    padding: 3vw
 
-    .map-option-container-wrapper {
-      min-width: auto;
-      max-width: inherit;
-      margin: 20px 0;
+    .map-option-container-wrapper
+      min-width: auto
+      max-width: inherit
+      margin: 20px 0
 
-      .map-option-container {
-        min-width: auto;
-        margin-left: 2vw;
+      .map-option-container
+        min-width: auto
+        margin-left: 2vw
 
-        .map-option-content {
-          margin: 0 10px 10px 0;
-          width: calc(50% - 10px);
-        }
-      }
-    }
-  }
+        .map-option-content
+          margin: 0 10px 10px 0
+          width: calc(50% - 10px)
 
-  .map-drop-container-wrapper {
-    margin-top: 10px;
-  }
-}
+  .map-drop-container-wrapper
+    margin-top: 10px
 
-@media screen and (max-width: 500px) {
-  .map-drop-container-wrapper {
-    margin-top: 0px;
-  }
+@media screen and (max-width: 500px)
+  .map-drop-container-wrapper
+    margin-top: 0px
 
-  .runes-mode-button {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-}
+  .runes-mode-button
+    padding-top: 5px
+    padding-bottom: 5px
 </style>
 

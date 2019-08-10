@@ -4,7 +4,7 @@
       popper-class="item-popover-class"
       placement="top"
       :title="item.name"
-      :width="!isShort? 350 : 250"
+      :width="!short? 350 : 250"
       :trigger="isHover"
       :open-delay="500"
     >
@@ -34,16 +34,25 @@
 
       <p>{{item.usage}}</p>
       <div v-if="type !== 'FURN'" class="item-popover">
-        <div v-if="item.stageDropList.length > 0">
+        <div v-if="dropList.length > 0">
           <el-divider content-position="left">
             <span>关卡掉落</span>
+            <span
+              v-if="showDropInfo"
+              :style="short ? 'top: 10px; right: -150px' : ''"
+              class="item-divider-extra"
+            >统计次数</span>
           </el-divider>
-          <p class="item-stage-container" v-for="stage in item.stageDropList" :key="stage.stageId">
+          <p class="item-stage-container" v-for="stage in dropList" :key="stage.stageId">
             <span
               :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'"
               class="item-stage-name"
             >{{stageId(stage.stageId)}}</span>
             <span class="item-occper">{{occper(stage.occPer)}}</span>
+            <el-tooltip v-if="stage.times" class="item-dropInfo" placement="top">
+              <div slot="content">{{stage.times}}/{{stage.quantity}}</div>
+              <span>{{stage.rate}}/次</span>
+            </el-tooltip>
           </p>
         </div>
         <div v-if="item.buildingProductList.length > 0">
@@ -67,11 +76,12 @@ import { path } from '../utils';
 
 import { itemBackground, occPer_chinese, roomType } from '../utils/string';
 
-import { Popover, Divider, Image } from 'element-ui';
+import { Popover, Divider, Image, Tooltip } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Popover);
 Vue.use(Divider);
 Vue.use(Image);
+Vue.use(Tooltip);
 
 const stageList = () =>
   import(/* webpackChunkName: "stageList" */ './stageList.json');
@@ -86,12 +96,11 @@ export default {
     type: String
   },
   mounted() {
-    stageList().then(res => (this.stageList = res));
+    stageList().then(res => (this.stageList = res.default));
   },
   data() {
     return {
       stageList: [],
-      isShort: this.short,
       isHover:
         process.env.NODE_ENV === 'development' || this.short ? 'click' : 'hover'
     };
@@ -107,6 +116,26 @@ export default {
         this.item.iconId +
         '_optimized.png'
       );
+    },
+    showDropInfo() {
+      return this.dropList[0].times;
+    },
+    dropList() {
+      const list = this.$store.getters.itemDropList(this.item.itemId);
+      if (list) {
+        console.log(list);
+        return list.filter(el =>
+          this.item.stageDropList.find(stage => {
+            if (stage.stageId === el.stageId) {
+              el.occPer = stage.occPer;
+              el.rate = Math.round((el.quantity / el.times) * 100) / 100;
+              return true;
+            }
+          })
+        );
+      } else {
+        return this.item.stageDropList;
+      }
     }
   },
   methods: {
@@ -124,96 +153,96 @@ export default {
 </script>
 
  <style lang="stylus" scoped>
- .evolvcost-item-contianer {
+ .evolvcost-item-contianer
    /*margin: 5px 10px;*/
-   width: 70px;
-   height: 70px;
-   display: block;
-   box-sizing: border-box;
-   border-radius: 50%;
-   box-shadow: inset 0 0 0 2px black;
-   background: grey;
-   border: 2px solid rgb(249, 198, 19);
-   overflow: visible;
-   margin: 0 auto;
- }
+   width: 70px
+   height: 70px
+   display: block
+   box-sizing: border-box
+   border-radius: 50%
+   box-shadow: inset 0 0 0 2px black
+   background: grey
+   border: 2px solid rgb(249, 198, 19)
+   overflow: visible
+   margin: 0 auto
 
- .evolvcost-item-contianer>>>img {
-   width: 128%;
-   height: 128%;
-   margin-top: -14%;
-   margin-left: -14%;
- }
+ .evolvcost-item-contianer>>>img
+   width: 128%
+   height: 128%
+   margin-top: -14%
+   margin-left: -14%
 
- .item-occper {
-   background-color: rgb(128, 128, 128);
-   color: white;
-   padding: 0 6px;
-   border-radius: 3px;
- }
+ .item-popover
+   &.is-left
+     left: 20px
+     padding: 0
 
- .item-stage-name {
-   width: 50px;
-   display: inline-block;
- }
+   .item-divider-extra
+     position: absolute
+     top: 0
+     right: - 230px
 
- .item-stage-container {
-   padding-left: 40px;
- }
+   .item-stage-container
+     padding-left: 40px
 
- .item-popover .is-left {
-   left: 20px;
-   padding: 0;
- }
+     .item-occper
+       background-color: rgb(128, 128, 128)
+       color: white
+       padding: 0 6px
+       border-radius: 3px
 
- .weekly {
-   width: auto;
- }
+     .item-dropInfo
+       float: right
+       cursor: pointer
 
- .furn-item {
-   width: 70px;
-   display: block;
-   box-sizing: border-box;
-   border-radius: 3px;
-   box-shadow: inset 0px 6px 13px 0px #4a4a4a;
-   background: url('../assets/bbbj_optimized.png');
-   background-size: cover;
+     .item-occper
+       background-color: rgb(128, 128, 128)
+       color: white
+       padding: 0 6px
+       border-radius: 3px
+
+     .item-stage-name
+       width: 50px
+       display: inline-block
+
+ .weekly
+   width: auto
+
+ .furn-item
+   width: 70px
+   display: block
+   box-sizing: border-box
+   border-radius: 3px
+   box-shadow: inset 0px 6px 13px 0px #4a4a4a
+   background: url('../assets/bbbj_optimized.png')
+   background-size: cover
    /*overflow: visible;*/
-   margin: 0 auto;
-   padding: 9px 0;
+   margin: 0 auto
+   padding: 9px 0
 
-   & >>> img {
-     width: calc(100% - 1px);
-     box-shadow: 1px 1px 0px 1px #6b6b6b63, 1px -1px 0px 0px #fff;
-   }
- }
+   & >>> img
+     width: calc(100% - 1px)
+     box-shadow: 1px 1px 0px 1px #6b6b6b63, 1px -1px 0px 0px #fff
 
- @media screen and (max-width: 700px) {
-   .evolvcost-item-contianer {
+ @media screen and (max-width: 700px)
+   .evolvcost-item-contianer
      /*padding: 5px 10px;*/
-     width: calc(40px + 1vw);
-     height: calc(40px + 1vw);
-   }
+     width: calc(40px + 1vw)
+     height: calc(40px + 1vw)
 
-   .evolvcost-name-wrapper {
-     font-size: 14px;
-   }
+   .evolvcost-name-wrapper
+     font-size: 14px
 
-   .item-stage-container {
-     padding-left: 30px;
-   }
+   .item-stage-container
+     padding-left: 30px
 
-   .item-popover {
-     max-height: 150px;
-     overflow-y: scroll;
-   }
+   .item-popover
+     max-height: 150px
+     overflow-y: scroll
 
-   .item-popover .is-left {
-     padding: 10px;
-   }
+   .item-popover .is-left
+     padding: 10px
 
-   .item-popover .el-divider--horizontal {
-     width: calc(100% - 10px);
-   }
- }
+   .item-popover .el-divider--horizontal
+     width: calc(100% - 10px)
 </style>
