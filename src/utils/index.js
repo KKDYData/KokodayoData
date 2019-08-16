@@ -1,3 +1,9 @@
+import store from '../store';
+
+const setVer = (name, ver) => {
+  store.commit(name, new Date(ver).toLocaleString());
+};
+
 const debounce = function (action, idle) {
   let last;
   return function () {
@@ -40,6 +46,8 @@ const fetchPut = (url, data) => {
 
 };
 
+
+
 const submitFeedback = content => {
   return fetchPut('/api/arknights/feedback', content)
     .catch(err => console.error(err))
@@ -51,10 +59,12 @@ const fetchGet = (url) => {
   return fetch(url, {
     method: 'GET'
   }).then(res => {
-    if (res.ok)
+    if (res.ok) {
       return res.json();
-    else
+    }
+    else {
       return Promise.reject('server error');
+    }
   });
 };
 
@@ -71,16 +81,24 @@ const getProfileList = () => {
 
 const getEnemyList = () => {
   return fetchGet('/api/arknights/data/enemyList')
-    .then(res => fetchGet('https' + res.url.slice(4)))
+    .then(res => {
+      setVer('setEnemyVer', res.lastModified);
+      return fetchGet('https' + res.url.slice(4));
+    }
+    )
     .catch(err => {
       console.log(err);
       return [];
     });
 };
 
+
 const getEneAppearMap = () => {
   return fetchGet('/api/arknights/data/enemyAppearMap')
-    .then(res => fetchGet('https' + res.url.slice(4)))
+    .then(res => {
+      setVer('setApperMapVer', res.lastModified);
+      return fetchGet('https' + res.url.slice(4));
+    })
     .catch(err => {
       console.log(err);
       return [];
@@ -89,7 +107,10 @@ const getEneAppearMap = () => {
 
 const getDevList = () => {
   return fetchGet('/api/arknights/data/devList')
-    .then(res => fetchGet('https' + res.url.slice(4)))
+    .then(res => {
+      setVer('setListVer', res.lastModified);
+      return fetchGet('https' + res.url.slice(4));
+    })
     .catch(err => {
       console.log('error');
       console.log(err);
@@ -113,8 +134,7 @@ const getMapData = name => {
     .catch(err => console.error(err));
 };
 
-const getMapDataLsitVer = name => {
-  console.log(name);
+const getMapDataListVer = name => {
   return fetchGet(path + 'map/exData/' + name + '.json')
     .catch(err => console.error(err));
 };
@@ -327,7 +347,7 @@ export {
   getDevList,
   isMoblie,
   getMapData,
-  getMapDataLsitVer,
+  getMapDataListVer,
   changeKey,
   submitFeedback
 };

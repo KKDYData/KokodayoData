@@ -1,5 +1,7 @@
 node_modules
 dist
+dist-Stable
+dist-Beta
 stats.json
 package-lock.json
 yarn.lock

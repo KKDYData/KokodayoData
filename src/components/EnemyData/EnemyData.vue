@@ -26,6 +26,7 @@
         ></el-tree>
       </div>
     </el-drawer>
+    <!-- 主体 -->
     <el-alert show-icon type="warning" description>
       <div slot="title">注意</div>
       <p>即将更新敌人路线、所有敌人的出现地图、其它地图数据...</p>
@@ -45,6 +46,13 @@
             :plain="!runesMode"
             class="runes-mode-button"
           >突袭</el-button>
+          <el-button
+            @click="laodRouteMap"
+            v-if="selMapDataEx"
+            :type="!showMap ? '': 'warning'"
+            :plain="!showMap"
+            class="runes-mode-button"
+          >地图</el-button>
         </div>
         <p ref="map-desc" v-if="selMapDataEx" :key="runesMode" v-html="mapDesc"></p>
       </div>
@@ -66,20 +74,9 @@
                 fit="fill"
                 :src="mapPath"
               ></el-image>
-              <div id="map-canvas-container"></div>
+              <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
             </div>
-            <div class="left-layout">
-              <my-title style="margin: 20px 0 0;" :title="selectedMap === '' ? '所有敌人' : '出现敌人'"></my-title>
-              <enemy-data-layout
-                ref="layout"
-                :short="short"
-                v-if="data"
-                :data="data"
-                :appear-map="appearMap"
-                :map-data="selMapData"
-                :runes-mode="runesMode"
-              ></enemy-data-layout>
-            </div>
+            <div class="left-layout"></div>
           </div>
           <div v-if="mapCode" class="map-option-container-wrapper">
             <my-title title="地图信息"></my-title>
@@ -129,6 +126,18 @@
           </div>
         </div>
       </div>
+      <my-title style="margin: 20px 0 0;" :title="selectedMap === '' ? '所有敌人' : '出现敌人'"></my-title>
+      <enemy-data-layout
+        ref="layout"
+        :short="short"
+        v-if="data"
+        :data="data"
+        :appear-map="appearMap"
+        :map-data="selMapData"
+        :runes-mode="runesMode"
+        @showRoute="loopRoutes"
+        @closeRoute="closeRoute"
+      ></enemy-data-layout>
     </div>
   </div>
 </template>
@@ -154,7 +163,7 @@ import {
   isMoblie,
   getMapData,
   path,
-  getMapDataLsitVer,
+  getMapDataListVer,
   changeDesc,
   fetchGet
 } from '../../utils';
@@ -165,7 +174,7 @@ import { mapOptionsKey } from '../../utils/string';
 
 import StageList from '../stageListPro';
 
-import { normalPath } from './draw';
+import { Map } from './draw';
 
 const StageType = {
   main: '主线',
@@ -174,7 +183,9 @@ const StageType = {
   wk: '日常',
   camp: '剿灭作战',
   guid: '教程',
-  sub: '支线'
+  sub: '支线',
+  pro: '芯片',
+  a001: '第一活动'
 };
 
 const EnemyDataLayout = () => ({
@@ -225,7 +236,9 @@ export default {
       runesMode: false,
       pTranisitionTemp: 0,
       treeId: '',
-      mapPicLoad: true
+      mapPicLoad: true,
+      map: null,
+      showMap: false
     };
   },
   computed: {
@@ -298,9 +311,7 @@ export default {
           }
         });
       };
-      return change(StageList)
-        .filter(el => el.label !== 'st')
-        .sort((pre, cur) => (pre.label > cur.label ? -1 : 1));
+      return change(StageList);
     },
     direction() {
       return this.short ? 'btt' : 'rtl';
@@ -330,13 +341,12 @@ export default {
       this.pTranisitionTemp = window.getComputedStyle(
         this.$refs['map-title-part']
       ).height;
-      // target.style.transition = 'none'; // 本行2015-05-20新增，mac Safari下，貌似auto也会触发transition, 故要none下~
       if (!this.runesMode) {
-        this.selMapDataEx = await getMapDataLsitVer(this.mapCode + '%23f%23');
+        this.selMapDataEx = await getMapDataListVer(this.mapCode + '%23f%23');
         this.runesMode = true;
       } else {
         this.runesMode = false;
-        this.selMapDataEx = await getMapDataLsitVer(this.mapCode);
+        this.selMapDataEx = await getMapDataListVer(this.mapCode);
       }
       this.pTransition();
     },
@@ -345,9 +355,9 @@ export default {
       target.style.height = 'auto';
       await this.$nextTick();
       const targetHeight = window.getComputedStyle(target).height;
-      target.style.height = +this.pTranisitionTemp.replace('px', '') + 'px';
+      target.style.height = this.pTranisitionTemp;
       setTimeout(() => {
-        target.style.height = targetHeight.replace('px', '') + 'px';
+        target.style.height = targetHeight;
       }, 50);
     },
     async loadMap() {
@@ -355,39 +365,29 @@ export default {
       const parent = this.$route.params.map || 'main_05-10';
       console.log(parent);
       if (!parent) return;
-      // this.choseMap({ path: parent });
-
-      const treeIndex = {
-        hard: 0,
-        camp: 1,
-        main: 2,
-        sub: 3
-      };
       const splitTemp = parent.split('_');
-      const pIndex = treeIndex[splitTemp[0]];
-      const chapter = splitTemp[1].split('-');
-      if (pIndex > 1) {
-        if (pIndex < 3) {
-          const nodes = this.stageList[2].children[+chapter[0]];
+      let groupName = splitTemp[0];
+      if (groupName === 'sub') groupName = 'main';
+      const group = this.stageList.find(
+        el => el.label === StageType[groupName]
+      );
+      if (group.label === '主线') {
+        const chapter = splitTemp[1].split('-');
+        if (splitTemp[0] === 'main') {
+          const nodes = this.stageList[0].children[+chapter[0]];
           const targetData = nodes.children[+chapter[1] - 1];
           this.choseMap(targetData);
         } else {
-          const temp = this.stageList[2].children[+chapter[0]];
+          //支线
+          const temp = this.stageList[0].children[+chapter[0]];
+          console.log(temp, this.stageList);
           const nodes = temp.children[temp.children.length - 1];
-          console.log(chapter, pIndex, chapter, temp, nodes);
-
           const targetData = nodes.children[+chapter[1] - 1];
-
           this.choseMap(targetData);
         }
       } else {
-        const index = chapter[chapter.length - 1] - 1;
-        console.log(chapter, pIndex, chapter, index);
-        console.log(this.stageList[pIndex]);
-        console.log(this.stageList[pIndex].children);
-        const targetData = this.stageList[pIndex].children[index];
-
-        console.log(targetData);
+        console.log(group);
+        const targetData = group.children.find(el => el.path === parent);
         this.choseMap(targetData);
       }
     },
@@ -402,44 +402,66 @@ export default {
         let parent = data.path;
         console.log(parent);
         this.mapCode = parent;
+        let dataCode = parent.replace('wk', 'weekly').replace('pro', 'promote');
         this.$refs['chapter-selecter'].closeDrawer();
         this.load = true;
         this.mapPicLoad = true;
         const [mapData, exData] = await Promise.all([
-          getMapData('level_' + parent),
-          getMapDataLsitVer(parent)
+          getMapData('level_' + dataCode),
+          getMapDataListVer(parent)
         ]);
         this.load = false;
         this.$router.push(this.path + parent);
-
-        console.log(exData);
+        console.log(mapData);
+        // console.log(exData);
         if (mapData) {
           exData.stageDropInfo &&
             this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
               data => (this.detailsDropList = data)
             );
-
+          this.data = Object.entries(this.rowData).reduce((res, [k, v]) => {
+            const target = mapData.enemyDbRefs.find(el => el.id === k);
+            if (target) {
+              res[k] = Object.assign(v, { level: target.level });
+              return res;
+            } else return res;
+          }, {});
+          console.log(this.data);
           this.selectedMap = data.label;
           this.selMapData = mapData;
           this.selMapDataEx = exData;
-          const temp = {};
-          Object.entries(this.rowData).forEach(([k, v]) => {
-            const target = mapData.enemyDbRefs.find(el => el.id === k);
-            if (target) {
-              temp[k] = Object.assign(v, {
-                level: target.level
-              });
-            }
-          });
-          this.data = temp;
           this.pTransition();
-          normalPath(
-            '#map-canvas-container',
-            mapData.routes.filter(el => el),
-            mapData.mapData
-          );
+          if (this.map) this.map.setData(mapData.mapData, mapData.routes);
+          else {
+            const { mapData: md, routes: r } = mapData;
+            await this.$nextTick();
+            this.map = new Map('#map-canvas-container', 100, md, r);
+          }
         }
       }
+    },
+    async loopRoutes(index, color) {
+      console.log(index, color);
+      this.showMap = true;
+      await this.$nextTick();
+      this.map.loadMap();
+      if (!this.selMapData.routes[index]) return;
+      this.map.addRoutes(index, color);
+    },
+    async laodRouteMap() {
+      if (this.showMap) {
+        this.showMap = false;
+      } else {
+        if (this.map) {
+          this.showMap = true;
+          await this.$nextTick();
+          this.map.loadMap();
+        } else throw Error('no map ?');
+      }
+    },
+    closeRoute(index) {
+      console.log('close', index);
+      this.map.deleteRoute(index);
     },
     linkStart() {
       return this.getData().then(data => {
@@ -475,141 +497,115 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.chapter-wrapper {
-  padding-left: 20px;
-}
+.chapter-wrapper
+  padding-left: 20px
 
-.map-wrapper {
-  margin: 20px auto 0;
-  max-width: 1200px;
-  padding: 20px;
-  min-width: 1100px;
-  min-height: 100vh;
+.map-wrapper
+  margin: 20px auto 0
+  max-width: 1200px
+  padding: 20px
+  min-width: 1100px
+  min-height: 100vh
+  display: flex
+  flex-direction: column
+  overflow: hidden
 
-  .map-title-part {
-    margin: 0 0 20px;
-    transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-  }
+  .map-title-part
+    margin: 0 0 20px
+    transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55)
 
-  .map-data-wrapper {
-    margin-bottom: 20px;
+  .map-data-wrapper
+    margin-bottom: 20px
 
-    .map-data-container {
-      margin-bottom: 20px;
-      display: flex;
-      flex-wrap: wrap;
-    }
-  }
+    .map-data-container
+      margin-bottom: 20px
+      display: flex
+      flex-wrap: wrap
 
-  .map-option-container-wrapper {
-    margin-left: 5vw;
-    max-width: 450px;
-    min-width: 385px;
+  --height: 28vw
 
-    .map-option-container {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      align-content: start;
+  .map-left-panel
+    width: calc(var(--height) * 1.78)
+    box-sizing: border-box
 
-      .map-option-content {
-        margin: 0 0 20px;
-        width: calc(50% - 40px);
-      }
-    }
-  }
+  .map-pic-contianer
+    height: var(--height)
+    width: calc(var(--height) * 1.78)
+    box-sizing: border-box
+    border: 2px solid #313131
+    //opacity: 0.5
 
-  --height: 28vw;
+.map-option-container-wrapper
+  margin-left: 5vw
+  max-width: 450px
+  min-width: 385px
 
-  .map-left-panel {
-    width: calc(var(--height) * 1.78);
-    box-sizing: border-box;
-  }
+  .map-option-container
+    display: flex
+    justify-content: space-between
+    flex-wrap: wrap
+    align-content: start
 
-  .map-pic-contianer {
-    height: var(--height);
-    width: calc(var(--height) * 1.78);
-    box-sizing: border-box;
-    border: 2px solid #313131;
-    opacity: 0.5;
-  }
-}
+    .map-option-content
+      margin: 0 0 20px
+      width: calc(50% - 40px)
 
-.map-drop-list-wrapper {
-  display: flex;
-}
+.map-drop-list-wrapper
+  display: flex
 
-.runes-mode-button {
-  padding-top: 7px;
-  padding-bottom: 4px;
-  vertical-align: bottom;
-  border-radius: 2px;
-}
+.runes-mode-button
+  padding-top: 4px
+  padding-bottom: 4px
+  vertical-align: bottom
+  border-radius: 2px
 
-#map-canvas-container {
-  border: 1px red solid;
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  border: 2px solid red;
-  transform: perspective(500px) rotateX(18deg) translate3d(0px, -10px, -20px);
-}
+#map-canvas-container
+  position: absolute
+  height: 100%
+  width: 100%
+  top: 0
+  transform: perspective(500px) rotateX(18deg) translate3d(0px, -10px, -20px)
 
-@media screen and (min-width: 1350px) {
-  .map-wrapper {
-    min-width: 100%;
-  }
+@media screen and (min-width: 1350px)
+  .map-wrapper
+    min-width: 100%
+    //--height: 68vw
 
-  --height: 68vw;
-}
+@media screen and (min-width: 1500px)
+  .map-wrapper
+    --height: 500px
+    //--height: 50vw
+    min-width: 1600px
 
-@media screen and (min-width: 1500px) {
-  .map-wrapper {
-    --height: 500px;
-    --height: 50vw;
-    min-width: 1500px;
-  }
-}
+@media screen and (max-width: 800px)
+  .map-wrapper
+    --height: calc(52.8vw)
+    min-width: 360px
+    box-sizing: border-box
+    padding: 3vw
 
-@media screen and (max-width: 800px) {
-  .map-wrapper {
-    --height: calc(52.8vw);
-    min-width: 360px;
-    box-sizing: border-box;
-    padding: 3vw;
+    .map-option-container-wrapper
+      min-width: auto
+      max-width: inherit
+      margin: 20px 0
 
-    .map-option-container-wrapper {
-      min-width: auto;
-      max-width: inherit;
-      margin: 20px 0;
+      .map-option-container
+        min-width: auto
+        margin-left: 2vw
 
-      .map-option-container {
-        min-width: auto;
-        margin-left: 2vw;
+        .map-option-content
+          margin: 0 10px 10px 0
+          width: calc(50% - 10px)
 
-        .map-option-content {
-          margin: 0 10px 10px 0;
-          width: calc(50% - 10px);
-        }
-      }
-    }
-  }
+  .map-drop-container-wrapper
+    margin-top: 10px
 
-  .map-drop-container-wrapper {
-    margin-top: 10px;
-  }
-}
+@media screen and (max-width: 500px)
+  .map-drop-container-wrapper
+    margin-top: 0px
 
-@media screen and (max-width: 500px) {
-  .map-drop-container-wrapper {
-    margin-top: 0px;
-  }
-
-  .runes-mode-button {
-    padding-top: 5px;
-    padding-bottom: 5px;
-  }
-}
+  .runes-mode-button
+    padding-top: 5px
+    padding-bottom: 5px
 </style>
 
