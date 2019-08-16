@@ -43,9 +43,10 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
         {
           // To match cross-origin requests, use a RegExp that matches
           // the start of the origin:
-          urlPattern: new RegExp('https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'),
+          urlPattern: new RegExp('https://andata.somedata.top/dataX/'),
           handler: 'StaleWhileRevalidate',
           options: {
+            cacheName: 'oss-cache',
             cacheableResponse: {
               statuses: [0, 200]
             }
@@ -55,7 +56,7 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           // To match cross-origin requests, use a RegExp that matches
           // the start of the origin:
           urlPattern: new RegExp('https://penguin-stats.io/PenguinStats/api/'),
-          handler: 'CacheFirst',
+          handler: 'StaleWhileRevalidate',
           options: {
             cacheableResponse: {
               statuses: [0, 200]

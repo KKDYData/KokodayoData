@@ -30,7 +30,7 @@ const throttle = function (action, delay) {
   };
 };
 
-const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';
+const path = 'https://andata.somedata.top/dataX/';
 
 // import 'core-js/modules/es.object.from-entries';
 
@@ -294,12 +294,11 @@ const getWebpOk = () => {
   ) {
     return { ok: false, mobile: isMoblie };
   } else {
-    return { ok: false, mobile: isMoblie };
+    return { ok: true, mobile: isMoblie };
   }
 };
 
 const webpOk = getWebpOk().ok;
-
 
 const getProfilePath = name => {
   return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
