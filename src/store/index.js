@@ -18,7 +18,6 @@ export default new Vuex.Store({
   getters: {
     itemDropList: (state) => id => {
       if (state.dropList) {
-        console.log(state.dropList);
         return state.dropList[id];
       }
     }

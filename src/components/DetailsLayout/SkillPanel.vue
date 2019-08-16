@@ -59,7 +59,7 @@
 </template>
 
 <script>
-import { changeDesc } from '../../utils';
+import { changeAttackSpeed } from '../../utils';
 import Range from './Range';
 import SkillContainer from './SkillContainer';
 
@@ -132,76 +132,7 @@ export default {
       return typeList[type];
     },
     changeSkillDesc(skill) {
-      const str = changeDesc(skill.description);
-      let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
-        let percent = '',
-          minus = false,
-          res = '';
-        if (p2.match(/:0%/)) {
-          p2 = p2.slice(0, -3);
-          percent = '%';
-        }
-        if (p2.match(/:0.0%/)) {
-          p2 = p2.slice(0, -5);
-          percent = '%';
-        }
-        if (p2.match(/:0.0/)) {
-          p2 = p2.slice(0, -4);
-          percent = '';
-        }
-        if (p2.match(/-/)) {
-          p2 = p2.slice(1);
-          minus = true;
-        }
-        let temp = skill.blackboard.find(el => el.key === p2.toLowerCase());
-        if (temp) {
-          res = temp.value;
-          if (minus) res *= -1;
-          if (percent) res = Math.floor(res * 10 * 10);
-        }
-        return res + percent;
-      });
-      const skill_time_text = res.match(/攻击间隔/);
-      if (skill_time_text) {
-        const skill_base_time = skill.blackboard.find(
-          el => el.key === 'base_attack_time'
-        );
-        const text = res
-          .slice(skill_time_text.index + 4)
-          .match(/(<.*?>)(.*?)(<\/.*?>)/);
-        let value = skill_base_time.value;
-        const unit = text[2] !== '极大幅度缩短' ? 's' : '%';
-        if (unit === '%') value *= 100;
-        const temp = res.split('');
-        temp.splice(
-          skill_time_text.index + 4 + text.index + text[0].length,
-          0,
-          `(${value}${unit})`
-        );
-
-        res = temp.join('');
-      }
-
-      const skill_attack_speed = res.match(/攻击速度(?!<)/);
-      if (skill_attack_speed) {
-        const attack_speed = skill.blackboard.find(
-          el => el.key === 'attack_speed'
-        );
-        if (!attack_speed) return;
-        const text = res
-          .slice(skill_attack_speed.index + 4)
-          .match(/(<.*?>)(.*?)(<\/.*?>)/);
-        let value = attack_speed.value;
-        const temp = res.split('');
-        temp.splice(
-          skill_attack_speed.index + 4 + text.index + text[0].length,
-          0,
-          `(${value})`
-        );
-        res = temp.join('');
-      }
-
-      return res;
+      return changeAttackSpeed(skill);
     }
   }
 };

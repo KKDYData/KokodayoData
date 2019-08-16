@@ -14,7 +14,6 @@ const actions = {
       });
     }
     commit('setDropList', res);
-    console.log(res);
   }
 };
 

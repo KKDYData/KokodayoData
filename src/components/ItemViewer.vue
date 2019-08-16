@@ -123,7 +123,6 @@ export default {
     dropList() {
       const list = this.$store.getters.itemDropList(this.item.itemId);
       if (list) {
-        console.log(list);
         return list.filter(el =>
           this.item.stageDropList.find(stage => {
             if (stage.stageId === el.stageId) {
