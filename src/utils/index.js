@@ -30,7 +30,7 @@ const throttle = function (action, delay) {
   };
 };
 
-const path = 'https://andata.somedata.top/dataX/';
+const path = 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/';//'https://andata.somedata.top/dataX/';
 
 // import 'core-js/modules/es.object.from-entries';
 
@@ -57,7 +57,8 @@ const submitFeedback = content => {
 //包装fetch，使用get
 const fetchGet = (url) => {
   return fetch(url, {
-    method: 'GET'
+    method: 'GET',
+    mode: 'cors'
   }).then(res => {
     if (res.ok) {
       return res.json();
