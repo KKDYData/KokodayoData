@@ -166,7 +166,13 @@
 </template>
 
 <script>
-import { getHeroData, path, fetchGet, changeDesc, isMoblie } from '../../utils';
+import {
+  getHeroData,
+  path,
+  fetchGet,
+  changeAttackSpeed,
+  isMoblie
+} from '../../utils';
 
 import {
   evolveGoldCost,
@@ -300,7 +306,7 @@ export default {
         for (let wrapper of this.data.talents) {
           const tGroup = wrapper.candidates;
           for (let talent of tGroup) {
-            talent.description = changeDesc(talent.description);
+            talent.description = changeAttackSpeed(talent);
             arr.push(talent);
           }
         }

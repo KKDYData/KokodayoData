@@ -30,9 +30,8 @@ const throttle = function (action, delay) {
   };
 };
 
-const path = 'https://andata.somedata.top/dataX/';
-
-// import 'core-js/modules/es.object.from-entries';
+const path = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'
+  : 'https://andata.somedata.top/dataX/';
 
 const fetchPut = (url, data) => {
   return fetch(url, {
@@ -322,6 +321,109 @@ const changeKey = key => {
   }
 };
 
+const changeAttackSpeed = (skill) => {
+  const str = changeDesc(skill.description);
+  let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
+    let percent = '',
+      minus = false,
+      res = '';
+    if (p2.match(/:0%/)) {
+      p2 = p2.slice(0, -3);
+      percent = '%';
+    }
+    if (p2.match(/:0.0%/)) {
+      p2 = p2.slice(0, -5);
+      percent = '%';
+    }
+    if (p2.match(/:0.0/)) {
+      p2 = p2.slice(0, -4);
+      percent = '';
+    }
+    if (p2.match(/-/)) {
+      p2 = p2.slice(1);
+      minus = true;
+    }
+    let temp = skill.blackboard.find(el => el.key === p2.toLowerCase());
+    if (temp) {
+      res = temp.value;
+      if (minus) res *= -1;
+      if (percent) res = Math.floor(res * 10 * 10);
+    }
+    return res + percent;
+  });
+  const skill_time_text = res.match(/攻击间隔/);
+  if (skill_time_text) {
+    const skill_base_time = skill.blackboard.find(
+      el => el.key === 'base_attack_time'
+    );
+    const text = res
+      .slice(skill_time_text.index + 4)
+      .match(/(<.*?>)(.*?)(<\/.*?>)/);
+
+    let value = skill_base_time.value;
+    const temp = res.split('');
+    if (!text) {
+      const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
+      temp.splice(
+        skill_time_text.index + tempIndex,
+        0,
+        `<i style="color:#F49800;font-style: normal;">(${value}s)</i>`
+      );
+    } else {
+      const unit = text[2] !== '极大幅度缩短' ? 's' : '%';
+      if (unit === '%') value *= 100;
+      temp.splice(
+        skill_time_text.index + 4 + text.index + text[0].length,
+        0,
+        `(${value}${unit})`
+      );
+    }
+
+    res = temp.join('');
+  }
+
+  const skill_attack_speed = res.match(/攻击速度(?!<|\+|-)/);
+  if (skill_attack_speed) {
+    const attack_speed = skill.blackboard.find(
+      el => el.key === 'attack_speed'
+    );
+    if (!attack_speed) return;
+    const text = res
+      .slice(skill_attack_speed.index + 4)
+      .match(/(<.*?>)(.*?)(<\/.*?>)/);
+    let value = attack_speed.value;
+    const temp = res.split('');
+    if (!text) {
+      const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
+      temp.splice(
+        skill_attack_speed.index + tempIndex,
+        0,
+        `<i style="color:#F49800;font-style: normal;">(${value})</i>`
+      );
+    } else {
+      temp.splice(
+        skill_attack_speed.index + 4 + text.index + text[0].length,
+        0,
+        `(${value})`
+      );
+    }
+    res = temp.join('');
+  }
+  const spUp = res.match(/技力回复速度/);
+  if (spUp) {
+    const temp = res.split('');
+    const value = skill.blackboard.find(
+      el => el.key === 'sp_recovery_per_sec'
+    ).value;
+    temp.splice(spUp.index + 6, 0,
+      `<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`
+    );
+    res = temp.join('');
+  }
+
+  return res;
+};
+
 
 export {
   debounce,
@@ -349,7 +451,8 @@ export {
   getMapData,
   getMapDataLsitVer,
   changeKey,
-  submitFeedback
+  submitFeedback,
+  changeAttackSpeed
 };
 
 
