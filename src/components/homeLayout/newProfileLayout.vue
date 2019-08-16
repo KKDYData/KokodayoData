@@ -86,7 +86,6 @@ const arrange = (arr, index = 0, group = []) => {
     res.push([...group[i], arr[index]]);
   }
   group = group.concat(res);
-  // debugger;
   if (index + 1 >= arr.length) return group;
   else return arrange(arr, index + 1, group);
 };

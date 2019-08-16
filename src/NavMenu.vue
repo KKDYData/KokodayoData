@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="width: 100%">
     <el-menu
       :default-active="$route.path"
       class="el-menu-demo"
