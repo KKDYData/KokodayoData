@@ -29,7 +29,7 @@
 
           <div class="talent-desc-content-wrapper">
             <div v-if="!showTalentPotencailUP[index]" class="talent-desc-content">
-              <span>{{talent.description}}</span>
+              <span v-html="talent.description"></span>
             </div>
             <div v-else class="talent-desc-content">
               <span v-html="talent.potentailUP.description"></span>
