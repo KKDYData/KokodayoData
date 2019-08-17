@@ -71,7 +71,7 @@ const fetchGet = (url) => {
 
 const getProfileList = () => {
   return fetchGet('/api/arknights/data/shortList')
-    .then(res => fetchGet('https' + res.url.slice(4)))
+    .then(res => fetchGet(path + res.name.slice(6)))
     .catch(err => {
       console.log(err);
       return [];
@@ -82,7 +82,7 @@ const getEnemyList = () => {
   return fetchGet('/api/arknights/data/enemyList')
     .then(res => {
       setVer('setEnemyVer', res.lastModified);
-      return fetchGet('https' + res.url.slice(4));
+      return fetchGet(path + res.name.slice(6));//改成拼链接
     }
     )
     .catch(err => {
@@ -96,10 +96,10 @@ const getEneAppearMap = () => {
   return fetchGet('/api/arknights/data/enemyAppearMap')
     .then(res => {
       setVer('setApperMapVer', res.lastModified);
-      return fetchGet('https' + res.url.slice(4));
+      return fetchGet(path + res.name.slice(6));//改成拼链接
     })
     .catch(err => {
-      console.log(err);
+      console.error('error', err);
       return [];
     });
 };
@@ -108,11 +108,10 @@ const getDevList = () => {
   return fetchGet('/api/arknights/data/devList')
     .then(res => {
       setVer('setListVer', res.lastModified);
-      return fetchGet('https' + res.url.slice(4));
+      return fetchGet(path + res.name.slice(6));//改成拼链接
     })
     .catch(err => {
-      console.log('error');
-      console.log(err);
+      console.error('error', err);
       return [];
     });
 };
