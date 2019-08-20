@@ -215,7 +215,7 @@ export default {
         this.$set(
           this.selectedStlye,
           index,
-          `--border: 7px solid hsl(${color}, 100%, 50%)`
+          `--border: 7px solid hsl(${color}, 75%, 50%)`
         );
         console.log(this.selectedRoutes);
         this.$emit('showRoute', index, color);

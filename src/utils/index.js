@@ -1,8 +1,10 @@
 import store from '../store';
+import { StageType } from './string';
 
 const setVer = (name, ver) => {
   store.commit(name, new Date(ver).toLocaleString());
 };
+
 
 const debounce = function (action, idle) {
   let last;
@@ -10,7 +12,7 @@ const debounce = function (action, idle) {
     const ctx = this,
       args = arguments;
     clearTimeout(last);
-    last = setTimeout(function () {
+    last = setTimeout(() => {
       action.apply(ctx, args);
     }, idle);
   };
@@ -109,6 +111,18 @@ const getDevList = () => {
   return fetchGet('/api/arknights/data/devList')
     .then(res => {
       setVer('setListVer', res.lastModified);
+      return fetchGet(path + res.name.slice(6));//改成拼链接
+    })
+    .catch(err => {
+      console.error('error', err);
+      return [];
+    });
+};
+
+const getStageList = () => {
+  return fetchGet('/api/arknights/data/stageList')
+    .then(res => {
+      // setVer('setListVer', res.lastModified);
       return fetchGet(path + res.name.slice(6));//改成拼链接
     })
     .catch(err => {
@@ -424,6 +438,33 @@ const changeAttackSpeed = (skill) => {
 };
 
 
+const findStage = (map, tree) => {
+  const splitTemp = map.split('_');
+  let groupName = splitTemp[0];
+  if (groupName === 'sub') groupName = 'main';
+  const group = tree.find(
+    el => el.label === StageType[groupName]
+  );
+  let target;
+  if (group.label === '主线') {
+    const chapter = splitTemp[1].split('-');
+    if (splitTemp[0] === 'main') {
+      const nodes = tree[0].children[+chapter[0]];
+      target = nodes.children[+chapter[1] - 1];
+    } else {
+      //支线
+      const temp = tree[0].children[+chapter[0]];
+      const nodes = temp.children[temp.children.length - 1];
+      target = nodes.children[+chapter[1] - 1];
+    }
+  } else {
+    map = map.replace('wk', 'weekly').replace('pro', 'promote');
+    target = group.children.find(el => el.path === map);
+  }
+  return target;
+};
+
+
 export {
   debounce,
   throttle,
@@ -451,7 +492,9 @@ export {
   getMapDataListVer,
   changeKey,
   submitFeedback,
-  changeAttackSpeed
+  changeAttackSpeed,
+  getStageList,
+  findStage
 };
 
 

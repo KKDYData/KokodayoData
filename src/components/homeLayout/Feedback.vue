@@ -3,19 +3,15 @@
     <div class="feedback-part">
       <my-title title="反馈"></my-title>
       <div class="feedback-info-wrapper">
-        <el-button @click="submitFb" type="primary" class="feedback-button">提交</el-button>
-        <el-button
-          @click="feedback = ''"
-          icon="el-icon-delete"
-          circle
-          class="feedback-button"
-          plain
-        ></el-button>
         <input-wrapper style="width: 50%" title="ID">
           <template>
             <el-input v-model="id" placeholder="用于识别的ID"></el-input>
           </template>
         </input-wrapper>
+        <div class="feedback-button">
+          <el-button @click="feedback = ''" icon="el-icon-delete" circle plain></el-button>
+          <el-button @click="submitFb" type="primary">提交</el-button>
+        </div>
       </div>
       <input-wrapper title="反馈">
         <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="feedback"></el-input>
@@ -25,7 +21,7 @@
       <my-title title="说明"></my-title>
       <p>1.选了标签（公招）的Tag之后，筛选模式会发生变化</p>
       <p>2.【职业】、【星级】这些分类名，点击可以取消全部选择。</p>
-      <p>3.语音√，立绘√，皮肤×，地图信息√，敌人信息√，每波敌人×，弩炮台数据×，路线×， 整合企鹅物流的掉落信息×</p>
+      <p>3.语音√，立绘√，皮肤×，地图信息√，敌人信息√，每波敌人√，弩炮台数据×，路线√， 整合企鹅物流的掉落信息×√</p>
       <p>4.可能夏活前会完全搞定吧。</p>
       <p>5.群799872783！</p>
     </div>
@@ -137,17 +133,19 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.feedback-part {
-  margin: 20px 0;
-}
+.feedback-part
+  margin: 20px 0
 
-.feedback-button {
-  float: right;
-}
+.feedback-info-wrapper
+  display: flex
 
-.feedback-button+.feedback-button {
-  margin-right: 10px;
-}
+.feedback-button
+  margin-left: auto
+  display: flex
+  margin: auto
+
+.feedback-button+.feedback-button
+  margin-right: 10px
 </style>
 
 

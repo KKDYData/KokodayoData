@@ -17,7 +17,7 @@
         <el-tree
           ref="chapter-tree"
           @node-click="choseMap"
-          :data="stageList"
+          :data="stageTree"
           accordion
           node-key="path"
           :highlight-current="true"
@@ -27,10 +27,7 @@
       </div>
     </el-drawer>
     <!-- 主体 -->
-    <el-alert show-icon type="warning" description>
-      <div slot="title">注意</div>
-      <p>即将更新敌人路线、所有敌人的出现地图、其它地图数据...</p>
-    </el-alert>
+
     <div class="map-wrapper">
       <div ref="map-title-part" class="map-title-part">
         <div>
@@ -147,11 +144,11 @@ import MyTitle from '../MyTitle';
 import ContentSlot from '../ContentSlot';
 import DropList from '../DropLIst';
 
-import { Alert, Tree, Drawer, Button, Image, Loading } from 'element-ui';
+import { Tree, Drawer, Button, Image, Loading } from 'element-ui';
 
+import { mapState } from 'vuex';
 import Vue from 'vue';
 Vue.use(Loading);
-Vue.use(Alert);
 Vue.use(Button);
 Vue.use(Tree);
 Vue.use(Drawer);
@@ -165,28 +162,13 @@ import {
   path,
   getMapDataListVer,
   changeDesc,
-  fetchGet
+  fetchGet,
+  findStage
 } from '../../utils';
 
 import Mode from '../../stats';
 
 import { mapOptionsKey } from '../../utils/string';
-
-import StageList from '../stageListPro';
-
-import { Map } from './draw';
-
-const StageType = {
-  main: '主线',
-  tr: 'TR',
-  hard: '困难',
-  wk: '日常',
-  camp: '剿灭作战',
-  guid: '教程',
-  sub: '支线',
-  pro: '芯片',
-  a001: '第一活动'
-};
 
 const EnemyDataLayout = () => ({
   component: import(
@@ -238,10 +220,18 @@ export default {
       treeId: '',
       mapPicLoad: true,
       map: null,
-      showMap: false
+      showMap: false,
+      watchTree: false
     };
   },
+  watch: {
+    stageTree(v) {
+      if (v && this.watchTree) this.loadMap();
+      this.watchTree = false;
+    }
+  },
   computed: {
+    ...mapState(['stageTree']),
     path() {
       return (
         (process.env.NODE_ENV === 'development' ? '' : Mode) + '/enemydata/'
@@ -265,9 +255,9 @@ export default {
     mapPath() {
       return this.mapCode
         ? path +
-            'map/pic/' +
-            this.mapCode +
-            '_optimized.png?x-oss-process=style/jpg-test'
+        'map/pic/' +
+        this.mapCode +
+        '_optimized.png?x-oss-process=style/jpg-test'
         : '';
     },
     options() {
@@ -279,40 +269,6 @@ export default {
           .filter(([k, v]) => mapOptionsKey[k])
           .map(([k, v]) => [mapOptionsKey[k], v]);
     },
-    stageList() {
-      const change = list => {
-        return Object.entries(list).map(([key, value]) => {
-          if (Array.isArray(value)) {
-            return {
-              label: StageType[key] || key,
-              children: value.map(el => {
-                if (el.type && el.data) {
-                  return {
-                    label: '支线',
-                    children: el.data.map(el => {
-                      const keys = el.split(' ');
-                      return {
-                        label: keys.slice(0, 2).join(' '),
-                        path: keys[2]
-                      };
-                    }) //change(el.data)
-                  };
-                } else {
-                  const keys = el.split(' ');
-                  return {
-                    label: keys.slice(0, 2).join(' '),
-                    path: keys[2]
-                  };
-                }
-              })
-            };
-          } else {
-            return { label: StageType[key] || key, children: change(value) };
-          }
-        });
-      };
-      return change(StageList);
-    },
     direction() {
       return this.short ? 'btt' : 'rtl';
     }
@@ -323,7 +279,7 @@ export default {
   beforeMount() {
     this.short = isMoblie();
   },
-  mounted() {},
+  mounted() { },
   methods: {
     clearMap() {
       this.data = this.rowData;
@@ -363,33 +319,10 @@ export default {
     async loadMap() {
       // test
       const parent = this.$route.params.map || 'main_05-10';
+      if (!parent || !this.stageTree) return;
       console.log(parent);
-      if (!parent) return;
-      const splitTemp = parent.split('_');
-      let groupName = splitTemp[0];
-      if (groupName === 'sub') groupName = 'main';
-      const group = this.stageList.find(
-        el => el.label === StageType[groupName]
-      );
-      if (group.label === '主线') {
-        const chapter = splitTemp[1].split('-');
-        if (splitTemp[0] === 'main') {
-          const nodes = this.stageList[0].children[+chapter[0]];
-          const targetData = nodes.children[+chapter[1] - 1];
-          this.choseMap(targetData);
-        } else {
-          //支线
-          const temp = this.stageList[0].children[+chapter[0]];
-          console.log(temp, this.stageList);
-          const nodes = temp.children[temp.children.length - 1];
-          const targetData = nodes.children[+chapter[1] - 1];
-          this.choseMap(targetData);
-        }
-      } else {
-        console.log(group);
-        const targetData = group.children.find(el => el.path === parent);
-        this.choseMap(targetData);
-      }
+      const target = findStage(parent, this.stageTree);
+      if (target) this.choseMap(target);
     },
     async choseMap(data) {
       this.pTranisitionTemp = window.getComputedStyle(
@@ -399,21 +332,18 @@ export default {
       if (!data.children) {
         this.runesMode = false;
         this.selMapNode = data;
-        let parent = data.path;
-        console.log(parent);
-        this.mapCode = parent;
-        let dataCode = parent.replace('wk', 'weekly').replace('pro', 'promote');
+        let codeFromPath = data.path;
+        let shortCode = codeFromPath.replace('weekly', 'wk').replace('promote', 'pro');
+        this.mapCode = shortCode;
         this.$refs['chapter-selecter'].closeDrawer();
         this.load = true;
         this.mapPicLoad = true;
         const [mapData, exData] = await Promise.all([
-          getMapData('level_' + dataCode),
-          getMapDataListVer(parent)
+          getMapData('level_' + codeFromPath),
+          getMapDataListVer(shortCode)
         ]);
         this.load = false;
-        this.$router.push(this.path + parent);
-        console.log(mapData);
-        // console.log(exData);
+        this.$router.push(this.path + shortCode);
         if (mapData) {
           exData.stageDropInfo &&
             this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
@@ -426,26 +356,35 @@ export default {
               return res;
             } else return res;
           }, {});
-          console.log(this.data);
           this.selectedMap = data.label;
           this.selMapData = mapData;
           this.selMapDataEx = exData;
           this.pTransition();
           if (this.map) this.map.setData(mapData.mapData, mapData.routes);
           else {
-            const { mapData: md, routes: r } = mapData;
-            await this.$nextTick();
-            this.map = new Map('#map-canvas-container', 100, md, r);
+            const body = document.querySelector('head');
+            const script = document.createElement('script');
+            script.type = 'text/javascript';
+            script.onload = async () => {
+              const { Map } = await import('./draw');
+              const { mapData: md, routes: r } = mapData;
+              await this.$nextTick();
+              this.map = new Map('#map-canvas-container', 100, md, r);
+            };
+            script.src = 'https://unpkg.com/spritejs/dist/spritejs.min.js';
+            body.appendChild(script);
           }
         }
       }
     },
     async loopRoutes(index, color) {
       console.log(index, color);
-      this.showMap = true;
-      await this.$nextTick();
-      this.map.loadMap();
-      if (!this.selMapData.routes[index]) return;
+      if (!this.showMap) {
+        this.showMap = true;
+        await this.$nextTick();
+        this.map.loadMap();
+      }
+      if (!this.selMapData.routes[index]) throw Error('没有这个线路');
       this.map.addRoutes(index, color);
     },
     async laodRouteMap() {
@@ -467,7 +406,8 @@ export default {
       return this.getData().then(data => {
         this.data = this.rowData = data[0];
         this.appearMap = data[1];
-        this.loadMap();
+        if (this.stageTree) this.loadMap();
+        else this.watchTree = true;
       });
     },
     getData() {
@@ -479,13 +419,13 @@ export default {
         list.map(async el => ({
           data: await fetchGet(
             path +
-              (el.type === 'FURN'
-                ? 'custom/furnitures/data/'
-                : el.type === 'CHAR'
-                  ? 'item/data/p_'
-                  : 'item/data/') +
-              el.id +
-              '.json'
+            (el.type === 'FURN'
+              ? 'custom/furnitures/data/'
+              : el.type === 'CHAR'
+                ? 'item/data/p_'
+                : 'item/data/') +
+            el.id +
+            '.json'
           ),
           type: el.type,
           dropType: el.dropType
