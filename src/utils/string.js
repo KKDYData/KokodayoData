@@ -391,6 +391,18 @@ const statusToCh = key => {
   return t[key];
 };
 
+const StageType = {
+  main: '主线',
+  tr: 'TR',
+  hard: '困难',
+  wk: '日常',
+  camp: '剿灭作战',
+  guid: '教程',
+  sub: '支线',
+  pro: '芯片',
+  a001: '骑兵与猎人'
+};
+
 export {
   StarArr,
   TagsArr,
@@ -406,5 +418,6 @@ export {
   charBorderColor,
   starColor,
   campToCode,
-  statusToCh
+  statusToCh,
+  StageType
 };

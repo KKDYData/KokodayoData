@@ -106,7 +106,7 @@
             class="my-form-item-wrapper"
           >
             <div slot="label">
-              <item-viewer class="exp-card" :short="!short" :item="card"></item-viewer>
+              <item-viewer class="exp-card" :short="short" :item="card"></item-viewer>
             </div>
             <el-input-number
               :size="short ? 'medium' : ''"
@@ -153,11 +153,11 @@
 </template>
 
 <script>
-import data from './level.json';
-import ItemViewer from './ItemViewer';
-import Vue from 'vue';
-import { Form, FormItem, Select, Option, InputNumber, Alert } from 'element-ui';
-import { exp_cards } from '../utils/string';
+import data from "./level.json";
+import ItemViewer from "./ItemViewer";
+import Vue from "vue";
+import { Form, FormItem, Select, Option, InputNumber, Alert } from "element-ui";
+import { exp_cards } from "../utils/string";
 Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Select);
@@ -189,13 +189,13 @@ export default {
     };
   },
   components: {
-    'item-viewer': ItemViewer
+    "item-viewer": ItemViewer
   },
   beforeMount() {
-    console.log('下面是计算用的数据，可以复制去自己用');
+    console.log("下面是计算用的数据，可以复制去自己用");
     console.log(this.data);
     this.short = window.innerWidth < 600 ? true : false;
-    window.addEventListener('resize', () => {
+    window.addEventListener("resize", () => {
       this.short = window.innerWidth < 600 ? true : false;
     });
   },
@@ -207,15 +207,15 @@ export default {
       else return [0, 1, 2];
     },
     MoneyNeed() {
-      return this.calBase('characterUpgradeCostMap');
+      return this.calBase("characterUpgradeCostMap");
     },
     ExpNeed() {
-      return this.calBase('characterExpMap');
+      return this.calBase("characterExpMap");
     },
     baseExp() {
       let res = 0;
       this.char.base.exp_cards.forEach((el, index) => {
-        res += el * this.exp_cards['200' + (index + 1)].exp;
+        res += el * this.exp_cards["200" + (index + 1)].exp;
         // return (cur += pre * this.exp_cards['200' + (cIndex + 1)].exp);
       });
       return res;
@@ -266,7 +266,7 @@ export default {
           // console.log(`j: ${j}, maxlv: ${level}, need: ${need}`);
         }
       }
-      if (target === 'characterUpgradeCostMap') {
+      if (target === "characterUpgradeCostMap") {
         // debugger;
         // console.log(need);
         for (let i = this.char.phases_now; i < phases; i++) {

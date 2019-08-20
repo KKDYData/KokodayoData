@@ -39,19 +39,24 @@
             <span>关卡掉落</span>
             <span
               v-if="showDropInfo"
-              :style="short ? 'top: 10px; right: -150px' : ''"
+              :style="short ? 'top: 10px; right: -165px' : ''"
               class="item-divider-extra"
-            >统计次数</span>
+            >
+              统计次数
+              <el-tooltip placement="top">
+                <i class="el-icon-info"></i>
+                <div slot="content">点击可以查看统计的总掉落数/总场次</div>
+              </el-tooltip>
+            </span>
           </el-divider>
           <p class="item-stage-container" v-for="stage in dropList" :key="stage.stageId">
-            <span
-              :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'"
-              class="item-stage-name"
-            >{{stageId(stage.stageId)}}</span>
+            <!-- 似乎是以前物资筹备关卡的名字比较长 -->
+            <!-- :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'" -->
+            <span class="item-stage-name">{{stage.stageCode}}</span>
             <span class="item-occper">{{occper(stage.occPer)}}</span>
             <el-tooltip v-if="stage.times" class="item-dropInfo" placement="top">
-              <div slot="content">{{stage.times}}/{{stage.quantity}}</div>
-              <span>{{stage.rate}}/次</span>
+              <div slot="content">{{stage.times}}/{{stage.quantity}}→{{stage.rate}}%</div>
+              <span>{{stage.dropCost}} 理智/个</span>
             </el-tooltip>
           </p>
         </div>
@@ -72,19 +77,16 @@
 
 
 <script>
-import { path } from '../utils';
+import { path, findStage } from '../utils';
 
 import { itemBackground, occPer_chinese, roomType } from '../utils/string';
-
 import { Popover, Divider, Image, Tooltip } from 'element-ui';
+import { mapState } from 'vuex';
 import Vue from 'vue';
 Vue.use(Popover);
 Vue.use(Divider);
 Vue.use(Image);
 Vue.use(Tooltip);
-
-const stageList = () =>
-  import(/* webpackChunkName: "stageList" */ './stageList.json');
 
 export default {
   props: {
@@ -95,17 +97,14 @@ export default {
     short: Boolean,
     type: String
   },
-  mounted() {
-    stageList().then(res => (this.stageList = res.default));
-  },
   data() {
     return {
-      stageList: [],
       isHover:
         process.env.NODE_ENV === 'development' || this.short ? 'click' : 'hover'
     };
   },
   computed: {
+    ...mapState(['stageTree']),
     itemBackground() {
       return this.type !== 'FURN' ? itemBackground[this.item.rarity] : {};
     },
@@ -122,25 +121,33 @@ export default {
     },
     dropList() {
       const list = this.$store.getters.itemDropList(this.item.itemId);
-      if (list) {
-        return list.filter(el =>
-          this.item.stageDropList.find(stage => {
-            if (stage.stageId === el.stageId) {
-              el.occPer = stage.occPer;
-              el.rate = Math.round((el.quantity / el.times) * 100) / 100;
-              return true;
+      if (this.stageTree) {
+        return this.item.stageDropList.map(el => {
+          let res = el;
+          const stageData = findStage(el.stageId, this.stageTree);
+          if (stageData) {
+            const temp = stageData.label.split(' ');
+            res.stageCode = temp[0];
+            if (list) {
+              const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId);
+              if (dropInfo) {
+                res = Object.assign(res, dropInfo);
+                console.log(dropInfo);
+                res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100);
+                res.dropCost = Math.round(
+                  (dropInfo.times / dropInfo.quantity) * stageData.apCost
+                );
+              }
             }
-          })
-        );
+          }
+          return res;
+        });
       } else {
         return this.item.stageDropList;
       }
     }
   },
   methods: {
-    stageId(id) {
-      if (this.stageList) return this.stageList[id];
-    },
     occper(occ) {
       return occPer_chinese[occ];
     },
@@ -177,9 +184,12 @@ export default {
      padding: 0
 
    .item-divider-extra
+     display: inline-block
+     background-color: #fff
+     padding: 0 10px
      position: absolute
      top: 0
-     right: - 230px
+     right: - 242px
 
    .item-stage-container
      padding-left: 40px

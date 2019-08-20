@@ -143,7 +143,12 @@
         <!-- 技能升级消耗 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
           <div class="group-container-title">技能升级消耗</div>
-          <skill-up-panel :allLevelCost="data.allSkillLvlup" :skills="skills" :seven="data.skills"></skill-up-panel>
+          <skill-up-panel
+            :short="short"
+            :allLevelCost="data.allSkillLvlup"
+            :skills="skills"
+            :seven="data.skills"
+          ></skill-up-panel>
         </div>
 
         <div class="tttt">

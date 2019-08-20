@@ -189,8 +189,6 @@ export default {
       this.$nextTick(() => {
         cell.querySelector('input').focus();
       });
-      // setTimeout(() => {
-      // }, 1000);
     },
     submitName(data) {
       // console.log(data);
