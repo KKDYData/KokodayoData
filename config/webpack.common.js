@@ -4,28 +4,10 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 
 const swPlugins = process.env.NODE_ENV === 'development' ? [] :
   [
-    new WebpackPwaManifest({
-      name: 'Arknights Data @Beta',
-      short_name: 'AnD@Beta',
-      description: '一个平平无奇的明日方舟资料站',
-      background_color: '#525252',
-      theme_color: '#525252',
-      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
-      start_url: '.',
-      navigationPreload: true,
-      icons: [
-        {
-          src: path.resolve('src/assets/icon.png'),
-          sizes: [96, 128], // multiple sizes
-          ios: true
-        },
-      ]
-    }),
     new WorkboxPlugin.GenerateSW({
       swDest: 'sw.js',
       clientsClaim: true,
@@ -47,6 +29,18 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           handler: 'StaleWhileRevalidate',
           options: {
             cacheName: 'oss-cache',
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          // To match cross-origin requests, use a RegExp that matches
+          // the start of the origin:
+          urlPattern: new RegExp('https://unpkg.com/spritejs/dist/spritejs.min.js'),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'spritejs',
             cacheableResponse: {
               statuses: [0, 200]
             }
@@ -145,7 +139,7 @@ module.exports = {
     ]
   },
   resolve: {
-
     extensions: ['.js', '.styl', '.vue', '.json']
   },
+
 };
