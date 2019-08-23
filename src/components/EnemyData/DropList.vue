@@ -1,6 +1,8 @@
 <template>
   <div class="map-drop-container all">
-    <my-title :title="title" style="margin: 10px 0"></my-title>
+    <div class="drop-list-title">
+      <span>{{title}}</span>
+    </div>
     <div class="map-common-droplist">
       <div v-for="item in list" :key="(item.data.itemId + item.dropType)">
         <item-viewer :short="short" :style="{margin: '10px'}" :type="item.type" :item="item.data"></item-viewer>
@@ -10,12 +12,10 @@
 </template>
 
 <script>
-import MyTitle from './MyTitle';
-import ItemViewer from './ItemViewer';
+import ItemViewer from '../ItemViewer';
 
 export default {
   components: {
-    MyTitle,
     ItemViewer
   },
   props: {
@@ -37,16 +37,25 @@ export default {
 <style lang="stylus" scoped>
 .map-drop-container {
   &.common {
-    min-width: 200px;
+    min-width: 200px
   }
 
   &.all {
-    flex-grow: 1;
+    flex-grow: 1
   }
 
   .map-common-droplist {
-    display: flex;
-    flex-wrap: wrap;
+    display: flex
+    flex-wrap: wrap
+  }
+}
+
+.drop-list-title {
+  span {
+    color: #525252
+    display: inline-block
+    width: 30%
+    border-bottom: 1px solid #828282
   }
 }
 </style>

@@ -1,5 +1,10 @@
 <template>
-  <div class="home-wrapper" v-loading.fullscreen.lock="load">
+  <div
+    class="home-wrapper"
+    v-loading.fullscreen.lock="load"
+    element-loading-background="rgba(168, 168, 168, 0.1)"
+  >
+    <!-- 地图选择的抽屉 -->
     <el-drawer
       ref="chapter-selecter"
       title="章节选择"
@@ -29,6 +34,7 @@
     <!-- 主体 -->
 
     <div class="map-wrapper">
+      <!-- 地图信息、控制栏 -->
       <div ref="map-title-part" class="map-title-part">
         <div>
           <el-button @click="drawer = true" type="primary">
@@ -62,7 +68,7 @@
             <div
               v-if="mapCode"
               v-loading="mapPicLoad"
-              element-loading-background="rgba(0, 0, 0, 0.5)"
+              element-loading-background="rgba(0, 0, 0, 0.8)"
               style="position: relative; font-size: 0"
             >
               <el-image
@@ -75,79 +81,71 @@
             </div>
             <div class="left-layout"></div>
           </div>
-          <div v-if="mapCode" class="map-option-container-wrapper">
-            <my-title title="地图信息"></my-title>
-            <div class="map-option-container">
-              <content-slot
-                class="map-option-content"
-                :long="true"
-                :no-wrap="true"
-                :width="126"
-                v-for="([k,v]) in options"
-                :key="k"
-              >
-                <template slot="title">{{k}}</template>
-                <template slot="content">{{v == '999999' ? '0' : v}}</template>
-              </content-slot>
-            </div>
-
-            <div class="map-drop-container-wrapper">
-              <div class="map-drop-list-wrapper">
-                <drop-list
-                  v-if="firstDrop.length > 0"
-                  :list="firstDrop"
-                  :short="short"
-                  title="首次掉落"
-                ></drop-list>
-                <drop-list
-                  v-if="commonDrop.length > 0"
-                  :list="commonDrop"
-                  :short="short"
-                  title="常规掉落"
-                ></drop-list>
-
-                <drop-list
-                  v-if="rarityDrop.length > 0"
-                  :list="rarityDrop"
-                  :short="short"
-                  title="稀有掉落"
-                ></drop-list>
-              </div>
-              <drop-list
-                v-if="almostDrop.length > 0"
-                :list="almostDrop"
-                :short="short"
-                title="概率掉落"
-              ></drop-list>
-            </div>
-          </div>
+          <enemy-map-info
+            v-if="!short && mapCode"
+            :short="short"
+            :options="options"
+            :dropInfo="detailsDropList"
+          ></enemy-map-info>
         </div>
       </div>
-      <my-title style="margin: 20px 0 0;" :title="selectedMap === '' ? '所有敌人' : '出现敌人'"></my-title>
-      <enemy-data-layout
-        ref="layout"
+      <my-slide-title
+        :control="mapCode ? true : false"
+        style="margin: 20px 0 0;"
         :short="short"
-        v-if="data"
-        :data="data"
-        :appear-map="appearMap"
-        :map-data="selMapData"
-        :runes-mode="runesMode"
-        @showRoute="loopRoutes"
-        @closeRoute="closeRoute"
-      ></enemy-data-layout>
+        :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
+      >
+        <div slot="extra-button">
+          <el-button
+            v-if="!simpleShow && mapCode"
+            size="mini"
+            type="danger"
+            class="clear-route-button"
+            @click="clearRoutes"
+          >清空路线</el-button>
+          <el-button
+            v-if="mapCode"
+            size="mini"
+            type="info"
+            :plain="simpleShow ? false: true"
+            class="clear-route-button"
+            @click="simpleShow = !simpleShow"
+          >{{simpleShow ? '简要显示': '路线模式'}}</el-button>
+        </div>
+        <enemy-data-layout
+          ref="layout"
+          :short="short"
+          v-if="data"
+          :data="data"
+          :appear-map="appearMap"
+          :map-data="selMapData"
+          :runes-mode="runesMode"
+          :simple-show="simpleShow"
+          @showRoute="loopRoutes"
+          @closeRoute="closeRoute"
+        ></enemy-data-layout>
+      </my-slide-title>
+      <my-slide-title style="margin-top: 20px" v-if="short && mapCode" title="地图信息" :short="short">
+        <enemy-map-info :show-title="false" :short="short" :options="options"></enemy-map-info>
+      </my-slide-title>
+      <map-drop-list style="margin-top: 20px" :short="short" :drop-info="detailsDropList"></map-drop-list>
     </div>
   </div>
 </template>
 <script>
 import loadingC from '../Loading';
 import MyTitle from '../MyTitle';
+import MySlideTitle from '../MySlideTilte';
 import ContentSlot from '../ContentSlot';
-import DropList from '../DropLIst';
+import MapDropList from './MapDropList';
+import EnemyMapInfo from './EnemyMapInfo';
+
 
 import { Tree, Drawer, Button, Image, Loading } from 'element-ui';
 
-import { mapState } from 'vuex';
 import Vue from 'vue';
+import { mapState } from 'vuex';
+
 Vue.use(Loading);
 Vue.use(Button);
 Vue.use(Tree);
@@ -183,9 +181,8 @@ const EnemyDataLayout = () => ({
 export default {
   metaInfo() {
     return {
-      titleTemplate: `${
-        this.selectedMap ? this.selectedMap + ' |' : ''
-      }敌人图鉴 | 明日方舟`,
+      titleTemplate: `${this.selectedMap
+        ? this.selectedMap + ' |' : ''}敌人图鉴 | 明日方舟`,
       meta: [
         {
           vmid: 'description',
@@ -198,8 +195,10 @@ export default {
   components: {
     EnemyDataLayout,
     MyTitle,
+    MySlideTitle,
     ContentSlot,
-    DropList
+    MapDropList,
+    EnemyMapInfo
   },
   data() {
     return {
@@ -221,7 +220,8 @@ export default {
       mapPicLoad: true,
       map: null,
       showMap: false,
-      watchTree: false
+      watchTree: false,
+      simpleShow: false
     };
   },
   watch: {
@@ -236,18 +236,6 @@ export default {
       return (
         (process.env.NODE_ENV === 'development' ? '' : Mode) + '/enemydata/'
       );
-    },
-    firstDrop() {
-      return this.detailsDropList.filter(el => el.dropType === 1);
-    },
-    commonDrop() {
-      return this.detailsDropList.filter(el => el.dropType === 2);
-    },
-    rarityDrop() {
-      return this.detailsDropList.filter(el => el.dropType === 3);
-    },
-    almostDrop() {
-      return this.detailsDropList.filter(el => el.dropType === 4);
     },
     mapDesc() {
       return this.selMapDataEx ? changeDesc(this.selMapDataEx.description) : '';
@@ -318,13 +306,14 @@ export default {
     },
     async loadMap() {
       // test
-      const parent = this.$route.params.map || 'main_05-10';
+      const parent = this.$route.params.map; //|| 'main_05-10';
       if (!parent || !this.stageTree) return;
       console.log(parent);
       const target = findStage(parent, this.stageTree);
+      target.first = true;
       if (target) this.choseMap(target);
     },
-    async choseMap(data) {
+    async choseMap(data, node, first) {
       this.pTranisitionTemp = window.getComputedStyle(
         this.$refs['map-title-part']
       ).height;
@@ -338,17 +327,27 @@ export default {
         this.$refs['chapter-selecter'].closeDrawer();
         this.load = true;
         this.mapPicLoad = true;
+        // 不用路由守卫了
+        if (!data.first) this.$router.push(this.path + shortCode);
+        else console.log('first? ', first);
+
         const [mapData, exData] = await Promise.all([
-          getMapData('level_' + codeFromPath),
+          getMapData('level_' + codeFromPath.replace('kc', 'killcost')),
           getMapDataListVer(shortCode)
         ]);
-        this.load = false;
-        this.$router.push(this.path + shortCode);
+
+        setTimeout(() => {
+          this.load = false;
+          this.mapPicLoad = false;
+        }, 500);
+
         if (mapData) {
           exData.stageDropInfo &&
             this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
               data => (this.detailsDropList = data)
             );
+
+          if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
           this.data = Object.entries(this.rowData).reduce((res, [k, v]) => {
             const target = mapData.enemyDbRefs.find(el => el.id === k);
             if (target) {
@@ -367,15 +366,19 @@ export default {
             script.type = 'text/javascript';
             script.onload = async () => {
               const { Map } = await import('./draw');
-              const { mapData: md, routes: r } = mapData;
               await this.$nextTick();
-              this.map = new Map('#map-canvas-container', 100, md, r);
+              this.map = new Map('#map-canvas-container', 100, mapData.mapData, mapData.routes);
             };
             script.src = 'https://unpkg.com/spritejs/dist/spritejs.min.js';
             body.appendChild(script);
           }
         }
       }
+    },
+    // 子组件传出来清空map的事件处理
+    clearRoutes() {
+      this.map.clearRoutes();
+      this.$refs.layout.clearRoutes();
     },
     async loopRoutes(index, color) {
       console.log(index, color);
@@ -437,115 +440,108 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.chapter-wrapper
+.chapter-wrapper {
   padding-left: 20px
+  margin-bottom: 70px
+}
 
-.map-wrapper
+.map-wrapper {
   margin: 20px auto 0
   max-width: 1200px
   padding: 20px
-  min-width: 1100px
+  //min-width: 1000px
   min-height: 100vh
   display: flex
   flex-direction: column
   overflow: hidden
 
-  .map-title-part
+  .map-title-part {
     margin: 0 0 20px
     transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55)
+  }
 
-  .map-data-wrapper
-    margin-bottom: 20px
-
-    .map-data-container
+  .map-data-wrapper {
+    .map-data-container {
       margin-bottom: 20px
       display: flex
-      flex-wrap: wrap
+    }
+  }
 
   --height: 28vw
 
-  .map-left-panel
+  .map-left-panel {
     width: calc(var(--height) * 1.78)
     box-sizing: border-box
+  }
 
-  .map-pic-contianer
+  .map-pic-contianer {
     height: var(--height)
     width: calc(var(--height) * 1.78)
     box-sizing: border-box
     border: 2px solid #313131
     //opacity: 0.5
+  }
+}
 
-.map-option-container-wrapper
-  margin-left: 5vw
-  max-width: 450px
-  min-width: 385px
-
-  .map-option-container
-    display: flex
-    justify-content: space-between
-    flex-wrap: wrap
-    align-content: start
-
-    .map-option-content
-      margin: 0 0 20px
-      width: calc(50% - 40px)
-
-.map-drop-list-wrapper
-  display: flex
-
-.runes-mode-button
+.runes-mode-button {
   padding-top: 4px
   padding-bottom: 4px
   vertical-align: bottom
   border-radius: 2px
+}
 
-#map-canvas-container
+#map-canvas-container {
   position: absolute
   height: 100%
   width: 100%
   top: 0
   transform: perspective(500px) rotateX(18deg) translate3d(0px, -10px, -20px)
+}
 
-@media screen and (min-width: 1350px)
-  .map-wrapper
+.clear-route-button {
+  //background-color: #ffffff
+}
+
+@media screen and (min-width: 1350px) {
+  .map-data-container {
+    margin-bottom: 20px
+    display: flex
+    flex-wrap: wrap
+  }
+
+  .map-wrapper {
     min-width: 100%
     //--height: 68vw
+  }
+}
 
-@media screen and (min-width: 1500px)
-  .map-wrapper
+@media screen and (min-width: 1500px) {
+  .map-wrapper {
     --height: 500px
     //--height: 50vw
     min-width: 1600px
+  }
+}
 
-@media screen and (max-width: 800px)
-  .map-wrapper
+@media screen and (max-width: 800px) {
+  .map-wrapper {
     --height: calc(52.8vw)
     min-width: 360px
     box-sizing: border-box
     padding: 3vw
+  }
+}
 
-    .map-option-container-wrapper
-      min-width: auto
-      max-width: inherit
-      margin: 20px 0
-
-      .map-option-container
-        min-width: auto
-        margin-left: 2vw
-
-        .map-option-content
-          margin: 0 10px 10px 0
-          width: calc(50% - 10px)
-
-  .map-drop-container-wrapper
-    margin-top: 10px
-
-@media screen and (max-width: 500px)
-  .map-drop-container-wrapper
-    margin-top: 0px
-
-  .runes-mode-button
+@media screen and (max-width: 500px) {
+  .runes-mode-button {
     padding-top: 5px
     padding-bottom: 5px
+  }
+
+  .chapter-wrapper {
+    //margin-bottom 有70px， 1px防止滚动穿透
+    min-height: calc(100% - 69px)
+  }
+}
 </style>
 

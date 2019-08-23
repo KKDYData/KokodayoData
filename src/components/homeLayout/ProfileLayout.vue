@@ -119,11 +119,11 @@ export default {
     };
   },
   watch: {
-    showTags: function(v) {
+    showTags: function (v) {
       console.log('show? ' + v);
       this.calFillAmount();
     },
-    short: function(v) {
+    short: function (v) {
       this.calFillAmount();
     }
   },
@@ -165,7 +165,8 @@ export default {
           ? cWidth + 69
           : cWidth + 70
         : cWidth;
-      this.fillItemWidth = { width: cWidth + 'px' };
+      this.fillItemWidth = { width: (cWidth + 50) + 'px' };
+      console.log('xxxxxxxxxxxxxxx', this.fillItemWidth);
       let size = Math.floor(width / cWidth);
       const arr = [];
       for (let i = 0; i < size; i++) {

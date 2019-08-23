@@ -133,7 +133,7 @@ import {
   TabPane,
   Button,
   Progress,
-  Slider
+  Slider,
 } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Carousel);
@@ -144,6 +144,8 @@ Vue.use(Button);
 Vue.use(Progress);
 Vue.use(Slider);
 import AudioContainer from './AudioContainer';
+
+
 
 export default {
   components: {
@@ -188,10 +190,10 @@ export default {
     halfPics() {
       if (this.data.charID) {
         const res = [];
-        const style = webpOk.ok
+
+        const style = !webpOk
           ? '_optimized.png'
           : '_optimized.png?x-oss-process=style/small-test';
-        // console.log(path);
         this.list.forEach(index => {
           res.push(
             path + 'char/halfPic/' + this.data.charID + '_' + index + style

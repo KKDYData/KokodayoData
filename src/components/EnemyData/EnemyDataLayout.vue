@@ -29,23 +29,34 @@
         </enemy-status>
       </template>
     </enemy-data-drawer>
-    <div style="max-height: 720px;overflow-y: scroll; flex-grow: 1" v-if="waveData && data">
+    <div
+      class="enemy-data-layout-body"
+      :style="short? {'max-height': '400px'} : {}"
+      v-if="!simpleShow && waveData && data"
+    >
       <div
-        v-for="({fragments, name, postDelay, preDelay, maxTimeWaitForNextWave}, wIndex) in waveData"
+        v-for="({fragments, name, postDelay, preDelay, maxTimeWaitingForNextWave}, wIndex) in waveData"
         :key="wIndex"
       >
         <my-title v-if="name" style="margin-top: 10px" :title="name || '一波'"></my-title>
         <p
-          v-if="postDelay || preDelay || maxTimeWaitForNextWave"
-        >max{{maxTimeWaitForNextWave}}||post{{postDelay}}||pre{{preDelay}}</p>
+          v-if="waveData.length > 1 && (postDelay || preDelay || maxTimeWaitingForNextWave)"
+        >最大等待时间：{{maxTimeWaitingForNextWave}}s | 延迟：{{preDelay}}s</p>
         <div
           class="wave-enemy-container"
           v-for="({actions, name, preDelay, time}, fIndex) in fragments"
           :key="fIndex"
         >
-          <p style="width: 100%; margin-bottom: -20px">
+          <p class="wave-info" style="width: 100%; margin-bottom: -20px">
             第{{fIndex+1}}波
-            <span v-if="preDelay">开始时间: {{time | time}}， 距离上一波: {{preDelay}}s</span>
+            <span>
+              <i class="el-icon-position"></i>
+              {{time | time}}
+              <span
+                style="margin-left: 10px"
+                v-if="preDelay"
+              >距离上一波{{preDelay}}s</span>
+            </span>
           </p>
           <!-- .filter(el => mapData.routes[el.routeIndex]) -->
           <div
@@ -66,12 +77,13 @@
               <p>预设 敌人</p>
               <p>{{key}}</p>
             </div>
-            <div @click="showRoute(routeIndex)" style="cursor: pointer">
+            <div @click="showRoute(routeIndex)" style class="enemy-cube-wave-info">
               <div>数量:{{count}}, 间隔:{{interval}}</div>
               <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
-                Delay: {{preDelay}}
+                延迟: {{preDelay}}s
                 <i
-                  :class="selectedStlye[routeIndex] ? 'el-icon-s-promotion' : 'el-icon-position'"
+                  :style="selectedStlye[routeIndex] ? 'color: #313131' : ''"
+                  class="el-icon-s-flag"
                 ></i>
               </div>
             </div>
@@ -79,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="enemy-data-layout">
+    <div v-else class="enemy-data-layout" :style="!short ? 'margin: 0 10px' : ''">
       <enemy-cube
         v-for="(enemy, key) in data"
         @mouseover.native="mouseHoverOpen(key, enemy)"
@@ -101,10 +113,11 @@
 </template>
 
 <script>
-import { Image, Drawer } from 'element-ui';
+import { Image, Drawer, Button } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Image);
 Vue.use(Drawer);
+Vue.use(Button);
 import MyTitle from '../MyTitle';
 
 import EnemyStatus from './EnemyStatus';
@@ -126,6 +139,10 @@ export default {
       type: Object
     },
     runesMode: {
+      type: Boolean,
+      default: false
+    },
+    simpleShow: {
       type: Boolean,
       default: false
     }
@@ -150,14 +167,18 @@ export default {
   beforeMount() {
     this.short = isMoblie();
   },
+  watch: {
+    simpleShow(v) {
+      if (v) this.calFillAmount();
+    }
+  },
   mounted() {
-    // this.calFillAmount();
     this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
     // console.log(this.drawerSize);
 
     window.addEventListener(
       'resize',
-      debounce(function() {
+      debounce(function () {
         this.short = window.innerWidth < 500 ? true : false;
         // this.calFillAmount();
         this.drawerSize =
@@ -198,11 +219,10 @@ export default {
     }
   },
   methods: {
-    checkFuck(key) {
-      if (!this.data[key]) {
-        console.log(Object.keys(this.data));
-        throw Error('error');
-      }
+    clearRoutes(v) {
+      this.selectedStlye = {};
+      this.selectedRoutes.clear();
+
     },
     showRoute(index) {
       if (this.selectedRoutes.has(index)) {
@@ -262,20 +282,53 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.enemy-data-layout
+.enemy-data-layout-body {
+  max-height: 40vh
+  overflow-y: scroll
+  flex-grow: 1
+  position: relative
+  padding-top: 40px
+  //吃掉title的margin-buttom 20px
+  margin-top: -20px
+}
+
+.enemy-data-layout {
   display: flex
   flex-wrap: wrap
   /*justify-content: start;*/
   margin: 0 auto
   max-width: 1200px
-  padding: 0 20px
+  padding: 0px 20px 0
+}
 
-.wave-enemy-container
+.wave-enemy-container {
   display: flex
   flex-wrap: wrap
+}
 
-@media screen and (max-width: 700px)
-  .enemy-data-layout
+.enemy-cube-wave-info {
+  cursor: pointer
+  font-size: 15px
+  color: rgb(168, 168, 168)
+}
+
+.wave-info {
+  color: #313131
+
+  &:before {
+    content: ''
+    width: 7px
+    height: 1.5em
+    background-color: #525252
+    display: inline-block
+    vertical-align: bottom
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .enemy-data-layout {
     padding: 0
     justify-content: center
+  }
+}
 </style>

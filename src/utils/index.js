@@ -289,6 +289,7 @@ const getClass_icon = (c) => {
 
 import UaParser from 'ua-parser-js';
 
+
 const Browser = () => new UaParser().getBrowser();
 const isMoblie = () => new UaParser().getDevice().type === 'mobile';
 
@@ -296,9 +297,11 @@ const getWebpOk = () => {
   const ua = new UaParser();
   const OS = ua.getOS();
   const Browser = ua.getBrowser();
-  const isMoblie = ua.getDevice().type === 'mobile';
-  console.log(OS);
-  console.log(Browser);
+  const width = document.body.clientWidth;
+  const isMoblie = ua.getDevice().type === 'mobile' || (OS.name === 'Mac OS' && width < 1300);
+  // import { Message } from 'element-ui';
+  // Message(`'is Moblie? ' ${isMoblie}, ${ua.getDevice().vendor}, os ${OS.name}`);
+
   if (
     OS.name === 'iOS' ||
     (OS.name === 'Mac OS' && Browser.name === 'Safari') ||

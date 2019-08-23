@@ -8,8 +8,9 @@
       :trigger="isHover"
       :open-delay="500"
     >
-      <div slot="reference">
-        <div style>
+      <!-- 去掉 ios 点击边框 -->
+      <div slot="reference" style="outline: none">
+        <div>
           <el-image
             :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
             :style="itemBackground"
@@ -52,7 +53,10 @@
           <p class="item-stage-container" v-for="stage in dropList" :key="stage.stageId">
             <!-- 似乎是以前物资筹备关卡的名字比较长 -->
             <!-- :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'" -->
-            <span class="item-stage-name">{{stage.stageCode}}</span>
+            <span
+              class="item-stage-name"
+              :style="stage.stageCode.length > 5 ? 'font-size: 0.9em': ''"
+            >{{stage.stageCode}}</span>
             <span class="item-occper">{{occper(stage.occPer)}}</span>
             <el-tooltip v-if="stage.times" class="item-dropInfo" placement="top">
               <div slot="content">{{stage.times}}/{{stage.quantity}}→{{stage.rate}}%</div>
@@ -132,7 +136,6 @@ export default {
               const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId);
               if (dropInfo) {
                 res = Object.assign(res, dropInfo);
-                console.log(dropInfo);
                 res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100);
                 res.dropCost = Math.round(
                   (dropInfo.times / dropInfo.quantity) * stageData.apCost
@@ -159,7 +162,7 @@ export default {
 </script>
 
  <style lang="stylus" scoped>
- .evolvcost-item-contianer
+ .evolvcost-item-contianer {
    /*margin: 5px 10px;*/
    width: 70px
    height: 70px
@@ -171,53 +174,64 @@ export default {
    border: 2px solid rgb(249, 198, 19)
    overflow: visible
    margin: 0 auto
+ }
 
- .evolvcost-item-contianer>>>img
+ .evolvcost-item-contianer>>>img {
    width: 128%
    height: 128%
    margin-top: -14%
    margin-left: -14%
+ }
 
- .item-popover
-   &.is-left
+ .item-popover {
+   &.is-left {
      left: 20px
      padding: 0
+   }
 
-   .item-divider-extra
+   .item-divider-extra {
      display: inline-block
      background-color: #fff
      padding: 0 10px
      position: absolute
      top: 0
      right: - 242px
+   }
 
-   .item-stage-container
+   .item-stage-container {
      padding-left: 40px
 
-     .item-occper
+     .item-occper {
        background-color: rgb(128, 128, 128)
        color: white
        padding: 0 6px
        border-radius: 3px
+     }
 
-     .item-dropInfo
+     .item-dropInfo {
        float: right
        cursor: pointer
+     }
 
-     .item-occper
+     .item-occper {
        background-color: rgb(128, 128, 128)
        color: white
        padding: 0 6px
        border-radius: 3px
+     }
 
-     .item-stage-name
+     .item-stage-name {
        width: 50px
        display: inline-block
+     }
+   }
+ }
 
- .weekly
+ .weekly {
    width: auto
+ }
 
- .furn-item
+ .furn-item {
    width: 70px
    display: block
    box-sizing: border-box
@@ -229,29 +243,38 @@ export default {
    margin: 0 auto
    padding: 9px 0
 
-   & >>> img
+   & >>> img {
      width: calc(100% - 1px)
      box-shadow: 1px 1px 0px 1px #6b6b6b63, 1px -1px 0px 0px #fff
+   }
+ }
 
- @media screen and (max-width: 700px)
-   .evolvcost-item-contianer
+ @media screen and (max-width: 700px) {
+   .evolvcost-item-contianer {
      /*padding: 5px 10px;*/
      width: calc(40px + 1vw)
      height: calc(40px + 1vw)
+   }
 
-   .evolvcost-name-wrapper
+   .evolvcost-name-wrapper {
      font-size: 14px
+   }
 
-   .item-stage-container
+   .item-stage-container {
      padding-left: 30px
+   }
 
-   .item-popover
+   .item-popover {
      max-height: 150px
      overflow-y: scroll
+   }
 
-   .item-popover .is-left
+   .item-popover .is-left {
      padding: 10px
+   }
 
-   .item-popover .el-divider--horizontal
+   .item-popover .el-divider--horizontal {
      width: calc(100% - 10px)
+   }
+ }
 </style>
