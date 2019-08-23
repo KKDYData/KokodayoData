@@ -184,6 +184,8 @@ export default {
  }
 
  .item-popover {
+   overflow-x: hidden
+
    &.is-left {
      left: 20px
      padding: 0
