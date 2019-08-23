@@ -4,7 +4,6 @@
     :visible="detailsOpen"
     @close="$emit('update:detailsOpen', false)"
     :size="short ? '85%': drawerSize"
-    custom-class="mobile-drawer-scroll"
     :destroy-on-close="true"
     :title="'敌人数据' +  (runesMode ? '[突袭]': '' )"
   >
@@ -173,13 +172,14 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.enemy-img-container
+.enemy-img-container {
   height: 100px
   width: 100px
   min-width: 100px
   position: relative
+}
 
-.enemy-index-container
+.enemy-index-container {
   position: absolute
   z-index: 1
   background-color: rgba(0, 0, 0, 0.5)
@@ -187,12 +187,14 @@ export default {
   top: -2px
   left: -2px
   padding: 2px 5px
+}
 
-.enemy-status-container
+.enemy-status-container {
   margin: 10px
   display: flex
+}
 
-.enemy-details-type-index-container
+.enemy-details-type-index-container {
   width: 42px
   height: 36px
   display: flex
@@ -200,67 +202,83 @@ export default {
   align-items: center
   border: 5px solid
   margin: 0 10px 0 5px
+}
 
-.enemy-details-type-index-container span
+.enemy-details-type-index-container span {
   font-size: 1.6em
+}
 
-.enemy-status-abc-container
+.enemy-status-abc-container {
   border: 4px solid rgb(82, 82, 82)
   width: 65px
   height: 48px
   color: rgb(82, 82, 82)
+}
 
-.enemy-status-abc-container + .enemy-status-abc-container
+.enemy-status-abc-container + .enemy-status-abc-container {
   margin-left: 5px
+}
 
-.enemy-status-abc-container h1
+.enemy-status-abc-container h1 {
   margin: 0
   text-align: center
   font-size: 2.5em
   line-height: 0.8em
+}
 
-.enemy-status-abc-title
+.enemy-status-abc-title {
   display: flex
   align-items: center
   font-size: 0
+}
 
-.enemy-status-abc-title-text
+.enemy-status-abc-title-text {
   display: inline-block
   text-align: center
   flex-grow: 1
   font-size: 12px
+}
 
-.slide-enter-active
+.slide-enter-active {
   transition: all 0.25 cubic-bezier(0.18, 0.54, 0.71, 0.99)
   height: 156px
   overflow: hidden
   opacity: 1
+}
 
-.slide-enter
+.slide-enter {
   height: 0
   opacity: 0
+}
 
-.enemy-drawer
+.enemy-drawer {
   padding: 0 20px 30px
+}
 
-@media screen and (max-width: 700px)
-  .enemy-data-layout
-    padding: 0
-    justify-content: center
-
-  .enemy-status-container
+@media screen and (max-width: 700px) {
+  .enemy-status-container {
     margin: 10px 0
+  }
 
-  .enemy-status-wrapper
+  .enemy-status-wrapper {
     flex-wrap: wrap
+  }
 
-  .status-phases-wrapper
+  .status-phases-wrapper {
     width: 100%
+  }
+}
 
-@media screen and (max-width: 400px)
-  .enemy-img-container
+@media screen and (max-width: 400px) {
+  .enemy-img-container {
     --imgW: calc(80px + 5vw)
     height: var(--imgW)
     width: var(--imgW)
     min-width: var(--imgW)
+  }
+}
+
+/*.enemy-drawer
+//似乎bug到body去了这里无效
+min-height: calc(100% + 1px)*/
 </style>

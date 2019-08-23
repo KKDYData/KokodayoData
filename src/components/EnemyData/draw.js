@@ -7,8 +7,6 @@ const cen = radio / 2;
 
 const mapBlockColoc = {
   0: 'grey',
-  // 1: '#ed8',
-  // 2: '#fff',
   1: '#fff',
   2: '#fff',
   3: '#ed8',
@@ -55,12 +53,17 @@ const spwanMap = ({ map, tiles }, paper) => {
     });
 
     paper.layer('map').append(mapBlock);
-    if (0 && process.env.NODE_ENV === 'development')
+    if (process.env.NODE_ENV === 'development')
       paper.layer('map').append(label);
   }));
   return myMap;
 };
 
+const sleep = time => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), time);
+  });
+};
 
 
 
@@ -69,12 +72,16 @@ const spwanMap = ({ map, tiles }, paper) => {
 class Map {
   tempRoutes = {}
   runningRoutes = new Set();
+  routeSet = new Set()
   pauseQueue
   grid
   map
   mapData
   routes
-  finder
+  finder = new PF.AStarFinder({
+    allowDiagonal: true,
+    dontCrossCorners: true
+  });
   paper
   mapRadio
 
@@ -90,15 +97,9 @@ class Map {
     this.mapRadio = radio;
     // 稍微做个判定，给以后用
     if (routes) {
-      this.mapData = mapData;
-      this.map = spwanMap(mapData, this.paper);
-      this.routes = routes;
+      this.setDataBeta(mapData, routes);
       const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
       this.grid = new PF.Grid(sMap);
-      this.finder = new PF.AStarFinder({
-        allowDiagonal: true,
-        dontCrossCorners: true
-      });
     }
   }
   async ray(body) {
@@ -173,8 +174,8 @@ class Map {
         p = Math.min(p / 0.7, 1);
 
         const colors = [
-          { offset: 0, color: `hsla(${color}, 100%, 50%, 0.1)` },
-          { offset: q, color: `hsla(${color}, 100%, 50%, 0.2)` },
+          { offset: 0, color: `hsla(${color}, 100%, 50%, 0.3)` },
+          { offset: q, color: `hsla(${color}, 100%, 50%, 0.5)` },
           { offset: p, color: `hsla(${color}, 100%, 50%, 1)` },
           { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100%, 50%, 0)` },
         ];
@@ -197,15 +198,24 @@ class Map {
 
     });
   }
-  setData(mapData, routes) {
+
+  setDataBeta(mapData, routes) {
     this.routes = routes;
+    this.mapData = mapData;
+    this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
+    this.map = spwanMap(mapData, this.paper);
+  }
+  setData(mapData, routes) {
+    this.clearRoutes();
     this.paper.children.forEach(el => {
+      console.log(el);
       this.paper.removeChild(el);
     });
-    this.clearRoutes();
-    this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
-    this.mapData = mapData;
-    this.map = spwanMap(mapData, this.paper);
+    // 清完再设置
+    this.setDataBeta(mapData, routes);
+    const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
+    this.grid = new PF.Grid(sMap);
+
   }
 
   loadMap() {
@@ -214,7 +224,7 @@ class Map {
 
 
   spwanPathAlpha(path) {
-    console.log(path);
+    // console.log(path);
     const temp = path.map((cur, index, arr) => {
       const [x, y] = cur;
       if (index === 0) return { row: y, col: x };
@@ -232,6 +242,10 @@ class Map {
     }, '');
   }
 
+  // clearRoutes() {
+  //   this.runningRoutes.clear();
+  //   this.tempRoutes = {};
+  // }
   deleteRoute(x) {
     this.runningRoutes.delete(x);
     delete this.tempRoutes[x];
@@ -267,19 +281,27 @@ class Map {
           res.push({ stop: { pos: el, time: pathPoints[index].time } });
         }
         const ttGrid = tempGrid.clone();
-        const path = this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid);
-        res.push({ path: this.spwanPathAlpha(path), time: path.length * 150 });
+        const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
+        path.forEach((el, index, arr) => {
+          if (index + 1 < arr.length) {
+            const next = arr[index + 1];
+            const len = Math.sqrt((el[0] - next[0]) ** 2 + (el[1] - next[1]) ** 2);
+            res.push({ path: this.spwanPathAlpha([el, next]), time: len * 200 });
+
+          }
+        });
         return res;
       }, []);
 
 
-      console.log('pos', splitPath, route, height);
+      // console.log('pos', splitPath, route, height);
 
       this.tempRoutes[x] = ({
         splitPath,
         index: x,
         color,
       });
+      this.routeSet.add(splitPath);
     } else {
       throw Error('Just receive  Number');
     }
@@ -293,6 +315,8 @@ class Map {
   clearRoutes() {
     this.run = false;
     this.runningRoutes.clear();
+    this.tempRoutes = {};
+
   }
   loopRoutes() {
     const loop = () => {
@@ -314,8 +338,6 @@ class Map {
       const tasksToPromises = tasks.map(el => {
         return new Promise(async resolve => {
           const { splitPath, layer, color } = el;
-          // return this.ray(el);
-          console.log(splitPath);
           for (const { path, time, stop } of splitPath) {
             await this.ray({ path, layer, color, time, stop });
           }
@@ -325,8 +347,8 @@ class Map {
 
 
       Promise.all(tasksToPromises)
-        .then((saveTimes) => {
-          console.log('complete');
+        .then(async (saveTimes) => {
+          // console.log('complete');
           saveTimes = saveTimes.filter(el => el);
           if (saveTimes.length > 0) {
             console.log('stop quene', saveTimes);
@@ -335,6 +357,7 @@ class Map {
             });
             this.pauseQueue = tasks;
           } else {
+            await sleep(500);
             tasks.forEach(el => {
               el.layer.remove();
             });
