@@ -123,7 +123,7 @@
             <b>Extra·技能</b>
           </div>
           <div :style="0 ? '' :'display: flex'">
-            <div class="enemy-skill-container" v-for="(skill, index) in skills[level]" :key="index">
+            <div class="enemy-skill-container" v-for="(skill, index) in targetSkill" :key="index">
               <div style="margin: 10px 0">
                 <span style="font-size: 1em">{{skill.prefabKey.toUpperCase()}}</span>
               </div>
@@ -190,7 +190,7 @@ export default {
   props: {
     data: {
       type: Array,
-      default: function() {
+      default: function () {
         return { message: 'hello' };
       }
     },
@@ -300,9 +300,15 @@ export default {
           this.skills.push(this.skills[0]);
         }
       }
+      console.log('skills', this.skills);
     }
   },
   computed: {
+    targetSkill() {
+      if (this.skills.length < 1) return;
+      if (this.mapLevel > -1) return this.skills[this.mapLevel];
+      else return this.skills[this.level];
+    },
     filterKeys() {
       const res = {};
       //选地图非突袭，mapLevel为地图所选择的等级
