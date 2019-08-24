@@ -5,7 +5,13 @@
     </div>
     <div class="map-common-droplist">
       <div v-for="item in list" :key="(item.data.itemId + item.dropType)">
-        <item-viewer :short="short" :style="{margin: '10px'}" :type="item.type" :item="item.data"></item-viewer>
+        <item-viewer
+          :targetStage="targetStage"
+          :short="short"
+          :style="{margin: '10px'}"
+          :type="item.type"
+          :item="item.data"
+        ></item-viewer>
       </div>
     </div>
   </div>
@@ -29,7 +35,8 @@ export default {
     },
     title: {
       type: String
-    }
+    },
+    targetStage: String
   }
 };
 </script>

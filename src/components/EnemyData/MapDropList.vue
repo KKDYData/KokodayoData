@@ -2,11 +2,38 @@
   <my-slide-title :short="short" title="掉落" :init-value="true">
     <div class="map-drop-container-wrapper">
       <div class="map-drop-list-wrapper">
-        <drop-list v-if="firstDrop.length > 0" :list="firstDrop" :short="short" title="首次掉落"></drop-list>
-        <drop-list v-if="commonDrop.length > 0" :list="commonDrop" :short="short" title="常规掉落"></drop-list>
-        <drop-list v-if="rarityDrop.length > 0" :list="rarityDrop" :short="short" title="稀有掉落"></drop-list>
+        <drop-list
+          class="flex-list"
+          v-if="firstDrop.length > 0"
+          :list="firstDrop"
+          :short="short"
+          title="首次掉落"
+          :target-stage="targetStage"
+        ></drop-list>
+        <drop-list
+          class="flex-list"
+          v-if="commonDrop.length > 0"
+          :list="commonDrop"
+          :short="short"
+          title="常规掉落"
+          :target-stage="targetStage"
+        ></drop-list>
+        <drop-list
+          class="flex-list"
+          v-if="rarityDrop.length > 0"
+          :list="rarityDrop"
+          :short="short"
+          title="稀有掉落"
+          :target-stage="targetStage"
+        ></drop-list>
       </div>
-      <drop-list v-if="almostDrop.length > 0" :list="almostDrop" :short="short" title="概率掉落"></drop-list>
+      <drop-list
+        v-if="almostDrop.length > 0"
+        :list="almostDrop"
+        :short="short"
+        title="概率掉落"
+        :target-stage="targetStage"
+      ></drop-list>
     </div>
   </my-slide-title>
 </template>
@@ -26,7 +53,8 @@ export default {
     },
     short: {
       required: true
-    }
+    },
+    targetStage: String
   },
   computed: {
     firstDrop() {
@@ -59,6 +87,15 @@ export default {
 @media screen and (max-width: 500px) {
   .map-drop-container-wrapper {
     margin-top: 0px
+  }
+
+  .map-drop-list-wrapper {
+    display: flex
+    flex-wrap: wrap
+  }
+
+  .flex-list {
+    width: 100%
   }
 }
 </style>

@@ -90,10 +90,12 @@
         </div>
       </div>
       <my-slide-title
+        v-if="data"
         :control="mapCode ? true : false"
         style="margin: 20px 0 0;"
         :short="short"
         :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
+        :init-value="true"
       >
         <div slot="extra-button">
           <el-button
@@ -110,7 +112,10 @@
             :plain="simpleShow ? false: true"
             class="clear-route-button"
             @click="simpleShow = !simpleShow"
-          >{{simpleShow ? '简要显示': '路线模式'}}</el-button>
+          >
+            <i class="el-icon-refresh"></i>
+            {{simpleShow ? '简要显示': '路线模式'}}
+          </el-button>
         </div>
         <enemy-data-layout
           ref="layout"
@@ -128,7 +133,14 @@
       <my-slide-title style="margin-top: 20px" v-if="short && mapCode" title="地图信息" :short="short">
         <enemy-map-info :show-title="false" :short="short" :options="options"></enemy-map-info>
       </my-slide-title>
-      <map-drop-list style="margin-top: 20px" :short="short" :drop-info="detailsDropList"></map-drop-list>
+      <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
+      <map-drop-list
+        v-if="mapCode && detailsDropList.length > 0"
+        style="margin-top: 20px"
+        :short="short"
+        :drop-info="detailsDropList"
+        :target-stage="mapCode"
+      ></map-drop-list>
     </div>
   </div>
 </template>
@@ -450,7 +462,8 @@ export default {
   max-width: 1200px
   padding: 20px
   //min-width: 1000px
-  min-height: 100vh
+  //有空再算一下，到底应该给多少，先随便给个80
+  min-height: 80vh
   display: flex
   flex-direction: column
   overflow: hidden

@@ -69,9 +69,7 @@
               :style="selectedStlye[routeIndex]"
               :name="data[key].name"
               :src="enemyPicPath(key)"
-              @click.native="openDetails(key, data[key], routeIndex)"
-              @mouseover.native="mouseHoverOpen(key, data[key])"
-              @mouseleave.native="cancelOpen"
+              @click.native="showRoute(routeIndex)"
             ></enemy-cube>
             <div v-else style="height: 100px">
               <p>预设 敌人</p>
@@ -175,6 +173,7 @@ export default {
   mounted() {
     this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
     // console.log(this.drawerSize);
+    if (this.$el.querySelector('.enemy-container')) this.calFillAmount();
 
     window.addEventListener(
       'resize',
@@ -264,12 +263,15 @@ export default {
     calFillAmount() {
       if (!this.data) return;
       const width = this.$el.clientWidth,
-        cWidth = this.$el.querySelector('.enemy-container').clientWidth;
-      this.fillItemWidth = { width: cWidth + 'px' };
-      let size = Math.floor(width / cWidth);
-      // size = size - (Object.keys(this.data).length % size);
+        target = this.$el.querySelector('.enemy-container'),
+        style = getComputedStyle(target),
+        cWidth = style.width,
+        vw = style['margin-right'],
+        res = (+cWidth.slice(0, -2) + +vw.slice(0, -2));
+      this.fillItemWidth = { width: res + 'px' };
+      let size = Math.floor(width / res);
       const arr = [];
-      if (size > 10) {
+      if (size > 30) {
         throw new Error('Some thing wrong!', size);
       }
       for (let i = 0; i < size; i++) {

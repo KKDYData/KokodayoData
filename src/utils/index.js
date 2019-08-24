@@ -291,15 +291,15 @@ import UaParser from 'ua-parser-js';
 
 
 const Browser = () => new UaParser().getBrowser();
-const isMoblie = () => new UaParser().getDevice().type === 'mobile';
 
+// import { Message } from 'element-ui';
 const getWebpOk = () => {
   const ua = new UaParser();
   const OS = ua.getOS();
   const Browser = ua.getBrowser();
   const width = document.body.clientWidth;
-  const isMoblie = ua.getDevice().type === 'mobile' || (OS.name === 'Mac OS' && width < 1300);
-  // import { Message } from 'element-ui';
+  const isMoblie = ua.getDevice().type === 'mobile';
+  const isMobliePad = isMoblie || (OS.name === 'Mac OS' && width < 1300);
   // Message(`'is Moblie? ' ${isMoblie}, ${ua.getDevice().vendor}, os ${OS.name}`);
 
   if (
@@ -307,13 +307,16 @@ const getWebpOk = () => {
     (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
     (Browser.name === 'Edge' && Browser.version < '18')
   ) {
-    return { ok: false, mobile: isMoblie };
+    return { ok: false, mobile: isMobliePad, isMoblie };
   } else {
-    return { ok: true, mobile: isMoblie };
+    return { ok: true, mobile: isMobliePad, isMoblie };
   }
 };
+const webp = getWebpOk();
+const webpOk = webp.ok;
+const isMoblie = () => webp.isMoblie;
+const isMobliePad = () => webp.mobile;
 
-const webpOk = getWebpOk().ok;
 
 const getProfilePath = name => {
   return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
@@ -497,7 +500,8 @@ export {
   submitFeedback,
   changeAttackSpeed,
   getStageList,
-  findStage
+  findStage,
+  isMobliePad
 };
 
 

@@ -158,21 +158,26 @@ export default {
     },
     calFillAmount() {
       //通过css控制填充的margin？
-      const width = this.$el.clientWidth;
-      let cWidth = this.short ? 106 : 120;
-      cWidth = this.showTags
-        ? this.short
-          ? cWidth + 69
-          : cWidth + 70
-        : cWidth;
-      this.fillItemWidth = { width: (cWidth + 50) + 'px' };
-      console.log('xxxxxxxxxxxxxxx', this.fillItemWidth);
-      let size = Math.floor(width / cWidth);
-      const arr = [];
-      for (let i = 0; i < size; i++) {
-        arr.push(i);
-      }
-      this.fillItems = arr;
+      setTimeout(() => {
+
+        const width = this.$el.clientWidth,
+          target = document.querySelector('.profile-item');
+        const slice2 = x => +x.slice(0, -2);
+        const
+          style = getComputedStyle(target),
+          cWidth = style.width,
+          vr = style['margin-right'],
+          vl = style['margin-left'],
+          res = slice2(cWidth) + slice2(vr) + slice2(vl);
+
+        this.fillItemWidth = { width: res + 'px' };
+        let size = Math.floor(width / res);
+        const arr = [];
+        for (let i = 0; i < size; i++) {
+          arr.push(i);
+        }
+        this.fillItems = arr;
+      }, 500);
     },
     tagHit(tag) {
       return this.tags.find(el => el.value === tag);
