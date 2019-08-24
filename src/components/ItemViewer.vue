@@ -34,10 +34,41 @@
       </div>
 
       <p>{{item.usage}}</p>
+      <div v-if="targetStageDrop">
+        <el-divider content-position="left">
+          <span>当前关卡</span>
+          <span
+            v-if="showDropInfo"
+            :style="short ? 'right: -144px' : ''"
+            class="item-divider-extra"
+          >
+            统计次数
+            <el-tooltip placement="top">
+              <i class="el-icon-info"></i>
+              <div slot="content">点击可以查看统计的总掉落数/总场次</div>
+            </el-tooltip>
+          </span>
+        </el-divider>
+        <p class="item-stage-container">
+          <span
+            class="item-stage-name"
+            :style="targetStageDrop.stageCode.length > 5 ? 'font-size: 0.9em': ''"
+          >{{targetStageDrop.stageCode}}</span>
+          <span
+            class="item-occper"
+          >{{targetStageDrop.occPer ? occper(targetStageDrop.occPer) : '概率掉落'}}</span>
+          <el-tooltip v-if="targetStageDrop.times" class="item-dropInfo" placement="top">
+            <div
+              slot="content"
+            >{{targetStageDrop.times}}/{{targetStageDrop.quantity}}→{{targetStageDrop.rate}}%</div>
+            <span>{{targetStageDrop.dropCost}} 理智/个</span>
+          </el-tooltip>
+        </p>
+      </div>
       <div v-if="type !== 'FURN'" class="item-popover">
         <div v-if="dropList.length > 0">
           <el-divider content-position="left">
-            <span>关卡掉落</span>
+            <span>主要掉落</span>
             <span
               v-if="showDropInfo"
               :style="short ? 'top: 10px; right: -165px' : ''"
@@ -81,7 +112,7 @@
 
 
 <script>
-import { path, findStage } from '../utils';
+import { path, findStage, isMobliePad } from '../utils';
 
 import { itemBackground, occPer_chinese, roomType } from '../utils/string';
 import { Popover, Divider, Image, Tooltip } from 'element-ui';
@@ -99,12 +130,14 @@ export default {
     },
     num: Number,
     short: Boolean,
-    type: String
+    type: String,
+    targetStage: String
   },
   data() {
     return {
       isHover:
-        process.env.NODE_ENV === 'development' || this.short ? 'click' : 'hover'
+        process.env.NODE_ENV === 'development' || isMobliePad() ||
+          this.short ? 'click' : 'hover'
     };
   },
   computed: {
@@ -120,11 +153,34 @@ export default {
         '_optimized.png'
       );
     },
-    showDropInfo() {
-      return this.dropList[0].times;
+
+    dropListRow() {
+      return this.$store.getters.itemDropList(this.item.itemId);
     },
+    targetStageDrop() {
+      if (!this.targetStage || !this.dropListRow) return;
+      else {
+        const tempRes = this.dropList.findIndex(el => el.stageId === this.targetStage);
+        if (tempRes > -1) {
+          const temp = this.dropList.splice(tempRes, 1)[0];
+          return temp;
+        }
+        const target = this.dropListRow
+          .find(el => el.stageId === this.targetStage);
+        const res = Object.assign({}, target);
+        const stageData = findStage(target.stageId, this.stageTree);
+        const temp = stageData.label.split(' ');
+        res.stageCode = temp[0];
+        res.rate = Math.round((target.quantity / target.times) * 100);
+        res.dropCost = Math.round(
+          (target.times / target.quantity) * stageData.apCost
+        );
+        return res;
+      }
+    },
+
     dropList() {
-      const list = this.$store.getters.itemDropList(this.item.itemId);
+      const list = this.dropListRow;
       if (this.stageTree) {
         return this.item.stageDropList.map(el => {
           let res = el;
@@ -132,6 +188,9 @@ export default {
           if (stageData) {
             const temp = stageData.label.split(' ');
             res.stageCode = temp[0];
+            if (temp[0] === this.ta) {
+              res.target = true;
+            }
             if (list) {
               const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId);
               if (dropInfo) {
@@ -148,7 +207,10 @@ export default {
       } else {
         return this.item.stageDropList;
       }
-    }
+    },
+    showDropInfo() {
+      return this.dropList.filter(el => el.times);
+    },
   },
   methods: {
     occper(occ) {
@@ -190,42 +252,42 @@ export default {
      left: 20px
      padding: 0
    }
+ }
 
-   .item-divider-extra {
-     display: inline-block
-     background-color: #fff
-     padding: 0 10px
-     position: absolute
-     top: 0
-     right: - 242px
+ .item-divider-extra {
+   display: inline-block
+   background-color: #fff
+   padding: 0 10px
+   position: absolute
+   top: 0
+   right: - 242px
+ }
+
+ .item-stage-container {
+   padding-left: 40px
+
+   .item-occper {
+     background-color: rgb(128, 128, 128)
+     color: white
+     padding: 0 6px
+     border-radius: 3px
    }
 
-   .item-stage-container {
-     padding-left: 40px
+   .item-dropInfo {
+     float: right
+     cursor: pointer
+   }
 
-     .item-occper {
-       background-color: rgb(128, 128, 128)
-       color: white
-       padding: 0 6px
-       border-radius: 3px
-     }
+   .item-occper {
+     background-color: rgb(128, 128, 128)
+     color: white
+     padding: 0 6px
+     border-radius: 3px
+   }
 
-     .item-dropInfo {
-       float: right
-       cursor: pointer
-     }
-
-     .item-occper {
-       background-color: rgb(128, 128, 128)
-       color: white
-       padding: 0 6px
-       border-radius: 3px
-     }
-
-     .item-stage-name {
-       width: 50px
-       display: inline-block
-     }
+   .item-stage-name {
+     width: 50px
+     display: inline-block
    }
  }
 

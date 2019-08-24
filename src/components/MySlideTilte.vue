@@ -42,8 +42,14 @@ export default {
       default: false
     }
   },
+  watch: {
+    value(v) {
+      console.log(v);
+    }
+  },
   data() {
-    const v = !this.short || this.initValue;
+    const v = this.initValue;
+    console.log(v);
     return {
       value: v,
       // 冻结按钮，但是想了下好像没必要
@@ -62,13 +68,16 @@ export default {
 <style lang="stylus" scoped>
 .extra-button {
   position: absolute
-  right: 20px
+  right: 0px
+  left: 10px
+  top: 30px
   z-index: 2
 }
 
 @media screen and (min-width: 700px) {
   .extra-button {
-    top: 30px
+    left: auto
+    right: 20px
   }
 }
 </style>
