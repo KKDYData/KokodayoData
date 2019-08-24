@@ -245,9 +245,9 @@ export default {
     mapPath() {
       return this.mapCode
         ? path +
-            'map/pic/' +
-            this.mapCode +
-            '_optimized.png?x-oss-process=style/jpg-test'
+        'map/pic/' +
+        this.mapCode +
+        '_optimized.png?x-oss-process=style/jpg-test'
         : '';
     },
     options() {
@@ -305,7 +305,7 @@ export default {
   beforeMount() {
     this.short = isMoblie();
   },
-  mounted() {},
+  mounted() { },
   methods: {
     clearMap() {
       this.data = this.rowData;
@@ -410,7 +410,7 @@ export default {
           Object.entries(this.rowData).forEach(([k, v]) => {
             const target = mapData.enemyDbRefs.find(el => el.id === k);
             if (target) {
-              temp[k] = Object.assign(v, {
+              temp[k] = Object.assign({}, v, {
                 level: target.level
               });
             }
@@ -437,13 +437,13 @@ export default {
         list.map(async el => ({
           data: await fetchGet(
             path +
-              (el.type === 'FURN'
-                ? 'custom/furnitures/data/'
-                : el.type === 'CHAR'
-                  ? 'item/data/p_'
-                  : 'item/data/') +
-              el.id +
-              '.json'
+            (el.type === 'FURN'
+              ? 'custom/furnitures/data/'
+              : el.type === 'CHAR'
+                ? 'item/data/p_'
+                : 'item/data/') +
+            el.id +
+            '.json'
           ),
           type: el.type,
           dropType: el.dropType
@@ -455,102 +455,127 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.chapter-wrapper
+.chapter-wrapper {
   padding-left: 20px
+}
 
-.map-wrapper
+.map-wrapper {
   margin: 20px auto 0
   max-width: 1200px
   padding: 20px
   //min-height: 100vh删了看看
   min-width: 1100px
 
-  .map-title-part
+  .map-title-part {
     margin: 0 0 20px
     transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55)
+  }
 
-  .map-data-wrapper
+  .map-data-wrapper {
     margin-bottom: 20px
 
-    .map-data-container
+    .map-data-container {
       margin-bottom: 20px
       display: flex
       flex-wrap: wrap
+    }
+  }
 
-  .map-option-container-wrapper
+  .map-option-container-wrapper {
     margin-left: 5vw
     max-width: 450px
     min-width: 385px
 
-    .map-option-container
+    .map-option-container {
       display: flex
       justify-content: space-between
       flex-wrap: wrap
       align-content: start
 
-      .map-option-content
+      .map-option-content {
         margin: 0 0 20px
         width: calc(50% - 40px)
+      }
+    }
+  }
 
   --height: 28vw
 
-  .map-left-panel
+  .map-left-panel {
     width: calc(var(--height) * 1.78)
     box-sizing: border-box
+  }
 
-  .map-pic-contianer
+  .map-pic-contianer {
     height: var(--height)
     width: calc(var(--height) * 1.78)
     box-sizing: border-box
     border: 2px solid #313131
+  }
+}
 
-.map-drop-list-wrapper
+.map-drop-list-wrapper {
   display: flex
+}
 
-.runes-mode-button
+.runes-mode-button {
   padding-top: 7px
   padding-bottom: 4px
   vertical-align: bottom
   border-radius: 2px
+}
 
-@media screen and (min-width: 1350px)
-  .map-wrapper
+@media screen and (min-width: 1350px) {
+  .map-wrapper {
     min-width: 100%
+  }
+}
 
-@media screen and (min-width: 1500px)
-  .map-wrapper
+@media screen and (min-width: 1500px) {
+  .map-wrapper {
     --height: 500px
     min-width: 1500px
+  }
+}
 
-@media screen and (max-width: 800px)
-  .map-wrapper
+@media screen and (max-width: 800px) {
+  .map-wrapper {
     --height: calc(52.8vw)
     min-width: 360px
     box-sizing: border-box
     padding: 3vw
 
-    .map-option-container-wrapper
+    .map-option-container-wrapper {
       min-width: auto
       max-width: inherit
       margin: 20px 0
 
-      .map-option-container
+      .map-option-container {
         min-width: auto
         margin-left: 2vw
 
-        .map-option-content
+        .map-option-content {
           margin: 0 10px 10px 0
           width: calc(50% - 10px)
+        }
+      }
+    }
+  }
 
-  .map-drop-container-wrapper
+  .map-drop-container-wrapper {
     margin-top: 10px
+  }
+}
 
-@media screen and (max-width: 500px)
-  .map-drop-container-wrapper
+@media screen and (max-width: 500px) {
+  .map-drop-container-wrapper {
     margin-top: 0px
+  }
 
-  .runes-mode-button
+  .runes-mode-button {
     padding-top: 5px
     padding-bottom: 5px
+  }
+}
 </style>
 
