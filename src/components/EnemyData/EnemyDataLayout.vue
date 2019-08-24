@@ -75,7 +75,7 @@
               <p>预设 敌人</p>
               <p>{{key}}</p>
             </div>
-            <div @click="showRoute(routeIndex)" style class="enemy-cube-wave-info">
+            <div @touchstart="showRoute(routeIndex)" style class="enemy-cube-wave-info">
               <div>数量:{{count}}, 间隔:{{interval}}</div>
               <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
                 延迟: {{preDelay}}s

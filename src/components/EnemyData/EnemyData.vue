@@ -233,7 +233,7 @@ export default {
       map: null,
       showMap: false,
       watchTree: false,
-      simpleShow: false
+      simpleShow: true
     };
   },
   watch: {
@@ -288,9 +288,12 @@ export default {
       this.selMapData = null;
       this.selMapDataEx = null;
       this.runesMode = false;
-      this.$refs['chapter-selecter'].closeDrawer();
       this.pTransition();
       this.$router.push(this.path);
+      setTimeout(() => {
+        // pc端关闭会反复弹出，怀疑是enemy-layout大幅变化导致pc有这个问题,移动端没事
+        this.$refs['chapter-selecter'].closeDrawer();
+      }, 100);
     },
     async loadRunes() {
       // const target = this.$refs['map-title-part'];
@@ -363,7 +366,7 @@ export default {
           this.data = Object.entries(this.rowData).reduce((res, [k, v]) => {
             const target = mapData.enemyDbRefs.find(el => el.id === k);
             if (target) {
-              res[k] = Object.assign(v, { level: target.level });
+              res[k] = Object.assign({}, v, { level: target.level });
               return res;
             } else return res;
           }, {});
