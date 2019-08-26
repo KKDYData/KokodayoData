@@ -125,7 +125,6 @@ export default {
   flex-wrap: wrap;
 }
 .filter-close-icon {
-  /* float: right; */
   position: absolute;
   left: 8px;
 }

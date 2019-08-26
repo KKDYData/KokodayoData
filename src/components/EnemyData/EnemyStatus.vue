@@ -15,6 +15,7 @@
       </div>
     </div>
     <div style="display: flex; align-items: center; margin: 10px 0">
+      <!-- 根据有没有mapLevel区分有没有选地图 -->
       <div v-if="mapLevel < 0" class :style="short ? 'width: auto': ''">
         <div style="margin-bottom: 15px">
           <span class="status-phases-text">Level</span>
@@ -299,6 +300,7 @@ export default {
           this.skills.push(this.skills[0]);
         }
       }
+      console.log('skills', this.skills);
     }
   },
   computed: {
@@ -309,9 +311,11 @@ export default {
     },
     filterKeys() {
       const res = {};
+      //选地图非突袭，mapLevel为地图所选择的等级
       if (this.mapLevel > -1 && !this.runesMode) {
         return this.status[this.mapLevel];
       }
+      // 不选地图，选等级，非突袭，level为用户选择的等级
       if (
         !this.runesMode &&
         (this.currentMap === '' ||
@@ -320,6 +324,7 @@ export default {
       ) {
         return this.status[this.level];
       }
+      // 突袭情况，先判定有没有选地图
       const target = this.runesMode
         ? this.mapData
         : this.appearMap[this.keyName][this.level].find(el =>

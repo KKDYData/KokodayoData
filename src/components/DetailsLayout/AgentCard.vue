@@ -2,13 +2,7 @@
   <div class="agent-card-container-wrapper">
     <el-card style=" margin-bottom: 20px; position: relative;">
       <div class="agent-card-container">
-        <div class="agent-card-pic" :style="`--logo-link: url(${logo})`">
-          <el-image style="height:100%;width:100%" :src="profile" :details="data.name">
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
-        </div>
+        <char-cube class="agent-card-pic" :style="`--logo-link: url(${logo})`" :src="profile"></char-cube>
         <div class="agent-card-title-wrapper">
           <div class="title-first">
             <div>
@@ -85,6 +79,8 @@ import {
   getDetailsProfilePath
 } from '../../utils';
 
+import charCube from '../charCube';
+
 export default {
   props: {
     data: {
@@ -96,7 +92,9 @@ export default {
       required: true
     }
   },
-
+  components: {
+    charCube
+  },
   computed: {
     profile() {
       return getDetailsProfilePath(this.$route.params.name);
@@ -136,13 +134,6 @@ export default {
   position: relative;
   height: 150px;
   z-index: 1;
-}
-.agent-card-pic {
-  display: inline-block;
-  width: 150px;
-  font-size: 12px;
-  position: relative;
-  vertical-align: middle;
 }
 
 .agent-card-pic::before {

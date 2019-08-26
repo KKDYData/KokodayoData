@@ -4,34 +4,17 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
 
 
 const swPlugins = process.env.NODE_ENV === 'development' ? [] :
   [
-    new WebpackPwaManifest({
-      name: 'Arknights Data @Beta',
-      short_name: 'AnD@Beta',
-      description: '一个平平无奇的明日方舟资料站',
-      background_color: '#525252',
-      theme_color: '#525252',
-      crossorigin: 'use-credentials', //can be null, use-credentials or anonymous
-      start_url: '.',
-      navigationPreload: true,
-      icons: [
-        {
-          src: path.resolve('src/assets/icon.png'),
-          sizes: [96, 128], // multiple sizes
-          ios: true
-        },
-      ]
-    }),
     new WorkboxPlugin.GenerateSW({
       swDest: 'sw.js',
       clientsClaim: true,
       skipWaiting: true,
       exclude: [/^icon.*?\.png$/],
       runtimeCaching: [
+
         {
           urlPattern: /api\/arknights/,
           handler: 'NetworkFirst'
@@ -41,8 +24,6 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           handler: 'CacheFirst'
         },
         {
-          // To match cross-origin requests, use a RegExp that matches
-          // the start of the origin:
           urlPattern: new RegExp('https://andata.somedata.top/dataX/'),
           handler: 'StaleWhileRevalidate',
           options: {
@@ -53,8 +34,16 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           }
         },
         {
-          // To match cross-origin requests, use a RegExp that matches
-          // the start of the origin:
+          urlPattern: new RegExp('https://unpkg.com/spritejs/dist/spritejs.min.js'),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'spritejs',
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
           urlPattern: new RegExp('https://penguin-stats.io/PenguinStats/api/'),
           handler: 'StaleWhileRevalidate',
           options: {
@@ -64,10 +53,14 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
             cacheName: 'penguin-api-cache',
             expiration: {
               maxEntries: 5,
-              maxAgeSeconds: 60 * 60,
+              maxAgeSeconds: 60 * 10,
             },
           }
-        }
+        },
+        {
+          urlPattern: new RegExp('https://somedata.top/Arknights'),
+          handler: 'StaleWhileRevalidate',
+        },
         //
       ]
     })
@@ -86,7 +79,7 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash].css',
-      // chunkFilename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
+      chunkFilename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
     }),
     new webpack.DefinePlugin({
       VERSION: JSON.stringify(new Date()),
@@ -145,7 +138,7 @@ module.exports = {
     ]
   },
   resolve: {
-
     extensions: ['.js', '.styl', '.vue', '.json']
   },
+
 };

@@ -19,18 +19,14 @@ html
 
 body
   width: 100vw
-  min-height: 100vh //防止#app
   overflow: hidden
   margin: 0
   background-color: white
 
 #app
   display: flex
-  min-height: 100vh
+  min-height: calc(100vh + 70px) //防止#footer闪现
   flex-direction: column
-
-  #footer
-    flex-grow: 1
 
 .image-slot
   display: flex
@@ -56,6 +52,7 @@ body
 
 .item-popover-class
   padding: 20px !important
+  outline: none
 
   .el-popover__title
     font-weight: bold
@@ -68,6 +65,10 @@ body
 
 .tags-popover-container
   max-width: 959px
+
+.fuck-outline
+  outline: none 
+
 
 .el-image img
   width: 100%
@@ -102,8 +103,9 @@ body
   overflow: auto
   margin: 0
 
-  .mobile-drawer-scroll
+  .el-drawer__body
     overflow-y: scroll
+    overflow-x: hidden
     margin-right: -17px
     padding-right: 17px
 
@@ -118,10 +120,5 @@ body
   .alert-update-msg
     width: 100%
 
-  /*drawer 在移动端*/
-  .el-dialog__wrapper .mobile-drawer-scroll
-    margin-right: 0px
-    padding-right: 0px
-
   .enemy-drawer
-    min-height: 80vh
+    min-height: calc(100% + 1px)

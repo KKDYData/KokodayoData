@@ -86,7 +86,6 @@ const arrange = (arr, index = 0, group = []) => {
     res.push([...group[i], arr[index]]);
   }
   group = group.concat(res);
-  // debugger;
   if (index + 1 >= arr.length) return group;
   else return arrange(arr, index + 1, group);
 };
@@ -140,12 +139,14 @@ export default {
 
           if (Array.isArray(agent[key]))
             agent[key].forEach(tag => {
-              const find = group.filters.find(el => el.value === tag);
+              // 服务器数据和前端声明的数据不统一。。。但是嘛，已经做了缓存了，就先这样手动转换看看
+              let find = group.filters.find(el => Number(el.value) === tag);
               if (find) {
                 hitTag.push(find);
               }
             });
           else {
+            // 全是数组了，这个好像没什么用了
             const find = group.filters.find(el => el.value === agent[key]);
             if (find) {
               hitTag.push(find);
