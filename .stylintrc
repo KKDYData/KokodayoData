@@ -1,6 +1,6 @@
 {
     "borderNone": true,
-    "brackets": false,
+    "brackets": true,
     "colons": false,
     "colors": false,
     "commaSpace": true,

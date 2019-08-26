@@ -13,7 +13,8 @@ export default new Vuex.Store({
     apperMapVer: '',
     // eslint-disable-next-line no-undef
     webVer: new Date(VERSION).toLocaleString(),
-    dropList: null
+    dropList: null,
+    stageTree: null
   },
   getters: {
     itemDropList: (state) => id => {
@@ -37,6 +38,9 @@ export default new Vuex.Store({
     },
     setDropList: (state, list) => {
       state.dropList = list;
+    },
+    setStageTree: (state, tree) => {
+      state.stageTree = tree;
     }
   },
   ...actions

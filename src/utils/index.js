@@ -1,8 +1,10 @@
 import store from '../store';
+import { StageType, statusToChChar } from './string';
 
 const setVer = (name, ver) => {
   store.commit(name, new Date(ver).toLocaleString());
 };
+
 
 const debounce = function (action, idle) {
   let last;
@@ -10,7 +12,7 @@ const debounce = function (action, idle) {
     const ctx = this,
       args = arguments;
     clearTimeout(last);
-    last = setTimeout(function () {
+    last = setTimeout(() => {
       action.apply(ctx, args);
     }, idle);
   };
@@ -56,7 +58,8 @@ const submitFeedback = content => {
 //包装fetch，使用get
 const fetchGet = (url) => {
   return fetch(url, {
-    method: 'GET'
+    method: 'GET',
+    mode: 'cors'
   }).then(res => {
     if (res.ok) {
       return res.json();
@@ -116,6 +119,18 @@ const getDevList = () => {
     });
 };
 
+const getStageList = () => {
+  return fetchGet('/api/arknights/data/stageList')
+    .then(res => {
+      // setVer('setListVer', res.lastModified);
+      return fetchGet(path + res.name.slice(6));//改成拼链接
+    })
+    .catch(err => {
+      console.error('error', err);
+      return [];
+    });
+};
+
 
 const getHeroData = name => {
   return fetchGet(path + 'char/data/' + name + '.json')
@@ -132,8 +147,7 @@ const getMapData = name => {
     .catch(err => console.error(err));
 };
 
-const getMapDataLsitVer = name => {
-  console.log(name);
+const getMapDataListVer = name => {
   return fetchGet(path + 'map/exData/' + name + '.json')
     .catch(err => console.error(err));
 };
@@ -275,28 +289,34 @@ const getClass_icon = (c) => {
 
 import UaParser from 'ua-parser-js';
 
-const Browser = () => new UaParser().getBrowser();
-const isMoblie = () => new UaParser().getDevice().type === 'mobile';
 
+const Browser = () => new UaParser().getBrowser();
+
+// import { Message } from 'element-ui';
 const getWebpOk = () => {
   const ua = new UaParser();
   const OS = ua.getOS();
   const Browser = ua.getBrowser();
+  const width = document.body.clientWidth;
   const isMoblie = ua.getDevice().type === 'mobile';
-  console.log(OS);
-  console.log(Browser);
+  const isMobliePad = isMoblie || (OS.name === 'Mac OS' && width < 1300);
+  // Message(`'is Moblie? ' ${isMoblie}, ${ua.getDevice().vendor}, os ${OS.name}`);
+
   if (
     OS.name === 'iOS' ||
     (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
     (Browser.name === 'Edge' && Browser.version < '18')
   ) {
-    return { ok: false, mobile: isMoblie };
+    return { ok: false, mobile: isMobliePad, isMoblie };
   } else {
-    return { ok: true, mobile: isMoblie };
+    return { ok: true, mobile: isMobliePad, isMoblie };
   }
 };
+const webp = getWebpOk();
+const webpOk = webp.ok;
+const isMoblie = () => webp.isMoblie;
+const isMobliePad = () => webp.mobile;
 
-const webpOk = getWebpOk().ok;
 
 const getProfilePath = name => {
   return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
@@ -424,6 +444,80 @@ const changeAttackSpeed = (skill) => {
 };
 
 
+const findStage = (map, tree) => {
+  const splitTemp = map.split('_');
+  let groupName = splitTemp[0];
+  if (groupName === 'sub') groupName = 'main';
+  const group = tree.find(
+    el => el.label === StageType[groupName]
+  );
+  let target;
+  if (group.label === '主线') {
+    const chapter = splitTemp[1].split('-');
+    if (splitTemp[0] === 'main') {
+      const nodes = tree[0].children[+chapter[0]];
+      target = nodes.children[+chapter[1] - 1];
+    } else {
+      //支线
+      const temp = tree[0].children[+chapter[0]];
+      const nodes = temp.children[temp.children.length - 1];
+      target = nodes.children[+chapter[1] - 1];
+    }
+  } else {
+    map = map.replace('wk', 'weekly').replace('pro', 'promote');
+    target = group.children.find(el => el.path === map);
+  }
+  return target;
+};
+
+const calStatus = (lv, data) => {
+  return data.reduce((zero, max) => {
+    const diff = max.level - zero.level;
+    const res = Object.entries(max.data).reduce((res, cur) => {
+      const [k, v] = cur;
+      res[k] = Math.round((v - zero.data[k]) / diff * (lv - 1)) + zero.data[k];
+      return res;
+    }, {});
+    return res;
+  });
+};
+
+const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP) => {
+  const data = calStatus(level, targetPhasese);
+  return Object.entries(data).reduce((res, cur) => {
+    // 判定是否显示属性，没有就是我看不懂，或者觉得没意义的
+    const [key, value] = cur;
+    if (!statusToChChar(key)) return res;
+    let nV = value, addV = 0;
+    // 判定是是否满好感
+    if (isFavor) {
+      const v = baseData.favorKeyFrames[1].data[key];
+      if (v !== 0) {
+        addV += v;
+        nV += v;
+      }
+    }
+    // 判定潜能提升
+    potentailStatusUP.forEach(el => {
+      el.forEach(el => {
+        if (el.type === key) {
+          if (key === 'baseAttackTime') {
+            addV += el.value;
+            nV = Math.floor((nV / (el.value / 100 + 1)) * 100) / 100;
+          } else {
+            addV += el.value;
+            nV += el.value;
+          }
+        }
+      });
+    });
+    const upOrMinus = addV > 0 ? '+' : '';
+    if (addV) nV = nV + '<i style="color: #F49800;font-style: normal;">(' + upOrMinus + addV + ')</i>';
+    res[key] = nV;
+    return res;
+  }, {});
+};
+
 export {
   debounce,
   throttle,
@@ -448,10 +542,15 @@ export {
   getDevList,
   isMoblie,
   getMapData,
-  getMapDataLsitVer,
+  getMapDataListVer,
   changeKey,
   submitFeedback,
-  changeAttackSpeed
+  changeAttackSpeed,
+  getStageList,
+  findStage,
+  isMobliePad,
+  calStatus,
+  calStatusEnd
 };
 
 

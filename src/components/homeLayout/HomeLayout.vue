@@ -94,7 +94,7 @@
         <new-profile-layout :tags="SelectedTag" :filterGroups="filterGroups" :data="data"></new-profile-layout>
       </el-tab-pane>
       <el-tab-pane name="expalain" label="说明&反馈" lazy>
-        <my-feedback :store="store"></my-feedback>
+        <my-feedback :short="short" :store="store"></my-feedback>
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -142,7 +142,7 @@ const myFeedback = () => ({
 const gkzm = [{ isTag: false, text: '仅公招', value: true, short: '公招' }];
 
 if (typeof Array.prototype.flat !== 'function') {
-  Array.prototype.flat = function(num) {
+  Array.prototype.flat = function (num) {
     return this.reduce((pre, cur) => pre.concat(cur));
   };
 }
@@ -150,6 +150,18 @@ if (typeof Array.prototype.flat !== 'function') {
 const version = 190715;
 
 export default {
+  metaInfo() {
+    return {
+      titleTemplate: 'ArknightsData 一个平平无奇的明日方舟数据库 0.7 Wiki|维基|数据',
+      meta: [
+        {
+          vmid: 'description',
+          name: 'Description',
+          content: '干员数据、语音、立绘、敌人图鉴、地图数据、计算器，公开招募，由Dr.阿凡提提供'
+        }
+      ]
+    };
+  },
   components: {
     'filter-group': FilterButtonGroup,
     'profile-layout': ProfileLayout,
@@ -175,7 +187,7 @@ export default {
       short: false
     };
   },
-  created() {},
+  created() { },
   beforeMount() {
     this.short = isMoblie();
     this.store = localforage.createInstance({

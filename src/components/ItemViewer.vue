@@ -8,8 +8,9 @@
       :trigger="isHover"
       :open-delay="500"
     >
-      <div slot="reference">
-        <div style>
+      <!-- 去掉 ios 点击边框 -->
+      <div slot="reference" style="outline: none">
+        <div>
           <el-image
             :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
             :style="itemBackground"
@@ -33,25 +34,65 @@
       </div>
 
       <p>{{item.usage}}</p>
+      <p>{{item.description}}</p>
+      <div v-if="targetStageDrop">
+        <el-divider content-position="left">
+          <span>当前关卡</span>
+          <span
+            v-if="showDropInfo"
+            :style="short ? 'right: -144px' : ''"
+            class="item-divider-extra"
+          >
+            统计次数
+            <el-tooltip placement="top">
+              <i class="el-icon-info"></i>
+              <div slot="content">点击可以查看统计的总掉落数/总场次</div>
+            </el-tooltip>
+          </span>
+        </el-divider>
+        <p class="item-stage-container">
+          <span
+            class="item-stage-name"
+            :style="targetStageDrop.stageCode.length > 5 ? 'font-size: 0.9em': ''"
+          >{{targetStageDrop.stageCode}}</span>
+          <span
+            class="item-occper"
+          >{{targetStageDrop.occPer ? occper(targetStageDrop.occPer) : '概率掉落'}}</span>
+          <el-tooltip v-if="targetStageDrop.times" class="item-dropInfo" placement="top">
+            <div
+              slot="content"
+            >{{targetStageDrop.times}}/{{targetStageDrop.quantity}}→{{targetStageDrop.rate}}%</div>
+            <span>{{targetStageDrop.dropCost}} 理智/个</span>
+          </el-tooltip>
+        </p>
+      </div>
       <div v-if="type !== 'FURN'" class="item-popover">
         <div v-if="dropList.length > 0">
           <el-divider content-position="left">
-            <span>关卡掉落</span>
+            <span>主要掉落</span>
             <span
               v-if="showDropInfo"
-              :style="short ? 'top: 10px; right: -150px' : ''"
+              :style="short ? 'top: 10px; right: -165px' : ''"
               class="item-divider-extra"
-            >统计次数</span>
+            >
+              统计次数
+              <el-tooltip placement="top">
+                <i class="el-icon-info"></i>
+                <div slot="content">点击可以查看统计的总掉落数/总场次</div>
+              </el-tooltip>
+            </span>
           </el-divider>
           <p class="item-stage-container" v-for="stage in dropList" :key="stage.stageId">
+            <!-- 似乎是以前物资筹备关卡的名字比较长 -->
+            <!-- :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'" -->
             <span
-              :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'"
               class="item-stage-name"
-            >{{stageId(stage.stageId)}}</span>
+              :style="stage.stageCode.length > 5 ? 'font-size: 0.9em': ''"
+            >{{stage.stageCode}}</span>
             <span class="item-occper">{{occper(stage.occPer)}}</span>
             <el-tooltip v-if="stage.times" class="item-dropInfo" placement="top">
-              <div slot="content">{{stage.times}}/{{stage.quantity}}</div>
-              <span>{{stage.rate}}/次</span>
+              <div slot="content">{{stage.times}}/{{stage.quantity}}→{{stage.rate}}%</div>
+              <span>{{stage.dropCost}} 理智/个</span>
             </el-tooltip>
           </p>
         </div>
@@ -72,19 +113,16 @@
 
 
 <script>
-import { path } from '../utils';
+import { path, findStage, isMobliePad } from '../utils';
 
 import { itemBackground, occPer_chinese, roomType } from '../utils/string';
-
 import { Popover, Divider, Image, Tooltip } from 'element-ui';
+import { mapState } from 'vuex';
 import Vue from 'vue';
 Vue.use(Popover);
 Vue.use(Divider);
 Vue.use(Image);
 Vue.use(Tooltip);
-
-const stageList = () =>
-  import(/* webpackChunkName: "stageList" */ './stageList.json');
 
 export default {
   props: {
@@ -93,19 +131,18 @@ export default {
     },
     num: Number,
     short: Boolean,
-    type: String
-  },
-  mounted() {
-    stageList().then(res => (this.stageList = res.default));
+    type: String,
+    targetStage: String
   },
   data() {
     return {
-      stageList: [],
       isHover:
-        process.env.NODE_ENV === 'development' || this.short ? 'click' : 'hover'
+        process.env.NODE_ENV === 'development' || isMobliePad() ||
+          this.short ? 'click' : 'hover'
     };
   },
   computed: {
+    ...mapState(['stageTree']),
     itemBackground() {
       return this.type !== 'FURN' ? itemBackground[this.item.rarity] : {};
     },
@@ -117,30 +154,67 @@ export default {
         '_optimized.png'
       );
     },
-    showDropInfo() {
-      return this.dropList[0].times;
+
+    dropListRow() {
+      return this.$store.getters.itemDropList(this.item.itemId);
     },
-    dropList() {
-      const list = this.$store.getters.itemDropList(this.item.itemId);
-      if (list) {
-        return list.filter(el =>
-          this.item.stageDropList.find(stage => {
-            if (stage.stageId === el.stageId) {
-              el.occPer = stage.occPer;
-              el.rate = Math.round((el.quantity / el.times) * 100) / 100;
-              return true;
-            }
-          })
+    targetStageDrop() {
+      if (!this.targetStage || !this.dropListRow) return;
+      else {
+        const tempRes = this.dropList.findIndex(el => el.stageId === this.targetStage);
+        if (tempRes > -1) {
+          const temp = this.dropList.splice(tempRes, 1)[0];
+          return temp;
+        }
+        const target = this.dropListRow
+          .find(el => el.stageId === this.targetStage);
+        if (!target) return;
+        const res = Object.assign({}, target);
+        const stageData = findStage(target.stageId, this.stageTree);
+        const temp = stageData.label.split(' ');
+        res.stageCode = temp[0];
+        res.rate = Math.round((target.quantity / target.times) * 100);
+        res.dropCost = Math.round(
+          (target.times / target.quantity) * stageData.apCost
         );
+        return res;
+      }
+    },
+
+    dropList() {
+      const list = this.dropListRow;
+      if (this.stageTree) {
+        return this.item.stageDropList.map(el => {
+          let res = el;
+          const stageData = findStage(el.stageId, this.stageTree);
+          if (stageData) {
+            const temp = stageData.label.split(' ');
+            res.stageCode = temp[0];
+            if (temp[0] === this.ta) {
+              res.target = true;
+            }
+            if (list) {
+              const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId);
+              if (dropInfo) {
+                res = Object.assign(res, dropInfo);
+                res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100);
+                res.dropCost = Math.round(
+                  (dropInfo.times / dropInfo.quantity) * stageData.apCost
+                );
+              }
+            }
+          }
+          return res;
+        });
       } else {
         return this.item.stageDropList;
       }
-    }
+    },
+    showDropInfo() {
+      return this.dropList.filter(el => el.times);
+    },
   },
   methods: {
-    stageId(id) {
-      if (this.stageList) return this.stageList[id];
-    },
     occper(occ) {
       return occPer_chinese[occ];
     },
@@ -152,7 +226,7 @@ export default {
 </script>
 
  <style lang="stylus" scoped>
- .evolvcost-item-contianer
+ .evolvcost-item-contianer {
    /*margin: 5px 10px;*/
    width: 70px
    height: 70px
@@ -164,50 +238,66 @@ export default {
    border: 2px solid rgb(249, 198, 19)
    overflow: visible
    margin: 0 auto
+ }
 
- .evolvcost-item-contianer>>>img
+ .evolvcost-item-contianer>>>img {
    width: 128%
    height: 128%
    margin-top: -14%
    margin-left: -14%
+ }
 
- .item-popover
-   &.is-left
+ .item-popover {
+   overflow-x: hidden
+
+   &.is-left {
      left: 20px
      padding: 0
+   }
+ }
 
-   .item-divider-extra
-     position: absolute
-     top: 0
-     right: - 230px
+ .item-divider-extra {
+   display: inline-block
+   background-color: #fff
+   padding: 0 10px
+   position: absolute
+   top: 0
+   right: - 242px
+ }
 
-   .item-stage-container
-     padding-left: 40px
+ .item-stage-container {
+   padding-left: 40px
 
-     .item-occper
-       background-color: rgb(128, 128, 128)
-       color: white
-       padding: 0 6px
-       border-radius: 3px
+   .item-occper {
+     background-color: rgb(128, 128, 128)
+     color: white
+     padding: 0 6px
+     border-radius: 3px
+   }
 
-     .item-dropInfo
-       float: right
-       cursor: pointer
+   .item-dropInfo {
+     float: right
+     cursor: pointer
+   }
 
-     .item-occper
-       background-color: rgb(128, 128, 128)
-       color: white
-       padding: 0 6px
-       border-radius: 3px
+   .item-occper {
+     background-color: rgb(128, 128, 128)
+     color: white
+     padding: 0 6px
+     border-radius: 3px
+   }
 
-     .item-stage-name
-       width: 50px
-       display: inline-block
+   .item-stage-name {
+     width: 50px
+     display: inline-block
+   }
+ }
 
- .weekly
+ .weekly {
    width: auto
+ }
 
- .furn-item
+ .furn-item {
    width: 70px
    display: block
    box-sizing: border-box
@@ -219,29 +309,38 @@ export default {
    margin: 0 auto
    padding: 9px 0
 
-   & >>> img
+   & >>> img {
      width: calc(100% - 1px)
      box-shadow: 1px 1px 0px 1px #6b6b6b63, 1px -1px 0px 0px #fff
+   }
+ }
 
- @media screen and (max-width: 700px)
-   .evolvcost-item-contianer
+ @media screen and (max-width: 700px) {
+   .evolvcost-item-contianer {
      /*padding: 5px 10px;*/
      width: calc(40px + 1vw)
      height: calc(40px + 1vw)
+   }
 
-   .evolvcost-name-wrapper
+   .evolvcost-name-wrapper {
      font-size: 14px
+   }
 
-   .item-stage-container
+   .item-stage-container {
      padding-left: 30px
+   }
 
-   .item-popover
+   .item-popover {
      max-height: 150px
      overflow-y: scroll
+   }
 
-   .item-popover .is-left
+   .item-popover .is-left {
      padding: 10px
+   }
 
-   .item-popover .el-divider--horizontal
+   .item-popover .el-divider--horizontal {
      width: calc(100% - 10px)
+   }
+ }
 </style>

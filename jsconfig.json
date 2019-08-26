@@ -5,6 +5,7 @@
       "components/*": [
         "src/components/*"
       ]
-    }
-  }
+    },
+  },
+  "parser": "babel-eslint"
 }

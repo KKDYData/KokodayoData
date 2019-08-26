@@ -1,5 +1,21 @@
 <template>
-  <div class="group-container-title">{{title}}</div>
+  <div class="group-container-title">
+    <div
+      v-if="!short && control"
+      @click="$emit('update:value', !value)"
+      :class="{active: value, 'control-button': true}"
+    >
+      <div class="control-border"></div>
+    </div>
+    <div class="title">{{title}}</div>
+    <div
+      v-if="short && control"
+      @click="$emit('update:value', !value)"
+      :class="{active: value, 'control-button': true}"
+    >
+      <div class="control-border"></div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -8,18 +24,139 @@ export default {
     title: {
       required: true,
       type: String
+    },
+    value: {
+      type: Boolean
+    },
+    control: {
+      default: false
+    },
+    short: {
+      default: false
     }
-  }
+  },
 };
 </script>
 
 <style lang="stylus" scoped>
 .group-container-title {
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
-  background-color: #414141;
-  padding-left: 1vw;
-  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
+  font-weight: bold
+  color: white
+  margin-bottom: 20px
+  background-color: #414141
+  padding-left: 20px
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15)
+  display: flex
+  font-size: 0
+  height: 20px
+
+  .title {
+    line-height: 1
+    font-size: 18px
+  }
+
+  &:hover {
+    .control-border {
+      &:before, &:after {
+        opacity: 1
+      }
+
+      &:before {
+        top: 50%
+        left: 100%
+      }
+
+      &:after {
+        top: -60%
+        left: -100%
+      }
+    }
+  }
+
+  .active {
+    .control-border {
+      &:before, &:after {
+        opacity: 1
+      }
+
+      &:before {
+        top: 70%
+        left: 80%
+      }
+
+      &:after {
+        top: -60%
+        left: -80%
+      }
+    }
+  }
+}
+
+.control-border {
+  --bwidth: 5px
+
+  &:before, &:after {
+    transition: all 0.3s ease
+    opacity: 0
+    position: absolute
+    content: ''
+    width: 20px
+    height: 20px
+    border: #313131 solid
+    box-sizing: border-box
+  }
+
+  &:before {
+    top: -60%
+    left: -100%
+    border-width: 0 var(--bwidth) var(--bwidth) 0
+  }
+
+  &:after {
+    top: 70%
+    left: 100%
+    border-width: var(--bwidth) 0 0 var(--bwidth)
+  }
+}
+
+.control-button {
+  //margin-left: 5px
+  margin-right: 30px
+  position: relative
+  cursor: pointer
+  width: 20px
+  height: 20px
+  z-index: 1
+
+  //background-color: green
+  &:before, &:after {
+    position: absolute
+    top: calc(50% - 2px)
+    left: -25%
+    content: ''
+    width: 30px
+    height: 4px
+    background-color: #ffffff
+    transition: all 0.3s
+    transform-origin: center
+  }
+}
+
+.active.control-button:before {
+  transform: rotate(90deg)
+}
+
+.active.control-button:after {
+  transform: scaleX(0.8)
+}
+
+@media screen and (max-width: 700px) {
+  .group-container-title {
+    padding-left: 10px
+  }
+
+  .control-button {
+    margin-left: auto
+  }
 }
 </style>

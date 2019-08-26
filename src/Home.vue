@@ -5,7 +5,7 @@
         style="vertical-align: baseline;"
         href="https://somedata.top/ArknightsBeta"
         type="info"
-      >Beta版链接</el-link>全新敌人图鉴上线
+      >Beta版链接</el-link>| 0.7版本上线，更新内容请看首页的说明和反馈标签
     </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
@@ -45,7 +45,6 @@ export default {
   },
   data() {
     return {
-      short: false,
       data: [],
       load: false,
       isBeta: Mode === '/ArknightsBeta'

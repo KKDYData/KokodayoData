@@ -21,7 +21,7 @@ Vue.config.productionTip = false;
 const Home = () => import(/* webpackChunkName: "Home" */'./Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');
-const EnemyData = () => import(/* webpackChunkName: "EnemyData" */'./EnemyData');
+const EnemyData = () => import(/* webpackChunkName: "Enemy" */'./Enemy');
 const Footer = () => import(/* webpackChunkName: "EnemyData" */'./Footer');
 
 
@@ -70,4 +70,8 @@ new Vue({
   res.default();
 });
 
-store.dispatch('getDropList');
+store.dispatch('setDropList');
+store.dispatch('setStageTree');
+
+
+
