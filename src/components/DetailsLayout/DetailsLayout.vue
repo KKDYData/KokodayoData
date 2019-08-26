@@ -19,28 +19,17 @@
           </div>
           <div class="status-wrapper">
             <div class="status-phases-wrapper">
-              <span class="status-phases-text">精英阶段</span>
-              <el-button
-                v-for="(item, index) in data.phases"
-                @click="phases = index"
-                :key="index"
-                size="mini"
-                :type="phases === index ? 'primary': ''"
-              >{{index}}</el-button>
-              <div class="status-lv-favor-wrapper">
-                <div class="status-phases-lv">
-                  <el-switch
-                    v-model="isLvMax"
-                    :active-text="data.phases[phases].maxLevel + '级'"
-                    inactive-text="1级"
-                    active-color="#313131"
-                    acitve-te
-                  ></el-switch>
-                </div>
-                <div class="status-favor-switch">
-                  <el-switch active-color="#313131" v-model="isFavor" active-text="满信赖"></el-switch>
-                </div>
+              <div class="status-phases-control-container">
+                <span class="status-phases-text">精英阶段</span>
+                <el-button
+                  v-for="(item, index) in data.phases"
+                  @click="phases = index"
+                  :key="index"
+                  size="mini"
+                  :type="phases === index ? 'primary': ''"
+                >{{index}}</el-button>
               </div>
+
               <div class="status-potential-wrapper">
                 <span class="status-phases-text">潜能等级</span>
                 <div style="display: inline; font-size: 0px">
@@ -58,20 +47,28 @@
                   >{{item + 2}}</el-button>
                 </div>
               </div>
-            </div>
-            <div class="status-details-wrapper">
-              <div v-for="(item, key) in status" :key="key" class="status-details-container">
-                <div>
-                  <div class="status-details-title">
-                    <span>{{statusToCh(key)}}</span>
+              <div class="status-lv-favor-wrapper">
+                <div class="status-phases-lv">
+                  <div class="status-phases-lv-title">
+                    <span>等级</span>
+                    <span>{{level}}</span>
                   </div>
-                  <div class="status-details-value">
-                    <span v-html="item"></span>
-                    <span v-if="key === 'baseAttackTime' || key === 'respawnTime'">s</span>
+                  <div class="status-phases-lv-inner">
+                    <el-slider
+                      :show-tooltip="false"
+                      v-model="level"
+                      :min="targetPhasese[0].level"
+                      :max="targetPhasese[1].level"
+                    ></el-slider>
                   </div>
+                </div>
+                <div class="status-favor-switch">
+                  <el-switch active-color="#313131" v-model="isFavor" active-text="满信赖"></el-switch>
                 </div>
               </div>
             </div>
+
+            <char-status class="status-details-wrapper" :status="status"></char-status>
             <div class="status-range-wrapper">
               <div v-if="rangeData.length > 0" class="status-range-inner-wrapper">
                 <range :data="rangeData[phases]"></range>
@@ -79,9 +76,7 @@
                   <span>攻击范围</span>
                 </div>
               </div>
-              <!-- <div v-else class="status-range-fill"></div> -->
             </div>
-            <!-- <div style="width: 30%"></div> -->
           </div>
         </div>
         <!-- 天赋面板 -->
@@ -176,14 +171,16 @@ import {
   path,
   fetchGet,
   changeAttackSpeed,
-  isMoblie
+  isMoblie,
+  calStatusEnd
 } from '../../utils';
 
 import {
   evolveGoldCost,
   potentialToStatus,
   itemBackground,
-  GOLD
+  GOLD,
+  statusToChChar
 } from '../../utils/string';
 
 import {
@@ -196,19 +193,20 @@ import {
   Image,
   Popover,
   Tag,
-  Alert
+  Alert,
+  Slider
 } from 'element-ui';
 
 import AgentCard from './AgentCard';
 import Range from './Range';
 import TalentsPanel from './TalentsPanel';
 import SkillPanel from './SkillPanel';
-import SkillUpCost from './SkillUpCost';
+import SkillUpPanel from './SkillUpCost';
 import BuildingData from './BuildingData';
 import InfoPanel from './InfoPanel';
 import ItemViewer from '../ItemViewer';
-
-import Loading from '../Loading';
+import charStatus from '../charStatus';
+import DataLoading from '../Loading';
 
 import Vue from 'vue';
 Vue.use(Card);
@@ -221,6 +219,7 @@ Vue.use(Button);
 Vue.use(Popover);
 Vue.use(Tag);
 Vue.use(Alert);
+Vue.use(Slider);
 
 export default {
   metaInfo() {
@@ -242,14 +241,13 @@ export default {
       .then(data => {
         this.data = data;
         this.phases = this.data.phases.length - 1;
-        // this.dataLoad = true;
+        this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
         this.getSkills();
         this.getRange();
         this.getEvolveCost();
         this.getInfo();
         this.getWords();
         this.dataLoad = true;
-        // this.loadingFail = true;
       })
       .catch(err => {
         console.log(err);
@@ -263,15 +261,16 @@ export default {
     });
   },
   components: {
-    range: Range,
-    'talents-panel': TalentsPanel,
-    'skill-panel': SkillPanel,
-    'skill-up-panel': SkillUpCost,
-    'building-data': BuildingData,
-    'info-panel': InfoPanel,
-    'item-viewer': ItemViewer,
-    'data-loading': Loading,
-    AgentCard
+    Range,
+    TalentsPanel,
+    SkillPanel,
+    SkillUpPanel,
+    BuildingData,
+    InfoPanel,
+    ItemViewer,
+    DataLoading,
+    AgentCard,
+    charStatus
   },
   data() {
     return {
@@ -291,7 +290,8 @@ export default {
       evolveCost: {},
       info: null,
       words: [],
-      GOLD: GOLD
+      GOLD: GOLD,
+      level: 1
     };
   },
   computed: {
@@ -339,53 +339,12 @@ export default {
         return res;
       }
     },
+    targetPhasese() {
+      return this.data.phases[this.phases].attributesKeyFrames;
+    },
     status() {
       if (this.data) {
-        const data = this.data.phases[this.phases].attributesKeyFrames[
-          this.isLvMax ? 1 : 0
-        ].data;
-        const newData = {};
-        for (let [key, value] of Object.entries(data)) {
-          if (!this.statusToCh(key)) continue;
-          let nV = value,
-            addV = 0;
-          if (this.isFavor) {
-            const v = this.data.favorKeyFrames[1].data[key];
-            if (v !== 0) {
-              addV += v;
-              nV += v;
-            }
-          }
-          // console.log(key);
-          this.potentailStatusUP.forEach(el => {
-            el.forEach(el => {
-              if (el.type === key) {
-                // console.log(el.type);
-                if (key === 'baseAttackTime') {
-                  addV += el.value;
-                  nV = Math.floor((nV / (el.value / 100 + 1)) * 100) / 100;
-                } else {
-                  addV += el.value;
-                  nV += el.value;
-                }
-              }
-            });
-          });
-
-          const upOrMinus = addV > 0 ? '+' : '';
-          if (addV)
-            nV =
-              nV +
-              '<i style="color: #F49800;font-style: normal;">(' +
-              upOrMinus +
-              '' +
-              addV +
-              ')</i>';
-          // if (key === 'baseAttackTime' || key === 'respawnTime')
-          //   nV = value + ' s';
-          newData[key] = nV;
-        }
-        return newData;
+        return calStatusEnd(this.data, this.level, this.targetPhasese, this.isFavor, this.potentailStatusUP);
       }
     },
     potentailUPList() {
@@ -406,30 +365,22 @@ export default {
       const rank = this.potentialRanks;
       const data = this.data.potentialRanks;
       if (!data) return;
-      const res = [];
 
-      let i = 0;
-      try {
-        data.forEach(el => {
-          if (i++ > rank || !el.buff) return;
-          if (!el.buff || !el.buff.attributes.attributeModifiers)
-            throw new Error('你是假数据！' + JSON.stringify(el.buff));
-          const temp = [];
-          el.buff.attributes.attributeModifiers.forEach(el => {
-            if (!el.attributeType) return;
-            temp.push({
-              type: potentialToStatus[el.attributeType],
-              value: el.value
-            });
-            // if (!res[el.attributeType]) res[el.attributeType] = el.value;
-            // else res[el.attributeType] += el.value;
+      return data.reduce((target, el, index) => {
+        if (index > rank || !el.buff) return target;
+        if (!el.buff.attributes.attributeModifiers)
+          throw new Error('你是假数据！' + JSON.stringify(el.buff));
+        const temp = el.buff.attributes.attributeModifiers.reduce((res, el) => {
+          if (!el.attributeType) return res;
+          res.push({
+            type: potentialToStatus[el.attributeType],
+            value: el.value
           });
-          res.push(temp);
-        });
-      } catch (err) {
-        console.log(err);
-      }
-      return res;
+          return res;
+        }, []);
+        target.push(temp);
+        return target;
+      }, []);
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -451,20 +402,9 @@ export default {
     evolvCost(t) {
       return evolveGoldCost[this.data.rarity][t];
     },
-    statusToCh(key) {
-      const t = {
-        maxHp: '生命上限',
-        respawnTime: '再部署',
-        atk: '攻击',
-        cost: '部署费用',
-        def: '防御',
-        blockCnt: '阻挡数',
-        magicResistance: '法术抵抗',
-        baseAttackTime: '攻击间隔'
-      };
-      return t[key];
+    statusToChChar(key) {
+      return statusToChChar(key);
     },
-
     getSkills() {
       if (!this.data) return;
       const data = [...this.data.skills];
@@ -562,13 +502,7 @@ export default {
   flex-wrap: wrap;
   height: 180px;
 }
-.status-details-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  width: 37%;
-  height: 180px;
-  border-right: 1px solid rgba(158, 158, 158, 0.4);
-}
+
 .status-phases-wrapper {
   padding: 12px 0;
 }
@@ -580,6 +514,12 @@ export default {
   border: none;
   border-bottom: 2px solid;
   color: rgb(255, 255, 255);
+}
+
+.status-details-wrapper {
+  width: 37%;
+  height: 180px;
+  border-right: 1px solid hsla(0, 0%, 62%, 0.4);
 }
 
 /* 潜能 */
@@ -611,51 +551,43 @@ export default {
   border-bottom: 2px solid rgb(255, 208, 75);
 }
 
+.status-phases-control-container {
+  font-size: 0;
+}
+
 .status-phases-text {
   padding-right: 10px;
   font-size: 1rem;
 }
 
 .status-lv-favor-wrapper {
-  padding: 10px 15px;
-  padding-left: 47px;
-}
-/* switch 颜色 */
-
-.status-phases-lv {
-  padding-top: 10px;
-  padding-left: 47px;
+  display: flex;
+  align-items: center;
 }
 
-.status-favor-switch,
 .status-phases-lv {
-  padding: 0;
+  display: flex;
+  align-items: center;
+  width: 200px;
+}
+.status-phases-lv-inner {
+  width: 80%;
+  margin-left: 25px;
+}
+
+.status-phases-lv-title {
+  width: 40px;
+  padding-bottom: 4px;
+  white-space: nowrap;
+}
+
+.status-favor-switch {
+  padding-bottom: 10px;
   display: inline;
 }
 .status-favor-switch {
   padding-top: 10px;
-  padding-left: 15px;
-}
-
-.status-details-container {
-  flex-grow: 0.5;
-  width: 50%;
-  margin: 10px 0;
-}
-.status-details-title {
-  color: white;
-  background-color: #313131;
-  border-radius: 2px;
-  width: calc(80px + 0.5vw);
-  text-align: center;
-  display: inline-block;
-  font-size: 100%;
-  line-height: 100%;
-  padding: 2px 0;
-  box-shadow: 1px 1px 2px 1px #0000005e;
-}
-.status-details-value {
-  display: inline-block;
+  margin-left: 25px;
 }
 
 .status-title-wrapper {
@@ -711,28 +643,10 @@ export default {
   vertical-align: middle;
 }
 /*  */
-/* .evolvcost-item-contianer {
-  margin: 5px 10px;
-  width: 70px;
-  height: 70px;
-  display: block;
-  box-sizing: border-box;
-  border-radius: 50%;
-  box-shadow: inset 0 0 0 2px black;
-  background: grey;
-  border: 2px solid rgb(249, 198, 19);
-} */
 
 .evolvcost-item-container {
   min-width: 120px;
 }
-
-/* .evolvcost-item-contianer img {
-  width: 130%;
-  height: 130%;
-  margin-top: -15%;
-  margin-left: -15%;
-} */
 
 .evolvcost-container-wrapper {
   position: relative;
@@ -776,23 +690,10 @@ export default {
     height: auto;
     justify-content: space-between;
   }
-  .status-details-wrapper {
-    width: 50%;
-    padding-left: 5px;
-    padding-top: 20px;
-    height: auto;
-  }
+
   .status-phases-text {
     margin-bottom: 10px;
   }
-  .status-details-title {
-    display: block;
-  }
-  .status-details-value {
-    width: calc(80px + 0.5vw);
-    text-align: center;
-  }
-
   .status-title-wrapper {
     position: relative;
     width: 100%;
@@ -802,6 +703,12 @@ export default {
   }
 
   /* part 2 */
+  .status-details-wrapper {
+    width: 50%;
+    padding-left: 5px;
+    padding-top: 20px;
+    height: auto;
+  }
 
   .status-wrapper {
     position: relative;
@@ -814,18 +721,10 @@ export default {
     border-bottom: 1px solid rgba(158, 158, 158, 0.4);
   }
 
-  .status-favor-switch,
-  .status-phases-lv {
-    padding: 0;
-    display: inline;
-  }
   .status-favor-switch {
-    padding-left: 15px;
-  }
-
-  .status-lv-favor-wrapper {
-    padding: 10px 15px;
-    padding-left: 47px;
+    padding: 0;
+    margin-left: 20px;
+    display: inline;
   }
 
   /*  */
@@ -878,11 +777,7 @@ export default {
     /* justify-content: space-between; */
     align-content: center;
   }
-  /* 
-  .evolvcost-item-contianer {
-    width: calc(45px + 2vw);
-    height: calc(45px + 2vw);
-  } */
+
   .evolvcost-name-wrapper {
     font-size: 14px;
   }
@@ -892,8 +787,6 @@ export default {
     min-width: auto;
     margin-right: calc(2.5% + 3px);
   }
-  /*  */
-  /*  */
   /*  */
 }
 </style>

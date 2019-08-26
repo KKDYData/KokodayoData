@@ -12,14 +12,14 @@
     >
       <el-menu-item :index="routes.home.path">{{routes.home.text}}</el-menu-item>
       <template v-if="!short">
-        <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
         <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item>
+        <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
       </template>
       <template v-else>
         <el-submenu index="2">
           <template slot="title">{{moreText}}</template>
-          <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
           <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item>
+          <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
         </el-submenu>
       </template>
     </el-menu>
@@ -47,7 +47,7 @@ export default {
       routes: {
         enemydata: {
           path: path + '/enemydata',
-          text: '敌人图鉴'
+          text: '关卡数据'
         },
         computer: {
           path: path + '/computer',
@@ -71,7 +71,7 @@ export default {
     });
   },
   watch: {
-    '$route.path': function(val, oldVal) {
+    '$route.path': function (val, oldVal) {
       //修复移动端菜单不回收的bug
       setTimeout(() => {
         console.log('hello');

@@ -391,6 +391,37 @@ const statusToCh = key => {
   return t[key];
 };
 
+const statusToChChar = key => {
+  const t = {
+    maxHp: '生命上限',
+    respawnTime: '再部署',
+    atk: '攻击',
+    cost: '部署费用',
+    def: '防御',
+    blockCnt: '阻挡数',
+    magicResistance: '法术抵抗',
+    baseAttackTime: '攻击间隔'
+  };
+  return t[key];
+};
+
+const statusToChToken = key => {
+  const t = {
+    // maxHp: '生命上限',
+    // respawnTime: '再部署',
+    atk: '攻击',
+    // def: '防御',
+    // blockCnt: '阻挡数',
+    // magicResistance: '法术抵抗',
+    // baseAttackTime: '攻击间隔',
+    // maxDeployCount: '最大部署数',
+    // spRecoveryPerSec: '每秒Sp回复',
+    // attackSpeed: '攻击速度'
+
+  };
+  return t[key];
+};
+
 const StageType = {
   main: '主线',
   tr: 'TR',
@@ -419,5 +450,7 @@ export {
   starColor,
   campToCode,
   statusToCh,
-  StageType
+  statusToChChar,
+  StageType,
+  statusToChToken
 };

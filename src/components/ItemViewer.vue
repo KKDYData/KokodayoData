@@ -34,6 +34,7 @@
       </div>
 
       <p>{{item.usage}}</p>
+      <p>{{item.description}}</p>
       <div v-if="targetStageDrop">
         <el-divider content-position="left">
           <span>当前关卡</span>
@@ -167,6 +168,7 @@ export default {
         }
         const target = this.dropListRow
           .find(el => el.stageId === this.targetStage);
+        if (!target) return;
         const res = Object.assign({}, target);
         const stageData = findStage(target.stageId, this.stageTree);
         const temp = stageData.label.split(' ');

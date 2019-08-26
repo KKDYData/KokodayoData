@@ -1,5 +1,5 @@
 <template>
-  <div style="position: relative">
+  <div class="my-slide-title-wrapper">
     <my-title
       :title="title"
       :freeze="freeze"
@@ -7,6 +7,7 @@
       :short="short"
       @update:value="click"
       :value="value"
+      style="margin-bottom: 0"
     ></my-title>
     <div v-if="!control || value" class="extra-button">
       <slot name="extra-button"></slot>
@@ -42,14 +43,8 @@ export default {
       default: false
     }
   },
-  watch: {
-    value(v) {
-      console.log(v);
-    }
-  },
   data() {
     const v = this.initValue;
-    console.log(v);
     return {
       value: v,
       // 冻结按钮，但是想了下好像没必要
@@ -72,6 +67,11 @@ export default {
   left: 10px
   top: 30px
   z-index: 2
+}
+
+.my-slide-title-wrapper {
+  position: relative
+  margin: 20px 0
 }
 
 @media screen and (min-width: 700px) {

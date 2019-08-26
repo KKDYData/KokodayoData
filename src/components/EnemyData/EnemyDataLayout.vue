@@ -71,9 +71,9 @@
               :src="enemyPicPath(key)"
               @click.native="showRoute(routeIndex)"
             ></enemy-cube>
-            <div v-else style="height: 100px">
-              <p>预设 敌人</p>
-              <p>{{key}}</p>
+            <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
+              <p>地图预设</p>
+              <p>{{key.replace('trap_007_ballis', '弩炮')}}</p>
             </div>
             <div @touchstart="showRoute(routeIndex)" style class="enemy-cube-wave-info">
               <div>数量:{{count}}, 间隔:{{interval}}</div>
@@ -177,13 +177,10 @@ export default {
 
     window.addEventListener(
       'resize',
-      debounce(function () {
+      debounce(() => {
         this.short = window.innerWidth < 500 ? true : false;
-        // this.calFillAmount();
-        this.drawerSize =
-          Math.floor((600 / document.body.clientWidth) * 100) + '%';
-        // console.log(this.drawerSize);
-      }, 1000).bind(this)
+        this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
+      }, 1000)
     );
     this.shortWidth = this.$el.clientWidth - 30;
   },
@@ -249,6 +246,27 @@ export default {
       this.currEnemy = v;
       if (key !== 'enemy_1503_talula') {
         this.currentData = await getEnemyData(key);
+        if (v.overwrittenData) {
+          const index = this.currentData.findIndex(el => el.level === v.level);
+          const target = this.currentData[index];
+          this.currentData[index].enemyData = Object.keys(target.enemyData).reduce((res, key) => {
+            if (v.overwrittenData[key]) {
+              if (v.overwrittenData[key].m_defined) {
+                res[key] = v.overwrittenData[key].m_value;
+              } else if (key === 'attributes') {
+                res.attributes = Object.keys(res.attributes).reduce((res, key) => {
+                  if (v.overwrittenData.attributes[key].m_defined) {
+                    res[key].m_defined = true;
+                    res[key].m_value = v.overwrittenData.attributes[key].m_value;
+                  }
+                  return res;
+                }, res.attributes);
+              }
+            }
+            return res;
+          }, target.enemyData);
+        }
+
       }
     },
     mouseHoverOpen(k, v) {

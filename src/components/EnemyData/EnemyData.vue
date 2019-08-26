@@ -9,7 +9,7 @@
       ref="chapter-selecter"
       title="章节选择"
       :visible.sync="drawer"
-      :size="short ? '70%' : '25%'"
+      :size="short ? '70%' : drawerSize"
       direction="ltr"
       :props="selMapNode"
       :show-close="false"
@@ -56,6 +56,13 @@
             :plain="!showMap"
             class="runes-mode-button"
           >地图</el-button>
+          <el-tooltip
+            v-if="showMap"
+            class="runes-mode-button"
+            content="白色是路，黄色是不能放干员的路，蓝色是能放干员的高台, 浅黄是隧道出入口"
+          >
+            <i class="el-icon-info"></i>
+          </el-tooltip>
         </div>
         <p ref="map-desc" v-if="selMapDataEx" :key="runesMode" v-html="mapDesc"></p>
       </div>
@@ -92,7 +99,6 @@
       <my-slide-title
         v-if="data"
         :control="mapCode ? true : false"
-        style="margin: 20px 0 0;"
         :short="short"
         :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
         :init-value="true"
@@ -116,8 +122,20 @@
             <i class="el-icon-refresh"></i>
             {{simpleShow ? '简要显示': '路线模式'}}
           </el-button>
+          <el-tooltip v-if="mapCode && !simpleShow" class="runes-mode-button">
+            <i class="el-icon-info"></i>
+            <div slot="content">
+              <p>假设这波开始的时间是2分10秒, 敌人延迟4秒，间隔30</p>
+              <p>在上面地图方块中出现X秒的意思是</p>
+              <p>会在这个标出时间的方块上停留X秒</p>
+              <p>延迟4s，就是这个敌人2分14秒的时候出发</p>
+              <p>数量2，间隔30秒</p>
+              <p>就是2分34秒之后会有第2个一样的敌人也走这一条线路</p>
+            </div>
+          </el-tooltip>
         </div>
         <enemy-data-layout
+          style="margin-top: 20px"
           ref="layout"
           :short="short"
           v-if="data"
@@ -130,8 +148,16 @@
           @closeRoute="closeRoute"
         ></enemy-data-layout>
       </my-slide-title>
-      <my-slide-title style="margin-top: 20px" v-if="short && mapCode" title="地图信息" :short="short">
-        <enemy-map-info :show-title="false" :short="short" :options="options"></enemy-map-info>
+      <my-slide-title v-if="short && mapCode" title="地图信息" :short="short">
+        <enemy-map-info
+          style="margin-top: 20px"
+          :show-title="false"
+          :short="short"
+          :options="options"
+        ></enemy-map-info>
+      </my-slide-title>
+      <my-slide-title v-if="mapCode && showPredefine" title="地图预设" :short="short">
+        <map-pre-defined style="margin-top: 10px" :short="short" :pre-data="selMapData.predefines"></map-pre-defined>
       </my-slide-title>
       <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
       <map-drop-list
@@ -151,6 +177,7 @@ import MySlideTitle from '../MySlideTilte';
 import ContentSlot from '../ContentSlot';
 import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
+import MapPreDefined from './MapPreDefined';
 
 
 import { Tree, Drawer, Button, Image, Loading } from 'element-ui';
@@ -173,7 +200,8 @@ import {
   getMapDataListVer,
   changeDesc,
   fetchGet,
-  findStage
+  findStage,
+  debounce
 } from '../../utils';
 
 import Mode from '../../stats';
@@ -199,7 +227,8 @@ export default {
         {
           vmid: 'description',
           name: 'Description',
-          content: '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
+          content: this.selectedMap ? this.mapDesc :
+            '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
         }
       ]
     };
@@ -210,7 +239,8 @@ export default {
     MySlideTitle,
     ContentSlot,
     MapDropList,
-    EnemyMapInfo
+    EnemyMapInfo,
+    MapPreDefined
   },
   data() {
     return {
@@ -233,7 +263,8 @@ export default {
       map: null,
       showMap: false,
       watchTree: false,
-      simpleShow: true
+      simpleShow: true,
+      drawerSize: '30%'
     };
   },
   watch: {
@@ -244,6 +275,10 @@ export default {
   },
   computed: {
     ...mapState(['stageTree']),
+    showPredefine() {
+      if (!this.selMapData || !this.selMapData.predefines) return false;
+      return Object.values(this.selMapData.predefines).reduce((res, cur) => res += cur.length, 0) > 0;
+    },
     path() {
       return (
         (process.env.NODE_ENV === 'development' ? '' : Mode) + '/enemydata/'
@@ -261,11 +296,8 @@ export default {
         : '';
     },
     options() {
-      return !this.selMapData
-        ? {}
-        : Object.entries(
-          Object.assign(this.selMapData.options, this.selMapDataEx)
-        )
+      return !this.selMapData ? {}
+        : Object.entries(Object.assign(this.selMapData.options, this.selMapDataEx))
           .filter(([k, v]) => mapOptionsKey[k])
           .map(([k, v]) => [mapOptionsKey[k], v]);
     },
@@ -279,7 +311,15 @@ export default {
   beforeMount() {
     this.short = isMoblie();
   },
-  mounted() { },
+  mounted() {
+    this.drawerSize = Math.floor((300 / document.body.clientWidth) * 100) + '%';
+    window.addEventListener(
+      'resize',
+      debounce(() => {
+        this.drawerSize = Math.floor((300 / document.body.clientWidth) * 100) + '%';
+      }, 1000)
+    );
+  },
   methods: {
     clearMap() {
       this.data = this.rowData;
@@ -325,10 +365,10 @@ export default {
       if (!parent || !this.stageTree) return;
       console.log(parent);
       const target = findStage(parent, this.stageTree);
-      target.first = true;
-      if (target) this.choseMap(target);
+      // target.first = true;
+      if (target) this.choseMap({ ...target, first: true });
     },
-    async choseMap(data, node, first) {
+    async choseMap(data, node) {
       this.pTranisitionTemp = window.getComputedStyle(
         this.$refs['map-title-part']
       ).height;
@@ -342,9 +382,9 @@ export default {
         this.$refs['chapter-selecter'].closeDrawer();
         this.load = true;
         this.mapPicLoad = true;
-        // 不用路由守卫了
+        // 不用路由守卫了,改起来过于麻烦
         if (!data.first) this.$router.push(this.path + shortCode);
-        else console.log('first? ', first);
+        else console.log('first? ');
 
         const [mapData, exData] = await Promise.all([
           getMapData('level_' + codeFromPath.replace('kc', 'killcost')),
@@ -366,7 +406,7 @@ export default {
           this.data = Object.entries(this.rowData).reduce((res, [k, v]) => {
             const target = mapData.enemyDbRefs.find(el => el.id === k);
             if (target) {
-              res[k] = Object.assign({}, v, { level: target.level });
+              res[k] = Object.assign({}, v, target);
               return res;
             } else return res;
           }, {});
@@ -526,7 +566,7 @@ export default {
   }
 
   .map-wrapper {
-    min-width: 100%
+    min-width: calc(100% - 40px)
     //--height: 68vw
   }
 }
@@ -534,8 +574,14 @@ export default {
 @media screen and (min-width: 1500px) {
   .map-wrapper {
     --height: 500px
-    //--height: 50vw
-    min-width: 1600px
+    //min-width: 1420px
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .map-wrapper {
+    --height: 500px
+    min-width: 1520px
   }
 }
 

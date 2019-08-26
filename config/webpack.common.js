@@ -14,6 +14,7 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
       skipWaiting: true,
       exclude: [/^icon.*?\.png$/],
       runtimeCaching: [
+
         {
           urlPattern: /api\/arknights/,
           handler: 'NetworkFirst'
@@ -23,8 +24,6 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           handler: 'CacheFirst'
         },
         {
-          // To match cross-origin requests, use a RegExp that matches
-          // the start of the origin:
           urlPattern: new RegExp('https://andata.somedata.top/dataX/'),
           handler: 'StaleWhileRevalidate',
           options: {
@@ -35,8 +34,6 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           }
         },
         {
-          // To match cross-origin requests, use a RegExp that matches
-          // the start of the origin:
           urlPattern: new RegExp('https://unpkg.com/spritejs/dist/spritejs.min.js'),
           handler: 'CacheFirst',
           options: {
@@ -47,8 +44,6 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
           }
         },
         {
-          // To match cross-origin requests, use a RegExp that matches
-          // the start of the origin:
           urlPattern: new RegExp('https://penguin-stats.io/PenguinStats/api/'),
           handler: 'StaleWhileRevalidate',
           options: {
@@ -58,10 +53,14 @@ const swPlugins = process.env.NODE_ENV === 'development' ? [] :
             cacheName: 'penguin-api-cache',
             expiration: {
               maxEntries: 5,
-              maxAgeSeconds: 60 * 60,
+              maxAgeSeconds: 60 * 10,
             },
           }
-        }
+        },
+        {
+          urlPattern: new RegExp('https://somedata.top/Arknights'),
+          handler: 'StaleWhileRevalidate',
+        },
         //
       ]
     })

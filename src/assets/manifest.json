@@ -25,7 +25,7 @@
   "short_name": "ArknightsData",
   "orientation": "portrait",
   "display": "standalone",
-  "start_url": "/",
+  "start_url": ".",
   "description": "一个平平无奇的明日方舟资料站",
   "background_color": "#525252",
   "theme_color": "#525252",
