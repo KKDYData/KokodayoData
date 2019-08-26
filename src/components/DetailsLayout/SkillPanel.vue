@@ -1,9 +1,14 @@
 <template>
-  <div v-if="skills.length > 0" class="skill-container--inner-wrapper">
+  <div v-if="skills && skills.length > 0" class="skill-container--inner-wrapper">
     <div class="skill-container" v-for="(skill, index) in skills" :key="skill.name">
       <div class="skill-title">
-        <skill-container :skill="skills[index]"></skill-container>
-        <div class="skill-tiltle-part" v-if="skill.levels[sLevel[index]-1]">
+        <skill-container v-if="showPic" :skill="skills[index]"></skill-container>
+        <p v-else>{{skill.levels[index].name}}</p>
+        <div
+          class="skill-tiltle-part"
+          v-if="skill.levels[sLevel[index]-1]"
+          :style="!showPic ? 'width: 100%; padding-left: 0' : ''"
+        >
           <div class="skill-status" v-if="skill.levels[sLevel[index]-1]">
             <span>
               <span>
@@ -32,7 +37,10 @@
           </div>
           <div class="skill-status-desc">
             <span v-html="changeSkillDesc(skill.levels[sLevel[index]-1])"></span>
-            <div class="skill-range-button" v-if="skill.levels[sLevel[index]-1].rangeId">
+            <div
+              class="skill-range-button"
+              v-if="showRange && skill.levels[sLevel[index]-1].rangeId"
+            >
               <el-popover placement="right" width="200px" trigger="click">
                 <range :rangeId="skill.levels[sLevel[index]-1].rangeId"></range>
                 <el-button size="mini" slot="reference">查看范围</el-button>
@@ -41,7 +49,7 @@
           </div>
         </div>
 
-        <div class="skill-name-level">
+        <div class="skill-name-level" v-if="!initLv &&  skill.levels.length > 1">
           <div style="display: flex; align-items: center; width: 100%; justify-content: flex-end">
             <div class="skill-title-level">
               <span>LV</span>
@@ -71,11 +79,21 @@ export default {
   props: {
     skills: {
       required: true
+    },
+    showPic: {
+      default: true
+    },
+    showRange: {
+      default: true
+    },
+    initLv: {
+      type: Number
     }
   },
   data() {
+    const initLv = this.initLv ? this.initLv : 1;
     return {
-      sLevel: [1, 1, 1]
+      sLevel: [initLv, 1, 1]
     };
   },
   methods: {
@@ -173,12 +191,12 @@ export default {
 .skill-tiltle-part {
   padding-left: 20px;
   width: calc(70% - 100px);
-  border-right: 1px solid rgba(158, 158, 158, 0.4);
 }
 .skill-title-level {
   margin: 0 20px;
 }
 .skill-name-level {
+  border-left: 1px solid rgba(158, 158, 158, 0.4);
   display: flex;
   align-items: flex-end;
   padding: 0 20px;
@@ -202,10 +220,10 @@ export default {
 .skill-status-desc {
   font-size: 16px;
   color: #606266;
-  /* height: calc(100% - 20px); */
   padding: 20px 10px;
   display: flex;
   align-items: center;
+  position: relative;
 }
 .skill-status span + span {
   padding-right: 5px;
@@ -257,6 +275,7 @@ export default {
   }
   .skill-name-level {
     width: 100%;
+    border: none;
   }
   .skill-name-level span {
     vertical-align: -5%;
@@ -266,7 +285,6 @@ export default {
   }
   .skill-range-button {
     position: absolute;
-    bottom: 25px;
     z-index: 1;
   }
 }

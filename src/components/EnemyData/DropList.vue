@@ -1,10 +1,10 @@
 <template>
   <div class="map-drop-container all">
-    <div class="drop-list-title">
-      <span>{{title}}</span>
-    </div>
+    <p class="predefine-title">
+      <span style="border-bottom: 1px solid #313131">{{title}}</span>
+    </p>
     <div class="map-common-droplist">
-      <div v-for="item in list" :key="(item.data.itemId + item.dropType)">
+      <div v-for="item in list" :key="(item.data.itemId)">
         <item-viewer
           :targetStage="targetStage"
           :short="short"
@@ -57,12 +57,7 @@ export default {
   }
 }
 
-.drop-list-title {
-  span {
-    color: #525252
-    display: inline-block
-    width: 30%
-    border-bottom: 1px solid #828282
-  }
+.predefine-title {
+  color: #828282
 }
 </style>

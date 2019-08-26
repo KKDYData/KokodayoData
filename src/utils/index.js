@@ -1,5 +1,5 @@
 import store from '../store';
-import { StageType } from './string';
+import { StageType, statusToChChar } from './string';
 
 const setVer = (name, ver) => {
   store.commit(name, new Date(ver).toLocaleString());
@@ -470,6 +470,53 @@ const findStage = (map, tree) => {
   return target;
 };
 
+const calStatus = (lv, data) => {
+  return data.reduce((zero, max) => {
+    const diff = max.level - zero.level;
+    const res = Object.entries(max.data).reduce((res, cur) => {
+      const [k, v] = cur;
+      res[k] = Math.round((v - zero.data[k]) / diff * (lv - 1)) + zero.data[k];
+      return res;
+    }, {});
+    return res;
+  });
+};
+
+const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP) => {
+  const data = calStatus(level, targetPhasese);
+  return Object.entries(data).reduce((res, cur) => {
+    // 判定是否显示属性，没有就是我看不懂，或者觉得没意义的
+    const [key, value] = cur;
+    if (!statusToChChar(key)) return res;
+    let nV = value, addV = 0;
+    // 判定是是否满好感
+    if (isFavor) {
+      const v = baseData.favorKeyFrames[1].data[key];
+      if (v !== 0) {
+        addV += v;
+        nV += v;
+      }
+    }
+    // 判定潜能提升
+    potentailStatusUP.forEach(el => {
+      el.forEach(el => {
+        if (el.type === key) {
+          if (key === 'baseAttackTime') {
+            addV += el.value;
+            nV = Math.floor((nV / (el.value / 100 + 1)) * 100) / 100;
+          } else {
+            addV += el.value;
+            nV += el.value;
+          }
+        }
+      });
+    });
+    const upOrMinus = addV > 0 ? '+' : '';
+    if (addV) nV = nV + '<i style="color: #F49800;font-style: normal;">(' + upOrMinus + addV + ')</i>';
+    res[key] = nV;
+    return res;
+  }, {});
+};
 
 export {
   debounce,
@@ -501,7 +548,9 @@ export {
   changeAttackSpeed,
   getStageList,
   findStage,
-  isMobliePad
+  isMobliePad,
+  calStatus,
+  calStatusEnd
 };
 
 

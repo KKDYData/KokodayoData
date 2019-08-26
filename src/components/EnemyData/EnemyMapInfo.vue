@@ -6,7 +6,7 @@
         class="map-option-content"
         :long="true"
         :no-wrap="true"
-        :width="126"
+        :width="slotWidth"
         v-for="([k,v]) in options"
         :key="k"
       >
@@ -40,6 +40,13 @@ export default {
       type: Boolean
     }
   },
+  data() {
+    const cW = document.body.clientWidth;
+    const slotWidth = cW < 375 ? 121 : 126;
+    return {
+      slotWidth
+    };
+  }
 };
 </script>
 
@@ -55,6 +62,7 @@ export default {
   justify-content: space-between
   flex-wrap: wrap
   align-content: start
+  margin-left: 10px
 }
 
 .map-option-content {
@@ -71,7 +79,6 @@ export default {
 
   .map-option-container {
     min-width: auto
-    margin-left: 2vw
   }
 
   .map-option-content {
@@ -87,6 +94,10 @@ export default {
 
   .map-option-content {
     margin: 0 10px 10px 0
+  }
+
+  .map-option-container {
+    margin-left: 0
   }
 }
 </style>

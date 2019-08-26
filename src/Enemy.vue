@@ -2,7 +2,7 @@
   <div>
     <el-alert show-icon type="warning" description>
       <div slot="title">注意</div>
-      <p>即将更新敌人路线、所有敌人的出现地图、其它地图数据...</p>
+      <p>已更新地图路线、即将更新实时摆箱子堵路的功能</p>
     </el-alert>
     <enemy-data></enemy-data>
   </div>

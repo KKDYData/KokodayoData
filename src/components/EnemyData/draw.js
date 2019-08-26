@@ -10,11 +10,11 @@ const mapBlockColoc = {
   1: '#fff',
   2: '#fff',
   3: '#ed8',
-  4: 'red',
-  5: 'green',
+  4: 'rgb(255, 61, 61)',
+  5: 'rgb(103, 203, 67)',
 };
 
-const react = `m 0 0 h ${radio} v ${radio} h ${-radio} z`;
+const react = `m 0 0 h ${radio - 2} v ${radio - 2} h ${-radio + 2} z`;
 const mapReact = {
   d: react,
   lineCap: 'round',
@@ -22,39 +22,49 @@ const mapReact = {
 
 const spwanMap = ({ map, tiles }, paper) => {
   const myMap = map.map((el, row) => el.map((i, col, arr) => {
-    const key = tiles[i].tileKey;
+    const { tileKey: key, passableMask, heightType, buildableType } = tiles[i];
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
-      : tiles[i].passableMask === 3 ? 1 : -1;
+      : passableMask === 3 ? 1 : -1;
     const rc = [col, row];
     return {
       i,
       rc,
       crossAble,
-      tileKey: tiles[i].tileKey
+      tileKey: key,
+      heightType,
+      buildableType,
+      passableMask
     };
   }));
 
-  myMap.forEach((el) => el.forEach(({ rc, crossAble, i, tileKey }) => {
+  myMap.forEach((el) => el.forEach(({ rc, crossAble, heightType, buildableType, passableMask }) => {
     const [col, row] = rc;
-    const pos = [col * radio, row * radio];
-    const fillColor = mapBlockColoc[crossAble];
+    const pos = [col * radio + 1, row * radio + 1];
+    const fillColor = buildableType === 2 && heightType === 1 ? 'rgb(125, 253, 244)'
+      : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'rgb(244, 152, 0)'
+        : mapBlockColoc[crossAble];
     const mapBlock = new Path();
-    const label = new Label(`${i} ${col} ${row}\n${tileKey}\nkey: ${crossAble}`);
-    const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
-    label.attr({
-      pos: labelPos,
-      fillColor: '#707',
-    });
+    // buildableType === 0 ? 'rgba(255, 182, 182, 0.5)' :
     mapBlock.attr({
       pos,
       lineWidth: 1,
       path: mapReact,
       fillColor,
+      strokeColor: 'rgb(64, 170, 191)'
     });
 
     paper.layer('map').append(mapBlock);
-    if (process.env.NODE_ENV === 'development')
+    if (col === 0 || row === 0) {
+      let text = `${col}  ${myMap.length - 1 - row}`;
+      if (col === 0 && row === 0) text = 'x | y   ' + text;
+      const label = new Label(text);
+      const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
+      label.attr({
+        pos: labelPos,
+        fillColor: '#fff',
+      });
       paper.layer('map').append(label);
+    }
   }));
   return myMap;
 };
@@ -121,6 +131,7 @@ class Map {
         stopText.attr({
           pos,
           fillColor: 'rgb(255, 255, 255)',
+          font: 'oblique small-caps bold 36px Arial',
           lineHeight: this.mapRadio,
           textAlign: 'center',
           width: this.mapRadio
@@ -207,15 +218,11 @@ class Map {
   }
   setData(mapData, routes) {
     this.clearRoutes();
-    this.paper.children.forEach(el => {
-      console.log(el);
-      this.paper.removeChild(el);
-    });
+    this.paper.children.forEach(el => this.paper.removeChild(el));
     // 清完再设置
     this.setDataBeta(mapData, routes);
     const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
     this.grid = new PF.Grid(sMap);
-
   }
 
   loadMap() {
@@ -233,7 +240,6 @@ class Map {
       return { row: y - preY, col: x - preX };
     });
     const radio = this.mapRadio, cen = this.mapRadio / 2;
-    console.log(temp);
     return temp.reduce((path, { row, col }, index) => {
       if (index === 0) return `m ${col * radio + cen} ${row * radio + cen}`;
       if (row === 0) return `${path} h ${col * radio} `;
@@ -241,11 +247,6 @@ class Map {
       return `${path} l ${col * radio} ${row * radio}`;
     }, '');
   }
-
-  // clearRoutes() {
-  //   this.runningRoutes.clear();
-  //   this.tempRoutes = {};
-  // }
   deleteRoute(x) {
     this.runningRoutes.delete(x);
     delete this.tempRoutes[x];
