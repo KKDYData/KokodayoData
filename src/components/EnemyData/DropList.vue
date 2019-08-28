@@ -1,7 +1,7 @@
 <template>
   <div class="map-drop-container all">
     <p class="predefine-title">
-      <span style="border-bottom: 1px solid #313131">{{title}}</span>
+      <span class="span-underline">{{title}}</span>
     </p>
     <div class="map-common-droplist">
       <div v-for="item in list" :key="(item.data.itemId)">
@@ -55,9 +55,5 @@ export default {
     display: flex
     flex-wrap: wrap
   }
-}
-
-.predefine-title {
-  color: #828282
 }
 </style>

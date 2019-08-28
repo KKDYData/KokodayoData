@@ -57,14 +57,20 @@
             class="runes-mode-button"
           >地图</el-button>
           <el-tooltip
-            v-if="showMap"
+            v-if="mapCode && showMap"
             class="runes-mode-button"
-            content="白色是路，黄色是不能放干员的路，蓝色是能放干员的高台, 浅黄是隧道出入口"
+            content="白色是路，浅黄是不能放干员的路，蓝色是能放干员的高台, 橙色是隧道出入口"
           >
             <i class="el-icon-info"></i>
           </el-tooltip>
         </div>
-        <p ref="map-desc" v-if="selMapDataEx" :key="runesMode" v-html="mapDesc"></p>
+        <div style="margin-left: 5px" ref="map-desc" v-if="selMapDataEx">
+          <p style="font-size: 0.9em" v-if="selMapDataEx.dangerLevel !== '-'">
+            <span>推荐等级</span>
+            <span style="color: #f49800;">{{selMapDataEx.dangerLevel}}</span>
+          </p>
+          <p style="font-size: 0.9em" :key="runesMode" v-html="mapDesc"></p>
+        </div>
       </div>
       <div class="map-data-wrapper">
         <div class="map-data-container">
@@ -134,11 +140,12 @@
             </div>
           </el-tooltip>
         </div>
+        <!-- 不能用margin会影响动画，margin合并 -->
         <enemy-data-layout
-          style="margin-top: 20px"
+          style="padding-top: 20px"
           ref="layout"
           :short="short"
-          v-if="data"
+          v-if="!load && data"
           :data="data"
           :appear-map="appearMap"
           :map-data="selMapData"
@@ -156,8 +163,13 @@
           :options="options"
         ></enemy-map-info>
       </my-slide-title>
-      <my-slide-title v-if="mapCode && showPredefine" title="地图预设" :short="short">
-        <map-pre-defined style="margin-top: 10px" :short="short" :pre-data="selMapData.predefines"></map-pre-defined>
+      <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设" :short="short">
+        <map-pre-defined
+          style="margin-top: 10px"
+          :short="short"
+          :pre-data="selMapData.predefines"
+          :data="preData"
+        ></map-pre-defined>
       </my-slide-title>
       <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
       <map-drop-list
@@ -180,7 +192,7 @@ import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
 
 
-import { Tree, Drawer, Button, Image, Loading } from 'element-ui';
+import { Tree, Drawer, Button, Image, Loading, Message } from 'element-ui';
 
 import Vue from 'vue';
 import { mapState } from 'vuex';
@@ -199,9 +211,12 @@ import {
   path,
   getMapDataListVer,
   changeDesc,
-  fetchGet,
+  getFurn,
   findStage,
-  debounce
+  debounce,
+  getCharItem,
+  getItem,
+  preDefineGet
 } from '../../utils';
 
 import Mode from '../../stats';
@@ -264,7 +279,8 @@ export default {
       showMap: false,
       watchTree: false,
       simpleShow: true,
-      drawerSize: '30%'
+      drawerSize: '30%',
+      preData: null,
     };
   },
   watch: {
@@ -328,6 +344,7 @@ export default {
       this.selMapData = null;
       this.selMapDataEx = null;
       this.runesMode = false;
+      this.preData = null;
       this.pTransition();
       this.$router.push(this.path);
       setTimeout(() => {
@@ -389,7 +406,11 @@ export default {
         const [mapData, exData] = await Promise.all([
           getMapData('level_' + codeFromPath.replace('kc', 'killcost')),
           getMapDataListVer(shortCode)
-        ]);
+        ]).catch(err => {
+          Message.error('获取数据失败');
+          return [];
+        });
+
 
         setTimeout(() => {
           this.load = false;
@@ -413,6 +434,7 @@ export default {
           this.selectedMap = data.label;
           this.selMapData = mapData;
           this.selMapDataEx = exData;
+          this.getPreData();
           this.pTransition();
           if (this.map) this.map.setData(mapData.mapData, mapData.routes);
           else {
@@ -475,20 +497,26 @@ export default {
       if (!list) return Promise.resolve([]);
       return Promise.all(
         list.map(async el => ({
-          data: await fetchGet(
-            path +
-            (el.type === 'FURN'
-              ? 'custom/furnitures/data/'
-              : el.type === 'CHAR'
-                ? 'item/data/p_'
-                : 'item/data/') +
-            el.id +
-            '.json'
-          ),
+          data: await (el.type === 'FURN' ? getFurn(el.id)
+            : el.type === 'CHAR' ? getCharItem(el.id)
+              : getItem(el.id)),
           type: el.type,
           dropType: el.dropType
         }))
       );
+    },
+    async getPreData() {
+      const data = this.selMapData.predefines;
+      console.log('preDefine', data);
+      if (!data) return;
+      const tasks = [
+        preDefineGet('tokenInsts', data),
+        preDefineGet('tokenCards', data),
+        preDefineGet('characterInsts', data),
+        preDefineGet('characterCards', data),
+      ];
+      const [tokenInsts, tokenCards, characterInsts, characterCards] = await Promise.all(tasks);
+      this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
     }
   }
 };

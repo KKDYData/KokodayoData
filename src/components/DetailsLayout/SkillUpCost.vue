@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import { path, fetchGet } from '../../utils';
+import { getItem } from '../../utils';
 import { itemBackground } from '../../utils/string';
 
 import ItemViewer from '../ItemViewer';
@@ -109,7 +109,7 @@ export default {
 
       Promise.all(
         this.unlockCond[index].data[num][p].map(async p => {
-          const item = await fetchGet(path + 'item/data/' + p.id + '.json');
+          const item = await getItem(p.id);
           const res = {
             item: item,
             count: p.count

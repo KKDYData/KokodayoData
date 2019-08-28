@@ -23,6 +23,7 @@ const Details = () => import(/* webpackChunkName: "Details" */'./Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');
 const EnemyData = () => import(/* webpackChunkName: "Enemy" */'./Enemy');
 const Footer = () => import(/* webpackChunkName: "EnemyData" */'./Footer');
+const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'./CustomTheme');
 
 
 const isDev = process.env.NODE_ENV === 'development';
@@ -35,7 +36,8 @@ const routes = [
   { path: path + 'computer', component: Computer },
   { path: path + 'details/:name', component: Details },
   { path: path + 'enemydata', component: EnemyData },
-  { path: path + 'enemydata/:map', component: EnemyData }
+  { path: path + 'enemydata/:map', component: EnemyData },
+  { path: path + 'customtheme', component: CustomTheme },
 ];
 const router = new VueRouter({
   mode: 'history',

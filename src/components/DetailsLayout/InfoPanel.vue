@@ -12,12 +12,12 @@
             <el-popover
               :visible-arrow="false"
               placement="top-start"
-              :width="short ? '330': '1000'"
+              :width="getScreenWidth()"
               trigger="click"
             >
               <el-carousel
+                :height="getScreenWidth() + 'px'"
                 :autoplay="false"
-                :height="short ? '380px': '1050px'"
                 class="char-set-container-wrapper"
                 indicator-position="outside"
                 :loop="false"
@@ -34,7 +34,7 @@
                       </div>
                     </el-image>
                   </div>
-                  <p>
+                  <p class="charset-info">
                     精英化阶段{{calPhases(list[index])}}
                     <span>长按或者右键可以下载</span>
                   </p>
@@ -232,6 +232,12 @@ export default {
       if (index === 1) return 0;
       else if (index === 2) return 2;
       else return 1;
+    },
+    getScreenWidth() {
+      const w = document.body.clientWidth;
+      const h = window.innerHeight;
+      const width = (w < h ? w : h) - 40;
+      return width > 1000 ? 1000 : width;
     }
   }
 };
@@ -299,6 +305,11 @@ export default {
   font-size: 20px;
   vertical-align: middle;
   cursor: pointer;
+}
+
+.charset-info {
+  position: absolute;
+  bottom: 20px;
 }
 
 @media screen and (max-width: 700px) {

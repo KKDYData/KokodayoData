@@ -9,7 +9,7 @@
       :value="value"
       style="margin-bottom: 0"
     ></my-title>
-    <div v-if="!control || value" class="extra-button">
+    <div v-show="!control || value" class="extra-button">
       <slot name="extra-button"></slot>
     </div>
     <div style="margin-left: 10px">
@@ -55,6 +55,7 @@ export default {
     click(v) {
       if (this.freeze) return;
       this.value = v;
+      this.$emit('open');
     }
   }
 };
