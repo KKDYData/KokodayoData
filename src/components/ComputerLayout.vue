@@ -153,11 +153,11 @@
 </template>
 
 <script>
-import data from "./level.json";
-import ItemViewer from "./ItemViewer";
-import Vue from "vue";
-import { Form, FormItem, Select, Option, InputNumber, Alert } from "element-ui";
-import { exp_cards } from "../utils/string";
+import data from './level.json';
+import ItemViewer from './ItemViewer';
+import Vue from 'vue';
+import { Form, FormItem, Select, Option, InputNumber, Alert } from 'element-ui';
+import { exp_cards } from '../utils/string';
 Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Select);
@@ -189,13 +189,13 @@ export default {
     };
   },
   components: {
-    "item-viewer": ItemViewer
+    'item-viewer': ItemViewer
   },
   beforeMount() {
-    console.log("下面是计算用的数据，可以复制去自己用");
+    console.log('下面是计算用的数据，可以复制去自己用');
     console.log(this.data);
     this.short = window.innerWidth < 600 ? true : false;
-    window.addEventListener("resize", () => {
+    window.addEventListener('resize', () => {
       this.short = window.innerWidth < 600 ? true : false;
     });
   },
@@ -207,15 +207,15 @@ export default {
       else return [0, 1, 2];
     },
     MoneyNeed() {
-      return this.calBase("characterUpgradeCostMap");
+      return this.calBase('characterUpgradeCostMap');
     },
     ExpNeed() {
-      return this.calBase("characterExpMap");
+      return this.calBase('characterExpMap');
     },
     baseExp() {
       let res = 0;
       this.char.base.exp_cards.forEach((el, index) => {
-        res += el * this.exp_cards["200" + (index + 1)].exp;
+        res += el * this.exp_cards['200' + (index + 1)].exp;
         // return (cur += pre * this.exp_cards['200' + (cIndex + 1)].exp);
       });
       return res;
@@ -233,14 +233,14 @@ export default {
     BLS5() {
       const result = Math.ceil(
         (this.ExpNeed - this.baseExp) /
-          (74000 + this.char.production.exp * 1000)
+        (74000 + this.char.production.exp * 1000)
       );
       return result > -1 ? result : 0;
     },
     BCE5() {
       const result = Math.ceil(
         (this.MoneyNeed - this.char.base.money * 1000) /
-          (75000 + this.char.production.money * 1000)
+        (75000 + this.char.production.money * 1000)
       );
       return result > -1 ? result : 0;
     }
@@ -266,7 +266,7 @@ export default {
           // console.log(`j: ${j}, maxlv: ${level}, need: ${need}`);
         }
       }
-      if (target === "characterUpgradeCostMap") {
+      if (target === 'characterUpgradeCostMap') {
         // debugger;
         // console.log(need);
         for (let i = this.char.phases_now; i < phases; i++) {
@@ -280,88 +280,103 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 .my-form-item {
-  /* width: 30%; */
-  max-width: 120px;
+  /*width: 30%;*/
+  max-width: 120px
 }
 
 .my-form-item-wrapper {
-  /* margin: 0px 10px 40px; */
-  --wrapperH: 5vh;
-  margin: 0;
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  /* width: 220px; */
+  /*margin: 0px 10px 40px;*/
+  --wrapperH: 5vh
+  margin: 0
+  display: flex
+  align-items: center
+  flex-wrap: wrap
+  /*width: 220px;*/
 }
+
 .my-form-item-fill {
-  width: 188px;
-  height: 5vh;
+  width: 188px
+  height: 5vh
 }
+
 .my-form-wrapper {
-  display: flex;
-  flex-grow: 1;
-  flex-wrap: wrap;
-  max-width: 800px;
-  margin: 0px auto;
-  height: 80px;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(92, 92, 92, 0.4);
+  display: flex
+  flex-grow: 1
+  flex-wrap: wrap
+  max-width: 800px
+  margin: 0px auto
+  height: 80px
+  justify-content: space-between
+  align-items: center
+  border-bottom: 1px solid rgba(92, 92, 92, 0.4)
 }
+
 .my-form-wrapper-result {
-  padding: 20px;
-  padding-top: 0;
-  margin: 0 auto;
-  max-width: 800px;
+  padding: 20px
+  padding-top: 0
+  margin: 0 auto
+  max-width: 800px
 }
+
 .extra-exp {
-  height: 100px;
-  justify-content: space-around;
+  height: 100px
+  justify-content: space-around
 }
 
 .extra-exp .my-form-item {
-  max-width: 100px;
+  max-width: 100px
 }
 
 @media screen and (max-width: 800px) {
   .my-form-wrapper {
-    height: 100px;
-    font-size: 13px;
-    padding: 0 5vw;
+    height: 100px
+    font-size: 13px
+    padding: 0 5vw
   }
+
   .my-form-item-fill {
-    width: 110px;
-    height: 100px;
+    width: 110px
+    height: 100px
   }
 
   .my-form-item-wrapper {
-    width: 106px;
+    width: 106px
   }
+
   .my-form-item {
-    max-width: 100px;
+    max-width: 100px
   }
 
   .extra-exp {
-    height: auto;
-    justify-content: space-between;
+    height: auto
+    justify-content: space-between
   }
+
   .extra-exp .my-form-item-wrapper {
-    width: calc(50vw - 150px);
-    margin: 15px 40px;
+    width: calc(50vw - 150px)
+    margin: 15px 40px
   }
 
   .extra-exp .my-form-item {
-    max-width: 100px;
+    max-width: 100px
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .exp-card >>> .evolvcost-item-contianer {
+    /*padding: 5px 10px;*/
+    width: calc(40px + 1vw)
+    height: calc(40px + 1vw)
   }
 }
 
 @media screen and (max-width: 600px) {
   .extra-exp .my-form-item-wrapper {
-    width: calc(50vw - 23px);
-    /* padding: 0; */
-    margin: 15px 0;
+    width: calc(50vw - 23px)
+    /*padding: 0;*/
+    margin: 15px 0
   }
 }
 </style>

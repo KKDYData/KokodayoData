@@ -9,9 +9,11 @@
       :value="value"
       style="margin-bottom: 0"
     ></my-title>
-    <div v-show="!control || value" class="extra-button">
-      <slot name="extra-button"></slot>
-    </div>
+    <transition name="extra-button">
+      <div v-if="!control || value" class="extra-button">
+        <slot name="extra-button"></slot>
+      </div>
+    </transition>
     <div style="margin-left: 10px">
       <el-collapse-transition>
         <slot v-if="!control || value"></slot>
@@ -66,7 +68,7 @@ export default {
   position: absolute
   right: 0px
   left: 10px
-  top: 30px
+  top: 36px
   z-index: 2
 }
 

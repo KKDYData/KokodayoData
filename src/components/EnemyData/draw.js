@@ -6,6 +6,7 @@ const radio = 100;
 const cen = radio / 2;
 
 const mapBlockColoc = {
+  [-1]: 'rgba(255,255,255, 0.5)',
   0: 'grey',
   1: '#fff',
   2: '#fff',
@@ -20,7 +21,7 @@ const mapReact = {
   lineCap: 'round',
 };
 
-const spwanMap = ({ map, tiles }, paper) => {
+const spwanMap = ({ map, tiles }, paper, top) => {
   const myMap = map.map((el, row) => el.map((i, col, arr) => {
     const { tileKey: key, passableMask, heightType, buildableType } = tiles[i];
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
@@ -37,34 +38,62 @@ const spwanMap = ({ map, tiles }, paper) => {
     };
   }));
 
+
   myMap.forEach((el) => el.forEach(({ rc, crossAble, heightType, buildableType, passableMask }) => {
     const [col, row] = rc;
     const pos = [col * radio + 1, row * radio + 1];
-    const fillColor = buildableType === 2 && heightType === 1 ? 'rgb(125, 253, 244)'
+    const fillColor = buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'
       : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'
         : mapBlockColoc[crossAble];
     const mapBlock = new Path();
     // buildableType === 0 ? 'rgba(255, 182, 182, 0.5)' :
-    mapBlock.attr({
-      pos,
-      lineWidth: 1,
-      path: mapReact,
-      fillColor,
-      strokeColor: 'rgb(64, 170, 191)'
-    });
+    const writeLabel = () => {
+      if (col === 0 || row === 0) {
+        let text = col === 0 ? myMap.length - 1 - row : col;
+        if (col === 0 && row === 0) text = 'x|y  ' + text + ' 0';
+        const label = new Label(text);
+        const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
+        label.attr({
+          pos: labelPos,
+          fillColor: '#fff',
+        });
+        paper.layer('map').append(label);
+      }
+    };
 
-    paper.layer('map').append(mapBlock);
-    if (col === 0 || row === 0) {
-      let text = `${col}  ${myMap.length - 1 - row}`;
-      if (col === 0 && row === 0) text = 'x | y   ' + text;
-      const label = new Label(text);
-      const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
-      label.attr({
-        pos: labelPos,
-        fillColor: '#fff',
+
+    if (!top && heightType !== 1) {
+      mapBlock.attr({
+        pos,
+        lineWidth: 1,
+        path: mapReact,
+        fillColor,
+        strokeColor: 'rgb(64, 170, 191)'
       });
-      paper.layer('map').append(label);
+      paper.layer('map').append(mapBlock);
+      writeLabel();
+
+    } else if (!top) {
+      mapBlock.attr({
+        pos,
+        lineWidth: 1,
+        path: mapReact,
+        fillColor: '#414141',
+        strokeColor: 'rgb(64, 170, 191)'
+      });
+      paper.layer('map').append(mapBlock);
+    } else if (top && heightType === 1) {
+      mapBlock.attr({
+        pos,
+        lineWidth: 1,
+        path: mapReact,
+        fillColor,
+        strokeColor: 'rgb(64, 170, 191)'
+      });
+      paper.layer('map').append(mapBlock);
+      writeLabel();
     }
+
   }));
   return myMap;
 };
@@ -94,10 +123,10 @@ class Map {
   });
   paper
   mapRadio
-
+  top
 
   run = false
-  constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, routes) {
+  constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, routes, top = false) {
     const config = {
       viewport: ['auto', 'auto'],
       stickMode: 'width',
@@ -105,11 +134,14 @@ class Map {
     };
     this.paper = new Scene(container, config);
     this.mapRadio = radio;
+    this.top = top;
     // 稍微做个判定，给以后用
     if (routes) {
       this.setDataBeta(mapData, routes);
       const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
-      this.grid = new PF.Grid(sMap);
+      if (!top) {
+        this.grid = new PF.Grid(sMap);
+      }
     }
   }
   async ray(body) {
@@ -157,6 +189,7 @@ class Map {
         pos,
         lineWidth: 6,
         path,
+        lineCap: 'round',
         linearGradients: {
           strokeColor: {
             vector: [10, 30, 180, 90],
@@ -185,9 +218,9 @@ class Map {
         p = Math.min(p / 0.7, 1);
 
         const colors = [
-          { offset: 0, color: `hsla(${color}, 100%, 50%, 0.3)` },
-          { offset: q, color: `hsla(${color}, 100%, 50%, 0.5)` },
-          { offset: p, color: `hsla(${color}, 100%, 50%, 1)` },
+          { offset: 0, color: `hsla(${color}, 100%, 50%, 0.1)` },
+          { offset: q, color: `hsla(${color}, 100%, 50%, 0.2)` },
+          { offset: p, color: `hsla(${color}, 100%, 25%, 1)` },
           { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100%, 50%, 0)` },
         ];
 
@@ -214,7 +247,7 @@ class Map {
     this.routes = routes;
     this.mapData = mapData;
     this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
-    this.map = spwanMap(mapData, this.paper);
+    this.map = spwanMap(mapData, this.paper, this.top);
   }
   setData(mapData, routes) {
     this.clearRoutes();

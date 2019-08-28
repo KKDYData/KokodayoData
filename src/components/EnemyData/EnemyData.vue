@@ -91,6 +91,7 @@
                 :src="mapPath"
               ></el-image>
               <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
+              <div id="map-canvas-container-up" :style="showMap ? '' : 'left: -5000px'"></div>
             </div>
             <div class="left-layout"></div>
           </div>
@@ -107,7 +108,7 @@
         :control="mapCode ? true : false"
         :short="short"
         :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
-        :init-value="true"
+        ref="layout-control"
       >
         <div slot="extra-button">
           <el-button
@@ -275,12 +276,13 @@ export default {
       pTranisitionTemp: 0,
       treeId: '',
       mapPicLoad: true,
-      map: null,
       showMap: false,
       watchTree: false,
       simpleShow: true,
       drawerSize: '30%',
       preData: null,
+      map: null,
+      mapUp: null,
     };
   },
   watch: {
@@ -415,6 +417,7 @@ export default {
         setTimeout(() => {
           this.load = false;
           this.mapPicLoad = false;
+          this.$refs['layout-control'].click(true);
         }, 500);
 
         if (mapData) {
@@ -436,8 +439,10 @@ export default {
           this.selMapDataEx = exData;
           this.getPreData();
           this.pTransition();
-          if (this.map) this.map.setData(mapData.mapData, mapData.routes);
-          else {
+          if (this.map) {
+            this.map.setData(mapData.mapData, mapData.routes);
+            this.mapUp.setData(mapData.mapData, mapData.routes);
+          } else {
             const body = document.querySelector('head');
             const script = document.createElement('script');
             script.type = 'text/javascript';
@@ -445,6 +450,7 @@ export default {
               const { Map } = await import('./draw');
               await this.$nextTick();
               this.map = new Map('#map-canvas-container', 100, mapData.mapData, mapData.routes);
+              this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, mapData.routes, true);
             };
             script.src = 'https://unpkg.com/spritejs/dist/spritejs.min.js';
             body.appendChild(script);
@@ -579,7 +585,15 @@ export default {
   height: 100%
   width: 100%
   top: 0
-  transform: perspective(500px) rotateX(18deg) translate3d(0px, -10px, -20px)
+  transform: perspective(1200px) rotateX(40deg) translate3d(0px, 0, -15px)
+}
+
+#map-canvas-container-up {
+  position: absolute
+  height: 100%
+  width: 100%
+  top: 0
+  transform: perspective(1200px) rotateX(40deg) translate3d(0, 0, 0px)
 }
 
 .clear-route-button {
@@ -620,6 +634,14 @@ export default {
     box-sizing: border-box
     padding: 3vw
   }
+
+  #map-canvas-container {
+    position: absolute
+    height: 100%
+    width: 100%
+    top: 0
+    transform: perspective(1200px) rotateX(40deg) translate3d(0px, 0, -10px)
+  }
 }
 
 @media screen and (max-width: 500px) {
@@ -631,6 +653,14 @@ export default {
   .chapter-wrapper {
     //margin-bottom 有70px， 1px防止滚动穿透
     min-height: calc(100% - 69px)
+  }
+
+  #map-canvas-container {
+    position: absolute
+    height: 100%
+    width: 100%
+    top: 0
+    transform: perspective(1200px) rotateX(40deg) translate3d(0px, 0, -7px)
   }
 }
 </style>

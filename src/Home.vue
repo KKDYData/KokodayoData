@@ -1,6 +1,6 @@
 <template>
   <div class="home-wrapper">
-    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>变得更流畅了...</el-alert>
+    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>地图变的立体了...</el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,可能会有Bug, 敌人图鉴有更新

@@ -231,7 +231,7 @@ export default {
         this.$set(
           this.selectedStlye,
           index,
-          `--border: 7px solid hsl(${color}, 75%, 50%)`
+          `--border: 7px solid hsl(${color}, 100%, 50%)`
         );
         console.log(this.selectedRoutes);
         this.$emit('showRoute', index, color);
@@ -347,7 +347,7 @@ export default {
 
 @media screen and (max-width: 700px) {
   .enemy-data-layout {
-    padding: 0
+    padding: 20px 0 0
     justify-content: center
   }
 }
