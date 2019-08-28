@@ -54,6 +54,7 @@ export default {
   .map-common-droplist {
     display: flex
     flex-wrap: wrap
+    align-items: center
   }
 }
 </style>

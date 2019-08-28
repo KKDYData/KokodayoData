@@ -40,10 +40,7 @@ export default {
     type: String
   },
 
-  async created() {
-    // this.furnis = await Promise.all(this.list.map(key => getFurn(key)));
 
-  }
 };
 </script>
 

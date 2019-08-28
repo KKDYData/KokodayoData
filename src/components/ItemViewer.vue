@@ -32,7 +32,8 @@
           </div>
         </div>
       </div>
-
+      <p v-if="type === 'FURN'" style="color: #828282">舒适度 {{item.comfort}}</p>
+      <p v-if="type === 'FURN'" style="color: #828282">{{item.obtainApproach}}</p>
       <p>{{item.usage}}</p>
       <p>{{item.description}}</p>
       <div v-if="targetStageDrop">
@@ -322,8 +323,8 @@ export default {
  @media screen and (max-width: 700px) {
    .evolvcost-item-contianer {
      /*padding: 5px 10px;*/
-     width: calc(40px + 1vw)
-     height: calc(40px + 1vw)
+     width: calc(45px + 2vw)
+     height: calc(45px + 2vw)
    }
 
    .evolvcost-name-wrapper {
