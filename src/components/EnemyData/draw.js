@@ -9,7 +9,7 @@ const mapBlockColoc = {
   0: 'grey',
   1: '#fff',
   2: '#fff',
-  3: '#ed8',
+  3: 'rgb(244, 152, 0)',
   4: 'rgb(255, 61, 61)',
   5: 'rgb(103, 203, 67)',
 };
@@ -41,7 +41,7 @@ const spwanMap = ({ map, tiles }, paper) => {
     const [col, row] = rc;
     const pos = [col * radio + 1, row * radio + 1];
     const fillColor = buildableType === 2 && heightType === 1 ? 'rgb(125, 253, 244)'
-      : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'rgb(244, 152, 0)'
+      : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'
         : mapBlockColoc[crossAble];
     const mapBlock = new Path();
     // buildableType === 0 ? 'rgba(255, 182, 182, 0.5)' :
@@ -263,7 +263,7 @@ class Map {
         if (el.type > 1 && el.type < 6) console.log('!!!!!!!!!!!!!!!!!!!!! 这是什么鬼point', el.type, el, route);
         return el.type < 4 || el.type === 6;
       });
-      const path = pathPoints.map(el => el.position);
+      const path = pathPoints.map(el => ({ ...el.position, type: el.type }));
 
       if (path.length === 0 || startPos.row !== path[0].row || startPos.col !== path[0].col) path.unshift(startPos);
       if (path.length === 0 || endPos.row !== path[path.length - 1].row || endPos.col !== path[path.length - 1].col) path.push(endPos);
@@ -274,9 +274,8 @@ class Map {
         if (index + 1 === arr.length) return res;
         const { col, row } = el;
         let { col: nCol, row: nRow } = arr[index + 1];
-
-        if (col === 0 && row === 0) return res;
-        if (nCol === 0 && nRow === 0) {
+        if ((col === 0 && row === 0) || arr[index + 1].type === 6) return res;
+        if (nCol === 0 && nRow === 0 && arr[index + 2].type !== 6) {
           nRow = arr[index + 2].row;
           nCol = arr[index + 2].col;
           res.push({ stop: { pos: el, time: pathPoints[index].time } });
@@ -293,9 +292,6 @@ class Map {
         });
         return res;
       }, []);
-
-
-      // console.log('pos', splitPath, route, height);
 
       this.tempRoutes[x] = ({
         splitPath,

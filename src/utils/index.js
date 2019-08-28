@@ -19,13 +19,11 @@ const debounce = function (action, idle) {
 };
 
 
-
 const throttle = function (action, delay) {
   var last = 0;
   return function () {
     var curr = +new Date();
     if (curr - last > delay) {
-      // console.log('hit  ' + (curr - last));
       action.apply(this, arguments);
       last = curr;
     }
@@ -34,6 +32,11 @@ const throttle = function (action, delay) {
 
 const path = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'
   : 'https://andata.somedata.top/dataX/';
+
+const dataPath = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'
+  : 'https://andata.somedata.top';
+const api = devMode === '/Arknights' ? '/api/arknights/' : '/api/arkforward/';
+
 
 const fetchPut = (url, data) => {
   return fetch(url, {
@@ -71,35 +74,11 @@ const fetchGet = (url) => {
 };
 
 
-
-const getProfileList = () => {
-  return fetchGet('/api/arknights/data/shortList')
-    .then(res => fetchGet(path + res.name.slice(6)))
-    .catch(err => {
-      console.log(err);
-      return [];
-    });
-};
-
-const getEnemyList = () => {
-  return fetchGet('/api/arknights/data/enemyList')
+const fetchGetSliceSet = (key, setKey) => {
+  return fetchGet(api + 'data/' + key)
     .then(res => {
-      setVer('setEnemyVer', res.lastModified);
-      return fetchGet(path + res.name.slice(6));//改成拼链接
-    }
-    )
-    .catch(err => {
-      console.log(err);
-      return [];
-    });
-};
-
-
-const getEneAppearMap = () => {
-  return fetchGet('/api/arknights/data/enemyAppearMap')
-    .then(res => {
-      setVer('setApperMapVer', res.lastModified);
-      return fetchGet(path + res.name.slice(6));//改成拼链接
+      if (setKey) setVer(setKey, res.lastModified);
+      return fetchGet(path + res.name.slice(6));
     })
     .catch(err => {
       console.error('error', err);
@@ -107,52 +86,50 @@ const getEneAppearMap = () => {
     });
 };
 
-const getDevList = () => {
-  return fetchGet('/api/arknights/data/devList')
-    .then(res => {
-      setVer('setListVer', res.lastModified);
-      return fetchGet(path + res.name.slice(6));//改成拼链接
-    })
+const fetchByKey = (keyPath) => {
+  return key => fetchGet(`${dataPath}/data/${keyPath}/${key}.json`)
     .catch(err => {
       console.error('error', err);
-      return [];
+      return Promise.reject('no data');
     });
 };
 
-const getStageList = () => {
-  return fetchGet('/api/arknights/data/stageList')
-    .then(res => {
-      // setVer('setListVer', res.lastModified);
-      return fetchGet(path + res.name.slice(6));//改成拼链接
-    })
-    .catch(err => {
-      console.error('error', err);
-      return [];
-    });
-};
+// 遗留api
+const getProfileList = () => fetchGetSliceSet('shortList');
+
+const getEnemyList = () => fetchGetSliceSet('enemyList', 'setEnemyVer');
+
+const getEneAppearMap = () => fetchGetSliceSet('enemyAppearMap', 'setApperMapVer');
+
+const getDevList = () => fetchGetSliceSet('devList', 'setListVer');
+
+const getStageList = () => fetchGetSliceSet('stageList');
+// 不用找服务器的list
+const getThemeList = () => fetchByKey('custom')('themeslist');
 
 
-const getHeroData = name => {
-  return fetchGet(path + 'char/data/' + name + '.json')
-    .catch(err => console.error(err));
-};
 
-const getEnemyData = key => {
-  return fetchGet(path + 'enemy/data/details/' + key + '.json')
-    .catch(err => console.error(err));
-};
+const getHeroData = key => fetchByKey('char/data')(key);
 
-const getMapData = name => {
-  return fetchGet(path + 'map/data/' + name + '.json')
-    .catch(err => console.error(err));
-};
+const getEnemyData = key => fetchByKey('enemy')(key);
 
-const getMapDataListVer = name => {
-  return fetchGet(path + 'map/exData/' + name + '.json')
-    .catch(err => console.error(err));
-};
+const getMapData = key => fetchByKey('map/data')(key);
 
+const getMapDataListVer = key => fetchByKey('map/exData')(key);
 
+const getCharInfo = key => fetchByKey('char/info')(key);
+
+const getCharWords = key => fetchByKey('char/words')(key);
+
+const getRange = key => fetchByKey('range')(key);
+
+const getSkill = key => fetchByKey('skills')(key);
+
+const getItem = key => fetchByKey('item')(key);
+
+const getFurn = key => fetchByKey('custom/furnitures')(key);
+
+const getCharItem = key => fetchByKey('item')('p_' + key);
 
 
 function sort(array, less) {
@@ -288,6 +265,7 @@ const getClass_icon = (c) => {
 };
 
 import UaParser from 'ua-parser-js';
+import devMode from '../stats';
 
 
 const Browser = () => new UaParser().getBrowser();
@@ -518,39 +496,87 @@ const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP
   }, {});
 };
 
+const preDefineCompute = (asyncData, baseData) => {
+  const res = baseData.map(el => {
+    const key = el.inst.characterKey;
+    const target = asyncData.find(item => key === item.key);
+    console.log('target ', target, asyncData, baseData);
+
+    if (!target) return;
+    const { data, targetSkill } = target;
+    const targetData = calStatus(el.inst.level, data.phases[el.inst.phase].attributesKeyFrames);
+    return { key, targetData, targetSkill, ...data, ...el };
+  });
+  return res.filter(el => el);
+};
+
+const preDefineGet = async (key, baseData) => {
+  const temp = baseData[key].reduce((res, cur) => res.add(cur.inst.characterKey), new Set());
+  if (temp.length === 0) return [];
+  const res = await Promise.all([...temp].map(key => getHeroData(key).then(data => ({ key, data }))));
+  for (const char of res) {
+    const base = baseData[key].find(el => el.inst.characterKey === char.key);
+    const targetSkill = char.data.skills[base.skillIndex];
+    if (targetSkill) {
+      const skillKey = targetSkill.skillId;
+      char.targetSkill = [await getSkill(skillKey)];
+    }
+  }
+  return res;
+};
+
 export {
   debounce,
   throttle,
-  getHeroData,
-  sort,
-  sortByTime,
-  getProfileList,
-  getClass_Chinese,
-  path,
-  getClass_Short,
-  class_chinese,
   fetchGet,
-  changeDesc,
-  getProfilePath,
-  getDetailsProfilePath,
-  getClass_icon,
-  webpOk,
-  Browser,
-  getEnemyList,
+  // api 类
+  getProfileList,
   getEnemyData,
   getEneAppearMap,
   getDevList,
-  isMoblie,
-  getMapData,
-  getMapDataListVer,
-  changeKey,
+  getEnemyList,
   submitFeedback,
-  changeAttackSpeed,
+  getThemeList,
+
+  // api 类，需要提供key
+  getHeroData,
+  getCharInfo,
+  getCharWords,
+  getSkill,
+  getMapData,
+  getItem,
+  getRange,
+  getMapDataListVer,
   getStageList,
+  getFurn,
+  getCharItem,
+
+  // 业务相关类
+  sort,
+  sortByTime,
+  changeDesc,
   findStage,
-  isMobliePad,
+  changeAttackSpeed,
   calStatus,
-  calStatusEnd
+  calStatusEnd,
+  preDefineCompute,
+  preDefineGet,
+
+  // 转换路径类，可能需要转义到string
+  path,
+  class_chinese,
+  getClass_Short,
+  getClass_Chinese,
+  getProfilePath,
+  getDetailsProfilePath,
+  getClass_icon,
+
+  // 设备检测
+  webpOk,
+  Browser,
+  isMoblie,
+  changeKey,
+  isMobliePad
 };
 
 

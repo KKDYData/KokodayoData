@@ -1,5 +1,5 @@
 <template>
-  <div class="item-viewer-container" style>
+  <div class="item-viewer-container">
     <el-popover
       popper-class="item-popover-class"
       placement="top"
@@ -62,7 +62,8 @@
             <div
               slot="content"
             >{{targetStageDrop.times}}/{{targetStageDrop.quantity}}→{{targetStageDrop.rate}}%</div>
-            <span>{{targetStageDrop.dropCost}} 理智/个</span>
+            <span v-if="targetStageDrop.dropCost">{{targetStageDrop.dropCost}} 理智/个</span>
+            <span v-else>{{targetStageDrop.dropCnt}}个/{{targetStageDrop.apCost}}票</span>
           </el-tooltip>
         </p>
       </div>
@@ -92,7 +93,8 @@
             <span class="item-occper">{{occper(stage.occPer)}}</span>
             <el-tooltip v-if="stage.times" class="item-dropInfo" placement="top">
               <div slot="content">{{stage.times}}/{{stage.quantity}}→{{stage.rate}}%</div>
-              <span>{{stage.dropCost}} 理智/个</span>
+              <span v-if="stage.dropCost">{{stage.dropCost}} 理智/个</span>
+              <span v-else>{{stage.dropCnt}}个/{{stage.apCost}}票</span>
             </el-tooltip>
           </p>
         </div>
@@ -185,7 +187,7 @@ export default {
       const list = this.dropListRow;
       if (this.stageTree) {
         return this.item.stageDropList.map(el => {
-          let res = el;
+          let res = Object.assign({}, el);
           const stageData = findStage(el.stageId, this.stageTree);
           if (stageData) {
             const temp = stageData.label.split(' ');
@@ -198,9 +200,11 @@ export default {
               if (dropInfo) {
                 res = Object.assign(res, dropInfo);
                 res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100);
-                res.dropCost = Math.round(
-                  (dropInfo.times / dropInfo.quantity) * stageData.apCost
-                );
+                res.dropCost = Math.round((dropInfo.times / dropInfo.quantity) * stageData.apCost);
+                if (res.dropCost < 1) {
+                  res.apCost = stageData.apCost;
+                  res.dropCnt = Math.round((dropInfo.quantity / dropInfo.times));
+                }
               }
             }
           }
@@ -299,6 +303,7 @@ export default {
 
  .furn-item {
    width: 70px
+   min-height: 70px
    display: block
    box-sizing: border-box
    border-radius: 3px
@@ -306,7 +311,6 @@ export default {
    background: url('../assets/bbbj_optimized.png')
    background-size: cover
    /*overflow: visible;*/
-   margin: 0 auto
    padding: 9px 0
 
    & >>> img {

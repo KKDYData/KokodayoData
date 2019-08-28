@@ -86,6 +86,7 @@ export default {
 .talent-container {
   width: calc(50% - 7px);
   min-width: 350px;
+  margin: 10px 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -114,7 +115,7 @@ export default {
   padding: 5px 10px;
   position: relative;
   min-width: 250px;
-  height: 60px;
+  min-height: 60px;
   width: calc(100% - 120px);
   margin-left: 100px;
   display: flex;
@@ -160,6 +161,7 @@ export default {
   .talent-container {
     width: calc(100% - 2px);
     min-width: 300px;
+    margin: 0;
     margin-bottom: 20px;
   }
 

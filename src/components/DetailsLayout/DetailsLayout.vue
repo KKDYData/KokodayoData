@@ -169,10 +169,14 @@
 import {
   getHeroData,
   path,
-  fetchGet,
   changeAttackSpeed,
   isMoblie,
-  calStatusEnd
+  calStatusEnd,
+  getSkill,
+  getItem,
+  getRange,
+  getCharWords,
+  getCharInfo,
 } from '../../utils';
 
 import {
@@ -405,58 +409,36 @@ export default {
     statusToChChar(key) {
       return statusToChChar(key);
     },
-    getSkills() {
-      if (!this.data) return;
-      const data = [...this.data.skills];
-      Promise.all(
-        data.map(skill => {
-          return fetchGet(path + 'skills/data/' + skill.skillId + '.json');
-        })
-      ).then(arr => {
-        this.skills = arr;
-      });
+    itemPic(id) {
+      return path + 'item/pic/' + id + '.png';
+    },
+    getInfo() {
+      getCharInfo(this.name).then(res => this.info = res);
+    },
+    getWords() {
+      getCharWords(this.name).then(res => this.words = res);
     },
     getRange() {
       if (!this.data) return;
       const data = [...this.data.phases];
-      Promise.all(
-        data.map(p => {
-          return fetchGet(path + 'range/' + p.rangeId + '.json');
-        })
-      ).then(arr => {
-        this.rangeData = arr;
-      });
+      Promise.all(data.map(p => getRange(p.rangeId)))
+        .then(arr => this.rangeData = arr);
     },
-    itemPic(id) {
-      return path + 'item/pic/' + id + '.png';
+    getSkills() {
+      if (!this.data) return;
+      const data = [...this.data.skills]
+        .map(skill => getSkill(skill.skillId));
+      Promise.all(data).then(arr => this.skills = arr);
     },
     getEvolveCost() {
       if (!this.data) return;
       const data = [...this.data.phases];
       for (let i = 0; i < data.length - 1; i++) {
-        Promise.all(
-          data[i + 1].evolveCost.map(async p => {
-            const item = await fetchGet(path + 'item/data/' + p.id + '.json');
-            return { cost: p.count, item: item };
-          })
-        ).then(arr => {
-          const data = {
-            money: evolveGoldCost[this.data.rarity][i],
-            items: arr
-          };
-          this.$set(this.evolveCost, i, data);
-        });
+        Promise.all(data[i + 1].evolveCost.map(p => getItem(p.id).then(item => ({ cost: p.count, item }))))
+          .then(items => {
+            this.$set(this.evolveCost, i, { money: evolveGoldCost[this.data.rarity][i], items });
+          });
       }
-    },
-    getInfo() {
-      fetchGet(path + 'char/info/' + this.name + '.json').then(data => {
-        this.info = data;
-      });
-    },
-    getWords() {
-      fetchGet(path + 'char/words/' + this.name + '.json').then(data => {
-        this.words = data;
-      });
     },
     itemBackground(rarity) {
       return itemBackground[rarity];

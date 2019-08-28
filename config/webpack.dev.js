@@ -42,7 +42,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|a001).*$/, to: context => {
+          from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|a00).*$/, to: context => {
             console.log(context.parsedUrl.path);
 
             console.log(context.parsedUrl.path.slice(11) + ' ttt');
@@ -63,7 +63,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/(computer|enemydata)$/, to: context => {
+          from: /^\/(computer|enemydata|customtheme)$/, to: context => {
             console.log(context.parsedUrl.path);
             return '/index.html';
           }

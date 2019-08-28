@@ -1,12 +1,6 @@
 <template>
   <div class="home-wrapper">
-    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
-      <el-link
-        style="vertical-align: baseline;"
-        href="https://somedata.top/ArknightsBeta"
-        type="info"
-      >Beta版链接</el-link>| 0.7版本上线，更新内容请看首页的说明和反馈标签
-    </el-alert>
+    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>变得更流畅了...</el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,可能会有Bug, 敌人图鉴有更新
