@@ -300,7 +300,6 @@ export default {
           this.skills.push(this.skills[0]);
         }
       }
-      console.log('skills', this.skills);
     }
   },
   computed: {
