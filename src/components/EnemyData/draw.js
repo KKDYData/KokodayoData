@@ -6,7 +6,7 @@ const radio = 100;
 const cen = radio / 2;
 
 const mapBlockColoc = {
-  [-1]: 'rgba(255,255,255, 0.5)',
+  [-1]: 'rgba(255,255,255, 0.2)',
   0: 'grey',
   1: '#fff',
   2: '#fff',
@@ -42,9 +42,10 @@ const spwanMap = ({ map, tiles }, paper, top) => {
   myMap.forEach((el) => el.forEach(({ rc, crossAble, heightType, buildableType, passableMask }) => {
     const [col, row] = rc;
     const pos = [col * radio + 1, row * radio + 1];
-    const fillColor = buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'
-      : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'
-        : mapBlockColoc[crossAble];
+    const fillColor = buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'//高台能摆的格子
+      : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'//地板不能摆的格子
+        : heightType === 1 ? 'rgba(230,230,230, 0.5)'
+          : mapBlockColoc[crossAble];//
     const mapBlock = new Path();
     // buildableType === 0 ? 'rgba(255, 182, 182, 0.5)' :
     const writeLabel = () => {
