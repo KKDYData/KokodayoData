@@ -12,7 +12,7 @@
         <div class="enemy-img-container">
           <el-image :src="picPath"></el-image>
         </div>
-        <div>
+        <div style="z-index: 1">
           <div style="display: flex">
             <div class="enemy-details-type-index-container">
               <span
@@ -22,7 +22,10 @@
             <div>
               <h1 style="margin: 0">
                 {{currentEnemy.name}}
-                <span style="font-size: 0.5em">Level {{currentEnemy.level}}</span>
+                <span
+                  v-if="currentEnemy.level"
+                  style="font-size: 0.5em"
+                >Level {{currentEnemy.level}}</span>
               </h1>
               <h3 style="margin: 0">{{currentEnemy.enemyRace}}</h3>
             </div>
@@ -70,6 +73,12 @@
               <h1>{{currentEnemy.resistance}}</h1>
             </div>
           </div>
+        </div>
+
+        <div class="enemy-boss-icon" v-if="currentEnemy.enemyLevel !== 'NORMAL'">
+          <el-image
+            :src="path + 'logo/' + currentEnemy.enemyLevel.toLowerCase() + '_icon_optimized.png?x-oss-process=style/jpg-test'"
+          ></el-image>
         </div>
       </div>
 
@@ -167,7 +176,9 @@ export default {
   },
   data() {
     return {
-      smallPicPath: path + 'others/'
+      smallPicPath: path + 'others/',
+      bossIcon: path + 'logo/boss_icon.png?x-oss-process=style/jpg-test',
+      path,
     };
   }
 };
@@ -257,6 +268,10 @@ export default {
   padding: 0 20px 30px
 }
 
+.enemy-boss-icon {
+  filter: invert(100%) opacity(0.15)
+}
+
 @media screen and (max-width: 700px) {
   .enemy-status-container {
     margin: 10px 0
@@ -268,6 +283,11 @@ export default {
 
   .status-phases-wrapper {
     width: 100%
+  }
+
+  .enemy-boss-icon {
+    position: absolute
+    right: 20px
   }
 }
 

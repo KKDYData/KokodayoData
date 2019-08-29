@@ -91,7 +91,7 @@
                 :src="mapPath"
               ></el-image>
               <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
-              <div id="map-canvas-container-up" :style="showMap ? '' : 'left: -5000px'"></div>
+              <div id="map-canvas-container-up" :class="showMap ? '' : 'map-canvas-bottom'"></div>
             </div>
             <div class="left-layout"></div>
           </div>
@@ -379,12 +379,10 @@ export default {
       }, 50);
     },
     async loadMap() {
-      // test
       const parent = this.$route.params.map; //|| 'main_05-10';
       if (!parent || !this.stageTree) return;
       console.log(parent);
       const target = findStage(parent, this.stageTree);
-      // target.first = true;
       if (target) this.choseMap({ ...target, first: true });
     },
     async choseMap(data, node) {
@@ -481,7 +479,9 @@ export default {
           this.showMap = true;
           await this.$nextTick();
           this.map.loadMap();
-        } else throw Error('no map ?');
+        } else {
+          Message('地图数据还没加载完成，请重试');
+        }
       }
     },
     closeRoute(index) {
@@ -513,7 +513,6 @@ export default {
     },
     async getPreData() {
       const data = this.selMapData.predefines;
-      console.log('preDefine', data);
       if (!data) return;
       const tasks = [
         preDefineGet('tokenInsts', data),
@@ -580,24 +579,30 @@ export default {
   border-radius: 2px
 }
 
-#map-canvas-container {
+#map-canvas-container-up, #map-canvas-container {
   position: absolute
   height: 100%
   width: 100%
   top: 0
-  transform: perspective(1200px) rotateX(40deg) translate3d(0px, 0, -15px)
+  transform: perspective(1200px) rotateX(40deg)
+}
+
+filter() {
+  -moz-filter: arguments
+  -webkit-filter: arguments
+  -o-filter: arguments
+  -ms-filter: arguments
 }
 
 #map-canvas-container-up {
-  position: absolute
-  height: 100%
-  width: 100%
-  top: 0
-  transform: perspective(1200px) rotateX(40deg) translate3d(0, 0, 0px)
+  transform: perspective(1200px) rotateX(40deg) translate3d(0, 0, calc(var(--height) * 0.05))
+  filter: drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6))
+  transition: transform 0.7s ease
 }
 
-.clear-route-button {
-  //background-color: #ffffff
+#map-canvas-container-up.map-canvas-bottom {
+  left: -5000px
+  transform: perspective(1200px) rotateX(40deg)
 }
 
 @media screen and (min-width: 1350px) {
@@ -609,14 +614,12 @@ export default {
 
   .map-wrapper {
     min-width: calc(100% - 40px)
-    //--height: 68vw
   }
 }
 
 @media screen and (min-width: 1500px) {
   .map-wrapper {
     --height: 500px
-    //min-width: 1420px
   }
 }
 
@@ -635,12 +638,8 @@ export default {
     padding: 3vw
   }
 
-  #map-canvas-container {
-    position: absolute
-    height: 100%
-    width: 100%
-    top: 0
-    transform: perspective(1200px) rotateX(40deg) translate3d(0px, 0, -10px)
+  #map-canvas-container-up {
+    filter: drop-shadow(1vw 4vw 10px rgba(0, 0, 0, 0.6))
   }
 }
 
@@ -653,14 +652,6 @@ export default {
   .chapter-wrapper {
     //margin-bottom 有70px， 1px防止滚动穿透
     min-height: calc(100% - 69px)
-  }
-
-  #map-canvas-container {
-    position: absolute
-    height: 100%
-    width: 100%
-    top: 0
-    transform: perspective(1200px) rotateX(40deg) translate3d(0px, 0, -7px)
   }
 }
 </style>
