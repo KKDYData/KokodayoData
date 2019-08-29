@@ -1,8 +1,8 @@
 <template>
   <div v-if="list && list.length > 0">
-    <p>
+    <div style="padding: 20px 0">
       <span style="border-bottom: 1px solid #313131">{{title}}</span>
-    </p>
+    </div>
     <div class="predefine-list">
       <div class="predefine-item" v-for="(item, index) in list" :key="index">
         <el-popover popper-class="fuck-outline" :width="300" :title="item.name">

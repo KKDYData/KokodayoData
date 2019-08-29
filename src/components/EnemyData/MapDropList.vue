@@ -58,7 +58,7 @@ export default {
   },
   computed: {
     firstDrop() {
-      return this.dropInfo.filter(el => el.dropType === 1);
+      return this.dropInfo.filter(el => el.dropType === 1 || el.dropType === 8);
     },
     commonDrop() {
       return this.dropInfo.filter(el => el.dropType === 2);

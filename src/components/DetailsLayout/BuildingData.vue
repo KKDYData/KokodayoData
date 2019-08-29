@@ -102,7 +102,7 @@ export default {
   padding: 5px 10px;
   position: relative;
   min-width: 250px;
-  height: 60px;
+  min-height: 60px;
   width: calc(100% - 120px);
   margin-left: 120px;
   display: flex;

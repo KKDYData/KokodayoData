@@ -300,7 +300,6 @@ export default {
           this.skills.push(this.skills[0]);
         }
       }
-      console.log('skills', this.skills);
     }
   },
   computed: {
@@ -373,7 +372,7 @@ export default {
         if (/(duration)/.exec(el.key)) {
           v = v + 's';
         }
-        if (/up|down|scale|healaura|reborn\.atk/.exec(el.key)) {
+        if (/up|down|scale|healaura|\.atk|\.hp_ratio/.exec(el.key)) {
           v = v * 100 + '%';
         }
         return {
@@ -411,10 +410,23 @@ export default {
       return Key[key] || key;
     },
     changeTalentsBlackBordtoCh(key) {
+      key = key.replace('.hp_ratio', '·Hp%')
+        .replace('selfbuff', '自身Buff')
+        .replace('attack_speed', '攻击速度')
+        .replace('.duration', '·持续时间')
+        .replace('.damage', '·伤害')
+        .replace('.interval', '·间隔')
+        .replace('.attack', '·攻击')
+        .replace('@damage', '@伤害')
+        .replace('rangedamage', '范围伤害')
+        .replace('ReduceBlockCnt', '减少阻挡数')
+        .replace('.block_cnt', '阻挡数量')
+        .replace('invincible', '隐身')
+        .replace('reborn', '复活')
+        .replace('.atk', '·攻击提升');
+
       const Key = {
-        'invincible.duration': '隐身时间',
         'healaura.hp_recovery_per_sec': '治愈光环',
-        'reborn.duration': '复活·时间',
         'atkup.atk': '攻击提升',
         'atkup.hp_ratio': '攻击提升·Hp%',
         'defdown.def': '防御降低·防御',
@@ -423,7 +435,7 @@ export default {
         'antiinvi.range_radius': '侦擦范围',
         'defup.def': '防御提升·防御',
         'boom.atk_scale': '爆炸·倍率',
-        'reborn.atk': '复活·攻击'
+        'MagicResistance.magic_resistance': '法术抵抗提升',
       };
       return Key[key] || key;
     }

@@ -1,5 +1,5 @@
 <template>
-  <div class="item-viewer-container" style>
+  <div class="item-viewer-container">
     <el-popover
       popper-class="item-popover-class"
       placement="top"
@@ -32,7 +32,8 @@
           </div>
         </div>
       </div>
-
+      <p v-if="type === 'FURN'" style="color: #828282">舒适度 {{item.comfort}}</p>
+      <p v-if="type === 'FURN'" style="color: #828282">{{item.obtainApproach}}</p>
       <p>{{item.usage}}</p>
       <p>{{item.description}}</p>
       <div v-if="targetStageDrop">
@@ -50,21 +51,9 @@
             </el-tooltip>
           </span>
         </el-divider>
-        <p class="item-stage-container">
-          <span
-            class="item-stage-name"
-            :style="targetStageDrop.stageCode.length > 5 ? 'font-size: 0.9em': ''"
-          >{{targetStageDrop.stageCode}}</span>
-          <span
-            class="item-occper"
-          >{{targetStageDrop.occPer ? occper(targetStageDrop.occPer) : '概率掉落'}}</span>
-          <el-tooltip v-if="targetStageDrop.times" class="item-dropInfo" placement="top">
-            <div
-              slot="content"
-            >{{targetStageDrop.times}}/{{targetStageDrop.quantity}}→{{targetStageDrop.rate}}%</div>
-            <span>{{targetStageDrop.dropCost}} 理智/个</span>
-          </el-tooltip>
-        </p>
+        <div class="item-stage-container">
+          <drop-line :data="targetStageDrop"></drop-line>
+        </div>
       </div>
       <div v-if="type !== 'FURN'" class="item-popover">
         <div v-if="dropList.length > 0">
@@ -82,19 +71,9 @@
               </el-tooltip>
             </span>
           </el-divider>
-          <p class="item-stage-container" v-for="stage in dropList" :key="stage.stageId">
-            <!-- 似乎是以前物资筹备关卡的名字比较长 -->
-            <!-- :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'" -->
-            <span
-              class="item-stage-name"
-              :style="stage.stageCode.length > 5 ? 'font-size: 0.9em': ''"
-            >{{stage.stageCode}}</span>
-            <span class="item-occper">{{occper(stage.occPer)}}</span>
-            <el-tooltip v-if="stage.times" class="item-dropInfo" placement="top">
-              <div slot="content">{{stage.times}}/{{stage.quantity}}→{{stage.rate}}%</div>
-              <span>{{stage.dropCost}} 理智/个</span>
-            </el-tooltip>
-          </p>
+          <div class="item-stage-container">
+            <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage"></drop-line>
+          </div>
         </div>
         <div v-if="item.buildingProductList.length > 0">
           <el-divider content-position="left">
@@ -124,7 +103,12 @@ Vue.use(Divider);
 Vue.use(Image);
 Vue.use(Tooltip);
 
+import DropLine from './dropLine';
+
 export default {
+  components: {
+    DropLine
+  },
   props: {
     item: {
       required: true
@@ -166,6 +150,7 @@ export default {
           const temp = this.dropList.splice(tempRes, 1)[0];
           return temp;
         }
+        // 招不到的情况， 先不改成etCost!!!
         const target = this.dropListRow
           .find(el => el.stageId === this.targetStage);
         if (!target) return;
@@ -185,7 +170,7 @@ export default {
       const list = this.dropListRow;
       if (this.stageTree) {
         return this.item.stageDropList.map(el => {
-          let res = el;
+          let res = Object.assign({}, el);
           const stageData = findStage(el.stageId, this.stageTree);
           if (stageData) {
             const temp = stageData.label.split(' ');
@@ -198,9 +183,12 @@ export default {
               if (dropInfo) {
                 res = Object.assign(res, dropInfo);
                 res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100);
-                res.dropCost = Math.round(
-                  (dropInfo.times / dropInfo.quantity) * stageData.apCost
-                );
+                res.dropCost = Math.round((dropInfo.times / dropInfo.quantity) * stageData.apCost);
+                if (res.dropCost < 1) {
+                  res.apCost = stageData.apCost;
+                  res.etCost = stageData.etCost;
+                  res.dropCnt = Math.round((dropInfo.quantity / dropInfo.times));
+                }
               }
             }
           }
@@ -267,30 +255,6 @@ export default {
 
  .item-stage-container {
    padding-left: 40px
-
-   .item-occper {
-     background-color: rgb(128, 128, 128)
-     color: white
-     padding: 0 6px
-     border-radius: 3px
-   }
-
-   .item-dropInfo {
-     float: right
-     cursor: pointer
-   }
-
-   .item-occper {
-     background-color: rgb(128, 128, 128)
-     color: white
-     padding: 0 6px
-     border-radius: 3px
-   }
-
-   .item-stage-name {
-     width: 50px
-     display: inline-block
-   }
  }
 
  .weekly {
@@ -299,6 +263,7 @@ export default {
 
  .furn-item {
    width: 70px
+   min-height: 70px
    display: block
    box-sizing: border-box
    border-radius: 3px
@@ -306,7 +271,6 @@ export default {
    background: url('../assets/bbbj_optimized.png')
    background-size: cover
    /*overflow: visible;*/
-   margin: 0 auto
    padding: 9px 0
 
    & >>> img {
@@ -318,8 +282,8 @@ export default {
  @media screen and (max-width: 700px) {
    .evolvcost-item-contianer {
      /*padding: 5px 10px;*/
-     width: calc(40px + 1vw)
-     height: calc(40px + 1vw)
+     width: calc(45px + 2vw)
+     height: calc(45px + 2vw)
    }
 
    .evolvcost-name-wrapper {
