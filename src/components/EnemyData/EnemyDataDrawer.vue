@@ -15,7 +15,9 @@
         <div>
           <div style="display: flex">
             <div class="enemy-details-type-index-container">
-              <span>{{currentEnemy.enemyIndex}}</span>
+              <span
+                :style="currentEnemy.enemyIndex.length > 2 ? 'font-size: 1em': ''"
+              >{{currentEnemy.enemyIndex}}</span>
             </div>
             <div>
               <h1 style="margin: 0">

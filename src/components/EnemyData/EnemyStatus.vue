@@ -373,7 +373,7 @@ export default {
         if (/(duration)/.exec(el.key)) {
           v = v + 's';
         }
-        if (/up|down|scale|healaura|reborn\.atk|\.hp_ratio/.exec(el.key)) {
+        if (/up|down|scale|healaura|\.atk|\.hp_ratio/.exec(el.key)) {
           v = v * 100 + '%';
         }
         return {
@@ -424,7 +424,6 @@ export default {
         .replace('.block_cnt', '阻挡数量')
         .replace('invincible', '隐身')
         .replace('reborn', '复活')
-        // .replace('aktup', '攻击提升')
         .replace('.atk', '·攻击提升');
 
       const Key = {
