@@ -51,22 +51,9 @@
             </el-tooltip>
           </span>
         </el-divider>
-        <p class="item-stage-container">
-          <span
-            class="item-stage-name"
-            :style="targetStageDrop.stageCode.length > 5 ? 'font-size: 0.9em': ''"
-          >{{targetStageDrop.stageCode}}</span>
-          <span
-            class="item-occper"
-          >{{targetStageDrop.occPer ? occper(targetStageDrop.occPer) : '概率掉落'}}</span>
-          <el-tooltip v-if="targetStageDrop.times" class="item-dropInfo" placement="top">
-            <div
-              slot="content"
-            >{{targetStageDrop.times}}/{{targetStageDrop.quantity}}→{{targetStageDrop.rate}}%</div>
-            <span v-if="targetStageDrop.dropCost">{{targetStageDrop.dropCost}} 理智/个</span>
-            <span v-else>{{targetStageDrop.dropCnt}}个/{{targetStageDrop.apCost}}票</span>
-          </el-tooltip>
-        </p>
+        <div class="item-stage-container">
+          <drop-line :data="targetStageDrop"></drop-line>
+        </div>
       </div>
       <div v-if="type !== 'FURN'" class="item-popover">
         <div v-if="dropList.length > 0">
@@ -84,20 +71,9 @@
               </el-tooltip>
             </span>
           </el-divider>
-          <p class="item-stage-container" v-for="stage in dropList" :key="stage.stageId">
-            <!-- 似乎是以前物资筹备关卡的名字比较长 -->
-            <!-- :style="stage.stageId !== 'wk_kc_1' && stage.stageId !== 'wk_melee_1' ? '' : 'width: auto'" -->
-            <span
-              class="item-stage-name"
-              :style="stage.stageCode.length > 5 ? 'font-size: 0.9em': ''"
-            >{{stage.stageCode}}</span>
-            <span class="item-occper">{{occper(stage.occPer)}}</span>
-            <el-tooltip v-if="stage.times" class="item-dropInfo" placement="top">
-              <div slot="content">{{stage.times}}/{{stage.quantity}}→{{stage.rate}}%</div>
-              <span v-if="stage.dropCost">{{stage.dropCost}} 理智/个</span>
-              <span v-else>{{stage.dropCnt}}个/{{stage.apCost}}票</span>
-            </el-tooltip>
-          </p>
+          <div class="item-stage-container">
+            <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage"></drop-line>
+          </div>
         </div>
         <div v-if="item.buildingProductList.length > 0">
           <el-divider content-position="left">
@@ -127,7 +103,12 @@ Vue.use(Divider);
 Vue.use(Image);
 Vue.use(Tooltip);
 
+import DropLine from './dropLine';
+
 export default {
+  components: {
+    DropLine
+  },
   props: {
     item: {
       required: true
@@ -169,6 +150,7 @@ export default {
           const temp = this.dropList.splice(tempRes, 1)[0];
           return temp;
         }
+        // 招不到的情况， 先不改成etCost!!!
         const target = this.dropListRow
           .find(el => el.stageId === this.targetStage);
         if (!target) return;
@@ -204,6 +186,7 @@ export default {
                 res.dropCost = Math.round((dropInfo.times / dropInfo.quantity) * stageData.apCost);
                 if (res.dropCost < 1) {
                   res.apCost = stageData.apCost;
+                  res.etCost = stageData.etCost;
                   res.dropCnt = Math.round((dropInfo.quantity / dropInfo.times));
                 }
               }
@@ -272,30 +255,6 @@ export default {
 
  .item-stage-container {
    padding-left: 40px
-
-   .item-occper {
-     background-color: rgb(128, 128, 128)
-     color: white
-     padding: 0 6px
-     border-radius: 3px
-   }
-
-   .item-dropInfo {
-     float: right
-     cursor: pointer
-   }
-
-   .item-occper {
-     background-color: rgb(128, 128, 128)
-     color: white
-     padding: 0 6px
-     border-radius: 3px
-   }
-
-   .item-stage-name {
-     width: 50px
-     display: inline-block
-   }
  }
 
  .weekly {
