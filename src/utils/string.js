@@ -431,7 +431,8 @@ const StageType = {
   guid: '教程',
   sub: '支线',
   pro: '芯片',
-  a001: '骑兵与猎人'
+  a001: '骑兵与猎人',
+  a003: '火蓝之心'
 };
 
 export {

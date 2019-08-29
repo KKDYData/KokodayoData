@@ -25,7 +25,8 @@ const change = (list) => {
             return {
               label: keys.slice(0, 2).join(' '),
               path: keys[2],
-              apCost: keys[3]
+              apCost: keys[3],
+              etCost: keys[4]
             };
           }
         })

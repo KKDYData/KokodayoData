@@ -57,14 +57,20 @@
             class="runes-mode-button"
           >地图</el-button>
           <el-tooltip
-            v-if="showMap"
+            v-if="mapCode && showMap"
             class="runes-mode-button"
-            content="白色是路，黄色是不能放干员的路，蓝色是能放干员的高台, 浅黄是隧道出入口"
+            content="白色是路，浅黄是不能放干员的路，蓝色是能放干员的高台, 橙色是隧道出入口"
           >
             <i class="el-icon-info"></i>
           </el-tooltip>
         </div>
-        <p ref="map-desc" v-if="selMapDataEx" :key="runesMode" v-html="mapDesc"></p>
+        <div style="margin-left: 5px" ref="map-desc" v-if="selMapDataEx">
+          <p style="font-size: 0.9em" v-if="selMapDataEx.dangerLevel !== '-'">
+            <span>推荐等级</span>
+            <span style="color: #f49800;">{{selMapDataEx.dangerLevel}}</span>
+          </p>
+          <p style="font-size: 0.9em" :key="runesMode" v-html="mapDesc"></p>
+        </div>
       </div>
       <div class="map-data-wrapper">
         <div class="map-data-container">
@@ -85,6 +91,7 @@
                 :src="mapPath"
               ></el-image>
               <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
+              <div id="map-canvas-container-up" :class="showMap ? '' : 'map-canvas-bottom'"></div>
             </div>
             <div class="left-layout"></div>
           </div>
@@ -101,7 +108,7 @@
         :control="mapCode ? true : false"
         :short="short"
         :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
-        :init-value="true"
+        ref="layout-control"
       >
         <div slot="extra-button">
           <el-button
@@ -134,11 +141,12 @@
             </div>
           </el-tooltip>
         </div>
+        <!-- 不能用margin会影响动画，margin合并 -->
         <enemy-data-layout
-          style="margin-top: 20px"
+          style="padding-top: 20px"
           ref="layout"
           :short="short"
-          v-if="data"
+          v-if="!load && data"
           :data="data"
           :appear-map="appearMap"
           :map-data="selMapData"
@@ -156,8 +164,13 @@
           :options="options"
         ></enemy-map-info>
       </my-slide-title>
-      <my-slide-title v-if="mapCode && showPredefine" title="地图预设" :short="short">
-        <map-pre-defined style="margin-top: 10px" :short="short" :pre-data="selMapData.predefines"></map-pre-defined>
+      <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设" :short="short">
+        <map-pre-defined
+          style="margin-top: 10px"
+          :short="short"
+          :pre-data="selMapData.predefines"
+          :data="preData"
+        ></map-pre-defined>
       </my-slide-title>
       <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
       <map-drop-list
@@ -180,7 +193,7 @@ import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
 
 
-import { Tree, Drawer, Button, Image, Loading } from 'element-ui';
+import { Tree, Drawer, Button, Image, Loading, Message } from 'element-ui';
 
 import Vue from 'vue';
 import { mapState } from 'vuex';
@@ -199,9 +212,12 @@ import {
   path,
   getMapDataListVer,
   changeDesc,
-  fetchGet,
+  getFurn,
   findStage,
-  debounce
+  debounce,
+  getCharItem,
+  getItem,
+  preDefineGet
 } from '../../utils';
 
 import Mode from '../../stats';
@@ -260,11 +276,13 @@ export default {
       pTranisitionTemp: 0,
       treeId: '',
       mapPicLoad: true,
-      map: null,
       showMap: false,
       watchTree: false,
       simpleShow: true,
-      drawerSize: '30%'
+      drawerSize: '30%',
+      preData: null,
+      map: null,
+      mapUp: null,
     };
   },
   watch: {
@@ -328,6 +346,7 @@ export default {
       this.selMapData = null;
       this.selMapDataEx = null;
       this.runesMode = false;
+      this.preData = null;
       this.pTransition();
       this.$router.push(this.path);
       setTimeout(() => {
@@ -360,12 +379,10 @@ export default {
       }, 50);
     },
     async loadMap() {
-      // test
       const parent = this.$route.params.map; //|| 'main_05-10';
       if (!parent || !this.stageTree) return;
       console.log(parent);
       const target = findStage(parent, this.stageTree);
-      // target.first = true;
       if (target) this.choseMap({ ...target, first: true });
     },
     async choseMap(data, node) {
@@ -389,11 +406,16 @@ export default {
         const [mapData, exData] = await Promise.all([
           getMapData('level_' + codeFromPath.replace('kc', 'killcost')),
           getMapDataListVer(shortCode)
-        ]);
+        ]).catch(err => {
+          Message.error('获取数据失败');
+          return [];
+        });
+
 
         setTimeout(() => {
           this.load = false;
           this.mapPicLoad = false;
+          this.$refs['layout-control'].click(true);
         }, 500);
 
         if (mapData) {
@@ -413,9 +435,12 @@ export default {
           this.selectedMap = data.label;
           this.selMapData = mapData;
           this.selMapDataEx = exData;
+          this.getPreData();
           this.pTransition();
-          if (this.map) this.map.setData(mapData.mapData, mapData.routes);
-          else {
+          if (this.map) {
+            this.map.setData(mapData.mapData, mapData.routes);
+            this.mapUp.setData(mapData.mapData, mapData.routes);
+          } else {
             const body = document.querySelector('head');
             const script = document.createElement('script');
             script.type = 'text/javascript';
@@ -423,6 +448,7 @@ export default {
               const { Map } = await import('./draw');
               await this.$nextTick();
               this.map = new Map('#map-canvas-container', 100, mapData.mapData, mapData.routes);
+              this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, mapData.routes, true);
             };
             script.src = 'https://unpkg.com/spritejs/dist/spritejs.min.js';
             body.appendChild(script);
@@ -453,7 +479,9 @@ export default {
           this.showMap = true;
           await this.$nextTick();
           this.map.loadMap();
-        } else throw Error('no map ?');
+        } else {
+          Message('地图数据还没加载完成，请重试');
+        }
       }
     },
     closeRoute(index) {
@@ -475,20 +503,25 @@ export default {
       if (!list) return Promise.resolve([]);
       return Promise.all(
         list.map(async el => ({
-          data: await fetchGet(
-            path +
-            (el.type === 'FURN'
-              ? 'custom/furnitures/data/'
-              : el.type === 'CHAR'
-                ? 'item/data/p_'
-                : 'item/data/') +
-            el.id +
-            '.json'
-          ),
+          data: await (el.type === 'FURN' ? getFurn(el.id)
+            : el.type === 'CHAR' ? getCharItem(el.id)
+              : getItem(el.id)),
           type: el.type,
           dropType: el.dropType
         }))
       );
+    },
+    async getPreData() {
+      const data = this.selMapData.predefines;
+      if (!data) return;
+      const tasks = [
+        preDefineGet('tokenInsts', data),
+        preDefineGet('tokenCards', data),
+        preDefineGet('characterInsts', data),
+        preDefineGet('characterCards', data),
+      ];
+      const [tokenInsts, tokenCards, characterInsts, characterCards] = await Promise.all(tasks);
+      this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
     }
   }
 };
@@ -546,16 +579,30 @@ export default {
   border-radius: 2px
 }
 
-#map-canvas-container {
+#map-canvas-container-up, #map-canvas-container {
   position: absolute
   height: 100%
   width: 100%
   top: 0
-  transform: perspective(500px) rotateX(18deg) translate3d(0px, -10px, -20px)
+  transform: perspective(1200px) rotateX(40deg)
 }
 
-.clear-route-button {
-  //background-color: #ffffff
+filter() {
+  -moz-filter: arguments
+  -webkit-filter: arguments
+  -o-filter: arguments
+  -ms-filter: arguments
+}
+
+#map-canvas-container-up {
+  transform: perspective(1200px) rotateX(40deg) translate3d(0, 0, calc(var(--height) * 0.05))
+  filter: drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6))
+  transition: transform 0.7s ease
+}
+
+#map-canvas-container-up.map-canvas-bottom {
+  left: -5000px
+  transform: perspective(1200px) rotateX(40deg)
 }
 
 @media screen and (min-width: 1350px) {
@@ -567,14 +614,12 @@ export default {
 
   .map-wrapper {
     min-width: calc(100% - 40px)
-    //--height: 68vw
   }
 }
 
 @media screen and (min-width: 1500px) {
   .map-wrapper {
     --height: 500px
-    //min-width: 1420px
   }
 }
 
@@ -591,6 +636,10 @@ export default {
     min-width: 360px
     box-sizing: border-box
     padding: 3vw
+  }
+
+  #map-canvas-container-up {
+    filter: drop-shadow(1vw 4vw 10px rgba(0, 0, 0, 0.6))
   }
 }
 

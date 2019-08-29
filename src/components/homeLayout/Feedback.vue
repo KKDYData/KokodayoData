@@ -1,5 +1,10 @@
 <template>
   <div style="padding: 0 20px">
+    <el-link
+      style="vertical-align: baseline;"
+      href="https://somedata.top/ArknightsBeta"
+      type="info"
+    >Beta版链接</el-link>
     <div class="feedback-part">
       <my-title title="反馈"></my-title>
       <div class="feedback-info-wrapper">
@@ -68,10 +73,11 @@
 </template>
 
 <script>
-import { Input, Button, Message, MessageBox } from 'element-ui';
+import { Input, Button, Message, MessageBox, Alert } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Input);
 Vue.use(Button);
+Vue.use(Alert);
 import InputWrapper from './InputWrapper';
 import MyTitle from '../MyTitle';
 import MySlideTitle from '../MySlideTilte';
