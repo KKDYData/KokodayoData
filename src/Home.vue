@@ -1,9 +1,9 @@
 <template>
   <div class="home-wrapper">
-    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>地图变的立体了...</el-alert>
+    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>上线了一个家具图鉴</el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
-        这是Beta版,可能会有Bug, 敌人图鉴有更新
+        这是Beta版,随缘修bug
         <el-link href="https://somedata.top/Arknights" type="success">稳定版链接</el-link>
       </div>
     </el-alert>
@@ -15,7 +15,6 @@
 <script>
 import { getDevList } from './utils';
 import { Alert, link } from 'element-ui';
-// import HomeLayout from './components/homeLayout';
 import Vue from 'vue';
 Vue.use(link);
 Vue.use(Alert);
