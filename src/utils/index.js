@@ -525,10 +525,11 @@ const preDefineGet = async (key, baseData) => {
   return res;
 };
 
+const bsr = (t, a1, a2, a3, a4) => a1 * (1 - t) * (1 - t) * (1 - t) + 3 * a2 * t * (1 - t) * (1 - t) + 3 * a3 * t * t * (1 - t) + a4 * t * t * t;
+
+
 export {
-  debounce,
-  throttle,
-  fetchGet,
+
   // api 类
   getProfileList,
   getEnemyData,
@@ -552,6 +553,10 @@ export {
   getCharItem,
 
   // 业务相关类
+  debounce,
+  throttle,
+  fetchGet,
+  bsr,//三阶贝塞尔
   sort,
   sortByTime,
   changeDesc,

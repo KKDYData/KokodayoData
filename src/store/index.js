@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import actions from './action';
 
+
 Vue.use(Vuex);
 
 

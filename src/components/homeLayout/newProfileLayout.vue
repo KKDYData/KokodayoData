@@ -140,7 +140,7 @@ export default {
           if (Array.isArray(agent[key]))
             agent[key].forEach(tag => {
               // 服务器数据和前端声明的数据不统一。。。但是嘛，已经做了缓存了，就先这样手动转换看看
-              let find = group.filters.find(el => Number(el.value) === tag);
+              let find = group.filters.find(el => el.value === tag);
               if (find) {
                 hitTag.push(find);
               }
@@ -158,9 +158,7 @@ export default {
         let resArr = arrange(hitTag);
         let i = resArr.length;
         while (i-- > 0) {
-          const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join(
-            ','
-          );
+          const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join('，');
           if (!res.get(key)) {
             res.set(key, { agents: [agent], keys: resArr[i] });
           } else {

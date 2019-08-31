@@ -1,18 +1,21 @@
 <template>
   <div>
     <div class="extra-title" v-if="type === 'extra'">
-      <span class="span-underline">可以多次购买的且自动摆放的家具</span>
+      <span class="span-underline">可自动摆放多个的家具</span>
     </div>
     <div class="furni-list">
       <div class="furni-item" v-for="item in furnis" :key="item.id">
         <div v-if="type !== 'extra'" style="font-size: 14px">
           <span v-if="item.price">
-            价格
+            <el-image
+              style="vertical-align: bottom"
+              :src="path + 'others/customCoin_optimized.png'"
+            ></el-image>
             <span>{{item.price}}</span>
           </span>
-          <span v-else>卖不出</span>
+          <span v-else-if="type !== 'BULK'">卖不出</span>
         </div>
-        <div v-else style="font-size: 14px">
+        <div v-else style="font-size: 14px;">
           <span>数量</span>
           <span>{{item.count}}</span>
         </div>
@@ -20,7 +23,7 @@
           <item-viewer :item="item" type="FURN"></item-viewer>
         </div>
         <div>
-          <span :style="item.name.length > 6 ? 'font-size: 13px': 'font-size: 14px'">{{item.name}}</span>
+          <span :style="item.name.length > 5 ? 'font-size: 13px': 'font-size: 14px'">{{item.name}}</span>
         </div>
       </div>
     </div>
@@ -29,9 +32,15 @@
 
 <script>
 import ItemViewer from './ItemViewer';
+import { path } from '../utils';
 export default {
   components: {
     ItemViewer
+  },
+  data() {
+    return {
+      path
+    };
   },
   props: {
     furnis: {
@@ -39,7 +48,16 @@ export default {
     },
     type: String
   },
-
+  methods: {
+    check(v) {
+      if (/饰牌/.test(v)) {
+        const temp = v.split('');
+        temp.splice(2, 0, '<br/>');
+        return temp.join('');
+      }
+      return v;
+    }
+  }
 
 };
 </script>
@@ -48,6 +66,7 @@ export default {
 .furni-list {
   display: flex
   flex-wrap: wrap
+  min-height: 140px
 }
 
 .furni-item {

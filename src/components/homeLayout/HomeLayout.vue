@@ -147,7 +147,7 @@ if (typeof Array.prototype.flat !== 'function') {
   };
 }
 
-const version = 190715;
+const version = 190831;
 
 export default {
   metaInfo() {
@@ -316,7 +316,7 @@ export default {
             //多选筛选(公招模式)，不需要break, Tags
             if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
-                if (group.find(t => t.value === tag + '')) {
+                if (group.find(t => t.value === tag)) {
                   find = true;
                   el.tagHit++;
                 }

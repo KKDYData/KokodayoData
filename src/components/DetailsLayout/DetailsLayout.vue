@@ -8,6 +8,7 @@
       effect="dark"
       :closable="false"
     >获取数据失败，若多次刷新无效，请联系管理员</el-alert>
+    <my-share></my-share>
     <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
@@ -211,6 +212,7 @@ import InfoPanel from './InfoPanel';
 import ItemViewer from '../ItemViewer';
 import charStatus from '../charStatus';
 import DataLoading from '../Loading';
+import MyShare from './Share';
 
 import Vue from 'vue';
 Vue.use(Card);
@@ -274,7 +276,8 @@ export default {
     ItemViewer,
     DataLoading,
     AgentCard,
-    charStatus
+    charStatus,
+    MyShare
   },
   data() {
     return {
