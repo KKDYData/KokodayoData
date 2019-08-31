@@ -1,13 +1,15 @@
 <template>
   <div class="my-slide-title-wrapper">
+    <slot name="const-content"></slot>
+
     <my-title
       :title="title"
-      :freeze="freeze"
       :control="control"
       :short="short"
       @update:value="click"
       :value="value"
       style="margin-bottom: 0"
+      :custom-bg="customBg"
     ></my-title>
     <transition name="extra-button">
       <div v-if="!control || value" class="extra-button">
@@ -28,6 +30,8 @@ import Vue from 'vue';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
 
+import { isMoblie } from '../utils';
+
 export default {
   components: { MyTitle },
   props: {
@@ -39,10 +43,13 @@ export default {
       default: true
     },
     short: {
-      default: false
+      default: isMoblie
     },
     initValue: {
       default: false
+    },
+    customBg: {
+      type: String
     }
   },
   data() {
@@ -50,14 +57,18 @@ export default {
     return {
       value: v,
       // 冻结按钮，但是想了下好像没必要
-      freeze: false
     };
+  },
+  mounted() {
+    this.$emit('monuted', this);
   },
   methods: {
     click(v) {
-      if (this.freeze) return;
       this.value = v;
-      this.$emit('open');
+      this.$emit('open', this);
+    },
+    close() {
+      this.value = false;
     }
   }
 };

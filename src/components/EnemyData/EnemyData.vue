@@ -143,7 +143,7 @@
         </div>
         <!-- 不能用margin会影响动画，margin合并 -->
         <enemy-data-layout
-          style="padding-top: 20px"
+          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
           ref="layout"
           :short="short"
           v-if="!load && data"

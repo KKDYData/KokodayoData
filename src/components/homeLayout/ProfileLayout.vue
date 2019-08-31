@@ -30,7 +30,7 @@
                 <div class="tag-container long-tag" v-if="index > 2 || index === 0 &&  tag > 3">
                   <el-tag
                     type="info"
-                    :effect="tagHit(String(tag)) ? 'dark' : 'plain'"
+                    :effect="tagHit(tag) ? 'dark' : 'plain'"
                     size="mini"
                   >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
                 </div>

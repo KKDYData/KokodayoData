@@ -5,21 +5,12 @@
   font-weight: normal
 
 /*
- * 复制过来的控制pc滚动条出现时不移动的css
+  ?复制过来的控制pc滚动条出现时不移动的css
+  !这些奇奇怪怪的css删掉了 2019年8月31日
+  *因为现在低栏是常驻在屏幕外的，永远都会有滚动条，不考虑因为滚动条出现导致画面变动的问题了
  */
-html
-  overflow-y: scroll
-
-:root
-  overflow-y: auto
-  overflow-x: hidden
-
-:root body
-  position: absolute
 
 body
-  width: 100vw
-  overflow: hidden
   margin: 0
   background-color: white
 
@@ -27,6 +18,7 @@ body
   display: flex
   min-height: calc(100vh + 70px) //防止#footer闪现
   flex-direction: column
+
 
 .image-slot
   display: flex
@@ -68,11 +60,6 @@ body
 }
 
 
-
-
-
-
-
 .extra-button-enter, .fade-leave-to {
   opacity: 0
 }
@@ -86,6 +73,10 @@ body
 .span-underline 
   color: #828282
   border-bottom: 1px solid #313131
+
+.flip-list-move 
+  transition: transform 0.7s;
+
 
 .el-image img
   width: 100%

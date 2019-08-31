@@ -11,17 +11,17 @@
       ref="nav-menu"
     >
       <el-menu-item :index="routes.home.path">{{routes.home.text}}</el-menu-item>
+      <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item>
       <template v-if="!short">
-        <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item>
         <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
-        <!-- <el-menu-item :index="routes.customTheme.path">{{routes.customTheme.text}}</el-menu-item> -->
+        <el-menu-item :index="routes.customtheme.path">{{routes.customtheme.text}}</el-menu-item>
       </template>
       <template v-else>
         <el-submenu index="2">
           <template slot="title">{{moreText}}</template>
-          <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item>
+          <!-- <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item> -->
           <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
-          <!-- <el-menu-item :index="routes.customTheme.path">{{routes.customTheme.text}}</el-menu-item> -->
+          <el-menu-item :index="routes.customtheme.path">{{routes.customtheme.text}}</el-menu-item>
         </el-submenu>
       </template>
     </el-menu>
@@ -34,6 +34,7 @@ import Vue from 'vue';
 Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(Submenu);
+
 
 import Mode from './stats';
 
@@ -59,7 +60,7 @@ export default {
           path: path + '/',
           text: 'Arknights Data'
         },
-        customTheme: {
+        customtheme: {
           path: path + '/customtheme',
           text: '家具'
         }
@@ -88,7 +89,8 @@ export default {
       let i = 0;
       while (i < arr.length) {
         const temp = arr[i];
-        if (new RegExp(temp).test(this.$route.path)) {
+        console.log(temp);
+        if (new RegExp(temp).test(this.$route.path) && temp !== 'enemydata') {
           this.moreText = this.routes[arr[i]].text;
           return;
         }
@@ -106,7 +108,5 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
 
 
