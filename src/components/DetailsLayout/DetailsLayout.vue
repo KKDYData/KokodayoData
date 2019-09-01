@@ -88,8 +88,13 @@
         <!-- 技能面板 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
           <div class="group-container-title">技能</div>
-
-          <skill-panel :skills="skills"></skill-panel>
+          <skill-panel
+            :status="status"
+            :skills="skills"
+            :talents="talents"
+            :profession="data.profession"
+            :short="short"
+          ></skill-panel>
         </div>
         <!-- 潜能面板 -->
         <div style="margin-bottom: 20px">

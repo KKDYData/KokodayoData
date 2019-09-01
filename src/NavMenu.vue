@@ -89,7 +89,6 @@ export default {
       let i = 0;
       while (i < arr.length) {
         const temp = arr[i];
-        console.log(temp);
         if (new RegExp(temp).test(this.$route.path) && temp !== 'enemydata') {
           this.moreText = this.routes[arr[i]].text;
           return;

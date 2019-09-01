@@ -132,6 +132,25 @@ const getFurn = key => fetchByKey('custom/furnitures')(key);
 const getCharItem = key => fetchByKey('item')('p_' + key);
 
 
+const importScript = (url, init = () => console.log('load')) => {
+  const body = document.querySelector('head');
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.onload = init;
+  script.src = url;
+  body.appendChild(script);
+};
+
+const importSpriteJs = (init) => {
+  importScript('https://unpkg.com/spritejs/dist/spritejs.min.js', init);
+};
+
+const importCatCharts = () => {
+  importScript('https://unpkg.com/spritejs/dist/spritejs.min.js');
+  importScript('https://unpkg.com/@qcharts/core/lib/index.js');
+  importScript('https://unpkg.com/cat-charts-vue/lib/index.js');
+};
+
 function sort(array, less) {
 
   function swap(i, j) {
@@ -538,6 +557,8 @@ export {
   getEnemyList,
   submitFeedback,
   getThemeList,
+  importSpriteJs,
+  importCatCharts,
 
   // api 类，需要提供key
   getHeroData,

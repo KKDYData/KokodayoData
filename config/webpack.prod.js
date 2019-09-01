@@ -57,7 +57,6 @@ module.exports = merge(common, {
   resolve: {
     alias: {
       'vue': 'vue/dist/vue.min.js',
-      'spritejs': 'spritejs/dist/spritejs.esm.min'
     }
   },
   externals: {

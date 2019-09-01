@@ -184,7 +184,7 @@ export default {
       SelectedTagGz: [],
       showOtherPanel: false,
       currentMode: 'profile-layout',
-      short: false
+      short: false,
     };
   },
   created() { },

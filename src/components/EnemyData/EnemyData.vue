@@ -217,7 +217,8 @@ import {
   debounce,
   getCharItem,
   getItem,
-  preDefineGet
+  preDefineGet,
+  importSpriteJs
 } from '../../utils';
 
 import Mode from '../../stats';
@@ -441,17 +442,17 @@ export default {
             this.map.setData(mapData.mapData, mapData.routes);
             this.mapUp.setData(mapData.mapData, mapData.routes);
           } else {
-            const body = document.querySelector('head');
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.onload = async () => {
+            const initMap = async () => {
               const { Map } = await import('./draw');
               await this.$nextTick();
               this.map = new Map('#map-canvas-container', 100, mapData.mapData, mapData.routes);
               this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, mapData.routes, true);
             };
-            script.src = 'https://unpkg.com/spritejs/dist/spritejs.min.js';
-            body.appendChild(script);
+            if (window.spritejs) {
+              initMap();
+            } else {
+              importSpriteJs(initMap);
+            }
           }
         }
       }

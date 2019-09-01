@@ -1,8 +1,8 @@
 <template>
   <transition name="el-fade-in">
     <div v-if="visible">
-      <button @click="share" :data-clipboard-text="shareLink" class="el-backtop share">
-        <el-icon name="share"></el-icon>
+      <button @click="share" :data-clipboard-text="shareLink" class="el-circle-icon share">
+        <i class="el-icon-share"></i>
       </button>
       <div
         @click.stop="handleClick"
@@ -10,9 +10,9 @@
         'right': styleRight,
         'bottom': styleBottom
       }"
-        class="el-backtop"
+        class="el-circle-icon"
       >
-        <el-icon name="caret-top"></el-icon>
+        <i class="el-icon-caret-top"></i>
       </div>
     </div>
   </transition>
@@ -20,9 +20,7 @@
 
 <script>
 import { throttle } from '../../utils';
-import { Icon, Message } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Icon);
+import { Message } from 'element-ui';
 
 import Clipboard from 'clipboard';
 import devMode from '../../stats';
@@ -118,22 +116,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.el-backtop {
-  position: fixed
-  background-color: #fff
-  width: 40px
-  height: 40px
-  border-radius: 50%
-  color: #313131
-  display: flex
-  align-items: center
-  justify-content: center
-  font-size: 20px
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12)
-  cursor: pointer
-  z-index: 5
-}
-
 .share {
   right: 40px
   bottom: 100px
