@@ -50,7 +50,16 @@
         </div>
 
         <div class="skill-name-level" v-if="!initLv &&  skill.levels.length > 1">
-          <div style="display: flex; align-items: center; width: 100%; justify-content: flex-end">
+          <skill-chart
+            v-if="!initLv && skill.levels[0].duration"
+            class="skill-name-level-item"
+            :status="status"
+            :skill="skill.levels[sLevel[index]-1]"
+            :talents="talents"
+            :profession="profession"
+            :short="short"
+          ></skill-chart>
+          <div class="skill-name-level-item">
             <div class="skill-title-level">
               <span>LV</span>
               <span>{{sLevel[index]}}</span>
@@ -59,6 +68,7 @@
               <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
               <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
             </div>
+            <skill-list :skill="skill"></skill-list>
           </div>
         </div>
       </div>
@@ -70,13 +80,22 @@
 import { changeAttackSpeed } from '../../utils';
 import Range from './Range';
 import SkillContainer from './SkillContainer';
+import SkillChart from './SkillChart';
+
+import SkillList from './SkillList';
+
 
 export default {
   components: {
-    range: Range,
-    'skill-container': SkillContainer
+    Range,
+    SkillContainer,
+    SkillChart,
+    SkillList
   },
   props: {
+    short: {
+      default: false
+    },
     skills: {
       required: true
     },
@@ -88,6 +107,15 @@ export default {
     },
     initLv: {
       type: Number
+    },
+    status: {
+      required: true
+    },
+    talents: {
+      required: true
+    },
+    profession: {
+      tyep: String
     }
   },
   data() {
@@ -157,135 +185,161 @@ export default {
 </script>
 
 
-<style scoped>
-/* part 4 */
+<style lang="stylus" scoped>
+/*part 4*/
 .group-container-title {
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
-  background-color: #414141;
-  padding-left: 1vw;
+  font-weight: bold
+  color: white
+  margin-bottom: 20px
+  background-color: #414141
+  padding-left: 1vw
 }
+
 .skill-container--inner-wrapper {
-  margin-top: 30px;
+  margin-top: 30px
 }
+
 .skill-container {
-  padding-bottom: 38px;
-  position: relative;
+  padding-bottom: 38px
+  position: relative
 }
 
 .skill-container + .skill-container {
-  border-top: 1px solid rgb(235, 238, 245);
+  border-top: 1px solid rgb(235, 238, 245)
 }
+
 .skill-title {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  justify-content: start;
-  padding: 0 5px;
-  width: calc(100% - 10px);
+  position: relative
+  display: flex
+  align-items: stretch
+  flex-wrap: wrap
+  margin-top: 20px
+  justify-content: start
+  padding: 0 5px
+  width: calc(100% - 10px)
 }
 
 .skill-tiltle-part {
-  padding-left: 20px;
-  width: calc(70% - 100px);
+  padding-left: 20px
+  width: calc(70% - 100px)
 }
+
 .skill-title-level {
-  margin: 0 20px;
+  margin-right: 20px
 }
+
 .skill-name-level {
-  border-left: 1px solid rgba(158, 158, 158, 0.4);
-  display: flex;
-  align-items: flex-end;
-  padding: 0 20px;
-  flex-grow: 1;
+  border-left: 1px solid rgba(158, 158, 158, 0.4)
+  display: flex
+  align-items: flex-end
+  flex-wrap: wrap
+  padding-right: 20px
+  flex-grow: 1
+  width: min-content
 }
 
 .skill-type {
-  word-break: keep-all;
-  color: white;
-  padding: 0px !important;
-  width: calc(64px + 1vw);
-  text-align: center;
-  display: inline-block;
-  border-radius: 3px;
-  background-color: rgb(153, 153, 153);
-  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
+  word-break: keep-all
+  color: white
+  padding: 0px !important
+  width: calc(64px + 1vw)
+  text-align: center
+  display: inline-block
+  border-radius: 3px
+  background-color: rgb(153, 153, 153)
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15)
 }
+
 .skill-status {
-  font-size: 14px;
+  font-size: 14px
 }
+
 .skill-status-desc {
-  font-size: 16px;
-  color: #606266;
-  padding: 20px 10px;
-  display: flex;
-  align-items: center;
-  position: relative;
+  font-size: 16px
+  color: #606266
+  padding: 20px 10px
+  display: flex
+  align-items: center
+  position: relative
 }
+
 .skill-status span + span {
-  padding-right: 5px;
+  padding-right: 5px
 }
 
 .extra-card {
-  margin-top: 5vw;
-  margin-bottom: 5vw;
+  margin-top: 5vw
+  margin-bottom: 5vw
 }
 
 .skill-range-button {
-  position: absolute;
-  bottom: -5px;
+  position: absolute
+  bottom: -5px
 }
 
 .skill-range-button .el-button--mini {
-  padding: 2px 3px;
-  margin-top: 5px;
+  padding: 2px 3px
+  margin-top: 5px
+}
+
+.skill-name-level-item {
+  display: flex
+  align-items: center
+  width: 100%
+  justify-content: flex-end
+  margin-bottom: 10px
 }
 
 @media screen and (max-width: 700px) {
   .skill-container--inner-wrapper {
-    margin-bottom: 20px;
+    margin-bottom: 20px
   }
 
   .skill-status {
-    font-size: calc(12px + 0.5vw);
+    font-size: calc(12px + 0.5vw)
   }
+
   .skill-status span + span {
-    padding: 0px;
+    padding: 0px
   }
+
   .skill-status-desc {
-    font-size: calc(13px + 0.5vw);
+    font-size: calc(13px + 0.5vw)
   }
+
   .talents-effects-desc {
-    font-size: calc(12px + 0.5vw);
+    font-size: calc(12px + 0.5vw)
   }
+
   .skill-title-level {
-    display: inline-block;
-    left: 0;
-    padding-left: 35vw;
-    padding-right: 2vw;
+    display: inline-block
+    left: 0
+    padding-right: 2vw
   }
+
   .skill-tiltle-part {
-    flex-wrap: wrap;
-    padding-left: 2vw;
-    width: calc(100% - 65px - 3vw);
-    border: none;
+    flex-wrap: wrap
+    padding-left: 2vw
+    width: calc(100% - 65px - 3vw)
+    border: none
   }
+
   .skill-name-level {
-    width: 100%;
-    border: none;
+    width: 100%
+    border: none
   }
+
   .skill-name-level span {
-    vertical-align: -5%;
+    vertical-align: -5%
   }
+
   .skill-container {
-    padding-bottom: 10px;
+    padding-bottom: 10px
   }
+
   .skill-range-button {
-    position: absolute;
-    z-index: 1;
+    position: absolute
+    z-index: 1
   }
 }
 </style>

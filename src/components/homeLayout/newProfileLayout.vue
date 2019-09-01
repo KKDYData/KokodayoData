@@ -248,8 +248,8 @@ export default {
   margin-left: 10px;
 }
 
-.other-mode-popover-tag + .other-mode-popover-tag {
-  margin-left: 5px;
+.other-mode-popover-tag {
+  margin: 5px 5px 0;
 }
 
 .other-mode-popover-class-icon {
