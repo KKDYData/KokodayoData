@@ -87,4 +87,8 @@ module.exports = merge(common, {
       'vue$': 'vue/dist/vue.esm.js',
     },
   },
+  externals: {
+    // spritejs: 'spritejs'
+    // CatChartsVue: 'CatChartsVue'
+  }
 });

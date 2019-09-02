@@ -44,7 +44,7 @@
 
           <el-button
             @click="loadRunes"
-            v-if="selMapDataEx && selMapDataEx.stageType === 'MAIN'"
+            v-if="selMapDataEx && (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')"
             :type="!runesMode ? '': 'warning'"
             :plain="!runesMode"
             class="runes-mode-button"
@@ -143,7 +143,7 @@
         </div>
         <!-- 不能用margin会影响动画，margin合并 -->
         <enemy-data-layout
-          style="padding-top: 20px"
+          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
           ref="layout"
           :short="short"
           v-if="!load && data"
@@ -170,6 +170,7 @@
           :short="short"
           :pre-data="selMapData.predefines"
           :data="preData"
+          :runes-data="runesMode ? selMapData.runes : null"
         ></map-pre-defined>
       </my-slide-title>
       <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
@@ -217,7 +218,8 @@ import {
   debounce,
   getCharItem,
   getItem,
-  preDefineGet
+  preDefineGet,
+  importSpriteJs
 } from '../../utils';
 
 import Mode from '../../stats';
@@ -317,7 +319,24 @@ export default {
       return !this.selMapData ? {}
         : Object.entries(Object.assign(this.selMapData.options, this.selMapDataEx))
           .filter(([k, v]) => mapOptionsKey[k])
-          .map(([k, v]) => [mapOptionsKey[k], v]);
+          .map(([k, v]) => {
+            if (this.runesMode) {
+              if (k === 'maxLifePoint') {
+                const lifePointBuff = this.selMapData.runes.find(el => el.key === 'gbuff_lifepoint');
+                if (lifePointBuff) {
+                  v = lifePointBuff.blackboard.find(el => el.key === 'value').value;
+                }
+              }
+              if (k === 'costIncreaseTime') {
+                const costBuff = this.selMapData.runes.find(el => el.key === 'cbuff_cost_recovery');
+                if (costBuff) {
+                  // 暂时只保留0.3，不然会换行
+                  v = Math.round(v / costBuff.blackboard.find(el => el.key === 'scale').value * 10) / 10;
+                }
+              }
+            }
+            return [mapOptionsKey[k], v];
+          });
     },
     direction() {
       return this.short ? 'btt' : 'rtl';
@@ -441,17 +460,17 @@ export default {
             this.map.setData(mapData.mapData, mapData.routes);
             this.mapUp.setData(mapData.mapData, mapData.routes);
           } else {
-            const body = document.querySelector('head');
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.onload = async () => {
+            const initMap = async () => {
               const { Map } = await import('./draw');
               await this.$nextTick();
               this.map = new Map('#map-canvas-container', 100, mapData.mapData, mapData.routes);
               this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, mapData.routes, true);
             };
-            script.src = 'https://unpkg.com/spritejs/dist/spritejs.min.js';
-            body.appendChild(script);
+            if (window.spritejs) {
+              initMap();
+            } else {
+              importSpriteJs(initMap);
+            }
           }
         }
       }

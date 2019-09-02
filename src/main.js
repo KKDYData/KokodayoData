@@ -48,6 +48,10 @@ const router = new VueRouter({
 });
 
 
+
+
+
+
 new Vue({
   el: '#app',
   router,
@@ -57,13 +61,13 @@ new Vue({
     Footer
   },
   template: `
-  <div id="app">
-    <nav-menu />
-    <transition name="fade" mode="out-in">
-      <router-view class="view"></router-view>
-    </transition>
-    <Footer />
-  </div>
+    <div id="app">
+      <nav-menu />
+      <transition name="fade" mode="out-in">
+        <router-view class="view"></router-view>
+      </transition>
+      <Footer />
+    </div>
   `
 });
 

@@ -6,12 +6,7 @@
       :list="tokenList"
       :statusToChFc="statusToChFc"
     ></map-predefined-list>
-    <map-predefined-list
-      v-if="1"
-      class="predefine-list-contianer"
-      title="预下场角色"
-      :list="characterInstsList"
-    ></map-predefined-list>
+    <map-predefined-list class="predefine-list-contianer" title="预下场角色" :list="characterInstsList"></map-predefined-list>
     <map-predefined-list
       class="predefine-list-contianer"
       title="预设角色卡"
@@ -22,6 +17,7 @@
       class="predefine-list-contianer"
       title="道具卡"
       :list="tokenCardList"
+      :runes-data="runesData"
       :show-position="false"
     ></map-predefined-list>
   </div>
@@ -44,7 +40,11 @@ export default {
     },
     data: {
       required: true
+    },
+    runesData: {
+      default: Object
     }
+
   },
   components: {
     MapPredefinedList
