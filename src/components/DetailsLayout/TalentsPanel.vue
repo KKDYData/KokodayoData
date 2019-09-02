@@ -9,11 +9,11 @@
               v-if="item.condidate[0].potentailUP"
               @click="openTalentPotentailUP(index)"
               size="mini"
-              :type="!showTalentPotencailUP[index] ? 'info' : 'warning'"
+              :type="!showTalentPotentailUP[index] ? 'info' : 'warning'"
             >
               潜能提升
               <i
-                :class="!showTalentPotencailUP[index] ? 'el-icon-star-off' : 'el-icon-star-on'"
+                :class="!showTalentPotentailUP[index] ? 'el-icon-star-off' : 'el-icon-star-on'"
               ></i>
             </el-button>
           </div>
@@ -28,7 +28,7 @@
           </div>
 
           <div class="talent-desc-content-wrapper">
-            <div v-if="!showTalentPotencailUP[index]" class="talent-desc-content">
+            <div v-if="!showTalentPotentailUP[index]" class="talent-desc-content">
               <span v-html="talent.description"></span>
             </div>
             <div v-else class="talent-desc-content">
@@ -52,12 +52,13 @@ export default {
   },
   data() {
     return {
-      showTalentPotencailUP: [false, false, false]
+      showTalentPotentailUP: [false, false, false]
     };
   },
   methods: {
     openTalentPotentailUP(t) {
-      this.$set(this.showTalentPotencailUP, t, !this.showTalentPotencailUP[t]);
+      this.$set(this.showTalentPotentailUP, t, !this.showTalentPotentailUP[t]);
+      this.$emit('talentPotentailUp', this.showTalentPotentailUP);
     }
   }
 };

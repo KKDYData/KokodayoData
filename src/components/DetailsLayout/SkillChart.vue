@@ -1,13 +1,32 @@
 <template>
   <div>
-    <el-popover :placement="short ? 'right':  'left'" :popper-class="short ? 'mobile-rotate' : ''">
+    <el-popover
+      :disabled="!attackType"
+      :placement="short ? 'right':  'left'"
+      :popper-class="short ? 'mobile-rotate' : ''"
+    >
       <div class="data-toggle" slot="reference">
-        <div>单点伤害{{skillAtk}}</div>
-        <div class="el-circle-icon" style="position: unset; margin-left: 10px">
+        <div
+          style="font-size: 14px; color: #515151"
+        >{{'单次' + (attackType? '伤害' : '效果')}}{{skillAtk}}</div>
+        <div v-if="attackType" class="el-circle-icon" style="position: unset; margin-left: 10px">
           <i class="el-icon-data-line"></i>
         </div>
       </div>
-      <div>
+      <div v-if="attackType">
+        <div class="chart-data-info">
+          测试中，仅供参考 |
+          <el-tooltip placement="left">
+            <span>
+              计算方式
+              <i class="el-icon-info"></i>
+            </span>
+            <div slot="content">
+              {{!magic ? '（面板攻击力 * 攻击倍率 * 攻击力增加 - 防御） / 攻击间隔 * 攻击速度'
+              : '（面板攻击力 * 攻击倍率 * 攻击力增加 * （100-魔抗）） / 攻击间隔 * 攻击速度' }}
+            </div>
+          </el-tooltip>
+        </div>
         <div class="chart-body" ref="chart"></div>
         <div class="chart-details-container">
           <div>攻击间隔: {{baseAttackTime | format}}</div>
@@ -23,11 +42,7 @@
 </template>
 
 <script>
-import 'echarts/lib/chart/bar';
-import 'echarts/lib/chart/line';
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/title';
-import echarts from 'echarts/lib/echarts';
+import { importEcharts } from '../../utils';
 
 const splitToData = e => typeof e === 'number' ? e : +e.split('<')[0];
 
@@ -105,6 +120,9 @@ export default {
     },
     short: {
       required: true
+    },
+    talentPotentailUp: {
+      required: true
     }
   },
   data() {
@@ -113,24 +131,28 @@ export default {
     };
   },
   filters: {
-    format(v){
+    format(v) {
       return Math.round(v * 100) / 100;
     }
   },
   computed: {
+    attackType() {
+      if (/回复/.test(this.skill.description) || this.profession === 'MEDIC') return false;
+      else return true;
+    },
     magic() {
-      if(/变为法术/.test(this.skill.description)) return true;
+      if (/变为法术/.test(this.skill.description)) return true;
       if (this.profession !== 'CASTER' && this.profession !== 'SUPPORT') return false;
       else return true;
     },
     atk() {
       return splitToData(this.status.atk);
     },
-    speedUp(){
+    speedUp() {
       const talentSpeedUp = Object.values(this.selectedTalents).reduce((res, cur) => res + upWhat('attack_speed', 0, cur), 0);
       const skillSpeedUp = upWhat('attack_speed', 0, this.skill);
-      return   100 + talentSpeedUp + skillSpeedUp;
-    
+      return 100 + talentSpeedUp + skillSpeedUp;
+
     },
     baseAttackTime() {
       const time = splitToData(this.status.baseAttackTime);
@@ -147,7 +169,7 @@ export default {
       }
 
 
-      return test || duration ? 1 : baseTime; 
+      return test || duration ? 1 : baseTime;
     },
     attackTimes() {
       const times = upWhat('attack@times', 0, this.skill);
@@ -155,7 +177,6 @@ export default {
     },
     defDownScale() {
       const res = getWhatDef('def', mergeDefR, this.skill, this.selectedTalents);
-      console.log(res);
       return res < 0 ? res : 0;
     },
     defDown() {
@@ -169,8 +190,9 @@ export default {
       return res < 0 ? res : 0;
     },
     selectedTalents() {
-      return this.talents.reduce((res, { condidate }) => {
-        res[condidate[0].prefabKey] = condidate[condidate.length - 1];
+      return this.talents.reduce((res, { condidate }, index) => {
+        res[condidate[0].prefabKey] = this.talentPotentailUp[index] ? condidate[condidate.length - 1].potentailUP
+          : condidate[condidate.length - 1];
         return res;
       }, {});
 
@@ -249,7 +271,6 @@ export default {
             name: 'dps',
             type: 'bar',
             data,
-
           }
         ]
       };
@@ -272,20 +293,22 @@ export default {
       });
     }
   },
-  mounted() {
-    this.chart = echarts.init(this.$refs.chart);
-
-    this.chart.setOption({
-      tooltip: {},
-      title: {
-        text: '技能DPS'
-      },
-      xAxis: {
-        data: this.dps.xAxis,
-        name: this.magic ? '魔抗' : '物防'
-      },
-      yAxis: {},
-      series: this.dps.series
+  created() {
+    importEcharts(() => {
+      // eslint-disable-next-line no-undef
+      this.chart = echarts.init(this.$refs.chart);
+      this.chart.setOption({
+        tooltip: {},
+        title: {
+          text: '技能DPS'
+        },
+        xAxis: {
+          data: this.dps.xAxis,
+          name: this.magic ? '魔抗' : '物防'
+        },
+        yAxis: {},
+        series: this.dps.series
+      });
     });
   }
 };
@@ -295,6 +318,12 @@ export default {
 .chart-body {
   height: 300px
   width: 600px
+  z-index: 5
+}
+
+.chart-data-info {
+  text-align: right
+  z-index: 10
 }
 
 .data-toggle {
@@ -306,5 +335,6 @@ export default {
 .chart-details-container {
   display: flex
   flex-wrap: wrap
+  margin-top: -30px
 }
 </style>

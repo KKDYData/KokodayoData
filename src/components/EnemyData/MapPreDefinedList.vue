@@ -1,10 +1,10 @@
 <template>
-  <div v-if="list && list.length > 0">
+  <div v-if="myList && myList.length > 0">
     <div style="padding: 20px 0">
       <span style="border-bottom: 1px solid #313131">{{title}}</span>
     </div>
     <div class="predefine-list">
-      <div class="predefine-item" v-for="(item, index) in list" :key="index">
+      <div class="predefine-item" v-for="(item, index) in myList" :key="index">
         <el-popover popper-class="fuck-outline" :width="300" :title="item.name">
           <div class="fuck-outline" slot="reference">
             <char-cube class="predefine-item-bg" :src="getSrc(item.key)" width="100px"></char-cube>
@@ -48,10 +48,22 @@
 import { getProfilePath } from '../../utils';
 import charCube from '../charCube';
 import charStatus from '../charStatus';
-import SkillPanel from '../DetailsLayout/SkillPanel';
+import loadingC from '../Loading';
+
+const SkillPanel = () => ({
+  component: import(
+    /* webpackChunkName: "SkillPanel" */ '../DetailsLayout/SkillPanel'
+  ),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
+
 import { Popover } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Popover);
+
 export default {
   components: { charCube, charStatus, SkillPanel },
   props: {
@@ -59,12 +71,36 @@ export default {
     statusToChFc: {},
     title: { required: true },
     showStatus: { default: true, type: Boolean },
-    showPosition: { default: true, type: Boolean }
+    showPosition: { default: true, type: Boolean },
+    runesData: { default: null }
   },
   methods: {
     getSrc(key) {
       return getProfilePath(key);
     },
+  },
+  computed: {
+    myList() {
+      if (this.runesData) {
+        // 仅检测箱子数量，测试一下
+        const checkTokenInsts = Object.values(this.runesData).find(el => el.key === 'cbuff_token_initial_cnt');
+        if (checkTokenInsts) {
+          const res = this.list.map(el => {
+            let initialCnt = el.initialCnt;
+            const charKey = checkTokenInsts.blackboard.find(el => el.key === 'char').valueStr;
+            if (charKey && el.key === charKey) {
+              initialCnt += checkTokenInsts.blackboard.find(el => el.key === 'value').value;
+            }
+            return { ...el, initialCnt };
+          });
+          return res;
+        } else {
+          return this.list;
+        }
+      } else {
+        return this.list;
+      }
+    }
   }
 };
 </script>
