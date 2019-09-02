@@ -83,7 +83,11 @@
         <!-- 天赋面板 -->
         <div class="tttt">
           <div class="group-container-title">天赋</div>
-          <talents-panel :talents="talents" :short="short"></talents-panel>
+          <talents-panel
+            @talentPotentailUp="e => talentPotentailUp = e"
+            :talents="talents"
+            :short="short"
+          ></talents-panel>
         </div>
         <!-- 技能面板 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
@@ -94,6 +98,7 @@
             :talents="talents"
             :profession="data.profession"
             :short="short"
+            :talent-potentail-up="talentPotentailUp"
           ></skill-panel>
         </div>
         <!-- 潜能面板 -->
@@ -210,7 +215,7 @@ import {
 import AgentCard from './AgentCard';
 import Range from './Range';
 import TalentsPanel from './TalentsPanel';
-import SkillPanel from './SkillPanel';
+// import SkillPanel from './SkillPanel';
 import SkillUpPanel from './SkillUpCost';
 import BuildingData from './BuildingData';
 import InfoPanel from './InfoPanel';
@@ -218,6 +223,19 @@ import ItemViewer from '../ItemViewer';
 import charStatus from '../charStatus';
 import DataLoading from '../Loading';
 import MyShare from './Share';
+
+
+import loadingC from '../Loading';
+
+const SkillPanel = () => ({
+  component: import(
+    /* webpackChunkName: "SkillPanel" */ '../DetailsLayout/SkillPanel'
+  ),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
 
 import Vue from 'vue';
 Vue.use(Card);
@@ -303,7 +321,8 @@ export default {
       info: null,
       words: [],
       GOLD: GOLD,
-      level: 1
+      level: 1,
+      talentPotentailUp: [false, false, false]
     };
   },
   computed: {

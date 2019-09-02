@@ -60,6 +60,7 @@ module.exports = merge(common, {
     }
   },
   externals: {
-    spritejs: 'spritejs'
+    spritejs: 'spritejs',
+    echarts: 'echarts'
   }
 });

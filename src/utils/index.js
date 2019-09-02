@@ -141,15 +141,14 @@ const importScript = (url, init = () => console.log('load')) => {
   body.appendChild(script);
 };
 
+const importEcharts = (init) => {
+  importScript('https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.common.min.js', init);
+};
+
 const importSpriteJs = (init) => {
   importScript('https://unpkg.com/spritejs/dist/spritejs.min.js', init);
 };
 
-const importCatCharts = () => {
-  importScript('https://unpkg.com/spritejs/dist/spritejs.min.js');
-  importScript('https://unpkg.com/@qcharts/core/lib/index.js');
-  importScript('https://unpkg.com/cat-charts-vue/lib/index.js');
-};
 
 function sort(array, less) {
 
@@ -558,7 +557,7 @@ export {
   submitFeedback,
   getThemeList,
   importSpriteJs,
-  importCatCharts,
+  importEcharts,
 
   // api 类，需要提供key
   getHeroData,

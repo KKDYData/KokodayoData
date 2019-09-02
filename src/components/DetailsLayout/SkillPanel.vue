@@ -58,6 +58,7 @@
             :talents="talents"
             :profession="profession"
             :short="short"
+            :talent-potentail-up="talentPotentailUp"
           ></skill-chart>
           <div class="skill-name-level-item">
             <div class="skill-title-level">
@@ -80,9 +81,8 @@
 import { changeAttackSpeed } from '../../utils';
 import Range from './Range';
 import SkillContainer from './SkillContainer';
-import SkillChart from './SkillChart';
-
 import SkillList from './SkillList';
+import SkillChart from './SkillChart';
 
 
 export default {
@@ -109,14 +109,18 @@ export default {
       type: Number
     },
     status: {
-      required: true
+      required: false
     },
     talents: {
-      required: true
+      required: false
     },
     profession: {
       tyep: String
+    },
+    talentPotentailUp: {
+      required: false
     }
+
   },
   data() {
     const initLv = this.initLv ? this.initLv : 1;
