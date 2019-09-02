@@ -132,6 +132,24 @@ const getFurn = key => fetchByKey('custom/furnitures')(key);
 const getCharItem = key => fetchByKey('item')('p_' + key);
 
 
+const importScript = (url, init = () => console.log('load')) => {
+  const body = document.querySelector('head');
+  const script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.onload = init;
+  script.src = url;
+  body.appendChild(script);
+};
+
+const importEcharts = (init) => {
+  importScript('https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.common.min.js', init);
+};
+
+const importSpriteJs = (init) => {
+  importScript('https://unpkg.com/spritejs/dist/spritejs.min.js', init);
+};
+
+
 function sort(array, less) {
 
   function swap(i, j) {
@@ -525,10 +543,11 @@ const preDefineGet = async (key, baseData) => {
   return res;
 };
 
+const bsr = (t, a1, a2, a3, a4) => a1 * (1 - t) * (1 - t) * (1 - t) + 3 * a2 * t * (1 - t) * (1 - t) + 3 * a3 * t * t * (1 - t) + a4 * t * t * t;
+
+
 export {
-  debounce,
-  throttle,
-  fetchGet,
+
   // api 类
   getProfileList,
   getEnemyData,
@@ -537,6 +556,8 @@ export {
   getEnemyList,
   submitFeedback,
   getThemeList,
+  importSpriteJs,
+  importEcharts,
 
   // api 类，需要提供key
   getHeroData,
@@ -552,6 +573,10 @@ export {
   getCharItem,
 
   // 业务相关类
+  debounce,
+  throttle,
+  fetchGet,
+  bsr,//三阶贝塞尔
   sort,
   sortByTime,
   changeDesc,

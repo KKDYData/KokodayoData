@@ -1,5 +1,5 @@
 <template>
-  <div class="group-container-title">
+  <div class="group-container-title" :style="customBg">
     <div
       v-if="!short && control"
       @click="$emit('update:value', !value)"
@@ -33,6 +33,10 @@ export default {
     },
     short: {
       default: false
+    },
+    customBg: {
+      tyep: String,
+      default: '--custombg: #414141'
     }
   },
 };
@@ -43,12 +47,13 @@ export default {
   font-weight: bold
   color: white
   margin-bottom: 20px
-  background-color: #414141
   padding-left: 20px
   box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15)
   display: flex
   font-size: 0
   height: 20px
+  border-radius: 2px
+  background: var(--custombg)
 
   .title {
     line-height: 1
@@ -152,7 +157,7 @@ export default {
 
 @media screen and (max-width: 700px) {
   .group-container-title {
-    padding-left: 10px
+    padding-left: 7vw
   }
 
   .control-button {

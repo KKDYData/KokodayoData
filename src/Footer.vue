@@ -56,11 +56,12 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-#footer
+#footer {
   margin-top: auto
   font-size: 12px
   background-color: #313131
   width: 100%
+  box-sizing: border-box
   color: hsla(0, 0%, 60%, 1)
   padding: 10px
   display: flex
@@ -70,19 +71,25 @@ export default {
   height: 50px
   align-content: flex-end
 
-  li
+  li {
     list-style: none
     padding: 2px 15px
+  }
+}
 
-.octicon
+.octicon {
   vertical-align: middle
+}
 
-@media screen and (max-width: 700px)
-  #footer
+@media screen and (max-width: 700px) {
+  #footer {
     height: auto
     display: block
 
-    li
+    li {
       text-align: right
+    }
+  }
+}
 </style>
 

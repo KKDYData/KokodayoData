@@ -140,5 +140,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.styl', '.vue', '.json']
   },
-
+  externals: {
+    spritejs: 'spritejs',
+    echarts: 'echarts'
+  }
 };

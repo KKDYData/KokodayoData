@@ -352,17 +352,17 @@ const TagsArr = [
   { isTag: true, text: '近战位', value: '近战位' },
   { isTag: true, text: '男性干员', value: '男' },
   { isTag: true, text: '女性干员', value: '女' },
-  { isTag: true, text: '资深干员', value: '4' },
-  { isTag: true, text: '高级资深干员', value: '5' },
+  { isTag: true, text: '资深干员', value: 4 },
+  { isTag: true, text: '高级资深干员', value: 5 },
 ];
 
 const StarArr = [
-  { isTag: false, text: 1, value: '0', short: 1 },
-  { isTag: false, text: 2, value: '1', short: 2 },
-  { isTag: false, text: 3, value: '2', short: 3 },
-  { isTag: false, text: 4, value: '3', short: 4 },
-  { isTag: false, text: 5, value: '4', short: 5 },
-  { isTag: false, text: 6, value: '5', short: 6 },
+  { isTag: false, text: 1, value: 0, short: 1 },
+  { isTag: false, text: 2, value: 1, short: 2 },
+  { isTag: false, text: 3, value: 2, short: 3 },
+  { isTag: false, text: 4, value: 3, short: 4 },
+  { isTag: false, text: 5, value: 4, short: 5 },
+  { isTag: false, text: 6, value: 5, short: 6 },
 ];
 
 const campToCode = {

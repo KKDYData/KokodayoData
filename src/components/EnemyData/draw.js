@@ -221,7 +221,7 @@ class Map {
         const colors = [
           { offset: 0, color: `hsla(${color}, 100%, 50%, 0.1)` },
           { offset: q, color: `hsla(${color}, 100%, 50%, 0.2)` },
-          { offset: p, color: `hsla(${color}, 100%, 25%, 1)` },
+          { offset: p, color: `hsla(${color}, 100%, 35%, 1)` },
           { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100%, 50%, 0)` },
         ];
 
@@ -231,7 +231,6 @@ class Map {
         linearGradients.strokeColor.vector = [x, y, newX, newY];
         s.attr({ linearGradients });
 
-
         if (progress < time) {
           requestAnimationFrame(auto);
         } else {
@@ -240,7 +239,6 @@ class Map {
       };
 
       requestAnimationFrame(auto);
-
     });
   }
 
@@ -262,7 +260,6 @@ class Map {
   loadMap() {
     this.map = spwanMap(this.mapData, this.paper);
   }
-
 
   spwanPathAlpha(path) {
     // console.log(path);
@@ -321,7 +318,6 @@ class Map {
             const next = arr[index + 1];
             const len = Math.sqrt((el[0] - next[0]) ** 2 + (el[1] - next[1]) ** 2);
             res.push({ path: this.spwanPathAlpha([el, next]), time: len * 200 });
-
           }
         });
         return res;
