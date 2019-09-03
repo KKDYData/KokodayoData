@@ -1,9 +1,10 @@
 <template>
   <div class="info-panel-container">
+    {{skins}}
     <el-tabs :value="activeName">
       <el-tab-pane label="人员档案" name="first">
         <div class="char-half-container-wrapper">
-          <el-image class="char-half-container" :src="halfPics" fit="contain" lazy>
+          <el-image class="char-half-container" :src="halfPics[0]" fit="contain" lazy>
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -15,31 +16,113 @@
               :width="getScreenWidth()"
               trigger="click"
             >
-              <el-carousel
-                :height="getScreenWidth() + 'px'"
-                :autoplay="false"
-                class="char-set-container-wrapper"
-                indicator-position="outside"
-                :loop="false"
-              >
-                <el-carousel-item
-                  v-for="(pic, index) in charSets"
-                  :key="pic"
-                  style="font-size:13px"
-                >
-                  <div v-if="showSet" style="background: rgba(255, 255, 255, 0.85);">
-                    <el-image class="char-set-container" :src="pic">
-                      <div slot="error" class="image-slot">
-                        <i class="el-icon-picture-outline"></i>
+              <el-tabs :value="activeSetPane">
+                <el-tab-pane label="一般" name="default">
+                  <el-carousel
+                    :height="getScreenWidth() + 'px'"
+                    :autoplay="false"
+                    class="char-set-container-wrapper"
+                    indicator-position="outside"
+                    :loop="false"
+                  >
+                    <el-carousel-item
+                      v-for="(pic, index) in charSets"
+                      :key="pic"
+                      style="font-size:13px"
+                    >
+                      <div v-if="showSet" class="char-set-contianer-wrapper" style>
+                        <div>
+                          <div class="char-profile-container">
+                            <el-image :src="profileList[index]"></el-image>
+                          </div>
+                          <div class="char-half-container">
+                            <el-image :src="halfPics[index]"></el-image>
+                          </div>
+                        </div>
+                        <div>
+                          <el-image class="char-set-container" :src="pic">
+                            <div slot="error" class="image-slot">
+                              <i class="el-icon-picture-outline"></i>
+                            </div>
+                          </el-image>
+                        </div>
                       </div>
-                    </el-image>
-                  </div>
-                  <p class="charset-info">
-                    精英化阶段{{calPhases(list[index])}}
-                    <span>长按或者右键可以下载</span>
-                  </p>
-                </el-carousel-item>
-              </el-carousel>
+                      <div class="charset-info">
+                        <div>
+                          <span v-if="index > 0">
+                            精英化阶段
+                            {{calPhases(list[index])}}
+                          </span>
+                        </div>
+                        <div>
+                          <span>长按或者右键可以下载</span>
+                        </div>
+                      </div>
+                      <div>{{setWords[index]}}</div>
+                    </el-carousel-item>
+                  </el-carousel>
+                </el-tab-pane>
+                <el-tab-pane v-if="skins" label="皮肤" name="skins">
+                  <el-carousel
+                    :height="getScreenWidth() + 'px'"
+                    :autoplay="false"
+                    class="char-set-container-wrapper"
+                    indicator-position="outside"
+                    :loop="false"
+                  >
+                    <el-carousel-item
+                      v-for="({avatarId, displaySkin}) in skins"
+                      :key="avatarId"
+                      style="font-size:13px"
+                    >
+                      <div v-if="showSet" class="char-set-contianer-wrapper" style>
+                        <div>
+                          <div class="char-profile-container">
+                            <el-image :src="getSkinProile(avatarId)"></el-image>
+                          </div>
+                          <div class="char-half-container">
+                            <el-image :src="getSkinhalfPic(avatarId)"></el-image>
+                          </div>
+                          <div style="width: 20vw; max-width: 200px">
+                            <content-slot :long="true" :no-wrap="true">
+                              <template slot="title">获得方式</template>
+                              <template slot="content">{{displaySkin.obtainApproach}}</template>
+                            </content-slot>
+                            <content-slot :long="true" :no-wrap="true">
+                              <template slot="title">系列</template>
+                              <template slot="content">{{displaySkin.skinGroupName}}</template>
+                            </content-slot>
+                            <content-slot :long="true" :no-wrap="true">
+                              <template slot="title">获得方式</template>
+                              <template slot="content">{{displaySkin.obtainApproach}}</template>
+                            </content-slot>
+                            <content-slot :long="true" :no-wrap="true">
+                              <template slot="title">描述</template>
+                              <template slot="content">{{displaySkin.usage}}</template>
+                            </content-slot>
+                            <content-slot :long="true" :no-wrap="true">
+                              <template slot="title">记录</template>
+                              <template slot="content">{{displaySkin.content}}</template>
+                            </content-slot>
+                          </div>
+                        </div>
+                        <div>
+                          <el-image class="char-set-container" :src="getSkinSet(avatarId)">
+                            <div slot="error" class="image-slot">
+                              <i class="el-icon-picture-outline"></i>
+                            </div>
+                          </el-image>
+                        </div>
+                      </div>
+                      <div class="charset-info">
+                        <div>
+                          <span>长按或者右键可以下载</span>
+                        </div>
+                      </div>
+                    </el-carousel-item>
+                  </el-carousel>
+                </el-tab-pane>
+              </el-tabs>
               <el-button
                 style="background: rgba(255, 255, 255, 0.85);"
                 @click="showSet=true"
@@ -144,12 +227,14 @@ Vue.use(Button);
 Vue.use(Progress);
 Vue.use(Slider);
 import AudioContainer from './AudioContainer';
+import ContentSlot from '../ContentSlot';
 
-
+import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
-    AudioContainer
+    AudioContainer,
+    ContentSlot
   },
   props: {
     data: {
@@ -165,41 +250,66 @@ export default {
       required: true
     }
   },
+  mounted() {
+    this.setExtraSkins();
+  },
   data() {
+    const normalSetWords = this.data.charID !== 'char_002_amiya' ?
+      [
+        '干员平时最常穿着的服装。虽然不一定比制服更实用，但是一定是干员最舒适的搭配之一',
+        '晋升后，经过调整的服装。根据干员的经验，对服装细节进行改进，针对一些作战环境进行了特化处理。在满足战斗需求的同时，最大程度还原各位干员熟悉的舒适穿着体验。'
+      ]
+      : [
+        '阿米娅最常穿着的服装，过大的尺寸似乎暗示了这件衣服曾不属于她\n不少细节部分都经过手工改造，而时间的痕迹也多有残留。',
+        '阿米娅最常穿着的服装，过大的尺寸仿佛述说着这件衣服曾不属于她的事实。即便如此，她也仔细地打理着这件衣服，让它看起来就像新的一样。',
+        '衣服需要修补，\n伤痛需要弥合。'
+      ];
     return {
       phases: 1,
       showSet: false,
       activeName: 'first',
       currentVoice: null,
       voicePercentage: 0,
-      voiceVolume: 100
+      voiceVolume: 100,
+      setWords: normalSetWords,
+      activeSetPane: 'default',
+      path
     };
   },
   computed: {
+    ...mapState(['extraSkins']),
+    style() {
+      return !webpOk
+        ? '_optimized.png'
+        : '_optimized.png?x-oss-process=style/small-test';
+    },
+    skins() {
+      if (this.extraSkins) {
+        return this.extraSkins.filter(el => el.charId === this.data.charID);
+      }
+    },
     charSets() {
       if (this.data.charID) {
-        const res = [];
-        this.list.forEach(index => {
-          res.push(
-            path + 'char/set/' + this.data.charID + '_' + index + '.png'
-          );
-        });
-        return res;
+        return this.list.reduce((res, index) => {
+          res.push(path + 'char/set/' + this.data.charID + '_' + index + '.png');
+          return res;
+        }, []);
+      }
+    },
+    profileList() {
+      if (this.data.charID) {
+        return this.list.reduce((res, index) => {
+          res.push(path + 'char/profile/' + this.data.charID + (index - 1 ? '_' + index : '') + this.style);
+          return res;
+        }, []);
       }
     },
     halfPics() {
       if (this.data.charID) {
-        const res = [];
-
-        const style = !webpOk
-          ? '_optimized.png'
-          : '_optimized.png?x-oss-process=style/small-test';
-        this.list.forEach(index => {
-          res.push(
-            path + 'char/halfPic/' + this.data.charID + '_' + index + style
-          );
-        });
-        return res[0];
+        return this.list.reduce((res, index) => {
+          res.push(path + 'char/halfPic/' + this.data.charID + '_' + index + this.style);
+          return res;
+        }, []);
       }
     }
   },
@@ -209,6 +319,18 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['setExtraSkins']),
+    getSkinProile(id) {
+
+      console.log(path + 'char/profile/' + id + this.style, id);
+      return path + 'char/profile/' + encodeURIComponent(id) + this.style;
+    },
+    getSkinhalfPic(id) {
+      return path + 'char/halfPic/' + encodeURIComponent(id) + this.style;
+    },
+    getSkinSet(id) {
+      return path + 'char/set/' + encodeURIComponent(id) + '.png';
+    },
     async playVoice(index) {
       this.currentVoice = index;
       await this.$nextTick();
@@ -259,13 +381,17 @@ export default {
 }
 
 .char-half-container {
-  width: 120px;
-  height: 210px;
+  width: 110px;
+  height: 240px;
+}
+.char-profile-container {
+  width: 110px;
+  height: 110px;
 }
 
 .char-half-container-wrapper {
   float: left;
-  width: 120px;
+  width: 110px;
   padding-left: 10px;
   overflow: hidden;
   position: relative;
@@ -310,6 +436,10 @@ export default {
 .charset-info {
   position: absolute;
   bottom: 20px;
+}
+.char-set-contianer-wrapper {
+  background: rgba(255, 255, 255, 0.85);
+  display: flex;
 }
 
 @media screen and (max-width: 700px) {

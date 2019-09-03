@@ -576,6 +576,7 @@ export {
   debounce,
   throttle,
   fetchGet,
+  fetchByKey,
   bsr,//三阶贝塞尔
   sort,
   sortByTime,

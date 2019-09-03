@@ -286,7 +286,7 @@ export default {
   },
   watch: {
     dps(v) {
-      // if (!this.skill.duration) return;
+      if (!this.actionType) return;
       this.chart.setOption({
         tooltip: {},
         title: {
@@ -304,7 +304,7 @@ export default {
   },
   created() {
     importEcharts(() => {
-      // if (!this.skill.duration) return;
+      if (!this.actionType) return;
       // eslint-disable-next-line no-undef
       this.chart = echarts.init(this.$refs.chart);
       this.chart.setOption({
