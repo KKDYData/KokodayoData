@@ -391,6 +391,7 @@ export default {
       const target = this.$refs['map-title-part'];
       target.style.height = 'auto';
       await this.$nextTick();
+      if (!target) return;
       const targetHeight = window.getComputedStyle(target).height;
       target.style.height = this.pTranisitionTemp;
       setTimeout(() => {
