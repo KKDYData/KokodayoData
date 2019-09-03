@@ -1,4 +1,4 @@
-import { fetchGet, getStageList } from '../utils';
+import { fetchGet, getStageList, fetchByKey } from '../utils';
 import { StageType } from '../utils/string';
 const url = 'https://penguin-stats.io/PenguinStats/api/result/matrix';
 
@@ -54,6 +54,12 @@ const actions = {
     if (state.stageTree) return;
     const data = await getStageList();
     commit('setStageTree', change(data));
+  },
+
+  async setExtraSkins({ commit, state }) {
+    if (state.extraSkins) return;
+    const data = await fetchByKey('char')('extraSkins');
+    commit('setExtraSkins', data);
   }
 };
 

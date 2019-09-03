@@ -177,19 +177,6 @@ export default {
   z-index: 1
 }
 
-.agent-card-pic::before {
-  content: ''
-  position: absolute
-  top: 0
-  left: 0
-  width: 100%
-  height: 100%
-  opacity: 0.4
-  z-index: -1
-  background-size: contain
-  background-image: var(--logo-link)
-}
-
 .agent-card-title-class {
   font-size: 0
   display: flex

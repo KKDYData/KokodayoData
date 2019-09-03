@@ -13,7 +13,8 @@ export default new Vuex.Store({
     // eslint-disable-next-line no-undef
     webVer: new Date(VERSION).toLocaleString(),
     dropList: null,
-    stageTree: null
+    stageTree: null,
+    extraSkins: null
   },
   getters: {
     itemDropList: (state) => id => {
@@ -40,7 +41,10 @@ export default new Vuex.Store({
     },
     setStageTree: (state, tree) => {
       state.stageTree = tree;
-    }
+    },
+    setExtraSkins: (state, list) => {
+      state.extraSkins = list;
+    },
   },
   ...actions
 });
