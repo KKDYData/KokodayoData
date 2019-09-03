@@ -39,7 +39,7 @@ export default {
     },
     bottom: {
       type: Number,
-      default: 40
+      default: 140
     }
   },
 
@@ -118,7 +118,7 @@ export default {
 <style lang="stylus" scoped>
 .share {
   right: 40px
-  bottom: 100px
+  bottom: 200px
   border: none
   padding: 0
 }

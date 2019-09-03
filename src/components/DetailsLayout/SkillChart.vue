@@ -66,12 +66,14 @@ const phyTdx = (atk, def, baseAttackTime, attackTimes) => {
 const magicTdx = (atk, def, baseAttackTime, attackTimes) => (atk * (1 - def / 100)) / baseAttackTime * attackTimes;
 
 const getWhatDef = function (what, merge, skill, talents) {
-  let temp = /命中目标/.test(skill.description) ? upWhat(what, 0, skill) : 0;
+  let temp = /命中目标|攻击范围内所有敌人/.test(skill.description) ? upWhat(what, 0, skill) : 0;
   let res = 0,
     prob = upProb(0, skill);
 
 
   res = merge(temp, res);
+  console.log(what, res, prob);
+
   Object.values(talents).forEach((cur) => {
     if (res < 0) return;
     prob = upProb(prob, cur);
@@ -87,7 +89,7 @@ const getWhatDef = function (what, merge, skill, talents) {
       prob = findSkillProb;
     }
   }
-  console.log(what, res);
+  console.log(what, res, prob);
   return prob > 0 ? prob * res : res;
 };
 
@@ -186,7 +188,10 @@ export default {
       return getWhatDef('magic_resistance', mergeDef, this.skill, this.selectedTalents);
     },
     margicResistanceR() {
-      const res = /无视防御力和法术抗性/.test(this.skill.description) ? -1 : getWhatDef('magic_resistance', mergeDefR, this.skill, this.selectedTalents);
+      const res = /无视防御力和法术抗性/.test(this.skill.description) ? -1
+        : getWhatDef('magic_resistance', mergeDefR, this.skill, this.selectedTalents);
+      console.log('magicR', res);
+
       return res < 0 ? res : 0;
     },
     selectedTalents() {

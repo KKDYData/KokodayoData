@@ -210,7 +210,7 @@ export default {
           }, 0)
         );
       }, 0);
-      console.log('time', a);
+      console.log('wave time', a);
       return this.mapData.waves;
     }
   },

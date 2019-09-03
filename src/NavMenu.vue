@@ -81,7 +81,6 @@ export default {
     '$route.path': function (val, oldVal) {
       //修复移动端菜单不回收的bug
       setTimeout(() => {
-        console.log('hello');
         this.$refs['nav-menu'].close('2');
       }, 100);
 
