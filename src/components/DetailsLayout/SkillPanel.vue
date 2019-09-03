@@ -51,7 +51,7 @@
 
         <div class="skill-name-level" v-if="!initLv &&  skill.levels.length > 1">
           <skill-chart
-            v-if="!initLv && skill.levels[0].duration"
+            v-if="!initLv && skill.levels[0]"
             class="skill-name-level-item"
             :status="status"
             :skill="skill.levels[sLevel[index]-1]"

@@ -163,6 +163,7 @@ export default {
         const width = this.$el.clientWidth,
           target = document.querySelector('.profile-item');
         const slice2 = x => +x.slice(0, -2);
+        if(!target) return;
         const
           style = getComputedStyle(target),
           cWidth = style.width,

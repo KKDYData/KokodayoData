@@ -174,7 +174,10 @@ export default {
       return test || duration ? 1 : baseTime;
     },
     attackTimes() {
-      const times = upWhat('attack@times', 0, this.skill);
+      let times = upWhat('attack@times', 0, this.skill);
+      if (!times) {
+        times = upWhat('times', 0, this.skill);
+      }
       return times ? times : 1;
     },
     defDownScale() {
@@ -283,6 +286,7 @@ export default {
   },
   watch: {
     dps(v) {
+      // if (!this.skill.duration) return;
       this.chart.setOption({
         tooltip: {},
         title: {
@@ -300,6 +304,7 @@ export default {
   },
   created() {
     importEcharts(() => {
+      // if (!this.skill.duration) return;
       // eslint-disable-next-line no-undef
       this.chart = echarts.init(this.$refs.chart);
       this.chart.setOption({
