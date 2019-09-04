@@ -15,7 +15,7 @@
       </div>
       <div v-if="attackType">
         <div class="chart-data-info">
-          测试中，仅供参考 |
+          测试中，仅供参考 | 会将天赋和技能所有加成计算上
           <el-tooltip placement="left">
             <span>
               计算方式
@@ -31,10 +31,8 @@
         <div class="chart-details-container">
           <div>攻击间隔: {{baseAttackTime | format}}</div>
           <div>| 攻击速度: {{speedUp | format}}</div>
-          <div>| 降低防御: {{defDown | format}}</div>
-          <div>| 降低防御比例: {{defDownScale | format}}</div>
-          <div>| 降低魔抗: {{margicResistance}}</div>
-          <div>| 降低魔抗比例: {{margicResistanceR}}</div>
+          <div>| 降低防御固定值/比例: {{defDown | format}} / {{defDownScale | format}}</div>
+          <div>| 降低魔抗固定值/比例: {{margicResistance}} / {{margicResistanceR}}</div>
         </div>
       </div>
     </el-popover>
@@ -171,7 +169,7 @@ export default {
       }
 
 
-      return test || duration ? 1 : baseTime;
+      return test || (duration && this.skill.skillType !== 0) ? 1 : baseTime;
     },
     attackTimes() {
       let times = upWhat('attack@times', 0, this.skill);
@@ -220,17 +218,20 @@ export default {
 
       const selectedTalents = this.selectedTalents;
 
-      Object.values(selectedTalents).forEach((cur) => {
-        atkUp = upAtk(atkUp, cur);
-        // 可能有问题，在天赋和技能都有攻击倍率的时候
-        let tempScale = upScale(atkScale, cur);
-        if (tempScale) {
-          atkScale = tempScale;
-        }
-        prob = upProb(prob, cur);
-        prob2 = upProb2(prob2, cur);
+      //蝎毒无法触发被动 
+      if (this.skill.name !== '蝎毒') {
+        Object.values(selectedTalents).forEach((cur) => {
+          atkUp = upAtk(atkUp, cur);
+          // 可能有问题，在天赋和技能都有攻击倍率的时候
+          let tempScale = upScale(atkScale, cur);
+          if (tempScale) {
+            atkScale = tempScale;
+          }
+          prob = upProb(prob, cur);
+          prob2 = upProb2(prob2, cur);
 
-      });
+        });
+      }
 
       let atk = this.atk * atkUp; // this.baseAttackTime;
 
@@ -286,7 +287,10 @@ export default {
   },
   watch: {
     dps(v) {
-      if (!this.actionType) return;
+      console.log('attackType', this.attackType);
+      if (!this.attackType) return;
+      // eslint-disable-next-line no-undef
+      if (!this.chart) this.chart = echarts.init(this.$refs.chart);
       this.chart.setOption({
         tooltip: {},
         title: {
@@ -304,7 +308,9 @@ export default {
   },
   created() {
     importEcharts(() => {
-      if (!this.actionType) return;
+      console.log('attackType', this.attackType);
+
+      if (!this.attackType) return;
       // eslint-disable-next-line no-undef
       this.chart = echarts.init(this.$refs.chart);
       this.chart.setOption({
