@@ -37,8 +37,8 @@
 
 
 <script>
-import { changeAttackSpeed } from "../../utils";
-import Range from "./Range";
+import { changeAttackSpeed } from '../../utils';
+import Range from './Range';
 
 export default {
   components: {
