@@ -84,25 +84,21 @@
                             <el-image :src="getSkinhalfPic(avatarId)"></el-image>
                           </div>
                           <div style="width: 20vw; max-width: 200px">
-                            <content-slot :long="true" :no-wrap="true">
-                              <template slot="title">获得方式</template>
-                              <template slot="content">{{displaySkin.obtainApproach}}</template>
-                            </content-slot>
-                            <content-slot :long="true" :no-wrap="true">
+                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
                               <template slot="title">系列</template>
                               <template slot="content">{{displaySkin.skinGroupName}}</template>
                             </content-slot>
-                            <content-slot :long="true" :no-wrap="true">
+                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
                               <template slot="title">获得方式</template>
                               <template slot="content">{{displaySkin.obtainApproach}}</template>
                             </content-slot>
-                            <content-slot :long="true" :no-wrap="true">
+                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
                               <template slot="title">描述</template>
                               <template slot="content">{{displaySkin.usage}}</template>
                             </content-slot>
-                            <content-slot :long="true" :no-wrap="true">
+                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
                               <template slot="title">记录</template>
-                              <template slot="content">{{displaySkin.content}}</template>
+                              <template slot="content">{{displaySkin.content | filterColor}}</template>
                             </content-slot>
                           </div>
                         </div>
@@ -316,6 +312,12 @@ export default {
   filters: {
     docter: str => {
       return str.replace(/{@nickname}/, '阿凡提');
+    },
+    filterColor(v) {
+      const reg = /<color (name=(.{7}))?>/g;
+      const regL = /<\/color>/g;
+      console.log(v, v.replace(reg, ''), v.replace(reg, '').replace(regL, ''));
+      return v.replace(reg, '').replace(regL, '');
     }
   },
   methods: {
