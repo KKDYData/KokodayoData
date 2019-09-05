@@ -188,7 +188,7 @@ class Map {
 
       s.attr({
         pos,
-        lineWidth: 6,
+        lineWidth: 12,
         path,
         lineCap: 'round',
         linearGradients: {
