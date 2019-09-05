@@ -1,6 +1,5 @@
 <template>
   <div class="home-layout-wrapper">
-    <!-- <p>{{OsText}} | {{webpOk}}</p> -->
     <div class="home-filter-wrapper" id="profile-panel">
       <filter-group
         label="职业"
@@ -14,13 +13,21 @@
         :filters="filterGroups.star"
         @filter="resetFilter($event, 'star')"
       ></filter-group>
-
+      <filter-group
+        :short="short"
+        label="公招"
+        :filters="filterGroups.gkzm"
+        :single="true"
+        @filter="resetFilter($event, 'gkzm')"
+        ref="gkzm"
+      ></filter-group>
       <div class="tags-popover-wrapper">
         <el-popover
           popper-class="tags-popover-container"
-          placement="bottom-start"
+          placement="top"
           trigger="click"
           :visible-arrow="false"
+          :width="short ? 320 : 800"
         >
           <div slot="reference">
             <div class="tags-selected-container">
@@ -28,59 +35,44 @@
                 :type="SelectedTagGz.length > 0 ?  'warning' : 'info'"
                 :size="short? 'mini' :'medium'"
                 round
-                @change="OpenTagsPanel"
+                :style="short ? 'margin-left: 10px' : ''"
               >标签</el-button>
               <div class="tag-selected-content-container" style>
-                <div
-                  v-for="tag in SelectedTagGz"
-                  :key="tag.value"
-                  class="tags-selected-inner-container"
-                >
-                  <el-tag
-                    :size="short? 'medium' :'normal'"
-                    @close="handleClose(tag)"
-                    closable
-                    effect="dark"
-                  >{{tag.text}}</el-tag>
-                </div>
-                <span
-                  style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
-                  v-if="SelectedTagGz.length === 0 "
-                >点击打开标签面板</span>
+                <transition name="fade" mode="out-in">
+                  <div v-if="SelectedTagGz.length !== 0 ">
+                    <div
+                      v-for="tag in SelectedTagGz"
+                      :key="tag.value"
+                      class="tags-selected-inner-container"
+                    >
+                      <el-tag
+                        :size="short? 'medium' :'normal'"
+                        @close="handleClose(tag)"
+                        closable
+                        effect="dark"
+                      >{{tag.text}}</el-tag>
+                    </div>
+                  </div>
+                  <span
+                    style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
+                    v-else
+                  >点击打开标签面板</span>
+                </transition>
               </div>
             </div>
           </div>
 
           <filter-group
             :short="short"
-            label="Tgas"
+            label="Tags"
             :filters="filterGroups.tags"
             @filter="resetFilter($event, 'tags')"
             ref="tagFilter"
           ></filter-group>
-          <filter-group
-            :short="short"
-            label="位置"
-            :filters="filterGroups.position"
-            @filter="resetFilter($event, 'position')"
-          ></filter-group>
-          <filter-group
-            :short="short"
-            label="性别"
-            :filters="filterGroups.sex"
-            @filter="resetFilter($event, 'sex')"
-          ></filter-group>
-          <filter-group
-            :short="short"
-            label="公招"
-            :filters="filterGroups.gkzm"
-            :single="true"
-            @filter="resetFilter($event, 'gkzm')"
-            ref="gkzm"
-          ></filter-group>
+          <div style="display:flex"></div>
           <div style="direction: rtl">
-            <el-button @click="$el.click()" type="danger" :size="short? 'mini' :'medium'" round>
-              <i class="el-icon-close"></i> 关闭
+            <el-button class="close-button" @click="$el.click()" type="danger" size="mini">
+              <i class="el-icon-close"></i>
             </el-button>
           </div>
         </el-popover>
@@ -95,35 +87,22 @@
           :tags="SelectedTag"
           :filter-groups="filterGroups"
           :data="data"
-          :webpOk="webpOk"
+          :short="short"
         ></profile-layout>
       </el-tab-pane>
-      <el-tab-pane name="new-profile-layout" label="排列组合">
-        <new-profile-layout
-          :webp-ok="webpOk"
-          :tags="SelectedTag"
-          :filterGroups="filterGroups"
-          :data="data"
-        ></new-profile-layout>
+      <el-tab-pane name="new-profile-layout" label="排列组合" lazy>
+        <new-profile-layout :tags="SelectedTag" :filterGroups="filterGroups" :data="data"></new-profile-layout>
       </el-tab-pane>
-      <el-tab-pane name="expalain" label="说明">
-        <div style="padding: 0 10px">
-          <p>1.选了标签（公招）的Tag之后，筛选模式会发生变化</p>
-          <p>2.【职业】、【星级】这些分类名，点击可以取消全部选择。</p>
-          <p>3.还没想到要说什么。。。对了，这个说明面板还要改</p>
-          <p>4.配色还在调整</p>
-          <p>5.反馈群799872783！</p>
-        </div>
+      <el-tab-pane name="expalain" label="说明&反馈" lazy>
+        <my-feedback :short="short" :store="store"></my-feedback>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
+
 <script>
-import FilterButtonGroup from '../FilterButtonGroup';
-import ProfileLayout from './ProfileLayout';
-import { sort, TagsArr, StarArr, class_chinese } from '../utils';
 import Vue from 'vue';
-import { Button, MessageBox, Popover, Tag, Tabs, TabPane } from 'element-ui';
+import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
 Vue.use(Button);
@@ -132,8 +111,14 @@ Vue.use(Tag);
 Vue.use(Tabs);
 Vue.use(TabPane);
 
-import Vlf from 'vlf';
-Vue.use(Vlf);
+import FilterButtonGroup from '../FilterButtonGroup';
+import ProfileLayout from './ProfileLayout';
+import { sort, class_chinese, throttle, isMoblie } from '../../utils';
+
+import { TagsArr, StarArr } from '../../utils/string';
+
+import localforage from 'localforage';
+
 import loadingC from '../Loading';
 
 const newProfileLayout = () => ({
@@ -146,39 +131,48 @@ const newProfileLayout = () => ({
   timeout: 5000
 });
 
-import UaParser from 'ua-parser-js';
+const myFeedback = () => ({
+  component: import(/* webpackChunkName: "newProfileLayout" */ './feedback'),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
 
 const gkzm = [{ isTag: false, text: '仅公招', value: true, short: '公招' }];
-const position = [
-  { isTag: false, text: '远程位', value: '远程位', short: '远程位' },
-  { isTag: false, text: '近战位', value: '近战位', short: '近战位' }
-];
-
-const sex = [
-  { isTag: false, text: '男性干员', value: '男', short: '男' },
-  { isTag: false, text: '女性干员', value: '女', short: '女' }
-];
 
 if (typeof Array.prototype.flat !== 'function') {
-  Array.prototype.flat = function(num) {
+  Array.prototype.flat = function (num) {
     return this.reduce((pre, cur) => pre.concat(cur));
   };
 }
 
-const explain = '';
+const version = 190831;
 
 export default {
+  metaInfo() {
+    return {
+      titleTemplate: 'ArknightsData 一个平平无奇的明日方舟数据库 0.7 Wiki|维基|数据',
+      meta: [
+        {
+          vmid: 'description',
+          name: 'Description',
+          content: '干员数据、语音、立绘、敌人图鉴、地图数据、计算器，公开招募，由Dr.阿凡提提供'
+        }
+      ]
+    };
+  },
   components: {
     'filter-group': FilterButtonGroup,
     'profile-layout': ProfileLayout,
-    'new-profile-layout': newProfileLayout
+    'new-profile-layout': newProfileLayout,
+    myFeedback
   },
   props: {
     profileList: Array
   },
   data() {
     return {
-      short: false,
       data: null,
       rowData: this.profileList,
       showKey: '',
@@ -188,63 +182,47 @@ export default {
       store: null,
       SelectedTag: [],
       SelectedTagGz: [],
-      showExplain: ['1'],
       showOtherPanel: false,
       currentMode: 'profile-layout',
-      webpOk: true,
-      OsText: ''
+      short: false,
     };
   },
-  created() {
-    this.short = window.innerWidth < 500 ? true : false;
-    if (this.short) this.showExplain = [];
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 500 ? true : false;
+  created() { },
+  beforeMount() {
+    this.short = isMoblie();
+    this.store = localforage.createInstance({
+      name: 'testDB'
     });
-    const ua = new UaParser();
-    const OS = ua.getOS();
-    const Browser = ua.getBrowser();
-    console.log(OS);
-    console.log(Browser);
-    if (
-      OS.name === 'iOS' ||
-      (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
-      (Browser.name === 'Edge' && Browser.version < '18')
-    ) {
-      this.webpOk = false;
-    }
-    this.OsText = OS.name + ' | ' + Browser.name + ' | ' + Browser.version;
+    this.store.getItem('filterGroups').then(filterGroups => {
+      if (filterGroups && filterGroups._version >= version) {
+        Object.keys(filterGroups).forEach(key => {
+          if (key !== '_version')
+            this.$set(this.filterGroups, key, filterGroups[key]);
+        });
+        console.log('reset');
+        this.data = this.profileList;
+        this.resetFilter();
+      } else {
+        console.log('???????_noVersion');
+        this.store.setItem('_filterVersion', version);
+        this.data = this.profileList;
+      }
+    });
   },
   mounted() {
-    this.$vlf
-      .createInstance({
-        name: 'testDB'
-      })
-      .then(async store => {
-        this.store = store;
-        const filterGroups = await store.getItem('filterGroups');
-        if (filterGroups) {
-          // this.$set(this, 'filterGroups', filterGroups);
-          Object.keys(filterGroups).forEach(el => {
-            if (filterGroups[el][0].isTag === undefined)
-              console.log('不读缓存， 更新数据' + el);
-            else {
-              this.$set(this.filterGroups, el, filterGroups[el]);
-            }
-          });
-        }
-        this.resetFilter();
-      });
+    window.addEventListener('resize', () => {
+      this.short = window.innerWidth < 500 ? true : false;
+      this.$refs['profile-layout'] &&
+        this.$refs['profile-layout'].calFillAmount();
+    });
   },
   computed: {
     filterGroups() {
       return {
         gkzm: gkzm,
         star: StarArr,
-        position: position,
         class: Object.values(class_chinese),
-        tags: TagsArr,
-        sex: sex
+        tags: TagsArr
       };
     },
     orAgents() {
@@ -252,16 +230,15 @@ export default {
     }
   },
   methods: {
+    getClientWidth() {
+      return this.$el.clientWidth - 50;
+    },
     switchToNormal(tab) {
       if (this.currentMode === 'profile-layout')
         this.$nextTick().then(() => {
-          this.$refs['profile-layout'].calFillAmount();
+          this.$refs['profile-layout'] &&
+            this.$refs['profile-layout'].calFillAmount();
         });
-    },
-    openExpain() {
-      MessageBox.alert(explain, {
-        dangerouslyUseHTMLString: true
-      });
     },
     handleClose(tag) {
       tag.chosed = false;
@@ -275,11 +252,17 @@ export default {
             : a.tagHit > b.tagHit;
         }
         : (a, b) => a.index > b.index;
-
       this.data = [...sort(key, less)];
     },
+
     async resetFilter(group, p) {
-      this.store.setItem('filterGroups', this.filterGroups);
+      const saveTask = () => {
+        this.store.setItem('filterGroups', {
+          ...this.filterGroups,
+          _version: version
+        });
+      };
+      throttle(saveTask(), 1000);
 
       //判定是否是公招模式
       let targetData = this.filterGroups.gkzm[0].chosed
@@ -291,8 +274,9 @@ export default {
         starFilter.length > 0
           ? targetData.filter(
             el =>
-              starFilter.findIndex(star => Number(star.value) === el.star) >
-                -1
+              starFilter.findIndex(
+                star => Number(star.value) === el.tags[0]
+              ) > -1
           )
           : targetData;
       const filters = Object.keys(this.filterGroups).map(el => [
@@ -311,12 +295,10 @@ export default {
       ].flat(1);
 
       this.showTag = this.SelectedTagGz.length > 0 ? true : false;
-
       //是否过滤
       const isFilter = filters
         .map(el => el[1].length && el[0] !== 'star' && el[0] !== 'gkzm')
         .reduce((pre, cur) => pre + cur);
-
       if (isFilter > 0) {
         //重新筛选， 重置tagHit
         targetData.forEach(el => this.$set(el, 'tagHit', 0));
@@ -331,7 +313,7 @@ export default {
               continue;
             }
 
-            //多选筛选(公招模式)，不需要break
+            //多选筛选(公招模式)，不需要break, Tags
             if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
                 if (group.find(t => t.value === tag)) {
@@ -372,26 +354,7 @@ export default {
           return find;
         });
       }
-
       this.sortData(targetData);
-      await this.$nextTick();
-      if (targetData.length > 0) {
-        //等tag消失的动画结束
-        setTimeout(() => {
-          if (this.currentMode === 'profile-layout')
-            this.$refs['profile-layout'].calFillAmount();
-        }, 500);
-      }
-    },
-
-    OpenTagsPanel() {
-      this.showTag = !this.showTag;
-      if (!this.showTag) {
-        this.$set(this.filterGroups.gkzm[0], 'chosed', false);
-      } else {
-        this.$set(this.filterGroups.gkzm[0], 'chosed', true);
-      }
-      this.resetFilter();
     }
   }
 };
@@ -399,6 +362,7 @@ export default {
 <style>
 .home-filter-wrapper {
   margin-bottom: 20px;
+  padding: 10px;
   /* border-bottom: 1px solid rgba(158, 158, 158, 0.4); */
 }
 .sort-group-wrapper {
@@ -468,21 +432,19 @@ export default {
   border-color: #414141;
 }
 
-.el-button:focus,
-.el-button:hover {
-  background-color: hsla(356, 57%, 52%, 0.5);
-  border-color: hsla(356, 57%, 52%, 0.1);
-  color: #fff;
+.tags-selected-container button {
+  margin: 5px 0;
 }
 
 @media screen and (max-width: 495px) {
   .tag-selected-content-container {
     display: inline-block;
-    width: calc(100% - 62px);
+    width: calc(100% - 80px);
   }
+  .home-filter-wrapper {
+    padding: 0px;
 
-  .tags-selected-container button {
-    margin-top: 6px;
+    /* border-bottom: 1px solid rgba(158, 158, 158, 0.4); */
   }
 }
 </style>

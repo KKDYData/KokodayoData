@@ -1,18 +1,10 @@
 <template>
   <div class="home-wrapper">
-    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
-      <el-link
-        href="https://somedata.top/ArknightsBeta"
-        type="info"
-      >Beta版链接somedata.top/ArknightsBeta</el-link>。适配了dpi360的|苹果系的机型|切换成H5 history模式
-    </el-alert>
+    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>上线了一个家具图鉴</el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
-        这是Beta版,可能会有Bug
-        <el-link
-          href="https://somedata.top/Arknights"
-          type="success"
-        >这是稳定版somedata.top/Arknights, Agen' Recording is testing</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
+        这是Beta版,随缘修bug
+        <el-link href="https://somedata.top/Arknights" type="success">稳定版链接</el-link>
       </div>
     </el-alert>
     <transition name="fade" mode="out-in">
@@ -21,7 +13,7 @@
   </div>
 </template>
 <script>
-import { getProfileList } from "./components/utils";
+import { getDevList } from "./utils";
 import { Alert, link } from "element-ui";
 import Vue from "vue";
 Vue.use(link);
@@ -44,7 +36,6 @@ export default {
   },
   data() {
     return {
-      short: false,
       data: [],
       load: false,
       isBeta: Mode === "/ArknightsBeta"
@@ -52,12 +43,6 @@ export default {
   },
   mounted() {
     this.linkStart();
-    // const isOpen = localStorage.getItem('isOpen');
-    // if (!isOpen) {
-    //   localStorage.setItem('isOpen', true);
-    // } else {
-    //   this.linkStart();
-    // }
   },
   methods: {
     linkStart() {
@@ -67,12 +52,12 @@ export default {
       });
     },
     getData() {
-      return getProfileList().then(source => {
+      return getDevList().then(source => {
         source.forEach((el, index) => {
           el.index = index;
           el.tagHit = 0;
         });
-        return source.filter(el => el.position).reverse();
+        return source.filter(el => el.logo).reverse();
       });
     }
   }

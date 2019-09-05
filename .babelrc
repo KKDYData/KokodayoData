@@ -1,9 +1,16 @@
 {
   "presets": [
     [
-      "@babel/env",
+      "@babel/preset-env",
       {
-        "modules": false
+        "useBuiltIns": "entry",
+        "targets": {
+          "esmodules": true
+        },
+        "corejs": {
+          "version": 3,
+          "proposals": true
+        }
       }
     ],
     [
@@ -22,7 +29,6 @@
     ],
     [
       "@babel/plugin-transform-runtime",
-      {}
     ],
     [
       "@babel/plugin-syntax-dynamic-import"
@@ -31,7 +37,7 @@
       "component",
       {
         "libraryName": "element-ui",
-        "styleLibraryName": "theme-chalk"
+        "styleLibraryName": "~theme"
       }
     ]
   ]

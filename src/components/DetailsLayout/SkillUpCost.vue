@@ -10,14 +10,14 @@
             <span>所需材料：</span>
           </div>
           <div class="skill-lvUpCost-wrapper">
-            <!-- 改成根据slevelcompute返回当前数据 -->
-            <div
+            <item-viewer
               v-for="(skill, index) in picList[index]"
               :key="index"
               class="item-viwer-flex-default"
-            >
-              <item-viewer :short="!short" :item="skill.item" :num="skill.count"></item-viewer>
-            </div>
+              :short="short"
+              :item="skill.item"
+              :num="skill.count"
+            ></item-viewer>
           </div>
         </div>
       </div>
@@ -51,7 +51,9 @@
 </template>
 
 <script>
-import { path, fetchGet, itemBackground } from '../utils';
+import { getItem } from '../../utils';
+import { itemBackground } from '../../utils/string';
+
 import ItemViewer from '../ItemViewer';
 import SkillContainer from './SkillContainer';
 
@@ -97,10 +99,6 @@ export default {
     itemBackground(rarity) {
       return itemBackground[rarity];
     },
-    itemPic(id) {
-      // console.log(id);
-      return path + 'item/pic/' + id + '.png';
-    },
     sLevelAdd(index, i) {
       let num = this.sLevel[index] + i;
       if (num > this.unlockCond[index].data.length - 1)
@@ -111,7 +109,7 @@ export default {
 
       Promise.all(
         this.unlockCond[index].data[num][p].map(async p => {
-          const item = await fetchGet(path + 'item/data/' + p.id + '.json');
+          const item = await getItem(p.id);
           const res = {
             item: item,
             count: p.count
@@ -127,12 +125,7 @@ export default {
           this.$set(this.sLevel, index, num);
         }
       });
-    },
-    getSkillPath(skill) {
-      const name = skill.iconId ? skill.iconId : skill.skillId;
-      return path + 'skills/pics/skill_icon_' + name + '.png';
-    },
-    async getItemId(id) {}
+    }
   }
 };
 </script>

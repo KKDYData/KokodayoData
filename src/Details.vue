@@ -17,6 +17,9 @@ const DetailsLayout = () => ({
 });
 
 export default {
+  metaInfo: {
+    titleTemplate: '%s | 干员详情 | 明日方舟'
+  },
   components: {
     'details-layout': DetailsLayout
   },

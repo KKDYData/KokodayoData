@@ -1,12 +1,19 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common');
 const webpack = require('webpack');
+const CleanWebPackPlugin = require('clean-webpack-plugin');
+const path = require('path');
 
 module.exports = merge(common, {
   mode: 'development',
   plugins: [
+    new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
     new webpack.HotModuleReplacementPlugin(),
-
+    new webpack.DefinePlugin({
+      PRODUCTION: JSON.stringify(false),
+      VERSION: JSON.stringify(new Date()),
+      // 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    })
 
   ],
   devtool: 'inline-source-map',
@@ -30,7 +37,24 @@ module.exports = merge(common, {
         //详情页面
         {
           from: /^\/details\/(?!char).*$/, to: context => {
-            return '/' + context.parsedUrl.pathname.slice(9);
+            console.log(context.parsedUrl.path.slice(9));
+            return '/' + context.parsedUrl.path.slice(9);
+          }
+        },
+        {
+          from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|a00).*$/, to: context => {
+            console.log(context.parsedUrl.path);
+
+            console.log(context.parsedUrl.path.slice(11) + ' ttt');
+            // return context.parsedUrl.path;
+            return '/' + context.parsedUrl.path.slice(11);
+          }
+        },
+        {
+          from: /^\/enemydata\/(main|hard|camp)?/, to: context => {
+            console.log(context.parsedUrl.path);
+            console.log(context.parsedUrl.path.slice(11) + ' eee');
+            return '/index.html';
           }
         },
         {
@@ -39,14 +63,16 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/computer$/, to: context => {
+          from: /^\/(computer|enemydata|customtheme)$/, to: context => {
+            console.log(context.parsedUrl.path);
             return '/index.html';
           }
         },
 
         {
           from: /^\/.*$/, to: context => {
-            return '/' + context.parsedUrl.pathname;
+            console.log(context.parsedUrl.path + '???????');
+            return '/' + context.parsedUrl.path;
           }
         },
         {
@@ -58,7 +84,11 @@ module.exports = merge(common, {
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.esm.js',
     },
+  },
+  externals: {
+    // spritejs: 'spritejs'
+    // CatChartsVue: 'CatChartsVue'
   }
 });

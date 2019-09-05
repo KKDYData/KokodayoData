@@ -9,12 +9,17 @@
 </template>
 
 <script>
-import { sort, fetchGet, path } from '../utils';
+import { sort, getRange } from '../../utils';
 
 export default {
   async mounted() {
     if (this.rangeId) {
-      this.rangeData = await this.getRangeById(this.rangeId);
+      this.rangeData = await getRange(this.rangeId);
+    }
+  },
+  watch: {
+    async rangeId(v) {
+      this.rangeData = await getRange(this.rangeId);
     }
   },
   props: ['rangeId', 'data'],
@@ -93,10 +98,6 @@ export default {
       });
       return t ? 'gird-col' : 'gird-col gird-none';
     },
-    async getRangeById(id) {
-      const data = await fetchGet(path + 'range/' + id + '.json');
-      return data;
-    }
   }
 };
 </script>

@@ -1,18 +1,19 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common');
-// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 module.exports = merge(common, {
   mode: 'production',
   plugins: [
-    new webpack.HashedModuleIdsPlugin()
+    new webpack.HashedModuleIdsPlugin(),
+    new OptimizeCssAssetsPlugin({}),
   ],
   optimization: {
     runtimeChunk: 'single',
     splitChunks: {
-      chunks: 'async',
+      chunks: 'all',
       minSize: 30000,
       minChunks: 1,
       maxAsyncRequests: 5,
@@ -26,9 +27,15 @@ module.exports = merge(common, {
           minChunks: 2
         },
         vendors: {
-          test: /[\\/]node_modules[\\/]/,
-          priority: -10
+          test: /[\\/]node_modules[\\/](vue|vue-router|vue-meta|vuex)[\\/]/,
+          name: 'vendor_vue',
+          chunks: 'all'
         },
+        // vendors: {
+        //   test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
+        //   name: 'vendor_element',
+        //   chunks: 'async'
+        // },
         default: {
           minChunks: 2,
           priority: -20,
@@ -38,6 +45,7 @@ module.exports = merge(common, {
     },
     minimizer: [
       new TerserPlugin({
+        test: /\.m?js$/,
         cache: true,
         parallel: true,
       }),
@@ -48,7 +56,11 @@ module.exports = merge(common, {
   },
   resolve: {
     alias: {
-      'vue': 'vue/dist/vue.min.js'
+      'vue': 'vue/dist/vue.min.js',
     }
+  },
+  externals: {
+    spritejs: 'spritejs',
+    echarts: 'echarts'
   }
 });
