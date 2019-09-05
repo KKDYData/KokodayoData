@@ -1,6 +1,5 @@
 <template>
   <div class="info-panel-container">
-    {{skins}}
     <el-tabs :value="activeName">
       <el-tab-pane label="人员档案" name="first">
         <div class="char-half-container-wrapper">
