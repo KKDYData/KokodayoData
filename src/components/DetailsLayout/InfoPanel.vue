@@ -18,7 +18,7 @@
               <el-tabs :value="activeSetPane">
                 <el-tab-pane label="一般" name="default">
                   <el-carousel
-                    :height="getScreenWidth() + 'px'"
+                    :height="(getScreenWidth() + (short ? 60 : 0)) + 'px'"
                     :autoplay="false"
                     class="char-set-container-wrapper"
                     indicator-position="outside"
@@ -44,17 +44,6 @@
                               <i class="el-icon-picture-outline"></i>
                             </div>
                           </el-image>
-                        </div>
-                      </div>
-                      <div class="charset-info">
-                        <div>
-                          <span v-if="index > 0">
-                            精英化阶段
-                            {{calPhases(list[index])}}
-                          </span>
-                        </div>
-                        <div>
-                          <span>长按或者右键可以下载</span>
                         </div>
                       </div>
                       <div>{{setWords[index]}}</div>
