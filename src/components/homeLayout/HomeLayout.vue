@@ -132,7 +132,7 @@ const newProfileLayout = () => ({
 });
 
 const myFeedback = () => ({
-  component: import(/* webpackChunkName: "newProfileLayout" */ './feedback'),
+  component: import(/* webpackChunkName: "newProfileLayout" */ './Feedback'),
   loading: loadingC,
   error: loadingC,
   delay: 200,
