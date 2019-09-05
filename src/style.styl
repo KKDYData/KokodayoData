@@ -1,0 +1,159 @@
+@font-face
+  font-family: 'FZYaSong-H-GBK'
+  src: url('./assets/fzty_gbk.ttf') format('truetype')
+  font-style: normal
+  font-weight: normal
+
+/*
+  ?复制过来的控制pc滚动条出现时不移动的css
+  !这些奇奇怪怪的css删掉了 2019年8月31日
+  *因为现在低栏是常驻在屏幕外的，永远都会有滚动条，不考虑因为滚动条出现导致画面变动的问题了
+ */
+
+body
+  margin: 0
+  background-color: white
+
+#app
+  display: flex
+  min-height: calc(100vh + 70px) //防止#footer闪现
+  flex-direction: column
+
+
+.image-slot
+  display: flex
+  justify-content: center
+  align-items: center
+  width: 100%
+  height: 100%
+  background: #f5f7fa
+  color: #909399
+  font-size: 14px
+
+.el-icon-picture-outline
+  font-family: element-icons !important
+  font-style: normal
+  font-weight: 400
+  font-variant: normal
+  text-transform: none
+  line-height: 1
+  vertical-align: baseline
+  display: inline-block
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
+
+.item-popover-class
+  padding: 20px !important
+  outline: none
+
+  .el-popover__title
+    font-weight: bold
+
+.fade-enter-active, .fade-leave-active
+  transition: opacity 0.3s ease
+
+.fade-enter, .fade-leave-to
+  opacity: 0
+
+.extra-button-enter-active {
+  transition: opacity 0.3s ease 0.2s
+}
+
+
+.extra-button-enter, .fade-leave-to {
+  opacity: 0
+}
+
+.tags-popover-container
+  max-width: 959px
+
+.fuck-outline
+  outline: none 
+
+.span-underline 
+  color: #828282
+  border-bottom: 1px solid #313131
+
+.flip-list-move 
+  transition: transform 0.7s;
+
+.el-circle-icon {
+  position: fixed
+  background-color: #fff
+  width: 40px
+  height: 40px
+  border-radius: 50%
+  color: #313131
+  display: flex
+  align-items: center
+  justify-content: center
+  font-size: 20px
+  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12)
+  cursor: pointer
+  z-index: 5
+}
+
+
+
+.mobile-rotate {
+  transform: rotate(90deg)
+  left 175px !important
+
+}
+
+.chart-body div:first-of-type {
+  z-index: 0
+}
+
+.el-image img
+  width: 100%
+
+.status-lv-favor-wrapper .el-switch__label.is-active
+  color: #f49800
+
+.agent-card-star-pic .el-image__inner
+  width: auto
+
+.info-panel-container .el-tabs__nav-scroll, .home-layout-wrapper .el-tabs__nav-scroll
+  padding: 0 10px
+
+.el-button--danger.el-button--mini.close-button
+  position: absolute
+  right: -5px
+  top: -5px
+  padding: 5px
+
+.close-button i
+  font-size: 2em
+
+.enemy-tooltip-item
+  width: 200px
+
+.el-dialog__wrapper
+  position: fixed
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
+  overflow: auto
+  margin: 0
+
+  .el-drawer__body
+    overflow-y: scroll
+    overflow-x: hidden
+    margin-right: -17px
+    padding-right: 17px
+
+@media screen and (min-width: 1000px)
+  .el-message-box
+    min-width: 700px
+
+  .el-message-box__message p
+    margin: 10px !important
+
+@media screen and (max-width: 700px)
+  .alert-update-msg
+    width: 100%
+
+  .enemy-drawer
+    min-height: calc(100% + 1px)

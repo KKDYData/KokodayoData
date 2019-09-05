@@ -1,9 +1,14 @@
 <template>
-  <div v-if="skills.length > 0" class="skill-container--inner-wrapper">
+  <div v-if="skills && skills.length > 0" class="skill-container--inner-wrapper">
     <div class="skill-container" v-for="(skill, index) in skills" :key="skill.name">
       <div class="skill-title">
-        <skill-container :skill="skills[index]"></skill-container>
-        <div class="skill-tiltle-part" v-if="skill.levels[sLevel[index]-1]">
+        <skill-container v-if="showPic" :skill="skills[index]"></skill-container>
+        <p v-else>{{skill.levels[index].name}}</p>
+        <div
+          class="skill-tiltle-part"
+          v-if="skill.levels[sLevel[index]-1]"
+          :style="!showPic ? 'width: 100%; padding-left: 0' : ''"
+        >
           <div class="skill-status" v-if="skill.levels[sLevel[index]-1]">
             <span>
               <span>
@@ -32,7 +37,10 @@
           </div>
           <div class="skill-status-desc">
             <span v-html="changeSkillDesc(skill.levels[sLevel[index]-1])"></span>
-            <div class="skill-range-button" v-if="skill.levels[sLevel[index]-1].rangeId">
+            <div
+              class="skill-range-button"
+              v-if="showRange && skill.levels[sLevel[index]-1].rangeId"
+            >
               <el-popover placement="right" width="200px" trigger="click">
                 <range :rangeId="skill.levels[sLevel[index]-1].rangeId"></range>
                 <el-button size="mini" slot="reference">查看范围</el-button>
@@ -41,8 +49,18 @@
           </div>
         </div>
 
-        <div class="skill-name-level">
-          <div style="display: flex; align-items: center; width: 100%; justify-content: flex-end">
+        <div class="skill-name-level" v-if="!initLv &&  skill.levels.length > 1">
+          <skill-chart
+            v-if="!initLv && skill.levels[0].duration"
+            class="skill-name-level-item"
+            :status="status"
+            :skill="skill.levels[sLevel[index]-1]"
+            :talents="talents"
+            :profession="profession"
+            :short="short"
+            :talent-potentail-up="talentPotentailUp"
+          ></skill-chart>
+          <div class="skill-name-level-item">
             <div class="skill-title-level">
               <span>LV</span>
               <span>{{sLevel[index]}}</span>
@@ -51,6 +69,7 @@
               <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
               <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
             </div>
+            <skill-list :skill="skill"></skill-list>
           </div>
         </div>
       </div>
@@ -59,23 +78,54 @@
 </template>
 
 <script>
-import { path, changeDesc } from '../utils';
+import { changeAttackSpeed } from '../../utils';
 import Range from './Range';
 import SkillContainer from './SkillContainer';
+import SkillList from './SkillList';
+import SkillChart from './SkillChart';
+
 
 export default {
   components: {
-    range: Range,
-    'skill-container': SkillContainer
+    Range,
+    SkillContainer,
+    SkillChart,
+    SkillList
   },
   props: {
+    short: {
+      default: false
+    },
     skills: {
       required: true
+    },
+    showPic: {
+      default: true
+    },
+    showRange: {
+      default: true
+    },
+    initLv: {
+      type: Number
+    },
+    status: {
+      required: false
+    },
+    talents: {
+      required: false
+    },
+    profession: {
+      tyep: String
+    },
+    talentPotentailUp: {
+      required: false
     }
+
   },
   data() {
+    const initLv = this.initLv ? this.initLv : 1;
     return {
-      sLevel: [1, 1, 1]
+      sLevel: [initLv, 1, 1]
     };
   },
   methods: {
@@ -87,10 +137,6 @@ export default {
       if (num < 8) {
         this.sLevel = [num, num, num];
       } else this.$set(this.sLevel, index, num);
-    },
-    getSkillPath(skill) {
-      const name = skill.iconId ? skill.iconId : skill.skillId;
-      return path + 'skills/pics/skill_icon_' + name + '.png';
     },
     changeSpType(type) {
       const typeList = {
@@ -136,197 +182,168 @@ export default {
       return typeList[type];
     },
     changeSkillDesc(skill) {
-      const str = changeDesc(skill.description);
-      let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
-        let percent = '',
-          minus = false,
-          res = '',
-          factor = 100;
-        if (p2.match(/:0%/)) {
-          p2 = p2.slice(0, -3);
-          percent = '%';
-        }
-        if (p2.match(/:0.0%/)) {
-          p2 = p2.slice(0, -5);
-          percent = '%';
-          // factor = 1;
-        }
-        if (p2.match(/:0.0/)) {
-          p2 = p2.slice(0, -4);
-          percent = '';
-          // factor = 1;
-        }
-        if (p2.match(/-/)) {
-          p2 = p2.slice(1);
-          minus = true;
-        }
-        let temp = skill.blackboard.find(el => el.key === p2.toLowerCase());
-        if (temp) {
-          res = temp.value;
-          if (minus) res *= -1;
-          if (percent) res = Math.floor(res * factor);
-        }
-        return res + percent;
-      });
-      const skill_time_text = res.match(/攻击间隔/);
-      if (skill_time_text) {
-        const skill_base_time = skill.blackboard.find(
-          el => el.key === 'base_attack_time'
-        );
-        const text = res
-          .slice(skill_time_text.index + 4)
-          .match(/(<.*?>)(.*?)(<\/.*?>)/);
-
-        // console.log(skill_time_text);
-        // console.log(skill_time_text.index + 4 + text[0].length);
-        const unit = text[2] !== '极大幅度缩短' ? 's' : '%';
-        let value = skill_base_time.value;
-        if (unit === '%') value *= 100;
-        const temp = res.split('');
-        temp.splice(
-          skill_time_text.index + 4 + text[0].length,
-          0,
-          `(${value}${unit})`
-        );
-
-        res = temp.join('');
-      }
-      return res;
+      return changeAttackSpeed(skill);
     }
   }
 };
 </script>
 
 
-<style scoped>
-/* part 4 */
+<style lang="stylus" scoped>
+/*part 4*/
 .group-container-title {
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
-  background-color: #414141;
-  padding-left: 1vw;
+  font-weight: bold
+  color: white
+  margin-bottom: 20px
+  background-color: #414141
+  padding-left: 1vw
 }
+
 .skill-container--inner-wrapper {
-  margin-top: 30px;
+  margin-top: 30px
 }
+
 .skill-container {
-  padding-bottom: 38px;
-  position: relative;
+  padding-bottom: 38px
+  position: relative
 }
 
 .skill-container + .skill-container {
-  border-top: 1px solid rgb(235, 238, 245);
+  border-top: 1px solid rgb(235, 238, 245)
 }
+
 .skill-title {
-  position: relative;
-  display: flex;
-  align-items: stretch;
-  flex-wrap: wrap;
-  margin-top: 20px;
-  justify-content: start;
-  padding: 0 5px;
-  width: calc(100% - 10px);
+  position: relative
+  display: flex
+  align-items: stretch
+  flex-wrap: wrap
+  margin-top: 20px
+  justify-content: start
+  padding: 0 5px
+  width: calc(100% - 10px)
 }
 
 .skill-tiltle-part {
-  padding-left: 20px;
-  width: calc(70% - 100px);
-  border-right: 1px solid rgba(158, 158, 158, 0.4);
+  padding-left: 20px
+  width: calc(70% - 100px)
 }
+
 .skill-title-level {
-  margin: 0 20px;
+  margin-right: 20px
 }
+
 .skill-name-level {
-  display: flex;
-  align-items: flex-end;
-  padding: 0 20px;
-  flex-grow: 1;
+  border-left: 1px solid rgba(158, 158, 158, 0.4)
+  display: flex
+  align-items: flex-end
+  flex-wrap: wrap
+  padding-right: 20px
+  flex-grow: 1
+  width: min-content
 }
 
 .skill-type {
-  word-break: keep-all;
-  color: white;
-  padding: 0px !important;
-  width: calc(64px + 1vw);
-  text-align: center;
-  display: inline-block;
-  border-radius: 3px;
-  background-color: rgb(153, 153, 153);
-  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
+  word-break: keep-all
+  color: white
+  padding: 0px !important
+  width: calc(64px + 1vw)
+  text-align: center
+  display: inline-block
+  border-radius: 3px
+  background-color: rgb(153, 153, 153)
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15)
 }
+
 .skill-status {
-  font-size: 14px;
+  font-size: 14px
 }
+
 .skill-status-desc {
-  font-size: 16px;
-  color: #606266;
-  /* height: calc(100% - 20px); */
-  padding: 20px 10px;
-  display: flex;
-  align-items: center;
+  font-size: 16px
+  color: #606266
+  padding: 20px 10px
+  display: flex
+  align-items: center
+  position: relative
 }
+
 .skill-status span + span {
-  padding-right: 5px;
+  padding-right: 5px
 }
 
 .extra-card {
-  margin-top: 5vw;
-  margin-bottom: 5vw;
+  margin-top: 5vw
+  margin-bottom: 5vw
 }
 
 .skill-range-button {
-  position: absolute;
-  bottom: -5px;
+  position: absolute
+  bottom: -5px
 }
 
 .skill-range-button .el-button--mini {
-  padding: 2px 3px;
-  margin-top: 5px;
+  padding: 2px 3px
+  margin-top: 5px
+}
+
+.skill-name-level-item {
+  display: flex
+  align-items: center
+  width: 100%
+  justify-content: flex-end
+  margin-bottom: 10px
 }
 
 @media screen and (max-width: 700px) {
   .skill-container--inner-wrapper {
-    margin-bottom: 20px;
+    margin-bottom: 20px
   }
 
   .skill-status {
-    font-size: calc(12px + 0.5vw);
+    font-size: calc(12px + 0.5vw)
   }
+
   .skill-status span + span {
-    padding: 0px;
+    padding: 0px
   }
+
   .skill-status-desc {
-    font-size: calc(13px + 0.5vw);
+    font-size: calc(13px + 0.5vw)
   }
+
   .talents-effects-desc {
-    font-size: calc(12px + 0.5vw);
+    font-size: calc(12px + 0.5vw)
   }
+
   .skill-title-level {
-    display: inline-block;
-    left: 0;
-    padding-left: 35vw;
-    padding-right: 2vw;
+    display: inline-block
+    left: 0
+    padding-right: 2vw
   }
+
   .skill-tiltle-part {
-    flex-wrap: wrap;
-    padding-left: 2vw;
-    width: calc(100% - 65px - 3vw);
-    border: none;
+    flex-wrap: wrap
+    padding-left: 2vw
+    width: calc(100% - 65px - 3vw)
+    border: none
   }
+
   .skill-name-level {
-    width: 100%;
+    width: 100%
+    border: none
   }
+
   .skill-name-level span {
-    vertical-align: -5%;
+    vertical-align: -5%
   }
+
   .skill-container {
-    padding-bottom: 10px;
+    padding-bottom: 10px
   }
+
   .skill-range-button {
-    position: absolute;
-    bottom: 25px;
-    z-index: 1;
+    position: absolute
+    z-index: 1
   }
 }
 </style>

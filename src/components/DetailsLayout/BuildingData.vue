@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { changeDesc } from '../utils';
+import { changeDesc } from '../../utils';
 
 export default {
   props: {
@@ -102,7 +102,7 @@ export default {
   padding: 5px 10px;
   position: relative;
   min-width: 250px;
-  height: 60px;
+  min-height: 60px;
   width: calc(100% - 120px);
   margin-left: 120px;
   display: flex;

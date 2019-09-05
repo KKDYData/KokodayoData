@@ -4,7 +4,6 @@
       <el-progress :show-text="false" :percentage="voicePercentage" color="rgb(82, 82, 82)"></el-progress>
     </div>
     <audio
-      :volume="1"
       :autoplay="false"
       preload="none"
       class="info-word-audio-control"
@@ -22,6 +21,7 @@
 </template>
 
 <script>
+import { Message } from "element-ui";
 export default {
   props: {
     src: {
@@ -37,6 +37,9 @@ export default {
       voicePercentage: 0
     };
   },
+  mounted() {
+    this.$refs.word.volume = this.volume / 100;
+  },
   watch: {
     volume: function(e) {
       this.$refs.word.volume = e / 100;
@@ -44,8 +47,10 @@ export default {
   },
   methods: {
     play() {
-      this.$refs.word.volume = this.volume / 100;
-      this.$refs.word.play();
+      this.$refs.word.play().catch(err => {
+        console.log(err);
+        Message.error("语音数据可能还没压缩上传，过一会再来听吧");
+      });
     },
     pause() {
       this.$refs.word.pause();

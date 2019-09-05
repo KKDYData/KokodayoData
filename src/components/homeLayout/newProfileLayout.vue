@@ -19,10 +19,10 @@
         <div>{{item[0]}}</div>
         <div>
           <div
-            v-for="agent in item[1].agents.sort((a, b) => b.star - a.star)"
+            v-for="agent in item[1].agents.sort((a, b) => b.tags[0] - a.tags[0])"
             :key="agent.name"
             class="other-mode-agent"
-            :style="bgColor(agent.star)"
+            :style="bgColor(agent.tags[0])"
           >
             <el-popover trigger="click">
               <div class="other-mode-popover">
@@ -43,8 +43,8 @@
                     <router-link :to="path + '/details/' + agent.No">
                       <span class="other-mode-popover-details-title-name">{{agent.name}}</span>
                       <span
-                        :style="agent.sex === '女' ? 'color: pink;' : ''"
-                      >{{agent.sex === '女' ? '♀' : '♂'}}</span>
+                        :style="agent.tags[1] === '女' ? 'color: pink;' : ''"
+                      >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
                       <el-image
                         class="other-mode-popover-class-icon"
                         :alt="agent.class"
@@ -54,13 +54,15 @@
                     </router-link>
                   </div>
                   <div style="margin-top: 10px;">
-                    <el-tag
-                      class="other-mode-popover-tag"
-                      v-for="tag in agent.tags"
-                      :key="tag"
-                      effect="dark"
-                      type="info"
-                    >{{tag}}</el-tag>
+                    <template v-for="(tag, index) in agent.tags">
+                      <el-tag
+                        v-if="index === 0 && tag > 3 || index > 1"
+                        class="other-mode-popover-tag"
+                        :key="tag"
+                        effect="dark"
+                        type="info"
+                      >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
+                    </template>
                   </div>
                   <!-- <span>{{agent.tags}}</span> -->
                 </div>
@@ -84,7 +86,6 @@ const arrange = (arr, index = 0, group = []) => {
     res.push([...group[i], arr[index]]);
   }
   group = group.concat(res);
-  // debugger;
   if (index + 1 >= arr.length) return group;
   else return arrange(arr, index + 1, group);
 };
@@ -94,7 +95,10 @@ import {
   getClass_Chinese,
   getProfilePath,
   getClass_icon
-} from '../utils';
+} from '../../utils';
+
+import { starColor } from '../../utils/string';
+
 import { Card, Tag } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Card);
@@ -109,8 +113,7 @@ export default {
     tags: Array,
     showTags: Boolean,
     short: Boolean,
-    filterGroups: Object,
-    webpOk: Boolean
+    filterGroups: Object
   },
 
   computed: {
@@ -136,12 +139,14 @@ export default {
 
           if (Array.isArray(agent[key]))
             agent[key].forEach(tag => {
-              const find = group.filters.find(el => el.value === tag);
+              // 服务器数据和前端声明的数据不统一。。。但是嘛，已经做了缓存了，就先这样手动转换看看
+              let find = group.filters.find(el => el.value === tag);
               if (find) {
                 hitTag.push(find);
               }
             });
           else {
+            // 全是数组了，这个好像没什么用了
             const find = group.filters.find(el => el.value === agent[key]);
             if (find) {
               hitTag.push(find);
@@ -153,9 +158,7 @@ export default {
         let resArr = arrange(hitTag);
         let i = resArr.length;
         while (i-- > 0) {
-          const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join(
-            ','
-          );
+          const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join('，');
           if (!res.get(key)) {
             res.set(key, { agents: [agent], keys: resArr[i] });
           } else {
@@ -183,18 +186,16 @@ export default {
       return getClass_Chinese(c);
     },
     bgColor(star) {
-      const colors = {
-        0: 'background-color: rgb(84, 92, 100);',
-        1: 'background-color: rgb(84, 92, 100);',
-        2: 'background-color: hsla(223, 25%, 65%, 1);',
-        3: 'background-color:  hsla(223, 81%, 65%, 1);',
-        4: 'background-color: hsla(36, 100%, 65%, 1);',
-        5: 'background-color: rgb(255, 208, 75);'
+      const targetColor = starColor[star];
+
+      return {
+        'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${
+          targetColor[2]
+        }%, 1)`
       };
-      return colors[star];
     },
     profilePath(name) {
-      return getProfilePath(name, this.webpOk);
+      return getProfilePath(name);
     }
   }
 };
@@ -247,8 +248,8 @@ export default {
   margin-left: 10px;
 }
 
-.other-mode-popover-tag + .other-mode-popover-tag {
-  margin-left: 5px;
+.other-mode-popover-tag {
+  margin: 5px 5px 0;
 }
 
 .other-mode-popover-class-icon {

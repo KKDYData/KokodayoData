@@ -1,16 +1,74 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebPackPlugin = require('clean-webpack-plugin');
 const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-// const devMode = process.env.NODE_ENV !== 'production';
+const WorkboxPlugin = require('workbox-webpack-plugin');
 
+
+const swPlugins = process.env.NODE_ENV === 'development' ? [] :
+  [
+    new WorkboxPlugin.GenerateSW({
+      swDest: 'sw.js',
+      clientsClaim: true,
+      skipWaiting: true,
+      exclude: [/^icon.*?\.png$/],
+      runtimeCaching: [
+
+        {
+          urlPattern: /api\/arknights/,
+          handler: 'NetworkFirst'
+        },
+        {
+          urlPattern: /\.ico$/,
+          handler: 'CacheFirst'
+        },
+        {
+          urlPattern: new RegExp('https://andata.somedata.top/dataX/'),
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheName: 'oss-cache',
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: new RegExp('https://unpkg.com/spritejs/dist/spritejs.min.js'),
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'spritejs',
+            cacheableResponse: {
+              statuses: [0, 200]
+            }
+          }
+        },
+        {
+          urlPattern: new RegExp('https://penguin-stats.io/PenguinStats/api/'),
+          handler: 'StaleWhileRevalidate',
+          options: {
+            cacheableResponse: {
+              statuses: [0, 200]
+            },
+            cacheName: 'penguin-api-cache',
+            expiration: {
+              maxEntries: 5,
+              maxAgeSeconds: 60 * 10,
+            },
+          }
+        },
+        {
+          urlPattern: new RegExp('https://somedata.top/Arknights'),
+          handler: 'StaleWhileRevalidate',
+        },
+        //
+      ]
+    })
+  ];
 
 module.exports = {
   entry: './src/main.js',
   plugins: [
-    new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
     new HtmlWebpackPlugin({
       title: 'test!',
       template: 'src/index.html',
@@ -21,14 +79,13 @@ module.exports = {
       // Options similar to the same options in webpackOptions.output
       // both options are optional
       filename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[contenthash].css',
-      // chunkFilename: devMode ? '[id].css' : '[id].[hash].css',
+      chunkFilename: process.env.NODE_ENV === 'development' ? '[name].css' : '[name].[hash].css',
     }),
-
+    new webpack.DefinePlugin({
+      VERSION: JSON.stringify(new Date()),
+    }),
+    ...swPlugins
   ],
-  devServer: {
-    contentBase: './dist',
-    hot: true
-  },
   output: {
     path: path.resolve('dist')
   },
@@ -38,31 +95,19 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.(sa|sc|c)ss$/,
+        test: /\.(styl|stylus|css)$/,
         use: [
           {
             loader: MiniCssExtractPlugin.loader,
             options: {
+              // you can specify a publicPath here
+              // by default it uses publicPath in webpackOptions.output
+              // publicPath: '../',
               hmr: process.env.NODE_ENV === 'development',
+              reloadAll: true
             },
           },
-          'css-loader',
-          // 'postcss-loader',
-          // 'sass-loader',
-        ],
-      },
-      {
-        test: /\.(styl|stylus)$/,
-        use: [{
-          loader: MiniCssExtractPlugin.loader,
-          options: {
-            // you can specify a publicPath here
-            // by default it uses publicPath in webpackOptions.output
-            // publicPath: '../',
-            hmr: process.env.NODE_ENV === 'development',
-          },
-        },
-        'css-loader', 'stylus-loader'],
+          'css-loader', 'stylus-loader'],
       },
       {
         test: /\.(png|svg|jpg|gif|woff2?|eot|ttf|otf)$/,
@@ -93,7 +138,10 @@ module.exports = {
     ]
   },
   resolve: {
-
     extensions: ['.js', '.styl', '.vue', '.json']
   },
+  externals: {
+    spritejs: 'spritejs',
+    echarts: 'echarts'
+  }
 };

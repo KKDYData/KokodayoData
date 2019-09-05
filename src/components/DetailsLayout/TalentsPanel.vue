@@ -9,11 +9,11 @@
               v-if="item.condidate[0].potentailUP"
               @click="openTalentPotentailUP(index)"
               size="mini"
-              :type="!showTalentPotencailUP[index] ? 'info' : 'warning'"
+              :type="!showTalentPotentailUP[index] ? 'info' : 'warning'"
             >
               潜能提升
               <i
-                :class="!showTalentPotencailUP[index] ? 'el-icon-star-off' : 'el-icon-star-on'"
+                :class="!showTalentPotentailUP[index] ? 'el-icon-star-off' : 'el-icon-star-on'"
               ></i>
             </el-button>
           </div>
@@ -28,8 +28,8 @@
           </div>
 
           <div class="talent-desc-content-wrapper">
-            <div v-if="!showTalentPotencailUP[index]" class="talent-desc-content">
-              <span>{{talent.description}}</span>
+            <div v-if="!showTalentPotentailUP[index]" class="talent-desc-content">
+              <span v-html="talent.description"></span>
             </div>
             <div v-else class="talent-desc-content">
               <span v-html="talent.potentailUP.description"></span>
@@ -52,12 +52,13 @@ export default {
   },
   data() {
     return {
-      showTalentPotencailUP: [false, false, false]
+      showTalentPotentailUP: [false, false, false]
     };
   },
   methods: {
     openTalentPotentailUP(t) {
-      this.$set(this.showTalentPotencailUP, t, !this.showTalentPotencailUP[t]);
+      this.$set(this.showTalentPotentailUP, t, !this.showTalentPotentailUP[t]);
+      this.$emit('talentPotentailUp', this.showTalentPotentailUP);
     }
   }
 };
@@ -86,6 +87,7 @@ export default {
 .talent-container {
   width: calc(50% - 7px);
   min-width: 350px;
+  margin: 10px 0;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -114,7 +116,7 @@ export default {
   padding: 5px 10px;
   position: relative;
   min-width: 250px;
-  height: 60px;
+  min-height: 60px;
   width: calc(100% - 120px);
   margin-left: 100px;
   display: flex;
@@ -126,6 +128,7 @@ export default {
 .talent-condition-wrapper {
   padding-right: 10px;
   width: 100px;
+  word-break: keep-all;
 }
 
 .talent-desc-content-wrapper {
@@ -142,7 +145,14 @@ export default {
   text-align: center;
 }
 .talent-desc-change-button .el-button--mini {
-  padding: 0;
+  padding: 2px 4px 2px 8px;
+  border-radius: 2px;
+}
+
+.talent-desc-change-button .el-button--warning:focus,
+.talent-desc-change-button .el-button--warning:hover {
+  background-color: #f49800;
+  border-color: #f49800;
 }
 
 @media screen and (max-width: 700px) {
@@ -152,6 +162,7 @@ export default {
   .talent-container {
     width: calc(100% - 2px);
     min-width: 300px;
+    margin: 0;
     margin-bottom: 20px;
   }
 
@@ -208,6 +219,7 @@ export default {
   .talent-desc-change-button {
     right: 0px;
     width: auto;
+    top: -3px;
     /* text-align: right; */
   }
 }

@@ -3,42 +3,59 @@
     <el-tabs :value="activeName">
       <el-tab-pane label="人员档案" name="first">
         <div class="char-half-container-wrapper">
-          <el-image class="char-half-container" :src="halfPics" fit="contain">
+          <el-image class="char-half-container" :src="halfPics" fit="contain" lazy>
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
           </el-image>
           <div class="info-char-set-wrapper">
-            <el-popover placement="top-start" :width="short ? '330': '1000'" trigger="click">
-              <el-carousel :height="short ? '380px': '1050px'" class="char-set-container-wrapper">
+            <el-popover
+              :visible-arrow="false"
+              placement="top-start"
+              :width="getScreenWidth()"
+              trigger="click"
+            >
+              <el-carousel
+                :height="getScreenWidth() + 'px'"
+                :autoplay="false"
+                class="char-set-container-wrapper"
+                indicator-position="outside"
+                :loop="false"
+              >
                 <el-carousel-item
                   v-for="(pic, index) in charSets"
                   :key="pic"
                   style="font-size:13px"
                 >
-                  <div v-if="showSet">
+                  <div v-if="showSet" style="background: rgba(255, 255, 255, 0.85);">
                     <el-image class="char-set-container" :src="pic">
                       <div slot="error" class="image-slot">
                         <i class="el-icon-picture-outline"></i>
                       </div>
                     </el-image>
                   </div>
-                  <p>
+                  <p class="charset-info">
                     精英化阶段{{calPhases(list[index])}}
                     <span>长按或者右键可以下载</span>
                   </p>
                 </el-carousel-item>
               </el-carousel>
-              <el-button @click="showSet=true" size="mini" slot="reference">查看立绘</el-button>
+              <el-button
+                style="background: rgba(255, 255, 255, 0.85);"
+                @click="showSet=true"
+                size="mini"
+                slot="reference"
+                plain
+              >查看立绘</el-button>
             </el-popover>
           </div>
           <div class="info-draw-name">
-            <span>画师：</span>
-            <span>{{data.drawName}}</span>
+            <span style="width: 32px; display: inline-block">画师</span>
+            <span>: {{data.drawName}}</span>
           </div>
           <div class="info-cv-name">
-            <span>CV：</span>
-            <span>{{data.infoName}}</span>
+            <span style="width: 32px; display: inline-block">CV</span>
+            <span>: {{data.infoName}}</span>
           </div>
         </div>
         <div class="info-story-wrapper">
@@ -84,18 +101,20 @@
               <div style="padding-right: 5px;">
                 <b style="line-height:20px">{{word.voiceTitle}}</b>
               </div>
-              <div @click="playVoice(index)" class="word-control-button">
-                <i class="el-icon-video-play"></i>
-              </div>
-              <div @click="pausePlayVoice(index)" class="word-control-button">
-                <i class="el-icon-video-pause"></i>
-              </div>
-              <audio-container
-                ref="word"
-                v-if="currentVoice === index"
-                :volume="voiceVolume"
-                :src="audioPath(word)"
-              ></audio-container>
+              <template v-if="data.infoName !== '--'">
+                <div @click="playVoice(index)" class="word-control-button">
+                  <i class="el-icon-video-play"></i>
+                </div>
+                <div @click="pausePlayVoice(index)" class="word-control-button">
+                  <i class="el-icon-video-pause"></i>
+                </div>
+                <audio-container
+                  ref="word"
+                  v-if="currentVoice === index"
+                  :volume="voiceVolume"
+                  :src="audioPath(word)"
+                ></audio-container>
+              </template>
             </div>
             <p>{{word.voiceText | docter}}</p>
           </div>
@@ -106,7 +125,7 @@
 </template>
 
 <script>
-import { path } from "../utils";
+import { path, webpOk } from '../../utils';
 import {
   Carousel,
   CarouselItem,
@@ -114,9 +133,9 @@ import {
   TabPane,
   Button,
   Progress,
-  Slider
-} from "element-ui";
-import Vue from "vue";
+  Slider,
+} from 'element-ui';
+import Vue from 'vue';
 Vue.use(Carousel);
 Vue.use(CarouselItem);
 Vue.use(Tabs);
@@ -124,7 +143,9 @@ Vue.use(TabPane);
 Vue.use(Button);
 Vue.use(Progress);
 Vue.use(Slider);
-import AudioContainer from "./AudioContainer";
+import AudioContainer from './AudioContainer';
+
+
 
 export default {
   components: {
@@ -148,16 +169,11 @@ export default {
     return {
       phases: 1,
       showSet: false,
-      activeName: "first",
+      activeName: 'first',
       currentVoice: null,
       voicePercentage: 0,
       voiceVolume: 100
     };
-  },
-  filters: {
-    docter(value) {
-      return value.replace(/{@nickname}/, "阿凡提");
-    }
   },
   computed: {
     charSets() {
@@ -165,7 +181,7 @@ export default {
         const res = [];
         this.list.forEach(index => {
           res.push(
-            path + "char/set/" + this.data.charID + "_" + index + ".png"
+            path + 'char/set/' + this.data.charID + '_' + index + '.png'
           );
         });
         return res;
@@ -174,9 +190,13 @@ export default {
     halfPics() {
       if (this.data.charID) {
         const res = [];
+
+        const style = !webpOk
+          ? '_optimized.png'
+          : '_optimized.png?x-oss-process=style/small-test';
         this.list.forEach(index => {
           res.push(
-            path + "char/halfPic/" + this.data.charID + "_" + index + ".png"
+            path + 'char/halfPic/' + this.data.charID + '_' + index + style
           );
         });
         return res[0];
@@ -185,33 +205,39 @@ export default {
   },
   filters: {
     docter: str => {
-      return str.replace(/{@nickname}/, "阿凡提");
+      return str.replace(/{@nickname}/, '阿凡提');
     }
   },
   methods: {
     async playVoice(index) {
       this.currentVoice = index;
       await this.$nextTick();
-      const a = this.$refs["word"];
+      const a = this.$refs['word'];
       a[0].play();
     },
     pausePlayVoice(index) {
       if (index !== this.currentVoice) return;
-      const a = this.$refs["word"];
+      const a = this.$refs['word'];
       if (a[0]) a[0].pause();
     },
     audioPath(data) {
       return (
-        path + "char/voice/" + this.data.charID + "/" + data.voiceId + ".wav"
+        path + 'char/voice/' + this.data.charID + '/' + data.voiceId + '.mp3'
       );
     },
     changeText(str) {
-      return str.replace(/(\n)/g, "<br />");
+      return str.replace(/(\n)/g, '<br />');
     },
     calPhases(index) {
       if (index === 1) return 0;
       else if (index === 2) return 2;
       else return 1;
+    },
+    getScreenWidth() {
+      const w = document.body.clientWidth;
+      const h = window.innerHeight;
+      const width = (w < h ? w : h) - 40;
+      return width > 1000 ? 1000 : width;
     }
   }
 };
@@ -220,7 +246,9 @@ export default {
 
 <style  scoped>
 .info-char-set-wrapper {
-  text-align: center;
+  position: absolute;
+  bottom: 45px;
+  right: 1px;
 }
 .info-story-wrapper {
   padding: 0 10px;
@@ -240,11 +268,13 @@ export default {
   width: 120px;
   padding-left: 10px;
   overflow: hidden;
+  position: relative;
 }
 
 .info-draw-name,
 .info-cv-name {
   margin-left: 0px;
+  white-space: nowrap;
 }
 
 .info-word-audio-control {
@@ -275,6 +305,11 @@ export default {
   font-size: 20px;
   vertical-align: middle;
   cursor: pointer;
+}
+
+.charset-info {
+  position: absolute;
+  bottom: 20px;
 }
 
 @media screen and (max-width: 700px) {
