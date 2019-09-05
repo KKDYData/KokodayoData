@@ -9,7 +9,10 @@
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,可能会有Bug
-        <el-link href="https://somedata.top/Arknights" type="success">这是稳定版somedata.top/Arknights</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
+        <el-link
+          href="https://somedata.top/Arknights"
+          type="success"
+        >这是稳定版somedata.top/Arknights, Agen' Recording is testing</el-link>，建议使用。Beta版更新频率在一天左右，稳定版大概在3-4天
       </div>
     </el-alert>
     <transition name="fade" mode="out-in">
@@ -18,18 +21,17 @@
   </div>
 </template>
 <script>
-import { getProfileList } from './components/utils';
-import { Alert, link } from 'element-ui';
-// import HomeLayout from './components/homeLayout';
-import Vue from 'vue';
+import { getProfileList } from "./components/utils";
+import { Alert, link } from "element-ui";
+import Vue from "vue";
 Vue.use(link);
 Vue.use(Alert);
 
-import loadingC from './components/Loading';
-import Mode from './stats';
+import loadingC from "./components/Loading";
+import Mode from "./stats";
 
 const HomeLayout = () => ({
-  component: import(/* webpackChunkName: "HomeLayout" */ './components/homeLayout'),
+  component: import(/* webpackChunkName: "HomeLayout" */ "./components/homeLayout"),
   loading: loadingC,
   error: loadingC,
   delay: 200,
@@ -38,14 +40,14 @@ const HomeLayout = () => ({
 
 export default {
   components: {
-    'home-layout': HomeLayout
+    "home-layout": HomeLayout
   },
   data() {
     return {
       short: false,
       data: [],
       load: false,
-      isBeta: Mode === '/ArknightsBeta'
+      isBeta: Mode === "/ArknightsBeta"
     };
   },
   mounted() {

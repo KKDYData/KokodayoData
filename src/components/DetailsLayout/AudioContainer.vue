@@ -28,7 +28,7 @@ export default {
       required: true
     },
     volume: {
-      default: 1,
+      default: 100,
       type: Number
     }
   },
@@ -44,6 +44,7 @@ export default {
   },
   methods: {
     play() {
+      this.$refs.word.volume = this.volume / 100;
       this.$refs.word.play();
     },
     pause() {
