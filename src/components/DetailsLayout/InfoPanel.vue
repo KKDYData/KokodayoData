@@ -30,7 +30,7 @@
                       style="font-size:13px"
                     >
                       <div v-if="showSet" class="char-set-contianer-wrapper" style>
-                        <div>
+                        <div v-if="!short">
                           <div class="char-profile-container">
                             <el-image :src="profileList[index]"></el-image>
                           </div>
@@ -61,9 +61,9 @@
                     </el-carousel-item>
                   </el-carousel>
                 </el-tab-pane>
-                <el-tab-pane v-if="skins" label="皮肤" name="skins">
+                <el-tab-pane v-if="skins && skins.length" label="皮肤" name="skins">
                   <el-carousel
-                    :height="getScreenWidth() + 'px'"
+                    :height="(getScreenWidth() + (short ? 60 : 0)) + 'px'"
                     :autoplay="false"
                     class="char-set-container-wrapper"
                     indicator-position="outside"
@@ -75,7 +75,7 @@
                       style="font-size:13px"
                     >
                       <div v-if="showSet" class="char-set-contianer-wrapper" style>
-                        <div>
+                        <div v-if="!short">
                           <div class="char-profile-container">
                             <el-image :src="getSkinProile(avatarId)"></el-image>
                           </div>
@@ -109,11 +109,7 @@
                           </el-image>
                         </div>
                       </div>
-                      <div class="charset-info">
-                        <div>
-                          <span>长按或者右键可以下载</span>
-                        </div>
-                      </div>
+                      <div v-if="short">{{displaySkin.content | filterColor}}</div>
                     </el-carousel-item>
                   </el-carousel>
                 </el-tab-pane>
