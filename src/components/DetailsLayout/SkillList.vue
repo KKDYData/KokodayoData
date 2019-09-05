@@ -1,11 +1,11 @@
 <template>
-  <el-popover>
+  <el-popover :visible-arrow="false">
     <div slot="reference" class="el-circle-icon" style="position: unset; margin-left: 10px">
       <i class="el-icon-more"></i>
     </div>
     <div style="max-height: 80vh; overflow-y: scroll">
       <div v-for="(skill, index) in skill.levels" :key="index" style="margin: 10px">
-        <div style="display: flex">
+        <div style="display: flex; align-items: baseline;">
           <div>
             <span>
               <span>
@@ -22,7 +22,7 @@
               {{skill.duration}}
             </span>
           </div>
-          <div style="margin-left: auto; font-size: 1.2em">
+          <div style="margin-left: auto; font-size: 1.5em">
             Level
             <span>{{index + 1}}</span>
           </div>
@@ -37,8 +37,8 @@
 
 
 <script>
-import { changeAttackSpeed } from '../../utils';
-import Range from './Range';
+import { changeAttackSpeed } from "../../utils";
+import Range from "./Range";
 
 export default {
   components: {
@@ -50,7 +50,7 @@ export default {
     },
     showRange: {
       default: true
-    },
+    }
   },
   methods: {
     changeSkillDesc(skill) {
