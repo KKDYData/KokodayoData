@@ -22,8 +22,8 @@
               {{skill.duration}}
             </span>
           </div>
-          <div style="margin-left: auto">
-            level
+          <div style="margin-left: auto; font-size: 1.2em">
+            Level
             <span>{{index + 1}}</span>
           </div>
         </div>
