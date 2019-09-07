@@ -2,7 +2,12 @@
   <div>
     <el-alert show-icon type="warning" description>
       <div slot="title">注意</div>
-      <p>已更新地图路线、即将更新实时摆箱子堵路的功能</p>
+      <p>
+        已更新地图路线，在所有敌人有个简要模式，点按切为路线模式。
+        <del>即将更新</del>下次大型活动前更新实时摆箱子堵路的功能
+      </p>
+      <p>数据请以下面选择地图后的数据为准，因为每个地图都有可能覆盖敌人数据</p>
+      <p>出现章节的选项会在后续版本中取消</p>
     </el-alert>
     <enemy-data></enemy-data>
   </div>
