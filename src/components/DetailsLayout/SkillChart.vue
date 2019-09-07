@@ -215,6 +215,9 @@ export default {
       if (!atkScale) {
         atkScale = upWhat('damage_scale', 0, this.skill);
       }
+      if (!atkScale) {
+        atkScale = upWhat('atk_scale[drone]', 0, this.skill);
+      }
 
       const selectedTalents = this.selectedTalents;
 
@@ -227,8 +230,10 @@ export default {
           if (tempScale) {
             atkScale = tempScale;
           }
-          prob = upProb(prob, cur);
-          prob2 = upProb2(prob2, cur);
+          if (/闪避/.test(this.skill.description)) {
+            prob = upProb(prob, cur);
+            prob2 = upProb2(prob2, cur);
+          }
 
         });
       }
@@ -249,10 +254,12 @@ export default {
       if (atkScale) {
         console.log('find atkScale!', atkScale, prob);
       }
-      console.log('atkUp', atkUp);
+      console.log('atkUp', atkUp, atkScale, prob, atk);
 
-      if (atkScale > 0) {
+      if (atkScale > 0 && prob > 0) {
         atk = prob ? toProb(prob, atkScale, atk) : atk * atkScale;//atk * atkScale * prob + atk * (1 - prob);
+      } else if (atkScale > 0) {
+        atk = atk * atkScale * atkUp;
       }
       return Math.round(atk);
     },

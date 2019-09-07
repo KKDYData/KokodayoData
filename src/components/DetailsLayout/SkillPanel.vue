@@ -51,7 +51,7 @@
 
         <div class="skill-name-level" v-if="!initLv &&  skill.levels.length > 1">
           <skill-chart
-            v-if="!initLv && skill.levels[0]"
+            v-if="!production && !initLv && skill.levels[0]"
             class="skill-name-level-item"
             :status="status"
             :skill="skill.levels[sLevel[index]-1]"
@@ -119,13 +119,13 @@ export default {
     },
     talentPotentailUp: {
       required: false
-    }
-
+    },
   },
   data() {
     const initLv = this.initLv ? this.initLv : 1;
     return {
-      sLevel: [initLv, 1, 1]
+      sLevel: [initLv, 1, 1],
+      production: PRODUCTION
     };
   },
   methods: {
