@@ -2,6 +2,7 @@ node_modules
 dist
 dist-Stable
 dist-Beta
+ArknightsBeta
 stats.json
 package-lock.json
 yarn.lock

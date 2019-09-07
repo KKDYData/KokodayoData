@@ -7,7 +7,7 @@ const CleanWebPackPlugin = require('clean-webpack-plugin');
 module.exports = merge(prod, {
   mode: 'production',
   output: {
-    path: path.resolve('dist-Beta')
+    path: path.resolve('ArknightsBeta')
   },
   plugins: [
     new CleanWebPackPlugin(['dist-Beta'], { root: path.resolve(__dirname, '..') }),
