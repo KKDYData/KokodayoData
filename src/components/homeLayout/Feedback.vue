@@ -5,7 +5,7 @@
       href="https://somedata.top/ArknightsBeta"
       type="info"
     >Beta版链接</el-link>
-    <p style="color: #515151">群799872783！</p>
+    <p style="color: #515151">反馈群799872783！</p>
     <div class="feedback-part">
       <my-title title="反馈"></my-title>
       <div class="feedback-info-wrapper">
@@ -20,7 +20,12 @@
         </div>
       </div>
       <input-wrapper title="反馈">
-        <el-input type="textarea" :rows="2" placeholder="请输入内容" v-model="feedback"></el-input>
+        <el-input
+          type="textarea"
+          :rows="2"
+          placeholder="可以在内容后面留个邮箱，或者进群获取反馈进度。"
+          v-model="feedback"
+        ></el-input>
       </input-wrapper>
     </div>
     <div class="feedback-part">
@@ -74,16 +79,16 @@
 </template>
 
 <script>
-import { Input, Button, Message, MessageBox, Alert } from "element-ui";
-import Vue from "vue";
+import { Input, Button, Message, MessageBox, Alert } from 'element-ui';
+import Vue from 'vue';
 Vue.use(Input);
 Vue.use(Button);
 Vue.use(Alert);
-import InputWrapper from "./InputWrapper";
-import MyTitle from "../MyTitle";
-import MySlideTitle from "../MySlideTilte";
+import InputWrapper from './InputWrapper';
+import MyTitle from '../MyTitle';
+import MySlideTitle from '../MySlideTilte';
 
-import { submitFeedback } from "../../utils";
+import { submitFeedback } from '../../utils';
 
 export default {
   components: {
@@ -102,8 +107,8 @@ export default {
   },
   data() {
     return {
-      feedback: "",
-      id: "",
+      feedback: '',
+      id: '',
       debounceLogFb: null
     };
   },
@@ -111,17 +116,17 @@ export default {
     feedback() {
       clearTimeout(this.debounceLogFb);
       this.debounceLogFb = setTimeout(async () => {
-        await this.store.setItem("tempFeedback", this.feedback);
-        console.log("save success");
+        await this.store.setItem('tempFeedback', this.feedback);
+        console.log('save success');
       }, 1000);
     }
   },
   async mounted() {
-    const lastFeedback = await this.store.getItem("tempFeedback");
-    const lastFeedbackID = await this.store.getItem("feedbackID");
+    const lastFeedback = await this.store.getItem('tempFeedback');
+    const lastFeedbackID = await this.store.getItem('feedbackID');
     if (lastFeedback) {
       this.feedback = lastFeedback;
-      Message.success("成功恢复上次反馈但未提交的内容");
+      Message.success('成功恢复上次反馈但未提交的内容');
     }
     if (lastFeedbackID) {
       this.id = lastFeedbackID;
@@ -130,31 +135,31 @@ export default {
   methods: {
     async submitFb() {
       if (!this.id) {
-        Message.warning("必须填ID");
+        Message.warning('必须填ID');
         return;
       }
       if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(this.id)) {
-        Message.warning("ID不能包含特殊符号");
+        Message.warning('ID不能包含特殊符号');
         return;
       }
       if (!this.feedback) {
-        Message.warning("反馈内容不能为空");
+        Message.warning('反馈内容不能为空');
         return;
       }
-      const lastId = await this.store.getItem("feedbackID");
+      const lastId = await this.store.getItem('feedbackID');
       if (!lastId) {
-        await this.store.setItem("feedbackID", this.id);
+        await this.store.setItem('feedbackID', this.id);
       }
       if (lastId && lastId !== this.id) {
         await MessageBox.confirm(
           `这次的ID(${this.id})和上次不一样，需要换成上次(${lastId})的吗？`,
-          "ID不一致"
+          'ID不一致'
         )
           .then(el => {
             this.id = lastId;
           })
           .catch(el => {
-            this.store.setItem("feedbackID", this.id);
+            this.store.setItem('feedbackID', this.id);
           });
       }
       MessageBox.confirm(
@@ -165,7 +170,7 @@ export default {
           this.submit();
         })
         .catch(el => {
-          Message.info("取消");
+          Message.info('取消');
         });
     },
     submit() {
@@ -175,10 +180,10 @@ export default {
           console.error(err);
         })
         .then(res => {
-          MessageBox.confirm("反馈成功，感谢你的支持", 
-          '');
-          this.feedback = "";
-          this.store.setItem("tempFeedback", "");
+          MessageBox.confirm('反馈成功，感谢你的支持',
+            '如果没留邮箱建议进群哦～');
+          this.feedback = '';
+          this.store.setItem('tempFeedback', '');
         });
     }
   }
@@ -187,21 +192,21 @@ export default {
 
 <style lang="stylus" scoped>
 .feedback-part {
-  margin: 20px 0;
+  margin: 20px 0
 }
 
 .feedback-info-wrapper {
-  display: flex;
+  display: flex
 }
 
 .feedback-button {
-  margin-left: auto;
-  display: flex;
-  margin: auto;
+  margin-left: auto
+  display: flex
+  margin: auto
 }
 
 .feedback-button+.feedback-button {
-  margin-right: 10px;
+  margin-right: 10px
 }
 </style>
 
