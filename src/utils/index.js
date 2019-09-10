@@ -402,27 +402,28 @@ const changeAttackSpeed = (skill) => {
     const attack_speed = skill.blackboard.find(
       el => el.key === 'attack_speed'
     );
-    if (!attack_speed) return;
-    const text = res
-      .slice(skill_attack_speed.index + 4)
-      .match(/(<.*?>)(.*?)(<\/.*?>)/);
-    let value = attack_speed.value;
-    const temp = res.split('');
-    if (!text) {
-      const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
-      temp.splice(
-        skill_attack_speed.index + tempIndex,
-        0,
-        `<i style="color:#F49800;font-style: normal;">(${value})</i>`
-      );
-    } else {
-      temp.splice(
-        skill_attack_speed.index + 4 + text.index + text[0].length,
-        0,
-        `(${value})`
-      );
+    if (attack_speed) {
+      const text = res
+        .slice(skill_attack_speed.index + 4)
+        .match(/(<.*?>)(.*?)(<\/.*?>)/);
+      let value = attack_speed.value;
+      const temp = res.split('');
+      if (!text) {
+        const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
+        temp.splice(
+          skill_attack_speed.index + tempIndex,
+          0,
+          `<i style="color:#F49800;font-style: normal;">(${value})</i>`
+        );
+      } else {
+        temp.splice(
+          skill_attack_speed.index + 4 + text.index + text[0].length,
+          0,
+          `(${value})`
+        );
+      }
+      res = temp.join('');
     }
-    res = temp.join('');
   }
   const spUp = res.match(/技力回复速度/);
   if (spUp) {
@@ -435,6 +436,7 @@ const changeAttackSpeed = (skill) => {
     );
     res = temp.join('');
   }
+  //console.log(str, 'res ', res);
 
   return res;
 };

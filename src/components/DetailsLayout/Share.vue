@@ -59,7 +59,7 @@ export default {
       return `${this.right}px`;
     },
     shareLink() {
-      return 'https://somedata.top' + devMode + this.$route.fullPath;
+      return 'https://somedata.top' + this.$route.fullPath;
     }
   },
 

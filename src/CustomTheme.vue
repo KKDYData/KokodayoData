@@ -43,15 +43,15 @@
                 <div class="theme-desc">自动摆放最大舒适度：{{extraComfort[k]}}</div>
               </div>
             </div>
+            <div v-if="groupList[k].extraFurn && groupList[k].extraFurn.length">
+              <furni-list type="extra" :furnis="groupList[k].extraFurn"></furni-list>
+            </div>
             <div v-for="group in groupList[k].lists" :key="group.name">
               <p style="color: #313131; margin-bottom: 0">
                 {{group.name}}
                 <span>套件舒适度： {{group.comfort}}</span>
               </p>
               <furni-list :furnis="group.list"></furni-list>
-            </div>
-            <div v-if="groupList[k].extraFurn && groupList[k].extraFurn.length">
-              <furni-list type="extra" :furnis="groupList[k].extraFurn"></furni-list>
             </div>
           </div>
         </div>
