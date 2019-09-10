@@ -90,7 +90,12 @@ export default {
 
   .status-details-value {
     width: calc(80px + 0.5vw)
+    padding-top: 2px
     text-align: center
+  }
+
+  .status-details-container {
+    margin: 5px 0
   }
 }
 </style>

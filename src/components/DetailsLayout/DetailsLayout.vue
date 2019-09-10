@@ -342,7 +342,9 @@ export default {
         for (let wrapper of this.data.talents) {
           const tGroup = wrapper.candidates;
           for (let talent of tGroup) {
-            talent.description = changeAttackSpeed(talent);
+            const res = changeAttackSpeed(talent);
+            talent.description = res;
+            //console.log(res);
             arr.push(talent);
           }
         }

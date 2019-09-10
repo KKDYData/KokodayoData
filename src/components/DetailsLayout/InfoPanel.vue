@@ -135,7 +135,7 @@
               <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
                 <div class="info-story-unlock" v-if="p.unLockParam !== ''">
                   <span>解锁需要好感：</span>
-                  <span>{{p.unLockParam}}</span>
+                  <span>{{p.unLockParam | unlockStr}}</span>
                 </div>
                 <p v-html="changeText(p.storyText)"></p>
               </div>
@@ -294,6 +294,14 @@ export default {
     }
   },
   filters: {
+    unlockStr(v) {
+      if (/;/.test(v)) {
+        const arr = v.split(';');
+        return `精英阶段${arr[0]}, 等级${arr[1]}`;
+      } else {
+        return v;
+      }
+    },
     docter: str => {
       return str.replace(/{@nickname}/, '阿凡提');
     },

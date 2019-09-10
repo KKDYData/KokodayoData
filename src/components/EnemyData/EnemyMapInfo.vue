@@ -1,6 +1,7 @@
 <template>
   <div class="map-option-container-wrapper">
     <my-title v-if="showTitle" title="地图信息"></my-title>
+    <div style="margin-bottom: 10px; color: #828282; font-size: 0.8em">3星通关时，经验和龙门币的获取需要有1.2倍加成</div>
     <div class="map-option-container">
       <content-slot
         class="map-option-content"
@@ -22,6 +23,10 @@
 <script>
 import MyTitle from '../MyTitle';
 import ContentSlot from '../ContentSlot';
+import Vue from 'vue';
+import { Alert } from 'element-ui';
+Vue.use(Alert);
+
 
 export default {
   components: {
@@ -93,7 +98,8 @@ export default {
   }
 
   .map-option-content {
-    margin: 0 10px 10px 0
+    margin: 0 0 10px 0
+    width: calc(50% - 5px)
   }
 
   .map-option-container {
