@@ -58,7 +58,7 @@ const actions = {
 
   async setExtraSkins({ commit, state }) {
     if (state.extraSkins) return;
-    const data = await fetchByKey('char')('extraSkins');
+    const data = await fetchByKey('char/extraSkins')('1');
     commit('setExtraSkins', data);
   }
 };

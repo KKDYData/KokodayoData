@@ -10,7 +10,7 @@ module.exports = merge(prod, {
     path: path.resolve('ArknightsBeta')
   },
   plugins: [
-    new CleanWebPackPlugin(['dist-Beta'], { root: path.resolve(__dirname, '..') }),
+    new CleanWebPackPlugin(['ArknightsBeta'], { root: path.resolve(__dirname, '..') }),
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(false)
     })
