@@ -109,7 +109,7 @@
                 size="mini"
                 slot="reference"
                 plain
-              >查看立绘</el-button>
+              >立绘/皮肤</el-button>
             </el-popover>
           </div>
           <div class="info-draw-name">
@@ -179,7 +179,7 @@
                 ></audio-container>
               </template>
             </div>
-            <p>{{word.voiceText | docter}}</p>
+            <p v-html="changeVoice(word.voiceText)">{{word.voiceText}}</p>
           </div>
         </div>
       </el-tab-pane>
@@ -302,18 +302,26 @@ export default {
         return v;
       }
     },
-    docter: str => {
-      return str.replace(/{@nickname}/, '阿凡提');
-    },
     filterColor(v) {
       const reg = /<color (name=(.{7}))?>/g;
       const regL = /<\/color>/g;
-      console.log(v, v.replace(reg, ''), v.replace(reg, '').replace(regL, ''));
       return v.replace(reg, '').replace(regL, '');
     }
   },
   methods: {
     ...mapActions(['setExtraSkins']),
+    changeVoice(str = '') {
+      const matches = str.matchAll(/{@nickname}/g);
+      if (matches) {
+        let res = '', lastIndex = 0;
+        for (const cur of matches) {
+          res += str.substring(lastIndex, cur.index) + '<i style="color:#F49800; font-style: normal">阿凡提#001</i>';
+          lastIndex = cur.index + cur[0].length;
+        }
+        res += str.substring(lastIndex);
+        return res;
+      } else return str;
+    },
     getSkinProile(id) {
 
       console.log(path + 'char/profile/' + id + this.style, id);

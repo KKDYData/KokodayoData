@@ -25,29 +25,8 @@
               </div>
               <div class="intro-2-wrapper">
                 <span v-if="!descArrary" class="intro-2" v-html="desc"></span>
-                <span v-else v-html="desc[descIndex]" class="intro-2"></span>
-                <div v-if="descArrary && desc.length > 1" class="intro-2-control">
-                  <div class="intro-2-control-button">
-                    <el-button
-                      @click="descIndex++"
-                      :disabled="descIndex === desc.length - 1"
-                      type="warning"
-                      icon="el-icon-caret-top"
-                      size="mini"
-                      circle
-                    ></el-button>
-                  </div>
-                  <div class="intro-2-control-button">
-                    <el-button
-                      :disabled="descIndex === 0"
-                      @click="descIndex--"
-                      type="warning"
-                      size="mini"
-                      icon="el-icon-caret-bottom"
-                      circle
-                    ></el-button>
-                  </div>
-                </div>
+                <span v-else-if="desc.length > 1" v-html="desc[phases]" class="intro-2"></span>
+                <span v-else v-html="desc[0]" class="intro-2"></span>
               </div>
             </div>
           </div>
@@ -115,15 +94,14 @@ export default {
     short: {
       type: Boolean,
       required: true
+    },
+    phases: {
+      type: Number,
+      required: true
     }
   },
   components: {
     charCube
-  },
-  data() {
-    return {
-      descIndex: 0
-    };
   },
   computed: {
     profile() {

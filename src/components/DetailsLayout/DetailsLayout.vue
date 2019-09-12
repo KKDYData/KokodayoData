@@ -12,7 +12,7 @@
     <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
-        <agent-card :data="data" :short="short"></agent-card>
+        <agent-card :phases="phases" :data="data" :short="short"></agent-card>
         <!-- 属性面板 -->
         <div class="stats-wrapper">
           <div class="group-container-title">
