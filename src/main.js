@@ -78,6 +78,3 @@ new Vue({
 
 store.dispatch('setDropList');
 store.dispatch('setStageTree');
-
-
-
