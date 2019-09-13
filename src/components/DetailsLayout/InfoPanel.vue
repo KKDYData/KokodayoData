@@ -311,16 +311,15 @@ export default {
   methods: {
     ...mapActions(['setExtraSkins']),
     changeVoice(str = '') {
-      const matches = str.matchAll(/{@nickname}/g);
-      if (matches) {
-        let res = '', lastIndex = 0;
-        for (const cur of matches) {
-          res += str.substring(lastIndex, cur.index) + '<i style="color:#F49800; font-style: normal">阿凡提#001</i>';
-          lastIndex = cur.index + cur[0].length;
-        }
-        res += str.substring(lastIndex);
-        return res;
-      } else return str;
+      const reg = new RegExp('{@nickname}', 'g');
+      let matches;
+      let res = '', lastIndex = 0;
+      while ((matches = reg.exec(str)) != null) {
+        res += str.substring(lastIndex, matches.index) + '<i style="color:#F49800; font-style: normal">阿凡提#001</i>';
+        lastIndex = matches.index + matches[0].length;
+      }
+      res += str.substring(lastIndex);
+      return res;
     },
     getSkinProile(id) {
 
