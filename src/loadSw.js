@@ -30,6 +30,7 @@ export default () => {
 
       wb.addEventListener('controlling', (event) => {
         console.log('controlling');
+
       });
       console.log('注册sw');
       wb.register();
