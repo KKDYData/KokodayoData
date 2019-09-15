@@ -31,8 +31,9 @@
         <div class="chart-details-container">
           <div>攻击间隔: {{baseAttackTime | format}}</div>
           <div>| 攻击速度: {{speedUp | format}}</div>
-          <div>| 降低防御固定值/比例: {{defDown | format}} / {{defDownScale | format}}</div>
-          <div>| 降低魔抗固定值/比例: {{margicResistance}} / {{margicResistanceR}}</div>
+          <div>| 攻击次数: {{attackTimes}}</div>
+          <div>| 减防数值/比例: {{defDown | format}} / {{defDownScale | format}}</div>
+          <div>| 减抗数值/比例: {{margicResistance}} / {{margicResistanceR}}</div>
         </div>
       </div>
     </el-popover>
@@ -176,7 +177,8 @@ export default {
       if (!times) {
         times = upWhat('times', 0, this.skill);
       }
-      return times ? times : 1;
+      return times ? times
+        : /攻击变为二连击/.test(this.skill.description) ? 2 : 1;
     },
     defDownScale() {
       const res = getWhatDef('def', mergeDefR, this.skill, this.selectedTalents);
