@@ -230,7 +230,7 @@ export default {
           if (tempScale) {
             atkScale = tempScale;
           }
-          if (/闪避/.test(this.skill.description)) {
+          if (!/闪避/.test(this.skill.description)) {
             prob = upProb(prob, cur);
             prob2 = upProb2(prob2, cur);
           }
