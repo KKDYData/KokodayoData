@@ -23,7 +23,6 @@ import { throttle } from '../../utils';
 import { Message } from 'element-ui';
 
 import Clipboard from 'clipboard';
-import devMode from '../../stats';
 
 
 export default {
