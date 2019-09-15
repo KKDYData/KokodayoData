@@ -331,6 +331,7 @@ export default {
         );
 
       target.runes.forEach(data => {
+        if (!data.blackboard.length) return;
         if (data.blackboard[0].key === 'enemy') {
           if (data.blackboard[0].valueStr !== this.keyName) return;
           data.blackboard.forEach(el => {
