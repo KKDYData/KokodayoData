@@ -161,14 +161,14 @@ export default {
       const duration = this.skill.duration === -1;
 
       // 暂时只有技能有减攻击间隔的
-      let baseTime = upBaseAttackTime(time, this.skill);
+      let timeUp = upBaseAttackTime(0, this.skill);
       const shorten = /缩短/.test(this.skill.description);
-      // 检查是否是安洁莉娜的模式
-      if (shorten && baseTime - time > 0) {
-        console.log('shorten !!!!!', baseTime, time);
-        baseTime = (baseTime - time) * time;
-      }
 
+      // 检查是否是安洁莉娜的模式
+      const absV = Math.abs(timeUp);
+      let baseTime = shorten && timeUp > 0 ? time * timeUp :
+        absV > 1 || absV < 0.5 ? time + timeUp
+          : time * (1 + timeUp);
 
       return test || (duration && this.skill.skillType !== 0) ? 1 : baseTime;
     },
