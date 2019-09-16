@@ -404,7 +404,8 @@ export default {
         if (!el.buff.attributes.attributeModifiers)
           throw new Error('你是假数据！' + JSON.stringify(el.buff));
         const temp = el.buff.attributes.attributeModifiers.reduce((res, el) => {
-          if (!el.attributeType) return res;
+          // type = 0 是生命提升，没有小于0的
+          // if (!el.attributeType) return res;
           res.push({
             type: potentialToStatus[el.attributeType],
             value: el.value
