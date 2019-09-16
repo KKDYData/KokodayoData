@@ -377,16 +377,16 @@ const changeAttackSpeed = (skill) => {
 
     let value = skill_base_time.value;
     const temp = res.split('');
+    // 有text的话，直接按匹配的长度弄就好
     if (!text) {
-      const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
-      temp.splice(
-        skill_time_text.index + tempIndex,
-        0,
-        `<i style="color:#F49800;font-style: normal;">(${value}s)</i>`
-      );
+      throw new Error('攻击间隔的正则匹配出问题');
     } else {
-      const unit = text[2] !== '极大幅度缩短' ? 's' : '%';
-      if (unit === '%') value *= 100;
+      let unit = 's';
+      const absV = Math.abs(value);
+      if (absV < 1 && absV > 0.5 || absV < 0.2) {
+        value *= 100;
+        unit = '%';
+      }
       temp.splice(
         skill_time_text.index + 4 + text.index + text[0].length,
         0,
@@ -425,6 +425,7 @@ const changeAttackSpeed = (skill) => {
       res = temp.join('');
     }
   }
+
   const spUp = res.match(/技力回复速度/);
   if (spUp) {
     const temp = res.split('');
@@ -436,7 +437,6 @@ const changeAttackSpeed = (skill) => {
     );
     res = temp.join('');
   }
-  //console.log(str, 'res ', res);
 
   return res;
 };
