@@ -125,6 +125,7 @@ export default {
     const initLv = this.initLv ? this.initLv : 1;
     return {
       sLevel: [initLv, 1, 1],
+      // eslint-disable-next-line no-undef
       production: PRODUCTION
     };
   },
