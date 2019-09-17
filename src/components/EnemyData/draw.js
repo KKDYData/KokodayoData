@@ -270,6 +270,7 @@ class Map {
       const [preX, preY] = arr[index - 1];
       return { row: y - preY, col: x - preX };
     });
+    console.log('??');
     const radio = this.mapRadio, cen = this.mapRadio / 2;
     return temp.reduce((path, { row, col }, index) => {
       if (index === 0) return `m ${col * radio + cen} ${row * radio + cen}`;
@@ -309,7 +310,8 @@ class Map {
         if (nCol === 0 && nRow === 0 && arr[index + 2].type !== 6) {
           nRow = arr[index + 2].row;
           nCol = arr[index + 2].col;
-          res.push({ stop: { pos: el, time: pathPoints[index].time } });
+          const time = pathPoints[index].time ? pathPoints[index].time : pathPoints[index + 1].time;
+          res.push({ stop: { pos: el, time } });
         }
         const ttGrid = tempGrid.clone();
         const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
