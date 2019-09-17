@@ -71,8 +71,8 @@
 
             <char-status class="status-details-wrapper" :status="status"></char-status>
             <div class="status-range-wrapper">
-              <div v-if="rangeData.length > 0" class="status-range-inner-wrapper">
-                <range :data="rangeData[phases]"></range>
+              <div v-if="rangeId" class="status-range-inner-wrapper">
+                <range :range-id="rangeId"></range>
                 <div style="text-align: center;font-size: 14px">
                   <span>攻击范围</span>
                 </div>
@@ -185,7 +185,6 @@ import {
   calStatusEnd,
   getSkill,
   getItem,
-  getRange,
   getCharWords,
   getCharInfo,
 } from '../../utils';
@@ -272,7 +271,7 @@ export default {
         this.phases = this.data.phases.length - 1;
         this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
         this.getSkills();
-        this.getRange();
+        // this.getRange();
         this.getEvolveCost();
         this.getInfo();
         this.getWords();
@@ -316,7 +315,6 @@ export default {
       isFavor: true,
       potentialRanks: -1,
       skills: [],
-      rangeData: [],
       evolveCost: {},
       info: null,
       words: [],
@@ -326,6 +324,24 @@ export default {
     };
   },
   computed: {
+    rangeId() {
+      // 针对白雪
+
+      const talent = this.talents.filter(el => el.condidate.filter(el => /攻击范围扩大/.test(el.description) && el.rangeId).length);
+      if (talent.length) {
+        const id = talent.reduce((res, cur) => {
+          return cur.condidate.reduce((res, cur) => {
+            if (cur.unlockCondition.phase <= this.phases && cur.unlockCondition.level <= this.level) {
+              res = cur.rangeId;
+            }
+            return res;
+          }, res);
+        }, '');
+        if (id) return id;
+      }
+
+      return this.data.phases[this.phases].rangeId;
+    },
     setList() {
       if (!this.data) return [];
       if (this.name === 'char_002_amiya') return [1, '1%2B', 2];
@@ -447,12 +463,6 @@ export default {
     },
     getWords() {
       getCharWords(this.name).then(res => this.words = res);
-    },
-    getRange() {
-      if (!this.data) return;
-      const data = [...this.data.phases];
-      Promise.all(data.map(p => getRange(p.rangeId)))
-        .then(arr => this.rangeData = arr);
     },
     getSkills() {
       if (!this.data) return;

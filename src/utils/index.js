@@ -379,12 +379,19 @@ const changeAttackSpeed = (skill) => {
     const temp = res.split('');
     // 有text的话，直接按匹配的长度弄就好
     if (!text) {
-      throw new Error('攻击间隔的正则匹配出问题');
+      // throw new Error('攻击间隔的正则匹配出问题');
+      const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
+
+      temp.splice(
+        skill_time_text.index + tempIndex,
+        0,
+        `<i style="color:#F49800;font-style: normal;">(${value}s)</i>`
+      );
     } else {
       let unit = 's';
       const absV = Math.abs(value);
-      if (absV < 1 && absV > 0.5 || absV < 0.2) {
-        value *= 100;
+      if (absV === 0.7 || absV === 0.15) {
+        value = value * 10 * 10;
         unit = '%';
       }
       temp.splice(
