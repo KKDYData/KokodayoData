@@ -330,6 +330,8 @@ export default {
           new RegExp(el.key).test(this.currentMap)
         );
 
+      const lv = this.mapLevel ? this.mapLevel : this.level;
+
       target.runes.forEach(data => {
         if (!data.blackboard.length) return;
         if (data.blackboard[0].key === 'enemy') {
@@ -346,14 +348,14 @@ export default {
           } else {
             this.skillRangeRadius = data.blackboard[0].value;
           }
-        } else {
+        } else if (data.key !== 'gbuff_lifepoint') {
           data.blackboard.forEach(el => {
             const key = changeKey(el.key);
             res[key] = res[key] ? res[key] * el.value : el.value;
           });
         }
       });
-      return this.status[this.level].map(el => {
+      return this.status[lv].map(el => {
         if (res[el[2]]) {
           return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10];
         } else {
