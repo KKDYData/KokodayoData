@@ -261,7 +261,7 @@ export default {
       if (atkScale > 0 && prob > 0) {
         atk = prob ? toProb(prob, atkScale, atk) : atk * atkScale;//atk * atkScale * prob + atk * (1 - prob);
       } else if (atkScale > 0) {
-        atk = atk * atkScale * atkUp;
+        atk = atk * atkScale;
       }
       return Math.round(atk);
     },
