@@ -269,7 +269,7 @@ export default {
 }
 
 .enemy-boss-icon {
-  filter: invert(100%) opacity(0.15)
+  filter: invert(100%) contrast(2) opacity(0.15)
 }
 
 @media screen and (max-width: 700px) {
