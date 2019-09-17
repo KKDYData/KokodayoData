@@ -28,7 +28,7 @@
     </el-drawer>
     <el-alert show-icon type="warning" description>
       <div slot="title">注意</div>
-      <p>即将更新敌人路线、所有敌人的出现地图、其它地图数据...</p>
+      <p>修复突袭对于所有敌人的buff无法作用于拥有多等级的敌人（Boss）的bug...</p>
     </el-alert>
     <div class="map-wrapper">
       <div ref="map-title-part" class="map-title-part">
