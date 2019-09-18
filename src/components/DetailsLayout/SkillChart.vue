@@ -124,6 +124,9 @@ export default {
     },
     talentPotentailUp: {
       required: true
+    },
+    description: {
+      required: true
     }
   },
   data() {
@@ -142,7 +145,7 @@ export default {
       else return true;
     },
     magic() {
-      if (/变为法术/.test(this.skill.description)) return true;
+      if (/变为法术/.test(this.skill.description) || /法术伤害/.test(this.description)) return true;
       if (this.profession !== 'CASTER' && this.profession !== 'SUPPORT') return false;
       else return true;
     },
@@ -207,9 +210,12 @@ export default {
     },
     skillAtk() {
       let atkUp = upAtk(1, this.skill);
-      let atkScale = upScale(0, this.skill),
+      let atkScale = upScale(0, this.skill), prob, prob2;
+
+      if (!/闪避/.test(this.skill.description)) {
         prob = upProb(0, this.skill),
         prob2 = upProb2(0, this.skill);
+      }
 
       if (!atkScale) {
         atkScale = upWhat('attack@atk_scale', 0, this.skill);
@@ -232,7 +238,7 @@ export default {
           if (tempScale) {
             atkScale = tempScale;
           }
-          if (!/闪避/.test(this.skill.description)) {
+          if (!/闪避/.test(cur.description)) {
             prob = upProb(prob, cur);
             prob2 = upProb2(prob2, cur);
           }
