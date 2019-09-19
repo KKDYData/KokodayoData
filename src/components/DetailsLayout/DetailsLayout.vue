@@ -274,13 +274,14 @@ export default {
         // this.getEvolveCost();
         // this.getInfo();
         // this.getWords();
+        this.getSkills();
+
         this.dataLoad = true;
       })
       .catch(err => {
         console.log(err);
         // this.loadingFail = true;
       });
-    // this.getSkills();
 
   },
   beforeMount() {
