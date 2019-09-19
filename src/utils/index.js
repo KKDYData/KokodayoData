@@ -97,13 +97,13 @@ const fetchByKey = (keyPath) => {
 // 遗留api
 const getProfileList = () => fetchGetSliceSet('shortList');
 
-const getEnemyList = () => fetchByKey('LIst/enemyList')('1568885219757');
+const getEnemyList = () => fetchGetSliceSet('enemyList', 'setEnemyVer');
 
 const getEneAppearMap = () => fetchGetSliceSet('enemyAppearMap', 'setApperMapVer');
 
-const getDevList = () => fetchByKey('LIst/charList')('1568885771611');
+const getDevList = () => fetchGetSliceSet('devList', 'setListVer');
 
-const getStageList = () => fetchByKey('LIst/stageList')('1568885159227');
+const getStageList = () => fetchGetSliceSet('stageList');
 // 不用找服务器的list
 const getThemeList = () => fetchByKey('custom')('themeslist');
 
