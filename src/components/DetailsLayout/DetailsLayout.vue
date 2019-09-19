@@ -271,17 +271,17 @@ export default {
         this.data = data;
         this.phases = this.data.phases.length - 1;
         this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
-        this.getSkills();
-        // this.getRange();
-        this.getEvolveCost();
-        this.getInfo();
-        this.getWords();
+        // this.getEvolveCost();
+        // this.getInfo();
+        // this.getWords();
         this.dataLoad = true;
       })
       .catch(err => {
         console.log(err);
-        this.loadingFail = true;
+        // this.loadingFail = true;
       });
+    // this.getSkills();
+
   },
   beforeMount() {
     this.short = isMoblie();
@@ -328,7 +328,8 @@ export default {
     rangeId() {
       // 针对白雪
 
-      const talent = this.talents.filter(el => el.condidate.filter(el => /攻击范围扩大/.test(el.description) && el.rangeId).length);
+      const talent = this.talents ? this.talents.filter(el => el.condidate.filter(el => /攻击范围扩大/.test(el.description) && el.rangeId).length)
+        : [];
       if (talent.length) {
         const id = talent.reduce((res, cur) => {
           return cur.condidate.reduce((res, cur) => {
@@ -354,7 +355,7 @@ export default {
       return arr;
     },
     talents() {
-      if (this.data) {
+      if (this.data && this.data.profession !== 'TOKEN') {
         const arr = [];
         for (let wrapper of this.data.talents) {
           const tGroup = wrapper.candidates;
@@ -398,7 +399,7 @@ export default {
       }
     },
     potentailUPList() {
-      if (!this.data) return;
+      if (!this.data || this.data.profession === 'TOKEN') return;
       const res = [];
       this.data.potentialRanks.forEach((el, index) => {
         let haveValue = false;
@@ -414,7 +415,7 @@ export default {
     potentailStatusUP() {
       const rank = this.potentialRanks;
       const data = this.data.potentialRanks;
-      if (!data) return;
+      if (!this.data || this.data.profession === 'TOKEN') return;
 
       return data.reduce((target, el, index) => {
         if (index > rank || !el.buff) return target;
@@ -469,7 +470,8 @@ export default {
       if (!this.data) return;
       const data = [...this.data.skills]
         .map(skill => getSkill(skill.skillId));
-      Promise.all(data).then(arr => this.skills = arr);
+      Promise.all(data).then(arr => this.skills = arr)
+        .catch(err => console.log(err));
     },
     getEvolveCost() {
       if (!this.data) return;

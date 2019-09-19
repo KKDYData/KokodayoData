@@ -36,13 +36,13 @@ module.exports = merge(common, {
         },
         //详情页面
         {
-          from: /^\/details\/(?!char).*$/, to: context => {
-            console.log(context.parsedUrl.path.slice(9));
+          from: /^\/details\/(?!(char|token)).*$/, to: context => {
+            console.log(context.parsedUrl.path.slice(9), 'bundle');
             return '/' + context.parsedUrl.path.slice(9);
           }
         },
         {
-          from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|a00).*$/, to: context => {
+          from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|a00|level_).*$/, to: context => {
             console.log(context.parsedUrl.path);
 
             console.log(context.parsedUrl.path.slice(11) + ' ttt');
@@ -58,7 +58,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/details\/(char)?/, to: context => {
+          from: /^\/details\/(char|token)?/, to: context => {
             return '/index.html';
           }
         },

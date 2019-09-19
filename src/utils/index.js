@@ -30,12 +30,12 @@ const throttle = function (action, delay) {
   };
 };
 
-const path = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'
+const path = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com/data2nd/'
   : 'https://andata.somedata.top/dataX/';
 
 const dataPath = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'
   : 'https://andata.somedata.top';
-const api = devMode === '/Arknights' ? '/api/arknights/' : '/api/arkforward/';
+const api = devMode === '/Arknights' ? '/api/arknights/' : '/api/arknights/';
 
 
 const fetchPut = (url, data) => {
@@ -78,16 +78,16 @@ const fetchGetSliceSet = (key, setKey) => {
   return fetchGet(api + 'data/' + key)
     .then(res => {
       if (setKey) setVer(setKey, res.lastModified);
-      return fetchGet(path + res.name.slice(6));
+      return fetchGet(path + res.name.slice(8));
     })
     .catch(err => {
       console.error('error', err);
-      return [];
+      return {};
     });
 };
 
 const fetchByKey = (keyPath) => {
-  return key => fetchGet(`${dataPath}/data/${keyPath}/${key}.json`)
+  return key => fetchGet(`${dataPath}/data2nd/${keyPath}/${key}.json`)
     .catch(err => {
       console.error('error', err);
       return Promise.reject('no data');
@@ -224,6 +224,7 @@ const class_chinese = {
   TANK: { isTag: false, text: '重装', value: 'TANK', short: '重' },
   SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL', short: '特' },
   SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT', short: '辅' },
+  TOKEN: { isTag: false, text: '召唤物', value: 'TOKEN', short: '召' },
 
 };
 
@@ -495,7 +496,7 @@ const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP
     if (!statusToChChar(key)) return res;
     let nV = value, addV = 0;
     // 判定是是否满好感
-    if (isFavor) {
+    if (isFavor && baseData.favorKeyFrames) {
       const v = baseData.favorKeyFrames[1].data[key];
       if (v !== 0) {
         addV += v;
@@ -503,7 +504,7 @@ const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP
       }
     }
     // 判定潜能提升
-    potentailStatusUP.forEach(el => {
+    potentailStatusUP && potentailStatusUP.forEach(el => {
       el.forEach(el => {
         if (el.type === key) {
           if (key === 'baseAttackTime') {
