@@ -414,7 +414,7 @@ export default {
         this.runesMode = false;
         this.selMapNode = data;
         let codeFromPath = data.path;
-        let shortCode = codeFromPath.replace('weekly', 'wk').replace('promote', 'pro');
+        let shortCode = codeFromPath.replace('weekly', 'wk').replace('promote', 'pro').split('/')[2];
         this.mapCode = shortCode;
         this.$refs['chapter-selecter'].closeDrawer();
         this.load = true;
@@ -422,10 +422,10 @@ export default {
         // 不用路由守卫了,改起来过于麻烦
         if (!data.first) this.$router.push(this.path + shortCode);
         else console.log('first? ');
-
+        console.log('?');
         const [mapData, exData] = await Promise.all([
-          getMapData('level_' + codeFromPath.replace('kc', 'killcost')),
-          getMapDataListVer(shortCode)
+          getMapData(shortCode),
+          getMapDataListVer(codeFromPath)
         ]).catch(err => {
           Message.error('获取数据失败');
           return [];
