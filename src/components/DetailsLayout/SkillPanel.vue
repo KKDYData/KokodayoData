@@ -59,6 +59,7 @@
             :profession="profession"
             :short="short"
             :talent-potentail-up="talentPotentailUp"
+            :description="description"
           ></skill-chart>
           <div class="skill-name-level-item">
             <div class="skill-title-level">
@@ -120,6 +121,9 @@ export default {
     talentPotentailUp: {
       required: false
     },
+    description: {
+      required: true
+    }
   },
   data() {
     const initLv = this.initLv ? this.initLv : 1;
