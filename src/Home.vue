@@ -67,7 +67,7 @@ export default {
           el.index = index;
           el.tagHit = 0;
         });
-        return source.reverse();
+        return source.filter(el => el.logo).reverse();
       });
     }
   }
