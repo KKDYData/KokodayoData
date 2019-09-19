@@ -99,7 +99,6 @@
             :profession="data.profession"
             :short="short"
             :talent-potentail-up="talentPotentailUp"
-            :description="data.description"
           ></skill-panel>
         </div>
         <!-- 潜能面板 -->
