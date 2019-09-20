@@ -28,7 +28,7 @@ export default {
       required: true
     },
     volume: {
-      default: 1,
+      default: 100,
       type: Number
     }
   },
@@ -41,19 +41,16 @@ export default {
     this.$refs.word.volume = this.volume / 100;
   },
   watch: {
-    volume: function(e) {
+    volume: function (e) {
       this.$refs.word.volume = e / 100;
     }
   },
   methods: {
     play() {
-      this.$refs.word.play()
-        .catch(err => {
-          console.log(err);
-          Message.error('语音数据可能还没压缩上传，过一会再来听吧');
-        });
-        
-
+      this.$refs.word.play().catch(err => {
+        console.log(err);
+        Message.error('语音数据可能还没压缩上传，过一会再来听吧');
+      });
     },
     pause() {
       this.$refs.word.pause();

@@ -31,9 +31,7 @@ import loadingC from './components/Loading';
 import Mode from './stats';
 
 const HomeLayout = () => ({
-  component: import(
-    /* webpackChunkName: "HomeLayout" */ './components/homeLayout'
-  ),
+  component: import(/* webpackChunkName: "HomeLayout" */ './components/homeLayout'),
   loading: loadingC,
   error: loadingC,
   delay: 200,
