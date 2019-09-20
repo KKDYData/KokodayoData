@@ -147,7 +147,7 @@ if (typeof Array.prototype.flat !== 'function') {
   };
 }
 
-const version = 190831;
+const version = 190920;
 
 export default {
   metaInfo() {
@@ -164,8 +164,8 @@ export default {
   },
   components: {
     'filter-group': FilterButtonGroup,
-    'profile-layout': ProfileLayout,
-    'new-profile-layout': newProfileLayout,
+    ProfileLayout,
+    newProfileLayout,
     myFeedback
   },
   props: {
@@ -203,7 +203,7 @@ export default {
         this.data = this.profileList;
         this.resetFilter();
       } else {
-        console.log('???????_noVersion');
+        console.log('first open _noVersion');
         this.store.setItem('_filterVersion', version);
         this.data = this.profileList;
       }

@@ -95,7 +95,7 @@ const fetchByKey = (keyPath) => {
 };
 
 // 遗留api
-const getProfileList = () => fetchGetSliceSet('shortList');
+const getProfileList = () => fetchByKey('char/list')('1568990623279');
 
 const getEnemyList = () => fetchGetSliceSet('enemyList', 'setEnemyVer');
 
@@ -224,6 +224,7 @@ const class_chinese = {
   TANK: { isTag: false, text: '重装', value: 'TANK', short: '重' },
   SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL', short: '特' },
   SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT', short: '辅' },
+  TOKEN: { isTag: false, text: '召唤物', value: 'TOKEN', short: '辅' },
 
 };
 
@@ -495,7 +496,7 @@ const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP
     if (!statusToChChar(key)) return res;
     let nV = value, addV = 0;
     // 判定是是否满好感
-    if (isFavor) {
+    if (isFavor && baseData.favorKeyFrames) {
       const v = baseData.favorKeyFrames[1].data[key];
       if (v !== 0) {
         addV += v;
