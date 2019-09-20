@@ -744,7 +744,6 @@ export default {
 
   .status-phases-wrapper {
     width: 100%;
-    padding-left: 10px;
     border-bottom: 1px solid rgba(158, 158, 158, 0.4);
   }
 
