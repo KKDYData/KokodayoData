@@ -120,5 +120,6 @@ export default {
   bottom: 200px
   border: none
   padding: 0
+  z-index: 100
 }
 </style>
