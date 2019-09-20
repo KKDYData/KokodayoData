@@ -31,7 +31,7 @@
                 >{{index}}</el-button>
               </div>
 
-              <div class="status-potential-wrapper">
+              <div class="status-potential-wrapper" v-if="potentailUPList.length > 0">
                 <span class="status-phases-text">潜能等级</span>
                 <div style="display: inline; font-size: 0px">
                   <el-button
@@ -63,7 +63,7 @@
                     ></el-slider>
                   </div>
                 </div>
-                <div class="status-favor-switch">
+                <div class="status-favor-switch" v-if="data.favorKeyFrames">
                   <el-switch active-color="#313131" v-model="isFavor" active-text="满信赖"></el-switch>
                 </div>
               </div>
@@ -531,7 +531,7 @@ export default {
 }
 
 .status-phases-wrapper {
-  padding: 12px 0;
+  padding: 12px 0 12px 10px;
 }
 
 /* 改button颜色 */
