@@ -81,7 +81,7 @@
           </div>
         </div>
         <!-- 天赋面板 -->
-        <div class="tttt">
+        <div v-if="talents.length > 0" class="tttt">
           <div class="group-container-title">天赋</div>
           <talents-panel
             @talentPotentailUp="e => talentPotentailUp = e"
@@ -271,7 +271,7 @@ export default {
         this.dataLoad = true;
 
         this.getSkills();
-        if (this.data.profession !== 'TOKEN') return;
+        if (this.data.profession === 'TOKEN') return;
         // this.getRange();
         this.getEvolveCost();
         this.getInfo();
@@ -358,6 +358,7 @@ export default {
     talents() {
       if (this.data) {
         const arr = [];
+        if (!this.data.talents) return [];
         for (let wrapper of this.data.talents) {
           const tGroup = wrapper.candidates;
           if (!tGroup) continue;
