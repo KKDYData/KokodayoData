@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { getDevList } from './utils';
+import { getProfileList } from './utils';
 import { Alert, link } from 'element-ui';
 import Vue from 'vue';
 Vue.use(link);
@@ -62,12 +62,12 @@ export default {
       });
     },
     getData() {
-      return getDevList().then(source => {
+      return getProfileList().then(source => {
         source.forEach((el, index) => {
           el.index = index;
           el.tagHit = 0;
         });
-        return source.filter(el => el.logo).reverse();
+        return source.reverse();
       });
     }
   }

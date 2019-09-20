@@ -3,7 +3,9 @@
     <div class="talent-container-wrapper">
       <div v-for="(item, index) in talents" :key="item.name" class="talent-container">
         <div class="talent-name-wrapper">
-          <span :style="!short && item.name.length > 5 ? 'font-size: 13px': ''">{{item.name}}</span>
+          <span
+            :style="!short && item.name && item.name.length > 5 ? 'font-size: 13px': ''"
+          >{{item.name}}</span>
           <div class="talent-desc-change-button">
             <el-button
               v-if="item.condidate[0].potentailUP"

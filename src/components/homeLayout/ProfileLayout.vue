@@ -64,7 +64,7 @@
                 v-if="showTags && tagHit(agent.tags[1])"
               >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
             </div>
-            <div class="name-slide-logo">
+            <div class="name-slide-logo" v-if="agent.logo">
               <el-image
                 fit="cover"
                 :alt="agent.name"
@@ -163,7 +163,7 @@ export default {
         const width = this.$el.clientWidth,
           target = document.querySelector('.profile-item');
         const slice2 = x => +x.slice(0, -2);
-        if(!target) return;
+        if (!target) return;
         const
           style = getComputedStyle(target),
           cWidth = style.width,

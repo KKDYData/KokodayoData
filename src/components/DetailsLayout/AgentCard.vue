@@ -15,7 +15,12 @@
             </div>
             <div>
               <div class="agent-card-title-class">
-                <el-image class="agent-card-pro-pic" :src="professionPic" :details="data.name">
+                <el-image
+                  v-if="professionPic"
+                  class="agent-card-pro-pic"
+                  :src="professionPic"
+                  :details="data.name"
+                >
                   <div slot="error" class="image-slot">
                     <i class="el-icon-picture-outline"></i>
                   </div>
@@ -108,6 +113,7 @@ export default {
       return getDetailsProfilePath(this.$route.params.name);
     },
     professionPic() {
+      if (this.data.profession === 'TOKEN') return;
       return (
         path +
         'others/icon_profession_' +
@@ -136,7 +142,7 @@ export default {
       return Array.isArray(this.desc);
     },
     logo() {
-      return path + 'logo/' + this.data.displayLogo + '_optimized.png';
+      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '_optimized.png' : '';
     },
     team() {
       return Team[this.data.team];

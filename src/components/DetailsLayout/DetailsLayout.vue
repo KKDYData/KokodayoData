@@ -103,7 +103,7 @@
           ></skill-panel>
         </div>
         <!-- 潜能面板 -->
-        <div style="margin-bottom: 20px">
+        <div style="margin-bottom: 20px" v-if="normal">
           <div class="group-container-title">潜能</div>
           <div v-if="data.potentialRanks && data.potentialRanks.length" class="potency-container">
             <div v-for="(item, index) in data.potentialRanks" :key="index">
@@ -148,7 +148,7 @@
         </div>
 
         <!-- 技能升级消耗 -->
-        <div v-if="skills.length > 0" class="skill-container-wrapper">
+        <div v-if="skills.length > 0 && normal" class="skill-container-wrapper">
           <div class="group-container-title">技能升级消耗</div>
           <skill-up-panel
             :short="short"
@@ -158,20 +158,17 @@
           ></skill-up-panel>
         </div>
 
-        <div class="tttt">
+        <!-- 基建面板 -->
+        <div v-if="normal" class="tttt">
           <building-data :building="data.buildingData"></building-data>
         </div>
-        <div class="group-container-title" style="margin-bottom: 0">
+        <div v-if="normal" class="group-container-title" style="margin-bottom: 0">
           <span>干员资料</span>
         </div>
         <template slot="title">
           <span style="direction:rtl;width: 100%">打开</span>
         </template>
         <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
-        <el-card>
-          <p>待更新</p>
-          <p>。。。</p>
-        </el-card>
       </div>
     </transition>
   </div>
@@ -271,12 +268,14 @@ export default {
         this.data = data;
         this.phases = this.data.phases.length - 1;
         this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
+        this.dataLoad = true;
+
         this.getSkills();
+        if (this.data.profession !== 'TOKEN') return;
         // this.getRange();
         this.getEvolveCost();
         this.getInfo();
         this.getWords();
-        this.dataLoad = true;
       })
       .catch(err => {
         console.log(err);
@@ -325,6 +324,9 @@ export default {
     };
   },
   computed: {
+    normal() {
+      return this.data && this.data.profession !== 'TOKEN';
+    },
     rangeId() {
       // 针对白雪
 
@@ -358,6 +360,7 @@ export default {
         const arr = [];
         for (let wrapper of this.data.talents) {
           const tGroup = wrapper.candidates;
+          if (!tGroup) continue;
           for (let talent of tGroup) {
             const res = changeAttackSpeed(talent);
             talent.description = res;
@@ -472,7 +475,7 @@ export default {
       Promise.all(data).then(arr => this.skills = arr);
     },
     getEvolveCost() {
-      if (!this.data) return;
+      if (!this.data || !this.normal) return;
       const data = [...this.data.phases];
       for (let i = 0; i < data.length - 1; i++) {
         Promise.all(data[i + 1].evolveCost.map(p => getItem(p.id).then(item => ({ cost: p.count, item }))))

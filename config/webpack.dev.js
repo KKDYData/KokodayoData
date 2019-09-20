@@ -36,7 +36,7 @@ module.exports = merge(common, {
         },
         //详情页面
         {
-          from: /^\/details\/(?!char).*$/, to: context => {
+          from: /^\/details\/(?!(char|token)).*$/, to: context => {
             console.log(context.parsedUrl.path.slice(9));
             return '/' + context.parsedUrl.path.slice(9);
           }
@@ -58,7 +58,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/details\/(char)?/, to: context => {
+          from: /^\/details\/(char|token)?/, to: context => {
             return '/index.html';
           }
         },
