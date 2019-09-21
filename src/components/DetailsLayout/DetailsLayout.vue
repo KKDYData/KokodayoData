@@ -472,8 +472,11 @@ export default {
     getSkills() {
       if (!this.data) return;
       const data = [...this.data.skills]
-        .map(skill => getSkill(skill.skillId));
-      Promise.all(data).then(arr => this.skills = arr);
+        .map(skill => {
+          if (skill.skillId)
+            return getSkill(skill.skillId);
+        });
+      Promise.all(data).then(arr => this.skills = arr.filter(el => el));
     },
     getEvolveCost() {
       if (!this.data || !this.normal) return;

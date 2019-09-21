@@ -1,7 +1,7 @@
 <template>
   <div v-if="skills && skills.length > 0" class="skill-container--inner-wrapper">
-    <div class="skill-container" v-for="(skill, index) in skills" :key="skill.name">
-      <div class="skill-title">
+    <div class="skill-container" v-for="(skill, index) in skills" :key="index">
+      <div v-if="skill" class="skill-title">
         <skill-container v-if="showPic" :skill="skills[index]"></skill-container>
         <p v-else>{{skill.levels[index].name}}</p>
         <div
