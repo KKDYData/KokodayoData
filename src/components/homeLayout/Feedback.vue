@@ -5,7 +5,7 @@
       href="https://somedata.top/ArknightsBeta"
       type="info"
     >Beta版链接</el-link>
-    <p style="color: #515151">反馈群799872783！</p>
+    <p style="color: #515151">反馈群799872783！实测s10下包括QQ浏览器，及iPadOS(iOS 13)没有Bug</p>
     <div class="feedback-part">
       <my-title title="反馈"></my-title>
       <div class="feedback-info-wrapper">
@@ -29,6 +29,21 @@
       </input-wrapper>
     </div>
     <div class="feedback-part">
+      <my-slide-title :short="short" title="v0.71 Bug修复">
+        <div>
+          <p>1.为了准备可能突然实装的凯尔希，把召唤物加入了豪华午餐。</p>
+          <p>2.无人机确实有两个一样的技能，暂时就这样处理吧</p>
+          <p>3.去掉了移动端的语音音量控制，Ios现在能正常看到语音的进度条了。</p>
+          <p>4.Dps图再等等，最近有点忙</p>
+          <p>5.如果有图片看不到，可以尝试清空浏览器缓存</p>
+          <h4>10-11月 想要更新的内容</h4>
+          <p>1.感谢各位的支持，赫拉格更新这里日活上6k，国庆可能考虑去贴吧或者微博宣传一下，看看有没有可能上万（先优化服务器）。</p>
+          <p>2.希望用骨骼动画把小人放进来资料站。</p>
+          <p>3.基建表格会做，等上面的做完，或者搞不定的时候。</p>
+          <p>4.还有皮肤图鉴，希望能高仿出游戏里的样子，当然和上面一样，搞完2才行，因为需要展示小人。</p>
+          <p>5.分享和反馈会做一个新的，会在所有地方都出现。</p>
+        </div>
+      </my-slide-title>
       <my-slide-title :short="short" title="v0.7 更新内容">
         <div>
           <h4>1. 敌人图鉴 → 更名为关卡数据</h4>
@@ -46,7 +61,7 @@
           <p>(1)较好的适配iPad了，但是iOS13的上，safari有些自己的问题，例如连续快速点击会丢失事件(同样在qq、或者chrome下没有问题)，iOS13的问题无能为力</p>
           <p>(2)安卓用chrome浏览器的添加到桌面的话，体验挺好，还没右下角的浏览器logo。</p>
           <h4>4. 其它</h4>
-          <p>(1)换了个App logo</p>
+          <p>(1)换了个App Logo</p>
           <p>(2)特别感谢昨天突然来了两个人进群告诉了我几个完全没注意到的问题，不然可能要等上线稳定版之后才能发现。</p>
           <h4>5. 一些做这个东西的思路</h4>
           <p>(1)这个线路看起来是动画，但是实际上动的是渐变色。就是这样</p>
@@ -207,6 +222,10 @@ export default {
 
 .feedback-button+.feedback-button {
   margin-right: 10px
+}
+
+h4 {
+  padding-top: 20px
 }
 </style>
 
