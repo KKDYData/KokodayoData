@@ -146,7 +146,7 @@
 
       <el-tab-pane label="语音记录" name="second">
         <div class="info-words-wrapper">
-          <div style="display: flex; align-items: center">
+          <div v-if="!short && !isMobliePad" style="display: flex; align-items: center">
             <div style="padding-right: 10px">
               <span>volume:</span>
             </div>
@@ -188,7 +188,7 @@
 </template>
 
 <script>
-import { path, webpOk } from '../../utils';
+import { path, webpOk, isMobliePad } from '../../utils';
 import {
   Carousel,
   CarouselItem,
@@ -253,7 +253,8 @@ export default {
       voiceVolume: 100,
       setWords: normalSetWords,
       activeSetPane: 'default',
-      path
+      path,
+      isMobliePad
     };
   },
   computed: {

@@ -10,7 +10,7 @@
       :src="src"
       ref="word"
       id="word"
-      @timeupdate="e => voicePercentage = e.target.currentTime * 100 / e.target.duration"
+      @timeupdate="timeUpDate($event)"
     >
       <span>
         Your browser doesn't support HTML5 audio. Here is a
@@ -41,11 +41,14 @@ export default {
     this.$refs.word.volume = this.volume / 100;
   },
   watch: {
-    volume: function (e) {
+    volume(e) {
       this.$refs.word.volume = e / 100;
     }
   },
   methods: {
+    timeUpDate(e) {
+      this.voicePercentage = e.target.currentTime * 100 / e.target.duration;
+    },
     play() {
       this.$refs.word.play().catch(err => {
         console.log(err);
