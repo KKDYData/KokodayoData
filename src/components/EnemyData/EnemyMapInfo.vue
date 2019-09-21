@@ -1,7 +1,7 @@
 <template>
   <div class="map-option-container-wrapper">
     <my-title v-if="showTitle" title="地图信息"></my-title>
-    <div style="margin-bottom: 10px; color: #828282; font-size: 0.8em">3星通关时，经验和龙门币的获取需要有1.2倍加成</div>
+    <div style="margin-bottom: 10px; color: #828282; font-size: 0.8em">3星通关时，经验和龙门币的获取会要有1.2倍加成</div>
     <div class="map-option-container">
       <content-slot
         class="map-option-content"

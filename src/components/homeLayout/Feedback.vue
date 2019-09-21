@@ -5,7 +5,9 @@
       href="https://somedata.top/ArknightsBeta"
       type="info"
     >Beta版链接</el-link>
-    <p style="color: #515151">反馈群799872783！实测s10下包括QQ浏览器，及iPadOS(iOS 13)没有Bug</p>
+    <p
+      style="color: #515151"
+    >反馈群799872783！个人测试浏览器为s10下包括QQ浏览器，及iPadOS(iOS 13)的safari、chrome，Pc，Edge/Chrome</p>
     <div class="feedback-part">
       <my-title title="反馈"></my-title>
       <div class="feedback-info-wrapper">
@@ -37,7 +39,7 @@
           <p>4.Dps图再等等，最近有点忙</p>
           <p>5.如果有图片看不到，可以尝试清空浏览器缓存</p>
           <h4>10-11月 想要更新的内容</h4>
-          <p>1.感谢各位的支持，赫拉格更新这里日活上6k，国庆可能考虑去贴吧或者微博宣传一下，看看有没有可能上万（先优化服务器）。</p>
+          <p>1.感谢大家的支持，赫拉格更新的那天活上6k（是以前的3倍），国庆可能考虑去贴吧或者微博宣传一下，看看有没有可能上万（先优化服务器）。</p>
           <p>2.希望用骨骼动画把小人放进来资料站。</p>
           <p>3.基建表格会做，等上面的做完，或者搞不定的时候。</p>
           <p>4.还有皮肤图鉴，希望能高仿出游戏里的样子，当然和上面一样，搞完2才行，因为需要展示小人。</p>
