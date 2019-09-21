@@ -368,7 +368,7 @@ const changeAttackSpeed = (skill) => {
     return res + percent;
   });
   const skill_time_text = res.match(/攻击间隔/);
-  if (skill_time_text) {
+  if (skill_time_text && !new RegExp(`/攻击间隔(.{2,}${Math.abs(skill_time_text.value)})/`).test(res)) {
     const skill_base_time = skill.blackboard.find(
       el => el.key === 'base_attack_time'
     );
@@ -410,7 +410,7 @@ const changeAttackSpeed = (skill) => {
     const attack_speed = skill.blackboard.find(
       el => el.key === 'attack_speed'
     );
-    if (attack_speed) {
+    if (attack_speed && !new RegExp(`/攻击速度(.{2,}${Math.abs(attack_speed.value)})/`).test(res)) {
       const text = res
         .slice(skill_attack_speed.index + 4)
         .match(/(<.*?>)(.*?)(<\/.*?>)/);

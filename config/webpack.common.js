@@ -10,6 +10,7 @@ const swPlugins = [
   new WorkboxPlugin.GenerateSW({
     swDest: 'sw.js',
     clientsClaim: true,
+    importWorkboxFrom: 'local',
     skipWaiting: true,
     exclude: [/^icon.*?\.png$/],
     runtimeCaching: [
@@ -32,7 +33,6 @@ const swPlugins = [
           },
           broadcastUpdate: {
             channelName: 'oss-update',
-            //headersToCheck: 'x-swift-error'
           }
         }
       },
