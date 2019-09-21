@@ -254,7 +254,7 @@ export default {
       setWords: normalSetWords,
       activeSetPane: 'default',
       path,
-      isMobliePad
+      isMobliePad: isMobliePad()
     };
   },
   computed: {
