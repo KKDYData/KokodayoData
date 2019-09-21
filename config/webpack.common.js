@@ -4,68 +4,14 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
+// const workbox = require('work')
 
 
 const swPlugins = [
-  new WorkboxPlugin.GenerateSW({
+  new WorkboxPlugin.InjectManifest({
+    swSrc: './src/sw.js',
     swDest: 'sw.js',
-    clientsClaim: true,
-    importWorkboxFrom: 'local',
-    skipWaiting: true,
-    exclude: [/^icon.*?\.png$/],
-    runtimeCaching: [
-
-      {
-        urlPattern: /api\/arknights/,
-        handler: 'NetworkFirst'
-      },
-      {
-        urlPattern: /\.ico$/,
-        handler: 'CacheFirst'
-      },
-      {
-        urlPattern: new RegExp('https://andata.somedata.top/dataX/'),
-        handler: 'StaleWhileRevalidate',
-        options: {
-          cacheName: 'oss-cache',
-          cacheableResponse: {
-            statuses: [0, 200],
-          },
-          broadcastUpdate: {
-            channelName: 'oss-update',
-          }
-        }
-      },
-      {
-        urlPattern: new RegExp('https://unpkg.com/spritejs/dist/spritejs.min.js'),
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'spritejs',
-          cacheableResponse: {
-            statuses: [0, 200]
-          }
-        }
-      },
-      {
-        urlPattern: new RegExp('https://penguin-stats.io/PenguinStats/api/'),
-        handler: 'StaleWhileRevalidate',
-        options: {
-          cacheableResponse: {
-            statuses: [0, 200]
-          },
-          cacheName: 'penguin-api-cache',
-          expiration: {
-            maxEntries: 5,
-            maxAgeSeconds: 60 * 10,
-          },
-        }
-      },
-      {
-        urlPattern: new RegExp('https://somedata.top/Arknights'),
-        handler: 'StaleWhileRevalidate',
-      },
-      //
-    ]
+    importWorkboxFrom: 'local'
   })
 ];
 
