@@ -11,6 +11,7 @@
       ref="word"
       id="word"
       @timeupdate="timeUpDate($event)"
+      @durationchange="durationUpdate($event)"
     >
       <span>
         Your browser doesn't support HTML5 audio. Here is a
@@ -34,7 +35,8 @@ export default {
   },
   data() {
     return {
-      voicePercentage: 0
+      voicePercentage: 0,
+      duration: 30,
     };
   },
   mounted() {
@@ -46,13 +48,24 @@ export default {
     }
   },
   methods: {
+    durationUpdate(e) {
+      if (e.target.duration !== Infinity) {
+        // Message.success('get the change ' + e.target.duration);
+        this.duration = e.target.duration;
+      }
+    },
     timeUpDate(e) {
-      this.voicePercentage = e.target.currentTime * 100 / e.target.duration;
+      try {
+        this.voicePercentage = Math.min(e.target.currentTime / this.duration * 100, 100);
+        // Message(this.voicePercentage + ' | ' + e.target.currentTime + ' | ' + this.duration);
+      } catch (error) {
+        Message(JSON.stringify(error));
+      }
     },
     play() {
       this.$refs.word.play().catch(err => {
         console.log(err);
-        Message.error('语音数据可能还没压缩上传，过一会再来听吧');
+        Message.error('语音数据可能还没压缩上传，过一会再来听吧' + ' | err : ' + JSON.stringify(err));
       });
     },
     pause() {

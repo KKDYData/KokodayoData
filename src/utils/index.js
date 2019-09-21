@@ -296,7 +296,7 @@ const getWebpOk = () => {
   const Browser = ua.getBrowser();
   const width = document.body.clientWidth;
   const isMoblie = ua.getDevice().type === 'mobile';
-  const isMobliePad = isMoblie || (OS.name === 'Mac OS' && width < 1300);
+  const isMobliePad = isMoblie || OS.name === 'iOS' || (OS.name === 'Mac OS' && width < 1300);
   // Message(`'is Moblie? ' ${isMoblie}, ${ua.getDevice().vendor}, os ${OS.name}`);
 
   if (
