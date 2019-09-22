@@ -120,7 +120,8 @@ class Map {
   routes
   finder = new PF.AStarFinder({
     allowDiagonal: true,
-    dontCrossCorners: true
+    dontCrossCorners: true,
+    heuristic: PF.Heuristic.manhattan
   });
   paper
   mapRadio
@@ -151,9 +152,10 @@ class Map {
       if (stop) {
         const stopText = new Label(stop.time + 's');
         const height = this.grid.height - 1;
-        const { col, row } = stop.pos;
+        const { col, row, reachOffset = { x: 0, y: 0 } } = stop.pos;
+
         const fillColor = `hsl(${color}, 75%, 50%)`;
-        const pos = [col * this.mapRadio, (height - row) * this.mapRadio];
+        const pos = [(col + reachOffset.x) * this.mapRadio, (height - row - reachOffset.y) * this.mapRadio];
         const mapBlock = new Path();
         mapBlock.attr({
           pos,
@@ -191,6 +193,7 @@ class Map {
         lineWidth: 12,
         path,
         lineCap: 'round',
+        lineJoin: 'round',
         linearGradients: {
           strokeColor: {
             vector: [10, 30, 180, 90],
@@ -295,7 +298,7 @@ class Map {
         if (el.type > 1 && el.type < 6) console.log('!!!!!!!!!!!!!!!!!!!!! 这是什么鬼point', el.type, el, route);
         return el.type < 4 || el.type === 6;
       });
-      const path = pathPoints.map(el => ({ ...el.position, type: el.type }));
+      const path = pathPoints.map(el => ({ ...el.position, type: el.type, reachOffset: el.reachOffset }));
 
       if (path.length === 0 || startPos.row !== path[0].row || startPos.col !== path[0].col) path.unshift(startPos);
       if (path.length === 0 || endPos.row !== path[path.length - 1].row || endPos.col !== path[path.length - 1].col) path.push(endPos);
@@ -305,16 +308,26 @@ class Map {
       const splitPath = path.reduce((res, el, index, arr) => {
         if (index + 1 === arr.length) return res;
         const { col, row } = el;
-        let { col: nCol, row: nRow } = arr[index + 1];
+        let { col: nCol, row: nRow, reachOffset } = arr[index + 1];
         if ((col === 0 && row === 0) || arr[index + 1].type === 6) return res;
         if (nCol === 0 && nRow === 0 && arr[index + 2].type !== 6) {
           nRow = arr[index + 2].row;
           nCol = arr[index + 2].col;
+          reachOffset = arr[index + 2].reachOffset;
           const time = pathPoints[index].time ? pathPoints[index].time : pathPoints[index + 1].time;
+
           res.push({ stop: { pos: el, time } });
         }
         const ttGrid = tempGrid.clone();
         const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
+        if (el.reachOffset) {
+          path[0][0] += el.reachOffset.x;
+          path[0][1] += el.reachOffset.y;
+        }
+        if (reachOffset) {
+          path[path.length - 1][0] += reachOffset.x;
+          path[path.length - 1][1] += reachOffset.y;
+        }
         path.forEach((el, index, arr) => {
           if (index + 1 < arr.length) {
             const next = arr[index + 1];
