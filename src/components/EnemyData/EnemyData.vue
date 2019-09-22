@@ -508,7 +508,9 @@ export default {
     },
     closeRoute(index) {
       console.log('close', index);
-      this.map.deleteRoute(index);
+      if (this.map) this.map.deleteRoute(index);
+      else Message('地图数据还没加载完成，等一会再看看吧');
+
     },
     linkStart() {
       return this.getData().then(data => {
