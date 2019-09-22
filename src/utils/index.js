@@ -94,13 +94,13 @@ const fetchByKey = (keyPath) => {
     });
 };
 
-// 遗留api
 const getProfileList = () => fetchByKey('char/list')('1568990623279');
 
 const getEnemyList = () => fetchGetSliceSet('enemyList', 'setEnemyVer');
 
 const getEneAppearMap = () => fetchGetSliceSet('enemyAppearMap', 'setApperMapVer');
 
+// 遗留api
 const getDevList = () => fetchGetSliceSet('devList', 'setListVer');
 
 const getStageList = () => fetchGetSliceSet('stageList');
