@@ -6,7 +6,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    listVer: '',
+    listVer: new Date(1568990623279).toLocaleString(),
     pageVer: '',
     enemyVer: '',
     apperMapVer: '',

@@ -483,13 +483,15 @@ export default {
     },
     async loopRoutes(index, color) {
       console.log(index, color);
+      if (!this.map) Message('地图数据还没加载完成，等一会再看看吧');
       if (!this.showMap) {
         this.showMap = true;
         await this.$nextTick();
-        this.map.loadMap();
+        if (this.map) this.map.loadMap();
+
       }
       if (!this.selMapData.routes[index]) throw Error('没有这个线路');
-      this.map.addRoutes(index, color);
+      if (this.map) this.map.addRoutes(index, color);
     },
     async laodRouteMap() {
       if (this.showMap) {
