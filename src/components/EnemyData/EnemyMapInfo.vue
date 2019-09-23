@@ -13,7 +13,25 @@
       >
         <template slot="title">{{k}}</template>
         <template slot="content">
-          <span :style="v > 100 ? 'font-size: 14px': ''">{{v == '999999' ? '0' : v}}</span>
+          <span :style="v > 100 ? 'font-size: 14px': ''">{{v > 999 ? '0' : v}}</span>
+        </template>
+      </content-slot>
+    </div>
+    <div class="map-option-container">
+      <content-slot
+        :long="true"
+        :no-wrap="true"
+        :width="150"
+        v-for="([k,v]) in globalBuffs"
+        :key="k"
+      >
+        <template slot="title">{{k}}</template>
+        <template slot="content">
+          <span
+            v-for="{key, value} in v"
+            :key="key"
+            :style="value > 100 ? 'font-size: 14px;': ''"
+          >{{value == '999999' ? '0' : value}} {{Keys[key]}}</span>
         </template>
       </content-slot>
     </div>
@@ -37,6 +55,9 @@ export default {
     options: {
       required: true
     },
+    globalBuffs: {
+      required: true
+    },
     short: {
       required: true
     },
@@ -49,7 +70,14 @@ export default {
     const cW = document.body.clientWidth;
     const slotWidth = cW < 375 ? 121 : 126;
     return {
-      slotWidth
+      slotWidth,
+      Keys: {
+        damage: '/',
+        interval: 's',
+        atk: '攻击',
+        def: '防御',
+        max_hp: '生命',
+      }
     };
   }
 };
