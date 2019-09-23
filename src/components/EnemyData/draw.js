@@ -296,7 +296,7 @@ class Map {
 
       const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
       const pathPoints = checkpoints.filter(el => {
-        if (el.type > 1 && el.type < 6) console.log('!!!!!!!!!!!!!!!!!!!!! 这是什么鬼point', el.type, el, route);
+        // if (el.type > 1 && el.type < 6) console.log('!!!!!!!!!!!!!!!!!!!!! 这是什么鬼point', el.type, el, route);
         return el.type < 4 || el.type === 6;
       });
       const path = pathPoints.map(el => ({ ...el.position, type: el.type, reachOffset: el.reachOffset }));
@@ -322,6 +322,11 @@ class Map {
         const ttGrid = tempGrid.clone();
         const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
 
+
+        if (path.length > 0 && reachOffset) {
+          path[path.length - 1][0] += reachOffset.x;
+          path[path.length - 1][1] += reachOffset.y;
+        }
         path.forEach((el, index, arr) => {
 
           if (index + 1 < arr.length) {
@@ -330,10 +335,7 @@ class Map {
               x += cur.reachOffset.x;
               y += cur.reachOffset.y;
             }
-            if (index == arr.length && reachOffset) {
-              x += reachOffset.x;
-              y += reachOffset.y;
-            }
+
             const next = arr[index + 1];
             const len = Math.sqrt((x - next[0]) ** 2 + (y - next[1]) ** 2);
             res.push({ path: this.spwanPathAlpha([[x, y], next]), time: len * 200 });

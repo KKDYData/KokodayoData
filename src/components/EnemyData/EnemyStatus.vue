@@ -323,6 +323,11 @@ export default {
       ) {
         return this.status[this.level];
       }
+
+      const lv = this.mapLevel ? this.mapLevel : this.level;
+
+      // 防止数据没加载好，不是很安全，有空改一下
+      if (!this.status[lv]) return this.status[0];
       // 突袭情况，先判定有没有选地图
       const target = this.runesMode
         ? this.mapData
@@ -330,7 +335,6 @@ export default {
           new RegExp(el.key).test(this.currentMap)
         );
 
-      const lv = this.mapLevel ? this.mapLevel : this.level;
 
       target.runes.forEach(data => {
         if (!data.blackboard.length) return;
@@ -355,6 +359,7 @@ export default {
           });
         }
       });
+
       return this.status[lv].map(el => {
         if (res[el[2]]) {
           return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10];

@@ -324,8 +324,8 @@ export default {
         periodic_damage: '地图周期伤害',
         // ebuff_attribute: '属性增益'
       };
-
-      const target = this.runesMode ? [...this.selMapData.globalBuffs, ...this.selMapData.runes] : [...this.selMapData.globalBuffs];
+      const globalBuffs = this.selMapData.globalBuffs ? this.selMapData.globalBuffs : [];
+      const target = this.runesMode ? [...globalBuffs, ...this.selMapData.runes] : [...globalBuffs];
       return target
         .map(({ prefabKey, key, blackboard }) => {
           const k = prefabKey ? prefabKey : key;
