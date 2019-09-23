@@ -25,14 +25,15 @@
         v-for="([k,v]) in globalBuffs"
         :key="k"
       >
-        <template slot="title">{{k}}</template>
-        <template slot="content">
+        <div slot="title">{{k}}</div>
+        <div slot="content" v-if="k !== '属性增益'">
           <span
             v-for="{key, value} in v"
             :key="key"
             :style="value > 100 ? 'font-size: 14px;': ''"
           >{{value == '999999' ? '0' : value}} {{Keys[key]}}</span>
-        </template>
+        </div>
+        <div slot="content" v-else>属性已进行合并计算，在下面显示</div>
       </content-slot>
     </div>
   </div>
