@@ -122,7 +122,7 @@ export default {
       required: false
     },
     description: {
-      required: true
+      default: ''
     }
   },
   data() {
