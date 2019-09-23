@@ -306,9 +306,9 @@ class Map {
       const tempGrid = route.motionMode !== 1 ? this.grid.clone() : new PF.Grid(this.grid.width, this.grid.height);
       tempGrid.setWalkableAt(endPos.col, height - endPos.row, true);
 
-      const splitPath = path.reduce((res, el, index, arr) => {
+      const splitPath = path.reduce((res, cur, index, arr) => {
         if (index + 1 === arr.length) return res;
-        const { col, row } = el;
+        const { col, row } = cur;
         let { col: nCol, row: nRow, reachOffset } = arr[index + 1];
         if ((col === 0 && row === 0) || arr[index + 1].type === 6) return res;
         if (nCol === 0 && nRow === 0 && arr[index + 2].type !== 6) {
@@ -317,23 +317,26 @@ class Map {
           reachOffset = arr[index + 2].reachOffset;
           const time = pathPoints[index].time ? pathPoints[index].time : pathPoints[index + 1].time;
 
-          res.push({ stop: { pos: el, time } });
+          res.push({ stop: { pos: cur, time } });
         }
         const ttGrid = tempGrid.clone();
         const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
-        if (el.reachOffset) {
-          path[0][0] += el.reachOffset.x;
-          path[0][1] += el.reachOffset.y;
-        }
-        if (reachOffset) {
-          path[path.length - 1][0] += reachOffset.x;
-          path[path.length - 1][1] += reachOffset.y;
-        }
+
         path.forEach((el, index, arr) => {
+
           if (index + 1 < arr.length) {
+            let [x, y] = el;
+            if (index === 0 && cur.reachOffset) {
+              x += cur.reachOffset.x;
+              y += cur.reachOffset.y;
+            }
+            if (index == arr.length && reachOffset) {
+              x += reachOffset.x;
+              y += reachOffset.y;
+            }
             const next = arr[index + 1];
-            const len = Math.sqrt((el[0] - next[0]) ** 2 + (el[1] - next[1]) ** 2);
-            res.push({ path: this.spwanPathAlpha([el, next]), time: len * 200 });
+            const len = Math.sqrt((x - next[0]) ** 2 + (y - next[1]) ** 2);
+            res.push({ path: this.spwanPathAlpha([[x, y], next]), time: len * 200 });
           }
         });
         return res;

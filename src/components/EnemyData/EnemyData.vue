@@ -100,6 +100,7 @@
             :short="short"
             :options="options"
             :dropInfo="detailsDropList"
+            :global-buffs="globalBuffs"
           ></enemy-map-info>
         </div>
       </div>
@@ -162,6 +163,7 @@
           :show-title="false"
           :short="short"
           :options="options"
+          :global-buffs="globalBuffs"
         ></enemy-map-info>
       </my-slide-title>
       <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设" :short="short">
@@ -314,6 +316,21 @@ export default {
         this.mapCode +
         '_optimized.png?x-oss-process=style/jpg-test'
         : '';
+    },
+    globalBuffs() {
+      if (!this.selMapData) return {};
+      const BuffKeys = {
+        kill_to_add_cost: '杀敌额外回复',
+        periodic_damage: '地图周期伤害',
+        // ebuff_attribute: '属性增益'
+      };
+
+      const target = this.runesMode ? [...this.selMapData.globalBuffs, ...this.selMapData.runes] : [...this.selMapData.globalBuffs];
+      return target
+        .map(({ prefabKey, key, blackboard }) => {
+          const k = prefabKey ? prefabKey : key;
+          if (BuffKeys[k]) return [BuffKeys[k], blackboard];
+        }).filter(el => el);
     },
     options() {
       return !this.selMapData ? {}
