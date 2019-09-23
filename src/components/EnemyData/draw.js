@@ -142,9 +142,9 @@ class Map {
     if (routes) {
       this.setDataBeta(mapData, routes);
       const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
-      if (!top) {
-        this.grid = new PF.Grid(sMap);
-      }
+      this.grid = new PF.Grid(sMap);
+      // if (!top) {
+      // }
     }
   }
   async ray(body) {
@@ -287,72 +287,69 @@ class Map {
     this.runningRoutes.delete(x);
     delete this.tempRoutes[x];
   }
-  addRoutes(x, color) {
+  addRoutes(route, x, color) {
     //可以接受Array或者Number
-    if (Number.isInteger(x)) {
-      this.runningRoutes.add(x);
-      const route = this.routes.find((el, index) => x === index);
-      const height = this.grid.height - 1;
+    this.runningRoutes.add(x);
+    // const route = this.routes.find((el, index) => x === index);
+    const height = this.grid.height - 1;
 
-      const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
-      const pathPoints = checkpoints.filter(el => {
-        // if (el.type > 1 && el.type < 6) console.log('!!!!!!!!!!!!!!!!!!!!! 这是什么鬼point', el.type, el, route);
-        return el.type < 4 || el.type === 6;
-      });
-      const path = pathPoints.map(el => ({ ...el.position, type: el.type, reachOffset: el.reachOffset }));
+    const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
+    const pathPoints = checkpoints.filter(el => {
+      return el.type < 4 || el.type === 6;
+    });
+    const path = pathPoints.map(el => ({ ...el.position, type: el.type, reachOffset: el.reachOffset }));
 
-      if (path.length === 0 || startPos.row !== path[0].row || startPos.col !== path[0].col) path.unshift(startPos);
-      if (path.length === 0 || endPos.row !== path[path.length - 1].row || endPos.col !== path[path.length - 1].col) path.push(endPos);
-      const tempGrid = route.motionMode !== 1 ? this.grid.clone() : new PF.Grid(this.grid.width, this.grid.height);
-      tempGrid.setWalkableAt(endPos.col, height - endPos.row, true);
+    if (path.length === 0 || startPos.row !== path[0].row || startPos.col !== path[0].col) path.unshift(startPos);
+    if (path.length === 0 || endPos.row !== path[path.length - 1].row || endPos.col !== path[path.length - 1].col) path.push(endPos);
 
-      const splitPath = path.reduce((res, cur, index, arr) => {
-        if (index + 1 === arr.length) return res;
-        const { col, row } = cur;
-        let { col: nCol, row: nRow, reachOffset } = arr[index + 1];
-        if ((col === 0 && row === 0) || arr[index + 1].type === 6) return res;
-        if (nCol === 0 && nRow === 0 && arr[index + 2].type !== 6) {
-          nRow = arr[index + 2].row;
-          nCol = arr[index + 2].col;
-          reachOffset = arr[index + 2].reachOffset;
-          const time = pathPoints[index].time ? pathPoints[index].time : pathPoints[index + 1].time;
+    const tempGrid = route.motionMode !== 1 ? this.grid.clone() : new PF.Grid(this.grid.width, this.grid.height);
+    tempGrid.setWalkableAt(endPos.col, height - endPos.row, true);
 
-          res.push({ stop: { pos: cur, time } });
-        }
-        const ttGrid = tempGrid.clone();
-        const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
+    const splitPath = path.reduce((res, cur, index, arr) => {
+      if (index + 1 === arr.length) return res;
+      const { col, row } = cur;
+      let { col: nCol, row: nRow, reachOffset } = arr[index + 1];
+      if ((col === 0 && row === 0) || arr[index + 1].type === 6) return res;
+      if (nCol === 0 && nRow === 0 && arr[index + 2].type !== 6) {
+        nRow = arr[index + 2].row;
+        nCol = arr[index + 2].col;
+        reachOffset = arr[index + 2].reachOffset;
+        const time = pathPoints[index].time ? pathPoints[index].time : pathPoints[index + 1].time;
+
+        res.push({ stop: { pos: cur, time } });
+      }
+      const ttGrid = tempGrid.clone();
+      const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
 
 
-        if (path.length > 0 && reachOffset) {
-          path[path.length - 1][0] += reachOffset.x;
-          path[path.length - 1][1] += reachOffset.y;
-        }
-        path.forEach((el, index, arr) => {
+      if (path.length > 0 && reachOffset) {
+        path[path.length - 1][0] += reachOffset.x;
+        path[path.length - 1][1] += reachOffset.y;
+      }
+      path.forEach((el, index, arr) => {
 
-          if (index + 1 < arr.length) {
-            let [x, y] = el;
-            if (index === 0 && cur.reachOffset) {
-              x += cur.reachOffset.x;
-              y += cur.reachOffset.y;
-            }
-
-            const next = arr[index + 1];
-            const len = Math.sqrt((x - next[0]) ** 2 + (y - next[1]) ** 2);
-            res.push({ path: this.spwanPathAlpha([[x, y], next]), time: len * 200 });
+        if (index + 1 < arr.length) {
+          let [x, y] = el;
+          if (index === 0 && cur.reachOffset) {
+            x += cur.reachOffset.x;
+            y += cur.reachOffset.y;
           }
-        });
-        return res;
-      }, []);
 
-      this.tempRoutes[x] = ({
-        splitPath,
-        index: x,
-        color,
+          const next = arr[index + 1];
+          const len = Math.sqrt((x - next[0]) ** 2 + (y - next[1]) ** 2);
+          res.push({ path: this.spwanPathAlpha([[x, y], next]), time: len * 200 });
+        }
       });
-      this.routeSet.add(splitPath);
-    } else {
-      throw Error('Just receive  Number');
-    }
+      return res;
+    }, []);
+
+    this.tempRoutes[x] = ({
+      splitPath,
+      index: x,
+      color,
+    });
+    this.routeSet.add(splitPath);
+
 
     if (!this.run) {
       this.run = true;

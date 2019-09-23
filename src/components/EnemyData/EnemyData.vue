@@ -496,28 +496,28 @@ export default {
     // 子组件传出来清空map的事件处理
     clearRoutes() {
       this.map.clearRoutes();
+      this.mapUp.clearRoutes();
       this.$refs.layout.clearRoutes();
     },
-    async loopRoutes(index, color) {
+    loopRoutes(index, color) {
       console.log(index, color);
       if (!this.map) Message('地图数据还没加载完成，等一会再看看吧');
       if (!this.showMap) {
         this.showMap = true;
-        await this.$nextTick();
-        if (this.map) this.map.loadMap();
-
       }
-      if (!this.selMapData.routes[index]) throw Error('没有这个线路');
-      if (this.map) this.map.addRoutes(index, color);
+      const route = this.selMapData.routes[index];
+      if (!route) throw Error('没有这个线路');
+      if (this.map) {
+        if (route.motionMode === 1) this.mapUp.addRoutes(route, index, color);
+        else this.map.addRoutes(route, index, color);
+      }
     },
-    async laodRouteMap() {
+    laodRouteMap() {
       if (this.showMap) {
         this.showMap = false;
       } else {
         if (this.map) {
           this.showMap = true;
-          await this.$nextTick();
-          this.map.loadMap();
         } else {
           Message('地图数据还没加载完成，请重试');
         }
@@ -525,7 +525,10 @@ export default {
     },
     closeRoute(index) {
       console.log('close', index);
-      if (this.map) this.map.deleteRoute(index);
+      if (this.map) {
+        this.map.deleteRoute(index);
+        this.mapUp.deleteRoute(index);
+      }
       else Message('地图数据还没加载完成，等一会再看看吧');
 
     },
