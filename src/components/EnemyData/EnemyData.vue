@@ -124,14 +124,13 @@
             size="mini"
             type="info"
             :plain="simpleShow ? false: true"
-            class="clear-route-button"
             @click="simpleShow = !simpleShow"
           >
             <i class="el-icon-refresh"></i>
             {{simpleShow ? '简要显示': '路线模式'}}
           </el-button>
-          <el-tooltip v-if="mapCode && !simpleShow" class="runes-mode-button">
-            <i class="el-icon-info"></i>
+          <el-tooltip v-if="mapCode && !simpleShow">
+            <el-button type="info" size="mini">说明</el-button>
             <div slot="content">
               <p>假设这波开始的时间是2分10秒, 敌人延迟4秒，间隔30</p>
               <p>在上面地图方块中出现X秒的意思是</p>
@@ -139,6 +138,7 @@
               <p>延迟4s，就是这个敌人2分14秒的时候出发</p>
               <p>数量2，间隔30秒</p>
               <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
+              <p>同名人形Boss只会有一个，但是拆包可能出现两个一样的</p>
             </div>
           </el-tooltip>
         </div>

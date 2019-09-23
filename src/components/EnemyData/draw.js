@@ -127,7 +127,6 @@ class Map {
   paper
   mapRadio
   top
-
   run = false
   constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, routes, top = false) {
     const config = {
@@ -143,8 +142,7 @@ class Map {
       this.setDataBeta(mapData, routes);
       const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
       this.grid = new PF.Grid(sMap);
-      // if (!top) {
-      // }
+
     }
   }
   async ray(body) {
@@ -155,8 +153,8 @@ class Map {
         const height = this.grid.height - 1;
         const { col, row, reachOffset = { x: 0, y: 0 } } = stop.pos;
 
-        const fillColor = `hsl(${color}, 75%, 50%)`;
-        const pos = [(col + reachOffset.x) * this.mapRadio, (height - row - reachOffset.y) * this.mapRadio];
+        const fillColor = `hsla(${color}, 75%, 50%, 0.7)`;
+        const pos = [(col + reachOffset.x) * this.mapRadio, (height - row + reachOffset.y) * this.mapRadio];
         const mapBlock = new Path();
         mapBlock.attr({
           pos,
@@ -224,7 +222,7 @@ class Map {
 
         const colors = [
           { offset: 0, color: `hsla(${color}, 100%, 50%, 0.1)` },
-          { offset: q, color: `hsla(${color}, 100%, 50%, 0.2)` },
+          { offset: q, color: `hsla(${color}, 100%, 50%, 0.7)` },
           { offset: p, color: `hsla(${color}, 100%, 35%, 1)` },
           { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100%, 50%, 0)` },
         ];
