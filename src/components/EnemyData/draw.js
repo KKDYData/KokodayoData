@@ -13,6 +13,7 @@ const mapBlockColoc = {
   3: 'rgb(244, 152, 0)',
   4: 'rgb(255, 61, 61)',
   5: 'rgb(103, 203, 67)',
+  6: 'hsl(219, 57%, 14%)'
 };
 
 const react = `m 0 0 h ${radio - 2} v ${radio - 2} h ${-radio + 2} z`;
@@ -25,7 +26,7 @@ const spwanMap = ({ map, tiles }, paper, top) => {
   const myMap = map.map((el, row) => el.map((i, col, arr) => {
     const { tileKey: key, passableMask, heightType, buildableType } = tiles[i];
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
-      : passableMask === 3 ? 1 : -1;
+      : /hole/.test(key) ? 6 : passableMask === 3 ? 1 : -1;
     const rc = [col, row];
     return {
       i,

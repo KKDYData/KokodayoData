@@ -59,7 +59,7 @@
           <el-tooltip
             v-if="mapCode && showMap"
             class="runes-mode-button"
-            content="白色是路，浅黄是不能放干员的路，蓝色是能放干员的高台, 橙色是隧道出入口"
+            content="白色是路，浅黄是不能放干员的路，蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑"
           >
             <i class="el-icon-info"></i>
           </el-tooltip>
