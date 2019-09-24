@@ -36,7 +36,7 @@
             <i class="el-icon-info"></i>
           </el-tooltip>
         </div>
-        <div>
+        <!-- <div>
           <span class="status-phases-text">
             <b>出现章节</b>
           </span>
@@ -71,9 +71,8 @@
               class="no-map"
               disabled
             >???</el-button>
-            <!-- <span>???</span> -->
           </template>
-        </div>
+        </div>-->
       </div>
     </div>
 
@@ -310,30 +309,26 @@ export default {
     },
     filterKeys() {
       const res = {};
+
+      // 不选地图，选等级，非突袭，level为用户选择的等级
+      if (this.mapLevel < 0) {
+        return this.status[this.level];
+      }
+
       //选地图非突袭，mapLevel为地图所选择的等级
       if (this.mapLevel > -1 && !this.runesMode) {
         return this.status[this.mapLevel];
       }
-      // 不选地图，选等级，非突袭，level为用户选择的等级
-      if (
-        !this.runesMode &&
-        (this.currentMap === '' ||
-          !this.appearMap[this.keyName] ||
-          !this.appearMap[this.keyName][this.level])
-      ) {
-        return this.status[this.level];
-      }
 
-      const lv = this.mapLevel ? this.mapLevel : this.level;
+
+      const lv = this.mapLevel;
 
       // 防止数据没加载好，不是很安全，有空改一下
       if (!this.status[lv]) return this.status[0];
+
       // 突袭情况，先判定有没有选地图
-      const target = this.runesMode
-        ? this.mapData
-        : this.appearMap[this.keyName][this.level].find(el =>
-          new RegExp(el.key).test(this.currentMap)
-        );
+      const target = this.mapData;
+
 
 
       target.runes.forEach(data => {
@@ -389,18 +384,18 @@ export default {
         };
       });
     },
-    maps() {
-      if (
-        this.appearMap &&
-        this.appearMap[this.keyName] &&
-        this.appearMap[this.keyName][this.level]
-      ) {
-        return this.appearMap[this.keyName][this.level].map(el => {
-          console.log(el);
-          return el.id.slice(11);
-        });
-      }
-    }
+    // maps() {
+    //   if (
+    //     this.appearMap &&
+    //     this.appearMap[this.keyName] &&
+    //     this.appearMap[this.keyName][this.level]
+    //   ) {
+    //     return this.appearMap[this.keyName][this.level].map(el => {
+    //       console.log(el);
+    //       return el.id.slice(11);
+    //     });
+    //   }
+    // }
   },
   methods: {
     changeBlackboardToCh(key) {
