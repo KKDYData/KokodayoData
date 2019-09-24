@@ -16,7 +16,6 @@
           :short="short"
           :key-name="showKey"
           :map-level="currEnemy.level"
-          :appear-map="appearMap"
           :map-data="mapData"
           :runes-mode="runesMode"
         >
@@ -75,9 +74,6 @@ export default {
     data: {
       required: true
     },
-    appearMap: {
-      type: Object
-    },
     mapData: {
       type: Object
     },
@@ -111,7 +107,7 @@ export default {
 
     window.addEventListener(
       'resize',
-      debounce(function() {
+      debounce(function () {
         this.short = window.innerWidth < 500 ? true : false;
         this.calFillAmount();
         this.drawerSize =
@@ -162,7 +158,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.enemy-data-layout
+.enemy-data-layout {
   //display: flex
   //flex-wrap: wrap
   ///*justify-content: start;*/
@@ -171,19 +167,22 @@ export default {
   //padding: 0 20px
   max-height: 600px
   overflow-y: scroll
+}
 
-.enemy-container
+.enemy-container {
   display: flex
   margin: 30px 0
   min-width: 120px
+}
 
-.enemy-img-container
+.enemy-img-container {
   height: 100px
   width: 100px
   min-width: 100px
   position: relative
+}
 
-.enemy-index-container
+.enemy-index-container {
   position: absolute
   z-index: 1
   background-color: rgba(0, 0, 0, 0.5)
@@ -191,16 +190,21 @@ export default {
   top: -2px
   left: -2px
   padding: 2px 5px
+}
 
-@media screen and (max-width: 700px)
-  .enemy-data-layout
+@media screen and (max-width: 700px) {
+  .enemy-data-layout {
     padding: 0
     justify-content: center
+  }
+}
 
-@media screen and (max-width: 400px)
-  .enemy-img-container
+@media screen and (max-width: 400px) {
+  .enemy-img-container {
     --imgW: calc(80px + 5vw)
     height: var(--imgW)
     width: var(--imgW)
     min-width: var(--imgW)
+  }
+}
 </style>

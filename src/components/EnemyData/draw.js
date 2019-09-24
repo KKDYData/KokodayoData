@@ -154,7 +154,7 @@ class Map {
         const { col, row, reachOffset = { x: 0, y: 0 } } = stop.pos;
 
         const fillColor = `hsla(${color}, 75%, 50%, 0.7)`;
-        const pos = [(col + reachOffset.x) * this.mapRadio, (height - row + reachOffset.y) * this.mapRadio];
+        const pos = [(col + reachOffset.x) * this.mapRadio, (height - row - reachOffset.y) * this.mapRadio];
         const mapBlock = new Path();
         mapBlock.attr({
           pos,
@@ -189,7 +189,7 @@ class Map {
 
       s.attr({
         pos,
-        lineWidth: 12,
+        lineWidth: 6,
         path,
         lineCap: 'round',
         lineJoin: 'round',
@@ -285,9 +285,9 @@ class Map {
     this.runningRoutes.delete(x);
     delete this.tempRoutes[x];
   }
-  addRoutes(route, x, color) {
+  addRoutes(route, id, color) {
     //可以接受Array或者Number
-    this.runningRoutes.add(x);
+    this.runningRoutes.add(id);
     // const route = this.routes.find((el, index) => x === index);
     const height = this.grid.height - 1;
 
@@ -305,9 +305,12 @@ class Map {
 
     const splitPath = path.reduce((res, cur, index, arr) => {
       if (index + 1 === arr.length) return res;
-      const { col, row } = cur;
+      let { col, row } = cur;
       let { col: nCol, row: nRow, reachOffset } = arr[index + 1];
+
+      // 现在的点是空的，或者是隧道出口，跳过
       if ((col === 0 && row === 0) || arr[index + 1].type === 6) return res;
+      // 下一个点是空的，且下下个点不是隧道出口，则这个点就是停止点，顺位到下下下个点，因为前面把type5，也就是进隧道的点过滤了，只有出隧道的点。
       if (nCol === 0 && nRow === 0 && arr[index + 2].type !== 6) {
         nRow = arr[index + 2].row;
         nCol = arr[index + 2].col;
@@ -316,13 +319,27 @@ class Map {
 
         res.push({ stop: { pos: cur, time } });
       }
+
+      // 颠倒y 从图例左下角为（0， 0），变为canvas坐标系，左上角（0， 0）
+      row = height - row;
+      nRow = height - nRow;
+
       const ttGrid = tempGrid.clone();
-      const path = PF.Util.compressPath(this.finder.findPath(col, height - row, nCol, height - nRow, ttGrid));
+
+      // 不拐弯直走逻辑，危险，待测试。检测两点之间是都有便宜，如果是，就不寻路
+      const path = reachOffset && cur.reachOffset && (reachOffset.x !== 0 || reachOffset.y !== 0) && (cur.reachOffset.x !== 0 || cur.reachOffset.y !== 0) ?
+        [[col, row], [nCol, nRow]] : PF.Util.compressPath(this.finder.findPath(col, row, nCol, nRow, ttGrid));
 
 
       if (path.length > 0 && reachOffset) {
         path[path.length - 1][0] += reachOffset.x;
-        path[path.length - 1][1] += reachOffset.y;
+        path[path.length - 1][1] -= reachOffset.y;
+      }
+
+      // 擦墙逻辑，如果找不到路，但是点不是隧道出口， 且下一个点有reachOffset，x,y 不等于0，就擦墙看看，在of1是可以和下一段的起点连上的。
+      if (path.length === 0 && arr[index + 2].type !== 6 && reachOffset.x !== 0 && reachOffset.y !== 0) {
+        path.push([col, row]);
+        path.push([nCol + reachOffset.x, nRow - reachOffset.y]);
       }
       path.forEach((el, index, arr) => {
 
@@ -330,7 +347,8 @@ class Map {
           let [x, y] = el;
           if (index === 0 && cur.reachOffset) {
             x += cur.reachOffset.x;
-            y += cur.reachOffset.y;
+            y -= cur.reachOffset.y;
+            console.log(x, y);
           }
 
           const next = arr[index + 1];
@@ -341,9 +359,9 @@ class Map {
       return res;
     }, []);
 
-    this.tempRoutes[x] = ({
+    this.tempRoutes[id] = ({
       splitPath,
-      index: x,
+      index: id,
       color,
     });
     this.routeSet.add(splitPath);
