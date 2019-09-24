@@ -130,9 +130,7 @@ export default {
     data: {
       required: true
     },
-    appearMap: {
-      type: Object
-    },
+
     mapData: {
       type: Object
     },
@@ -192,6 +190,10 @@ export default {
     }
   },
   computed: {
+    appearMap() {
+      // 之后改成从vuex拿
+      return {};
+    },
     waveData() {
       if (!this.mapData) return;
       const a = this.mapData.waves.reduce((wRes, cur) => {

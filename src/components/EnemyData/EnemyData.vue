@@ -149,7 +149,6 @@
           :short="short"
           v-if="!load && data"
           :data="data"
-          :appear-map="appearMap"
           :map-data="selMapData"
           :runes-mode="runesMode"
           :simple-show="simpleShow"
@@ -209,7 +208,7 @@ Vue.use(Image);
 
 import {
   getEnemyList,
-  getEneAppearMap,
+  // getEneAppearMap,
   isMoblie,
   getMapData,
   path,
@@ -268,7 +267,7 @@ export default {
       data: null,
       rowData: [],
       load: false,
-      appearMap: null,
+      // appearMap: null,
       drawer: false,
       selectedMap: '',
       selMapData: null,
@@ -535,13 +534,13 @@ export default {
     linkStart() {
       return this.getData().then(data => {
         this.data = this.rowData = data[0];
-        this.appearMap = data[1];
+        // this.appearMap = data[1];
         if (this.stageTree) this.loadMap();
         else this.watchTree = true;
       });
     },
     getData() {
-      return Promise.all([getEnemyList(), getEneAppearMap()]);
+      return Promise.all([getEnemyList()]);
     },
     getItemList(list) {
       if (!list) return Promise.resolve([]);
