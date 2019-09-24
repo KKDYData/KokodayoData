@@ -6,7 +6,6 @@
           :size="short? 'mini' :'medium'"
           @click="choseAll"
           :type="allChosed ? 'info': 'warning'"
-          :style="short ? 'margin-left: 10px; ' : ''"
           :class="!allChosed ? 'filter-button filter-button-closeable' : 'filter-button'"
         >
           {{label}}
@@ -48,23 +47,15 @@ export default {
     };
   },
   watch: {
-    filters: function(newFilter, old) {
+    filters: function (newFilter, old) {
       const res = newFilter.map(obj => {
         if (!obj.chosed) obj.chosed = false;
         return obj;
       });
-      // console.log(res);
-      // console.log(this);
       this.lists = res;
     }
   },
   computed: {
-    // lists() {
-    //   return this.filters.map(obj => {
-    //     if (!obj.chosed) obj.chosed = false;
-    //     return obj;
-    //   });
-    // },
     allChosed() {
       if (!this.lists) return;
       const l = this.lists.filter(key => key.chosed).length;
@@ -80,15 +71,12 @@ export default {
       const fArr = this.lists.filter(key => key.chosed);
       if (!this.single) {
         if (fArr.length === 0) {
-          // this.$emit("reset");
           this.$emit('filter', []);
-
           return;
         }
         if (fArr.length === this.lists.length) {
           this.lists.forEach(key => this.$set(key, 'chosed', false));
           this.$emit('filter', []);
-
           return;
         }
       }
@@ -123,6 +111,7 @@ export default {
 .filter-button-wrapper {
   display: flex;
   flex-wrap: wrap;
+  margin-left: -10px;
 }
 .filter-close-icon {
   position: absolute;
@@ -131,6 +120,7 @@ export default {
 .filter-button {
   margin-bottom: 5px;
   margin-top: 5px;
+  margin-left: 10px;
   min-width: 50px;
   transition: all 0.3s ease;
   box-sizing: border-box;
@@ -147,6 +137,10 @@ export default {
   }
   .filter-button-closeable {
     min-width: 68px;
+  }
+
+  .filter-button-wrapper {
+    margin-left: 0;
   }
 }
 /* .filter-button:first-of-type {
