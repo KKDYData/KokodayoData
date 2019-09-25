@@ -77,7 +77,7 @@
           v-if="isEdge && showMap"
           type="error"
           :closable="false"
-        >Edge 不支持translateZ, 所以请考虑使用手机或者其它浏览器</el-alert>
+        >旧版Edge 不支持translateZ, 所以请考虑使用手机或者其它浏览器，或者试下那个新版的Edge</el-alert>
         <div class="map-data-container">
           <div
             :style="!mapCode ? {width: 'auto', 'min-width': '300px'} : {}"
@@ -98,7 +98,7 @@
               <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
               <div
                 id="map-canvas-container-up"
-                :style="isEdge ? 'transform: perspective(1200px) rotateX(40deg)' : ''"
+                :style="isEdge ? 'transform: perspective(1200px) rotateX(40deg); filter: none' : ''"
                 :class="showMap ? '' : 'map-canvas-bottom'"
               ></div>
             </div>
@@ -272,6 +272,7 @@ export default {
     MapPreDefined
   },
   data() {
+    const browser = Browser();
     return {
       short: false,
       data: null,
@@ -295,7 +296,7 @@ export default {
       preData: null,
       map: null,
       mapUp: null,
-      isEdge: Browser().name === 'Edge'
+      isEdge: browser.name === 'Edge' && browser.major < 19
     };
   },
   watch: {
