@@ -435,6 +435,13 @@ const StageType = {
   a003: '火蓝之心'
 };
 
+const Directions = {
+  3: '←',
+  2: '↓',
+  1: '→',
+  0: '↑'
+};
+
 export {
   StarArr,
   TagsArr,
@@ -453,5 +460,6 @@ export {
   statusToCh,
   statusToChChar,
   StageType,
-  statusToChToken
+  statusToChToken,
+  Directions
 };
