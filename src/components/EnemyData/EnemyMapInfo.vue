@@ -35,6 +35,10 @@
         </div>
         <div slot="content" v-else>属性已进行合并计算，在下面显示</div>
       </content-slot>
+      <content-slot :long="true" :no-wrap="true" :width="150">
+        <div slot="title">总时长</div>
+        <div slot="content">{{waveTime | time}}</div>
+      </content-slot>
     </div>
   </div>
 </template>
@@ -65,6 +69,14 @@ export default {
     showTitle: {
       default: true,
       type: Boolean
+    },
+    waveTime: {
+      default: 0
+    }
+  },
+  filters: {
+    time(v) {
+      return Math.floor(v / 60) + ' min ' + (v % 60) + ' s';
     }
   },
   data() {

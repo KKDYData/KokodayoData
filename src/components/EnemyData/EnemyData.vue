@@ -110,6 +110,7 @@
             :options="options"
             :dropInfo="detailsDropList"
             :global-buffs="globalBuffs"
+            :wave-time="waveTime"
           ></enemy-map-info>
         </div>
       </div>
@@ -172,6 +173,7 @@
           :short="short"
           :options="options"
           :global-buffs="globalBuffs"
+          :wave-time="waveTime"
         ></enemy-map-info>
       </my-slide-title>
       <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设" :short="short">
@@ -307,6 +309,23 @@ export default {
   },
   computed: {
     ...mapState(['stageTree']),
+    waveTime() {
+      return this.selMapData ? this.selMapData.waves.reduce((wRes, cur) =>
+        wRes +
+        cur.preDelay +
+        cur.postDelay +
+        cur.fragments.reduce((fRes, cur) => {
+          let fTemp = fRes + cur.preDelay;
+          cur.time = fTemp;
+          fTemp += cur.actions.reduce((res, cur) => {
+            const curTime = cur.preDelay + cur.interval * cur.count;
+            return Math.max(res, curTime);
+          }, 0);
+          return fTemp;
+        }, 0)
+      , 0) : 0;
+
+    },
     showPredefine() {
       if (!this.selMapData || !this.selMapData.predefines) return false;
       return Object.values(this.selMapData.predefines).reduce((res, cur) => res += cur.length, 0) > 0;
@@ -485,14 +504,14 @@ export default {
           this.getPreData();
           this.pTransition();
           if (this.map) {
-            this.map.setData(mapData.mapData);
-            this.mapUp.setData(mapData.mapData);
+            this.map.setData(mapData);
+            this.mapUp.setData(mapData);
           } else {
             const initMap = async () => {
               const { Map } = await import('./draw');
               await this.$nextTick();
-              this.map = new Map('#map-canvas-container', 100, mapData.mapData);
-              this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, true);
+              this.map = new Map('#map-canvas-container', 100, mapData);
+              this.mapUp = new Map('#map-canvas-container-up', 100, mapData, true);
             };
             if (window.spritejs) {
               initMap();

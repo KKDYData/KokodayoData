@@ -94,16 +94,22 @@ const fetchByKey = (keyPath) => {
     });
 };
 
-const getProfileList = () => fetchByKey('char/list')('1568990623279');
 
-const getEnemyList = () => fetchGetSliceSet('enemyList', 'setEnemyVer');
+import {
+  charListVer,
+  stageListVer,
+  enemyListVer
+} from './listVer';
 
-const getEneAppearMap = () => fetchGetSliceSet('enemyAppearMap', 'setApperMapVer');
+const getProfileList = () => fetchByKey('char/list')(charListVer);
+const getStageList = () => fetchByKey('lists/stage')(stageListVer); //fetchGetSliceSet('stageList');
+const getEnemyList = () => fetchByKey('lists/enemy')(enemyListVer); //fetchGetSliceSet('enemyList', 'setEnemyVer');
+
 
 // 遗留api
+const getEneAppearMap = () => fetchGetSliceSet('enemyAppearMap', 'setApperMapVer');
 const getDevList = () => fetchGetSliceSet('devList', 'setListVer');
 
-const getStageList = () => fetchGetSliceSet('stageList');
 // 不用找服务器的list
 const getThemeList = () => fetchByKey('custom')('themeslist');
 

@@ -1,7 +1,19 @@
 import { Scene, Path, Label } from 'spritejs';
 // pathfinding 被我手动把不需要的模块注释掉了，只有Grid和AStarFinder还在，体积从68kb变成了20kb，感动人心
 import PF from 'pathfinding';
+import { Directions } from '../../utils/string';
+import { Notification } from 'element-ui';
 
+const task = (title, message) => {
+  return () => {
+    Notification({
+      title,
+      message,
+      position: 'top-right',
+      type: 'info'
+    });
+  };
+};
 const radio = 100;
 const cen = radio / 2;
 
@@ -22,47 +34,107 @@ const mapReact = {
   lineCap: 'round',
 };
 
-const spwanMap = ({ map, tiles }, paper, top) => {
-  const myMap = map.map((el, row) => el.map((i, col, arr) => {
-    const { tileKey: key, passableMask, heightType, buildableType } = tiles[i];
+const spwanMap = ({ map, tiles }, np, paper, top) => {
+  const myMap = map.map((el, row) => el.map((i, col) => {
+    const { tileKey: key, passableMask, heightType, buildableType, blackboard } = tiles[i];
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
       : /hole/.test(key) ? 6 : passableMask === 3 ? 1 : -1;
     const rc = [col, row];
+
     return {
       i,
       rc,
       crossAble,
-      tileKey: key,
+      key,
       heightType,
       buildableType,
-      passableMask
+      passableMask,
+      blackboard
     };
   }));
 
+  np.forEach(el => {
+    const { col, row } = el.position;
+    myMap[myMap.length - 1 - row][col].data = el;
+  });
 
-  myMap.forEach((el) => el.forEach(({ rc, crossAble, heightType, buildableType, passableMask }) => {
+  const Keys = {
+    damage: '伤害',
+    cd_min: '最小cd',
+    cd_max: '最大cd',
+    attack_speed: '攻速',
+    atk_scale: '攻击倍率',
+    def: '防御'
+  };
+
+  const Keys2 = {
+    tile_volspread: '演讲喷射处',
+    tile_volcano: '热泵通道',
+    tile_gazebo: '防空符文',
+    tile_corrosion: '腐蚀地表'
+  };
+
+
+  myMap.forEach((el) => el.forEach(({ rc, crossAble, heightType, buildableType, passableMask, data, key, blackboard }) => {
     const [col, row] = rc;
     const pos = [col * radio + 1, row * radio + 1];
-    const fillColor = buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'//高台能摆的格子
-      : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'//地板不能摆的格子
-        : heightType === 1 ? 'rgba(230,230,230, 0.5)'
-          : mapBlockColoc[crossAble];
+
+
+
+
+    const valspread = 'tile_volspread' === key;
+    const valcanno = 'tile_volcano' === key;
+    const gazebo = 'tile_gazebo' === key;
+    const corrosion = 'tile_corrosion' === key;
+
+    const fillColor = gazebo ? 'hsl(48, 83%, 57%)' //防空符文
+      : buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'//高台能摆的格子
+        : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'//地板不能摆的格子
+          : valspread ? 'hsl(0, 100%, 24%)' //岩浆
+            : valcanno ? 'hsla(25, 100%, 49%, 0.9)' //地板
+              : corrosion ? 'hsl(179, 18%, 42%)' //腐蚀
+                : heightType === 1 ? 'rgba(230,230,230, 0.5)'
+                  : mapBlockColoc[crossAble];
 
     const mapBlock = new Path();
-    // buildableType === 0 ? 'rgba(255, 182, 182, 0.5)' :
+
     const writeLabel = () => {
+      const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
+      let text;
       if (col === 0 || row === 0) {
-        let text = col === 0 ? myMap.length - 1 - row : col;
-        if (col === 0 && row === 0) text = 'x|y  ' + text + ' 0';
+        if (col === 0 && row === 0) {
+          labelPos[0] -= 10;
+          text = 'Y|X';
+        }
+        else text = col === 0 ? myMap.length - 1 - row : col;
         const label = new Label(text);
-        const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
         label.attr({
           pos: labelPos,
           fillColor: '#fff',
+          font: 'bold 44px Arial',
         });
         paper.layer('map').append(label);
+      } else if (data) {
+
+        labelPos[1] -= 25;
+        text = Directions[data.direction];
+        const fillColor = /trap/.test(data.alias) ? 'black' : '#fff';
+        const label = new Label(text);
+        label.attr({
+          pos: labelPos,
+          fillColor,
+          font: 'bold 80px Arial',
+        });
+        mapBlock.on('mouseenter', task('弩炮', `${data.hidden ? '非立刻出现， ' : ''}等级${data.inst.level}，详细数据看下面`));
+        paper.layer('map').append(label);
+
       }
     };
+
+
+    const tempTask = blackboard ? task(Keys2[key], `${blackboard.reduce((res, el, index) => {
+      return res + (index === 0 ? '' : ' ') + Keys[el.key] + ' ' + el.value;
+    }, '')}`) : null;
 
 
     if (!top && heightType !== 1) {
@@ -75,6 +147,7 @@ const spwanMap = ({ map, tiles }, paper, top) => {
       });
       paper.layer('map').append(mapBlock);
       writeLabel();
+
     } else if (!top) {
       mapBlock.attr({
         pos,
@@ -84,6 +157,7 @@ const spwanMap = ({ map, tiles }, paper, top) => {
         strokeColor: 'rgb(64, 170, 191)'
       });
       paper.layer('map').append(mapBlock);
+
     } else if (top && heightType === 1) {
       mapBlock.attr({
         pos,
@@ -94,6 +168,22 @@ const spwanMap = ({ map, tiles }, paper, top) => {
       });
       paper.layer('map').append(mapBlock);
       writeLabel();
+
+      if (valspread || gazebo) {
+        mapBlock.on('mouseenter', tempTask);
+      }
+
+    } else if (top) {
+      // 高层代理时间的地板
+      if (valcanno || corrosion) {
+        mapBlock.attr({
+          pos,
+          path: mapReact,
+          strokeColor: 'rgba(64, 170, 191, 0)'
+        });
+        paper.layer('map').append(mapBlock);
+        mapBlock.on('mouseenter', tempTask);
+      }
     }
 
   }));
@@ -240,16 +330,18 @@ class Map {
     });
   }
 
-  setDataBeta(mapData) {
+  setDataBeta(rowData) {
+    const { mapData, predefines } = rowData;
+    const np = predefines ? predefines.tokenInsts : [];
     this.mapData = mapData;
     this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
-    this.map = spwanMap(mapData, this.paper, this.top);
+    this.map = spwanMap(mapData, np, this.paper, this.top);
   }
-  setData(mapData, routes) {
+  setData(mapData) {
     this.clearRoutes();
     this.paper.children.forEach(el => this.paper.removeChild(el));
     // 清完再设置
-    this.setDataBeta(mapData, routes);
+    this.setDataBeta(mapData);
     const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
     this.grid = new PF.Grid(sMap);
   }
@@ -342,7 +434,6 @@ class Map {
           if (index === 0 && cur.reachOffset) {
             x += cur.reachOffset.x;
             y -= cur.reachOffset.y;
-            console.log(x, y);
           }
 
           const next = arr[index + 1];

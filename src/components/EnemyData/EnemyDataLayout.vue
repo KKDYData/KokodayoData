@@ -196,23 +196,7 @@ export default {
     },
     waveData() {
       if (!this.mapData) return;
-      const a = this.mapData.waves.reduce((wRes, cur) => {
-        return (
-          wRes +
-          cur.preDelay +
-          cur.postDelay +
-          cur.fragments.reduce((fRes, cur) => {
-            let fTemp = fRes + cur.preDelay;
-            cur.time = fTemp;
-            fTemp += cur.actions.reduce((res, cur) => {
-              const curTime = cur.preDelay + cur.interval * cur.count;
-              return Math.max(res, curTime);
-            }, 0);
-            return fTemp;
-          }, 0)
-        );
-      }, 0);
-      console.log('wave time', a);
+
       return this.mapData.waves;
     }
   },
