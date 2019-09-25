@@ -24,6 +24,12 @@
     <!-- anchor linking to external file -->
     <a href="https://www.mozilla.com/">External Link</a>
   </noscript>
+  <script>
+    var agent = navigator.userAgent.toLowerCase()
+    if (agent.indexOf('trident') > 0) {
+      document.body.innerHTML = '不支持IE，请使用现代浏览器'
+    }
+  </script>
 </body>
 
 </html>
