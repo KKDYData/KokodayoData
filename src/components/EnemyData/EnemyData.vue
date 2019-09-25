@@ -148,7 +148,6 @@
               <p>延迟4s，就是这个敌人2分14秒的时候出发</p>
               <p>数量2，间隔30秒</p>
               <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
-              <p>同名人形Boss只会有一个，但是拆包可能出现两个一样的</p>
             </div>
           </el-tooltip>
         </div>
@@ -310,6 +309,8 @@ export default {
   computed: {
     ...mapState(['stageTree']),
     waveTime() {
+      let enemyNum = 0;
+      // 看起来像是简单算个时间，但是实际上，顺便把数量和每波开始的时间加进数据了
       return this.selMapData ? this.selMapData.waves.reduce((wRes, cur) =>
         wRes +
         cur.preDelay +
@@ -317,8 +318,15 @@ export default {
         cur.fragments.reduce((fRes, cur) => {
           let fTemp = fRes + cur.preDelay;
           cur.time = fTemp;
+
+          enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
+            if (el.actionType === 0) return res + el.count;
+            else return res;
+          }, enemyNum);
+
           fTemp += cur.actions.reduce((res, cur) => {
             const curTime = cur.preDelay + cur.interval * cur.count;
+            // 找出每波最长的
             return Math.max(res, curTime);
           }, 0);
           return fTemp;
