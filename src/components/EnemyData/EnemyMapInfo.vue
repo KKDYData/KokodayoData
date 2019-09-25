@@ -24,6 +24,7 @@
         :width="150"
         v-for="([k,v]) in globalBuffs"
         :key="k"
+        style="margin-bottom: 10px"
       >
         <div slot="title">{{k}}</div>
         <div slot="content" v-if="k !== '属性增益'">
@@ -76,7 +77,7 @@ export default {
   },
   filters: {
     time(v) {
-      return Math.floor(v / 60) + ' min ' + (v % 60) + ' s';
+      return Math.floor(v / 60) + ' min ' + Math.round(v % 60) + ' s';
     }
   },
   data() {

@@ -10,7 +10,7 @@ const task = (title, message) => {
       title,
       message,
       position: 'top-right',
-      type: 'info'
+      type: 'warning'
     });
   };
 };
