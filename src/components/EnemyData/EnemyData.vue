@@ -73,6 +73,11 @@
         </div>
       </div>
       <div class="map-data-wrapper">
+        <el-alert
+          v-if="isEdge && showMap"
+          type="error"
+          :closable="false"
+        >Edge 不支持translateZ, 所以请考虑使用手机或者其它浏览器</el-alert>
         <div class="map-data-container">
           <div
             :style="!mapCode ? {width: 'auto', 'min-width': '300px'} : {}"
@@ -91,7 +96,11 @@
                 :src="mapPath"
               ></el-image>
               <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
-              <div id="map-canvas-container-up" :class="showMap ? '' : 'map-canvas-bottom'"></div>
+              <div
+                id="map-canvas-container-up"
+                :style="isEdge ? 'transform: perspective(1200px) rotateX(40deg)' : ''"
+                :class="showMap ? '' : 'map-canvas-bottom'"
+              ></div>
             </div>
             <div class="left-layout"></div>
           </div>
@@ -220,7 +229,8 @@ import {
   getCharItem,
   getItem,
   preDefineGet,
-  importSpriteJs
+  importSpriteJs,
+  Browser
 } from '../../utils';
 
 import Mode from '../../stats';
@@ -267,7 +277,6 @@ export default {
       data: null,
       rowData: [],
       load: false,
-      // appearMap: null,
       drawer: false,
       selectedMap: '',
       selMapData: null,
@@ -286,6 +295,7 @@ export default {
       preData: null,
       map: null,
       mapUp: null,
+      isEdge: Browser().name === 'Edge'
     };
   },
   watch: {
@@ -474,14 +484,14 @@ export default {
           this.getPreData();
           this.pTransition();
           if (this.map) {
-            this.map.setData(mapData.mapData, mapData.routes);
-            this.mapUp.setData(mapData.mapData, mapData.routes);
+            this.map.setData(mapData.mapData);
+            this.mapUp.setData(mapData.mapData);
           } else {
             const initMap = async () => {
               const { Map } = await import('./draw');
               await this.$nextTick();
-              this.map = new Map('#map-canvas-container', 100, mapData.mapData, mapData.routes);
-              this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, mapData.routes, true);
+              this.map = new Map('#map-canvas-container', 100, mapData.mapData);
+              this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, true);
             };
             if (window.spritejs) {
               initMap();
@@ -635,11 +645,12 @@ filter() {
   -webkit-filter: arguments
   -o-filter: arguments
   -ms-filter: arguments
+  filter: arguments
 }
 
 #map-canvas-container-up {
-  transform: perspective(1200px) rotateX(40deg) translate3d(0, 0, calc(var(--height) * 0.05))
-  filter: drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6))
+  filter(drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6)))
+  transform: perspective(1200px) rotateX(40deg) translateZ(calc(var(--height) * 0.05))
   transition: transform 0.7s ease
 }
 

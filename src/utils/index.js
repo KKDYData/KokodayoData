@@ -35,7 +35,7 @@ const path = process.env.NODE_ENV === 'development' ? 'https://arknights-data.os
 
 const dataPath = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'
   : 'https://andata.somedata.top';
-const api = devMode === '/Arknights' ? '/api/arknights/' : '/api/arkforward/';
+const api = '/api/arknights/';
 
 
 const fetchPut = (url, data) => {
@@ -284,7 +284,6 @@ const getClass_icon = (c) => {
 };
 
 import UaParser from 'ua-parser-js';
-import devMode from '../stats';
 
 
 const Browser = () => new UaParser().getBrowser();

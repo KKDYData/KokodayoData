@@ -46,7 +46,8 @@ const spwanMap = ({ map, tiles }, paper, top) => {
     const fillColor = buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'//高台能摆的格子
       : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'//地板不能摆的格子
         : heightType === 1 ? 'rgba(230,230,230, 0.5)'
-          : mapBlockColoc[crossAble];//
+          : mapBlockColoc[crossAble];
+
     const mapBlock = new Path();
     // buildableType === 0 ? 'rgba(255, 182, 182, 0.5)' :
     const writeLabel = () => {
@@ -74,7 +75,6 @@ const spwanMap = ({ map, tiles }, paper, top) => {
       });
       paper.layer('map').append(mapBlock);
       writeLabel();
-
     } else if (!top) {
       mapBlock.attr({
         pos,
@@ -118,7 +118,6 @@ class Map {
   grid
   map
   mapData
-  routes
   finder = new PF.AStarFinder({
     allowDiagonal: true,
     dontCrossCorners: true,
@@ -128,7 +127,7 @@ class Map {
   mapRadio
   top
   run = false
-  constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, routes, top = false) {
+  constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, top = false) {
     const config = {
       viewport: ['auto', 'auto'],
       stickMode: 'width',
@@ -138,12 +137,9 @@ class Map {
     this.mapRadio = radio;
     this.top = top;
     // 稍微做个判定，给以后用
-    if (routes) {
-      this.setDataBeta(mapData, routes);
-      const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
-      this.grid = new PF.Grid(sMap);
-
-    }
+    this.setDataBeta(mapData);
+    const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
+    this.grid = new PF.Grid(sMap);
   }
   async ray(body) {
     return new Promise((resolve, reject) => {
@@ -244,8 +240,7 @@ class Map {
     });
   }
 
-  setDataBeta(mapData, routes) {
-    this.routes = routes;
+  setDataBeta(mapData) {
     this.mapData = mapData;
     this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
     this.map = spwanMap(mapData, this.paper, this.top);
@@ -288,7 +283,6 @@ class Map {
   addRoutes(route, id, color) {
     //可以接受Array或者Number
     this.runningRoutes.add(id);
-    // const route = this.routes.find((el, index) => x === index);
     const height = this.grid.height - 1;
 
     const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
