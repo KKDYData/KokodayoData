@@ -44,7 +44,7 @@
         >最大等待时间：{{maxTimeWaitingForNextWave}}s | 延迟：{{preDelay}}s</p>
         <div
           class="wave-enemy-container"
-          v-for="({actions, name, preDelay, time}, fIndex) in fragments"
+          v-for="({actions, name, preDelay, time, enemyNum}, fIndex) in fragments"
           :key="fIndex"
         >
           <p class="wave-info" style="width: 100%; margin-bottom: -20px">
@@ -54,13 +54,13 @@
               {{time | time}}
               <span
                 style="margin-left: 10px"
-                v-if="preDelay"
-              >距离上一波{{preDelay}}s</span>
+              >{{enemyNum}}/{{fragments[fragments.length - 1].enemyNum}}</span>
+              <span style="margin-left: 10px" v-if="preDelay">距离上一波{{preDelay}}s</span>
             </span>
           </p>
           <!-- .filter(el => mapData.routes[el.routeIndex]) -->
           <div
-            v-for="({key, actionType, count, interval, preDelay, routeIndex}, aIndex) in actions.filter(el => el.actionType !== 5)"
+            v-for="({key, actionType, count, interval, preDelay, routeIndex}, aIndex) in actions.filter(el => el.actionType === 0)"
             :key="aIndex"
             class="wave-enemy-single"
           >
@@ -76,7 +76,7 @@
               <p>{{key.replace('trap_007_ballis', '弩炮')}}</p>
             </div>
             <div @touchstart="showRoute(routeIndex)" style class="enemy-cube-wave-info">
-              <div>数量:{{count}}, 间隔:{{interval}}</div>
+              <div>数量:{{count}} 间隔:{{interval}}s</div>
               <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
                 延迟: {{preDelay}}s
                 <i
@@ -196,7 +196,6 @@ export default {
     },
     waveData() {
       if (!this.mapData) return;
-
       return this.mapData.waves;
     }
   },
@@ -313,7 +312,6 @@ export default {
 }
 
 .enemy-cube-wave-info {
-  cursor: pointer
   font-size: 15px
   color: rgb(168, 168, 168)
 }
