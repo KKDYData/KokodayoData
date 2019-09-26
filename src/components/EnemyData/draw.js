@@ -34,7 +34,7 @@ const mapReact = {
   lineCap: 'round',
 };
 
-const spwanMap = ({ map, tiles }, np, paper, top) => {
+const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
   const myMap = map.map((el, row) => el.map((i, col) => {
     const { tileKey: key, passableMask, heightType, buildableType, blackboard } = tiles[i];
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
@@ -118,23 +118,36 @@ const spwanMap = ({ map, tiles }, np, paper, top) => {
 
         labelPos[1] -= 25;
         text = Directions[data.direction];
-        const fillColor = /trap/.test(data.alias) ? 'black' : '#fff';
+        const id = data.alias.split('#');
+        if (id[1]) {
+          const idLabel = new Label(id[1]);
+          let pos = id[1] > 9 ? [labelPos[0] - 25, labelPos[1]] : labelPos;
+          idLabel.attr({
+            pos,
+            fillColor: '#313131',
+            font: 'bold 80px Arial',
+          });
+          paper.layer('map').append(idLabel);
+        }
+        const fillColor = 'rgba(255, 255, 255, 0.7)';
         const label = new Label(text);
         label.attr({
           pos: labelPos,
           fillColor,
           font: 'bold 80px Arial',
         });
-        mapBlock.on('mouseenter', task('弩炮', `${data.hidden ? '非立刻出现， ' : ''}等级${data.inst.level}，详细数据看下面`));
+        mapBlock.on('mouseenter', task('弩炮', `等级${data.inst.level} ，${branches ? '由敌人召唤，出现时间看梅菲斯特的技能' : '随敌人出现，出现时间参考出现敌人一栏'}`));
         paper.layer('map').append(label);
 
       }
     };
 
 
-    const tempTask = blackboard ? task(Keys2[key], `${blackboard.reduce((res, el, index) => {
-      return res + (index === 0 ? '' : ' ') + Keys[el.key] + ' ' + el.value;
-    }, '')}`) : null;
+    const tempTask = blackboard ? task(Keys2[key], `${
+      blackboard.reduce((res, el, index) => {
+        return res + (index === 0 ? '' : ' ') + Keys[el.key] + ' ' + el.value;
+      }, '')
+    } `) : null;
 
 
     if (!top && heightType !== 1) {
@@ -239,7 +252,7 @@ class Map {
         const height = this.grid.height - 1;
         const { col, row, reachOffset = { x: 0, y: 0 } } = stop.pos;
 
-        const fillColor = `hsla(${color}, 75%, 50%, 0.7)`;
+        const fillColor = `hsla(${color}, 75 %, 50 %, 0.7)`;
         const pos = [(col + reachOffset.x) * this.mapRadio, (height - row - reachOffset.y) * this.mapRadio];
         const mapBlock = new Path();
         mapBlock.attr({
@@ -267,10 +280,10 @@ class Map {
       const s = new Path();
       const fullColors = [{
         offset: 0,
-        color: `hsla(${color}, 100%, 50%, 0)`,
+        color: `hsla(${color}, 100 %, 50 %, 0)`,
       }, {
         offset: 1,
-        color: `hsla(${color}, 100%, 50%, 0)`,
+        color: `hsla(${color}, 100 %, 50 %, 0)`,
       }];
 
       s.attr({
@@ -307,10 +320,10 @@ class Map {
         p = Math.min(p / 0.7, 1);
 
         const colors = [
-          { offset: 0, color: `hsla(${color}, 100%, 50%, 0.1)` },
-          { offset: q, color: `hsla(${color}, 100%, 50%, 0.7)` },
-          { offset: p, color: `hsla(${color}, 100%, 35%, 1)` },
-          { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100%, 50%, 0)` },
+          { offset: 0, color: `hsla(${color}, 100 %, 50 %, 0.1)` },
+          { offset: q, color: `hsla(${color}, 100 %, 50 %, 0.7)` },
+          { offset: p, color: `hsla(${color}, 100 %, 35 %, 1)` },
+          { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100 %, 50 %, 0)` },
         ];
 
         const linearGradients = s.attr('linearGradients');
@@ -362,10 +375,10 @@ class Map {
     console.log('??');
     const radio = this.mapRadio, cen = this.mapRadio / 2;
     return temp.reduce((path, { row, col }, index) => {
-      if (index === 0) return `m ${col * radio + cen} ${row * radio + cen}`;
+      if (index === 0) return `m ${col * radio + cen} ${row * radio + cen} `;
       if (row === 0) return `${path} h ${col * radio} `;
       if (col === 0) return `${path} v ${row * radio} `;
-      return `${path} l ${col * radio} ${row * radio}`;
+      return `${path} l ${col * radio} ${row * radio} `;
     }, '');
   }
   deleteRoute(x) {

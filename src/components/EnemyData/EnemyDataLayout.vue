@@ -49,6 +49,7 @@
         >
           <p class="wave-info" style="width: 100%; margin-bottom: -20px">
             第{{fIndex+1}}波
+            <span style="color: hsl(218, 58%, 14%)">{{name}}</span>
             <span>
               <i class="el-icon-position"></i>
               {{time | time}}
@@ -60,7 +61,7 @@
           </p>
           <!-- .filter(el => mapData.routes[el.routeIndex]) -->
           <div
-            v-for="({key, actionType, count, interval, preDelay, routeIndex}, aIndex) in actions.filter(el => el.actionType === 0)"
+            v-for="({key, actionType, count, interval, preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
             :key="aIndex"
             class="wave-enemy-single"
           >
@@ -71,8 +72,13 @@
               :src="enemyPicPath(key)"
               @click.native="showRoute(routeIndex)"
             ></enemy-cube>
+            <enemy-cube
+              style="background: linear-gradient(45deg, hsl(163, 100%, 6%), transparent);box-shadow: inset 0px 0px 0px 5px #313131"
+              v-else-if="/trap_007_ballis/.test(key)"
+              name="弩炮"
+              :src="ballis"
+            ></enemy-cube>
             <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
-              <p>地图预设</p>
               <p>{{key.replace('trap_007_ballis', '弩炮')}}</p>
             </div>
             <div @touchstart="showRoute(routeIndex)" style class="enemy-cube-wave-info">
@@ -145,6 +151,7 @@ export default {
   },
   data() {
     return {
+      ballis: path + 'char/profile/trap_007_ballis_optimized.png?x-oss-process=style/small-test',
       path: path + 'enemy/pic/',
       showKey: '',
       currentData: [],
