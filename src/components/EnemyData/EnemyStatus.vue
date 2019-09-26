@@ -119,12 +119,14 @@
       <div>
         <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
           <div>
-            <b>Extra·技能</b>
+            <b style="font-size: 1.2em">Extra·技能</b>
           </div>
           <div :style="0 ? '' :'display: flex'">
             <div class="enemy-skill-container" v-for="(skill, index) in targetSkill" :key="index">
               <div style="margin: 10px 0">
-                <span style="font-size: 1em">{{skill.prefabKey.toUpperCase()}}</span>
+                <span
+                  style="font-size: 1.1em"
+                >{{skill.prefabKey === 'SummonBallis' ? '召唤弩炮': skill.prefabKey.toUpperCase()}}</span>
               </div>
               <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
                 <div :style="short ?'margin-left: 10px' : ''">
