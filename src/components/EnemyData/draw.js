@@ -68,7 +68,7 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
   };
 
   const Keys2 = {
-    tile_volspread: '演讲喷射处',
+    tile_volspread: '岩浆喷射处',
     tile_volcano: '热泵通道',
     tile_gazebo: '防空符文',
     tile_corrosion: '腐蚀地表'
@@ -252,7 +252,7 @@ class Map {
         const height = this.grid.height - 1;
         const { col, row, reachOffset = { x: 0, y: 0 } } = stop.pos;
 
-        const fillColor = `hsla(${color}, 75 %, 50 %, 0.7)`;
+        const fillColor = `hsla(${color}, 75%, 50%, 0.7)`;
         const pos = [(col + reachOffset.x) * this.mapRadio, (height - row - reachOffset.y) * this.mapRadio];
         const mapBlock = new Path();
         mapBlock.attr({
@@ -280,10 +280,10 @@ class Map {
       const s = new Path();
       const fullColors = [{
         offset: 0,
-        color: `hsla(${color}, 100 %, 50 %, 0)`,
+        color: `hsla(${color}, 100%, 50%, 0)`,
       }, {
         offset: 1,
-        color: `hsla(${color}, 100 %, 50 %, 0)`,
+        color: `hsla(${color}, 100%, 50%, 0)`,
       }];
 
       s.attr({
@@ -320,10 +320,10 @@ class Map {
         p = Math.min(p / 0.7, 1);
 
         const colors = [
-          { offset: 0, color: `hsla(${color}, 100 %, 50 %, 0.1)` },
-          { offset: q, color: `hsla(${color}, 100 %, 50 %, 0.7)` },
-          { offset: p, color: `hsla(${color}, 100 %, 35 %, 1)` },
-          { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100 %, 50 %, 0)` },
+          { offset: 0, color: `hsla(${color}, 100%, 50%, 0.1)` },
+          { offset: q, color: `hsla(${color}, 100%, 50%, 0.7)` },
+          { offset: p, color: `hsla(${color}, 100%, 35%, 1)` },
+          { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100%, 50%, 0)` },
         ];
 
         const linearGradients = s.attr('linearGradients');

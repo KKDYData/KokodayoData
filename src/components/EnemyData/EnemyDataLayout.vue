@@ -219,13 +219,13 @@ export default {
         this.selectedRoutes.delete(index);
       } else {
         this.selectedRoutes.add(index);
-        const color = 360 * Math.random();
+        const color = Math.round(360 * Math.random());
         this.$set(
           this.selectedStlye,
           index,
           `--border: 7px solid hsl(${color}, 100%, 50%)`
         );
-        console.log(this.selectedRoutes);
+        console.log(this.selectedRoutes, color);
         this.$emit('showRoute', index, color);
       }
     },
