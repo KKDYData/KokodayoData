@@ -49,6 +49,11 @@ export default {
   cursor: pointer
 }
 
+.item-data-name {
+  min-width: 50px
+  display: inline-block
+}
+
 .item-occper {
   background-color: rgb(128, 128, 128)
   color: white
