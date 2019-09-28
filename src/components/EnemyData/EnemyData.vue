@@ -42,27 +42,30 @@
             <i class="el-icon-edit-outline"></i>
           </el-button>
 
-          <el-button
-            @click="loadRunes"
-            v-if="selMapDataEx && (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')"
-            :type="!runesMode ? '': 'warning'"
-            :plain="!runesMode"
-            class="runes-mode-button"
-          >突袭</el-button>
-          <el-button
-            @click="laodRouteMap"
-            v-if="selMapDataEx"
-            :type="!showMap ? '': 'warning'"
-            :plain="!showMap"
-            class="runes-mode-button"
-          >地图</el-button>
-          <el-tooltip
-            v-if="mapCode && showMap"
-            class="runes-mode-button"
-            content="白色是路，浅黄是不能放干员的路，蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑"
-          >
-            <el-button type="info">地图说明</el-button>
-          </el-tooltip>
+          <span :style="short ? 'margin-top: 10px; display: block' : ''">
+            <el-button
+              @click="loadRunes"
+              v-if="selMapDataEx && (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')"
+              :type="!runesMode ? '': 'warning'"
+              :plain="!runesMode"
+              class="runes-mode-button"
+            >突袭</el-button>
+            <el-button
+              @click="laodRouteMap"
+              v-if="selMapDataEx"
+              :type="!showMap ? '': 'warning'"
+              :plain="!showMap"
+              class="runes-mode-button"
+            >地图</el-button>
+            <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
+              <el-button type="info">地图说明</el-button>
+              <div slot="content">
+                <p>白色是路，浅黄是不能放干员的路，</p>
+                <p>蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑</p>
+                <p>粉色或者其它颜色是特别功能地板，点击查看效果</p>
+              </div>
+            </el-tooltip>
+          </span>
         </div>
         <div style="margin-left: 5px" ref="map-desc" v-if="selMapDataEx">
           <p style="font-size: 0.9em" v-if="selMapDataEx.dangerLevel !== '-'">
