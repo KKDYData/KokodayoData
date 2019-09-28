@@ -533,7 +533,6 @@ const preDefineCompute = (asyncData, baseData) => {
   const res = baseData.map(el => {
     const key = el.inst.characterKey;
     const target = asyncData.find(item => key === item.key);
-    console.log('target ', target, asyncData, baseData);
 
     if (!target) return;
     const { data, targetSkill } = target;

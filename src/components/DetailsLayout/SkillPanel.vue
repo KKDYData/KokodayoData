@@ -126,9 +126,9 @@ export default {
     }
   },
   data() {
-    const initLv = this.initLv ? this.initLv : 1;
+    const initLv = this.initLv ? this.initLv : 7;
     return {
-      sLevel: [initLv, 1, 1],
+      sLevel: [initLv, initLv, initLv],
       // eslint-disable-next-line no-undef
       production: PRODUCTION
     };
