@@ -1,32 +1,207 @@
 import { Scene, Path, Label } from 'spritejs';
-// pathfinding 被我手动把不需要的模块注释掉了，只有Grid和AStarFinder还在，体积从68kb变成了20kb，感动人心
 import PF from 'pathfinding';
 import { Directions } from '../../utils/string';
 import { Notification } from 'element-ui';
 
-const task = (title, message) => {
+console.log('draw.js');
+
+
+const task = (mapBlock, mapData, heightType) => {
   return () => {
+    let rightTrans = null;
     Notification({
-      title,
-      message,
+      ...mapData,
       position: 'top-right',
       type: 'warning'
+    });
+    rightTrans = mapBlock.transition(0.7);
+    rightTrans.attr({
+      fillColor: 'rgba(92, 222, 255, 0.5)'
+    });
+    setTimeout(() => {
+      mapBlock.attr({ fillColor: heightType !== 1 ? 'rgba(0, 0, 0, 0)' : mapData.color });
+    }, 2000);
+    mapBlock.on('mouseleave', (evt) => {
+      rightTrans.reverse();
     });
   };
 };
 const radio = 100;
 const cen = radio / 2;
 
-const mapBlockColoc = {
-  [-1]: 'rgba(255,255,255, 0.2)',
-  0: 'grey',
-  1: '#fff',
-  2: '#fff',
-  3: 'rgb(244, 152, 0)',
-  4: 'rgb(255, 61, 61)',
-  5: 'rgb(103, 203, 67)',
-  6: 'hsl(219, 57%, 14%)'
+const Keys = key => {
+  const keys = {
+    damage: '伤害',
+    cd_min: '最小cd',
+    cd_max: '最大cd',
+    attack_speed: '攻速',
+    atk_scale: '攻击倍率',
+    def: '防御',
+    HP_RECOVERY_PER_SEC_BY_MAX_HP_RATIO: '每秒HP回复百分比'
+  };
+  if (keys[key]) return keys[key];
+  else return key;
 };
+
+const tileInfo = {
+  'tile_bigforce': {
+    'name': '特种战术点',
+    'description': '置于其中的我方单位在推动或拉动敌方单位时力度增大',
+    color: 'hsl(342, 98%, 67%)'
+
+  },
+  'tile_def': {
+    'name': '防御符文',
+    'description': '置于其中的干员获得额外的防御力',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_fence': {
+    'name': '围栏',
+    'description': '可放置近战单位，不可以通行',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_healing': {
+    'name': '医疗符文',
+    'description': '置于其中的干员会持续恢复生命',
+    color: 'hsl(342, 98%, 67%)'
+  },
+
+  'tile_rcm_crate': {
+    'name': '推荐障碍放置点',
+    'description': 'PRTS推荐的障碍物放置点',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_rcm_operator': {
+    'name': '推荐干员放置点',
+    'description': 'PRTS推荐的战术放置点',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_shallowwater': {
+    'name': '浅水区',
+    'description': '代表岸边的水地形',
+    color: 'hsl(342, 98%, 67%)'
+  },
+
+  'tile_corrosion': {
+    'name': '腐蚀地面',
+    'description': '置于其中的干员防御力减半',
+    color: 'hsl(179, 18%, 42%)',
+
+  },
+  'tile_deepwater': {
+    'name': '深水区',
+    'description': '代表离岸较远的水地形',
+    color: 'hsla(224, 100%, 25%, 0.7)'
+
+  },
+
+  'tile_end': {
+    'name': '保护目标',
+    'description': '蓝色目标点，敌方进入后会减少此目标点的耐久',
+    color: 'rgb(103, 203, 67)'
+
+  },
+
+  'tile_floor': {
+    'name': '不可放置位',
+    'description': '不可放置单位，可以通行',
+    color: 'hsla(38, 92%, 90%, 1)',
+
+  },
+  'tile_flystart': {
+    'name': '空袭侵入点',
+    'description': '敌方飞行单位会从此处进入战场',
+    color: 'rgb(255, 61, 61)'
+
+  },
+  'tile_forbidden': {
+    'name': '禁入区',
+    'description': '不可放置单位，不可通行',
+    color: 'rgba(230,230,230, 0.5)',
+
+  },
+  'tile_gazebo': {
+    'name': '防空符文',
+    'description': '置于其中的干员攻击速度略微下降，但在攻击空中单位时攻击力大幅度提升',
+    color: 'hsl(48, 83%, 57%)',
+
+  },
+  'tile_grass': {
+    'name': '草丛',
+    'description': '置于其中的干员不会成为敌军远程攻击的目标',
+    color: 'green'
+  },
+
+  'tile_hole': {
+    'name': '地穴',
+    'description': '危险的凹陷地形或地面破洞，经过的敌人会摔落至底部直接死亡',
+    color: 'hsl(219, 57%, 14%)'
+
+  },
+  'tile_infection': {
+    'name': '活性源石',
+    'description': '部署的友军和经过的敌军获得攻击力和攻击速度提升的效果，但会持续失去生命',
+    color: 'red'
+  },
+
+  'tile_road': {
+    'name': '平地',
+    'description': '可以放置近战单位，可以通行',
+    color: '#fff',
+  },
+
+  'tile_start': {
+    'name': '侵入点',
+    'description': '敌方会从此进入战场',
+    color: 'rgb(255, 61, 61)'
+  },
+  'tile_telin': {
+    'name': '通道入口',
+    'description': '敌方会从此进入通道，从通道出口出现',
+    color: 'rgb(244, 152, 0)'
+  },
+  'tile_telout': {
+    'name': '通道出口',
+    'description': '进入通道的敌方单位会从此处再度出现',
+    color: 'rgb(244, 152, 0)'
+  },
+  'tile_volcano': {
+    'name': '热泵通道',
+    'description': '每隔一段时间便会喷出高温气体，对其上的任何单位造成无视防御和法抗的伤害',
+    color: 'hsla(25, 100%, 49%, 0.9)',
+  },
+  'tile_volspread': {
+    'name': '岩浆喷射处',
+    'description': '每隔一段时间会喷出岩浆，对周围8格内的我方单位造成大量伤害且可以融化障碍物',
+    color: 'hsl(0, 100%, 24%)',
+  },
+  'tile_wall': {
+    'name': '高台',
+    'description': '可以放置远程单位，不可通行',
+    color: 'rgba(125, 253, 244, 0.9)',
+  }
+};
+
+const getBlockData = (data, key, blackboard) => {
+
+  if (data) {
+    return {
+      color: 'rgba(230,230,230, 0.5)'
+    };
+  } else if (tileInfo[key]) {
+    const { description, name: title, color } = tileInfo[key];
+    return {
+      title,
+      color,
+      message: description + (blackboard ? `， ${blackboard.reduce((res, el, index) => res + (index === 0 ? '' : ' ') + Keys(el.key) + ' '
+        + el.value + (el.key.indexOf('cd') > -1 ? 's' : ''), '')}`
+        : ''),
+    };
+  } else return {
+    color: 'rgba(0, 0, 0, 0)'
+  };
+};
+
 
 const react = `m 0 0 h ${radio - 2} v ${radio - 2} h ${-radio + 2} z`;
 const mapReact = {
@@ -37,6 +212,7 @@ const mapReact = {
 const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
   const myMap = map.map((el, row) => el.map((i, col) => {
     const { tileKey: key, passableMask, heightType, buildableType, blackboard } = tiles[i];
+    // 只剩下计算是否同行的作用了
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
       : /hole/.test(key) ? 6 : passableMask === 3 ? 1 : -1;
     const rc = [col, row];
@@ -58,45 +234,19 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
     myMap[myMap.length - 1 - row][col].data = el;
   });
 
-  const Keys = {
-    damage: '伤害',
-    cd_min: '最小cd',
-    cd_max: '最大cd',
-    attack_speed: '攻速',
-    atk_scale: '攻击倍率',
-    def: '防御'
-  };
-
-  const Keys2 = {
-    tile_volspread: '岩浆喷射处',
-    tile_volcano: '热泵通道',
-    tile_gazebo: '防空符文',
-    tile_corrosion: '腐蚀地表'
-  };
 
 
-  myMap.forEach((el) => el.forEach(({ rc, crossAble, heightType, buildableType, passableMask, data, key, blackboard }) => {
+
+  myMap.forEach((el) => el.forEach(({ rc, heightType, data, key, blackboard }) => {
     const [col, row] = rc;
     const pos = [col * radio + 1, row * radio + 1];
 
-
-
-
-    const valspread = 'tile_volspread' === key;
-    const valcanno = 'tile_volcano' === key;
-    const gazebo = 'tile_gazebo' === key;
-    const corrosion = 'tile_corrosion' === key;
-
-    const fillColor = gazebo ? 'hsl(48, 83%, 57%)' //防空符文
-      : buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'//高台能摆的格子
-        : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'//地板不能摆的格子
-          : valspread ? 'hsl(0, 100%, 24%)' //岩浆
-            : valcanno ? 'hsla(25, 100%, 49%, 0.9)' //地板
-              : corrosion ? 'hsl(179, 18%, 42%)' //腐蚀
-                : heightType === 1 ? 'rgba(230,230,230, 0.5)'
-                  : mapBlockColoc[crossAble];
-
     const mapBlock = new Path();
+
+    const typeData = getBlockData(data, key, blackboard);
+    const fillColor = typeData.color;
+    const eventTask = data ? task(mapBlock, { color: 'rgba(230,230,230, 0.5)', title: '弩炮', message: `等级${data.inst.level} ，${branches ? '由敌人召唤，出现时间看梅菲斯特的技能' : '随敌人出现，出现时间参考出现敌人一栏'}` }, heightType)
+      : task(mapBlock, typeData, heightType);
 
     const writeLabel = () => {
       const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
@@ -136,18 +286,10 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
           fillColor,
           font: 'bold 80px Arial',
         });
-        mapBlock.on('mouseenter', task('弩炮', `等级${data.inst.level} ，${branches ? '由敌人召唤，出现时间看梅菲斯特的技能' : '随敌人出现，出现时间参考出现敌人一栏'}`));
         paper.layer('map').append(label);
 
       }
     };
-
-
-    const tempTask = blackboard ? task(Keys2[key], `${
-      blackboard.reduce((res, el, index) => {
-        return res + (index === 0 ? '' : ' ') + Keys[el.key] + ' ' + el.value;
-      }, '')
-    } `) : null;
 
 
     if (!top && heightType !== 1) {
@@ -160,7 +302,6 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
       });
       paper.layer('map').append(mapBlock);
       writeLabel();
-
     } else if (!top) {
       mapBlock.attr({
         pos,
@@ -170,7 +311,6 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
         strokeColor: 'rgb(64, 170, 191)'
       });
       paper.layer('map').append(mapBlock);
-
     } else if (top && heightType === 1) {
       mapBlock.attr({
         pos,
@@ -181,22 +321,19 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
       });
       paper.layer('map').append(mapBlock);
       writeLabel();
-
-      if (valspread || gazebo) {
-        mapBlock.on('mouseenter', tempTask);
-      }
-
-    } else if (top) {
+    } else {
       // 高层代理时间的地板
-      if (valcanno || corrosion) {
-        mapBlock.attr({
-          pos,
-          path: mapReact,
-          strokeColor: 'rgba(64, 170, 191, 0)'
-        });
-        paper.layer('map').append(mapBlock);
-        mapBlock.on('mouseenter', tempTask);
-      }
+      mapBlock.attr({
+        pos,
+        fillColor: 'rgba(0, 0, 0, 0)',
+        path: mapReact,
+        strokeColor: 'rgba(64, 170, 191, 0)'
+      });
+      paper.layer('map').append(mapBlock);
+    }
+
+    if (top) {
+      mapBlock.on('mouseenter', eventTask);
     }
 
   }));
@@ -304,6 +441,7 @@ class Map {
       const len = s.getPathLength();
       let [x, y] = path.split(' ').slice(1, 3);
       let start = null;
+
       const auto = (timeStamp) => {
         if (!start) start = timeStamp;
         const progress = timeStamp - start + saveTime;
@@ -344,11 +482,11 @@ class Map {
   }
 
   setDataBeta(rowData) {
-    const { mapData, predefines } = rowData;
+    const { mapData, predefines, branches } = rowData;
     const np = predefines ? predefines.tokenInsts : [];
     this.mapData = mapData;
     this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
-    this.map = spwanMap(mapData, np, this.paper, this.top);
+    this.map = spwanMap({ ...mapData, branches }, np, this.paper, this.top);
   }
   setData(mapData) {
     this.clearRoutes();
@@ -372,7 +510,6 @@ class Map {
       const [preX, preY] = arr[index - 1];
       return { row: y - preY, col: x - preX };
     });
-    console.log('??');
     const radio = this.mapRadio, cen = this.mapRadio / 2;
     return temp.reduce((path, { row, col }, index) => {
       if (index === 0) return `m ${col * radio + cen} ${row * radio + cen} `;
@@ -386,7 +523,6 @@ class Map {
     delete this.tempRoutes[x];
   }
   addRoutes(route, id, color) {
-    //可以接受Array或者Number
     this.runningRoutes.add(id);
     const height = this.grid.height - 1;
 
@@ -523,7 +659,6 @@ class Map {
             if (this.pauseQueue) this.pauseQueue = null;
           }
           loop();
-          // this.run = false;
         });
     };
     loop();
