@@ -179,6 +179,7 @@ import Vue from 'vue';
 Vue.use(Button);
 Vue.use(Tooltip);
 
+import { mapState } from 'vuex';
 import ContentSlot from '../ContentSlot';
 
 import { changeKey } from '../../utils';
@@ -199,9 +200,6 @@ export default {
       type: Object
     },
     keyName: String,
-    short: {
-      default: false
-    },
     mapLevel: {
       type: Number,
       default: -1
@@ -248,62 +246,9 @@ export default {
       skillRangeRadius: 1
     };
   },
-  watch: {
-    currentMap(v) {
-      if (v === '') this.skillRangeRadius = 1;
-    },
-    data() {
-      if (!this.data) return [];
-      const tagKey = { stunImmune: '免疫眩晕', silenceImmune: '免疫沉默' };
-      this.talents = [];
 
-      this.status = this.data.map((list, i) => {
-        const res = [];
-
-        const findDefinedValue = (key, curI) => {
-          if (curI < 0) return 0;
-          const target =
-            this.data[curI].enemyData[key] ||
-            this.data[curI].enemyData.attributes[key];
-          if (target.m_defined) return target.m_value;
-          else return findDefinedValue(key, curI - 1);
-        };
-
-        Object.keys(list.enemyData.attributes).forEach(key => {
-          const name = statusToCh(key);
-          if (name) {
-            res.push([name, findDefinedValue(key, i), key]);
-          } else if (i === 0) {
-            if (tagKey[key]) {
-              this.Tag[key].value = findDefinedValue(key, i);
-            }
-          }
-        });
-
-        if (list.enemyData.talentBlackboard)
-          this.talents.push(list.enemyData.talentBlackboard);
-        res.push([
-          '攻击范围/格',
-          findDefinedValue('rangeRadius', i),
-          'rangeScale'
-        ]);
-        // console.log(findDefinedValue('rangeRadius', i) + '|range');
-        res.push(['LifePoint', findDefinedValue('lifePointReduce', i)]);
-
-        return res;
-      });
-      this.skills = this.data
-        .map(list => list.enemyData.skills)
-        .filter(el => el);
-      if (this.skills.length < this.data.length && this.skills.length === 1) {
-        let i = this.data.length;
-        while (--i) {
-          this.skills.push(this.skills[0]);
-        }
-      }
-    }
-  },
   computed: {
+    ...mapState(['short']),
     targetSkill() {
       if (this.skills.length < 1) return;
       if (this.mapLevel > -1) return this.skills[this.mapLevel];
@@ -386,18 +331,61 @@ export default {
         };
       });
     },
-    // maps() {
-    //   if (
-    //     this.appearMap &&
-    //     this.appearMap[this.keyName] &&
-    //     this.appearMap[this.keyName][this.level]
-    //   ) {
-    //     return this.appearMap[this.keyName][this.level].map(el => {
-    //       console.log(el);
-    //       return el.id.slice(11);
-    //     });
-    //   }
-    // }
+  },
+  watch: {
+    currentMap(v) {
+      if (v === '') this.skillRangeRadius = 1;
+    },
+    data() {
+      if (!this.data) return [];
+      const tagKey = { stunImmune: '免疫眩晕', silenceImmune: '免疫沉默' };
+      this.talents = [];
+
+      this.status = this.data.map((list, i) => {
+        const res = [];
+
+        const findDefinedValue = (key, curI) => {
+          if (curI < 0) return 0;
+          const target =
+            this.data[curI].enemyData[key] ||
+            this.data[curI].enemyData.attributes[key];
+          if (target.m_defined) return target.m_value;
+          else return findDefinedValue(key, curI - 1);
+        };
+
+        Object.keys(list.enemyData.attributes).forEach(key => {
+          const name = statusToCh(key);
+          if (name) {
+            res.push([name, findDefinedValue(key, i), key]);
+          } else if (i === 0) {
+            if (tagKey[key]) {
+              this.Tag[key].value = findDefinedValue(key, i);
+            }
+          }
+        });
+
+        if (list.enemyData.talentBlackboard)
+          this.talents.push(list.enemyData.talentBlackboard);
+        res.push([
+          '攻击范围/格',
+          findDefinedValue('rangeRadius', i),
+          'rangeScale'
+        ]);
+        // console.log(findDefinedValue('rangeRadius', i) + '|range');
+        res.push(['LifePoint', findDefinedValue('lifePointReduce', i)]);
+
+        return res;
+      });
+      this.skills = this.data
+        .map(list => list.enemyData.skills)
+        .filter(el => el);
+      if (this.skills.length < this.data.length && this.skills.length === 1) {
+        let i = this.data.length;
+        while (--i) {
+          this.skills.push(this.skills[0]);
+        }
+      }
+    }
   },
   methods: {
     changeBlackboardToCh(key) {

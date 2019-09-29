@@ -1,20 +1,9 @@
 <template>
   <div class="home-layout-wrapper">
     <div class="home-filter-wrapper" id="profile-panel">
+      <filter-group label="职业" :filters="filterGroups.class" @filter="resetFilter($event, 'class')"></filter-group>
+      <filter-group label="星级" :filters="filterGroups.star" @filter="resetFilter($event, 'star')"></filter-group>
       <filter-group
-        label="职业"
-        :filters="filterGroups.class"
-        :short="short"
-        @filter="resetFilter($event, 'class')"
-      ></filter-group>
-      <filter-group
-        :short="short"
-        label="星级"
-        :filters="filterGroups.star"
-        @filter="resetFilter($event, 'star')"
-      ></filter-group>
-      <filter-group
-        :short="short"
         label="公招"
         :filters="filterGroups.gkzm"
         :single="true"
@@ -63,7 +52,6 @@
           </div>
 
           <filter-group
-            :short="short"
             label="Tags"
             :filters="filterGroups.tags"
             @filter="resetFilter($event, 'tags')"
@@ -87,21 +75,24 @@
           :tags="SelectedTag"
           :filter-groups="filterGroups"
           :data="data"
-          :short="short"
         ></profile-layout>
       </el-tab-pane>
       <el-tab-pane name="new-profile-layout" label="排列组合" lazy>
         <new-profile-layout :tags="SelectedTag" :filterGroups="filterGroups" :data="data"></new-profile-layout>
       </el-tab-pane>
       <el-tab-pane name="expalain" label="说明&反馈" lazy>
-        <my-feedback :short="short" :store="store"></my-feedback>
+        <my-feedback :store="store"></my-feedback>
       </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
+import localforage from 'localforage';
+
 import Vue from 'vue';
+import { mapState } from 'vuex';
+
 import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
@@ -112,14 +103,13 @@ Vue.use(Tabs);
 Vue.use(TabPane);
 
 import FilterButtonGroup from '../FilterButtonGroup';
-import ProfileLayout from './ProfileLayout';
-import { sort, class_chinese, throttle, isMoblie } from '../../utils';
-
-import { TagsArr, StarArr } from '../../utils/string';
-
-import localforage from 'localforage';
-
 import loadingC from '../Loading';
+import ProfileLayout from './ProfileLayout';
+
+import { sort, throttle, } from '../../utils';
+import { TagsArr, class_chinese, StarArr } from '../../utils/string';
+
+
 
 const newProfileLayout = () => ({
   component: import(
@@ -139,7 +129,7 @@ const myFeedback = () => ({
   timeout: 5000
 });
 
-const gkzm = [{ isTag: false, text: '仅公招', value: true, short: '公招' }];
+const gkzm = [{ isTag: false, text: '仅公招', value: true }];
 
 if (typeof Array.prototype.flat !== 'function') {
   Array.prototype.flat = function (num) {
@@ -184,12 +174,9 @@ export default {
       SelectedTagGz: [],
       showOtherPanel: false,
       currentMode: 'profile-layout',
-      short: false,
     };
   },
-  created() { },
   beforeMount() {
-    this.short = isMoblie();
     this.store = localforage.createInstance({
       name: 'testDB'
     });
@@ -209,14 +196,8 @@ export default {
       }
     });
   },
-  mounted() {
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 500 ? true : false;
-      this.$refs['profile-layout'] &&
-        this.$refs['profile-layout'].calFillAmount();
-    });
-  },
   computed: {
+    ...mapState(['short']),
     filterGroups() {
       return {
         gkzm: gkzm,

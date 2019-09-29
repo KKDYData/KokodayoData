@@ -21,7 +21,7 @@
   </div>
 </template>
 <script>
-import { getProfileList } from './utils';
+import { getProfileList } from './utils/fetch';
 import { Alert, link } from 'element-ui';
 import Vue from 'vue';
 Vue.use(link);

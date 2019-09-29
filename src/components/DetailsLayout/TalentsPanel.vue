@@ -45,17 +45,21 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     talents: {
       required: true
     },
-    short: Boolean
   },
   data() {
     return {
       showTalentPotentailUP: [false, false, false]
     };
+  },
+  computed: {
+    ...mapState(['short']),
   },
   methods: {
     openTalentPotentailUP(t) {

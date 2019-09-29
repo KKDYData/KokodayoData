@@ -1,7 +1,6 @@
 <template>
   <div>
     <enemy-data-drawer
-      :short="short"
       :details-open.sync="detailsOpen"
       :runes-mode="runesMode"
       :current-enemy="currEnemy"
@@ -13,7 +12,6 @@
           v-if="currEnemy"
           v-loading="!currentData"
           :data="currentData"
-          :short="short"
           :key-name="showKey"
           :map-level="currEnemy.level"
           :appear-map="appearMap"
@@ -81,7 +79,7 @@
             <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
               <p>{{key.replace('trap_007_ballis', '弩炮')}}</p>
             </div>
-            <div @touchstart="showRoute(routeIndex)" style class="enemy-cube-wave-info">
+            <div style class="enemy-cube-wave-info">
               <div>数量:{{count}} 间隔:{{interval}}s</div>
               <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
                 延迟: {{preDelay}}s
@@ -119,6 +117,7 @@
 <script>
 import { Image, Drawer, Button } from 'element-ui';
 import Vue from 'vue';
+import { mapState } from 'vuex';
 Vue.use(Image);
 Vue.use(Drawer);
 Vue.use(Button);
@@ -128,7 +127,8 @@ import EnemyStatus from './EnemyStatus';
 import EnemyDataDrawer from './EnemyDataDrawer';
 import EnemyCube from './EnemyCube';
 
-import { path, getEnemyData, isMoblie, debounce } from '../../utils';
+import { getEnemyData } from '../../utils/fetch';
+import { path } from '../../utils/listVer';
 
 export default {
   components: { EnemyStatus, EnemyDataDrawer, EnemyCube, MyTitle },
@@ -136,7 +136,6 @@ export default {
     data: {
       required: true
     },
-
     mapData: {
       type: Object
     },
@@ -161,32 +160,20 @@ export default {
       shortWidth: 350,
       detailsOpen: false,
       currEnemy: null,
-      drawerSize: '30%',
       debounceOpen: null,
       selectedRoutes: new Set(),
       selectedStlye: {}
     };
   },
-  beforeMount() {
-    this.short = isMoblie();
-  },
+
   watch: {
     simpleShow(v) {
       if (v) this.calFillAmount();
     }
   },
   mounted() {
-    this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
     // console.log(this.drawerSize);
-    if (this.$el.querySelector('.enemy-container')) this.calFillAmount();
-
-    window.addEventListener(
-      'resize',
-      debounce(() => {
-        this.short = window.innerWidth < 500 ? true : false;
-        this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
-      }, 1000)
-    );
+    if (this.$el && this.$el.querySelector('.enemy-container')) this.calFillAmount();
     this.shortWidth = this.$el.clientWidth - 30;
   },
   filters: {
@@ -197,6 +184,10 @@ export default {
     }
   },
   computed: {
+    ...mapState(['screenWidth', 'short']),
+    drawerSize() {
+      return Math.floor((600 / this.screenWidth) * 100) + '%';
+    },
     appearMap() {
       // 之后改成从vuex拿
       return {};
@@ -210,7 +201,6 @@ export default {
     clearRoutes(v) {
       this.selectedStlye = {};
       this.selectedRoutes.clear();
-
     },
     showRoute(index) {
       if (this.selectedRoutes.has(index)) {

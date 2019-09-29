@@ -9,7 +9,8 @@
 </template>
 
 <script>
-import { sort, getRange } from '../../utils';
+import { getRange } from '../../utils/fetch';
+import { sort } from '../../utils';
 
 export default {
   async mounted() {

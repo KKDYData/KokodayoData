@@ -14,8 +14,9 @@
 </template>
 
 <script>
+import { path } from '../../utils/listVer';
+
 import { Image } from 'element-ui';
-import { path } from '../../utils';
 import Vue from 'vue';
 Vue.use(Image);
 
