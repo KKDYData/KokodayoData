@@ -7,7 +7,6 @@
       <div v-for="item in list" :key="(item.data.itemId)">
         <item-viewer
           :targetStage="targetStage"
-          :short="short"
           :style="{margin: '10px'}"
           :type="item.type"
           :item="item.data"
@@ -19,19 +18,19 @@
 
 <script>
 import ItemViewer from '../ItemViewer';
+import { mapState } from 'vuex';
 
 export default {
   components: {
     ItemViewer
   },
+  computed: {
+    ...mapState(['short']),
+  },
   props: {
     list: {
       required: true,
       type: Array
-    },
-    short: {
-      required: true,
-      type: Boolean
     },
     title: {
       type: String

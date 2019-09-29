@@ -47,7 +47,10 @@
 <script>
 import MyTitle from '../MyTitle';
 import ContentSlot from '../ContentSlot';
+
 import Vue from 'vue';
+import { mapState } from 'vuex';
+
 import { Alert } from 'element-ui';
 Vue.use(Alert);
 
@@ -62,9 +65,6 @@ export default {
       required: true
     },
     globalBuffs: {
-      required: true
-    },
-    short: {
       required: true
     },
     showTitle: {
@@ -93,6 +93,9 @@ export default {
         max_hp: '生命',
       }
     };
+  },
+  computed: {
+    ...mapState(['short']),
   }
 };
 </script>

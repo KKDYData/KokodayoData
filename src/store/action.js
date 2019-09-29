@@ -1,12 +1,12 @@
-import { fetchGet, getStageList, fetchByKey } from '../utils';
-import { StageType } from '../utils/string';
+import { fetchGet, getStageList, fetchByKey } from '../utils/fetch';
+import { getStageType } from '../utils/string';
 const url = 'https://penguin-stats.io/PenguinStats/api/result/matrix';
 
 const change = (list) => {
   return Object.entries(list).map(([key, value]) => {
     if (Array.isArray(value)) {
       return {
-        label: StageType[key] || key,
+        label: getStageType(key),
         children: value.map(el => {
           if (el.type && el.data) {
             return {
@@ -32,7 +32,7 @@ const change = (list) => {
         })
       };
     } else {
-      return { label: StageType[key] || key, children: change(value) };
+      return { label: getStageType(key), children: change(value) };
     }
   });
 };

@@ -1,20 +1,34 @@
-const mapOptionsKey = {
-  characterLimit: '可部署干员数',
-  maxLifePoint: 'LifePoint',
-  initialCost: '初始部署费用',
-  maxCost: '最大部署费用',
-  costIncreaseTime: '部署费用回复/s',
-  // moveMultiplier: '移速系数',
-  apCost: '理智消耗',
-  apFailReturn: '失败返还理智',
-  completeFavor: '干员好感增加',
-  // difficulty: '难度',
-  expGain: '经验获得',
-  goldGain: '龙门币获得',
+const getKey = (keys) => key => keys[key] ? keys[key] : key;
+const getKeyWithNull = (keys) => key => keys[key] ? keys[key] : null;
 
-  // isTrainingLevel: '训练？',
-  // functionDisableMask: 'mask？'
-};
+
+// 拆包数据
+const evolveGoldCost = [
+  [
+    -1,
+    -1
+  ],
+  [
+    -1,
+    -1
+  ],
+  [
+    10000,
+    -1
+  ],
+  [
+    15000,
+    60000
+  ],
+  [
+    20000,
+    120000
+  ],
+  [
+    30000,
+    180000
+  ]
+];
 
 const exp_cards = {
   2001: {
@@ -141,18 +155,6 @@ const exp_cards = {
     buildingProductList: []
   },
 };
-const occPer_chinese = {
-  ALWAYS: '固定掉落',
-  SOMETIMES: '罕见',
-  OFTEN: '小概率',
-  USUAL: '概率掉率',
-  ALMOST: '大概率'
-};
-
-const roomType = {
-  WORKSHOP: '加工站',
-  MANUFACTURE: '制造站'
-};
 
 const GOLD = {
   itemId: '4001',
@@ -199,6 +201,146 @@ const GOLD = {
   buildingProductList: []
 };
 
+const tileInfo = {
+  'tile_bigforce': {
+    'name': '特种战术点',
+    'description': '置于其中的我方单位在推动或拉动敌方单位时力度增大',
+    color: 'hsl(342, 98%, 67%)'
+
+  },
+  'tile_def': {
+    'name': '防御符文',
+    'description': '置于其中的干员获得额外的防御力',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_fence': {
+    'name': '围栏',
+    'description': '可放置近战单位，不可以通行',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_healing': {
+    'name': '医疗符文',
+    'description': '置于其中的干员会持续恢复生命',
+    color: 'hsl(342, 98%, 67%)'
+  },
+
+  'tile_rcm_crate': {
+    'name': '推荐障碍放置点',
+    'description': 'PRTS推荐的障碍物放置点',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_rcm_operator': {
+    'name': '推荐干员放置点',
+    'description': 'PRTS推荐的战术放置点',
+    color: 'hsl(342, 98%, 67%)'
+  },
+  'tile_shallowwater': {
+    'name': '浅水区',
+    'description': '代表岸边的水地形',
+    color: 'hsl(342, 98%, 67%)'
+  },
+
+  'tile_corrosion': {
+    'name': '腐蚀地面',
+    'description': '置于其中的干员防御力减半',
+    color: 'hsl(179, 18%, 42%)',
+
+  },
+  'tile_deepwater': {
+    'name': '深水区',
+    'description': '代表离岸较远的水地形',
+    color: 'hsla(224, 100%, 25%, 0.7)'
+
+  },
+
+  'tile_end': {
+    'name': '保护目标',
+    'description': '蓝色目标点，敌方进入后会减少此目标点的耐久',
+    color: 'rgb(103, 203, 67)'
+
+  },
+
+  'tile_floor': {
+    'name': '不可放置位',
+    'description': '不可放置单位，可以通行',
+    color: 'hsla(38, 92%, 90%, 1)',
+
+  },
+  'tile_flystart': {
+    'name': '空袭侵入点',
+    'description': '敌方飞行单位会从此处进入战场',
+    color: 'rgb(255, 61, 61)'
+
+  },
+  'tile_forbidden': {
+    'name': '禁入区',
+    'description': '不可放置单位，不可通行',
+    color: 'rgba(230,230,230, 0.5)',
+
+  },
+  'tile_gazebo': {
+    'name': '防空符文',
+    'description': '置于其中的干员攻击速度略微下降，但在攻击空中单位时攻击力大幅度提升',
+    color: 'hsl(48, 83%, 57%)',
+
+  },
+  'tile_grass': {
+    'name': '草丛',
+    'description': '置于其中的干员不会成为敌军远程攻击的目标',
+    color: 'green'
+  },
+
+  'tile_hole': {
+    'name': '地穴',
+    'description': '危险的凹陷地形或地面破洞，经过的敌人会摔落至底部直接死亡',
+    color: 'hsl(219, 57%, 14%)'
+
+  },
+  'tile_infection': {
+    'name': '活性源石',
+    'description': '部署的友军和经过的敌军获得攻击力和攻击速度提升的效果，但会持续失去生命',
+    color: 'red'
+  },
+
+  'tile_road': {
+    'name': '平地',
+    'description': '可以放置近战单位，可以通行',
+    color: '#fff',
+  },
+
+  'tile_start': {
+    'name': '侵入点',
+    'description': '敌方会从此进入战场',
+    color: 'rgb(255, 61, 61)'
+  },
+  'tile_telin': {
+    'name': '通道入口',
+    'description': '敌方会从此进入通道，从通道出口出现',
+    color: 'rgb(244, 152, 0)'
+  },
+  'tile_telout': {
+    'name': '通道出口',
+    'description': '进入通道的敌方单位会从此处再度出现',
+    color: 'rgb(244, 152, 0)'
+  },
+  'tile_volcano': {
+    'name': '热泵通道',
+    'description': '每隔一段时间便会喷出高温气体，对其上的任何单位造成无视防御和法抗的伤害',
+    color: 'hsla(25, 100%, 49%, 0.9)',
+  },
+  'tile_volspread': {
+    'name': '岩浆喷射处',
+    'description': '每隔一段时间会喷出岩浆，对周围8格内的我方单位造成大量伤害且可以融化障碍物',
+    color: 'hsl(0, 100%, 24%)',
+  },
+  'tile_wall': {
+    'name': '高台',
+    'description': '可以放置远程单位，不可通行',
+    color: 'rgba(125, 253, 244, 0.9)',
+  }
+};
+
+// css属性
 const starColor = [
   [0, 0, 20],
   [0, 0, 20],
@@ -206,30 +348,24 @@ const starColor = [
   [282, 35, 15],
   [40, 100, 50],
   [25, 95, 55]
-  //hsl(25, 95%, 55%)
 ];
-
 
 const charBorderColor = {
   0: {
     background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2]}%, 1), hsla(0, 0%, 95%, 1))`,
     'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
-    // 'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
   },
   1: {
     background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2]}%, 1), hsla(0, 0%, 95%, 1))`,
     'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px'
-    // 'box-shadow': 'rgba(85, 85, 86, 0.78) 1px 1px 2px 1px'
   },
   2: {
     background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1]}%, ${starColor[2][2]}%, 1), hsla(213, 53%, 95%, 1))`,
     'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(213, 20%, 50%, 0.3) 1px 1px 1px 1px'
-    // 'box-shadow': '1px 1px 2px 1px #1d3552c7'
   },
   3: {
     background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2]}%, 1), hsla(282, 35%, 95%, 1))`,
     'box-shadow': 'rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(282, 20%, 50%, 0.3) 1px 1px 1px 1px'
-    // 'box-shadow': 'rgba(63, 53, 82, 0.78) 1px 1px 2px 1px'
   },
   4: {
     background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), hsla(40, 100%, 95%, 1))`,
@@ -294,43 +430,8 @@ const itemBackground = {
   },
 };
 
-const potentialToStatus = {
-  0: 'maxHp',
-  1: 'atk',
-  2: 'def',
-  3: 'magicResistance',
-  4: 'cost',
-  5: 'blockCnt',
-  7: 'baseAttackTime',
-  21: 'respawnTime'
-};
 
-const evolveGoldCost = [
-  [
-    -1,
-    -1
-  ],
-  [
-    -1,
-    -1
-  ],
-  [
-    10000,
-    -1
-  ],
-  [
-    15000,
-    60000
-  ],
-  [
-    20000,
-    120000
-  ],
-  [
-    30000,
-    180000
-  ]
-];
+
 
 const TagsArr = [
   { isTag: true, text: '快速复活', value: '快速复活' },
@@ -365,72 +466,96 @@ const StarArr = [
   { isTag: false, text: 6, value: 5, short: 6 },
 ];
 
+const potentialToStatus = {
+  0: 'maxHp',
+  1: 'atk',
+  2: 'def',
+  3: 'magicResistance',
+  4: 'cost',
+  5: 'blockCnt',
+  7: 'baseAttackTime',
+  21: 'respawnTime'
+};
+
+const mapOptionsKey = {
+  characterLimit: '可部署干员数',
+  maxLifePoint: 'LifePoint',
+  initialCost: '初始部署费用',
+  maxCost: '最大部署费用',
+  costIncreaseTime: '部署费用回复/s',
+  // moveMultiplier: '移速系数',
+  apCost: '理智消耗',
+  apFailReturn: '失败返还理智',
+  completeFavor: '干员好感增加',
+  // difficulty: '难度',
+  expGain: '经验获得',
+  goldGain: '龙门币获得',
+  // isTrainingLevel: '训练？',
+  // functionDisableMask: 'mask？'
+};
+
+
+const occPer_chinese = {
+  ALWAYS: '固定掉落',
+  SOMETIMES: '罕见',
+  OFTEN: '小概率',
+  USUAL: '概率掉率',
+  ALMOST: '大概率'
+};
+
+const roomType = {
+  WORKSHOP: '加工站',
+  MANUFACTURE: '制造站'
+};
+
+
 const campToCode = {
   切尔诺伯格: '01',
   龙门外环: '02',
   龙门市区: '03'
 };
 
-const statusToCh = key => {
-  const t = {
-    maxHp: '生命上限',
-    atk: '攻击',
-    def: '防御',
-    moveSpeed: '移动速度',
-    magicResistance: '法术抵抗',
-    baseAttackTime: '攻击间隔',
-    hpRecoveryPerSec: '生命回复/秒',
-    // spRecoveryPerSec: '每秒Sp回复'
-    // maxDeployCount: '最大部署数',
-    massLevel: '重量'
-    // stunImmune: '免疫打断',
-    // silenceImmune: '免疫沉默'
-    // massLevel: '重量等级',
-    // baseForeLevel: '力量等级'
-  };
-  return t[key];
+const statusToCh_M1 = {
+  maxHp: '生命上限',
+  atk: '攻击',
+  def: '防御',
+  moveSpeed: '移动速度',
+  magicResistance: '法术抵抗',
+  baseAttackTime: '攻击间隔',
+  hpRecoveryPerSec: '生命回复/秒',
+  // spRecoveryPerSec: '每秒Sp回复'
+  // maxDeployCount: '最大部署数',
+  massLevel: '重量'
+  // stunImmune: '免疫打断',
+  // silenceImmune: '免疫沉默'
+  // massLevel: '重量等级',
+  // baseForeLevel: '力量等级'
 };
 
-const statusToChChar = key => {
-  const t = {
-    maxHp: '生命上限',
-    respawnTime: '再部署',
-    atk: '攻击',
-    cost: '部署费用',
-    def: '防御',
-    blockCnt: '阻挡数',
-    magicResistance: '法术抵抗',
-    baseAttackTime: '攻击间隔'
-  };
-  return t[key];
+const statusToCh_M2 = {
+  maxHp: '生命上限',
+  respawnTime: '再部署',
+  atk: '攻击',
+  cost: '部署费用',
+  def: '防御',
+  blockCnt: '阻挡数',
+  magicResistance: '法术抵抗',
+  baseAttackTime: '攻击间隔'
 };
 
-const statusToChToken = key => {
-  const t = {
-    // maxHp: '生命上限',
-    // respawnTime: '再部署',
-    atk: '攻击',
-    // def: '防御',
-    // blockCnt: '阻挡数',
-    // magicResistance: '法术抵抗',
-    // baseAttackTime: '攻击间隔',
-    // maxDeployCount: '最大部署数',
-    // spRecoveryPerSec: '每秒Sp回复',
-    // attackSpeed: '攻击速度'
-
-  };
-  return t[key];
+const statusToCh_M3 = {
+  atk: '攻击',
 };
 
 const StageType = {
   main: '主线',
   tr: 'TR',
   hard: '困难',
-  wk: '日常',
+  wk: '物资筹备',
   camp: '剿灭作战',
   guid: '教程',
   sub: '支线',
-  pro: '芯片',
+  pro: '芯片搜索',
   a001: '骑兵与猎人',
   a003: '火蓝之心'
 };
@@ -442,24 +567,75 @@ const Directions = {
   0: '↑'
 };
 
+const keys = {
+  damage: '伤害',
+  cd_min: '最小cd',
+  cd_max: '最大cd',
+  attack_speed: '攻速',
+  atk_scale: '攻击倍率',
+  def: '防御',
+  HP_RECOVERY_PER_SEC_BY_MAX_HP_RATIO: '每秒HP回复百分比'
+};
+
+
+
+
+// 展示的面板属性，返回空值则不显示
+const statusToCh = getKeyWithNull(statusToCh_M1);
+const statusToChChar = getKeyWithNull(statusToCh_M2);
+const statusToChToken = getKeyWithNull(statusToCh_M3);
+
+const getPotentialToStatus = getKey(potentialToStatus);
+const getStageType = getKey(StageType);
+const blockKeys = getKey(keys);
+
+const class_chinese = {
+  MEDIC: { isTag: false, text: '医疗', value: 'MEDIC' },
+  CASTER: { isTag: false, text: '术士', value: 'CASTER' },
+  SNIPER: { isTag: false, text: '狙击', value: 'SNIPER' },
+  WARRIOR: { isTag: false, text: '近卫', value: 'WARRIOR' },
+  PIONEER: { isTag: false, text: '先锋', value: 'PIONEER' },
+  TANK: { isTag: false, text: '重装', value: 'TANK' },
+  SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL' },
+  SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT' },
+  TOKEN: { isTag: false, text: '召唤物', value: 'TOKEN' },
+};
+
+const getClass_Chinese = en => {
+  return class_chinese[en].text;
+};
+
+
 export {
+  // 筛选数据
   StarArr,
   TagsArr,
-  evolveGoldCost,
-  potentialToStatus,
+  // css
   itemBackground,
   charNameColor,
-  mapOptionsKey,
-  exp_cards,
-  occPer_chinese,
-  GOLD,
-  roomType,
   charBorderColor,
   starColor,
+
+  // key
+  mapOptionsKey,
+  roomType,
   campToCode,
   statusToCh,
   statusToChChar,
-  StageType,
+  getStageType,
+  getPotentialToStatus,
   statusToChToken,
-  Directions
+  class_chinese,
+  getClass_Chinese,
+
+  // 拆包数据
+  evolveGoldCost,
+  exp_cards,
+  occPer_chinese,
+  GOLD,
+
+  // map生成
+  Directions,
+  blockKeys,
+  tileInfo
 };

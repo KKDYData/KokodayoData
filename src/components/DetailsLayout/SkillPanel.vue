@@ -20,7 +20,6 @@
                 {{skill.levels[sLevel[index]-1].spData.spCost}}
               </span>
             </span>
-
             <span v-if="skill.levels[sLevel[index]-1].duration > 0">
               <i class="el-icon-timer"></i>
               {{skill.levels[sLevel[index]-1].duration}}
@@ -57,7 +56,6 @@
             :skill="skill.levels[sLevel[index]-1]"
             :talents="talents"
             :profession="profession"
-            :short="short"
             :talent-potentail-up="talentPotentailUp"
             :description="description"
           ></skill-chart>
@@ -79,12 +77,14 @@
 </template>
 
 <script>
-import { changeAttackSpeed } from '../../utils';
+import { changeAttackSpeed, } from '../../utils';
+
 import Range from './Range';
 import SkillContainer from './SkillContainer';
 import SkillList from './SkillList';
 import SkillChart from './SkillChart';
 
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -94,9 +94,6 @@ export default {
     SkillList
   },
   props: {
-    short: {
-      default: false
-    },
     skills: {
       required: true
     },
@@ -132,6 +129,9 @@ export default {
       // eslint-disable-next-line no-undef
       production: PRODUCTION
     };
+  },
+  computed: {
+    ...mapState(['short']),
   },
   methods: {
     sLevelAdd(index, i) {

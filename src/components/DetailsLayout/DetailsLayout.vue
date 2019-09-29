@@ -12,7 +12,7 @@
     <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
-        <agent-card :phases="phases" :data="data" :short="short"></agent-card>
+        <agent-card :phases="phases" :data="data"></agent-card>
         <!-- 属性面板 -->
         <div class="stats-wrapper">
           <div class="group-container-title">
@@ -83,11 +83,7 @@
         <!-- 天赋面板 -->
         <div v-if="talents.length > 0" class="tttt">
           <div class="group-container-title">天赋</div>
-          <talents-panel
-            @talentPotentailUp="e => talentPotentailUp = e"
-            :talents="talents"
-            :short="short"
-          ></talents-panel>
+          <talents-panel @talentPotentailUp="e => talentPotentailUp = e" :talents="talents"></talents-panel>
         </div>
         <!-- 技能面板 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
@@ -97,7 +93,6 @@
             :skills="skills"
             :talents="talents"
             :profession="data.profession"
-            :short="short"
             :talent-potentail-up="talentPotentailUp"
             :description="data.description"
           ></skill-panel>
@@ -133,14 +128,9 @@
                 <span>精英阶段{{index + 1}}</span>
               </div>
               <div class="evolvcost-container">
-                <item-viewer
-                  :short="short"
-                  :item="GOLD"
-                  :num="data.money"
-                  class="evolvcost-item-container"
-                ></item-viewer>
+                <item-viewer :item="GOLD" :num="data.money" class="evolvcost-item-container"></item-viewer>
                 <div v-for="item in data.items" :key="item.IconId" class="evolvcost-item-container">
-                  <item-viewer :short="short" :item="item.item" :num="item.cost"></item-viewer>
+                  <item-viewer :item="item.item" :num="item.cost"></item-viewer>
                 </div>
               </div>
             </div>
@@ -150,12 +140,7 @@
         <!-- 技能升级消耗 -->
         <div v-if="skills.length > 0 && normal" class="skill-container-wrapper">
           <div class="group-container-title">技能升级消耗</div>
-          <skill-up-panel
-            :short="short"
-            :allLevelCost="data.allSkillLvlup"
-            :skills="skills"
-            :seven="data.skills"
-          ></skill-up-panel>
+          <skill-up-panel :allLevelCost="data.allSkillLvlup" :skills="skills" :seven="data.skills"></skill-up-panel>
         </div>
 
         <!-- 基建面板 -->
@@ -168,32 +153,56 @@
         <template slot="title">
           <span style="direction:rtl;width: 100%">打开</span>
         </template>
-        <info-panel v-if="info" :data="info" :short="short" :list="setList" :words="words"></info-panel>
+        <info-panel v-if="info" :data="info" :list="setList" :words="words"></info-panel>
       </div>
     </transition>
   </div>
 </template>
 
 <script>
+import { changeAttackSpeed, calStatusEnd, } from '../../utils';
 import {
   getHeroData,
-  path,
-  changeAttackSpeed,
-  isMoblie,
-  calStatusEnd,
   getSkill,
   getItem,
   getCharWords,
   getCharInfo,
-} from '../../utils';
+} from '../../utils/fetch';
+
+import { path } from '../../utils/listVer';
 
 import {
   evolveGoldCost,
-  potentialToStatus,
+  getPotentialToStatus,
   itemBackground,
   GOLD,
   statusToChChar
 } from '../../utils/string';
+
+
+
+import AgentCard from './AgentCard';
+import Range from './Range';
+import TalentsPanel from './TalentsPanel';
+// import SkillPanel from './SkillPanel';
+import SkillUpPanel from './SkillUpCost';
+import BuildingData from './BuildingData';
+import InfoPanel from './InfoPanel';
+import ItemViewer from '../ItemViewer';
+import charStatus from '../charStatus';
+import DataLoading from '../Loading';
+import MyShare from './Share';
+import loadingC from '../Loading';
+
+const SkillPanel = () => ({
+  component: import(
+    /* webpackChunkName: "SkillPanel" */ '../DetailsLayout/SkillPanel'
+  ),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+});
 
 import {
   Card,
@@ -209,31 +218,7 @@ import {
   Slider
 } from 'element-ui';
 
-import AgentCard from './AgentCard';
-import Range from './Range';
-import TalentsPanel from './TalentsPanel';
-// import SkillPanel from './SkillPanel';
-import SkillUpPanel from './SkillUpCost';
-import BuildingData from './BuildingData';
-import InfoPanel from './InfoPanel';
-import ItemViewer from '../ItemViewer';
-import charStatus from '../charStatus';
-import DataLoading from '../Loading';
-import MyShare from './Share';
-
-
-import loadingC from '../Loading';
-
-const SkillPanel = () => ({
-  component: import(
-    /* webpackChunkName: "SkillPanel" */ '../DetailsLayout/SkillPanel'
-  ),
-  loading: loadingC,
-  error: loadingC,
-  delay: 200,
-  timeout: 5000
-});
-
+import { mapState } from 'vuex';
 import Vue from 'vue';
 Vue.use(Card);
 Vue.use(Collapse);
@@ -282,12 +267,6 @@ export default {
         this.loadingFail = true;
       });
   },
-  beforeMount() {
-    this.short = isMoblie();
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 500 ? true : false;
-    });
-  },
   components: {
     Range,
     TalentsPanel,
@@ -309,7 +288,6 @@ export default {
       picUrls: {},
       name: '',
       dataLoad: false,
-      short: false,
       isLvMax: true,
       phases: 0,
       isFavor: true,
@@ -324,6 +302,7 @@ export default {
     };
   },
   computed: {
+    ...mapState(['short']),
     normal() {
       return this.data && this.data.profession !== 'TOKEN';
     },
@@ -428,7 +407,7 @@ export default {
           // type = 0 是生命提升，没有小于0的
           // if (!el.attributeType) return res;
           res.push({
-            type: potentialToStatus[el.attributeType],
+            type: getPotentialToStatus(el.attributeType),
             value: el.value
           });
           return res;

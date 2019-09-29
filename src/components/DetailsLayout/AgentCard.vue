@@ -59,7 +59,7 @@
       </div>
       <div class="agent-card-tags">
         <el-tag
-          :size="short? 'mini' :'medium'"
+          :size="short ? 'mini' :'medium'"
           effect="dark"
           type="info"
           v-for="tag in  data.tagList"
@@ -74,6 +74,7 @@
 <script>
 import { Card, Tag, Image, Popover } from 'element-ui';
 import Vue from 'vue';
+import { mapState } from 'vuex';
 Vue.use(Card);
 Vue.use(Tag);
 Vue.use(Image);
@@ -81,12 +82,13 @@ Vue.use(Popover);
 
 import Team from './handbook_team_table.json';
 import {
-  getClass_Chinese,
-  path,
   changeDesc,
   getDetailsProfilePath,
   changeAttackSpeed
 } from '../../utils';
+
+import { getClass_Chinese } from '../../utils/string';
+import { path } from '../../utils/listVer';
 
 import charCube from '../charCube';
 
@@ -96,19 +98,17 @@ export default {
       type: Object,
       required: true
     },
-    short: {
-      type: Boolean,
-      required: true
-    },
     phases: {
       type: Number,
       required: true
     }
   },
+
   components: {
     charCube
   },
   computed: {
+    ...mapState(['short']),
     profile() {
       return getDetailsProfilePath(this.$route.params.name);
     },

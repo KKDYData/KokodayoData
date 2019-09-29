@@ -37,6 +37,7 @@ Vue.use(Submenu);
 
 
 import Mode from './stats';
+import { mapState } from 'vuex';
 
 export default {
   data() {
@@ -45,7 +46,6 @@ export default {
       activeIndex: '1',
       activeIndex2: '1',
       isCollapse: false,
-      short: false,
       moreText: '更多',
       routes: {
         enemydata: {
@@ -67,15 +67,11 @@ export default {
       }
     };
   },
-  created() {
-    this.short = window.innerWidth < 500 ? true : false;
-
-    if (this.$route.path.length > 1)
-      this.moreText = this.routes[this.$route.path.slice(1)].text;
-    if (this.short) this.showExplain = [];
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 500 ? true : false;
-    });
+  computed: {
+    ...mapState(['short']),
+    path() {
+      return process.env.NODE_ENV === 'development' ? '' : Mode;
+    }
   },
   watch: {
     '$route.path': function (val, oldVal) {
@@ -97,12 +93,6 @@ export default {
       this.moreText = '更多';
     }
   },
-  methods: {},
-  computed: {
-    path() {
-      return process.env.NODE_ENV === 'development' ? '' : Mode;
-    }
-  }
 };
 </script>
 

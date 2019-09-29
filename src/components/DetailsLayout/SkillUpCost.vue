@@ -14,7 +14,6 @@
               v-for="(skill, index) in picList[index]"
               :key="index"
               class="item-viwer-flex-default"
-              :short="short"
               :item="skill.item"
               :num="skill.count"
             ></item-viewer>
@@ -51,11 +50,12 @@
 </template>
 
 <script>
-import { getItem } from '../../utils';
+import { getItem } from '../../utils/fetch';
 import { itemBackground } from '../../utils/string';
-
 import ItemViewer from '../ItemViewer';
 import SkillContainer from './SkillContainer';
+
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -70,7 +70,6 @@ export default {
       required: true
     },
     seven: Array,
-    short: Boolean
   },
   mounted() {
     for (let i = 0; i < this.unlockCond.length; i++) {
@@ -79,11 +78,12 @@ export default {
   },
   data() {
     return {
-      sLevel: [0, 0, 0],
+      sLevel: [6, 6, 6],
       picList: { 0: [], 1: [], 2: [] }
     };
   },
   computed: {
+    ...mapState(['short']),
     unlockCond() {
       const res = [];
       for (let i = 0; i < this.skills.length; i++) {
