@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      short: false,
       data: [],
       load: false
     };

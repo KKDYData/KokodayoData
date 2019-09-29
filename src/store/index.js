@@ -1,8 +1,12 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import actions from './action';
+import { UA } from '../utils';
+
 
 Vue.use(Vuex);
+
+
 
 export default new Vuex.Store({
   state: {
@@ -14,7 +18,9 @@ export default new Vuex.Store({
     webVer: new Date(VERSION).toLocaleString(),
     dropList: null,
     stageTree: null,
-    extraSkins: null
+    extraSkins: null,
+    short: UA.isMoblie || window.innerWidth < 600 ? true : false,
+    screenWidth: document.body.clientWidth
   },
   getters: {
     itemDropList: (state) => id => {
@@ -24,6 +30,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setShort: (state, v) => {
+      state.short = v;
+    },
+    setScreenWidth: (state, v) => {
+      state.screenWidth = v;
+    },
     setListVer: (state, ver) => {
       state.listVer = ver;
     },

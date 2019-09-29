@@ -1,12 +1,11 @@
 <template>
-  <my-slide-title :short="short" title="掉落" :init-value="true">
+  <my-slide-title title="掉落" :init-value="true">
     <div class="map-drop-container-wrapper">
       <div class="map-drop-list-wrapper">
         <drop-list
           class="flex-list"
           v-if="firstDrop.length > 0"
           :list="firstDrop"
-          :short="short"
           title="首次掉落"
           :target-stage="targetStage"
         ></drop-list>
@@ -14,7 +13,6 @@
           class="flex-list"
           v-if="commonDrop.length > 0"
           :list="commonDrop"
-          :short="short"
           title="常规掉落"
           :target-stage="targetStage"
         ></drop-list>
@@ -22,7 +20,6 @@
           class="flex-list"
           v-if="rarityDrop.length > 0"
           :list="rarityDrop"
-          :short="short"
           title="稀有掉落"
           :target-stage="targetStage"
         ></drop-list>
@@ -30,7 +27,6 @@
       <drop-list
         v-if="almostDrop.length > 0"
         :list="almostDrop"
-        :short="short"
         title="概率掉落"
         :target-stage="targetStage"
       ></drop-list>
@@ -41,6 +37,7 @@
 <script>
 import DropList from './DropList';
 import MySlideTitle from '../MySlideTilte';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -51,12 +48,11 @@ export default {
     dropInfo: {
       required: true
     },
-    short: {
-      required: true
-    },
     targetStage: String
   },
+
   computed: {
+    ...mapState(['short']),
     firstDrop() {
       return this.dropInfo.filter(el => el.dropType === 1 || el.dropType === 8);
     },

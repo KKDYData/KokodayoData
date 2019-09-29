@@ -32,7 +32,7 @@
 
 <script>
 import ItemViewer from './ItemViewer';
-import { path } from '../utils';
+import { path } from '../utils/listVer';
 export default {
   components: {
     ItemViewer

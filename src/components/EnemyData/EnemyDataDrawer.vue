@@ -142,7 +142,8 @@
 </template>
 
 <script>
-import { path } from '../../utils';
+import { path } from '../../utils/listVer';
+import { mapState } from 'vuex';
 
 import { Image, Drawer } from 'element-ui';
 import Vue from 'vue';
@@ -151,9 +152,6 @@ Vue.use(Drawer);
 
 export default {
   props: {
-    short: {
-      type: Boolean
-    },
     detailsOpen: {
       required: true,
       type: Boolean
@@ -180,6 +178,9 @@ export default {
       bossIcon: path + 'logo/boss_icon.png?x-oss-process=style/jpg-test',
       path,
     };
+  },
+  computed: {
+    ...mapState(['short']),
   }
 };
 </script>

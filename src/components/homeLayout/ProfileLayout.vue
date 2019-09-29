@@ -85,19 +85,16 @@
 </template>
 
 <script>
-import { Tag, Image } from 'element-ui';
 import Vue from 'vue';
-import {
-  getClass_Chinese,
-  getProfilePath,
-  getClass_icon,
-  path
-} from '../../utils';
+import { mapState } from 'vuex';
 
-import { charBorderColor, charNameColor } from '../../utils/string';
-
+import { Tag, Image } from 'element-ui';
 Vue.use(Image);
 Vue.use(Tag);
+
+import { getProfilePath, getClass_icon, } from '../../utils';
+import { path } from '../../utils/listVer';
+import { charBorderColor, charNameColor, getClass_Chinese, } from '../../utils/string';
 
 import Mode from '../../stats';
 
@@ -107,7 +104,6 @@ export default {
     showKey: String,
     tags: Array,
     showTags: Boolean,
-    short: Boolean
   },
   components: {},
   data() {
@@ -128,6 +124,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['short']),
     path() {
       return process.env.NODE_ENV === 'development' ? '' : Mode;
     }

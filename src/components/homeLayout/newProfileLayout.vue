@@ -79,6 +79,8 @@
 </template>
 
 <script>
+
+// 排列组合
 const arrange = (arr, index = 0, group = []) => {
   const res = [];
   res.push([arr[index]]);
@@ -92,15 +94,16 @@ const arrange = (arr, index = 0, group = []) => {
 
 import {
   sort,
-  getClass_Chinese,
   getProfilePath,
   getClass_icon
 } from '../../utils';
 
-import { starColor } from '../../utils/string';
+import { getClass_Chinese, starColor } from '../../utils/string';
+
+import { mapState } from 'vuex';
+import Vue from 'vue';
 
 import { Card, Tag } from 'element-ui';
-import Vue from 'vue';
 Vue.use(Card);
 Vue.use(Tag);
 
@@ -112,11 +115,11 @@ export default {
     showKey: String,
     tags: Array,
     showTags: Boolean,
-    short: Boolean,
     filterGroups: Object
   },
 
   computed: {
+    ...mapState(['short']),
     path() {
       return process.env.NODE_ENV === 'development' ? '' : Mode;
     },

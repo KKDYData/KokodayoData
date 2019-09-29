@@ -109,7 +109,6 @@
           </div>
           <enemy-map-info
             v-if="!short && mapCode"
-            :short="short"
             :options="options"
             :dropInfo="detailsDropList"
             :global-buffs="globalBuffs"
@@ -120,7 +119,6 @@
       <my-slide-title
         v-if="data"
         :control="mapCode ? true : false"
-        :short="short"
         :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
         ref="layout-control"
       >
@@ -158,7 +156,6 @@
         <enemy-data-layout
           :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
           ref="layout"
-          :short="short"
           v-if="!load && data"
           :data="data"
           :map-data="selMapData"
@@ -168,20 +165,18 @@
           @closeRoute="closeRoute"
         ></enemy-data-layout>
       </my-slide-title>
-      <my-slide-title v-if="short && mapCode" title="地图信息" :short="short">
+      <my-slide-title v-if="short && mapCode" title="地图信息">
         <enemy-map-info
           style="margin-top: 20px"
           :show-title="false"
-          :short="short"
           :options="options"
           :global-buffs="globalBuffs"
           :wave-time="waveTime"
         ></enemy-map-info>
       </my-slide-title>
-      <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设" :short="short">
+      <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设">
         <map-pre-defined
           style="margin-top: 10px"
-          :short="short"
           :pre-data="selMapData.predefines"
           :data="preData"
           :runes-data="runesMode ? selMapData.runes : null"
@@ -191,7 +186,6 @@
       <map-drop-list
         v-if="mapCode && detailsDropList.length > 0"
         style="margin-top: 20px"
-        :short="short"
         :drop-info="detailsDropList"
         :target-stage="mapCode"
       ></map-drop-list>
@@ -220,22 +214,23 @@ Vue.use(Drawer);
 Vue.use(Image);
 
 import {
-  getEnemyList,
-  // getEneAppearMap,
-  isMoblie,
-  getMapData,
-  path,
-  getMapDataListVer,
   changeDesc,
-  getFurn,
   findStage,
-  debounce,
+  preDefineGet,
+  UA,
+} from '../../utils';
+
+import {
+  getEnemyList,
+  getMapData,
+  getMapDataListVer,
   getCharItem,
   getItem,
-  preDefineGet,
+  getFurn,
   importSpriteJs,
-  Browser
-} from '../../utils';
+} from '../../utils/fetch';
+
+import { path } from '../../utils/listVer';
 
 import Mode from '../../stats';
 
@@ -276,9 +271,8 @@ export default {
     MapPreDefined
   },
   data() {
-    const browser = Browser();
+    const browser = UA.Browser;
     return {
-      short: false,
       data: null,
       rowData: [],
       load: false,
@@ -296,21 +290,17 @@ export default {
       showMap: false,
       watchTree: false,
       simpleShow: true,
-      drawerSize: '30%',
       preData: null,
       map: null,
       mapUp: null,
       isEdge: browser.name === 'Edge' && browser.major < 19
     };
   },
-  watch: {
-    stageTree(v) {
-      if (v && this.watchTree) this.loadMap();
-      this.watchTree = false;
-    }
-  },
   computed: {
-    ...mapState(['stageTree']),
+    ...mapState(['stageTree', 'screenWidth', 'short']),
+    drawerSize() {
+      return Math.floor((300 / this.screenWidth) * 100) + '%';
+    },
     waveTime() {
       let enemyNum = 0;
       // 看起来像是简单算个时间，但是实际上，顺便把数量和每波开始的时间加进数据了
@@ -337,6 +327,7 @@ export default {
       , 0) : 0;
 
     },
+
     showPredefine() {
       if (!this.selMapData || !this.selMapData.predefines) return false;
       return Object.values(this.selMapData.predefines).reduce((res, cur) => res += cur.length, 0) > 0;
@@ -399,21 +390,24 @@ export default {
       return this.short ? 'btt' : 'rtl';
     }
   },
+  watch: {
+    stageTree(v) {
+      if (v && this.watchTree) this.loadMap();
+      this.watchTree = false;
+    },
+    preData(v) {
+      if (v && Object.values(v).reduce((res, cur) => res + cur.length, 0) > 0 && this.map) {
+        console.log('load predefinedData');
+        this.map.setData(this.selMapData, this.preData);
+        this.mapUp.setData(this.selMapData, this.preData);
+      }
+    }
+  },
   created() {
     this.linkStart();
   },
-  beforeMount() {
-    this.short = isMoblie();
-  },
-  mounted() {
-    this.drawerSize = Math.floor((300 / document.body.clientWidth) * 100) + '%';
-    window.addEventListener(
-      'resize',
-      debounce(() => {
-        this.drawerSize = Math.floor((300 / document.body.clientWidth) * 100) + '%';
-      }, 1000)
-    );
-  },
+
+
   methods: {
     clearMap() {
       this.data = this.rowData;
@@ -515,14 +509,14 @@ export default {
           this.getPreData();
           this.pTransition();
           if (this.map) {
-            this.map.setData(mapData);
-            this.mapUp.setData(mapData);
+            this.map.setData(mapData, this.preData);
+            this.mapUp.setData(mapData, this.preData);
           } else {
             const initMap = async () => {
               const { Map } = await import('./draw');
               await this.$nextTick();
-              this.map = new Map('#map-canvas-container', 100, mapData);
-              this.mapUp = new Map('#map-canvas-container-up', 100, mapData, true);
+              this.map = new Map('#map-canvas-container', 100, mapData, this.preData);
+              this.mapUp = new Map('#map-canvas-container-up', 100, mapData, this.preData, true);
             };
             if (window.spritejs) {
               initMap();
@@ -605,6 +599,7 @@ export default {
         preDefineGet('characterCards', data),
       ];
       const [tokenInsts, tokenCards, characterInsts, characterCards] = await Promise.all(tasks);
+      // preDefineCompute()
       this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
     }
   }
