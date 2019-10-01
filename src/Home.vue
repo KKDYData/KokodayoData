@@ -6,7 +6,7 @@
       type="success"
       title="你现在访问的是稳定版"
       description
-    >大概10.1在github开源， 如果看不到图，请清空缓存。</el-alert>
+    >源码已在Github公开，欢迎Star和Pr。 如果看不到图，请清空缓存。</el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,随缘修bug。Dps柱状图准备重做，请自行分辨是否正确。
