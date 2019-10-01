@@ -41,10 +41,10 @@
 </template>
 
 <script>
-import { importEcharts } from '../../utils';
+import { importEcharts } from '../../utils/fetch';
+import { mapState } from 'vuex';
 
 const splitToData = e => typeof e === 'number' ? e : +e.split('<')[0];
-
 
 
 const upWhat = (what, base, e) => e.blackboard.reduce((res, cur) => {
@@ -119,9 +119,6 @@ export default {
     profession: {
       required: true
     },
-    short: {
-      required: true
-    },
     talentPotentailUp: {
       required: true
     },
@@ -131,7 +128,7 @@ export default {
   },
   data() {
     return {
-      chart: null
+      chart: null,
     };
   },
   filters: {
@@ -140,6 +137,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['short']),
     attackType() {
       if (/回复/.test(this.skill.description) || this.profession === 'MEDIC') return false;
       else return true;

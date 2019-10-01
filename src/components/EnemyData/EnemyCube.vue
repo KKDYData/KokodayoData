@@ -38,6 +38,7 @@ export default {
   display: flex
   margin: 30px 0
   margin-right: 20px
+  cursor: pointer
 
   .enemy-img-container {
     height: 100px

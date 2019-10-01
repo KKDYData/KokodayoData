@@ -1,10 +1,7 @@
 import store from '../store';
-import { StageType, statusToChChar } from './string';
-
-const setVer = (name, ver) => {
-  store.commit(name, new Date(ver).toLocaleString());
-};
-
+import { getStageType, statusToChChar } from './string';
+import { path } from './listVer';
+import { getHeroData, getSkill } from './fetch';
 
 const debounce = function (action, idle) {
   let last;
@@ -18,148 +15,28 @@ const debounce = function (action, idle) {
   };
 };
 
-
 const throttle = function (action, delay) {
-  var last = 0;
-  return function () {
-    var curr = +new Date();
+  let last = 0;
+  // 传的参数是类似requestAnimationFrame的TimeEvent
+  return function (event) {
+    let curr = event.timeStamp;
     if (curr - last > delay) {
-      action.apply(this, arguments);
+      console.log(event);
+      action(event);
       last = curr;
     }
   };
 };
 
-const path = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'
-  : 'https://andata.somedata.top/dataX/';
-
-const dataPath = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'
-  : 'https://andata.somedata.top';
-const api = devMode === '/Arknights' ? '/api/arknights/' : '/api/arkforward/';
-
-
-const fetchPut = (url, data) => {
-  return fetch(url, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    })
-  }).then(res => res.json())
-    .catch(err => Promise.reject(err));
-
-};
-
-
-
-const submitFeedback = content => {
-  return fetchPut('/api/arknights/feedback', content)
-    .catch(err => console.error(err))
-    .then(res => Promise.resolve(res));
-};
-
-//包装fetch，使用get
-const fetchGet = (url) => {
-  return fetch(url, {
-    method: 'GET',
-    mode: 'cors'
-  }).then(res => {
-    if (res.ok) {
-      return res.json();
-    }
-    else {
-      return Promise.reject('server error');
-    }
-  });
-};
-
-
-const fetchGetSliceSet = (key, setKey) => {
-  return fetchGet(api + 'data/' + key)
-    .then(res => {
-      if (setKey) setVer(setKey, res.lastModified);
-      return fetchGet(path + res.name.slice(6));
-    })
-    .catch(err => {
-      console.error('error', err);
-      return [];
-    });
-};
-
-const fetchByKey = (keyPath) => {
-  return key => fetchGet(`${dataPath}/data/${keyPath}/${key}.json`)
-    .catch(err => {
-      console.error('error', err);
-      return Promise.reject('no data');
-    });
-};
-
-const getProfileList = () => fetchByKey('char/list')('1568990623279');
-
-const getEnemyList = () => fetchGetSliceSet('enemyList', 'setEnemyVer');
-
-const getEneAppearMap = () => fetchGetSliceSet('enemyAppearMap', 'setApperMapVer');
-
-// 遗留api
-const getDevList = () => fetchGetSliceSet('devList', 'setListVer');
-
-const getStageList = () => fetchGetSliceSet('stageList');
-// 不用找服务器的list
-const getThemeList = () => fetchByKey('custom')('themeslist');
-
-
-
-const getHeroData = key => fetchByKey('char/data')(key);
-
-const getEnemyData = key => fetchByKey('enemy')(key);
-
-const getMapData = key => fetchByKey('map/data')(key);
-
-const getMapDataListVer = key => fetchByKey('map/exData')(key);
-
-const getCharInfo = key => fetchByKey('char/info')(key);
-
-const getCharWords = key => fetchByKey('char/words')(key);
-
-const getRange = key => fetchByKey('range')(key);
-
-const getSkill = key => fetchByKey('skills')(key);
-
-const getItem = key => fetchByKey('item')(key);
-
-const getFurn = key => fetchByKey('custom/furnitures')(key);
-
-const getCharItem = key => fetchByKey('item')('p_' + key);
-
-
-const importScript = (url, init = () => console.log('load')) => {
-  const body = document.querySelector('head');
-  const script = document.createElement('script');
-  script.type = 'text/javascript';
-  script.onload = init;
-  script.src = url;
-  body.appendChild(script);
-};
-
-const importEcharts = (init) => {
-  importScript('https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.common.min.js', init);
-};
-
-const importSpriteJs = (init) => {
-  importScript('https://unpkg.com/spritejs/dist/spritejs.min.js', init);
-};
 
 
 function sort(array, less) {
-
   function swap(i, j) {
     const t = array[i];
     array[i] = array[j];
     array[j] = t;
   }
-
   function quicksort(left, right) {
-
     if (left < right) {
       const pivot = array[left + Math.floor((right - left) / 2)];
       let
@@ -182,63 +59,11 @@ function sort(array, less) {
 
       quicksort(left, right_new);
       quicksort(left_new, right);
-
     }
   }
-
   quicksort(0, array.length - 1);
-
   return array;
 }
-
-
-const sortByTime = data => {
-  const format = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: 'numeric',
-    hour12: false
-  });
-  data.forEach(element => {
-    const date = element.time ? new Date(element.time) : '';
-    if (date) element.time = format.format(date);
-    element.editing = false;
-  });
-  try {
-    return sort(data, (a, b) => {
-      return a.time > b.time;
-    });
-  } catch (error) {
-    console.log(error);
-  }
-};
-
-const class_chinese = {
-  MEDIC: { isTag: false, text: '医疗', value: 'MEDIC', short: '医' },
-  CASTER: { isTag: false, text: '术士', value: 'CASTER', short: '术' },
-  SNIPER: { isTag: false, text: '狙击', value: 'SNIPER', short: '狙' },
-  WARRIOR: { isTag: false, text: '近卫', value: 'WARRIOR', short: '战' },
-  PIONEER: { isTag: false, text: '先锋', value: 'PIONEER', short: '先' },
-  TANK: { isTag: false, text: '重装', value: 'TANK', short: '重' },
-  SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL', short: '特' },
-  SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT', short: '辅' },
-  TOKEN: { isTag: false, text: '召唤物', value: 'TOKEN', short: '辅' },
-
-};
-
-const getClass_Chinese = en => {
-  return class_chinese[en].text;
-};
-
-const getClass_Short = en => {
-  return class_chinese[en].short;
-};
-
-
-
-
 
 const changeDesc = (desc) => {
   const reg1 = /(<\/>)/g,
@@ -284,13 +109,10 @@ const getClass_icon = (c) => {
 };
 
 import UaParser from 'ua-parser-js';
-import devMode from '../stats';
 
-
-const Browser = () => new UaParser().getBrowser();
 
 // import { Message } from 'element-ui';
-const getWebpOk = () => {
+const getUA = () => {
   const ua = new UaParser();
   const OS = ua.getOS();
   const Browser = ua.getBrowser();
@@ -299,29 +121,32 @@ const getWebpOk = () => {
   const isMobliePad = isMoblie || OS.name === 'iOS' || (OS.name === 'Mac OS' && width < 1300);
   // Message(`'is Moblie? ' ${isMoblie}, ${ua.getDevice().vendor}, os ${OS.name}`);
 
-  if (
-    OS.name === 'iOS' ||
-    (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
-    (Browser.name === 'Edge' && Browser.version < '18')
-  ) {
-    return { ok: false, mobile: isMobliePad, isMoblie };
-  } else {
-    return { ok: true, mobile: isMobliePad, isMoblie };
-  }
+  return {
+    isMoblie,
+    Browser,
+    ok: !(OS.name == 'iOS' ||
+      (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
+      (Browser.name === 'Edge' && Browser.version < '18')),
+    isMobliePad
+  };
 };
-const webp = getWebpOk();
-const webpOk = webp.ok;
-const isMoblie = () => webp.isMoblie;
-const isMobliePad = () => webp.mobile;
+
+const UA = getUA();
+
+window.addEventListener('resize', throttle(() => {
+  const w = document.body.clientWidth;
+  store.commit('setShort', w < 600 ? true : false);
+  store.commit('setScreenWidth', w);
+}, 500));
 
 
 const getProfilePath = name => {
-  return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
+  return UA.ok ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
     : `${path}char/profile/${name}.png`;
 };
 
 const getDetailsProfilePath = name => {
-  return webpOk ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/profile-test`
+  return UA.ok ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/profile-test`
     : `${path}char/profile/${name}.png`;
 };
 
@@ -449,33 +274,6 @@ const changeAttackSpeed = (skill) => {
   return res;
 };
 
-
-const findStage = (map, tree) => {
-  const splitTemp = map.split('_');
-  let groupName = splitTemp[0];
-  if (groupName === 'sub') groupName = 'main';
-  const group = tree.find(
-    el => el.label === StageType[groupName]
-  );
-  let target;
-  if (group.label === '主线') {
-    const chapter = splitTemp[1].split('-');
-    if (splitTemp[0] === 'main') {
-      const nodes = tree[0].children[+chapter[0]];
-      target = nodes.children[+chapter[1] - 1];
-    } else {
-      //支线
-      const temp = tree[0].children[+chapter[0]];
-      const nodes = temp.children[temp.children.length - 1];
-      target = nodes.children[+chapter[1] - 1];
-    }
-  } else {
-    map = map.replace('wk', 'weekly').replace('pro', 'promote');
-    target = group.children.find(el => el.path === map);
-  }
-  return target;
-};
-
 const calStatus = (lv, data) => {
   return data.reduce((zero, max) => {
     const diff = max.level - zero.level;
@@ -528,7 +326,6 @@ const preDefineCompute = (asyncData, baseData) => {
   const res = baseData.map(el => {
     const key = el.inst.characterKey;
     const target = asyncData.find(item => key === item.key);
-    console.log('target ', target, asyncData, baseData);
 
     if (!target) return;
     const { data, targetSkill } = target;
@@ -550,46 +347,43 @@ const preDefineGet = async (key, baseData) => {
       char.targetSkill = [await getSkill(skillKey)];
     }
   }
-  return res;
+  return preDefineCompute(res, baseData[key]);
 };
 
 const bsr = (t, a1, a2, a3, a4) => a1 * (1 - t) * (1 - t) * (1 - t) + 3 * a2 * t * (1 - t) * (1 - t) + 3 * a3 * t * t * (1 - t) + a4 * t * t * t;
 
+const findStage = (map, tree) => {
+  const splitTemp = map.split('_');
+  let groupName = splitTemp[0];
+  if (groupName === 'sub') groupName = 'main';
+  const group = tree.find(
+    el => el.label === getStageType(groupName)
+  );
+  let target;
+  if (group.label === '主线') {
+    const chapter = splitTemp[1].split('-');
+    if (splitTemp[0] === 'main') {
+      target = group.children[+chapter[0]].children.find(el => el.path === map);
+    } else {
+      //支线
+      const temp = group.children[+chapter[0]];
+      target = temp.children[temp.children.length - 1].children.find(el => el.path === map);
+    }
+  } else {
+    map = map.replace('wk', 'weekly').replace('pro', 'promote');
+    target = group.children.find(el => el.path === map);
+  }
+  return target;
+};
+
+
 
 export {
-
-  // api 类
-  getProfileList,
-  getEnemyData,
-  getEneAppearMap,
-  getDevList,
-  getEnemyList,
-  submitFeedback,
-  getThemeList,
-  importSpriteJs,
-  importEcharts,
-
-  // api 类，需要提供key
-  getHeroData,
-  getCharInfo,
-  getCharWords,
-  getSkill,
-  getMapData,
-  getItem,
-  getRange,
-  getMapDataListVer,
-  getStageList,
-  getFurn,
-  getCharItem,
-
   // 业务相关类
   debounce,
   throttle,
-  fetchGet,
-  fetchByKey,
   bsr,//三阶贝塞尔
   sort,
-  sortByTime,
   changeDesc,
   findStage,
   changeAttackSpeed,
@@ -599,20 +393,11 @@ export {
   preDefineGet,
 
   // 转换路径类，可能需要转义到string
-  path,
-  class_chinese,
-  getClass_Short,
-  getClass_Chinese,
   getProfilePath,
   getDetailsProfilePath,
   getClass_icon,
 
   // 设备检测
-  webpOk,
-  Browser,
-  isMoblie,
+  UA,
   changeKey,
-  isMobliePad
 };
-
-

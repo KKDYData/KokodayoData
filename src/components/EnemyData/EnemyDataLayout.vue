@@ -1,7 +1,6 @@
 <template>
   <div>
     <enemy-data-drawer
-      :short="short"
       :details-open.sync="detailsOpen"
       :runes-mode="runesMode"
       :current-enemy="currEnemy"
@@ -13,7 +12,6 @@
           v-if="currEnemy"
           v-loading="!currentData"
           :data="currentData"
-          :short="short"
           :key-name="showKey"
           :map-level="currEnemy.level"
           :appear-map="appearMap"
@@ -44,23 +42,24 @@
         >最大等待时间：{{maxTimeWaitingForNextWave}}s | 延迟：{{preDelay}}s</p>
         <div
           class="wave-enemy-container"
-          v-for="({actions, name, preDelay, time}, fIndex) in fragments"
+          v-for="({actions, name, preDelay, time, enemyNum}, fIndex) in fragments"
           :key="fIndex"
         >
           <p class="wave-info" style="width: 100%; margin-bottom: -20px">
             第{{fIndex+1}}波
+            <span style="color: hsl(218, 58%, 14%)">{{name}}</span>
             <span>
               <i class="el-icon-position"></i>
               {{time | time}}
               <span
                 style="margin-left: 10px"
-                v-if="preDelay"
-              >距离上一波{{preDelay}}s</span>
+              >{{enemyNum}}/{{fragments[fragments.length - 1].enemyNum}}</span>
+              <span style="margin-left: 10px" v-if="preDelay">距离上一波{{preDelay}}s</span>
             </span>
           </p>
           <!-- .filter(el => mapData.routes[el.routeIndex]) -->
           <div
-            v-for="({key, actionType, count, interval, preDelay, routeIndex}, aIndex) in actions.filter(el => el.actionType !== 5)"
+            v-for="({key, actionType, count, interval, preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
             :key="aIndex"
             class="wave-enemy-single"
           >
@@ -71,12 +70,17 @@
               :src="enemyPicPath(key)"
               @click.native="showRoute(routeIndex)"
             ></enemy-cube>
+            <enemy-cube
+              style="background: linear-gradient(45deg, hsl(163, 100%, 6%), transparent);box-shadow: inset 0px 0px 0px 5px #313131"
+              v-else-if="/trap_007_ballis/.test(key)"
+              name="弩炮"
+              :src="ballis"
+            ></enemy-cube>
             <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
-              <p>地图预设</p>
               <p>{{key.replace('trap_007_ballis', '弩炮')}}</p>
             </div>
-            <div @touchstart="showRoute(routeIndex)" style class="enemy-cube-wave-info">
-              <div>数量:{{count}}, 间隔:{{interval}}</div>
+            <div style class="enemy-cube-wave-info">
+              <div>数量:{{count}} 间隔:{{interval}}s</div>
               <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
                 延迟: {{preDelay}}s
                 <i
@@ -113,6 +117,7 @@
 <script>
 import { Image, Drawer, Button } from 'element-ui';
 import Vue from 'vue';
+import { mapState } from 'vuex';
 Vue.use(Image);
 Vue.use(Drawer);
 Vue.use(Button);
@@ -122,7 +127,8 @@ import EnemyStatus from './EnemyStatus';
 import EnemyDataDrawer from './EnemyDataDrawer';
 import EnemyCube from './EnemyCube';
 
-import { path, getEnemyData, isMoblie, debounce } from '../../utils';
+import { getEnemyData } from '../../utils/fetch';
+import { path } from '../../utils/listVer';
 
 export default {
   components: { EnemyStatus, EnemyDataDrawer, EnemyCube, MyTitle },
@@ -144,6 +150,7 @@ export default {
   },
   data() {
     return {
+      ballis: path + 'char/profile/trap_007_ballis_optimized.png?x-oss-process=style/small-test',
       path: path + 'enemy/pic/',
       showKey: '',
       currentData: [],
@@ -153,32 +160,20 @@ export default {
       shortWidth: 350,
       detailsOpen: false,
       currEnemy: null,
-      drawerSize: '30%',
       debounceOpen: null,
       selectedRoutes: new Set(),
       selectedStlye: {}
     };
   },
-  beforeMount() {
-    this.short = isMoblie();
-  },
+
   watch: {
     simpleShow(v) {
       if (v) this.calFillAmount();
     }
   },
   mounted() {
-    this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
     // console.log(this.drawerSize);
-    if (this.$el.querySelector('.enemy-container')) this.calFillAmount();
-
-    window.addEventListener(
-      'resize',
-      debounce(() => {
-        this.short = window.innerWidth < 500 ? true : false;
-        this.drawerSize = Math.floor((600 / document.body.clientWidth) * 100) + '%';
-      }, 1000)
-    );
+    if (this.$el && this.$el.querySelector('.enemy-container')) this.calFillAmount();
     this.shortWidth = this.$el.clientWidth - 30;
   },
   filters: {
@@ -189,29 +184,16 @@ export default {
     }
   },
   computed: {
+    ...mapState(['screenWidth', 'short']),
+    drawerSize() {
+      return Math.floor((600 / this.screenWidth) * 100) + '%';
+    },
     appearMap() {
       // 之后改成从vuex拿
       return {};
     },
     waveData() {
       if (!this.mapData) return;
-      const a = this.mapData.waves.reduce((wRes, cur) => {
-        return (
-          wRes +
-          cur.preDelay +
-          cur.postDelay +
-          cur.fragments.reduce((fRes, cur) => {
-            let fTemp = fRes + cur.preDelay;
-            cur.time = fTemp;
-            fTemp += cur.actions.reduce((res, cur) => {
-              const curTime = cur.preDelay + cur.interval * cur.count;
-              return Math.max(res, curTime);
-            }, 0);
-            return fTemp;
-          }, 0)
-        );
-      }, 0);
-      console.log('wave time', a);
       return this.mapData.waves;
     }
   },
@@ -219,7 +201,6 @@ export default {
     clearRoutes(v) {
       this.selectedStlye = {};
       this.selectedRoutes.clear();
-
     },
     showRoute(index) {
       if (this.selectedRoutes.has(index)) {
@@ -228,13 +209,13 @@ export default {
         this.selectedRoutes.delete(index);
       } else {
         this.selectedRoutes.add(index);
-        const color = 360 * Math.random();
+        const color = Math.round(360 * Math.random());
         this.$set(
           this.selectedStlye,
           index,
           `--border: 7px solid hsl(${color}, 100%, 50%)`
         );
-        console.log(this.selectedRoutes);
+        console.log(this.selectedRoutes, color);
         this.$emit('showRoute', index, color);
       }
     },
@@ -328,7 +309,6 @@ export default {
 }
 
 .enemy-cube-wave-info {
-  cursor: pointer
   font-size: 15px
   color: rgb(168, 168, 168)
 }

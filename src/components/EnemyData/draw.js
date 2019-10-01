@@ -1,101 +1,203 @@
 import { Scene, Path, Label } from 'spritejs';
-// pathfinding 被我手动把不需要的模块注释掉了，只有Grid和AStarFinder还在，体积从68kb变成了20kb，感动人心
 import PF from 'pathfinding';
+import { Directions, blockKeys, tileInfo } from '../../utils/string';
+import { Notification } from 'element-ui';
+import { UA } from '../../utils';
+
+console.log('draw.js');
 
 const radio = 100;
 const cen = radio / 2;
-
-const mapBlockColoc = {
-  [-1]: 'rgba(255,255,255, 0.2)',
-  0: 'grey',
-  1: '#fff',
-  2: '#fff',
-  3: 'rgb(244, 152, 0)',
-  4: 'rgb(255, 61, 61)',
-  5: 'rgb(103, 203, 67)',
-  6: 'hsl(219, 57%, 14%)'
-};
-
 const react = `m 0 0 h ${radio - 2} v ${radio - 2} h ${-radio + 2} z`;
 const mapReact = {
   d: react,
   lineCap: 'round',
 };
 
-const spwanMap = ({ map, tiles }, paper, top) => {
-  const myMap = map.map((el, row) => el.map((i, col, arr) => {
-    const { tileKey: key, passableMask, heightType, buildableType } = tiles[i];
+let noti, notiTime;
+
+const task = (mapBlock, mapData, heightType) => {
+  return () => {
+    let rightTrans = null;
+    notiTime = +new Date();
+    if (!noti || noti.closed) {
+      noti = Notification({
+        ...mapData,
+        position: UA.Browser.name === 'Mobile Safari' ? 'bottom-right' : 'top-right',
+        type: 'warning',
+        duration: 0
+      });
+    } else {
+      noti.closed = false;
+      noti.message = mapData.message;
+      noti.title = mapData.title;
+    }
+    rightTrans = mapBlock.transition(0.7);
+    rightTrans.attr({
+      fillColor: 'rgba(92, 222, 255, 0.5)'
+    });
+    setTimeout(() => {
+      // 颜色强制复原
+      mapBlock.attr({ fillColor: heightType !== 1 ? 'rgba(0, 0, 0, 0)' : mapData.color });
+      if (UA.isMobliePad) {
+        if (+ new Date - notiTime > 3000) {
+          noti.close();
+        }
+      }
+    }, 3000);
+    mapBlock.on('mouseleave', (evt) => {
+      rightTrans.reverse();
+      noti.close();
+    });
+  };
+};
+
+
+const getBlockData = (data, key, blackboard) => {
+  // 预设已经下场的地板
+  if (data) {
+    return {
+      color: 'rgba(230,230,230, 0.5)'
+    };
+  } else if (tileInfo[key]) {
+    const { description, name: title, color } = tileInfo[key];
+    return {
+      title,
+      color,
+      message: description + (blackboard ? `， ${blackboard.reduce((res, el, index) => res + (index === 0 ? '' : ' ') + blockKeys(el.key) + ' '
+        + el.value + (el.key.indexOf('cd') > -1 ? 's' : ''), '')}`
+        : ''),
+    };
+  } else return {
+    color: 'rgba(0, 0, 0, 0)'
+  };
+};
+
+
+const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
+  const myMap = map.map((el, row) => el.map((i, col) => {
+    const { tileKey: key, passableMask, heightType, buildableType, blackboard } = tiles[i];
+    // 只剩下计算是否同行的作用了
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
       : /hole/.test(key) ? 6 : passableMask === 3 ? 1 : -1;
     const rc = [col, row];
+
     return {
       i,
       rc,
       crossAble,
-      tileKey: key,
+      key,
       heightType,
       buildableType,
-      passableMask
+      passableMask,
+      blackboard
     };
   }));
 
+  np.forEach(el => {
+    const { col, row } = el.position;
+    const target = myMap[myMap.length - 1 - row][col];
+    if (target) {
+      target.data = el;
+    } else {
+      console.log('数据异常');
+    }
+  });
 
-  myMap.forEach((el) => el.forEach(({ rc, crossAble, heightType, buildableType, passableMask }) => {
+  myMap.forEach((el) => el.forEach(({ rc, heightType, data, key, blackboard }) => {
     const [col, row] = rc;
     const pos = [col * radio + 1, row * radio + 1];
-    const fillColor = buildableType === 2 && heightType === 1 ? 'rgba(125, 253, 244, 0.9)'//高台能摆的格子
-      : crossAble < 3 && buildableType === 0 && heightType === 0 && passableMask === 3 ? 'hsla(38, 92%, 90%, 1)'//地板不能摆的格子
-        : heightType === 1 ? 'rgba(230,230,230, 0.5)'
-          : mapBlockColoc[crossAble];//
+
     const mapBlock = new Path();
-    // buildableType === 0 ? 'rgba(255, 182, 182, 0.5)' :
+
+    const typeData = getBlockData(data, key, blackboard);
+    const fillColor = typeData.color;
+
     const writeLabel = () => {
+      const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
+      let text;
       if (col === 0 || row === 0) {
-        let text = col === 0 ? myMap.length - 1 - row : col;
-        if (col === 0 && row === 0) text = 'x|y  ' + text + ' 0';
+        if (col === 0 && row === 0) {
+          labelPos[0] -= 10;
+          text = 'Y|X';
+        }
+        else text = col === 0 ? myMap.length - 1 - row : col;
         const label = new Label(text);
-        const labelPos = [pos[0] + cen / 2, pos[1] + cen / 2];
         label.attr({
           pos: labelPos,
           fillColor: '#fff',
+          font: 'bold 44px Arial',
         });
         paper.layer('map').append(label);
+      } else if (data) {
+
+        labelPos[1] -= 25;
+        text = Directions[data.direction];
+
+        let id, temp, arrow = false;
+        const idConfig = {
+          fillColor: '#313131',
+          font: 'bold 80px Arial',
+        };
+        // 画箭头和它的序号
+        if (data.alias) {
+          temp = data.alias.split('#');
+          if (temp[1]) id = temp[1];
+          else id = '';
+          arrow = true;
+        } else if (data.inst) {
+          id = data.name;
+          idConfig.font = 'bold 25px Arial';
+        }
+        // 大于2是扫描器这类的东西
+        idConfig.pos = id.length > 1 ? id.length > 2 ? [labelPos[0] - 20, labelPos[1] + 25]
+          : [labelPos[0] - 20, labelPos[1]] : labelPos;
+        const idLabel = new Label(id);
+        idLabel.attr(idConfig);
+        paper.layer('map').append(idLabel);
+
+        if (arrow) {
+          const fillColor = 'rgba(255, 255, 255, 0.7)';
+          const label = new Label(text);
+          label.attr({
+            pos: labelPos,
+            fillColor,
+            font: 'bold 80px Arial',
+          });
+          paper.layer('map').append(label);
+        }
       }
     };
 
+    const mapBlockConfig = {
+      pos,
+      lineWidth: 1,
+      path: mapReact,
+      fillColor,
+      strokeColor: 'rgb(64, 170, 191)'
+    };
+    let isWL = false;
 
-    if (!top && heightType !== 1) {
-      mapBlock.attr({
-        pos,
-        lineWidth: 1,
-        path: mapReact,
-        fillColor,
-        strokeColor: 'rgb(64, 170, 191)'
-      });
-      paper.layer('map').append(mapBlock);
-      writeLabel();
-
+    if (!top && heightType !== 1 || top && heightType === 1) {
+      isWL = true;
     } else if (!top) {
-      mapBlock.attr({
-        pos,
-        lineWidth: 1,
-        path: mapReact,
-        fillColor: '#414141',
-        strokeColor: 'rgb(64, 170, 191)'
-      });
-      paper.layer('map').append(mapBlock);
-    } else if (top && heightType === 1) {
-      mapBlock.attr({
-        pos,
-        lineWidth: 1,
-        path: mapReact,
-        fillColor,
-        strokeColor: 'rgb(64, 170, 191)'
-      });
-      paper.layer('map').append(mapBlock);
-      writeLabel();
+      // 高层下面的地板
+      mapBlockConfig.fillColor = '#414141';
+    } else {
+      // 高层代理时间的地板
+      mapBlockConfig.fillColor = 'rgba(0, 0, 0, 0)';
+      mapBlockConfig.strokeColor = null;
     }
+    mapBlock.attr(mapBlockConfig);
+    paper.layer('map').append(mapBlock);
+    if (isWL) writeLabel();
 
+    if (top) {
+      const t = data ? task(mapBlock, { color: 'rgba(230,230,230, 0.5)', title: data.name, message: `等级${data.inst.level}${branches ? '  |  由敌人召唤，出现时间看梅菲斯特的技能' : ''}` }, heightType)
+        : task(mapBlock, typeData, heightType);
+      mapBlock.on('click', t);
+      mapBlock.on('mouseenter', t);
+    }
   }));
   return myMap;
 };
@@ -107,9 +209,6 @@ const sleep = time => {
 };
 
 
-
-
-
 class Map {
   tempRoutes = {}
   runningRoutes = new Set();
@@ -118,7 +217,6 @@ class Map {
   grid
   map
   mapData
-  routes
   finder = new PF.AStarFinder({
     allowDiagonal: true,
     dontCrossCorners: true,
@@ -128,7 +226,7 @@ class Map {
   mapRadio
   top
   run = false
-  constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, routes, top = false) {
+  constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, preData, top = false) {
     const config = {
       viewport: ['auto', 'auto'],
       stickMode: 'width',
@@ -137,13 +235,9 @@ class Map {
     this.paper = new Scene(container, config);
     this.mapRadio = radio;
     this.top = top;
-    // 稍微做个判定，给以后用
-    if (routes) {
-      this.setDataBeta(mapData, routes);
-      const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
-      this.grid = new PF.Grid(sMap);
-
-    }
+    this.setDataBeta(mapData, preData);
+    const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
+    this.grid = new PF.Grid(sMap);
   }
   async ray(body) {
     return new Promise((resolve, reject) => {
@@ -205,6 +299,7 @@ class Map {
       const len = s.getPathLength();
       let [x, y] = path.split(' ').slice(1, 3);
       let start = null;
+
       const auto = (timeStamp) => {
         if (!start) start = timeStamp;
         const progress = timeStamp - start + saveTime;
@@ -244,24 +339,23 @@ class Map {
     });
   }
 
-  setDataBeta(mapData, routes) {
-    this.routes = routes;
+  setDataBeta(rowData, preData) {
+    const { mapData, branches } = rowData;
+    const np = preData ? preData.tokenInsts : [];
     this.mapData = mapData;
+
     this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
-    this.map = spwanMap(mapData, this.paper, this.top);
+    this.map = spwanMap({ ...mapData, branches }, np, this.paper, this.top);
   }
-  setData(mapData, routes) {
+  setData(mapData, preData) {
     this.clearRoutes();
     this.paper.children.forEach(el => this.paper.removeChild(el));
     // 清完再设置
-    this.setDataBeta(mapData, routes);
+    this.setDataBeta(mapData, preData);
     const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
     this.grid = new PF.Grid(sMap);
   }
 
-  loadMap() {
-    this.map = spwanMap(this.mapData, this.paper);
-  }
 
   spwanPathAlpha(path) {
     // console.log(path);
@@ -272,13 +366,12 @@ class Map {
       const [preX, preY] = arr[index - 1];
       return { row: y - preY, col: x - preX };
     });
-    console.log('??');
     const radio = this.mapRadio, cen = this.mapRadio / 2;
     return temp.reduce((path, { row, col }, index) => {
-      if (index === 0) return `m ${col * radio + cen} ${row * radio + cen}`;
+      if (index === 0) return `m ${col * radio + cen} ${row * radio + cen} `;
       if (row === 0) return `${path} h ${col * radio} `;
       if (col === 0) return `${path} v ${row * radio} `;
-      return `${path} l ${col * radio} ${row * radio}`;
+      return `${path} l ${col * radio} ${row * radio} `;
     }, '');
   }
   deleteRoute(x) {
@@ -286,9 +379,7 @@ class Map {
     delete this.tempRoutes[x];
   }
   addRoutes(route, id, color) {
-    //可以接受Array或者Number
     this.runningRoutes.add(id);
-    // const route = this.routes.find((el, index) => x === index);
     const height = this.grid.height - 1;
 
     const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
@@ -348,7 +439,6 @@ class Map {
           if (index === 0 && cur.reachOffset) {
             x += cur.reachOffset.x;
             y -= cur.reachOffset.y;
-            console.log(x, y);
           }
 
           const next = arr[index + 1];
@@ -425,7 +515,6 @@ class Map {
             if (this.pauseQueue) this.pauseQueue = null;
           }
           loop();
-          // this.run = false;
         });
     };
     loop();
