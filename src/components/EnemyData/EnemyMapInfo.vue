@@ -24,6 +24,7 @@
         :width="150"
         v-for="([k,v]) in globalBuffs"
         :key="k"
+        style="margin-bottom: 10px"
       >
         <div slot="title">{{k}}</div>
         <div slot="content" v-if="k !== '属性增益'">
@@ -35,6 +36,10 @@
         </div>
         <div slot="content" v-else>属性已进行合并计算，在下面显示</div>
       </content-slot>
+      <content-slot :long="true" :no-wrap="true" :width="150">
+        <div slot="title">总时长</div>
+        <div slot="content">{{waveTime | time}}</div>
+      </content-slot>
     </div>
   </div>
 </template>
@@ -42,7 +47,10 @@
 <script>
 import MyTitle from '../MyTitle';
 import ContentSlot from '../ContentSlot';
+
 import Vue from 'vue';
+import { mapState } from 'vuex';
+
 import { Alert } from 'element-ui';
 Vue.use(Alert);
 
@@ -59,12 +67,17 @@ export default {
     globalBuffs: {
       required: true
     },
-    short: {
-      required: true
-    },
     showTitle: {
       default: true,
       type: Boolean
+    },
+    waveTime: {
+      default: 0
+    }
+  },
+  filters: {
+    time(v) {
+      return Math.floor(v / 60) + ' min ' + Math.round(v % 60) + ' s';
     }
   },
   data() {
@@ -80,6 +93,9 @@ export default {
         max_hp: '生命',
       }
     };
+  },
+  computed: {
+    ...mapState(['short']),
   }
 };
 </script>

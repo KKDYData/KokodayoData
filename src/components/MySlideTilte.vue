@@ -5,7 +5,6 @@
     <my-title
       :title="title"
       :control="control"
-      :short="short"
       @update:value="click"
       :value="value"
       style="margin-bottom: 0"
@@ -29,8 +28,7 @@ import MyTitle from './MyTitle';
 import Vue from 'vue';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
-
-import { isMoblie } from '../utils';
+import { mapState } from 'vuex';
 
 export default {
   components: { MyTitle },
@@ -42,9 +40,6 @@ export default {
     control: {
       default: true
     },
-    short: {
-      default: isMoblie
-    },
     initValue: {
       default: false
     },
@@ -53,11 +48,12 @@ export default {
     }
   },
   data() {
-    const v = this.initValue;
     return {
-      value: v,
-      // 冻结按钮，但是想了下好像没必要
+      value: this.initValue
     };
+  },
+  computed: {
+    ...mapState(['short']),
   },
   mounted() {
     this.$emit('monuted', this);

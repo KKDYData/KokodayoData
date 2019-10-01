@@ -1,12 +1,17 @@
 import Vuex from 'vuex';
 import Vue from 'vue';
 import actions from './action';
+import { UA } from '../utils';
+import { charListVer } from '../utils/listVer';
+
 
 Vue.use(Vuex);
 
+
+
 export default new Vuex.Store({
   state: {
-    listVer: new Date(1568990623279).toLocaleString(),
+    listVer: new Date(charListVer.toString().split('').reverse().join('')).toLocaleString(),
     pageVer: '',
     enemyVer: '',
     apperMapVer: '',
@@ -14,7 +19,9 @@ export default new Vuex.Store({
     webVer: new Date(VERSION).toLocaleString(),
     dropList: null,
     stageTree: null,
-    extraSkins: null
+    extraSkins: null,
+    short: UA.isMoblie || window.innerWidth < 600 ? true : false,
+    screenWidth: document.body.clientWidth
   },
   getters: {
     itemDropList: (state) => id => {
@@ -24,6 +31,12 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    setShort: (state, v) => {
+      state.short = v;
+    },
+    setScreenWidth: (state, v) => {
+      state.screenWidth = v;
+    },
     setListVer: (state, ver) => {
       state.listVer = ver;
     },

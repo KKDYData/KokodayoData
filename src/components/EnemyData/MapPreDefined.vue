@@ -3,20 +3,20 @@
     <map-predefined-list
       class="predefine-list-contianer"
       title="预设道具"
-      :list="tokenList"
+      :list="data.tokenInsts"
       :statusToChFc="statusToChFc"
     ></map-predefined-list>
-    <map-predefined-list class="predefine-list-contianer" title="预下场角色" :list="characterInstsList"></map-predefined-list>
+    <map-predefined-list class="predefine-list-contianer" title="预下场角色" :list="data.characterInsts"></map-predefined-list>
     <map-predefined-list
       class="predefine-list-contianer"
       title="预设角色卡"
-      :list="characterCardsList"
+      :list="data.characterCards"
       :show-position="false"
     ></map-predefined-list>
     <map-predefined-list
       class="predefine-list-contianer"
       title="道具卡"
-      :list="tokenCardList"
+      :list="data.tokenCards"
       :runes-data="runesData"
       :show-position="false"
     ></map-predefined-list>
@@ -24,19 +24,16 @@
 </template>
 
 <script>
-import { getProfilePath, isMobliePad, preDefineCompute } from '../../utils';
+import { getProfilePath, UA } from '../../utils';
 import { statusToChToken } from '../../utils/string';
 import MapPredefinedList from './MapPreDefinedList';
 
-
+import { mapState } from 'vuex';
 
 export default {
   props: {
     preData: {
       required: true
-    },
-    short: {
-      default: false
     },
     data: {
       required: true
@@ -44,7 +41,6 @@ export default {
     runesData: {
       default: Object
     }
-
   },
   components: {
     MapPredefinedList
@@ -59,24 +55,13 @@ export default {
       skills: null,
       detailsOpen: false,
       isHover:
-        process.env.NODE_ENV === 'development' || isMobliePad() ||
+        process.env.NODE_ENV === 'development' || UA.isMobliePad ||
           this.short ? 'click' : 'hover',
       lock: false
     };
   },
   computed: {
-    tokenList() {
-      return preDefineCompute(this.data.tokenInsts, this.preData.tokenInsts);
-    },
-    tokenCardList() {
-      return preDefineCompute(this.data.tokenCards, this.preData.tokenCards);
-    },
-    characterInstsList() {
-      return preDefineCompute(this.data.characterInsts, this.preData.characterInsts);
-    },
-    characterCardsList() {
-      return preDefineCompute(this.data.characterCards, this.preData.characterCards);
-    },
+    ...mapState(['short']),
   },
   methods: {
     getSrc(key) {

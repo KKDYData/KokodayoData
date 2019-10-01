@@ -42,27 +42,30 @@
             <i class="el-icon-edit-outline"></i>
           </el-button>
 
-          <el-button
-            @click="loadRunes"
-            v-if="selMapDataEx && (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')"
-            :type="!runesMode ? '': 'warning'"
-            :plain="!runesMode"
-            class="runes-mode-button"
-          >突袭</el-button>
-          <el-button
-            @click="laodRouteMap"
-            v-if="selMapDataEx"
-            :type="!showMap ? '': 'warning'"
-            :plain="!showMap"
-            class="runes-mode-button"
-          >地图</el-button>
-          <el-tooltip
-            v-if="mapCode && showMap"
-            class="runes-mode-button"
-            content="白色是路，浅黄是不能放干员的路，蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑"
-          >
-            <i class="el-icon-info"></i>
-          </el-tooltip>
+          <span :style="short ? 'margin-top: 10px; display: block' : ''">
+            <el-button
+              @click="loadRunes"
+              v-if="selMapDataEx && (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')"
+              :type="!runesMode ? '': 'warning'"
+              :plain="!runesMode"
+              class="runes-mode-button"
+            >突袭</el-button>
+            <el-button
+              @click="laodRouteMap"
+              v-if="selMapDataEx"
+              :type="!showMap ? '': 'warning'"
+              :plain="!showMap"
+              class="runes-mode-button"
+            >地图</el-button>
+            <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
+              <el-button type="info">地图说明</el-button>
+              <div slot="content">
+                <p>白色是路，浅黄是不能放干员的路，</p>
+                <p>蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑</p>
+                <p>粉色或者其它颜色是特别功能地板，点击查看效果</p>
+              </div>
+            </el-tooltip>
+          </span>
         </div>
         <div style="margin-left: 5px" ref="map-desc" v-if="selMapDataEx">
           <p style="font-size: 0.9em" v-if="selMapDataEx.dangerLevel !== '-'">
@@ -73,6 +76,11 @@
         </div>
       </div>
       <div class="map-data-wrapper">
+        <el-alert
+          v-if="isEdge && showMap"
+          type="error"
+          :closable="false"
+        >旧版Edge 不支持translateZ, 所以请考虑使用手机或者其它浏览器，或者试下那个新版的Edge</el-alert>
         <div class="map-data-container">
           <div
             :style="!mapCode ? {width: 'auto', 'min-width': '300px'} : {}"
@@ -91,23 +99,26 @@
                 :src="mapPath"
               ></el-image>
               <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
-              <div id="map-canvas-container-up" :class="showMap ? '' : 'map-canvas-bottom'"></div>
+              <div
+                id="map-canvas-container-up"
+                :style="isEdge ? 'transform: perspective(1200px) rotateX(40deg); filter: none' : ''"
+                :class="showMap ? '' : 'map-canvas-bottom'"
+              ></div>
             </div>
             <div class="left-layout"></div>
           </div>
           <enemy-map-info
             v-if="!short && mapCode"
-            :short="short"
             :options="options"
             :dropInfo="detailsDropList"
             :global-buffs="globalBuffs"
+            :wave-time="waveTime"
           ></enemy-map-info>
         </div>
       </div>
       <my-slide-title
         v-if="data"
         :control="mapCode ? true : false"
-        :short="short"
         :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
         ref="layout-control"
       >
@@ -138,7 +149,6 @@
               <p>延迟4s，就是这个敌人2分14秒的时候出发</p>
               <p>数量2，间隔30秒</p>
               <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
-              <p>同名人形Boss只会有一个，但是拆包可能出现两个一样的</p>
             </div>
           </el-tooltip>
         </div>
@@ -146,7 +156,6 @@
         <enemy-data-layout
           :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
           ref="layout"
-          :short="short"
           v-if="!load && data"
           :data="data"
           :map-data="selMapData"
@@ -156,19 +165,18 @@
           @closeRoute="closeRoute"
         ></enemy-data-layout>
       </my-slide-title>
-      <my-slide-title v-if="short && mapCode" title="地图信息" :short="short">
+      <my-slide-title v-if="short && mapCode" title="地图信息">
         <enemy-map-info
           style="margin-top: 20px"
           :show-title="false"
-          :short="short"
           :options="options"
           :global-buffs="globalBuffs"
+          :wave-time="waveTime"
         ></enemy-map-info>
       </my-slide-title>
-      <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设" :short="short">
+      <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设">
         <map-pre-defined
           style="margin-top: 10px"
-          :short="short"
           :pre-data="selMapData.predefines"
           :data="preData"
           :runes-data="runesMode ? selMapData.runes : null"
@@ -178,7 +186,6 @@
       <map-drop-list
         v-if="mapCode && detailsDropList.length > 0"
         style="margin-top: 20px"
-        :short="short"
         :drop-info="detailsDropList"
         :target-stage="mapCode"
       ></map-drop-list>
@@ -207,21 +214,23 @@ Vue.use(Drawer);
 Vue.use(Image);
 
 import {
-  getEnemyList,
-  // getEneAppearMap,
-  isMoblie,
-  getMapData,
-  path,
-  getMapDataListVer,
   changeDesc,
-  getFurn,
   findStage,
-  debounce,
+  preDefineGet,
+  UA,
+} from '../../utils';
+
+import {
+  getEnemyList,
+  getMapData,
+  getMapDataListVer,
   getCharItem,
   getItem,
-  preDefineGet,
-  importSpriteJs
-} from '../../utils';
+  getFurn,
+  importSpriteJs,
+} from '../../utils/fetch';
+
+import { path } from '../../utils/listVer';
 
 import Mode from '../../stats';
 
@@ -262,12 +271,11 @@ export default {
     MapPreDefined
   },
   data() {
+    const browser = UA.Browser;
     return {
-      short: false,
       data: null,
       rowData: [],
       load: false,
-      // appearMap: null,
       drawer: false,
       selectedMap: '',
       selMapData: null,
@@ -282,20 +290,44 @@ export default {
       showMap: false,
       watchTree: false,
       simpleShow: true,
-      drawerSize: '30%',
       preData: null,
       map: null,
       mapUp: null,
+      isEdge: browser.name === 'Edge' && browser.major < 19
     };
   },
-  watch: {
-    stageTree(v) {
-      if (v && this.watchTree) this.loadMap();
-      this.watchTree = false;
-    }
-  },
   computed: {
-    ...mapState(['stageTree']),
+    ...mapState(['stageTree', 'screenWidth', 'short']),
+    drawerSize() {
+      return Math.floor((300 / this.screenWidth) * 100) + '%';
+    },
+    waveTime() {
+      let enemyNum = 0;
+      // 看起来像是简单算个时间，但是实际上，顺便把数量和每波开始的时间加进数据了
+      return this.selMapData ? this.selMapData.waves.reduce((wRes, cur) =>
+        wRes +
+        cur.preDelay +
+        cur.postDelay +
+        cur.fragments.reduce((fRes, cur) => {
+          let fTemp = fRes + cur.preDelay;
+          cur.time = fTemp;
+
+          enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
+            if (el.actionType === 0) return res + el.count;
+            else return res;
+          }, enemyNum);
+
+          fTemp += cur.actions.reduce((res, cur) => {
+            const curTime = cur.preDelay + cur.interval * cur.count;
+            // 找出每波最长的
+            return Math.max(res, curTime);
+          }, 0);
+          return fTemp;
+        }, 0)
+      , 0) : 0;
+
+    },
+
     showPredefine() {
       if (!this.selMapData || !this.selMapData.predefines) return false;
       return Object.values(this.selMapData.predefines).reduce((res, cur) => res += cur.length, 0) > 0;
@@ -358,21 +390,24 @@ export default {
       return this.short ? 'btt' : 'rtl';
     }
   },
+  watch: {
+    stageTree(v) {
+      if (v && this.watchTree) this.loadMap();
+      this.watchTree = false;
+    },
+    preData(v) {
+      if (v && Object.values(v).reduce((res, cur) => res + cur.length, 0) > 0 && this.map) {
+        console.log('load predefinedData');
+        this.map.setData(this.selMapData, this.preData);
+        this.mapUp.setData(this.selMapData, this.preData);
+      }
+    }
+  },
   created() {
     this.linkStart();
   },
-  beforeMount() {
-    this.short = isMoblie();
-  },
-  mounted() {
-    this.drawerSize = Math.floor((300 / document.body.clientWidth) * 100) + '%';
-    window.addEventListener(
-      'resize',
-      debounce(() => {
-        this.drawerSize = Math.floor((300 / document.body.clientWidth) * 100) + '%';
-      }, 1000)
-    );
-  },
+
+
   methods: {
     clearMap() {
       this.data = this.rowData;
@@ -474,14 +509,14 @@ export default {
           this.getPreData();
           this.pTransition();
           if (this.map) {
-            this.map.setData(mapData.mapData, mapData.routes);
-            this.mapUp.setData(mapData.mapData, mapData.routes);
+            this.map.setData(mapData, this.preData);
+            this.mapUp.setData(mapData, this.preData);
           } else {
             const initMap = async () => {
               const { Map } = await import('./draw');
               await this.$nextTick();
-              this.map = new Map('#map-canvas-container', 100, mapData.mapData, mapData.routes);
-              this.mapUp = new Map('#map-canvas-container-up', 100, mapData.mapData, mapData.routes, true);
+              this.map = new Map('#map-canvas-container', 100, mapData, this.preData);
+              this.mapUp = new Map('#map-canvas-container-up', 100, mapData, this.preData, true);
             };
             if (window.spritejs) {
               initMap();
@@ -564,6 +599,7 @@ export default {
         preDefineGet('characterCards', data),
       ];
       const [tokenInsts, tokenCards, characterInsts, characterCards] = await Promise.all(tasks);
+      // preDefineCompute()
       this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
     }
   }
@@ -635,11 +671,12 @@ filter() {
   -webkit-filter: arguments
   -o-filter: arguments
   -ms-filter: arguments
+  filter: arguments
 }
 
 #map-canvas-container-up {
-  transform: perspective(1200px) rotateX(40deg) translate3d(0, 0, calc(var(--height) * 0.05))
-  filter: drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6))
+  filter(drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6)))
+  transform: perspective(1200px) rotateX(40deg) translateZ(calc(var(--height) * 0.05))
   transition: transform 0.7s ease
 }
 

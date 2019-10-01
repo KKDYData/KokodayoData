@@ -79,6 +79,8 @@
 </template>
 
 <script>
+
+// 排列组合
 const arrange = (arr, index = 0, group = []) => {
   const res = [];
   res.push([arr[index]]);
@@ -92,15 +94,16 @@ const arrange = (arr, index = 0, group = []) => {
 
 import {
   sort,
-  getClass_Chinese,
   getProfilePath,
   getClass_icon
 } from '../../utils';
 
-import { starColor } from '../../utils/string';
+import { getClass_Chinese, starColor } from '../../utils/string';
+
+import { mapState } from 'vuex';
+import Vue from 'vue';
 
 import { Card, Tag } from 'element-ui';
-import Vue from 'vue';
 Vue.use(Card);
 Vue.use(Tag);
 
@@ -112,11 +115,11 @@ export default {
     showKey: String,
     tags: Array,
     showTags: Boolean,
-    short: Boolean,
     filterGroups: Object
   },
 
   computed: {
+    ...mapState(['short']),
     path() {
       return process.env.NODE_ENV === 'development' ? '' : Mode;
     },
@@ -139,7 +142,7 @@ export default {
 
           if (Array.isArray(agent[key]))
             agent[key].forEach(tag => {
-              // 服务器数据和前端声明的数据不统一。。。但是嘛，已经做了缓存了，就先这样手动转换看看
+
               let find = group.filters.find(el => el.value === tag);
               if (find) {
                 hitTag.push(find);
@@ -166,7 +169,14 @@ export default {
           }
         }
       });
-      res = sort([...res], (a, b) => {
+      // 滤掉6星
+      res = [...res].map(el => {
+        if (el[0].indexOf('高级资深干员') < 0) {
+          el[1].agents = el[1].agents.filter(el => el.tags[0] < 5);
+        }
+        return el;
+      });
+      res = sort(res, (a, b) => {
         const tempA = a[1].keys;
         const tempB = b[1].keys;
         if (tempA.length === 1 && tempB.length === 1) {

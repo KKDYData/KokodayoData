@@ -32,7 +32,7 @@
           </div>
         </div>
       </div>
-      <p v-if="type === 'FURN'" style="color: #828282">舒适度 {{item.comfort}}</p>
+      <p v-if="type === 'FURN'" style="color: #828282">氛围 {{item.comfort}}</p>
       <p v-if="type === 'FURN'" style="color: #828282">{{item.obtainApproach}}</p>
       <p>{{item.usage}}</p>
       <p>{{item.description}}</p>
@@ -47,7 +47,11 @@
             统计次数
             <el-tooltip placement="top">
               <i class="el-icon-info"></i>
-              <div slot="content">点击可以查看统计的总掉落数/总场次</div>
+              <div slot="content">
+                点击可以查看统计的
+                <color color="hsl(193, 78%, 69%)">总掉落数</color>/
+                <color color="hsl(350, 100%, 79%)">总场次</color>
+              </div>
             </el-tooltip>
           </span>
         </el-divider>
@@ -67,7 +71,11 @@
               统计次数
               <el-tooltip placement="top">
                 <i class="el-icon-info"></i>
-                <div slot="content">点击可以查看统计的总掉落数/总场次</div>
+                <div slot="content">
+                  点击可以查看统计的
+                  <color color="hsl(193, 78%, 69%)">总掉落数</color>/
+                  <color color="hsl(350, 100%, 79%)">总场次</color>
+                </div>
               </el-tooltip>
             </span>
           </el-divider>
@@ -92,41 +100,43 @@
 
 
 <script>
-import { path, findStage, isMobliePad } from '../utils';
-
+import { findStage, UA } from '../utils';
+import { path } from '../utils/listVer';
 import { itemBackground, occPer_chinese, roomType } from '../utils/string';
-import { Popover, Divider, Image, Tooltip } from 'element-ui';
+
 import { mapState } from 'vuex';
 import Vue from 'vue';
+import { Popover, Divider, Image, Tooltip } from 'element-ui';
 Vue.use(Popover);
 Vue.use(Divider);
 Vue.use(Image);
 Vue.use(Tooltip);
 
-import DropLine from './dropLine';
+import DropLine from './DropLine';
+import Color from './Color';
 
 export default {
   components: {
-    DropLine
+    DropLine,
+    Color
   },
   props: {
     item: {
       required: true
     },
     num: Number,
-    short: Boolean,
     type: String,
     targetStage: String
   },
   data() {
     return {
       isHover:
-        process.env.NODE_ENV === 'development' || isMobliePad() ||
+        process.env.NODE_ENV === 'development' || UA.isMobliePad ||
           this.short ? 'click' : 'hover'
     };
   },
   computed: {
-    ...mapState(['stageTree']),
+    ...mapState(['stageTree', 'short']),
     itemBackground() {
       return this.type !== 'FURN' ? itemBackground[this.item.rarity] : {};
     },
@@ -150,7 +160,7 @@ export default {
           const temp = this.dropList.splice(tempRes, 1)[0];
           return temp;
         }
-        // 招不到的情况， 先不改成etCost!!!
+        // 找不到的情况， 先不改成etCost!!!
         const target = this.dropListRow
           .find(el => el.stageId === this.targetStage);
         if (!target) return;

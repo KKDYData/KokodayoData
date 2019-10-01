@@ -36,11 +36,11 @@
             <div class="theme-details-container">
               <p>{{theme.desc}}</p>
               <div>
-                <div class="theme-desc">舒适度：{{groupList[k].comfort}}</div>
+                <div class="theme-desc">氛围：{{groupList[k].comfort}}</div>
                 <div class="theme-desc">总价格：{{groupList[k].price}}</div>
               </div>
               <div v-if="extraComfort[k]">
-                <div class="theme-desc">自动摆放最大舒适度：{{extraComfort[k]}}</div>
+                <div class="theme-desc">自动摆放最大氛围：{{extraComfort[k]}}</div>
               </div>
             </div>
             <div v-if="groupList[k].extraFurn && groupList[k].extraFurn.length">
@@ -49,7 +49,7 @@
             <div v-for="group in groupList[k].lists" :key="group.name">
               <p style="color: #313131; margin-bottom: 0">
                 {{group.name}}
-                <span>套件舒适度： {{group.comfort}}</span>
+                <span>套件氛围： {{group.comfort}}</span>
               </p>
               <furni-list :furnis="group.list"></furni-list>
             </div>
@@ -67,8 +67,9 @@
 <script>
 import MySlideTitle from './components/MySlideTilte';
 import FurniList from './components/FurniLIst';
-import { getThemeList, getFurn, path, bsr } from './utils';
-import { Promise } from 'q';
+import { bsr } from './utils';
+import { getThemeList, getFurn } from './utils/fetch';
+import { path } from './utils/listVer';
 
 import { Loading } from 'element-ui';
 import Vue from 'vue';

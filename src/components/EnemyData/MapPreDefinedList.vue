@@ -24,6 +24,10 @@
                 <span>{{item.position.row}}</span>
               </div>
             </div>
+            <div v-if="item.direction > -1" class="predefine-positon-inner">
+              <div class="status-details-title">方向</div>
+              <div class="predefine-position-item">{{getDirection(item.direction)}}</div>
+            </div>
           </div>
           <char-status
             v-if="showStatus"
@@ -62,6 +66,7 @@ const SkillPanel = () => ({
 
 import { Popover } from 'element-ui';
 import Vue from 'vue';
+import { Directions } from '../../utils/string';
 Vue.use(Popover);
 
 export default {
@@ -78,6 +83,10 @@ export default {
     getSrc(key) {
       return getProfilePath(key);
     },
+    getDirection(k) {
+
+      return Directions[k];
+    }
   },
   computed: {
     myList() {
@@ -116,7 +125,9 @@ export default {
 }
 
 .predefine-item-bg {
-  background: linear-gradient(45deg, black, transparent)
+  background: linear-gradient(45deg, #000a1d, transparent)
+  border: 5px solid #280332
+  box-sizing: border-box
 }
 
 .predefine-position {
@@ -125,6 +136,10 @@ export default {
 
 .predefine-positon-inner {
   display: flex
+}
+
+.predefine-positon-inner + .predefine-positon-inner {
+  margin-top: 10px
 }
 
 .predefine-position-item {

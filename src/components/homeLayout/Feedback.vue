@@ -7,7 +7,7 @@
     >Beta版链接</el-link>
     <p
       style="color: #515151"
-    >反馈群799872783！个人测试浏览器为s10下包括QQ浏览器，及iPadOS(iOS 13)的safari、chrome，Pc，Edge/Chrome</p>
+    >反馈群799872783！个人测试浏览器为s10下包括QQ浏览器，及iPadOS(iOS 13)的Safari、Chrome，Pc的Edge/Chrome</p>
     <div class="feedback-part">
       <my-title title="反馈"></my-title>
       <div class="feedback-info-wrapper">
@@ -31,7 +31,7 @@
       </input-wrapper>
     </div>
     <div class="feedback-part">
-      <my-slide-title :short="short" title="v0.71 Bug修复">
+      <my-slide-title title="v0.71 Bug修复">
         <div>
           <p>1.为了准备可能突然实装的凯尔希，把召唤物加入了豪华午餐。</p>
           <p>2.无人机确实有两个一样的技能，暂时就这样处理吧</p>
@@ -46,7 +46,7 @@
           <p>5.分享和反馈会做一个新的，会在所有地方都出现。</p>
         </div>
       </my-slide-title>
-      <my-slide-title :short="short" title="v0.7 更新内容">
+      <my-slide-title title="v0.7 更新内容">
         <div>
           <h4>1. 敌人图鉴 → 更名为关卡数据</h4>
           <p>(1)补全了除了训练关卡的数据</p>
@@ -82,7 +82,7 @@
           <p>(5)如果之后考虑到服务器安全没问题的话，可能会把这个资料站的代码公布在github。</p>
         </div>
       </my-slide-title>
-      <my-slide-title :short="short" title="筛选说明">
+      <my-slide-title title="筛选说明">
         <div>
           <p>1.选了标签（公招）的Tag之后，筛选模式会发生变化</p>
           <p>2.【职业】、【星级】这些分类名，点击可以取消全部选择。</p>
@@ -105,7 +105,8 @@ import InputWrapper from './InputWrapper';
 import MyTitle from '../MyTitle';
 import MySlideTitle from '../MySlideTilte';
 
-import { submitFeedback } from '../../utils';
+import { submitFeedback } from '../../utils/fetch';
+import { mapState } from 'vuex';
 
 export default {
   components: {
@@ -117,10 +118,6 @@ export default {
     store: {
       required: true
     },
-    short: {
-      required: true,
-      type: Boolean
-    }
   },
   data() {
     return {
@@ -128,6 +125,9 @@ export default {
       id: '',
       debounceLogFb: null
     };
+  },
+  computed: {
+    ...mapState(['short']),
   },
   watch: {
     feedback() {
@@ -225,13 +225,10 @@ export default {
 .feedback-button+.feedback-button {
   margin-right: 10px
 }
-<<<<<<< HEAD
 
 h4 {
   padding-top: 20px
 }
-=======
->>>>>>> bf42468eafb60d5358e74204ccf3d315464e4d89
 </style>
 
 

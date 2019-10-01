@@ -106,7 +106,7 @@
             class="my-form-item-wrapper"
           >
             <div slot="label">
-              <item-viewer class="exp-card" :short="short" :item="card"></item-viewer>
+              <item-viewer class="exp-card" :item="card"></item-viewer>
             </div>
             <el-input-number
               :size="short ? 'medium' : ''"
@@ -158,12 +158,14 @@ import ItemViewer from './ItemViewer';
 import Vue from 'vue';
 import { Form, FormItem, Select, Option, InputNumber, Alert } from 'element-ui';
 import { exp_cards } from '../utils/string';
+import { mapState } from 'vuex';
 Vue.use(Form);
 Vue.use(FormItem);
 Vue.use(Select);
 Vue.use(Option);
 Vue.use(InputNumber);
 Vue.use(Alert);
+
 
 export default {
   data() {
@@ -172,7 +174,7 @@ export default {
         phases: 0,
         phases_now: 0,
         level_now: 1,
-        star: 3,
+        star: 5,
         base: {
           money: 0,
           exp_cards: [0, 0, 0, 0]
@@ -184,8 +186,7 @@ export default {
         level: 10
       },
       data: data,
-      short: false,
-      exp_cards: exp_cards
+      exp_cards: exp_cards,
     };
   },
   components: {
@@ -194,12 +195,9 @@ export default {
   beforeMount() {
     console.log('下面是计算用的数据，可以复制去自己用');
     console.log(this.data);
-    this.short = window.innerWidth < 600 ? true : false;
-    window.addEventListener('resize', () => {
-      this.short = window.innerWidth < 600 ? true : false;
-    });
   },
   computed: {
+    ...mapState(['short']),
     phases() {
       const star = this.char.star;
       if (star < 2) return [0];
