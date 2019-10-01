@@ -1,5 +1,3 @@
-
-
 import {
   charListVer,
   stageListVer,
@@ -10,6 +8,7 @@ import {
 } from './listVer';
 
 import store from '../store';
+
 const setVer = (name, ver) => {
   store.commit(name, new Date(ver).toLocaleString());
 };
@@ -24,7 +23,6 @@ const fetchPut = (url, data) => {
   }).then(res => res.json())
     .catch(err => Promise.reject(err));
 };
-
 
 const submitFeedback = content => {
   return fetchPut('/api/arknights/feedback', content)
