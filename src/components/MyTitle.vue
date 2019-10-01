@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 export default {
   props: {
     title: {
@@ -31,50 +33,50 @@ export default {
     control: {
       default: false
     },
-    short: {
-      default: false
-    },
     customBg: {
       tyep: String,
-      default: "--custombg: #414141"
+      default: '--custombg: #414141'
     }
+  },
+  computed: {
+    ...mapState(['short']),
   }
 };
 </script>
 
 <style lang="stylus" scoped>
 .group-container-title {
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
-  padding-left: 20px;
-  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
-  display: flex;
-  font-size: 0;
-  height: 20px;
-  border-radius: 2px;
-  background: var(--custombg);
+  font-weight: bold
+  color: white
+  margin-bottom: 20px
+  padding-left: 20px
+  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15)
+  display: flex
+  font-size: 0
+  height: 20px
+  border-radius: 2px
+  background: var(--custombg)
 
   .title {
-    line-height: 1;
-    padding-top: 2px;
-    font-size: 18px;
+    line-height: 1
+    padding-top: 2px
+    font-size: 18px
   }
 
   &:hover {
     .control-border {
       &:before, &:after {
-        opacity: 1;
+        opacity: 1
       }
 
       &:before {
-        top: 50%;
-        left: 100%;
+        top: 50%
+        left: 100%
       }
 
       &:after {
-        top: -60%;
-        left: -100%;
+        top: -60%
+        left: -100%
       }
     }
   }
@@ -82,87 +84,87 @@ export default {
   .active {
     .control-border {
       &:before, &:after {
-        opacity: 1;
+        opacity: 1
       }
 
       &:before {
-        top: 70%;
-        left: 80%;
+        top: 70%
+        left: 80%
       }
 
       &:after {
-        top: -60%;
-        left: -80%;
+        top: -60%
+        left: -80%
       }
     }
   }
 }
 
 .control-border {
-  --bwidth: 5px;
+  --bwidth: 5px
 
   &:before, &:after {
-    transition: all 0.3s ease;
-    opacity: 0;
-    position: absolute;
-    content: '';
-    width: 20px;
-    height: 20px;
-    border: #313131 solid;
-    box-sizing: border-box;
+    transition: all 0.3s ease
+    opacity: 0
+    position: absolute
+    content: ''
+    width: 20px
+    height: 20px
+    border: #313131 solid
+    box-sizing: border-box
   }
 
   &:before {
-    top: -60%;
-    left: -100%;
-    border-width: 0 var(--bwidth) var(--bwidth) 0;
+    top: -60%
+    left: -100%
+    border-width: 0 var(--bwidth) var(--bwidth) 0
   }
 
   &:after {
-    top: 70%;
-    left: 100%;
-    border-width: var(--bwidth) 0 0 var(--bwidth);
+    top: 70%
+    left: 100%
+    border-width: var(--bwidth) 0 0 var(--bwidth)
   }
 }
 
 .control-button {
-  // margin-left: 5px
-  margin-right: 30px;
-  position: relative;
-  cursor: pointer;
-  width: 20px;
-  height: 20px;
-  z-index: 1;
+  //margin-left: 5px
+  margin-right: 30px
+  position: relative
+  cursor: pointer
+  width: 20px
+  height: 20px
+  z-index: 1
 
-  // background-color: green
+  //background-color: green
   &:before, &:after {
-    position: absolute;
-    top: calc(50% - 2px);
-    left: -25%;
-    content: '';
-    width: 30px;
-    height: 4px;
-    background-color: #ffffff;
-    transition: all 0.3s;
-    transform-origin: center;
+    position: absolute
+    top: calc(50% - 2px)
+    left: -25%
+    content: ''
+    width: 30px
+    height: 4px
+    background-color: #ffffff
+    transition: all 0.3s
+    transform-origin: center
   }
 }
 
 .active.control-button:before {
-  transform: rotate(90deg);
+  transform: rotate(90deg)
 }
 
 .active.control-button:after {
-  transform: scaleX(0.8);
+  transform: scaleX(0.8)
 }
 
 @media screen and (max-width: 700px) {
   .group-container-title {
-    padding-left: 7vw;
+    padding-left: 7vw
   }
 
   .control-button {
-    margin-left: auto;
+    margin-left: auto
   }
 }
 </style>

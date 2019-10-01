@@ -34,10 +34,11 @@
 <script>
 import Vue from 'vue';
 import { Button } from 'element-ui';
+import { mapState } from 'vuex';
 Vue.use(Button);
 
 export default {
-  props: ['filters', 'short', 'label', 'single'],
+  props: ['filters', 'label', 'single'],
   data() {
     return {
       lists: this.filters.map(obj => {
@@ -56,6 +57,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['short']),
     allChosed() {
       if (!this.lists) return;
       const l = this.lists.filter(key => key.chosed).length;

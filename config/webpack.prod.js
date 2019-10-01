@@ -31,11 +31,6 @@ module.exports = merge(common, {
           name: 'vendor_vue',
           chunks: 'all'
         },
-        // vendors: {
-        //   test: /[\\/]node_modules[\\/](element-ui)[\\/]/,
-        //   name: 'vendor_element',
-        //   chunks: 'async'
-        // },
         default: {
           minChunks: 2,
           priority: -20,

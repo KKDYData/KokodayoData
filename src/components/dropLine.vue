@@ -8,7 +8,11 @@
     >{{data.stageCode}}</span>
     <span class="item-occper">{{data.occPer? occper(data.occPer) : '概率掉落'}}</span>
     <el-tooltip v-if="data.times" class="item-dropInfo" placement="top">
-      <div slot="content">{{data.times}}/{{data.quantity}}→{{data.rate}}%</div>
+      <div slot="content">
+        <color color="hsl(350, 100%, 79%)">{{data.times}}</color>/
+        <color color="hsl(193, 78%, 69%)">{{data.quantity}}</color>
+        →{{data.rate}}%
+      </div>
       <span v-if="data.dropCost">{{data.dropCost}} 理智/个</span>
       <span v-else>{{data.dropCnt}}个/{{data.etCost}}票</span>
     </el-tooltip>
@@ -22,7 +26,12 @@ Vue.use(Tooltip);
 
 import { occPer_chinese } from '../utils/string';
 
+import Color from './Color';
+
 export default {
+  components: {
+    Color
+  },
   props: {
     data: {
       required: true
@@ -47,6 +56,11 @@ export default {
 .item-dropInfo {
   float: right
   cursor: pointer
+}
+
+.item-data-name {
+  min-width: 50px
+  display: inline-block
 }
 
 .item-occper {

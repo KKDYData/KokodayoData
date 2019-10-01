@@ -188,7 +188,8 @@
 </template>
 
 <script>
-import { path, webpOk, isMobliePad } from '../../utils';
+import { UA, } from '../../utils';
+import { path } from '../../utils/listVer';
 import {
   Carousel,
   CarouselItem,
@@ -223,9 +224,7 @@ export default {
     list: {
       required: true
     },
-    short: {
-      required: true
-    },
+
     words: {
       required: true
     }
@@ -254,13 +253,13 @@ export default {
       setWords: normalSetWords,
       activeSetPane: 'default',
       path,
-      isMobliePad: isMobliePad()
+      isMobliePad: UA.isMobliePad
     };
   },
   computed: {
-    ...mapState(['extraSkins']),
+    ...mapState(['extraSkins', 'short']),
     style() {
-      return !webpOk
+      return !UA.ok
         ? '_optimized.png'
         : '_optimized.png?x-oss-process=style/small-test';
     },
