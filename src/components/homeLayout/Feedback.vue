@@ -225,10 +225,13 @@ export default {
 .feedback-button+.feedback-button {
   margin-right: 10px
 }
+<<<<<<< HEAD
 
 h4 {
   padding-top: 20px
 }
+=======
+>>>>>>> bf42468eafb60d5358e74204ccf3d315464e4d89
 </style>
 
 
