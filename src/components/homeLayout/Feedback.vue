@@ -1,10 +1,6 @@
 <template>
   <div style="padding: 0 20px">
-    <el-link
-      style="vertical-align: baseline;"
-      href="https://somedata.top/ArknightsBeta"
-      type="info"
-    >Beta版链接</el-link>
+    <el-link href="https://somedata.top/ArknightsBeta" type="info">Beta版链接</el-link>
     <p
       style="color: #515151"
     >反馈群799872783！个人测试浏览器为s10下包括QQ浏览器，及iPadOS(iOS 13)的Safari、Chrome，Pc的Edge/Chrome</p>

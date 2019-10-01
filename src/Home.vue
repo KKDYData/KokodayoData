@@ -1,12 +1,9 @@
 <template>
   <div class="home-wrapper">
-    <el-alert
-      v-if="!isBeta"
-      show-icon
-      type="success"
-      title="你现在访问的是稳定版"
-      description
-    >源码已在Github公开，欢迎Star和Pr。 如果看不到图，请清空缓存。</el-alert>
+    <el-alert v-if="!!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
+      <div>如果看不到图，请清空缓存。</div>
+      <el-link type="warning" href="https://github.com/odex21/ArknightsData">源码已在Github公开，欢迎Star</el-link>
+    </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
         这是Beta版,随缘修bug。Dps柱状图准备重做，请自行分辨是否正确。
