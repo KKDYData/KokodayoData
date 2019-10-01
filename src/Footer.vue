@@ -6,7 +6,10 @@
     <li>
       <span>材料统计：企鹅物流</span>
     </li>
+    <li></li>
+
     <li>
+      QQ:736693980 |
       <span>
         <el-link href="https://github.com/odex21/ArknightsData" target="_blank">源码</el-link>
         <svg
@@ -23,10 +26,6 @@
           />
         </svg>
       </span>
-    </li>
-
-    <li>
-      <span>联系我：odex_2100@outlook.com | QQ:736693980</span>
     </li>
     <li>
       <span>网站最后更新时间: {{webVer}}</span>
