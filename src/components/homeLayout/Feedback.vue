@@ -8,6 +8,7 @@
     <p
       style="color: #515151"
     >反馈群799872783！个人测试浏览器为s10下包括QQ浏览器，及iPadOS(iOS 13)的Safari、Chrome，Pc的Edge/Chrome</p>
+    <p style="color: #515151">在Github提Issue也行</p>
     <div class="feedback-part">
       <my-title title="反馈"></my-title>
       <div class="feedback-info-wrapper">
