@@ -205,45 +205,45 @@ const tileInfo = {
   'tile_bigforce': {
     'name': '特种战术点',
     'description': '置于其中的我方单位在推动或拉动敌方单位时力度增大',
-    color: 'hsl(342, 98%, 67%)'
+    color: 'hsla(342, 98%, 67%, 1)'
 
   },
   'tile_def': {
     'name': '防御符文',
     'description': '置于其中的干员获得额外的防御力',
-    color: 'hsl(342, 98%, 67%)'
+    color: 'hsla(342, 98%, 67%, 1)'
   },
   'tile_fence': {
     'name': '围栏',
     'description': '可放置近战单位，不可以通行',
-    color: 'hsl(342, 98%, 67%)'
+    color: 'hsla(342, 98%, 67%, 1)'
   },
   'tile_healing': {
     'name': '医疗符文',
     'description': '置于其中的干员会持续恢复生命',
-    color: 'hsl(342, 98%, 67%)'
+    color: 'hsla(342, 98%, 67%, 1)'
   },
 
   'tile_rcm_crate': {
     'name': '推荐障碍放置点',
     'description': 'PRTS推荐的障碍物放置点',
-    color: 'hsl(342, 98%, 67%)'
+    color: 'hsla(342, 98%, 67%, 1)'
   },
   'tile_rcm_operator': {
     'name': '推荐干员放置点',
     'description': 'PRTS推荐的战术放置点',
-    color: 'hsl(342, 98%, 67%)'
+    color: 'hsla(342, 98%, 67%, 1)'
   },
   'tile_shallowwater': {
     'name': '浅水区',
     'description': '代表岸边的水地形',
-    color: 'hsl(342, 98%, 67%)'
+    color: 'hsla(342, 98%, 67%, 1)'
   },
 
   'tile_corrosion': {
     'name': '腐蚀地面',
     'description': '置于其中的干员防御力减半',
-    color: 'hsl(179, 18%, 42%)',
+    color: 'hsla(179, 18%, 42%, 1)',
 
   },
   'tile_deepwater': {
@@ -256,7 +256,7 @@ const tileInfo = {
   'tile_end': {
     'name': '保护目标',
     'description': '蓝色目标点，敌方进入后会减少此目标点的耐久',
-    color: 'rgb(103, 203, 67)'
+    color: 'hsl(189, 96%, 37%)'
 
   },
 
@@ -269,7 +269,7 @@ const tileInfo = {
   'tile_flystart': {
     'name': '空袭侵入点',
     'description': '敌方飞行单位会从此处进入战场',
-    color: 'rgb(255, 61, 61)'
+    color: 'hsl(0, 95%, 61%)'
 
   },
   'tile_forbidden': {
@@ -281,7 +281,7 @@ const tileInfo = {
   'tile_gazebo': {
     'name': '防空符文',
     'description': '置于其中的干员攻击速度略微下降，但在攻击空中单位时攻击力大幅度提升',
-    color: 'hsl(48, 83%, 57%)',
+    color: 'hsla(48, 83%, 57%, 1)',
 
   },
   'tile_grass': {
@@ -293,7 +293,7 @@ const tileInfo = {
   'tile_hole': {
     'name': '地穴',
     'description': '危险的凹陷地形或地面破洞，经过的敌人会摔落至底部直接死亡',
-    color: 'hsl(219, 57%, 14%)'
+    color: 'hsla(219, 57%, 14%, 1)'
 
   },
   'tile_infection': {

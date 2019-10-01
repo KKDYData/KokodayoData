@@ -2,6 +2,7 @@ import Vuex from 'vuex';
 import Vue from 'vue';
 import actions from './action';
 import { UA } from '../utils';
+import { charListVer } from '../utils/listVer';
 
 
 Vue.use(Vuex);
@@ -10,7 +11,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    listVer: new Date(1568990623279).toLocaleString(),
+    listVer: new Date(charListVer.toString().split('').reverse().join('')).toLocaleString(),
     pageVer: '',
     enemyVer: '',
     apperMapVer: '',
