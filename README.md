@@ -23,3 +23,9 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 
  1. 因为我还不怎么会写Markdown，所以文档更新可能有点慢。
  2. 这其实是第一个用VUE写的个人项目，（虽然有个E7的前身），所以也非常欢迎指出问题。
+
+
+### 数据来源
+
+1. <https://github.com/Perfare/ArknightsGameData>
+2. <https://penguin-stats.io/>

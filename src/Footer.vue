@@ -8,7 +8,7 @@
     </li>
     <li>
       <span>
-        数据来源：Perfare
+        <el-link href="https://github.com/odex21/ArknightsData" target="_blank">源码</el-link>
         <svg
           height="24"
           class="octicon octicon-mark-github"
@@ -39,8 +39,11 @@
 
 <script>
 import { mapState } from 'vuex';
+import Vue from 'vue';
+
 import mode from './stats';
-console.log(mode);
+import { Link } from 'element-ui';
+Vue.use(Link);
 
 // eslint-disable-next-line no-undef
 const baseUrl = PRODUCTION ? mode + '/' : '/';
