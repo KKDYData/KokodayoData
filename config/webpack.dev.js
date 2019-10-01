@@ -12,7 +12,6 @@ module.exports = merge(common, {
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(false),
       VERSION: JSON.stringify(new Date()),
-      // 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
     })
 
   ],
@@ -24,9 +23,6 @@ module.exports = merge(common, {
       '/api': 'http://127.0.0.1:8444',
     },
     host: '0.0.0.0',
-    allowedHosts: [
-      '192.168.31.179'
-    ],
     historyApiFallback: {
       rewrites: [
         {
@@ -34,26 +30,18 @@ module.exports = merge(common, {
             return '';
           }
         },
-        //详情页面
         {
           from: /^\/details\/(?!(char|token)).*$/, to: context => {
-            console.log(context.parsedUrl.path.slice(9));
             return '/' + context.parsedUrl.path.slice(9);
           }
         },
         {
           from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|a00).*$/, to: context => {
-            console.log(context.parsedUrl.path);
-
-            console.log(context.parsedUrl.path.slice(11) + ' ttt');
-            // return context.parsedUrl.path;
             return '/' + context.parsedUrl.path.slice(11);
           }
         },
         {
           from: /^\/enemydata\/(main|hard|camp)?/, to: context => {
-            console.log(context.parsedUrl.path);
-            console.log(context.parsedUrl.path.slice(11) + ' eee');
             return '/index.html';
           }
         },
@@ -64,14 +52,12 @@ module.exports = merge(common, {
         },
         {
           from: /^\/(computer|enemydata|customtheme)$/, to: context => {
-            console.log(context.parsedUrl.path);
             return '/index.html';
           }
         },
 
         {
           from: /^\/.*$/, to: context => {
-            console.log(context.parsedUrl.path + '???????');
             return '/' + context.parsedUrl.path;
           }
         },
