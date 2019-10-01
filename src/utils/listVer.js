@@ -1,4 +1,4 @@
-const charListVer = 1568990623279;
+const charListVer = 9494734989651;
 const stageListVer = 1569786667996;
 const enemyListVer = 1566883495135;
 
