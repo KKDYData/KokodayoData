@@ -142,7 +142,7 @@ export default {
 
           if (Array.isArray(agent[key]))
             agent[key].forEach(tag => {
-              // 服务器数据和前端声明的数据不统一。。。但是嘛，已经做了缓存了，就先这样手动转换看看
+
               let find = group.filters.find(el => el.value === tag);
               if (find) {
                 hitTag.push(find);
@@ -169,7 +169,14 @@ export default {
           }
         }
       });
-      res = sort([...res], (a, b) => {
+      // 滤掉6星
+      res = [...res].map(el => {
+        if (el[0].indexOf('高级资深干员') < 0) {
+          el[1].agents = el[1].agents.filter(el => el.tags[0] < 5);
+        }
+        return el;
+      });
+      res = sort(res, (a, b) => {
         const tempA = a[1].keys;
         const tempB = b[1].keys;
         if (tempA.length === 1 && tempB.length === 1) {

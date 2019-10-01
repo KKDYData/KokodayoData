@@ -2,6 +2,7 @@ import { Scene, Path, Label } from 'spritejs';
 import PF from 'pathfinding';
 import { Directions, blockKeys, tileInfo } from '../../utils/string';
 import { Notification } from 'element-ui';
+import { UA } from '../../utils';
 
 console.log('draw.js');
 
@@ -13,30 +14,47 @@ const mapReact = {
   lineCap: 'round',
 };
 
+let noti, notiTime;
 
 const task = (mapBlock, mapData, heightType) => {
   return () => {
     let rightTrans = null;
-    Notification({
-      ...mapData,
-      position: 'top-right',
-      type: 'warning'
-    });
+    notiTime = +new Date();
+    if (!noti || noti.closed) {
+      noti = Notification({
+        ...mapData,
+        position: UA.Browser.name === 'Mobile Safari' ? 'bottom-right' : 'top-right',
+        type: 'warning',
+        duration: 0
+      });
+    } else {
+      noti.closed = false;
+      noti.message = mapData.message;
+      noti.title = mapData.title;
+    }
     rightTrans = mapBlock.transition(0.7);
     rightTrans.attr({
       fillColor: 'rgba(92, 222, 255, 0.5)'
     });
     setTimeout(() => {
+      // 颜色强制复原
       mapBlock.attr({ fillColor: heightType !== 1 ? 'rgba(0, 0, 0, 0)' : mapData.color });
-    }, 2000);
+      if (UA.isMobliePad) {
+        if (+ new Date - notiTime > 3000) {
+          noti.close();
+        }
+      }
+    }, 3000);
     mapBlock.on('mouseleave', (evt) => {
       rightTrans.reverse();
+      noti.close();
     });
   };
 };
 
 
 const getBlockData = (data, key, blackboard) => {
+  // 预设已经下场的地板
   if (data) {
     return {
       color: 'rgba(230,230,230, 0.5)'
@@ -78,7 +96,12 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
 
   np.forEach(el => {
     const { col, row } = el.position;
-    myMap[myMap.length - 1 - row][col].data = el;
+    const target = myMap[myMap.length - 1 - row][col];
+    if(target){
+      target.data = el;
+    }else {
+      console.log('数据异常');
+    }
   });
 
   myMap.forEach((el) => el.forEach(({ rc, heightType, data, key, blackboard }) => {
@@ -116,17 +139,19 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
           fillColor: '#313131',
           font: 'bold 80px Arial',
         };
+        // 画箭头和它的序号
         if (data.alias) {
           temp = data.alias.split('#');
           if (temp[1]) id = temp[1];
           else id = '';
-          // 画箭头
           arrow = true;
         } else if (data.inst) {
           id = data.name;
           idConfig.font = 'bold 25px Arial';
         }
-        idConfig.pos = id.length > 1 ? [labelPos[0] - 20, labelPos[1] + 25] : labelPos;
+        // 大于2是扫描器这类的东西
+        idConfig.pos = id.length > 1 ? id.length > 2 ? [labelPos[0] - 20, labelPos[1] + 25]
+          : [labelPos[0] - 20, labelPos[1]] : labelPos;
         const idLabel = new Label(id);
         idLabel.attr(idConfig);
         paper.layer('map').append(idLabel);
@@ -144,49 +169,34 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
       }
     };
 
-    if (!top && heightType !== 1) {
-      mapBlock.attr({
-        pos,
-        lineWidth: 1,
-        path: mapReact,
-        fillColor,
-        strokeColor: 'rgb(64, 170, 191)'
-      });
-      paper.layer('map').append(mapBlock);
-      writeLabel();
+    const mapBlockConfig = {
+      pos,
+      lineWidth: 1,
+      path: mapReact,
+      fillColor,
+      strokeColor: 'rgb(64, 170, 191)'
+    };
+    let isWL = false;
+
+    if (!top && heightType !== 1 || top && heightType === 1) {
+      isWL = true;
     } else if (!top) {
-      mapBlock.attr({
-        pos,
-        lineWidth: 1,
-        path: mapReact,
-        fillColor: '#414141',
-        strokeColor: 'rgb(64, 170, 191)'
-      });
-      paper.layer('map').append(mapBlock);
-    } else if (top && heightType === 1) {
-      mapBlock.attr({
-        pos,
-        lineWidth: 1,
-        path: mapReact,
-        fillColor,
-        strokeColor: 'rgb(64, 170, 191)'
-      });
-      paper.layer('map').append(mapBlock);
-      writeLabel();
+      // 高层下面的地板
+      mapBlockConfig.fillColor = '#414141';
     } else {
       // 高层代理时间的地板
-      mapBlock.attr({
-        pos,
-        fillColor: 'rgba(0, 0, 0, 0)',
-        path: mapReact,
-        strokeColor: 'rgba(64, 170, 191, 0)'
-      });
-      paper.layer('map').append(mapBlock);
+      mapBlockConfig.fillColor = 'rgba(0, 0, 0, 0)';
+      mapBlockConfig.strokeColor = null;
     }
+    mapBlock.attr(mapBlockConfig);
+    paper.layer('map').append(mapBlock);
+    if (isWL) writeLabel();
 
     if (top) {
-      mapBlock.on('mouseenter', data ? task(mapBlock, { color: 'rgba(230,230,230, 0.5)', title: data.name, message: `等级${data.inst.level}${branches ? '  |  由敌人召唤，出现时间看梅菲斯特的技能' : ''}` }, heightType)
-        : task(mapBlock, typeData, heightType));
+      const t = data ? task(mapBlock, { color: 'rgba(230,230,230, 0.5)', title: data.name, message: `等级${data.inst.level}${branches ? '  |  由敌人召唤，出现时间看梅菲斯特的技能' : ''}` }, heightType)
+        : task(mapBlock, typeData, heightType);
+      mapBlock.on('click', t);
+      mapBlock.on('mouseenter', t);
     }
   }));
   return myMap;
