@@ -354,7 +354,6 @@ export default {
           });
         }
       });
-
       return this.status[lv].map(el => {
         if (res[el[2]]) {
           return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10];

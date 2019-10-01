@@ -130,7 +130,6 @@ export default {
     data: {
       required: true
     },
-
     mapData: {
       type: Object
     },
