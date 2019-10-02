@@ -433,6 +433,7 @@ export default {
       }
       this.pTransition();
     },
+    // 让每个地图的文字说明高度变化地更好看的动画函数，需要先设置好pTranisitionTemp，保存原先的高度
     async pTransition() {
       const target = this.$refs['map-title-part'];
       target.style.height = 'auto';
@@ -445,15 +446,16 @@ export default {
       }, 50);
     },
     async loadMap(map) {
-      const parent = map || this.$route.params.map; //|| 'main_05-10';
+      const parent = map || this.$route.params.map;
       if (!parent || !this.stageTree) return;
       const target = findStage(parent, this.stageTree);
-
-      let shortCode = target.path.replace('weekly', 'wk').replace('promote', 'pro');
-      this.mapCode = shortCode;
-      if (target) this.choseMap({ ...target, first: true });
+      if (target) {
+        this.mapCode = target.path.replace('weekly', 'wk').replace('promote', 'pro');
+        this.choseMap(target);
+      } else {
+        console.log('没有这个地图，路由失败');
+      }
     },
-
     // 选择章节
     changeMapCode(data) {
       if (!data.children) {
@@ -467,8 +469,7 @@ export default {
         let codeFromPath = data.path;
         let shortCode = codeFromPath.replace('weekly', 'wk').replace('promote', 'pro');
         this.mapCode = shortCode;
-        if (!data.first) this.$router.push(this.path + shortCode);
-        else console.log('first? ');
+        this.$router.push(this.path + shortCode);
 
         setTimeout(() => {
           this.load = false;
@@ -477,7 +478,7 @@ export default {
         }, 500);
       }
     },
-    async choseMap(data, node) {
+    async choseMap(data) {
       const [mapData, exData] = await Promise.all([
         getMapData('level_' + data.path.replace('kc', 'killcost')),
         getMapDataListVer(this.mapCode)
@@ -565,7 +566,6 @@ export default {
         this.mapUp.deleteRoute(index);
       }
       else Message('地图数据还没加载完成，等一会再看看吧');
-
     },
     linkStart() {
       return this.getData().then(data => {
