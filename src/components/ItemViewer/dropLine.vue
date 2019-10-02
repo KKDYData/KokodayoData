@@ -24,9 +24,9 @@ import { Tooltip } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Tooltip);
 
-import { occPer_chinese } from '../utils/string';
+import { occPer_chinese } from '../../utils/string';
 
-import Color from './Color';
+import Color from '../Color';
 
 export default {
   components: {

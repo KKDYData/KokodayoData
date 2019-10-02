@@ -16,12 +16,12 @@
     >
       <template slot="title">
         <span>章节选择</span>
-        <el-button v-if="selMapData" type="danger" size="small" @click="clearMap">取消选择</el-button>
+        <el-button v-if="selMapData" type="danger" size="small" @click="$router.push(path)">取消选择</el-button>
       </template>
       <div class="chapter-wrapper">
         <el-tree
           ref="chapter-tree"
-          @node-click="choseMap"
+          @node-click="changeMapCode"
           :data="stageTree"
           accordion
           node-key="path"
@@ -410,6 +410,7 @@ export default {
 
   methods: {
     clearMap() {
+      this.$refs['chapter-selecter'].closeDrawer();
       this.data = this.rowData;
       this.mapCode = '';
       this.selectedMap = '';
@@ -418,14 +419,8 @@ export default {
       this.runesMode = false;
       this.preData = null;
       this.pTransition();
-      this.$router.push(this.path);
-      setTimeout(() => {
-        // pc端关闭会反复弹出，怀疑是enemy-layout大幅变化导致pc有这个问题,移动端没事
-        this.$refs['chapter-selecter'].closeDrawer();
-      }, 100);
     },
     async loadRunes() {
-      // const target = this.$refs['map-title-part'];
       this.pTranisitionTemp = window.getComputedStyle(
         this.$refs['map-title-part']
       ).height;
@@ -449,80 +444,86 @@ export default {
         target.style.height = targetHeight;
       }, 50);
     },
-    async loadMap() {
-      const parent = this.$route.params.map; //|| 'main_05-10';
+    async loadMap(map) {
+      const parent = map || this.$route.params.map; //|| 'main_05-10';
       if (!parent || !this.stageTree) return;
-      console.log(parent);
       const target = findStage(parent, this.stageTree);
+
+      let shortCode = target.path.replace('weekly', 'wk').replace('promote', 'pro');
+      this.mapCode = shortCode;
       if (target) this.choseMap({ ...target, first: true });
     },
-    async choseMap(data, node) {
-      this.pTranisitionTemp = window.getComputedStyle(
-        this.$refs['map-title-part']
-      ).height;
 
+    // 选择章节
+    changeMapCode(data) {
       if (!data.children) {
+
+        this.$refs['chapter-selecter'].closeDrawer();
+        this.load = true;
+        this.mapPicLoad = true;
+
         this.runesMode = false;
         this.selMapNode = data;
         let codeFromPath = data.path;
         let shortCode = codeFromPath.replace('weekly', 'wk').replace('promote', 'pro');
         this.mapCode = shortCode;
-        this.$refs['chapter-selecter'].closeDrawer();
-        this.load = true;
-        this.mapPicLoad = true;
-        // 不用路由守卫了,改起来过于麻烦
         if (!data.first) this.$router.push(this.path + shortCode);
         else console.log('first? ');
-
-        const [mapData, exData] = await Promise.all([
-          getMapData('level_' + codeFromPath.replace('kc', 'killcost')),
-          getMapDataListVer(shortCode)
-        ]).catch(err => {
-          Message.error('获取数据失败');
-          return [];
-        });
-
 
         setTimeout(() => {
           this.load = false;
           this.mapPicLoad = false;
           this.$refs['layout-control'].click(true);
         }, 500);
+      }
+    },
+    async choseMap(data, node) {
+      const [mapData, exData] = await Promise.all([
+        getMapData('level_' + data.path.replace('kc', 'killcost')),
+        getMapDataListVer(this.mapCode)
+      ]).catch(err => {
+        Message.error('获取数据失败');
+        return [];
+      });
 
-        if (mapData) {
-          exData.stageDropInfo &&
-            this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
-              data => (this.detailsDropList = data)
-            );
+      if (mapData) {
+        this.pTranisitionTemp = window.getComputedStyle(
+          this.$refs['map-title-part']
+        ).height;
 
-          if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
-          this.data = Object.entries(this.rowData).reduce((res, [k, v]) => {
-            const target = mapData.enemyDbRefs.find(el => el.id === k);
-            if (target) {
-              res[k] = Object.assign({}, v, target);
-              return res;
-            } else return res;
-          }, {});
-          this.selectedMap = data.label;
-          this.selMapData = mapData;
-          this.selMapDataEx = exData;
-          this.getPreData();
-          this.pTransition();
-          if (this.map) {
-            this.map.setData(mapData, this.preData);
-            this.mapUp.setData(mapData, this.preData);
+        exData.stageDropInfo &&
+          this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
+            data => (this.detailsDropList = data)
+          );
+
+        if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
+        this.data = Object.entries(this.rowData).reduce((res, [k, v]) => {
+          const target = mapData.enemyDbRefs.find(el => el.id === k);
+          if (target) {
+            res[k] = Object.assign({}, v, target);
+            return res;
+          } else return res;
+        }, {});
+        this.selectedMap = data.label;
+        this.selMapData = mapData;
+        this.selMapDataEx = exData;
+        this.getPreData();
+        this.pTransition();
+
+        if (this.map) {
+          this.map.setData(mapData, this.preData);
+          this.mapUp.setData(mapData, this.preData);
+        } else {
+          const initMap = async () => {
+            const { Map } = await import('./draw');
+            await this.$nextTick();
+            this.map = new Map('#map-canvas-container', 100, mapData, this.preData);
+            this.mapUp = new Map('#map-canvas-container-up', 100, mapData, this.preData, true);
+          };
+          if (window.spritejs) {
+            initMap();
           } else {
-            const initMap = async () => {
-              const { Map } = await import('./draw');
-              await this.$nextTick();
-              this.map = new Map('#map-canvas-container', 100, mapData, this.preData);
-              this.mapUp = new Map('#map-canvas-container-up', 100, mapData, this.preData, true);
-            };
-            if (window.spritejs) {
-              initMap();
-            } else {
-              importSpriteJs(initMap);
-            }
+            importSpriteJs(initMap);
           }
         }
       }
@@ -590,6 +591,7 @@ export default {
       );
     },
     async getPreData() {
+      this.preData = null;
       const data = this.selMapData.predefines;
       if (!data) return;
       const tasks = [
@@ -599,7 +601,6 @@ export default {
         preDefineGet('characterCards', data),
       ];
       const [tokenInsts, tokenCards, characterInsts, characterCards] = await Promise.all(tasks);
-      // preDefineCompute()
       this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
     }
   }

@@ -100,9 +100,9 @@
 
 
 <script>
-import { findStage, UA } from '../utils';
-import { path } from '../utils/listVer';
-import { itemBackground, occPer_chinese, roomType } from '../utils/string';
+import { findStage, UA } from '../../utils';
+import { path } from '../../utils/listVer';
+import { itemBackground, occPer_chinese, roomType } from '../..//utils/string';
 
 import { mapState } from 'vuex';
 import Vue from 'vue';
@@ -113,7 +113,7 @@ Vue.use(Image);
 Vue.use(Tooltip);
 
 import DropLine from './DropLine';
-import Color from './Color';
+import Color from '../Color';
 
 export default {
   components: {
@@ -278,7 +278,7 @@ export default {
    box-sizing: border-box
    border-radius: 3px
    box-shadow: inset 0px 6px 13px 0px #4a4a4a
-   background: url('../assets/bbbj_optimized.png')
+   background: url('../../assets/bbbj_optimized.png')
    background-size: cover
    /*overflow: visible;*/
    padding: 9px 0

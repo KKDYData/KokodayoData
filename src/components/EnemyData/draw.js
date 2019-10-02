@@ -96,11 +96,15 @@ const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
 
   np.forEach(el => {
     const { col, row } = el.position;
-    const target = myMap[myMap.length - 1 - row][col];
-    if (target) {
-      target.data = el;
-    } else {
+    if (!myMap[myMap.length - 1 - row]) {
       console.log('数据异常');
+    } else {
+      const target = myMap[myMap.length - 1 - row][col];
+      if (target) {
+        target.data = el;
+      } else {
+        console.log('数据异常');
+      }
     }
   });
 
