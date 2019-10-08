@@ -74,7 +74,7 @@ const getBlockData = (data, key, blackboard) => {
 };
 
 
-const spwanMap = ({ map, tiles, branches }, np, paper, top) => {
+const spawnMap = ({ map, tiles, branches }, np, paper, top) => {
   const myMap = map.map((el, row) => el.map((i, col) => {
     const { tileKey: key, passableMask, heightType, buildableType, blackboard } = tiles[i];
     // 只剩下计算是否同行的作用了
@@ -221,11 +221,7 @@ class Map {
   grid
   map
   mapData
-  finder = new PF.AStarFinder({
-    allowDiagonal: true,
-    dontCrossCorners: true,
-    heuristic: PF.Heuristic.manhattan
-  });
+
   paper
   mapRadio
   top
@@ -349,7 +345,7 @@ class Map {
     this.mapData = mapData;
 
     this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
-    this.map = spwanMap({ ...mapData, branches }, np, this.paper, this.top);
+    this.map = spawnMap({ ...mapData, branches }, np, this.paper, this.top);
   }
   setData(mapData, preData) {
     this.clearRoutes();
@@ -361,7 +357,7 @@ class Map {
   }
 
 
-  spwanPathAlpha(path) {
+  spawnPathAlpha(path) {
     // console.log(path);
     const temp = path.map((cur, index, arr) => {
       const [x, y] = cur;
@@ -385,6 +381,18 @@ class Map {
   addRoutes(route, id, color) {
     this.runningRoutes.add(id);
     const height = this.grid.height - 1;
+    const finder = new PF.BestFirstFinder({
+      allowDiagonal: true,
+      dontCrossCorners: true,
+      heuristic: function (dx, dy) {
+        const { x, y } = route.spawnRandomRange;
+        if (x > 0 && y > 0) {
+          return Math.max(dx * x, dy * (1 + y));
+        } else {
+          return Math.max(dx, dy);
+        }
+      }
+    });
 
     const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
     const pathPoints = checkpoints.filter(el => {
@@ -421,9 +429,9 @@ class Map {
 
       const ttGrid = tempGrid.clone();
 
-      // 不拐弯直走逻辑，危险，待测试。检测两点之间是都有便宜，如果是，就不寻路
-      const path = reachOffset && cur.reachOffset && (reachOffset.x !== 0 || reachOffset.y !== 0) && (cur.reachOffset.x !== 0 || cur.reachOffset.y !== 0) ?
-        [[col, row], [nCol, nRow]] : PF.Util.compressPath(this.finder.findPath(col, row, nCol, nRow, ttGrid));
+      // 不拐弯直走逻辑，危险，待测试。检测两点之间是都有偏移，如果是，就不寻路
+      const path = route.allowDiagonalMove && (Math.abs(nCol - col) < 2 || Math.abs(nRow - row) < 2) ? //reachOffset && cur.reachOffset && (reachOffset.x !== 0 || reachOffset.y !== 0) && (cur.reachOffset.x !== 0 || cur.reachOffset.y !== 0) ?
+        [[col, row], [nCol, nRow]] : PF.Util.compressPath(finder.findPath(col, row, nCol, nRow, ttGrid));
 
 
       if (path.length > 0 && reachOffset) {
@@ -447,7 +455,7 @@ class Map {
 
           const next = arr[index + 1];
           const len = Math.sqrt((x - next[0]) ** 2 + (y - next[1]) ** 2);
-          res.push({ path: this.spwanPathAlpha([[x, y], next]), time: len * 200 });
+          res.push({ path: this.spawnPathAlpha([[x, y], next]), time: len * 200 });
         }
       });
       return res;

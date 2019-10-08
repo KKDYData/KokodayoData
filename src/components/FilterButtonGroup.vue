@@ -26,7 +26,6 @@
         >{{key.text}}</el-button>
       </div>
     </div>
-    <!-- style="margin-left: 0" -->
   </div>
 </template>
 
