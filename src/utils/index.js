@@ -65,6 +65,38 @@ function sort(array, less) {
   return array;
 }
 
+class TaskQueue {
+  constructor(concurrency, finalTask = () => { }, queue = []) {
+    this.concurrency = concurrency;
+    this.running = 0;
+    this.queue = queue;
+    this.finalTask = finalTask;
+
+    return this;
+  }
+
+  pushTask(task) {
+    this.queue.push(task);
+    this.next();
+  }
+
+  next() {
+    while (this.running < this.concurrency && this.queue.length) {
+      const task = this.queue.shift();
+      task().then(() => {
+        this.running--;
+        this.next();
+      });
+      this.running++;
+    }
+    if (this.running === 0 && this.queue.length === 0) {
+      console.log('Task is over');
+      this.finalTask();
+    }
+  }
+}
+
+
 const changeDesc = (desc) => {
   const reg1 = /(<\/>)/g,
     reg2 = /\\n/g,
@@ -379,6 +411,8 @@ const findStage = (map, tree) => {
 
 
 export {
+  TaskQueue,
+
   // 业务相关类
   debounce,
   throttle,

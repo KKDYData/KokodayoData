@@ -57,6 +57,14 @@
               :plain="!showMap"
               class="runes-mode-button"
             >地图</el-button>
+            <el-button
+              @click="loopAllRoutes"
+              v-if="selMapDataEx"
+              :type="!showMap ? '': 'warning'"
+              :plain="!showMap"
+              class="runes-mode-button"
+            >加载所有路线</el-button>
+
             <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
               <el-button type="info">地图说明</el-button>
               <div slot="content">
@@ -201,7 +209,6 @@ import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
 
-
 import { Tree, Drawer, Button, Image, Loading, Message } from 'element-ui';
 
 import Vue from 'vue';
@@ -218,6 +225,7 @@ import {
   findStage,
   preDefineGet,
   UA,
+  TaskQueue
 } from '../../utils';
 
 import {
@@ -227,7 +235,7 @@ import {
   getCharItem,
   getItem,
   getFurn,
-  importSpriteJs,
+  importSpriteJs
 } from '../../utils/fetch';
 
 import { path } from '../../utils/listVer';
@@ -249,14 +257,16 @@ const EnemyDataLayout = () => ({
 export default {
   metaInfo() {
     return {
-      titleTemplate: `${this.selectedMap
-        ? this.selectedMap + ' |' : ''}敌人图鉴 | 明日方舟`,
+      titleTemplate: `${
+        this.selectedMap ? this.selectedMap + ' |' : ''
+      }敌人图鉴 | 明日方舟`,
       meta: [
         {
           vmid: 'description',
           name: 'Description',
-          content: this.selectedMap ? this.mapDesc :
-            '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
+          content: this.selectedMap
+            ? this.mapDesc
+            : '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
         }
       ]
     };
@@ -304,33 +314,41 @@ export default {
     waveTime() {
       let enemyNum = 0;
       // 看起来像是简单算个时间，但是实际上，顺便把数量和每波开始的时间加进数据了
-      return this.selMapData ? this.selMapData.waves.reduce((wRes, cur) =>
-        wRes +
-        cur.preDelay +
-        cur.postDelay +
-        cur.fragments.reduce((fRes, cur) => {
-          let fTemp = fRes + cur.preDelay;
-          cur.time = fTemp;
+      return this.selMapData
+        ? this.selMapData.waves.reduce(
+          (wRes, cur) =>
+            wRes +
+              cur.preDelay +
+              cur.postDelay +
+              cur.fragments.reduce((fRes, cur) => {
+                let fTemp = fRes + cur.preDelay;
+                cur.time = fTemp;
 
-          enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
-            if (el.actionType === 0) return res + el.count;
-            else return res;
-          }, enemyNum);
+                enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
+                  if (el.actionType === 0) return res + el.count;
+                  else return res;
+                }, enemyNum);
 
-          fTemp += cur.actions.reduce((res, cur) => {
-            const curTime = cur.preDelay + cur.interval * cur.count;
-            // 找出每波最长的
-            return Math.max(res, curTime);
-          }, 0);
-          return fTemp;
-        }, 0)
-      , 0) : 0;
-
+                fTemp += cur.actions.reduce((res, cur) => {
+                  const curTime = cur.preDelay + cur.interval * cur.count;
+                  // 找出每波最长的
+                  return Math.max(res, curTime);
+                }, 0);
+                return fTemp;
+              }, 0),
+          0
+        )
+        : 0;
     },
 
     showPredefine() {
       if (!this.selMapData || !this.selMapData.predefines) return false;
-      return Object.values(this.selMapData.predefines).reduce((res, cur) => res += cur.length, 0) > 0;
+      return (
+        Object.values(this.selMapData.predefines).reduce(
+          (res, cur) => (res += cur.length),
+          0
+        ) > 0
+      );
     },
     path() {
       return (
@@ -343,43 +361,62 @@ export default {
     mapPath() {
       return this.mapCode
         ? path +
-        'map/pic/' +
-        this.mapCode +
-        '_optimized.png?x-oss-process=style/jpg-test'
+            'map/pic/' +
+            this.mapCode +
+            '_optimized.png?x-oss-process=style/jpg-test'
         : '';
     },
     globalBuffs() {
       if (!this.selMapData) return {};
       const BuffKeys = {
         kill_to_add_cost: '杀敌额外回复',
-        periodic_damage: '地图周期伤害',
+        periodic_damage: '地图周期伤害'
         // ebuff_attribute: '属性增益'
       };
-      const globalBuffs = this.selMapData.globalBuffs ? this.selMapData.globalBuffs : [];
-      const target = this.runesMode ? [...globalBuffs, ...this.selMapData.runes] : [...globalBuffs];
+      const globalBuffs = this.selMapData.globalBuffs
+        ? this.selMapData.globalBuffs
+        : [];
+      const target = this.runesMode
+        ? [...globalBuffs, ...this.selMapData.runes]
+        : [...globalBuffs];
       return target
         .map(({ prefabKey, key, blackboard }) => {
           const k = prefabKey ? prefabKey : key;
           if (BuffKeys[k]) return [BuffKeys[k], blackboard];
-        }).filter(el => el);
+        })
+        .filter(el => el);
     },
     options() {
-      return !this.selMapData ? {}
-        : Object.entries(Object.assign(this.selMapData.options, this.selMapDataEx))
+      return !this.selMapData
+        ? {}
+        : Object.entries(
+          Object.assign(this.selMapData.options, this.selMapDataEx)
+        )
           .filter(([k, v]) => mapOptionsKey[k])
           .map(([k, v]) => {
             if (this.runesMode) {
               if (k === 'maxLifePoint') {
-                const lifePointBuff = this.selMapData.runes.find(el => el.key === 'gbuff_lifepoint');
+                const lifePointBuff = this.selMapData.runes.find(
+                  el => el.key === 'gbuff_lifepoint'
+                );
                 if (lifePointBuff) {
-                  v = lifePointBuff.blackboard.find(el => el.key === 'value').value;
+                  v = lifePointBuff.blackboard.find(el => el.key === 'value')
+                    .value;
                 }
               }
               if (k === 'costIncreaseTime') {
-                const costBuff = this.selMapData.runes.find(el => el.key === 'cbuff_cost_recovery');
+                const costBuff = this.selMapData.runes.find(
+                  el => el.key === 'cbuff_cost_recovery'
+                );
                 if (costBuff) {
                   // 暂时只保留0.3，不然会换行
-                  v = Math.round(v / costBuff.blackboard.find(el => el.key === 'scale').value * 10) / 10;
+                  v =
+                      Math.round(
+                        (v /
+                          costBuff.blackboard.find(el => el.key === 'scale')
+                            .value) *
+                          10
+                      ) / 10;
                 }
               }
             }
@@ -396,7 +433,11 @@ export default {
       this.watchTree = false;
     },
     preData(v) {
-      if (v && Object.values(v).reduce((res, cur) => res + cur.length, 0) > 0 && this.map) {
+      if (
+        v &&
+        Object.values(v).reduce((res, cur) => res + cur.length, 0) > 0 &&
+        this.map
+      ) {
         console.log('load predefinedData');
         this.map.setData(this.selMapData, this.preData);
         this.mapUp.setData(this.selMapData, this.preData);
@@ -406,7 +447,6 @@ export default {
   created() {
     this.linkStart();
   },
-
 
   methods: {
     clearMap() {
@@ -465,7 +505,9 @@ export default {
         this.runesMode = false;
         this.selMapNode = data;
         let codeFromPath = data.path;
-        let shortCode = codeFromPath.replace('weekly', 'wk').replace('promote', 'pro');
+        let shortCode = codeFromPath
+          .replace('weekly', 'wk')
+          .replace('promote', 'pro');
         this.mapCode = shortCode;
         this.$refs['chapter-selecter'].closeDrawer();
         this.load = true;
@@ -481,7 +523,6 @@ export default {
           Message.error('获取数据失败');
           return [];
         });
-
 
         setTimeout(() => {
           this.load = false;
@@ -515,8 +556,19 @@ export default {
             const initMap = async () => {
               const { Map } = await import('./draw');
               await this.$nextTick();
-              this.map = new Map('#map-canvas-container', 100, mapData, this.preData);
-              this.mapUp = new Map('#map-canvas-container-up', 100, mapData, this.preData, true);
+              this.map = new Map(
+                '#map-canvas-container',
+                100,
+                mapData,
+                this.preData
+              );
+              this.mapUp = new Map(
+                '#map-canvas-container-up',
+                100,
+                mapData,
+                this.preData,
+                true
+              );
             };
             if (window.spritejs) {
               initMap();
@@ -533,24 +585,57 @@ export default {
       this.mapUp.clearRoutes();
       this.$refs.layout.clearRoutes();
     },
+    checkCodeBase() {
+      if (!this.map) {
+        Message('地图数据还没加载完成，等一会再看看吧');
+        return false;
+      } else return true;
+    },
     loopRoutes(index, color) {
       console.log(index, color);
-      if (!this.map) Message('地图数据还没加载完成，等一会再看看吧');
+      if (!this.checkCodeBase()) return;
+
       if (!this.showMap) {
         this.showMap = true;
       }
       const route = this.selMapData.routes[index];
       if (!route) throw Error('没有这个线路');
-      if (this.map) {
-        if (route.motionMode === 1) this.mapUp.addRoutes(route, index, color);
-        else this.map.addRoutes(route, index, color);
+      if (route.motionMode === 1) this.mapUp.addRoutes(route, index, color);
+      else this.map.addRoutes(route, index, color);
+    },
+    loopAllRoutes() {
+      if (this.checkCodeBase()) {
+        console.log('load all routes begin');
+        this.showMap = true;
+        const tasks = this.selMapData.routes
+          .filter(el => el)
+          .map((route, index) => {
+            return () => {
+              const color = Math.round(360 * Math.random());
+              console.log(index, color);
+              if (route.motionMode === 1)
+                this.mapUp.addRoutes(route, index, color);
+              else this.map.addRoutes(route, index, color);
+              return Promise.resolve();
+            };
+          });
+
+        const queue = new TaskQueue(
+          5,
+          () => console.log('load all Success'),
+          tasks
+        );
+        queue.next();
+      } else {
+        this.laodRouteMap();
+        setTimeout(this.loopAllRoutes, 500);
       }
     },
     laodRouteMap() {
       if (this.showMap) {
         this.showMap = false;
       } else {
-        if (this.map) {
+        if (this.checkCodeBase()) {
           this.showMap = true;
         } else {
           Message('地图数据还没加载完成，请重试');
@@ -559,12 +644,10 @@ export default {
     },
     closeRoute(index) {
       console.log('close', index);
-      if (this.map) {
+      if (this.checkCodeBase()) {
         this.map.deleteRoute(index);
         this.mapUp.deleteRoute(index);
       }
-      else Message('地图数据还没加载完成，等一会再看看吧');
-
     },
     linkStart() {
       return this.getData().then(data => {
@@ -581,8 +664,10 @@ export default {
       if (!list) return Promise.resolve([]);
       return Promise.all(
         list.map(async el => ({
-          data: await (el.type === 'FURN' ? getFurn(el.id)
-            : el.type === 'CHAR' ? getCharItem(el.id)
+          data: await (el.type === 'FURN'
+            ? getFurn(el.id)
+            : el.type === 'CHAR'
+              ? getCharItem(el.id)
               : getItem(el.id)),
           type: el.type,
           dropType: el.dropType
@@ -596,9 +681,14 @@ export default {
         preDefineGet('tokenInsts', data),
         preDefineGet('tokenCards', data),
         preDefineGet('characterInsts', data),
-        preDefineGet('characterCards', data),
+        preDefineGet('characterCards', data)
       ];
-      const [tokenInsts, tokenCards, characterInsts, characterCards] = await Promise.all(tasks);
+      const [
+        tokenInsts,
+        tokenCards,
+        characterInsts,
+        characterCards
+      ] = await Promise.all(tasks);
       // preDefineCompute()
       this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
     }
