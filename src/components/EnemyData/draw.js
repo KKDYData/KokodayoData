@@ -394,7 +394,6 @@ class Map {
   checkObstacle(x1, y1, x2, y2) {
     if (!this.grid) throw Error('No grid !');
 
-
     const [minX, maxX] = compare(x1, x2);
     const [minY, maxY] = compare(y1, y2);
 
