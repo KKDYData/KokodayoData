@@ -87,7 +87,10 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.styl', '.vue', '.json']
+    extensions: ['.js', '.styl', '.vue', '.json'],
+    alias: {
+      'src': path.resolve(__dirname, '../src')
+    }
   },
   externals: {
     spritejs: 'spritejs',

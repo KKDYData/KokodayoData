@@ -131,8 +131,8 @@ export default {
   data() {
     return {
       isHover:
-        process.env.NODE_ENV === 'development' || UA.isMobliePad ||
-          this.short ? 'click' : 'hover'
+        process.env.NODE_ENV === 'development' || UA.isMobliePad || this.short
+          ? 'click' : 'hover'
     };
   },
   computed: {
@@ -141,12 +141,7 @@ export default {
       return this.type !== 'FURN' ? itemBackground[this.item.rarity] : {};
     },
     itemPic() {
-      return (
-        path +
-        (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') +
-        this.item.iconId +
-        '_optimized.png'
-      );
+      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') + this.item.iconId + '_optimized.png');
     },
 
     dropListRow() {
@@ -155,23 +150,22 @@ export default {
     targetStageDrop() {
       if (!this.targetStage || !this.dropListRow) return;
       else {
-        const tempRes = this.dropList.findIndex(el => el.stageId === this.targetStage);
+        const tempRes = this.dropList.findIndex(
+          el => el.stageId === this.targetStage
+        );
         if (tempRes > -1) {
           const temp = this.dropList.splice(tempRes, 1)[0];
           return temp;
         }
         // 找不到的情况， 先不改成etCost!!!
-        const target = this.dropListRow
-          .find(el => el.stageId === this.targetStage);
+        const target = this.dropListRow.find(el => el.stageId === this.targetStage);
         if (!target) return;
         const res = Object.assign({}, target);
         const stageData = findStage(target.stageId, this.stageTree);
         const temp = stageData.label.split(' ');
         res.stageCode = temp[0];
         res.rate = Math.round((target.quantity / target.times) * 100);
-        res.dropCost = Math.round(
-          (target.times / target.quantity) * stageData.apCost
-        );
+        res.dropCost = Math.round((target.times / target.quantity) * stageData.apCost);
         return res;
       }
     },
@@ -189,15 +183,21 @@ export default {
               res.target = true;
             }
             if (list) {
-              const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId);
+              const dropInfo = list.find(
+                dropInfo => dropInfo.stageId === el.stageId
+              );
               if (dropInfo) {
                 res = Object.assign(res, dropInfo);
-                res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100);
-                res.dropCost = Math.round((dropInfo.times / dropInfo.quantity) * stageData.apCost);
+                res.rate = Math.round(
+                  (dropInfo.quantity / dropInfo.times) * 100
+                );
+                res.dropCost = Math.round(
+                  (dropInfo.times / dropInfo.quantity) * stageData.apCost
+                );
                 if (res.dropCost < 1) {
                   res.apCost = stageData.apCost;
                   res.etCost = stageData.etCost;
-                  res.dropCnt = Math.round((dropInfo.quantity / dropInfo.times));
+                  res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times);
                 }
               }
             }
@@ -210,7 +210,7 @@ export default {
     },
     showDropInfo() {
       return this.dropList.filter(el => el.times);
-    },
+    }
   },
   methods: {
     occper(occ) {

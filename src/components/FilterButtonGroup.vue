@@ -47,7 +47,7 @@ export default {
     };
   },
   watch: {
-    filters: function (newFilter, old) {
+    filters: function(newFilter, old) {
       const res = newFilter.map(obj => {
         if (!obj.chosed) obj.chosed = false;
         return obj;
@@ -99,52 +99,62 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 .filter-wrapper {
-  margin-bottom: 10px;
-  padding-right: 10px;
+  margin-bottom: 10px
+  padding-right: 10px
 }
 
 .filter {
-  display: flex;
-  margin-left: 10px;
+  display: flex
+  margin-left: 10px
 }
+
 .filter-button-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: -10px;
+  display: flex
+  flex-wrap: wrap
+  margin-left: -10px
 }
+
 .filter-close-icon {
-  position: absolute;
-  left: 8px;
+  position: absolute
+  left: 8px
 }
+
 .filter-button {
-  margin-bottom: 5px;
-  margin-top: 5px;
-  margin-left: 10px;
-  min-width: 50px;
-  transition: all 0.3s ease;
-  box-sizing: border-box;
-  min-width: 70px;
-  position: relative;
+  margin-bottom: 5px
+  margin-top: 5px
+  margin-left: 10px
+  min-width: 50px
+  transition: all 0.3s ease
+  box-sizing: border-box
+  min-width: 70px
+  position: relative
+
+  &.is-plain:focus {
+    border-color: #dcdfe6
+  }
 }
+
 .filter-button-closeable {
-  min-width: 80px;
+  min-width: 80px
 }
 
 @media screen and (max-width: 500px) {
   .filter-button {
-    min-width: 56px;
+    min-width: 56px
   }
+
   .filter-button-closeable {
-    min-width: 68px;
+    min-width: 68px
   }
 
   .filter-button-wrapper {
-    margin-left: 0;
+    margin-left: 0
   }
 }
-/* .filter-button:first-of-type {
+
+/*.filter-button:first-of-type {
   margin-left: 0px;
-} */
+}*/
 </style>

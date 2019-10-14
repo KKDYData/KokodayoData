@@ -2,7 +2,7 @@ import { Scene, Path, Label } from 'spritejs';
 import PF from 'pathfinding';
 import { Directions, blockKeys, tileInfo } from '../../utils/string';
 import { Notification } from 'element-ui';
-import { UA } from '../../utils';
+import { UA, sort } from '../../utils';
 
 console.log('draw.js');
 
@@ -13,6 +13,8 @@ const mapReact = {
   d: react,
   lineCap: 'round',
 };
+
+const abs = Math.abs;
 
 let noti, notiTime;
 
@@ -51,6 +53,9 @@ const task = (mapBlock, mapData, heightType) => {
     });
   };
 };
+
+const comparePoint = (x1, y1, x2, y2) => x1 === x2 && y1 === y2; //arr.slice(index + 1).filter(el => el.type !== 3).length !== 1;
+
 
 
 const getBlockData = (data, key, blackboard) => {
@@ -221,11 +226,11 @@ class Map {
   grid
   map
   mapData
-
   paper
   mapRadio
   top
   run = false
+  finder = new PF.AStarFinder();
   constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, preData, top = false) {
     const config = {
       viewport: ['auto', 'auto'],
@@ -241,7 +246,8 @@ class Map {
   }
   async ray(body) {
     return new Promise((resolve, reject) => {
-      const { path, layer, color, time = 1000, saveTime = 0, stop } = body;
+      const { path, layer, color, saveTime = 0, stop } = body;
+      let time = body.time || 1000;
       if (stop) {
         const stopText = new Label(stop.time + 's');
         const height = this.grid.height - 1;
@@ -280,7 +286,6 @@ class Map {
         offset: 1,
         color: `hsla(${color}, 100%, 50%, 0)`,
       }];
-
       s.attr({
         pos,
         lineWidth: 6,
@@ -294,6 +299,7 @@ class Map {
           },
         },
       });
+
 
       layer.append(s);
       const len = s.getPathLength();
@@ -321,18 +327,21 @@ class Map {
           { offset: p, color: `hsla(${color}, 100%, 35%, 1)` },
           { offset: Math.min(p + 0.06, 1), color: `hsla(${color}, 100%, 50%, 0)` },
         ];
-
         const linearGradients = s.attr('linearGradients');
         linearGradients.strokeColor.colors = colors;
-        const [newX, newY] = s.getPointAtLength(p * len);
-        linearGradients.strokeColor.vector = [x, y, newX, newY];
-        s.attr({ linearGradients });
+        if (len) {
+          const [newX, newY] = s.getPointAtLength(p * len);
+          linearGradients.strokeColor.vector = [x, y, newX, newY];
+          s.attr({ linearGradients });
+
+        }
 
         if (progress < time) {
           requestAnimationFrame(auto);
         } else {
           resolve();
         }
+
       };
 
       requestAnimationFrame(auto);
@@ -378,27 +387,114 @@ class Map {
     this.runningRoutes.delete(x);
     delete this.tempRoutes[x];
   }
+
+  checkObstacle(x1, y1, x2, y2) {
+    if (!this.grid) throw Error('No grid !');
+    const compre = (x, y) => {
+      if (x > y) return [y, x];
+      else return [x, y];
+    };
+
+    const checkWalkable = (x, y) => this.grid.nodes[y][x].walkable || (x === x2 && y === y2);
+
+    const pointLen = (x1, y1, x2, y2) => abs(x1 - x2) + abs(y1 - y2);
+
+    const [minX, maxX] = compre(x1, x2);
+    const [minY, maxY] = compre(y1, y2);
+
+
+    const gW = maxX - minX, gH = maxY - minY;
+    const tx1 = x1 === minX ? 0 : gW,
+      ty1 = y1 === minY ? 0 : gH,
+      tx2 = x2 === minX ? 0 : gW,
+      ty2 = y2 === minY ? 0 : gH;
+
+    const area = this.grid.nodes.filter((el, y) => y <= maxY && y >= minY)
+      .map(arr => arr.filter((el, x) => x <= maxX && x >= minX).map(el => el.walkable ? 0 : 1));
+
+    try {
+      area[ty2][tx2] = 0;
+    } catch (error) {
+      console.log(ty2, tx2, area);
+    }
+
+    const grid = new PF.Grid(area);
+
+    const temxp = this.finder.findPath(tx1, ty1, tx2, ty2, grid);
+    if (temxp.length === 0) {
+      return [-1, -1];
+    }
+
+    const dx = abs(x1 - x2), dy = abs(y1 - y2);
+    // 变成了2 * 2 以上的范围就转寻路
+    if (dx === dy && dx > 1) {
+      return [minX + temxp[1][0], minY + temxp[1][1]];
+    }
+    const dirX = dx === 1 ? false : true; // | ___
+
+    const list = this.grid.nodes.filter((el, y) => y <= maxY && y >= minY)
+      .map(arr => arr.filter((el, x) => x <= maxX && x >= minX && !el.walkable)).flat();
+
+    if (!list.length) {
+      return [x2, y2];
+    }
+
+    const res = sort(list, (a, b) => pointLen(x1, y1, a.x, a.y) < pointLen(x1, y1, b.x, b.y))[0];
+
+    const len = pointLen(x1, y1, res.x, res.y);
+
+    let temp = dirX ? [res.x, res.y === maxY ? minY : maxY]
+      : [res.x === maxX ? minX : maxX, res.y];
+
+
+    if (comparePoint(x1, y1, ...temp)) {
+      return !dirX ? [x1, y1 === maxY ? y1 - 1 : y1 + 1] : [x1 === maxX ? x1 - 1 : x1 + 1, y1];
+    }
+    if (len === 1) {
+      const point = !dirX ? [temp[0], y1] : [x1, temp[1]];
+      if (checkWalkable(...point)) {
+        return point;
+      } else {
+        throw Error('unable to walk');
+      }
+    }
+    if (checkWalkable(...temp)) {
+      return temp;
+    } else {
+      return [-1, -1];
+    }
+
+  }
+
   addRoutes(route, id, color) {
     this.runningRoutes.add(id);
     const height = this.grid.height - 1;
-    const finder = new PF.BestFirstFinder({
-      allowDiagonal: true,
-      dontCrossCorners: true,
-      heuristic: function (dx, dy) {
-        const { x, y } = route.spawnRandomRange;
-        if (x > 0 && y > 0) {
-          return Math.max(dx * x, dy * (1 + y));
-        } else {
-          return Math.max(dx, dy);
-        }
-      }
-    });
 
     const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
+
+    const finder = new PF.AStarFinder({
+      // allowDiagonal: true,
+      diagonalMovement: 4,
+      // dontCrossCorners: true,
+      weight: Math.min(abs(startPos.col - endPos.col), abs(startPos.row - endPos.row)),
+      heuristic:
+        function (dx, dy) {
+          const { x, y } = route.spawnRandomRange;
+          if (x > 0 && y > 0) {
+            return Math.max(dx * x, dy * (1 + y));
+          } else {
+            return Math.max(dx, dy);
+          }
+        }
+    });
+
+
     const pathPoints = checkpoints.filter(el => {
       return el.type < 4 || el.type === 6;
     });
     const path = pathPoints.map(el => ({ ...el.position, type: el.type, reachOffset: el.reachOffset }));
+    const holeType = path.some(el => el.type === 6);
+    // const notSingleValidCheckPoint = path.filter(el => el.type === 0).length;
 
     if (path.length === 0 || startPos.row !== path[0].row || startPos.col !== path[0].col) path.unshift(startPos);
     if (path.length === 0 || endPos.row !== path[path.length - 1].row || endPos.col !== path[path.length - 1].col) path.push(endPos);
@@ -419,7 +515,6 @@ class Map {
         nCol = arr[index + 2].col;
         reachOffset = arr[index + 2].reachOffset;
         const time = pathPoints[index].time ? pathPoints[index].time : pathPoints[index + 1].time;
-
         res.push({ stop: { pos: cur, time } });
       }
 
@@ -429,22 +524,104 @@ class Map {
 
       const ttGrid = tempGrid.clone();
 
-      // 不拐弯直走逻辑，危险，待测试。检测两点之间是都有偏移，如果是，就不寻路
-      const path = route.allowDiagonalMove && (Math.abs(nCol - col) < 2 || Math.abs(nRow - row) < 2) ? //reachOffset && cur.reachOffset && (reachOffset.x !== 0 || reachOffset.y !== 0) && (cur.reachOffset.x !== 0 || cur.reachOffset.y !== 0) ?
-        [[col, row], [nCol, nRow]] : PF.Util.compressPath(finder.findPath(col, row, nCol, nRow, ttGrid));
+      // 不拐弯直走逻辑1，如果是2*x则开启直走
+      const isNotNeedFind = route.allowDiagonalMove && (abs(nCol - col) < 2 || abs(nRow - row) < 2);
 
 
-      if (path.length > 0 && reachOffset) {
-        path[path.length - 1][0] += reachOffset.x;
-        path[path.length - 1][1] -= reachOffset.y;
+      // 寻路一次
+      let section = PF.Util.compressPath(finder.findPath(col, row, nCol, nRow, ttGrid));
+
+
+
+      //3点压缩， dx|dy === 1 
+      let dx = abs(nCol - col), dy = abs(nRow - row);
+      if ((dx === 1 || dy === 1) && !holeType && isNotNeedFind) {
+        let [tempCol, tempRow] = [col, row], tempSection = section.slice(1);
+        section = section.slice(0, 1);
+
+        while ((dx + dy > 1)) {
+          [tempCol, tempRow] = this.checkObstacle(tempCol, tempRow, nCol, nRow);
+          if (tempCol < 0 && tempRow < 0) {
+            [tempCol, tempRow] = tempSection.shift();
+            if (section.length > 1) {
+              while (comparePoint(tempCol, tempRow, ...section[section.length - 2])) {
+                [tempCol, tempRow] = tempSection.shift();
+              }
+            }
+            section.push([tempCol, tempRow]);
+
+          } else {
+            section.push([tempCol, tempRow]);
+          }
+          dx = abs(nCol - tempCol);
+          dy = abs(nRow - tempRow);
+        }
+        if (!comparePoint(nCol, nRow, ...section[section.length - 1])) {
+          section.push([nCol, nRow]);
+        }
+      } else {
+
+        // 4点压缩
+        if (section.length > 3 && route.allowDiagonalMove && (abs(nCol - col) >= 2 || abs(nRow - row) >= 2)) {
+          let [tempCol, tempRow] = section[1], tempSection = section.slice(1), sLen = section.length;
+          section = section.slice(0, 1);
+
+          // 2+ * 2+
+          let dx = abs(nCol - tempCol), dy = abs(nRow - tempRow);
+          if (dx >= 2 && dy >= 2) {
+
+            while (abs(nCol - tempCol) >= 2 && abs(nRow - tempRow) >= 2) {
+
+              if (tempSection.length) {
+                // 先不推进去，在这里检查两点之间有没有方块。有就在方块处停。然后寻路到下一个点原来的点。
+                section.push(tempSection[0]);
+              }
+              // const tttGrid = tempGrid.clone();
+              [tempCol, tempRow] = tempSection.shift();
+              // tempSection = PF.Util.compressPath(finder.findPath(tempCol, tempRow, nCol, nRow, tttGrid));
+            }
+
+            if (tempSection.length) {
+              // if (i === 0) section.push(tempSection[0]);
+              if (tempSection.length >= 3) section.push(tempSection[1]);
+              section.push(tempSection.pop());
+            }
+            if (!comparePoint(...section[section.length - 1], nCol, nRow) && sLen > 2) section.push([nCol, nRow]);
+
+          } else if ((dx === 1 && dy > 1) || (dx > 1 && dy === 1)) {
+            // 2+ * 1
+            section.push(tempSection[0]);
+
+            while ((dx === 1 && dy > 1) || (dx > 1 && dy === 1)) {
+              [tempCol, tempRow] = this.checkObstacle(tempCol, tempRow, nCol, nRow);
+              if (tempCol < 0 && tempRow < 0) {
+                [tempCol, tempRow] = tempSection.shift();
+                section.push([tempCol, tempRow]);
+              } else {
+                section.push([tempCol, tempRow]);
+              }
+              dx = abs(nCol - tempCol);
+              dy = abs(nRow - tempRow);
+            }
+            if (!comparePoint(nCol, nRow, ...section[section.length - 1])) {
+              section.push([nCol, nRow]);
+            }
+          }
+
+        }
+      }
+
+      if (section.length > 0 && reachOffset) {
+        section[section.length - 1][0] += reachOffset.x;
+        section[section.length - 1][1] -= reachOffset.y;
       }
 
       // 擦墙逻辑，如果找不到路，但是点不是隧道出口， 且下一个点有reachOffset，x,y 不等于0，就擦墙看看，在of1是可以和下一段的起点连上的。
-      if (path.length === 0 && arr[index + 2].type !== 6 && reachOffset.x !== 0 && reachOffset.y !== 0) {
-        path.push([col, row]);
-        path.push([nCol + reachOffset.x, nRow - reachOffset.y]);
+      if (section.length === 0 && arr[index + 2].type !== 6 && reachOffset.x !== 0 && reachOffset.y !== 0) {
+        section.push([col, row]);
+        section.push([nCol + reachOffset.x, nRow - reachOffset.y]);
       }
-      path.forEach((el, index, arr) => {
+      section.forEach((el, index, arr) => {
 
         if (index + 1 < arr.length) {
           let [x, y] = el;
@@ -455,7 +632,7 @@ class Map {
 
           const next = arr[index + 1];
           const len = Math.sqrt((x - next[0]) ** 2 + (y - next[1]) ** 2);
-          res.push({ path: this.spawnPathAlpha([[x, y], next]), time: len * 200 });
+          res.push({ path: this.spawnPathAlpha([[x, y], next]), time: len * 200 || 10 });
         }
       });
       return res;
@@ -511,7 +688,6 @@ class Map {
 
       Promise.all(tasksToPromises)
         .then(async (saveTimes) => {
-          // console.log('complete');
           saveTimes = saveTimes.filter(el => el);
           if (saveTimes.length > 0) {
             console.log('stop quene', saveTimes);
