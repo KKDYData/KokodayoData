@@ -592,13 +592,13 @@ export default {
       } else return true;
     },
     loopRoutes(index, color) {
-      console.log(index, color);
       if (!this.checkCodeBase()) return;
 
       if (!this.showMap) {
         this.showMap = true;
       }
       const route = this.selMapData.routes[index];
+      console.log(index, color, route);
       if (!route) throw Error('没有这个线路');
       if (route.motionMode === 1) this.mapUp.addRoutes(route, index, color);
       else this.map.addRoutes(route, index, color);
@@ -613,9 +613,8 @@ export default {
             return () => {
               const color = Math.round(360 * Math.random());
               console.log(index, color);
-              if (route.motionMode === 1)
-                this.mapUp.addRoutes(route, index, color);
-              else this.map.addRoutes(route, index, color);
+              if (route.motionMode !== 1)
+                this.map.addRoutes(route, index, color);
               return Promise.resolve();
             };
           });
