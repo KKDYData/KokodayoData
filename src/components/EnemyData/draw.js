@@ -2,7 +2,7 @@ import { Scene, Path, Label } from 'spritejs';
 import PF from 'pathfinding';
 import { Directions, blockKeys, tileInfo } from '../../utils/string';
 import { Notification } from 'element-ui';
-import { UA, sort } from '../../utils';
+import { UA } from '../../utils';
 
 console.log('draw.js');
 
@@ -55,7 +55,10 @@ const task = (mapBlock, mapData, heightType) => {
 };
 
 const comparePoint = (x1, y1, x2, y2) => x1 === x2 && y1 === y2; //arr.slice(index + 1).filter(el => el.type !== 3).length !== 1;
-
+const compare = (x, y) => {
+  if (x > y) return [y, x];
+  else return [x, y];
+};
 
 
 const getBlockData = (data, key, blackboard) => {
@@ -230,7 +233,7 @@ class Map {
   mapRadio
   top
   run = false
-  finder = new PF.AStarFinder();
+  finder
   constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, preData, top = false) {
     const config = {
       viewport: ['auto', 'auto'],
@@ -390,18 +393,10 @@ class Map {
 
   checkObstacle(x1, y1, x2, y2) {
     if (!this.grid) throw Error('No grid !');
-    const compre = (x, y) => {
-      if (x > y) return [y, x];
-      else return [x, y];
-    };
 
-    const checkWalkable = (x, y) => this.grid.nodes[y][x].walkable || (x === x2 && y === y2);
 
-    const pointLen = (x1, y1, x2, y2) => abs(x1 - x2) + abs(y1 - y2);
-
-    const [minX, maxX] = compre(x1, x2);
-    const [minY, maxY] = compre(y1, y2);
-
+    const [minX, maxX] = compare(x1, x2);
+    const [minY, maxY] = compare(y1, y2);
 
     const gW = maxX - minX, gH = maxY - minY;
     const tx1 = x1 === minX ? 0 : gW,
@@ -415,53 +410,23 @@ class Map {
     try {
       area[ty2][tx2] = 0;
     } catch (error) {
-      console.log(ty2, tx2, area);
+      console.error(ty2, tx2, area);
     }
 
-    const grid = new PF.Grid(area);
-
-    const temxp = this.finder.findPath(tx1, ty1, tx2, ty2, grid);
-    if (temxp.length === 0) {
-      return [-1, -1];
-    }
-
-    const dx = abs(x1 - x2), dy = abs(y1 - y2);
-    // 变成了2 * 2 以上的范围就转寻路
-    if (dx === dy && dx > 1) {
-      return [minX + temxp[1][0], minY + temxp[1][1]];
-    }
-    const dirX = dx === 1 ? false : true; // | ___
-
-    const list = this.grid.nodes.filter((el, y) => y <= maxY && y >= minY)
-      .map(arr => arr.filter((el, x) => x <= maxX && x >= minX && !el.walkable)).flat();
-
-    if (!list.length) {
+    const unWalkSize = area.flat().filter(x => x === 1).length;
+    if (!unWalkSize) {
       return [x2, y2];
-    }
-
-    const res = sort(list, (a, b) => pointLen(x1, y1, a.x, a.y) < pointLen(x1, y1, b.x, b.y))[0];
-
-    const len = pointLen(x1, y1, res.x, res.y);
-
-    let temp = dirX ? [res.x, res.y === maxY ? minY : maxY]
-      : [res.x === maxX ? minX : maxX, res.y];
-
-
-    if (comparePoint(x1, y1, ...temp)) {
-      return !dirX ? [x1, y1 === maxY ? y1 - 1 : y1 + 1] : [x1 === maxX ? x1 - 1 : x1 + 1, y1];
-    }
-    if (len === 1) {
-      const point = !dirX ? [temp[0], y1] : [x1, temp[1]];
-      if (checkWalkable(...point)) {
-        return point;
-      } else {
-        throw Error('unable to walk');
-      }
-    }
-    if (checkWalkable(...temp)) {
-      return temp;
     } else {
-      return [-1, -1];
+      const [h, w] = compare(abs(x1 - x2), abs(y1 - y2));
+      if (h === 1 && w > 2 && unWalkSize === 1) {
+        return [x2, y2];
+      }
+
+      const temxp = PF.Util.compressPath(this.finder.findPath(tx1, ty1, tx2, ty2, new PF.Grid(area)));
+      if (temxp.length === 0) {
+        return [-1, -1];
+      }
+      return [minX + temxp[1][0], minY + temxp[1][1]];
     }
 
   }
@@ -472,10 +437,8 @@ class Map {
 
     const { startPosition: startPos, endPosition: endPos, checkpoints } = route;
 
-    const finder = new PF.AStarFinder({
-      // allowDiagonal: true,
+    this.finder = new PF.AStarFinder({
       diagonalMovement: 4,
-      // dontCrossCorners: true,
       weight: Math.min(abs(startPos.col - endPos.col), abs(startPos.row - endPos.row)),
       heuristic:
         function (dx, dy) {
@@ -499,7 +462,8 @@ class Map {
     if (path.length === 0 || startPos.row !== path[0].row || startPos.col !== path[0].col) path.unshift(startPos);
     if (path.length === 0 || endPos.row !== path[path.length - 1].row || endPos.col !== path[path.length - 1].col) path.push(endPos);
 
-    const tempGrid = route.motionMode !== 1 ? this.grid.clone() : new PF.Grid(this.grid.width, this.grid.height);
+    const fly = route.motionMode === 1;
+    const tempGrid = fly ? new PF.Grid(this.grid.width, this.grid.height) : this.grid.clone();
     tempGrid.setWalkableAt(endPos.col, height - endPos.row, true);
 
     const splitPath = path.reduce((res, cur, index, arr) => {
@@ -522,92 +486,52 @@ class Map {
       row = height - row;
       nRow = height - nRow;
 
-      const ttGrid = tempGrid.clone();
+      let section;
+      if (fly) {
+        section = [[col, row], [nCol, nRow]];
+      }
+      section = [[col, row]];
 
-      // 不拐弯直走逻辑1，如果是2*x则开启直走
-      const isNotNeedFind = route.allowDiagonalMove && (abs(nCol - col) < 2 || abs(nRow - row) < 2);
+      // 
+      const isNotNeedFind = route.allowDiagonalMove;
 
 
-      // 寻路一次
-      let section = PF.Util.compressPath(finder.findPath(col, row, nCol, nRow, ttGrid));
+      // 初始值
 
 
 
       //3点压缩， dx|dy === 1 
-      let dx = abs(nCol - col), dy = abs(nRow - row);
-      if ((dx === 1 || dy === 1) && !holeType && isNotNeedFind) {
-        let [tempCol, tempRow] = [col, row], tempSection = section.slice(1);
-        section = section.slice(0, 1);
+      if (!fly && !holeType && isNotNeedFind) {
+        let [tempCol, tempRow] = [col, row];
+        let tempSection;
 
+        let dx = abs(nCol - col), dy = abs(nRow - row);
         while ((dx + dy > 1)) {
           [tempCol, tempRow] = this.checkObstacle(tempCol, tempRow, nCol, nRow);
-          if (tempCol < 0 && tempRow < 0) {
+          if (tempCol > -1 && tempRow > -1) {
+            section.push([tempCol, tempRow]);
+
+          } else {// 区域内找不到路，全图寻路
+            if (!tempSection) {
+              tempSection = PF.Util.compressPath(this.finder.findPath(col, row, nCol, nRow, tempGrid)).slice(1);
+            }
+
             [tempCol, tempRow] = tempSection.shift();
+
             if (section.length > 1) {
               while (comparePoint(tempCol, tempRow, ...section[section.length - 2])) {
                 [tempCol, tempRow] = tempSection.shift();
               }
             }
             section.push([tempCol, tempRow]);
-
-          } else {
-            section.push([tempCol, tempRow]);
           }
           dx = abs(nCol - tempCol);
           dy = abs(nRow - tempRow);
         }
+
+        // 终点
         if (!comparePoint(nCol, nRow, ...section[section.length - 1])) {
           section.push([nCol, nRow]);
-        }
-      } else {
-
-        // 4点压缩
-        if (section.length > 3 && route.allowDiagonalMove && (abs(nCol - col) >= 2 || abs(nRow - row) >= 2)) {
-          let [tempCol, tempRow] = section[1], tempSection = section.slice(1), sLen = section.length;
-          section = section.slice(0, 1);
-
-          // 2+ * 2+
-          let dx = abs(nCol - tempCol), dy = abs(nRow - tempRow);
-          if (dx >= 2 && dy >= 2) {
-
-            while (abs(nCol - tempCol) >= 2 && abs(nRow - tempRow) >= 2) {
-
-              if (tempSection.length) {
-                // 先不推进去，在这里检查两点之间有没有方块。有就在方块处停。然后寻路到下一个点原来的点。
-                section.push(tempSection[0]);
-              }
-              // const tttGrid = tempGrid.clone();
-              [tempCol, tempRow] = tempSection.shift();
-              // tempSection = PF.Util.compressPath(finder.findPath(tempCol, tempRow, nCol, nRow, tttGrid));
-            }
-
-            if (tempSection.length) {
-              // if (i === 0) section.push(tempSection[0]);
-              if (tempSection.length >= 3) section.push(tempSection[1]);
-              section.push(tempSection.pop());
-            }
-            if (!comparePoint(...section[section.length - 1], nCol, nRow) && sLen > 2) section.push([nCol, nRow]);
-
-          } else if ((dx === 1 && dy > 1) || (dx > 1 && dy === 1)) {
-            // 2+ * 1
-            section.push(tempSection[0]);
-
-            while ((dx === 1 && dy > 1) || (dx > 1 && dy === 1)) {
-              [tempCol, tempRow] = this.checkObstacle(tempCol, tempRow, nCol, nRow);
-              if (tempCol < 0 && tempRow < 0) {
-                [tempCol, tempRow] = tempSection.shift();
-                section.push([tempCol, tempRow]);
-              } else {
-                section.push([tempCol, tempRow]);
-              }
-              dx = abs(nCol - tempCol);
-              dy = abs(nRow - tempRow);
-            }
-            if (!comparePoint(nCol, nRow, ...section[section.length - 1])) {
-              section.push([nCol, nRow]);
-            }
-          }
-
         }
       }
 
@@ -684,7 +608,6 @@ class Map {
           resolve();
         });
       });
-
 
       Promise.all(tasksToPromises)
         .then(async (saveTimes) => {
