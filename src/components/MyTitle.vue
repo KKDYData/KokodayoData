@@ -104,7 +104,7 @@ export default {
   --bwidth: 5px
 
   &:before, &:after {
-    transition: all 0.3s ease
+    transition: all 0.3s ease 0.2s
     opacity: 0
     position: absolute
     content: ''
