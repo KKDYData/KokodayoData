@@ -165,7 +165,7 @@ const version = 191016;
 export default {
   metaInfo() {
     return {
-      titleTemplate: 'ArknightsData 一个平平无奇的明日方舟数据库 0.7 Wiki|维基|数据',
+      titleTemplate: 'ArknightsData 一个平平无奇的明日方舟数据库 0.8 Wiki|维基|数据',
       meta: [
         {
           vmid: 'description',

@@ -1,7 +1,6 @@
 <template>
   <div class="home-wrapper">
     <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
-      <div>暂时还没传图。</div>
       <el-link
         type="warning"
         href="https://github.com/odex21/ArknightsData"
