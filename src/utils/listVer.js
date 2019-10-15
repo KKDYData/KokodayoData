@@ -1,5 +1,5 @@
-const charListVer = 9494734989651;
-const stageListVer = 1569786667996;
+const charListVer = 5147282211751;//9494734989651;
+const stageListVer = 9175062211751;//1569786667996;
 const enemyListVer = 1566883495135;
 
 const dataPath = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'

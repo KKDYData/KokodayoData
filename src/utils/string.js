@@ -556,8 +556,9 @@ const StageType = {
   guid: '教程',
   sub: '支线',
   pro: '芯片搜索',
-  a001: '骑兵与猎人',
-  a003: '火蓝之心'
+  a001: 'Act1·骑兵与猎人',
+  a003: 'Act3·火蓝之心',
+  act4d0: 'Act4·战地秘闻',
 };
 
 const Directions = {

@@ -112,7 +112,9 @@ const changeDesc = (desc) => {
     baRem = /(<@ba\.rem>)/g,
     baKw = /(<@ba\.kw>)/g,
     baTalpu = /(<@ba\.talpu>)/g,
-    lvItem = /<@lv\.(item|rem|fs)>/g;
+    lvItem = /<@lv\.(item|rem|fs)>/g,
+    timeLimit = /<@act\.timeLimit>/g;
+
 
   if (!reg1.test(desc) && !reg2.test(desc)) return desc;
   desc = desc
@@ -130,7 +132,9 @@ const changeDesc = (desc) => {
     .replace(baRem, '<i style="color:#F49800;font-style: normal;">')
     .replace(baKw, '<i style="color:#00B0FF;font-style: normal;">')
     .replace(baTalpu, '<i style="color:#F49800;font-style: normal;">')
-    .replace(lvItem, '<i style="color:#049cb8;font-style: normal;">');
+    .replace(lvItem, '<i style="color:#049cb8;font-style: normal;">')
+    .replace(timeLimit, '<i style="color:hsl(20, 100%, 50%);font-style: normal;">');
+
 
   return desc;
 };
