@@ -6,16 +6,18 @@
           :size="short? 'mini' :'medium'"
           @click="choseAll"
           :type="allChosed ? 'info': 'warning'"
-          :class="!allChosed ? 'filter-button filter-button-closeable' : 'filter-button'"
+          :class="!allChosed  && !single ? 'filter-button filter-button-closeable' : 'filter-button'"
+          :disabled="disabled"
         >
           {{label}}
           <transition name="fade">
-            <span v-if="!allChosed" class="filter-close-icon">
+            <span v-if="!allChosed && !single" class="filter-close-icon">
               <i class="el-icon-close"></i>
             </span>
           </transition>
         </el-button>
         <el-button
+          :disabled="disabled"
           v-for="key in lists"
           :key="key.value"
           @click="filter(key)"
@@ -37,17 +39,29 @@ import { mapState } from 'vuex';
 Vue.use(Button);
 
 export default {
-  props: ['filters', 'label', 'single'],
+  props: {
+    filters: Array,
+    label: String,
+    single: Boolean,
+    default: String,
+    disabled: {
+      default: false,
+      type: Boolean
+    }
+  },
   data() {
+    const de = this.default || '';
     return {
       lists: this.filters.map(obj => {
-        if (!obj.chosed) obj.chosed = false;
+        console.log('obj', obj);
+        if (obj.value !== de) obj.chosed = false;
+        else obj.chosed = true;
         return obj;
       })
     };
   },
   watch: {
-    filters: function(newFilter, old) {
+    filters: function (newFilter, old) {
       const res = newFilter.map(obj => {
         if (!obj.chosed) obj.chosed = false;
         return obj;
@@ -69,8 +83,9 @@ export default {
   methods: {
     filter(key) {
       this.$set(key, 'chosed', !key.chosed);
-      const fArr = this.lists.filter(key => key.chosed);
+      let fArr;
       if (!this.single) {
+        fArr = this.lists.filter(key => key.chosed);
         if (fArr.length === 0) {
           this.$emit('filter', []);
           return;
@@ -80,11 +95,20 @@ export default {
           this.$emit('filter', []);
           return;
         }
+        this.$emit('filter', fArr);
+
+      } else {
+        this.lists.forEach(other => {
+          if (key !== other) this.$set(other, 'chosed', false);
+        });
+        fArr = this.lists.filter(key => key.chosed);
+
+        this.$emit('filter', fArr);
       }
-      this.$emit('filter', fArr);
     },
     choseAll() {
       console.log('全选');
+      if (this.single) return;
 
       if (this.single && this.allChosed) {
         this.lists.forEach(key => this.$set(key, 'chosed', true));

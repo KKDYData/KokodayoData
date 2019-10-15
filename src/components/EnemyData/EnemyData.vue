@@ -318,24 +318,24 @@ export default {
         ? this.selMapData.waves.reduce(
           (wRes, cur) =>
             wRes +
-              cur.preDelay +
-              cur.postDelay +
-              cur.fragments.reduce((fRes, cur) => {
-                let fTemp = fRes + cur.preDelay;
-                cur.time = fTemp;
+            cur.preDelay +
+            cur.postDelay +
+            cur.fragments.reduce((fRes, cur) => {
+              let fTemp = fRes + cur.preDelay;
+              cur.time = fTemp;
 
-                enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
-                  if (el.actionType === 0) return res + el.count;
-                  else return res;
-                }, enemyNum);
+              enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
+                if (el.actionType === 0) return res + el.count;
+                else return res;
+              }, enemyNum);
 
-                fTemp += cur.actions.reduce((res, cur) => {
-                  const curTime = cur.preDelay + cur.interval * cur.count;
-                  // 找出每波最长的
-                  return Math.max(res, curTime);
-                }, 0);
-                return fTemp;
-              }, 0),
+              fTemp += cur.actions.reduce((res, cur) => {
+                const curTime = cur.preDelay + cur.interval * cur.count;
+                // 找出每波最长的
+                return Math.max(res, curTime);
+              }, 0);
+              return fTemp;
+            }, 0),
           0
         )
         : 0;
@@ -361,9 +361,9 @@ export default {
     mapPath() {
       return this.mapCode
         ? path +
-            'map/pic/' +
-            this.mapCode +
-            '_optimized.png?x-oss-process=style/jpg-test'
+        'map/pic/' +
+        this.mapCode +
+        '_optimized.png?x-oss-process=style/jpg-test'
         : '';
     },
     globalBuffs() {
@@ -411,12 +411,12 @@ export default {
                 if (costBuff) {
                   // 暂时只保留0.3，不然会换行
                   v =
-                      Math.round(
-                        (v /
-                          costBuff.blackboard.find(el => el.key === 'scale')
-                            .value) *
-                          10
-                      ) / 10;
+                    Math.round(
+                      (v /
+                        costBuff.blackboard.find(el => el.key === 'scale')
+                          .value) *
+                      10
+                    ) / 10;
                 }
               }
             }
@@ -559,6 +559,9 @@ export default {
           this.mapUp.setData(mapData, this.preData);
         } else {
           const initMap = async () => {
+            // 去掉地图的loading遮罩
+            this.mapPicLoad = false;
+
             const { Map } = await import('./draw');
             await this.$nextTick();
             this.map = new Map(

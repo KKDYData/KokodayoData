@@ -1,14 +1,33 @@
 <template>
   <div class="home-layout-wrapper">
     <div class="home-filter-wrapper" id="profile-panel">
-      <filter-group label="职业" :filters="filterGroups.class" @filter="resetFilter($event, 'class')"></filter-group>
-      <filter-group label="星级" :filters="filterGroups.star" @filter="resetFilter($event, 'star')"></filter-group>
+      <filter-group
+        label="切换"
+        :filters="category.token"
+        :single="true"
+        @filter="switchData($event)"
+        ref="tokenFilter"
+        default="profileList"
+      ></filter-group>
+      <filter-group
+        label="职业"
+        :filters="filterGroups.class"
+        @filter="resetFilter($event, 'class')"
+        :disabled="agentFilterDisabled"
+      ></filter-group>
+      <filter-group
+        label="星级"
+        :filters="filterGroups.star"
+        @filter="resetFilter($event, 'star')"
+        :disabled="agentFilterDisabled"
+      ></filter-group>
       <filter-group
         label="公招"
         :filters="filterGroups.gkzm"
         :single="true"
         @filter="resetFilter($event, 'gkzm')"
         ref="gkzm"
+        :disabled="agentFilterDisabled"
       ></filter-group>
       <div class="tags-popover-wrapper">
         <el-popover
@@ -130,6 +149,10 @@ const myFeedback = () => ({
 });
 
 const gkzm = [{ isTag: false, text: '仅公招', value: true }];
+const token = [
+  { isTag: false, text: '干员', value: 'profileList' },
+  { isTag: false, text: '召唤物', value: 'tokenList' },
+];
 
 if (typeof Array.prototype.flat !== 'function') {
   Array.prototype.flat = function (num) {
@@ -137,7 +160,7 @@ if (typeof Array.prototype.flat !== 'function') {
   };
 }
 
-const version = 190920;
+const version = 191016;
 
 export default {
   metaInfo() {
@@ -159,7 +182,8 @@ export default {
     myFeedback
   },
   props: {
-    profileList: Array
+    profileList: Array,
+    tokenList: Array
   },
   data() {
     return {
@@ -174,6 +198,7 @@ export default {
       SelectedTagGz: [],
       showOtherPanel: false,
       currentMode: 'profile-layout',
+      agentFilterDisabled: false
     };
   },
   beforeMount() {
@@ -200,10 +225,15 @@ export default {
     ...mapState(['short']),
     filterGroups() {
       return {
-        gkzm: gkzm,
+        gkzm,
         star: StarArr,
         class: Object.values(class_chinese),
-        tags: TagsArr
+        tags: TagsArr,
+      };
+    },
+    category() {
+      return {
+        token
       };
     },
     orAgents() {
@@ -211,6 +241,18 @@ export default {
     }
   },
   methods: {
+    switchData(e) {
+      console.log('e', e);
+      this.rowData = e.length === 1 ? this[e[0].value] : this.profileList;
+      if (e[0].value !== 'profileList') {
+        this.data = this.rowData;
+        this.agentFilterDisabled = true;
+      }
+      else {
+        this.agentFilterDisabled = false;
+        this.resetFilter();
+      }
+    },
     getClientWidth() {
       return this.$el.clientWidth - 50;
     },

@@ -1,7 +1,7 @@
 <template>
   <div class="home-wrapper">
     <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
-      <div>如果看不到图，请清空缓存。</div>
+      <div>暂时还没传图。</div>
       <el-link
         type="warning"
         href="https://github.com/odex21/ArknightsData"
@@ -17,7 +17,7 @@
       </div>
     </el-alert>
     <transition name="fade" mode="out-in">
-      <home-layout v-if="load" :profileList="data"></home-layout>
+      <home-layout v-if="load" :profileList="data" :tokenList="token"></home-layout>
     </transition>
   </div>
 </template>
@@ -46,6 +46,7 @@ export default {
   data() {
     return {
       data: [],
+      token: [],
       load: false,
       isBeta: Mode === '/ArknightsBeta'
     };
@@ -56,7 +57,13 @@ export default {
   methods: {
     linkStart() {
       this.getData().then(data => {
-        this.data = data;
+        const agent = [], token = [];
+        data.forEach(el => {
+          if (el.class !== 'TOKEN') agent.push(el);
+          else token.push(el);
+        });
+        this.data = agent;
+        this.token = token;
         this.load = true;
       });
     },

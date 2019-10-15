@@ -599,10 +599,10 @@ const class_chinese = {
   TANK: { isTag: false, text: '重装', value: 'TANK' },
   SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL' },
   SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT' },
-  TOKEN: { isTag: false, text: '召唤物', value: 'TOKEN' },
 };
 
 const getClass_Chinese = en => {
+  if (en === 'TOKEN') return '召唤物';
   return class_chinese[en].text;
 };
 
