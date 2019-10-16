@@ -29,3 +29,10 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 
 1. 拆包数据<https://github.com/Perfare/ArknightsGameData>
 2. 掉落统计<https://penguin-stats.io/>
+
+### 缓存
+
+1. 语音选择用 Cache-Time 进行7天的缓存。
+   1. 因为语音挺大的，替用户着想。
+   2. 要想用 serverWorker 缓存那只能 preCache，提前显示的缓存。比较麻烦。因为运行时拿到的数据是不完整的。
+2. 其它数据都是采用 workbox 运行时缓存的。网页文件为预缓存。

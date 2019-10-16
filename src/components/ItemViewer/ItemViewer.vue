@@ -202,7 +202,7 @@ export default {
       return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};
     },
     itemPic() {
-      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/picTest/') + this.data.iconId + '_optimized.png');
+      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') + this.data.iconId + '_optimized.png');
     },
 
     dropListRow() {

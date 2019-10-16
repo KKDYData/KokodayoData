@@ -95,7 +95,6 @@ export default {
           return;
         }
         this.$emit('filter', fArr);
-
       } else {
         if (this.lists.length === 1 || !key.chosed)
           this.$set(key, 'chosed', !key.chosed);
@@ -104,7 +103,6 @@ export default {
           if (key !== other) this.$set(other, 'chosed', false);
         });
         fArr = this.lists.filter(key => key.chosed);
-
         this.$emit('filter', fArr);
       }
     },
