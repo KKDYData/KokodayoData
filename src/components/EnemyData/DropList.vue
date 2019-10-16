@@ -10,6 +10,7 @@
           :style="{margin: '10px'}"
           :type="item.type"
           :item="item.data ? item.data : item"
+          :list-mode="listMode"
         ></item-viewer>
       </div>
     </div>
@@ -35,7 +36,11 @@ export default {
     title: {
       type: String
     },
-    targetStage: String
+    targetStage: String,
+    listMode: {
+      default: false,
+      type: Boolean
+    }
   }
 };
 </script>

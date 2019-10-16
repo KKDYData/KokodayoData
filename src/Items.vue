@@ -1,6 +1,6 @@
 <template>
   <div class="item-list-panel">
-    <drop-list v-if="items.length > 0" :list="items" title="材料"></drop-list>
+    <drop-list v-if="items.length > 0" :list="items" title="材料" :list-mode="true"></drop-list>
   </div>
 </template>
 

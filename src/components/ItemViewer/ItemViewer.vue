@@ -11,7 +11,7 @@
       :disabled="noPopover"
     >
       <!-- 去掉 ios 点击边框 -->
-      <div slot="reference" style="outline: none">
+      <div slot="reference" style="outline: none" :class="noPopover ? 'short-force' : ''">
         <div>
           <el-image
             :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
@@ -107,7 +107,7 @@
                   <just-viewer :no-popover="true" :item="data.id" :num="data.count"></just-viewer>
                 </div>
               </div>
-              <div>
+              <div v-if="listMode">
                 <el-divider content-position="left">
                   <span>合成随机产物</span>
                 </el-divider>
@@ -167,7 +167,11 @@ export default {
       type: Boolean
     },
     small: Boolean,
-    weight: Number
+    weight: Number,
+    listMode: {
+      default: false,
+      type: Boolean
+    }
   },
   data() {
     return {
@@ -357,9 +361,36 @@ export default {
    padding: 5px
  }
 
+ .short-force { //强制缩小
+   .evolvcost-item-contianer {
+     width: 45px
+     height: 45px
+   }
+
+   .evolvcost-name-wrapper {
+     font-size: 13px
+   }
+
+   .item-stage-container {
+     padding-left: 30px
+   }
+
+   .item-popover {
+     overflow-x: hidden
+     max-height: 300px
+   }
+
+   .item-popover .is-left {
+     padding: 10px
+   }
+
+   .item-popover .el-divider--horizontal {
+     width: calc(100% - 10px)
+   }
+ }
+
  @media screen and (max-width: 700px) {
    .evolvcost-item-contianer {
-     /*padding: 5px 10px;*/
      width: calc(45px + 2vw)
      height: calc(45px + 2vw)
    }
