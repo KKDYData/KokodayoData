@@ -88,7 +88,7 @@
             </div>
           </div>
           <div v-if="data.buildingProductList.length > 0">
-            <el-divider content-position="left">
+            <el-divider v-if="formula.length > 0" content-position="left">
               <span>合成配方</span>
             </el-divider>
             <div
@@ -101,6 +101,7 @@
                   :item="GOLD"
                   :num="goldCost"
                   class="item-formula-item"
+                  :no-popover="true"
                 ></just-viewer>
                 <div class="item-formula-item" v-for="data in costs" :key="data.id">
                   <just-viewer :no-popover="true" :item="data.id" :num="data.count"></just-viewer>
@@ -195,13 +196,13 @@ export default {
     ...mapState(['stageTree', 'short']),
     formula() {
       if (!this.data) return;
-      return this.data.buildingProductList.map(el => formula[el.formulaId]);
+      return this.data.buildingProductList.filter(el => el.roomType === 'WORKSHOP').map(el => formula[el.formulaId]);
     },
     itemBackground() {
       return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};
     },
     itemPic() {
-      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') + this.data.iconId + '_optimized.png');
+      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/picTest/') + this.data.iconId + '_optimized.png');
     },
 
     dropListRow() {

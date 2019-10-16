@@ -53,7 +53,6 @@ export default {
     const de = this.default || '';
     return {
       lists: this.filters.map(obj => {
-        console.log('obj', obj);
         if (obj.value !== de) obj.chosed = false;
         else obj.chosed = true;
         return obj;
@@ -82,9 +81,9 @@ export default {
   },
   methods: {
     filter(key) {
-      this.$set(key, 'chosed', !key.chosed);
       let fArr;
       if (!this.single) {
+        this.$set(key, 'chosed', !key.chosed);
         fArr = this.lists.filter(key => key.chosed);
         if (fArr.length === 0) {
           this.$emit('filter', []);
@@ -98,6 +97,9 @@ export default {
         this.$emit('filter', fArr);
 
       } else {
+        if (this.lists.length === 1 || !key.chosed)
+          this.$set(key, 'chosed', !key.chosed);
+
         this.lists.forEach(other => {
           if (key !== other) this.$set(other, 'chosed', false);
         });

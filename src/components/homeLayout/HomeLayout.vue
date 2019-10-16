@@ -242,7 +242,6 @@ export default {
   },
   methods: {
     switchData(e) {
-      console.log('e', e);
       this.rowData = e.length === 1 ? this[e[0].value] : this.profileList;
       if (e[0].value !== 'profileList') {
         this.data = this.rowData;
