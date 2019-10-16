@@ -144,6 +144,9 @@ import DropLine from './DropLine';
 import Color from '../Color';
 import { getItem } from '../../utils/fetch';
 
+// 可以考虑给id的话，只显示图片，不做数据拉取
+// 或者noPopover + {假数据}，反正只显示图片的话，实际也不需要拉数据显示
+// 但是考虑到数据有做缓存，实际不会增加http连接数
 export default {
   name: 'just-viewer',
   components: {
@@ -174,6 +177,15 @@ export default {
       GOLD
     };
   },
+  watch: {
+    item(v) {
+      if (typeof this.item === 'string') {
+        getItem(this.item).then(el => this.data = el);
+      } else {
+        this.data = v;
+      }
+    }
+  },
   created() {
     if (typeof this.item === 'string') {
       getItem(this.item).then(el => this.data = el);
@@ -189,7 +201,7 @@ export default {
       return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};
     },
     itemPic() {
-      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/picTest/') + this.data.iconId + '_optimized.png');
+      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') + this.data.iconId + '_optimized.png');
     },
 
     dropListRow() {

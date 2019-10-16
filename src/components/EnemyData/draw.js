@@ -485,19 +485,9 @@ class Map {
       row = height - row;
       nRow = height - nRow;
 
-      let section;
-      if (fly) {
-        section = [[col, row], [nCol, nRow]];
-      }
-      section = [[col, row]];
+      let section = fly ? [[col, row], [nCol, nRow]] : section = [[col, row]];
 
-      // 
       const isNotNeedFind = route.allowDiagonalMove;
-
-
-      // 初始值
-
-
 
       //3点压缩， dx|dy === 1 
       if (!fly && !holeType && isNotNeedFind) {
