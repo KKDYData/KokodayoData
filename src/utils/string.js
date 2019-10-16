@@ -423,7 +423,7 @@ const itemBackground = {
   },
   5: {
     'border-color': 'rgb(75, 41, 23)',
-    'background-color': 'rgb(247, 212, 139)',
+    'background-color': 'rgb(232, 225, 209)',
     'box-shadow': `rgb(75, 41, 23) 0px 0px 0px 2px inset, 
                   rgb(250, 215, 138) 0 0 5px 4px inset,
                   0 0 1px 0px rgba(128, 128, 128, 0.37)`

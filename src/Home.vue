@@ -1,6 +1,7 @@
 <template>
   <div class="home-wrapper">
     <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
+      增加一个材料列表，请在更多查看
       <el-link
         type="warning"
         href="https://github.com/odex21/ArknightsData"

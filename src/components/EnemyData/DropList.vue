@@ -4,12 +4,12 @@
       <span class="span-underline">{{title}}</span>
     </p>
     <div class="map-common-droplist">
-      <div v-for="item in list" :key="(item.data.itemId)">
+      <div v-for="item in list" :key="item.data ?  item.data.itemId : item.itemId">
         <item-viewer
           :targetStage="targetStage"
           :style="{margin: '10px'}"
           :type="item.type"
-          :item="item.data"
+          :item="item.data ? item.data : item"
         ></item-viewer>
       </div>
     </div>

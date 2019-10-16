@@ -1,12 +1,14 @@
 <template>
   <div class="item-viewer-container">
     <el-popover
+      v-if="data"
       popper-class="item-popover-class"
       placement="top"
-      :title="item.name"
+      :title="data.name"
       :width="!short? 350 : 250"
       :trigger="isHover"
       :open-delay="500"
+      :disabled="noPopover"
     >
       <!-- 去掉 ios 点击边框 -->
       <div slot="reference" style="outline: none">
@@ -22,50 +24,28 @@
             </div>
           </el-image>
         </div>
-        <div style="text-align: center" v-if="num">
+        <div style="text-align: center" v-if="num || weight">
           <span
             class="evolvcost-name-wrapper"
-            :style="item.name.length > 6 ? 'font-size: 12px' : ''"
-          >{{item.name}}</span>
+            :style="data.name.length > 6 ? 'font-size: 12px' : ''"
+          >{{data.name}}</span>
           <div style="color:rgb(86, 86, 86)">
-            <span>x{{num}}</span>
+            <span v-if="num">x{{num}}</span>
+            <span v-else>{{weight}}%</span>
           </div>
         </div>
       </div>
-      <p v-if="type === 'FURN'" style="color: #828282">氛围 {{item.comfort}}</p>
-      <p v-if="type === 'FURN'" style="color: #828282">{{item.obtainApproach}}</p>
-      <p>{{item.usage}}</p>
-      <p>{{item.description}}</p>
-      <div v-if="targetStageDrop">
-        <el-divider content-position="left">
-          <span>当前关卡</span>
-          <span
-            v-if="showDropInfo"
-            :style="short ? 'right: -144px' : ''"
-            class="item-divider-extra"
-          >
-            统计次数
-            <el-tooltip placement="top">
-              <i class="el-icon-info"></i>
-              <div slot="content">
-                点击可以查看统计的
-                <color color="hsl(193, 78%, 69%)">总掉落数</color>/
-                <color color="hsl(350, 100%, 79%)">总场次</color>
-              </div>
-            </el-tooltip>
-          </span>
-        </el-divider>
-        <div class="item-stage-container">
-          <drop-line :data="targetStageDrop"></drop-line>
-        </div>
-      </div>
-      <div v-if="type !== 'FURN'" class="item-popover">
-        <div v-if="dropList.length > 0">
+      <div v-if="!noPopover">
+        <p v-if="type === 'FURN'" style="color: #828282">氛围 {{data.comfort}}</p>
+        <p v-if="type === 'FURN'" style="color: #828282">{{data.obtainApproach}}</p>
+        <p>{{data.usage}}</p>
+        <p>{{data.description}}</p>
+        <div v-if="targetStageDrop">
           <el-divider content-position="left">
-            <span>主要掉落</span>
+            <span>当前关卡</span>
             <span
               v-if="showDropInfo"
-              :style="short ? 'top: 10px; right: -165px' : ''"
+              :style="short ? 'right: -144px' : ''"
               class="item-divider-extra"
             >
               统计次数
@@ -80,18 +60,64 @@
             </span>
           </el-divider>
           <div class="item-stage-container">
-            <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage"></drop-line>
+            <drop-line :data="targetStageDrop"></drop-line>
           </div>
         </div>
-        <div v-if="item.buildingProductList.length > 0">
-          <el-divider content-position="left">
-            <span>基建生产</span>
-          </el-divider>
-          <p
-            class="item-stage-container"
-            v-for="way in item.buildingProductList"
-            :key="way.formulaId"
-          >{{roomName(way.roomType)}}</p>
+        <div v-if="type !== 'FURN'" class="item-popover">
+          <div v-if="dropList.length > 0">
+            <el-divider content-position="left">
+              <span>主要掉落</span>
+              <span
+                v-if="showDropInfo"
+                :style="short ? 'top: 10px; right: -165px' : ''"
+                class="item-divider-extra"
+              >
+                统计次数
+                <el-tooltip placement="top">
+                  <i class="el-icon-info"></i>
+                  <div slot="content">
+                    点击可以查看统计的
+                    <color color="hsl(193, 78%, 69%)">总掉落数</color>/
+                    <color color="hsl(350, 100%, 79%)">总场次</color>
+                  </div>
+                </el-tooltip>
+              </span>
+            </el-divider>
+            <div class="item-stage-container">
+              <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage"></drop-line>
+            </div>
+          </div>
+          <div v-if="data.buildingProductList.length > 0">
+            <el-divider content-position="left">
+              <span>合成配方</span>
+            </el-divider>
+            <div
+              v-for="{costs, formulaId, goldCost, extraOutcomeGroup} in formula"
+              :key="formulaId"
+            >
+              <div class="item-formula-container">
+                <just-viewer
+                  v-if="goldCost > 0"
+                  :item="GOLD"
+                  :num="goldCost"
+                  class="item-formula-item"
+                ></just-viewer>
+                <div class="item-formula-item" v-for="data in costs" :key="data.id">
+                  <just-viewer :no-popover="true" :item="data.id" :num="data.count"></just-viewer>
+                </div>
+              </div>
+              <div>
+                <el-divider content-position="left">
+                  <span>合成随机产物</span>
+                </el-divider>
+                <div class="item-formula-container">
+                  <div v-for="data in extraOutcomeGroup" :key="data.id">
+                    <just-viewer class="item-formula-item" :no-popover="true" :item="data.itemId"></just-viewer>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </el-popover>
@@ -102,7 +128,9 @@
 <script>
 import { findStage, UA } from '../../utils';
 import { path } from '../../utils/listVer';
-import { itemBackground, occPer_chinese, roomType } from '../..//utils/string';
+import formula from '../../utils/formula.json';
+
+import { itemBackground, occPer_chinese, roomType, GOLD } from '../..//utils/string';
 
 import { mapState } from 'vuex';
 import Vue from 'vue';
@@ -114,38 +142,58 @@ Vue.use(Tooltip);
 
 import DropLine from './DropLine';
 import Color from '../Color';
+import { getItem } from '../../utils/fetch';
 
 export default {
+  name: 'just-viewer',
   components: {
     DropLine,
     Color
   },
   props: {
     item: {
-      required: true
+      required: true,
+      type: [String, Object]
     },
     num: Number,
     type: String,
-    targetStage: String
+    targetStage: String,
+    noPopover: {
+      default: false,
+      type: Boolean
+    },
+    small: Boolean,
+    weight: Number
   },
   data() {
     return {
       isHover:
         process.env.NODE_ENV === 'development' || UA.isMobliePad || this.short
-          ? 'click' : 'hover'
+          ? 'click' : 'hover',
+      data: typeof this.item !== 'string' ? this.item : undefined,
+      GOLD
     };
+  },
+  created() {
+    if (typeof this.item === 'string') {
+      getItem(this.item).then(el => this.data = el);
+    }
   },
   computed: {
     ...mapState(['stageTree', 'short']),
+    formula() {
+      if (!this.data) return;
+      return this.data.buildingProductList.map(el => formula[el.formulaId]);
+    },
     itemBackground() {
-      return this.type !== 'FURN' ? itemBackground[this.item.rarity] : {};
+      return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};
     },
     itemPic() {
-      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') + this.item.iconId + '_optimized.png');
+      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/picTest/') + this.data.iconId + '_optimized.png');
     },
 
     dropListRow() {
-      return this.$store.getters.itemDropList(this.item.itemId);
+      return this.$store.getters.itemDropList(this.data.itemId);
     },
     targetStageDrop() {
       if (!this.targetStage || !this.dropListRow) return;
@@ -173,7 +221,7 @@ export default {
     dropList() {
       const list = this.dropListRow;
       if (this.stageTree) {
-        return this.item.stageDropList.map(el => {
+        return this.data.stageDropList.map(el => {
           let res = Object.assign({}, el);
           const stageData = findStage(el.stageId, this.stageTree);
           if (stageData) {
@@ -205,7 +253,7 @@ export default {
           return res;
         });
       } else {
-        return this.item.stageDropList;
+        return this.data.stageDropList;
       }
     },
     showDropInfo() {
@@ -246,8 +294,6 @@ export default {
  }
 
  .item-popover {
-   overflow-x: hidden
-
    &.is-left {
      left: 20px
      padding: 0
@@ -289,6 +335,15 @@ export default {
    }
  }
 
+ .item-formula-container {
+   display: flex
+   flex-wrap: wrap
+ }
+
+ .item-formula-item {
+   padding: 5px
+ }
+
  @media screen and (max-width: 700px) {
    .evolvcost-item-contianer {
      /*padding: 5px 10px;*/
@@ -305,8 +360,8 @@ export default {
    }
 
    .item-popover {
-     max-height: 150px
-     overflow-y: scroll
+     overflow-x: hidden
+     max-height: 300px
    }
 
    .item-popover .is-left {

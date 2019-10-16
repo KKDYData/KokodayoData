@@ -51,7 +51,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/(computer|enemydata|customtheme)$/, to: context => {
+          from: /^\/(computer|enemydata|customtheme|items)$/, to: context => {
             return '/index.html';
           }
         },

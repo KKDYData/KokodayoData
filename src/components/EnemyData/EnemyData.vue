@@ -59,7 +59,7 @@
             >地图</el-button>
             <el-button
               @click="loopAllRoutes"
-              v-if="selMapDataEx"
+              v-if="devMode === '/ArknightsBeta' && selMapDataEx"
               :type="!showMap ? '': 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
@@ -209,6 +209,8 @@ import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
 
+
+
 import { Tree, Drawer, Button, Image, Loading, Message } from 'element-ui';
 
 import Vue from 'vue';
@@ -243,6 +245,7 @@ import { path } from '../../utils/listVer';
 import Mode from '../../stats';
 
 import { mapOptionsKey } from '../../utils/string';
+import devMode from '../../stats';
 
 const EnemyDataLayout = () => ({
   component: import(
@@ -303,7 +306,8 @@ export default {
       preData: null,
       map: null,
       mapUp: null,
-      isEdge: browser.name === 'Edge' && browser.major < 19
+      isEdge: browser.name === 'Edge' && browser.major < 19,
+      devMode
     };
   },
   computed: {

@@ -13,13 +13,14 @@
       <el-menu-item :index="routes.home.path">{{routes.home.text}}</el-menu-item>
       <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item>
       <template v-if="!short">
+        <el-menu-item :index="routes.items.path">{{routes.items.text}}</el-menu-item>
         <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
         <el-menu-item :index="routes.customtheme.path">{{routes.customtheme.text}}</el-menu-item>
       </template>
       <template v-else>
         <el-submenu index="2">
           <template slot="title">{{moreText}}</template>
-          <!-- <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item> -->
+          <el-menu-item :index="routes.items.path">{{routes.items.text}}</el-menu-item>
           <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
           <el-menu-item :index="routes.customtheme.path">{{routes.customtheme.text}}</el-menu-item>
         </el-submenu>
@@ -63,6 +64,10 @@ export default {
         customtheme: {
           path: path + '/customtheme',
           text: '家具'
+        },
+        items: {
+          path: path + '/items',
+          text: '材料'
         }
       }
     };
