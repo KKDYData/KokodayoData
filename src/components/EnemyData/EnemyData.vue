@@ -227,7 +227,8 @@ import {
   findStage,
   preDefineGet,
   UA,
-  TaskQueue
+  TaskQueue,
+  findValue
 } from '../../utils';
 
 import {
@@ -398,30 +399,18 @@ export default {
         )
           .filter(([k, v]) => mapOptionsKey[k])
           .map(([k, v]) => {
+            v = k === 'costIncreaseTime' ? Math.round(10 / v) / 10 : v;
             if (this.runesMode) {
               if (k === 'maxLifePoint') {
-                const lifePointBuff = this.selMapData.runes.find(
-                  el => el.key === 'gbuff_lifepoint'
-                );
+                const lifePointBuff = findValue(this.selMapData, 'runes', 'gbuff_lifepoint');
                 if (lifePointBuff) {
-                  v = lifePointBuff.blackboard.find(el => el.key === 'value')
-                    .value;
+                  v = findValue(lifePointBuff, 'blackboard', 'value').value;
                 }
               }
               if (k === 'costIncreaseTime') {
-                const costBuff = this.selMapData.runes.find(
-                  el => el.key === 'cbuff_cost_recovery'
-                );
-                if (costBuff) {
-                  // 暂时只保留0.3，不然会换行
-                  v =
-                    Math.round(
-                      (v /
-                        costBuff.blackboard.find(el => el.key === 'scale')
-                          .value) *
-                      10
-                    ) / 10;
-                }
+                const costBuff = findValue(this.selMapData, 'runes', 'cbuff_cost_recovery');
+                // 暂时只保留0.3，不然会换行
+                v = Math.round((v / findValue(costBuff, 'blackboard', 'scale').value) * 10) / 10;
               }
             }
             return [mapOptionsKey[k], v];

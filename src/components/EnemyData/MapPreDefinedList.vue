@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { getProfilePath } from '../../utils';
+import { getProfilePath, findValue } from '../../utils';
 import charCube from '../charCube';
 import charStatus from '../charStatus';
 import loadingC from '../Loading';
@@ -96,9 +96,9 @@ export default {
         if (checkTokenInsts) {
           const res = this.list.map(el => {
             let initialCnt = el.initialCnt;
-            const charKey = checkTokenInsts.blackboard.find(el => el.key === 'char').valueStr;
+            const charKey = findValue(checkTokenInsts, 'blackboard', 'char').valueStr;
             if (charKey && el.key === charKey) {
-              initialCnt += checkTokenInsts.blackboard.find(el => el.key === 'value').value;
+              initialCnt += findValue(checkTokenInsts, 'blackboard', 'value').value;
             }
             return { ...el, initialCnt };
           });

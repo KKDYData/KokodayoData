@@ -194,6 +194,26 @@ const changeKey = key => {
   }
 };
 
+
+const getValueDesc = (res, index, offset) => res.slice(index + offset).match(/(<.*?>)(.*?)(<\/.*?>)/);
+
+const findValue = (data, attr, key) => {
+  if (data[attr]) {
+    return data[attr].find(el => el.key === key);
+  } else {
+    console.error(`There is no Attr ${attr} in `, data);
+  }
+};
+
+
+const decNoValue = (res, data, str) => {
+  if (!data || !data.value) return -1;
+  const temp = res.match(new RegExp(str));
+  if (temp && !new RegExp(`/${str}(.{2,}${Math.abs(data.value)})/`).test(res)) return temp.index;
+  else return -1;
+};
+
+const exSkill = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2']);
 const changeAttackSpeed = (skill) => {
   const str = changeDesc(skill.description);
   let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
@@ -216,7 +236,7 @@ const changeAttackSpeed = (skill) => {
       p2 = p2.slice(1);
       minus = true;
     }
-    let temp = skill.blackboard.find(el => el.key === p2.toLowerCase());
+    let temp = findValue(skill, 'blackboard', p2.toLowerCase());
     if (temp) {
       res = temp.value;
       if (minus) res *= -1;
@@ -224,82 +244,46 @@ const changeAttackSpeed = (skill) => {
     }
     return res + percent;
   });
-  const skill_time_text = res.match(/攻击间隔/);
-  if (skill_time_text && !new RegExp(`/攻击间隔(.{2,}${Math.abs(skill_time_text.value)})/`).test(res)) {
-    const skill_base_time = skill.blackboard.find(
-      el => el.key === 'base_attack_time'
-    );
-    const text = res
-      .slice(skill_time_text.index + 4)
-      .match(/(<.*?>)(.*?)(<\/.*?>)/);
 
+  const skill_base_time = findValue(skill, 'blackboard', 'base_attack_time');
+  const AtkBasetimeIndex = decNoValue(res, skill_base_time, '攻击间隔');
+  if (AtkBasetimeIndex > -1) {
+    const text = getValueDesc(res, AtkBasetimeIndex, 4);
     let value = skill_base_time.value;
-    const temp = res.split('');
-    // 有text的话，直接按匹配的长度弄就好
-    if (!text) {
-      // throw new Error('攻击间隔的正则匹配出问题');
-      const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
-
-      temp.splice(
-        skill_time_text.index + tempIndex,
-        0,
-        `<i style="color:#F49800;font-style: normal;">(${value}s)</i>`
-      );
-    } else {
-      let unit = 's';
-      const absV = Math.abs(value);
-      if (absV === 0.7 || absV === 0.15) {
-        value = value * 10 * 10;
-        unit = '%';
-      }
-      temp.splice(
-        skill_time_text.index + 4 + text.index + text[0].length,
-        0,
-        `(${value}${unit})`
-      );
+    let unit = 's';
+    if (exSkill.has(skill.prefabId)) {
+      value = value * 10 * 10;
+      unit = '%';
     }
+    // 只有白雪 !text
+    const inject = text ? `(${value}${unit})` : `<i style="color:#F49800;font-style: normal;">(${value}${unit})</i>`;
+    const tempIndex = text ? 4 + text[0].length : (res.match('略微增大') ? 4 : 0) + 4;
 
+    const temp = res.split('');
+    temp.splice(AtkBasetimeIndex + tempIndex, 0, inject);
     res = temp.join('');
   }
 
-  const skill_attack_speed = res.match(/攻击速度(?!<|\+|-)/);
-  if (skill_attack_speed) {
-    const attack_speed = skill.blackboard.find(
-      el => el.key === 'attack_speed'
-    );
-    if (attack_speed && !new RegExp(`/攻击速度(.{2,}${Math.abs(attack_speed.value)})/`).test(res)) {
-      const text = res
-        .slice(skill_attack_speed.index + 4)
-        .match(/(<.*?>)(.*?)(<\/.*?>)/);
-      let value = attack_speed.value;
-      const temp = res.split('');
-      if (!text) {
-        const tempIndex = (res.match('略微增大') ? 4 : 0) + 4;
-        temp.splice(
-          skill_attack_speed.index + tempIndex,
-          0,
-          `<i style="color:#F49800;font-style: normal;">(${value})</i>`
-        );
-      } else {
-        temp.splice(
-          skill_attack_speed.index + 4 + text.index + text[0].length,
-          0,
-          `(${value})`
-        );
-      }
-      res = temp.join('');
-    }
+  // 其实只有白金需要
+  const attack_speed = findValue(skill, 'blackboard', 'attack_speed');
+  const atkSpeedIndex = decNoValue(res, attack_speed, '攻击速度(?!<|\\+|-)');
+  const text = getValueDesc(res, atkSpeedIndex, 4);
+  if (atkSpeedIndex > -1 && text) {
+    const value = attack_speed.value;
+    const inject = text ? `(${value})` : `<i style="color:#F49800;font-style: normal;">(${value})</i>`;
+    const tempIndex = (text ? text[0].length : 4) + (res.match(/略微/) ? 2 : 0);
+
+    const temp = res.split('');
+    temp.splice(atkSpeedIndex + tempIndex, 0, inject);
+    res = temp.join('');
   }
 
+  // 只有白面
   const spUp = res.match(/技力回复速度/);
   if (spUp) {
     const temp = res.split('');
-    const value = skill.blackboard.find(
-      el => el.key === 'sp_recovery_per_sec'
-    ).value;
-    temp.splice(spUp.index + 6, 0,
-      `<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`
-    );
+    const value = findValue(skill, 'blackboard', 'sp_recovery_per_sec').value;
+    temp.splice(spUp.index + 6, 0, `<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`);
     res = temp.join('');
   }
 
@@ -388,9 +372,7 @@ const findStage = (map, tree) => {
   const splitTemp = map.split('_');
   let groupName = splitTemp[0];
   if (groupName === 'sub') groupName = 'main';
-  const group = tree.find(
-    el => el.label === getStageType(groupName)
-  );
+  const group = tree.find(el => el.label === getStageType(groupName));
   let target;
   if (group.label === '主线') {
     const chapter = splitTemp[1].split('-');
@@ -412,6 +394,7 @@ const findStage = (map, tree) => {
 
 export {
   TaskQueue,
+  findValue,
 
   // 业务相关类
   debounce,
