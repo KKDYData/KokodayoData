@@ -4,10 +4,7 @@ import actions from './action';
 import { UA } from '../utils';
 import { charListVer } from '../utils/listVer';
 
-
 Vue.use(Vuex);
-
-
 
 export default new Vuex.Store({
   state: {

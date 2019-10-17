@@ -284,7 +284,7 @@ export default {
           _version: version
         });
       };
-      throttle(saveTask(), 1000);
+      setTimeout(saveTask, 1000);
 
       //判定是否是公招模式
       let targetData = this.filterGroups.gkzm[0].chosed

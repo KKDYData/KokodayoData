@@ -71,14 +71,14 @@ export default {
     },
     seven: Array,
   },
-  mounted() {
+  beforeMount() {
     for (let i = 0; i < this.unlockCond.length; i++) {
       this.sLevelAdd(i, 0);
     }
   },
   data() {
     return {
-      sLevel: [6, 6, 6],
+      sLevel: this.skills[0].levels.length > 7 ? [6, 6, 6] : [5, 5, 5],
       picList: { 0: [], 1: [], 2: [] }
     };
   },
@@ -104,8 +104,8 @@ export default {
       if (num > this.unlockCond[index].data.length - 1)
         num = this.unlockCond[index].data.length - 1;
       if (num < 0) num = 0;
+      // 拆包出来的奇怪词条
       let p = num < 6 ? 'lvlUpCost' : 'levelUpCost';
-      // this.$set(this.picList[index], 'load', false);
 
       Promise.all(
         this.unlockCond[index].data[num][p].map(async p => {
@@ -117,12 +117,12 @@ export default {
           return res;
         })
       ).then(arr => {
-        if (p === 'lvlUpCost') {
-          this.picList = [arr, arr, arr];
-          this.sLevel = [num, num, num];
-        } else {
+        if (p === 'levelUpCost') {
           this.$set(this.picList, index, arr);
           this.$set(this.sLevel, index, num);
+        } else {
+          this.picList = [arr, arr, arr];
+          this.sLevel = [num, num, num];
         }
       });
     }

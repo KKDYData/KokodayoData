@@ -46,7 +46,8 @@ export default {
     return {
       el: null,
       container: null,
-      visible: false
+      visible: false,
+      throttledScrollHandler: null, // throttle(300, this.onScroll)
     };
   },
 
@@ -64,12 +65,14 @@ export default {
 
   mounted() {
     this.init();
-    this.throttledScrollHandler = throttle(300, this.onScroll);
-    this.container.addEventListener('scroll', this.onScroll);
+    this.throttledScrollHandler = throttle(this.onScroll, 100);
+    this.container.addEventListener('scroll', this.throttledScrollHandler);
 
     new Clipboard('.share');
   },
-
+  beforeDestroy() {
+    this.container.removeEventListener('scroll', this.throttledScrollHandler);
+  },
   methods: {
     init() {
       this.container = document;
@@ -108,9 +111,6 @@ export default {
     }
   },
 
-  beforeDestroy() {
-    this.container.removeEventListener('scroll', this.throttledScrollHandler);
-  }
 };
 </script>
 

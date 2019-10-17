@@ -1,10 +1,6 @@
 
 workbox.core.skipWaiting();
 workbox.core.clientsClaim();
-
-
-
-
 workbox.routing.registerRoute(/api\/arknights/, new workbox.strategies.NetworkFirst(), 'GET');
 workbox.routing.registerRoute(/\.ico$/, new workbox.strategies.CacheFirst(), 'GET');
 workbox.routing.registerRoute(/https:\/\/andata.somedata.top\/data(.+)(?<!\.mp3)$/, new workbox.strategies.StaleWhileRevalidate({ 'cacheName': 'oss-cache', plugins: [new workbox.cacheableResponse.Plugin({ statuses: [0, 200] }), new workbox.broadcastUpdate.Plugin({ channelName: 'oss-update' })] }), 'GET');

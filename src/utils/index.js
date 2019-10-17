@@ -5,23 +5,18 @@ import { getHeroData, getSkill } from './fetch';
 
 const debounce = function (action, idle) {
   let last;
-  return function () {
-    const ctx = this,
-      args = arguments;
+  return (...args) => {
     clearTimeout(last);
-    last = setTimeout(() => {
-      action.apply(ctx, args);
-    }, idle);
+    last = setTimeout(action, idle, ...args);
   };
 };
 
 const throttle = function (action, delay) {
   let last = 0;
   // 传的参数是类似requestAnimationFrame的TimeEvent
-  return function (event) {
+  return (event) => {
     let curr = event.timeStamp;
     if (curr - last > delay) {
-      console.log(event);
       action(event);
       last = curr;
     }

@@ -7,7 +7,6 @@ import NavMenu from './NavMenu';
 import Mode from './stats';
 import store from './store';
 
-
 Vue.use(VueRouter);
 Vue.use(VueMeta);
 
@@ -21,11 +20,8 @@ const Footer = () => import(/* webpackChunkName: "EnemyData" */'./Footer');
 const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'./CustomTheme');
 const Items = () => import(/* webpackChunkName: "Items" */'./Items');
 
-
 const isDev = process.env.NODE_ENV === 'development';
-
 const path = isDev ? '/' : Mode + '/';
-
 
 const routes = [
   { path: path, component: Home },
@@ -43,11 +39,6 @@ const router = new VueRouter({
     return { x: 0, y: 0 };
   }
 });
-
-
-
-
-
 
 new Vue({
   el: '#app',
@@ -67,7 +58,6 @@ new Vue({
     </div>
   `
 });
-
 
 !isDev && import(/* webpackChunkName: "loadSw" */'./loadSw').then(res => {
   res.default();
