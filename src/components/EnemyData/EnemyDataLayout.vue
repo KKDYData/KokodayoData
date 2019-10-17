@@ -251,11 +251,9 @@ export default {
 
       }
     },
-    mouseHoverOpen(k, v) {
+    mouseHoverOpen(...args) {
       clearTimeout(this.debounceOpen);
-      this.debounceOpen = setTimeout(() => {
-        this.openDetails(k, v);
-      }, 1000);
+      this.debounceOpen = setTimeout(this.openDetails, 1000, ...args);
     },
     cancelOpen() {
       clearTimeout(this.debounceOpen);

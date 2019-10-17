@@ -3,21 +3,22 @@ import { getStageType, statusToChChar } from './string';
 import { path } from './listVer';
 import { getHeroData, getSkill } from './fetch';
 
-const debounce = function (action, idle) {
+const debounce = function (action, idle, ...args) {
   let last;
-  return (...args) => {
+  return (e) => {
     clearTimeout(last);
     last = setTimeout(action, idle, ...args);
   };
 };
 
-const throttle = function (action, delay) {
+
+const throttle = function (action, delay, ...args) {
   let last = 0;
   // 传的参数是类似requestAnimationFrame的TimeEvent
   return (event) => {
     let curr = event.timeStamp;
     if (curr - last > delay) {
-      action(event);
+      action(...args);
       last = curr;
     }
   };
