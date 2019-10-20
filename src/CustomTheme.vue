@@ -112,7 +112,7 @@ export default {
   },
   methods: {
     initOpen(index, e) {
-      if (index === 1) {
+      if (index === 0) {
         e.click(true);
       }
     },
