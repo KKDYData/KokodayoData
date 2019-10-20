@@ -194,9 +194,6 @@ const changeKey = key => {
   }
 };
 
-
-const getValueDesc = (res, index, offset) => res.slice(index + offset).match(/(<.*?>)(.*?)(<\/.*?>)/);
-
 const findValue = (data, attr, key) => {
   if (data[attr]) {
     return data[attr].find(el => el.key === key);
@@ -205,7 +202,7 @@ const findValue = (data, attr, key) => {
   }
 };
 
-
+const getValueDesc = (res, index, offset) => res.slice(index + offset).match(/(<.*?>)(.*?)(<\/.*?>)/);
 const decNoValue = (res, data, str) => {
   if (!data || !data.value) return -1;
   const temp = res.match(new RegExp(str));

@@ -89,6 +89,7 @@
     <el-tabs @tab-click="switchToNormal" style="padding: 0px" :value="currentMode">
       <el-tab-pane label="一般模式" name="profile-layout">
         <profile-layout
+          v-if="currentMode === 'profile-layout'"
           :show-tags="showTag"
           ref="profile-layout"
           :tags="SelectedTag"
@@ -96,8 +97,13 @@
           :data="data"
         ></profile-layout>
       </el-tab-pane>
-      <el-tab-pane name="new-profile-layout" label="排列组合" lazy>
-        <new-profile-layout :tags="SelectedTag" :filterGroups="filterGroups" :data="data"></new-profile-layout>
+      <el-tab-pane name="new-profile-layout" label="公开招募" lazy>
+        <new-profile-layout
+          v-if="currentMode === 'new-profile-layout'"
+          :tags="SelectedTag"
+          :filterGroups="filterGroups"
+          :data="data"
+        ></new-profile-layout>
       </el-tab-pane>
       <el-tab-pane name="expalain" label="说明&反馈" lazy>
         <my-feedback :store="store"></my-feedback>
@@ -125,7 +131,7 @@ import FilterButtonGroup from '../FilterButtonGroup';
 import loadingC from '../Loading';
 import ProfileLayout from './ProfileLayout';
 
-import { sort, throttle, } from '../../utils';
+import { sort } from '../../utils';
 import { TagsArr, class_chinese, StarArr } from '../../utils/string';
 
 
@@ -256,7 +262,8 @@ export default {
       return this.$el.clientWidth - 50;
     },
     switchToNormal(tab) {
-      if (this.currentMode === 'profile-layout')
+      this.currentMode = tab.name;
+      if (tab.name === 'profile-layout')
         this.$nextTick().then(() => {
           this.$refs['profile-layout'] &&
             this.$refs['profile-layout'].calFillAmount();

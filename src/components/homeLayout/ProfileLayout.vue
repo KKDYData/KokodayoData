@@ -12,7 +12,7 @@
           :class="agent.tags[0] === 5 ? 'profile-item-inner-wrapper bg-6' : 'profile-item-inner-wrapper'"
           :style="bgColor(agent.tags[0])"
         >
-          <router-link :to="path + '/details/' + agent.No">
+          <router-link :to="path + '/details/' + agent.No" :target="!short ? '_blank': false">
             <el-image
               fit="cover"
               class="img-container"
@@ -204,7 +204,7 @@ export default {
 }
 
 .profile-item {
-  transition: all 1s ease-in-out;
+  transition: all 0.6s ease-in-out;
   display: inline-block;
 }
 

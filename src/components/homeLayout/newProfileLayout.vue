@@ -175,7 +175,9 @@ export default {
           el[1].agents = el[1].agents.filter(el => el.tags[0] < 5);
         }
         return el;
-      });
+      }).filter(el => el[1].agents.length);
+      console.log('new LayoutFilter');
+
       res = sort(res, (a, b) => {
         const tempA = a[1].keys;
         const tempB = b[1].keys;
