@@ -5,25 +5,23 @@
         class="profile-item"
         v-for="agent in data"
         :key="agent.name"
-        :title="agent.name"
         :style="showTags ? short ? ' width: 165px' : 'width: 170px; ' : ''"
       >
         <div
-          :class="agent.tags[0] === 5 ? 'profile-item-inner-wrapper bg-6' : 'profile-item-inner-wrapper'"
+          :class="{'profile-item-inner-wrapper': true, 'bg-6': dev && agent.tags[0] === 5,}"
           :style="bgColor(agent.tags[0])"
         >
-          <router-link :to="path + '/details/' + agent.No" :target="!short ? '_blank': false">
-            <el-image
-              fit="cover"
-              class="img-container"
-              :alt="agent.name"
-              :src="profilePath(agent.No)"
-            >
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
-              </div>
-            </el-image>
-          </router-link>
+          <el-image
+            :class="{'img-dev-container': dev, 'img-container': true}"
+            fit="cover"
+            :alt="agent.name"
+            :src="profilePath(agent.No)"
+            @click.native="openDetails(agent)"
+          >
+            <div slot="error" class="image-slot">
+              <i class="el-icon-picture-outline"></i>
+            </div>
+          </el-image>
           <transition name="slide-fade">
             <div class="tag-wrapper-1" v-if="showTags">
               <div v-for="(tag, index) in agent.tags" :key="tag">
@@ -51,20 +49,19 @@
           </transition>
 
           <div class="name">
-            <div class="name-inner-wrapper" :style="nameColor(agent.tags[0])">
-              <span
-                :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
-              >{{agent.name}}</span>
-            </div>
             <div
-              style="font-size: 12px;font-weight: normal;line-height: 12px;font-family: sans-serif;padding-left: 6px"
+              class="name-inner-wrapper"
+              :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
+            >{{agent.name}}</div>
+            <div
+              :style="dev ? 'font-size: 12px;font-weight: normal;line-height: 12px;font-family: sans-serif;padding-left: 6px': ''"
             >
               {{agent.en}}
               <span
                 v-if="showTags && tagHit(agent.tags[1])"
               >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
             </div>
-            <div class="name-slide-logo" v-if="agent.logo">
+            <div class="name-slide-logo" v-if="dev && agent.logo">
               <el-image
                 fit="cover"
                 :alt="agent.name"
@@ -109,9 +106,9 @@ export default {
   data() {
     return {
       fillItems: [],
-      moraleMode: false,
       fillItemWidth: { width: '100px' },
-      rowPath: path
+      rowPath: path,
+      dev: Mode !== '/ArknightsBeta'
     };
   },
   watch: {
@@ -145,13 +142,9 @@ export default {
     class_icon(c) {
       return getClass_icon(c);
     },
-    async openDetails(item) {
-      console.log(item.name);
-      if (this.moraleMode) {
-        this.$emit('chose', item.name);
-        return;
-      }
-      this.$router.push(this.path + '/details/' + item.No);
+    async openDetails(agent) {
+      if (this.short) this.$router.push(this.path + '/details/' + agent.No);
+      else window.open(this.path + '/details/' + agent.No);
     },
     calFillAmount() {
       //通过css控制填充的margin？
@@ -189,200 +182,211 @@ export default {
   }
 };
 </script>
-<style scoped>
+<style lang="stylus" scoped>
 .flip-list-move {
-  transition: transform 1s ease-in-out;
+  transition: transform 1s ease-in-out
 }
 
-.flip-list-enter,
-.flip-list-leave-to {
-  opacity: 0;
+.flip-list-enter, .flip-list-leave-to {
+  opacity: 0
 }
 
 .flip-list-leave-active {
-  position: absolute;
+  position: absolute
 }
 
 .profile-item {
-  transition: all 0.6s ease-in-out;
-  display: inline-block;
+  transition: all 0.6s ease-in-out
+  display: inline-block
 }
 
 .tag-container {
-  display: inline-block;
-  font-size: 0;
-  margin-bottom: 1px;
+  display: inline-block
+  font-size: 0
+  margin-bottom: 1px
 }
 
 .tag-container .el-tag {
-  border-radius: 2px;
+  border-radius: 2px
 }
 
 .slide-fade-enter-active {
-  transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out
 }
 
-.slide-fade-enter,
-.slide-fade-leave-to {
-  transform: translateX(-59px);
-  opacity: 0;
+.slide-fade-enter, .slide-fade-leave-to {
+  transform: translateX(-59px)
+  opacity: 0
 }
 
 .profile-container {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 20px auto 50px;
-  width: 100%;
-  justify-content: space-around;
+  display: flex
+  flex-wrap: wrap
+  margin: 20px auto 50px
+  width: 100%
+  justify-content: space-around
 }
+
 .profile-item {
-  --imgWidth: 88px;
-  /* position: relative; */
-  box-sizing: border-box;
-  margin: 10px;
+  --imgWidth: 88px
+  box-sizing: border-box
+  margin: 10px
 }
+
 .profile-item-inner-wrapper {
-  height: 121px;
-  width: 100px;
-  position: relative;
-  display: flex;
+  height: 121px
+  width: 100px
+  position: relative
+  display: flex
+  box-shadow: rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px
 }
 
 .img-container-wrapper {
-  display: flex;
+  display: flex
+}
+
+.img-dev-container {
+  height: calc(var(--imgWidth) + 12px)
+  z-index: 1
+}
+
+.img-dev-container::after {
+  content: ''
+  background-image: url('bg_1_lastbreath_optimized.png')
+  background-size: contain
+  width: var(--imgWidth)
+  height: var(--imgWidth)
+  display: inline-block
+  z-index: -1
+  position: absolute
+  top: 6px
+  left: 6px
 }
 
 .img-container {
-  width: calc(var(--imgWidth) + 12px);
-  height: calc(var(--imgWidth) + 12px);
-  z-index: 1;
-}
-.img-container::after {
-  content: "";
-  background-image: url("bg_1_lastbreath_optimized.png");
-  background-size: contain;
-  width: var(--imgWidth);
-  height: var(--imgWidth);
-  display: inline-block;
-  z-index: -1;
-  position: absolute;
-  top: 6px;
-  left: 6px;
-}
-.img-container img {
-  width: 100%;
+  width: calc(var(--imgWidth) + 12px)
+
+  img {
+    width: 100%
+  }
 }
 
 .name {
-  text-overflow: ellipsis;
-  width: 100px;
-  box-sizing: border-box;
-  white-space: nowrap;
-  overflow: hidden;
-  position: absolute;
-  top: 85px;
-  color: white;
-  font-size: 0;
-  font-family: "FZYaSong-H-GBK";
-  overflow: visible;
-  z-index: 10;
+  text-overflow: ellipsis
+  width: 100px
+  box-sizing: border-box
+  white-space: nowrap
+  overflow: hidden
+  position: absolute
+  top: 85px
+  color: white
+  font-size: 0
+  font-family: 'FZYaSong-H-GBK'
+  overflow: visible
+  z-index: 10
 }
+
 .name a {
-  color: inherit;
-  text-decoration: none;
-  width: 100%;
-  display: inline-block;
+  color: inherit
+  text-decoration: none
+  width: 100%
+  display: inline-block
 }
 
 .tag-wrapper-1 {
-  margin-left: -2px;
-  width: 65px;
-  z-index: -10;
+  margin-left: -2px
+  width: 65px
+  z-index: -10
 }
+
 .name-tag-show {
-  top: -15px !important;
-  padding-left: 5px;
-  text-align: left;
-  color: white;
-  width: var(--imgWidth);
-  background-color: #414141;
-  box-sizing: border-box;
-  height: 20px;
-  line-height: 19px;
+  top: -15px !important
+  padding-left: 5px
+  text-align: left
+  color: white
+  width: var(--imgWidth)
+  background-color: #414141
+  box-sizing: border-box
+  height: 20px
+  line-height: 19px
 }
 
 .class-icon {
-  --imgWidth: 20px;
-  vertical-align: middle;
+  --imgWidth: 20px
+  vertical-align: middle
 }
 
 .tag-container >>> .el-tag--dark {
-  background-color: #313131;
-  border-color: #313131;
+  background-color: #313131
+  border-color: #313131
 }
 
 .long-tag .el-tag--info {
-  min-width: 48px;
+  min-width: 48px
 }
 
 .name-slide-logo {
-  width: 47px;
-  top: -18px;
-  position: absolute;
-  right: -10px;
-  z-index: -1;
+  width: 47px
+  top: -18px
+  position: absolute
+  right: -10px
+  z-index: -1
 }
 
 .double-tag {
-  display: inline-block;
-  height: 100%;
-  font-size: 12px;
-  padding: 0 5px;
+  display: inline-block
+  height: 100%
+  font-size: 12px
+  padding: 0 5px
 }
+
 .double-tag-container .el-tag--mini.el-tag--info {
-  padding: 0;
-  font-size: 0;
-  overflow: hidden;
-  border-radius: 3px;
+  padding: 0
+  font-size: 0
+  overflow: hidden
+  border-radius: 3px
 }
 
 .double-tag:first-child {
-  border-right: 1px solid rgb(153, 153, 153);
+  border-right: 1px solid rgb(153, 153, 153)
 }
 
 .bg-6 {
-  background: url("./star_6_optimized.png");
-  background-size: cover;
+  background: url('./star_6_optimized.png')
+  background-size: cover
 }
 
 .name-inner-wrapper {
-  min-width: 50px;
-  display: inline-block;
-  padding-left: 6px;
-  font-size: 17px;
+  min-width: 50px
+  display: inline-block
+  padding-left: 6px
+  font-size: 17px
 }
 
 @media screen and (max-width: 700px) {
-  .img-container {
-    width: calc(var(--imgWidth) + 8px);
-    height: calc(var(--imgWidth) + 8px);
+  .img-dev-container {
+    width: calc(var(--imgWidth) + 8px)
+    height: calc(var(--imgWidth) + 8px)
   }
 
-  .img-container::after {
-    top: 4px;
-    left: 4px;
+  .img-dev-container::after {
+    top: 4px
+    left: 4px
   }
+
   .profile-item-inner-wrapper {
-    width: calc(var(--imgWidth) + 8px);
+    width: calc(var(--imgWidth) + 8px)
+    height: calc(calc(var(--imgWidth) + 8px) * 1.21)
   }
 
   .profile-item {
-    margin: 10px 5px;
+    margin: 10px 5px
   }
 }
+
 @media screen and (max-width: 360px) {
   .name {
-    font-size: 16px;
+    font-size: 16px
   }
 }
 </style>

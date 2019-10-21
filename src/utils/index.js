@@ -141,6 +141,7 @@ const getClass_icon = (c) => {
 };
 
 import UaParser from 'ua-parser-js';
+import devMode from 'src/stats';
 
 
 // import { Message } from 'element-ui';
@@ -173,8 +174,11 @@ window.addEventListener('resize', throttle(() => {
 
 
 const getProfilePath = name => {
-  return UA.ok ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
-    : `${path}char/profile/${name}.png`;
+  return devMode !== '/Arknights' ?
+    UA.ok ? `${path}char/portrait/${name}.png`
+      : `${path}char/portrait/${name}.png`
+    : UA.ok ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test`
+      : `${path}char/profile/${name}.png`;
 };
 
 const getDetailsProfilePath = name => {

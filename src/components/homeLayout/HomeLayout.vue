@@ -36,6 +36,7 @@
           trigger="click"
           :visible-arrow="false"
           :width="short ? 320 : 800"
+          :disabled="agentFilterDisabled"
         >
           <div slot="reference">
             <div class="tags-selected-container">
@@ -44,8 +45,9 @@
                 :size="short? 'mini' :'medium'"
                 round
                 :style="short ? 'margin-left: 10px' : ''"
+                :disabled="agentFilterDisabled"
               >标签</el-button>
-              <div class="tag-selected-content-container" style>
+              <div class="tag-selected-content-container">
                 <transition name="fade" mode="out-in">
                   <div v-if="SelectedTagGz.length !== 0 ">
                     <div
