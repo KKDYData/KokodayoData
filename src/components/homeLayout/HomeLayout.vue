@@ -78,9 +78,7 @@
           ></filter-group>
           <div style="display:flex"></div>
           <div style="direction: rtl">
-            <el-button class="close-button" @click="$el.click()" type="danger" size="mini">
-              <i class="el-icon-close"></i>
-            </el-button>
+            <close-button></close-button>
           </div>
         </el-popover>
       </div>
@@ -130,6 +128,7 @@ Vue.use(TabPane);
 import FilterButtonGroup from '../FilterButtonGroup';
 import loadingC from '../Loading';
 import ProfileLayout from './ProfileLayout';
+import CloseButton from '../CloseButton';
 
 import { sort } from '../../utils';
 import { TagsArr, class_chinese, StarArr } from '../../utils/string';
@@ -185,7 +184,8 @@ export default {
     'filter-group': FilterButtonGroup,
     ProfileLayout,
     newProfileLayout,
-    myFeedback
+    myFeedback,
+    CloseButton
   },
   props: {
     profileList: Array,

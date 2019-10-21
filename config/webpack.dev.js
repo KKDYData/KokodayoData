@@ -19,6 +19,7 @@ module.exports = merge(common, {
   devServer: {
     contentBase: './dist',
     hot: true,
+    public: 'http://localhost:8080',
     proxy: {
       '/api': 'http://127.0.0.1:8444',
     },

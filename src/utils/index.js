@@ -195,10 +195,11 @@ const changeKey = key => {
 };
 
 const findValue = (data, attr, key) => {
-  if (data[attr]) {
+  if (data && data[attr]) {
     return data[attr].find(el => el.key === key);
   } else {
     console.error(`There is no Attr ${attr} in `, data);
+    return 0;
   }
 };
 
