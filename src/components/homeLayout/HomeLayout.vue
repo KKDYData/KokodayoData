@@ -464,8 +464,6 @@ export default {
   }
   .home-filter-wrapper {
     padding: 0px;
-
-    /* border-bottom: 1px solid rgba(158, 158, 158, 0.4); */
   }
 }
 </style>
