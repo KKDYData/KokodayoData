@@ -4,25 +4,33 @@
       v-if="data"
       popper-class="item-popover-class"
       placement="top"
-      :title="data.name"
       :width="!short? 350 : 250"
-      :trigger="isHover"
+      trigger="click"
       :open-delay="500"
-      :disabled="noPopover"
+      :title="data.name"
+      :disabled="noPopover && show"
     >
       <!-- 去掉 ios 点击边框 -->
       <div slot="reference" style="outline: none" :class="noPopover ? 'short-force' : ''">
         <div>
-          <el-image
-            :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
-            :style="itemBackground"
-            fit="contain"
-            :src="itemPic"
+          <el-tooltip
+            :disabled="!noPopover"
+            effect="dark"
+            :content="data.name"
+            placement="top-start"
           >
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
-            </div>
-          </el-image>
+            <el-image
+              :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
+              :style="itemBackground"
+              fit="contain"
+              :src="itemPic"
+              @click="show = !show"
+            >
+              <div slot="error" class="image-slot">
+                <i class="el-icon-picture-outline"></i>
+              </div>
+            </el-image>
+          </el-tooltip>
         </div>
         <div style="text-align: center" v-if="num || weight">
           <span
@@ -36,6 +44,9 @@
         </div>
       </div>
       <div v-if="!noPopover">
+        <div>
+          <close-button></close-button>
+        </div>
         <p v-if="type === 'FURN'" style="color: #828282">氛围 {{data.comfort}}</p>
         <p v-if="type === 'FURN'" style="color: #828282">{{data.obtainApproach}}</p>
         <p>{{data.usage}}</p>
@@ -143,6 +154,9 @@ Vue.use(Tooltip);
 
 import DropLine from './DropLine';
 import Color from '../Color';
+import CloseButton from '../CloseButton';
+
+
 import { getItem } from '../../utils/fetch';
 
 // 可以考虑给id的话，只显示图片，不做数据拉取
@@ -152,7 +166,8 @@ export default {
   name: 'just-viewer',
   components: {
     DropLine,
-    Color
+    Color,
+    CloseButton
   },
   props: {
     item: {
@@ -179,7 +194,8 @@ export default {
         process.env.NODE_ENV === 'development' || UA.isMobliePad || this.short
           ? 'click' : 'hover',
       data: typeof this.item !== 'string' ? this.item : undefined,
-      GOLD
+      GOLD,
+      show: false
     };
   },
   watch: {
