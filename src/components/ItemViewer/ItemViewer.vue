@@ -5,10 +5,10 @@
       popper-class="item-popover-class"
       placement="top"
       :width="!short? 350 : 250"
-      trigger="click"
+      :trigger="isHover"
       :open-delay="500"
       :title="data.name"
-      :disabled="noPopover && show"
+      :disabled="noPopover"
     >
       <!-- 去掉 ios 点击边框 -->
       <div slot="reference" style="outline: none" :class="noPopover ? 'short-force' : ''">
@@ -24,7 +24,6 @@
               :style="itemBackground"
               fit="contain"
               :src="itemPic"
-              @click="show = !show"
             >
               <div slot="error" class="image-slot">
                 <i class="el-icon-picture-outline"></i>
@@ -44,7 +43,7 @@
         </div>
       </div>
       <div v-if="!noPopover">
-        <div>
+        <div v-if="isHover === 'click'">
           <close-button></close-button>
         </div>
         <p v-if="type === 'FURN'" style="color: #828282">氛围 {{data.comfort}}</p>
@@ -191,11 +190,11 @@ export default {
   data() {
     return {
       isHover:
-        process.env.NODE_ENV === 'development' || UA.isMobliePad || this.short
+        process.env.NODE_ENV === 'development' ||
+          UA.isMobliePad || this.short
           ? 'click' : 'hover',
       data: typeof this.item !== 'string' ? this.item : undefined,
       GOLD,
-      show: false
     };
   },
   watch: {
