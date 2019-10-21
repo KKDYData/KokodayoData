@@ -165,7 +165,7 @@ if (typeof Array.prototype.flat !== 'function') {
   };
 }
 
-const version = 191021;
+const version = 191022;
 
 export default {
   metaInfo() {
