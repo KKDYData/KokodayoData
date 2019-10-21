@@ -41,7 +41,7 @@
           <div slot="reference">
             <div class="tags-selected-container">
               <el-button
-                :type="SelectedTagGz.length > 0 ?  'warning' : 'info'"
+                :type="SelectedTagGz.length > 0 ?  'danger' : 'info'"
                 :size="short? 'mini' :'medium'"
                 round
                 :style="short ? 'margin-left: 10px' : ''"
@@ -58,8 +58,9 @@
                       <el-tag
                         :size="short? 'medium' :'normal'"
                         @close="handleClose(tag)"
-                        closable
+                        :closable="!agentFilterDisabled"
                         effect="dark"
+                        :type="agentFilterDisabled ? 'info': ''"
                       >{{tag.text}}</el-tag>
                     </div>
                   </div>
@@ -424,16 +425,10 @@ export default {
   margin: 5px 5px;
 }
 
-.filter-wrapper .el-button--warning,
-.tags-popover-wrapper .el-button--warning {
-  background-color: #ca3e47;
-  border-color: rgba(202, 62, 71, 0.6);
-}
-
-.tags-popover-wrapper .el-button--info {
+/* .tags-popover-wrapper .el-button--info {
   background-color: #313131;
   border-color: rgba(49, 49, 49, 0.54);
-}
+} */
 .explain-container {
   margin-top: 15px;
   padding: 0 10px;
@@ -456,11 +451,6 @@ export default {
 .tag-selected-content-container {
   display: inline-block;
   width: calc(100% - 80px);
-}
-
-.tags-selected-inner-container > .el-tag--dark {
-  background-color: #414141;
-  border-color: #414141;
 }
 
 .tags-selected-container button {

@@ -5,7 +5,7 @@
         <el-button
           :size="short? 'mini' :'medium'"
           @click="choseAll"
-          :type="allChosed ? 'info': 'warning'"
+          :type="allChosed ? 'info': 'danger'"
           :class="!allChosed  && !single ? 'filter-button filter-button-closeable' : 'filter-button'"
           :disabled="disabled"
         >
@@ -177,8 +177,4 @@ export default {
     margin-left: 0
   }
 }
-
-/*.filter-button:first-of-type {
-  margin-left: 0px;
-}*/
 </style>

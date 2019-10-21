@@ -1,18 +1,14 @@
 <template>
   <div>
     <transition-group name="flip-list" class="profile-container">
-      <div
-        class="profile-item"
-        v-for="agent in data"
-        :key="agent.name"
-        :style="showTags ? short ? ' width: 165px' : 'width: 170px; ' : ''"
-      >
+      <div class="profile-item" v-for="agent in data" :key="agent.name">
         <div
-          :class="{'profile-item-inner-wrapper': true, 'bg-6': dev && agent.tags[0] === 5,}"
-          :style="bgColor(agent.tags[0])"
+          :class="{'profile-item-inner-wrapper': true}"
+          :style="{ width: showTags ? short ? '165px' : '170px' : ''}"
         >
           <el-image
-            :class="{'img-dev-container': dev, 'img-container': true}"
+            :class="{'img-dev-container': dev, 'img-container': true, 'bg-6': dev && agent.tags[0] === 5}"
+            :style="bgColor(agent.tags[0])"
             fit="cover"
             :alt="agent.name"
             :src="profilePath(agent.No)"
@@ -54,7 +50,7 @@
               :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
             >{{agent.name}}</div>
             <div
-              :style="dev ? 'font-size: 12px;font-weight: normal;line-height: 12px;font-family: sans-serif;padding-left: 6px': ''"
+              style="font-size: 12px; line-height: 12px; font-family: sans-serif;padding-left: 6px"
             >
               {{agent.en}}
               <span
@@ -134,7 +130,7 @@ export default {
   },
   methods: {
     bgColor(star) {
-      return charBorderColor[star];
+      return this.dev && charBorderColor[star];
     },
     nameColor(star) {
       return charNameColor[star];
@@ -238,7 +234,6 @@ export default {
   width: 100px
   position: relative
   display: flex
-  box-shadow: rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px
 }
 
 .img-container-wrapper {
@@ -246,7 +241,6 @@ export default {
 }
 
 .img-dev-container {
-  height: calc(var(--imgWidth) + 12px)
   z-index: 1
 }
 
@@ -265,6 +259,7 @@ export default {
 
 .img-container {
   width: calc(var(--imgWidth) + 12px)
+  box-shadow: rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px
 
   img {
     width: 100%
