@@ -18,6 +18,7 @@
             effect="dark"
             :content="data.name"
             placement="top-start"
+            style="outline: none"
           >
             <el-image
               :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
