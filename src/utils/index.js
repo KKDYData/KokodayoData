@@ -174,9 +174,9 @@ window.addEventListener('resize', throttle(() => {
 
 
 const getProfilePath = name => {
-  return devMode !== '/Arknights' ? UA.ok ? `${path}char/portrait/${name}.png?x-oss-process=style/webp`
-    : `${path}char/portrait/${name}.png`
-    : UA.ok ? `${path}char/profile/${name}_optimized.png?x-oss-process=style/small-test` : `${path}char/profile/${name}.png`;
+  return UA.ok ? `${path}char/portrait/${name}.png?x-oss-process=style/webp`
+    : `${path}char/portrait/${name}.png`;
+
 };
 
 const getDetailsProfilePath = name => {

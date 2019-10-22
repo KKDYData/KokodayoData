@@ -8,7 +8,6 @@
         >
           <el-image
             class="img-container"
-            :style="bgColor(agent.tags[0])"
             fit="cover"
             :alt="agent.name"
             :src="profilePath(agent.No)"
@@ -71,9 +70,9 @@ import { Tag, Image } from 'element-ui';
 Vue.use(Image);
 Vue.use(Tag);
 
-import { getProfilePath, getClass_icon, } from '../../utils';
+import { getProfilePath, } from '../../utils';
 import { path } from '../../utils/listVer';
-import { charBorderColor, charNameColor, getClass_Chinese, } from '../../utils/string';
+import { getClass_Chinese, } from '../../utils/string';
 
 import Mode from '../../stats';
 
@@ -90,7 +89,6 @@ export default {
       fillItems: [],
       fillItemWidth: { width: '100px' },
       rowPath: path,
-      dev: Mode !== '/ArknightsBeta'
     };
   },
   watch: {
@@ -115,15 +113,6 @@ export default {
     window.addEventListener('resize', self.calFillAmount);
   },
   methods: {
-    bgColor(star) {
-      return this.dev && charBorderColor[star];
-    },
-    nameColor(star) {
-      return charNameColor[star];
-    },
-    class_icon(c) {
-      return getClass_icon(c);
-    },
     async openDetails(agent) {
       if (this.short) this.$router.push(this.path + '/details/' + agent.No);
       else window.open(this.path + '/details/' + agent.No);
@@ -266,6 +255,10 @@ export default {
 
 .long-tag .el-tag {
   min-width: 48px
+}
+
+.long-tag .el-tag--plain {
+  color: #909399
 }
 
 .name-slide-logo {
