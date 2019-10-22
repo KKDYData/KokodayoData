@@ -3,11 +3,11 @@
     <transition-group name="flip-list" class="profile-container">
       <div class="profile-item" v-for="agent in data" :key="agent.name">
         <div
-          :class="{'profile-item-inner-wrapper': true}"
+          class="profile-item-inner-wrapper"
           :style="{ width: showTags ? short ? '165px' : '170px' : ''}"
         >
           <el-image
-            :class="{'img-dev-container': dev, 'img-container': true, 'bg-6': dev && agent.tags[0] === 5}"
+            class="img-container"
             :style="bgColor(agent.tags[0])"
             fit="cover"
             :alt="agent.name"
@@ -23,7 +23,6 @@
               <div v-for="(tag, index) in agent.tags" :key="tag">
                 <div class="tag-container long-tag" v-if="index > 2 || index === 0 &&  tag > 3">
                   <el-tag
-                    type="info"
                     :effect="tagHit(tag) ? 'dark' : 'plain'"
                     size="mini"
                   >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
@@ -49,24 +48,11 @@
               class="name-inner-wrapper"
               :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
             >{{agent.name}}</div>
-            <div
-              style="font-size: 12px; line-height: 12px; font-family: sans-serif;padding-left: 6px"
-            >
+            <div style="font-size: 12px; line-height: 12px; font-family: sans-serif">
               {{agent.en}}
               <span
                 v-if="showTags && tagHit(agent.tags[1])"
               >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
-            </div>
-            <div class="name-slide-logo" v-if="dev && agent.logo">
-              <el-image
-                fit="cover"
-                :alt="agent.name"
-                :src="rowPath + 'logo/' + agent.logo + '_optimized.png'"
-              >
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline"></i>
-                </div>
-              </el-image>
             </div>
           </div>
         </div>
@@ -224,42 +210,19 @@ export default {
 }
 
 .profile-item {
-  --imgWidth: 88px
+  --imgWidth: 110px
   box-sizing: border-box
   margin: 10px
 }
 
 .profile-item-inner-wrapper {
-  height: 121px
-  width: 100px
   position: relative
   display: flex
 }
 
-.img-container-wrapper {
-  display: flex
-}
-
-.img-dev-container {
-  z-index: 1
-}
-
-.img-dev-container::after {
-  content: ''
-  background-image: url('bg_1_lastbreath_optimized.png')
-  background-size: contain
-  width: var(--imgWidth)
-  height: var(--imgWidth)
-  display: inline-block
-  z-index: -1
-  position: absolute
-  top: 6px
-  left: 6px
-}
-
 .img-container {
-  width: calc(var(--imgWidth) + 12px)
-  box-shadow: rgba(77, 77, 77, 0.3) 1px 1px 2px 0px, hsla(47, 20%, 50%, 0.3) 1px 1px 1px 1px
+  width: var(--imgWidth)
+  height: calc(var(--imgWidth) * 1.12)
 
   img {
     width: 100%
@@ -273,23 +236,18 @@ export default {
   white-space: nowrap
   overflow: hidden
   position: absolute
-  top: 85px
+  top: 86px
   color: white
   font-size: 0
   font-family: 'FZYaSong-H-GBK'
   overflow: visible
   z-index: 10
-}
-
-.name a {
-  color: inherit
-  text-decoration: none
-  width: 100%
-  display: inline-block
+  padding-left: 6px
+  text-shadow: 1px 0px 2px #818181
 }
 
 .tag-wrapper-1 {
-  margin-left: -2px
+  margin-left: -10px
   width: 65px
   z-index: -10
 }
@@ -306,17 +264,7 @@ export default {
   line-height: 19px
 }
 
-.class-icon {
-  --imgWidth: 20px
-  vertical-align: middle
-}
-
-.tag-container >>> .el-tag--dark {
-  background-color: #313131
-  border-color: #313131
-}
-
-.long-tag .el-tag--info {
+.long-tag .el-tag {
   min-width: 48px
 }
 
@@ -335,7 +283,7 @@ export default {
   padding: 0 5px
 }
 
-.double-tag-container .el-tag--mini.el-tag--info {
+.double-tag-container .el-tag--mini.el-tag {
   padding: 0
   font-size: 0
   overflow: hidden
@@ -347,40 +295,39 @@ export default {
 }
 
 .bg-6 {
-  background: url('./star_6_optimized.png')
   background-size: cover
 }
 
 .name-inner-wrapper {
   min-width: 50px
   display: inline-block
-  padding-left: 6px
   font-size: 17px
 }
 
 @media screen and (max-width: 700px) {
-  .img-dev-container {
-    width: calc(var(--imgWidth) + 8px)
-    height: calc(var(--imgWidth) + 8px)
-  }
-
-  .img-dev-container::after {
-    top: 4px
-    left: 4px
-  }
-
-  .profile-item-inner-wrapper {
-    width: calc(var(--imgWidth) + 8px)
-    height: calc(calc(var(--imgWidth) + 8px) * 1.21)
-  }
-
   .profile-item {
     margin: 10px 5px
+    --imgWidth: calc(90px + 5vw)
+  }
+
+  .name {
+    top: calc(var(--imgWidth) * 0.77)
+    padding-left: 1vw
+  }
+
+  .tag-wrapper-1 {
+    margin-left: -1.5vw
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .tag-wrapper-1 {
+    margin-left: -3vw
   }
 }
 
 @media screen and (max-width: 360px) {
-  .name {
+  .name-inner-wrapper {
     font-size: 16px
   }
 }

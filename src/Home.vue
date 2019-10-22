@@ -1,7 +1,7 @@
 <template>
   <div class="home-wrapper">
     <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
-      增加一个材料列表，请在更多查看
+      大幅提高首页性能，625也能丝滑流畅
       <el-link
         type="warning"
         href="https://github.com/odex21/ArknightsData"
@@ -10,7 +10,7 @@
     </el-alert>
     <el-alert v-else show-icon type="warning" description>
       <div slot="title">
-        这是Beta版,随缘修bug。Dps柱状图准备重做，请自行分辨是否正确。
+        这是Beta版,测试用。Dps柱状图准备重做，请自行分辨是否正确。
         提醒： 先看单次伤害是否正确，然后看攻击间隔。因为要重做了，所以不会去处理边缘情况了。
         现在这个图对有持续时间的一般技能是正确的例如（黑/普罗旺斯/银灰/斯卡蒂）
         <el-link href="https://somedata.top/Arknights" type="success">稳定版链接</el-link>
