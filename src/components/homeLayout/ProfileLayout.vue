@@ -44,10 +44,10 @@
 
           <div class="name">
             <div
-              class="name-inner-wrapper"
+              class="name-inner-ch"
               :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
             >{{agent.name}}</div>
-            <div style="font-size: 12px; line-height: 12px; font-family: sans-serif">
+            <div class="name-inner-en">
               {{agent.en}}
               <span
                 v-if="showTags && tagHit(agent.tags[1])"
@@ -169,6 +169,9 @@ export default {
 .profile-item {
   transition: all 0.6s ease-in-out
   display: inline-block
+  --imgWidth: 106px
+  box-sizing: border-box
+  margin: 10px
 }
 
 .tag-container {
@@ -198,12 +201,6 @@ export default {
   justify-content: space-around
 }
 
-.profile-item {
-  --imgWidth: 110px
-  box-sizing: border-box
-  margin: 10px
-}
-
 .profile-item-inner-wrapper {
   position: relative
   display: flex
@@ -211,7 +208,7 @@ export default {
 
 .img-container {
   width: var(--imgWidth)
-  height: calc(var(--imgWidth) * 1.12)
+  height: calc(var(--imgWidth) * 1.17)
 
   img {
     width: 100%
@@ -225,7 +222,7 @@ export default {
   white-space: nowrap
   overflow: hidden
   position: absolute
-  top: 86px
+  top: calc(var(--imgWidth) * 0.812)
   color: white
   font-size: 0
   font-family: 'FZYaSong-H-GBK'
@@ -239,18 +236,6 @@ export default {
   margin-left: -10px
   width: 65px
   z-index: -10
-}
-
-.name-tag-show {
-  top: -15px !important
-  padding-left: 5px
-  text-align: left
-  color: white
-  width: var(--imgWidth)
-  background-color: #414141
-  box-sizing: border-box
-  height: 20px
-  line-height: 19px
 }
 
 .long-tag .el-tag {
@@ -287,41 +272,27 @@ export default {
   border-right: 1px solid rgb(153, 153, 153)
 }
 
-.bg-6 {
-  background-size: cover
-}
-
-.name-inner-wrapper {
+.name-inner-ch {
   min-width: 50px
   display: inline-block
-  font-size: 17px
+  font-size: calc(var(--imgWidth) * 0.16)
+}
+
+.name-inner-en {
+  font-size: calc(var(--imgWidth) * 0.113)
+  //line-height: calc(var(--imgWidth) * 0.113)
+  font-family: sans-serif
 }
 
 @media screen and (max-width: 700px) {
   .profile-item {
     margin: 10px 5px
-    --imgWidth: calc(90px + 5vw)
-  }
-
-  .name {
-    top: calc(var(--imgWidth) * 0.77)
-    padding-left: 1vw
-  }
-
-  .tag-wrapper-1 {
-    margin-left: -1.5vw
   }
 }
 
-@media screen and (max-width: 500px) {
-  .tag-wrapper-1 {
-    margin-left: -3vw
-  }
-}
-
-@media screen and (max-width: 360px) {
-  .name-inner-wrapper {
-    font-size: 16px
+@media screen and (max-width: 375px) {
+  .profile-item {
+    --imgWidth: 96px
   }
 }
 </style>

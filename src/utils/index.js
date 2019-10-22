@@ -141,7 +141,6 @@ const getClass_icon = (c) => {
 };
 
 import UaParser from 'ua-parser-js';
-import devMode from 'src/stats';
 
 
 // import { Message } from 'element-ui';

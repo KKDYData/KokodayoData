@@ -169,6 +169,7 @@ if (typeof Array.prototype.flat !== 'function') {
 }
 
 const version = 191022;
+const forceUnregister = 191023;
 
 export default {
   metaInfo() {
@@ -215,7 +216,8 @@ export default {
       name: 'testDB'
     });
     this.store.getItem('filterGroups').then(filterGroups => {
-      if (filterGroups && filterGroups._version >= version) {
+      if (filterGroups && filterGroups._version === version) {
+        //恢复上次的筛选条件
         Object.keys(filterGroups).forEach(key => {
           if (key !== '_version')
             this.$set(this.filterGroups, key, filterGroups[key]);
@@ -224,9 +226,19 @@ export default {
         this.data = this.profileList;
         this.resetFilter();
       } else {
-        console.log('first open _noVersion');
+        console.log('_noVersion');
         this.store.setItem('_filterVersion', version);
         this.data = this.profileList;
+      }
+    });
+
+    this.store.getItem('forceUnregister').then(date => {
+      if (!date || date < forceUnregister) {
+        navigator.serviceWorker.getRegistrations()
+          .then((registrations) => {
+            registrations.forEach(el => el.unregister());
+            this.store.setItem('forceUnregister', forceUnregister);
+          });
       }
     });
   },
