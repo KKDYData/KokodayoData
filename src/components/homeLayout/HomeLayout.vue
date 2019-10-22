@@ -234,6 +234,7 @@ export default {
 
     this.store.getItem('forceUnregister').then(date => {
       if (!date || date < forceUnregister) {
+        console.log(`强制注销serverWorker, 当前记录：${date}, 目标记录${forceUnregister}`);
         navigator.serviceWorker.getRegistrations()
           .then((registrations) => {
             registrations.forEach(el => el.unregister());
