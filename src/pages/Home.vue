@@ -22,17 +22,17 @@
   </div>
 </template>
 <script>
-import { getProfileList } from './utils/fetch';
+import { getProfileList } from '../utils/fetch';
 import { Alert, link } from 'element-ui';
 import Vue from 'vue';
 Vue.use(link);
 Vue.use(Alert);
 
-import loadingC from './components/Loading';
-import Mode from './stats';
+import loadingC from '../components/base/Loading';
+import Mode from '../stats';
 
 const HomeLayout = () => ({
-  component: import(/* webpackChunkName: "HomeLayout" */ './components/homeLayout'),
+  component: import(/* webpackChunkName: "HomeLayout" */ '../components/homeLayout'),
   loading: loadingC,
   error: loadingC,
   delay: 200,

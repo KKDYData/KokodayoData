@@ -37,7 +37,7 @@ Vue.use(MenuItem);
 Vue.use(Submenu);
 
 
-import Mode from './stats';
+import Mode from '../stats';
 import { mapState } from 'vuex';
 
 export default {

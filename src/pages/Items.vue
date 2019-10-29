@@ -5,10 +5,10 @@
 </template>
 
 <script>
-import DropList from './components/EnemyData/DropList';
-import { getItem } from './utils/fetch';
-import list from './utils/items.json';
-import { TaskQueue } from './utils';
+import DropList from '../components/EnemyData/DropList';
+import { getItem } from '../utils/fetch';
+import list from '../utils/items.json';
+import { TaskQueue } from '../utils';
 
 
 export default {

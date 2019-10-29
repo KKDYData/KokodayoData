@@ -20,7 +20,7 @@
 </template>
 
 <script>
-import { statusToChChar } from '../utils/string';
+import { statusToChChar } from '../../utils/string';
 export default {
   props: {
     status: {

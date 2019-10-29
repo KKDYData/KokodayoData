@@ -90,7 +90,7 @@ import {
 import { getClass_Chinese } from '../../utils/string';
 import { path } from '../../utils/listVer';
 
-import charCube from '../charCube';
+import charCube from '../base/charCube';
 
 export default {
   props: {

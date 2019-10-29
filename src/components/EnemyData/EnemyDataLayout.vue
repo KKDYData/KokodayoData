@@ -121,7 +121,7 @@ import { mapState } from 'vuex';
 Vue.use(Image);
 Vue.use(Drawer);
 Vue.use(Button);
-import MyTitle from '../MyTitle';
+import MyTitle from '../base/MyTitle';
 
 import EnemyStatus from './EnemyStatus';
 import EnemyDataDrawer from './EnemyDataDrawer';

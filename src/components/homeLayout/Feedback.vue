@@ -99,8 +99,8 @@ Vue.use(Input);
 Vue.use(Button);
 Vue.use(Alert);
 import InputWrapper from './InputWrapper';
-import MyTitle from '../MyTitle';
-import MySlideTitle from '../MySlideTilte';
+import MyTitle from '../base/MyTitle';
+import MySlideTitle from '../base/MySlideTilte';
 
 import { submitFeedback } from '../../utils/fetch';
 import { mapState } from 'vuex';

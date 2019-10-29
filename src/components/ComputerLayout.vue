@@ -153,7 +153,7 @@
 </template>
 
 <script>
-import data from './level.json';
+import data from '../utils/data/level.json';
 import ItemViewer from './ItemViewer';
 import Vue from 'vue';
 import { Form, FormItem, Select, Option, InputNumber, Alert } from 'element-ui';
@@ -230,14 +230,14 @@ export default {
     BLS5() {
       const result = Math.ceil(
         (this.ExpNeed - this.baseExp) /
-          (74000 + this.char.production.exp * 1000)
+        (74000 + this.char.production.exp * 1000)
       );
       return result > -1 ? result : 0;
     },
     BCE5() {
       const result = Math.ceil(
         (this.MoneyNeed - this.char.base.money * 1000) /
-          (75000 + this.char.production.money * 1000)
+        (75000 + this.char.production.money * 1000)
       );
       return result > -1 ? result : 0;
     }

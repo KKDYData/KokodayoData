@@ -201,10 +201,10 @@
   </div>
 </template>
 <script>
-import loadingC from '../Loading';
-import MyTitle from '../MyTitle';
-import MySlideTitle from '../MySlideTilte';
-import ContentSlot from '../ContentSlot';
+import loadingC from '../base/Loading';
+import MyTitle from '../base/MyTitle';
+import MySlideTitle from '../base/MySlideTilte';
+import ContentSlot from '../base/ContentSlot';
 import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';

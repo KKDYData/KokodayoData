@@ -40,7 +40,7 @@
 import { mapState } from 'vuex';
 import Vue from 'vue';
 
-import mode from './stats';
+import mode from '../stats';
 import { Link } from 'element-ui';
 Vue.use(Link);
 

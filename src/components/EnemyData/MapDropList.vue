@@ -36,7 +36,7 @@
 
 <script>
 import DropList from './DropList';
-import MySlideTitle from '../MySlideTilte';
+import MySlideTitle from '../base/MySlideTilte';
 import { mapState } from 'vuex';
 
 export default {

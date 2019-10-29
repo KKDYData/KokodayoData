@@ -65,11 +65,11 @@
 </template>
 
 <script>
-import MySlideTitle from './components/MySlideTilte';
-import FurniList from './components/FurniLIst';
-import { bsr } from './utils';
-import { getThemeList, getFurn } from './utils/fetch';
-import { path } from './utils/listVer';
+import MySlideTitle from '../components/base/MySlideTilte';
+import FurniList from '../components/base/FurniLIst';
+import { bsr } from '../utils';
+import { getThemeList, getFurn } from '../utils/fetch';
+import { path } from '../utils/listVer';
 
 import { Loading } from 'element-ui';
 import Vue from 'vue';

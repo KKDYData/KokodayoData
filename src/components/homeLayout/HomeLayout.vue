@@ -128,10 +128,10 @@ Vue.use(Tag);
 Vue.use(Tabs);
 Vue.use(TabPane);
 
-import FilterButtonGroup from '../FilterButtonGroup';
-import loadingC from '../Loading';
+import FilterButtonGroup from '../base/FilterButtonGroup';
+import loadingC from '../base/Loading';
 import ProfileLayout from './ProfileLayout';
-import CloseButton from '../CloseButton';
+import CloseButton from '../base/CloseButton';
 
 import { sort } from '../../utils';
 import { TagsArr, class_chinese, StarArr } from '../../utils/string';

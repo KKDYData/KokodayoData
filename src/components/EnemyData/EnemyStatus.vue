@@ -180,7 +180,7 @@ Vue.use(Button);
 Vue.use(Tooltip);
 
 import { mapState } from 'vuex';
-import ContentSlot from '../ContentSlot';
+import ContentSlot from '../base/ContentSlot';
 
 import { changeKey } from '../../utils';
 import { statusToCh } from '../../utils/string';

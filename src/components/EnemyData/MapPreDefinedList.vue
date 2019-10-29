@@ -50,9 +50,9 @@
 
 <script>
 import { getProfilePath, findValue } from '../../utils';
-import charCube from '../charCube';
-import charStatus from '../charStatus';
-import loadingC from '../Loading';
+import charCube from '../base/charCube';
+import charStatus from '../base/charStatus';
+import loadingC from '../base/Loading';
 
 const SkillPanel = () => ({
   component: import(

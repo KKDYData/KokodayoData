@@ -3,7 +3,7 @@ import './style.styl';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueMeta from 'vue-meta';
-import NavMenu from './NavMenu';
+import NavMenu from './components/NavMenu';
 import Mode from './stats';
 import store from './store';
 
@@ -12,13 +12,13 @@ Vue.use(VueMeta);
 
 Vue.config.productionTip = false;
 
-const Home = () => import(/* webpackChunkName: "Home" */'./Home');
-const Details = () => import(/* webpackChunkName: "Details" */'./Details');
-const Computer = () => import(/* webpackChunkName: "Computer" */'./Computer');
-const EnemyData = () => import(/* webpackChunkName: "Enemy" */'./Enemy');
-const Footer = () => import(/* webpackChunkName: "EnemyData" */'./Footer');
-const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'./CustomTheme');
-const Items = () => import(/* webpackChunkName: "Items" */'./Items');
+const Home = () => import(/* webpackChunkName: "Home" */'./pages/Home');
+const Details = () => import(/* webpackChunkName: "Details" */'./pages/Details');
+const Computer = () => import(/* webpackChunkName: "Computer" */'./pages/Computer');
+const EnemyData = () => import(/* webpackChunkName: "Enemy" */'./pages/Enemy');
+const Footer = () => import(/* webpackChunkName: "EnemyData" */'./pages/Footer');
+const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'./pages/CustomTheme');
+const Items = () => import(/* webpackChunkName: "Items" */'./pages/Items');
 
 const isDev = process.env.NODE_ENV === 'development';
 const path = isDev ? '/' : Mode + '/';

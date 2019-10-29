@@ -140,7 +140,7 @@
 <script>
 import { findStage, UA } from '../../utils';
 import { path } from '../../utils/listVer';
-import formula from '../../utils/formula.json';
+import formula from '../../utils/data/formula.json';
 
 import { itemBackground, occPer_chinese, roomType, GOLD } from '../..//utils/string';
 
@@ -153,8 +153,8 @@ Vue.use(Image);
 Vue.use(Tooltip);
 
 import DropLine from './DropLine';
-import Color from '../Color';
-import CloseButton from '../CloseButton';
+import Color from '../base/Color';
+import CloseButton from '../base/CloseButton';
 
 
 import { getItem } from '../../utils/fetch';

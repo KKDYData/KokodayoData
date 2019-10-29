@@ -189,17 +189,16 @@ import SkillUpPanel from './SkillUpCost';
 import BuildingData from './BuildingData';
 import InfoPanel from './InfoPanel';
 import ItemViewer from '../ItemViewer';
-import charStatus from '../charStatus';
-import DataLoading from '../Loading';
+import charStatus from '../base/charStatus';
+import DataLoading from '../base/Loading';
 import MyShare from './Share';
-import loadingC from '../Loading';
 
 const SkillPanel = () => ({
   component: import(
     /* webpackChunkName: "SkillPanel" */ '../DetailsLayout/SkillPanel'
   ),
-  loading: loadingC,
-  error: loadingC,
+  loading: DataLoading,
+  error: DataLoading,
   delay: 200,
   timeout: 5000
 });

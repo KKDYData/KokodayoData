@@ -31,8 +31,8 @@
 </template>
 
 <script>
-import ItemViewer from './ItemViewer';
-import { path } from '../utils/listVer';
+import ItemViewer from '../ItemViewer';
+import { path } from '../../utils/listVer';
 export default {
   components: {
     ItemViewer

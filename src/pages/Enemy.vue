@@ -16,15 +16,15 @@
 </template>
 
 <script>
-// import EnemyData from './components/EnemyData';
-import loadingC from './components/Loading';
+// import EnemyData from '../components/EnemyData';
+import loadingC from '../components/base/Loading';
 import { Alert } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Alert);
 
 const EnemyData = () => ({
   component: import(
-    /* webpackChunkName: "EnemyData" */ './components/EnemyData'
+    /* webpackChunkName: "EnemyData" */ '../components/EnemyData'
   ),
   loading: loadingC,
   error: loadingC,

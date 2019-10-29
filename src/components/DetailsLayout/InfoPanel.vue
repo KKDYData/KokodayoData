@@ -208,7 +208,7 @@ Vue.use(Button);
 Vue.use(Progress);
 Vue.use(Slider);
 import AudioContainer from './AudioContainer';
-import ContentSlot from '../ContentSlot';
+import ContentSlot from '../base/ContentSlot';
 
 import { mapActions, mapState } from 'vuex';
 
