@@ -69,9 +69,10 @@ export default {
     },
     getData() {
       return getProfileList().then(source => {
-        source.forEach((el, index) => {
+        source.forEach((el, index, arr) => {
           el.index = index;
           el.tagHit = 0;
+          el.showTags = false;
         });
         return source.reverse();
       });

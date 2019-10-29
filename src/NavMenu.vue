@@ -59,7 +59,7 @@ export default {
         },
         home: {
           path: path + '/',
-          text: 'Arknights Data'
+          text: 'Ko~ko~da~yo~'
         },
         customtheme: {
           path: path + '/customtheme',

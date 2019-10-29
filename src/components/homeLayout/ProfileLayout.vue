@@ -1,11 +1,16 @@
 <template>
   <div>
     <transition-group name="flip-list" class="profile-container">
-      <div class="profile-item" v-for="agent in data" :key="agent.name">
-        <div
-          class="profile-item-inner-wrapper"
-          :style="{ width: showTags ? short ? '165px' : '170px' : ''}"
-        >
+      <div
+        class="profile-item"
+        v-for="(agent, index) in data"
+        :key="agent.name"
+        @mouseover="hoverShowTag(true, index)"
+        @mouseleave="hoverShowTag(false, index)"
+        :style="{ width: showTags || agent.showTags ? '170px' : 'var(--imgWidth)'}"
+      >
+        <!--  -->
+        <div class="profile-item-inner-wrapper">
           <el-image
             class="img-container"
             fit="cover"
@@ -18,7 +23,7 @@
             </div>
           </el-image>
           <transition name="slide-fade">
-            <div class="tag-wrapper-1" v-if="showTags">
+            <div class="tag-wrapper-1" v-if="showTags || agent.showTags">
               <div v-for="(tag, index) in agent.tags" :key="tag">
                 <div class="tag-container long-tag" v-if="index > 2 || index === 0 &&  tag > 3">
                   <el-tag
@@ -41,7 +46,6 @@
               </div>
             </div>
           </transition>
-
           <div class="name">
             <div
               class="name-inner-ch"
@@ -113,6 +117,9 @@ export default {
     window.addEventListener('resize', self.calFillAmount);
   },
   methods: {
+    hoverShowTag(t, index) {
+      this.$set(this.data[index], 'showTags', t);
+    },
     async openDetails(agent) {
       if (this.short) this.$router.push(this.path + '/details/' + agent.No);
       else window.open(this.path + '/details/' + agent.No);
@@ -172,6 +179,15 @@ export default {
   --imgWidth: 106px
   box-sizing: border-box
   margin: 10px
+
+  &:hover {
+    filter: drop-shadow(1px 1px 1px #818181)
+  }
+}
+
+// 套个div包裹使得增减干员列表时有流畅的动画
+.profile-item-inner-wrapper {
+  position: relative
 }
 
 .tag-container {
@@ -184,7 +200,7 @@ export default {
   border-radius: 2px
 }
 
-.slide-fade-enter-active {
+.slide-fade-enter-active, .slide-fade-leave-active {
   transition: all 0.5s ease-in-out
 }
 
@@ -201,11 +217,6 @@ export default {
   justify-content: space-around
 }
 
-.profile-item-inner-wrapper {
-  position: relative
-  display: flex
-}
-
 .img-container {
   width: var(--imgWidth)
   height: calc(var(--imgWidth) * 1.17)
@@ -215,43 +226,12 @@ export default {
   }
 }
 
-.name {
-  text-overflow: ellipsis
-  width: 100px
-  box-sizing: border-box
-  white-space: nowrap
-  overflow: hidden
-  position: absolute
-  top: calc(var(--imgWidth) * 0.812)
-  color: white
-  font-size: 0
-  font-family: 'FZYaSong-H-GBK'
-  overflow: visible
-  z-index: 10
-  padding-left: 6px
-  text-shadow: 1px 0px 2px #818181
-}
-
-.tag-wrapper-1 {
-  margin-left: -10px
-  width: 65px
-  z-index: -10
-}
-
 .long-tag .el-tag {
   min-width: 48px
 }
 
 .long-tag .el-tag--plain {
   color: #909399
-}
-
-.name-slide-logo {
-  width: 47px
-  top: -18px
-  position: absolute
-  right: -10px
-  z-index: -1
 }
 
 .double-tag {
@@ -272,16 +252,48 @@ export default {
   border-right: 1px solid rgb(153, 153, 153)
 }
 
+.tag-wrapper-1 {
+  right: 7px
+  width: 65px
+  z-index: -10
+  top: 0
+  position: absolute
+}
+
+.name {
+  top: calc(var(--imgWidth) * 0.812)
+  padding-left: 6px
+  box-sizing: border-box
+  position: absolute
+  //overflow: hidden
+  color: white
+  font-family: 'FZYaSong-H-GBK'
+  white-space: nowrap
+  font-size: 0
+  text-overflow: ellipsis
+  text-shadow: 1px 0px 2px #818181
+  z-index: 10
+}
+
 .name-inner-ch {
   min-width: 50px
   display: inline-block
   font-size: calc(var(--imgWidth) * 0.16)
+  margin-top: 2px
+  margin-bottom: -2px
 }
 
 .name-inner-en {
   font-size: calc(var(--imgWidth) * 0.113)
-  //line-height: calc(var(--imgWidth) * 0.113)
   font-family: sans-serif
+}
+
+.name-slide-logo {
+  width: 47px
+  top: -18px
+  position: absolute
+  right: -10px
+  z-index: -1
 }
 
 @media screen and (max-width: 700px) {
@@ -291,6 +303,10 @@ export default {
 }
 
 @media screen and (max-width: 375px) {
+  .tag-wrapper-1 {
+    right: 15px
+  }
+
   .profile-item {
     --imgWidth: 96px
   }
