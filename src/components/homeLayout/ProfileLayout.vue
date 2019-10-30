@@ -41,7 +41,7 @@
                   <span
                     class="double-tag"
                     :style="tagHit(agent.tags[2]) ? 'background-color: #313131; color: #fff': ''"
-                  >{{agent.tags[2] === '近战位' ? '近' : '远'}}</span>
+                  >{{agent.tags[2] === 'MELEE' ? '近' : '远'}}</span>
                 </el-tag>
               </div>
             </div>
@@ -185,7 +185,7 @@ export default {
   }
 }
 
-// 套个div包裹使得增减干员列表时有流畅的动画
+//套个div包裹使得增减干员列表时有流畅的动画
 .profile-item-inner-wrapper {
   position: relative
 }

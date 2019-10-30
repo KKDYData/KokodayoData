@@ -128,7 +128,6 @@ export default {
 }
 
 .control-button {
-  //margin-left: 5px
   margin-right: 30px
   position: relative
   cursor: pointer
@@ -136,7 +135,6 @@ export default {
   height: 20px
   z-index: 1
 
-  //background-color: green
   &:before, &:after {
     position: absolute
     top: calc(50% - 2px)

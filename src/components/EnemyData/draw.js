@@ -25,7 +25,7 @@ const task = (mapBlock, mapData, heightType) => {
     if (!noti || noti.closed) {
       noti = Notification({
         ...mapData,
-        position: UA.Browser.name === 'Mobile Safari' ? 'bottom-right' : 'top-right',
+        position: 'top-right',
         type: 'warning',
         duration: 0
       });
