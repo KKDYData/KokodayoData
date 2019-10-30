@@ -59,7 +59,7 @@ export default {
         },
         home: {
           path: path + '/',
-          text: 'Ko~ko~da~yo~'
+          text: 'Arknights Data'
         },
         customtheme: {
           path: path + '/customtheme',
@@ -93,6 +93,7 @@ export default {
           this.moreText = this.routes[arr[i]].text;
           return;
         }
+        console.log(temp, this.$route.path);
         i++;
       }
       this.moreText = '更多';
