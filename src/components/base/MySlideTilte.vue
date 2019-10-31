@@ -5,10 +5,10 @@
     <my-title
       :title="title"
       :control="control"
-      @update:value="click"
-      :value="value"
-      style="margin-bottom: 0"
+      @click="click($event)"
       :custom-bg="customBg"
+      :right="short"
+      style="margin-bottom: 0"
     ></my-title>
     <transition name="extra-button">
       <div v-if="!control || value" class="extra-button">

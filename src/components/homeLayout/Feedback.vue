@@ -18,6 +18,13 @@
           <el-button @click="submitFb" type="primary">提交</el-button>
         </div>
       </div>
+      <div>
+        <input-wrapper title="标题">
+          <template>
+            <el-input v-model="title" placeholder="可选标题"></el-input>
+          </template>
+        </input-wrapper>
+      </div>
       <input-wrapper title="反馈">
         <el-input
           type="textarea"
@@ -120,6 +127,7 @@ export default {
     return {
       feedback: '',
       id: '',
+      title: '',
       debounceLogFb: null
     };
   },
@@ -188,7 +196,7 @@ export default {
         });
     },
     submit() {
-      const data = { id: this.id, content: this.feedback };
+      const data = { title: this.title, id: this.id, content: this.feedback };
       return submitFeedback(data)
         .catch(err => {
           console.error(err);

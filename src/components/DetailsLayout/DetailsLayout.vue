@@ -690,7 +690,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 980px) {
   .el-button + .el-button {
     margin-left: calc(3px + 1vw);
   }

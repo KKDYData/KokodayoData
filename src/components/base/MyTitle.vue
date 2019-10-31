@@ -1,17 +1,13 @@
 <template>
-  <div class="group-container-title" :style="customBg">
-    <div
-      v-if="!short && control"
-      @click="$emit('update:value', !value)"
-      :class="{active: value, 'control-button': true}"
-    >
+  <div class="title-container" :style="bg">
+    <div v-if="!right && control" @click="click" :class="{active: value, 'control-button': true}">
       <div class="control-border"></div>
     </div>
-    <div class="title">{{title}}</div>
+    <div class="title">{{ title }}</div>
     <div
-      v-if="short && control"
-      @click="$emit('update:value', !value)"
-      :class="{active: value, 'control-button': true}"
+      v-if="right && control"
+      @click="click"
+      :class="{active: value, 'control-button': true, right: true}"
     >
       <div class="control-border"></div>
     </div>
@@ -19,33 +15,50 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-
 export default {
+  name: 'slide-title',
   props: {
+    right: {
+      default: false
+    },
     title: {
       required: true,
       type: String
     },
-    value: {
-      type: Boolean
-    },
     control: {
       default: false
     },
-    customBg: {
-      tyep: String,
-      default: '--custombg: #414141'
+    backgroundColor: {
+      type: String,
+      default: '#414141'
     }
   },
+  data() {
+    return {
+      value: false
+    };
+  },
   computed: {
-    ...mapState(['short']),
+    bg() {
+      return '--custombg:' + this.backgroundColor;
+    }
+  },
+  methods: {
+    click() {
+      this.value = !this.value;
+      // undefined 不是很好看
+      /**
+       * @property {boolean} value - 控制器状态
+       */
+      this.$emit('click', this.value);
+    }
   }
 };
 </script>
 
 <style lang="stylus" scoped>
-.group-container-title {
+//test stylint
+.title-container {
   font-weight: bold
   color: white
   margin-bottom: 20px
@@ -56,12 +69,6 @@ export default {
   height: 20px
   border-radius: 2px
   background: var(--custombg)
-
-  .title {
-    line-height: 1
-    padding-top: 2px
-    font-size: 18px
-  }
 
   &:hover {
     .control-border {
@@ -80,24 +87,40 @@ export default {
       }
     }
   }
+}
 
-  .active {
-    .control-border {
-      &:before, &:after {
-        opacity: 1
-      }
+.active {
+  .control-border {
+    &:before, &:after {
+      opacity: 1
+    }
 
-      &:before {
-        top: 70%
-        left: 80%
-      }
+    &:before {
+      top: 70%
+      left: 80%
+    }
 
-      &:after {
-        top: -60%
-        left: -80%
-      }
+    &:after {
+      top: -60%
+      left: -80%
     }
   }
+
+  &.control-button {
+    &:before {
+      transform: rotate(90deg)
+    }
+
+    &:after {
+      transform: scaleX(0.8)
+    }
+  }
+}
+
+.title {
+  line-height: 1
+  padding-top: 2px
+  font-size: 18px
 }
 
 .control-border {
@@ -135,6 +158,10 @@ export default {
   height: 20px
   z-index: 1
 
+  &.right {
+    margin-left: auto
+  }
+
   &:before, &:after {
     position: absolute
     top: calc(50% - 2px)
@@ -145,24 +172,6 @@ export default {
     background-color: #ffffff
     transition: all 0.3s
     transform-origin: center
-  }
-}
-
-.active.control-button:before {
-  transform: rotate(90deg)
-}
-
-.active.control-button:after {
-  transform: scaleX(0.8)
-}
-
-@media screen and (max-width: 700px) {
-  .group-container-title {
-    padding-left: 7vw
-  }
-
-  .control-button {
-    margin-left: auto
   }
 }
 </style>
