@@ -499,8 +499,6 @@ export default {
 
 /*  */
 /*  */
-/*  */
-/*  */
 /* part 2 */
 .status-wrapper {
   position: relative;
@@ -508,7 +506,6 @@ export default {
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  height: 180px;
 }
 
 .status-phases-wrapper {
@@ -518,15 +515,13 @@ export default {
 /* 改button颜色 */
 .status-phases-wrapper .el-button--mini {
   background-color: rgba(172, 172, 172, 0.34);
-  /* border-color: rgb(153, 153, 153); */
   border: none;
   border-bottom: 2px solid;
   color: rgb(255, 255, 255);
 }
 
 .status-details-wrapper {
-  width: 37%;
-  height: 180px;
+  width: calc(calc(100% - 350px) * 0.5);
   border-right: 1px solid hsla(0, 0%, 62%, 0.4);
 }
 
@@ -607,7 +602,7 @@ export default {
 }
 
 .status-range-wrapper {
-  width: 20%;
+  /* width: 20%; */
   margin-right: 5%;
   display: flex;
   justify-content: center;
@@ -690,7 +685,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 980px) {
+@media screen and (max-width: 900px) {
   .el-button + .el-button {
     margin-left: calc(3px + 1vw);
   }
