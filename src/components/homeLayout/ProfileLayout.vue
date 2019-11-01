@@ -201,12 +201,12 @@ export default {
 }
 
 .slide-fade-enter-active, .slide-fade-leave-active {
-  transition: all 0.5s ease-in-out
+  transition: all 0.5s ease
 }
 
 .slide-fade-enter, .slide-fade-leave-to {
-  transform: translateX(-59px)
-  opacity: 0
+  transform: translateX(-30px)
+  opacity: 1
 }
 
 .profile-container {

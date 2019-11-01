@@ -29,15 +29,8 @@
                       :key="pic"
                       style="font-size:13px"
                     >
-                      <div v-if="showSet" class="char-set-contianer-wrapper" style>
-                        <div v-if="!short">
-                          <div class="char-profile-container">
-                            <el-image :src="profileList[index]"></el-image>
-                          </div>
-                          <div class="char-half-container">
-                            <el-image :src="halfPics[index]"></el-image>
-                          </div>
-                        </div>
+                      <div v-if="showSet" class="char-set-contianer-wrapper">
+                        <spine-panel class="spine-panel" width="300px" hight="300px"></spine-panel>
                         <div>
                           <el-image class="char-set-container" :src="pic">
                             <div slot="error" class="image-slot">
@@ -45,11 +38,21 @@
                             </div>
                           </el-image>
                         </div>
+                        <!-- v-if="!short" -->
+                        <div v-if="!short" style="margin-right: 10px">
+                          <div class="char-profile-container">
+                            <el-image :src="profileList[index]"></el-image>
+                          </div>
+                          <div class="char-half-container">
+                            <el-image :src="halfPics[index]"></el-image>
+                          </div>
+                        </div>
                       </div>
-                      <div>{{setWords[index]}}</div>
+                      <div style="text-align: right">{{setWords[index]}}</div>
                     </el-carousel-item>
                   </el-carousel>
                 </el-tab-pane>
+
                 <el-tab-pane v-if="skins && skins.length" label="皮肤" name="skins">
                   <el-carousel
                     :height="(getScreenWidth() + (short ? 60 : 0)) + 'px'"
@@ -209,13 +212,15 @@ Vue.use(Progress);
 Vue.use(Slider);
 import AudioContainer from './AudioContainer';
 import ContentSlot from '../base/ContentSlot';
+import SpinePanel from '../Spine';
 
 import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
     AudioContainer,
-    ContentSlot
+    ContentSlot,
+    SpinePanel
   },
   props: {
     data: {
@@ -367,87 +372,136 @@ export default {
 </script>
 
 
-<style  scoped>
+<style lang="stylus" scoped>
 .info-char-set-wrapper {
-  position: absolute;
-  bottom: 45px;
-  right: 1px;
+  position: absolute
+  bottom: 45px
+  right: 1px
 }
+
 .info-story-wrapper {
-  padding: 0 10px;
+  padding: 0 10px
 }
 
 .info-wrapper {
-  margin-bottom: 200px;
+  margin-bottom: 200px
+}
+
+.char-set-contianer-wrapper {
+  background: rgba(255, 255, 255, 0.85)
+  display: flex
 }
 
 .char-half-container {
-  width: 110px;
-  height: 240px;
+  width: 110px
+  /*height: 240px;*/
+  position: relative
+  margin-top: 20px
+  font-size: 0
 }
+
 .char-profile-container {
-  width: 110px;
-  height: 110px;
+  width: 110px
+  height: 110px
+  position: relative
+}
+
+.char-profile-container + .char-half-container, .char-profile-container {
+  &::before {
+    content: ''
+    position: absolute
+    width: 100%
+    height: 100%
+    top: 0
+    left: 0
+    border: 10px solid #fff
+    box-sizing: border-box
+    box-shadow: 0px 2px 4px 1px #0000004f, 0px 2px 6px 0px rgba(0, 0, 0, 0.47) inset
+  }
 }
 
 .char-half-container-wrapper {
-  float: left;
-  width: 110px;
-  padding-left: 10px;
-  overflow: hidden;
-  position: relative;
+  float: left
+  width: 110px
+  padding-left: 10px
+  overflow: hidden
+  position: relative
 }
 
-.info-draw-name,
-.info-cv-name {
-  margin-left: 0px;
-  white-space: nowrap;
+.info-draw-name, .info-cv-name {
+  margin-left: 0px
+  white-space: nowrap
 }
 
 .info-word-audio-control {
-  height: 30px;
-  vertical-align: middle;
-  padding-left: 20px;
+  height: 30px
+  vertical-align: middle
+  padding-left: 20px
 }
 
 .info-word-audio-title {
-  padding-top: 20px;
-  display: flex;
-  align-items: center;
+  padding-top: 20px
+  display: flex
+  align-items: center
 }
 
 .info-word-container + .info-word-container {
-  border-top: 1px solid #e4e7ed;
+  border-top: 1px solid #e4e7ed
 }
 
 .info-words-wrapper {
-  padding: 0 10px;
+  padding: 0 10px
 }
 
 .word-control-button {
-  font-size: 0;
-  margin: 0 5px;
+  font-size: 0
+  margin: 0 5px
 }
+
 .word-control-button i {
-  font-size: 20px;
-  vertical-align: middle;
-  cursor: pointer;
+  font-size: 20px
+  vertical-align: middle
+  cursor: pointer
 }
 
 .charset-info {
-  position: absolute;
-  bottom: 20px;
+  position: absolute
+  bottom: 20px
 }
-.char-set-contianer-wrapper {
-  background: rgba(255, 255, 255, 0.85);
-  display: flex;
+
+.spine-panel {
+  position: absolute
+  bottom: 0
+  left: 0
+
+  &:before {
+    content: ''
+    border-bottom: 25px solid #f00
+    border-right: 25px solid #f00
+    position: absolute
+    bottom: 55px
+    right: 0
+    width: 30%
+    height: 20%
+  }
+
+  &:after {
+    content: ''
+    border-top: 25px solid black
+    border-left: 25px solid black
+    position: absolute
+    top: 55px
+    left: 0
+    width: 30%
+    height: 20%
+  }
 }
 
 @media screen and (max-width: 700px) {
   .info-word-audio-control {
-    padding-left: 10px;
-    padding-top: 5px;
-    display: block;
+    padding-left: 10px
+    padding-top: 5px
+    display: block
   }
 }
 </style>

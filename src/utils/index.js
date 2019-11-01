@@ -2,6 +2,8 @@ import store from '../store';
 import { getStageType, statusToChChar } from './string';
 import { path } from './listVer';
 import { getHeroData, getSkill } from './fetch';
+import UaParser from 'ua-parser-js';
+
 
 const debounce = function (action, idle, ...args) {
   let last;
@@ -140,10 +142,8 @@ const getClass_icon = (c) => {
   return path + 'others/icon_profession_' + c.toLowerCase() + '.png';
 };
 
-import UaParser from 'ua-parser-js';
 
 
-// import { Message } from 'element-ui';
 const getUA = () => {
   const ua = new UaParser();
   const OS = ua.getOS();
@@ -151,7 +151,6 @@ const getUA = () => {
   const width = document.body.clientWidth;
   const isMoblie = ua.getDevice().type === 'mobile';
   const isMobliePad = isMoblie || OS.name === 'iOS' || (OS.name === 'Mac OS' && width < 1300);
-  // Message(`'is Moblie? ' ${isMoblie}, ${ua.getDevice().vendor}, os ${OS.name}`);
 
   return {
     isMoblie,
