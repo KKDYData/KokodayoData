@@ -3,7 +3,7 @@
     <el-tabs :value="activeName">
       <el-tab-pane label="人员档案" name="first">
         <div class="char-half-container-wrapper">
-          <el-image class="char-half-container" :src="halfPics[0]" fit="contain" lazy>
+          <el-image class="char-half-container" :src="setData[0].halfPic" fit="contain" lazy>
             <div slot="error" class="image-slot">
               <i class="el-icon-picture-outline"></i>
             </div>
@@ -17,93 +17,10 @@
             >
               <el-tabs :value="activeSetPane">
                 <el-tab-pane label="一般" name="default">
-                  <el-carousel
-                    :height="(getScreenWidth() + (short ? 60 : 0)) + 'px'"
-                    :autoplay="false"
-                    class="char-set-container-wrapper"
-                    indicator-position="outside"
-                    :loop="false"
-                  >
-                    <el-carousel-item
-                      v-for="(pic, index) in charSets"
-                      :key="pic"
-                      style="font-size:13px"
-                    >
-                      <div v-if="showSet" class="char-set-contianer-wrapper">
-                        <spine-panel class="spine-panel" width="300px" hight="300px"></spine-panel>
-                        <div>
-                          <el-image class="char-set-container" :src="pic">
-                            <div slot="error" class="image-slot">
-                              <i class="el-icon-picture-outline"></i>
-                            </div>
-                          </el-image>
-                        </div>
-                        <!-- v-if="!short" -->
-                        <div v-if="!short" style="margin-right: 10px">
-                          <div class="char-profile-container">
-                            <el-image :src="profileList[index]"></el-image>
-                          </div>
-                          <div class="char-half-container">
-                            <el-image :src="halfPics[index]"></el-image>
-                          </div>
-                        </div>
-                      </div>
-                      <div style="text-align: right">{{setWords[index]}}</div>
-                    </el-carousel-item>
-                  </el-carousel>
+                  <set-panel v-if="showSet" :set-data="setData"></set-panel>
                 </el-tab-pane>
-
                 <el-tab-pane v-if="skins && skins.length" label="皮肤" name="skins">
-                  <el-carousel
-                    :height="(getScreenWidth() + (short ? 60 : 0)) + 'px'"
-                    :autoplay="false"
-                    class="char-set-container-wrapper"
-                    indicator-position="outside"
-                    :loop="false"
-                  >
-                    <el-carousel-item
-                      v-for="({avatarId, displaySkin}) in skins"
-                      :key="avatarId"
-                      style="font-size:13px"
-                    >
-                      <div v-if="showSet" class="char-set-contianer-wrapper" style>
-                        <div v-if="!short">
-                          <div class="char-profile-container">
-                            <el-image :src="getSkinProile(avatarId)"></el-image>
-                          </div>
-                          <div class="char-half-container">
-                            <el-image :src="getSkinhalfPic(avatarId)"></el-image>
-                          </div>
-                          <div style="width: 20vw; max-width: 200px">
-                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                              <template slot="title">系列</template>
-                              <template slot="content">{{displaySkin.skinGroupName}}</template>
-                            </content-slot>
-                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                              <template slot="title">获得方式</template>
-                              <template slot="content">{{displaySkin.obtainApproach}}</template>
-                            </content-slot>
-                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                              <template slot="title">描述</template>
-                              <template slot="content">{{displaySkin.usage}}</template>
-                            </content-slot>
-                            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                              <template slot="title">记录</template>
-                              <template slot="content">{{displaySkin.content | filterColor}}</template>
-                            </content-slot>
-                          </div>
-                        </div>
-                        <div>
-                          <el-image class="char-set-container" :src="getSkinSet(avatarId)">
-                            <div slot="error" class="image-slot">
-                              <i class="el-icon-picture-outline"></i>
-                            </div>
-                          </el-image>
-                        </div>
-                      </div>
-                      <div v-if="short">{{displaySkin.content | filterColor}}</div>
-                    </el-carousel-item>
-                  </el-carousel>
+                  <set-panel v-if="showSet" :set-data="skins"></set-panel>
                 </el-tab-pane>
               </el-tabs>
               <el-button
@@ -146,7 +63,6 @@
           </div>
         </div>
       </el-tab-pane>
-
       <el-tab-pane label="语音记录" name="second">
         <div class="info-words-wrapper">
           <div v-if="!short && !isMobliePad" style="display: flex; align-items: center">
@@ -213,6 +129,7 @@ Vue.use(Slider);
 import AudioContainer from './AudioContainer';
 import ContentSlot from '../base/ContentSlot';
 import SpinePanel from '../Spine';
+import SetPanel from './SetPanel';
 
 import { mapActions, mapState } from 'vuex';
 
@@ -220,7 +137,8 @@ export default {
   components: {
     AudioContainer,
     ContentSlot,
-    SpinePanel
+    SpinePanel,
+    SetPanel
   },
   props: {
     data: {
@@ -270,33 +188,30 @@ export default {
     },
     skins() {
       if (this.extraSkins) {
-        return this.extraSkins.filter(el => el.charId === this.data.charID);
+        return this.extraSkins.filter(el => el.charId === this.data.charID)
+          .map(({ displaySkin, avatarId }) => {
+            return {
+              charSet: this.getSkinSet(avatarId),
+              profile: this.getSkinProile(avatarId),
+              halfPic: this.getSkinhalfPic(avatarId),
+              displaySkin
+            };
+          });
       }
     },
-    charSets() {
+    setData() {
       if (this.data.charID) {
-        return this.list.reduce((res, index) => {
-          res.push(path + 'char/set/' + this.data.charID + '_' + index + '.png');
-          return res;
-        }, []);
+        return this.list.map((index) => {
+          return {
+            charSet: path + 'char/set/' + this.data.charID + '_' + index + '.png',
+            profile: path + 'char/profile/' + this.data.charID + (index - 1 ? '_' + index : '') + this.style,
+            halfPic: path + 'char/halfPic/' + this.data.charID + '_' + index + this.style,
+            words: this.setWords[index - 1]
+          };
+        });
       }
     },
-    profileList() {
-      if (this.data.charID) {
-        return this.list.reduce((res, index) => {
-          res.push(path + 'char/profile/' + this.data.charID + (index - 1 ? '_' + index : '') + this.style);
-          return res;
-        }, []);
-      }
-    },
-    halfPics() {
-      if (this.data.charID) {
-        return this.list.reduce((res, index) => {
-          res.push(path + 'char/halfPic/' + this.data.charID + '_' + index + this.style);
-          return res;
-        }, []);
-      }
-    }
+
   },
   filters: {
     unlockStr(v) {
@@ -365,7 +280,7 @@ export default {
       const w = document.body.clientWidth;
       const h = window.innerHeight;
       const width = (w < h ? w : h) - 40;
-      return width > 1000 ? 1000 : width;
+      return width > 1200 ? 1200 : width;
     }
   }
 };
@@ -385,39 +300,6 @@ export default {
 
 .info-wrapper {
   margin-bottom: 200px
-}
-
-.char-set-contianer-wrapper {
-  background: rgba(255, 255, 255, 0.85)
-  display: flex
-}
-
-.char-half-container {
-  width: 110px
-  /*height: 240px;*/
-  position: relative
-  margin-top: 20px
-  font-size: 0
-}
-
-.char-profile-container {
-  width: 110px
-  height: 110px
-  position: relative
-}
-
-.char-profile-container + .char-half-container, .char-profile-container {
-  &::before {
-    content: ''
-    position: absolute
-    width: 100%
-    height: 100%
-    top: 0
-    left: 0
-    border: 10px solid #fff
-    box-sizing: border-box
-    box-shadow: 0px 2px 4px 1px #0000004f, 0px 2px 6px 0px rgba(0, 0, 0, 0.47) inset
-  }
 }
 
 .char-half-container-wrapper {
@@ -467,34 +349,6 @@ export default {
 .charset-info {
   position: absolute
   bottom: 20px
-}
-
-.spine-panel {
-  position: absolute
-  bottom: 0
-  left: 0
-
-  &:before {
-    content: ''
-    border-bottom: 25px solid #f00
-    border-right: 25px solid #f00
-    position: absolute
-    bottom: 55px
-    right: 0
-    width: 30%
-    height: 20%
-  }
-
-  &:after {
-    content: ''
-    border-top: 25px solid black
-    border-left: 25px solid black
-    position: absolute
-    top: 55px
-    left: 0
-    width: 30%
-    height: 20%
-  }
 }
 
 @media screen and (max-width: 700px) {
