@@ -7,12 +7,12 @@
     :loop="false"
   >
     <el-carousel-item v-if="short && setData && !setData[0].displaySkin">
-      <spine-panel class="spin-panel mobile" :canvasWidth="getScreenWidth() * 0.8"></spine-panel>z-index: 10
+      <spine-panel class="spin-panel mobile" :canvasWidth="300"></spine-panel>
     </el-carousel-item>
     <spine-panel v-if="!short" class="spine-panel" :canvasWidth="300"></spine-panel>
     <div v-for="(data, index) in setData" :key="index" :data="data" :short="short">
       <el-carousel-item v-if="short && setData && setData[0].displaySkin">
-        <spine-panel class="spin-panel mobile" :canvasWidth="getScreenWidth() * 0.8"></spine-panel>
+        <spine-panel class="spin-panel mobile" :canvasWidth="300"></spine-panel>
       </el-carousel-item>
       <el-carousel-item :key="index" style="font-size:13px">
         <div class="char-set-contianer-wrapper">
@@ -105,6 +105,7 @@ export default {
       const w = document.body.clientWidth;
       const h = window.innerHeight;
       const width = (w < h ? w : h) - 40;
+      console.log(width);
       return width > 1200 ? 1200 : width;
     }
   }
