@@ -1,13 +1,11 @@
-
 import SpineWebGl from './spine-webgl';
-import Binary from './skel2Json';
+import skel2Json from './skel2Json';
 const sleep = time => {
   return new Promise(resolve => {
     setTimeout(() => resolve(), time);
   });
 };
 class Spine {
-  animationStateData
   lastFrameTime
   canvas
   shader
@@ -20,14 +18,8 @@ class Spine {
   id
   curAnimate = 0
   animates
-  calculateBounds(skeleton) {
-    skeleton.setToSetupPose();
-    skeleton.updateWorldTransform();
-    const offset = new SpineWebGl.Vector2();
-    const size = new SpineWebGl.Vector2();
-    skeleton.getBounds(offset, size, []);
-    return { offset: offset, size: size };
-  }
+  urls
+
   constructor(cantainer) {
     this.canvas = cantainer;
     const config = { alpha: true };
@@ -42,9 +34,9 @@ class Spine {
     this.canvas.height = window.innerHeight;
     this.mvp.ortho2d(0, 0, this.canvas.width - 1, this.canvas.height - 1);
   }
-  init(id) {
+  async init({ id, path }) {
     this.id = id;
-
+    this.path = path;
     // Setup canvas and WebGL context. We pass alpha: false to canvas.getContext() so we don't use premultiplied alpha when
     // loading textures. That is handled separately by PolygonBatcher.
     if (!this.gl) {
@@ -52,72 +44,61 @@ class Spine {
       return;
     }
     // Create a simple shader, mesh, model-view-projection matrix and SkeletonRenderer.
-    this.assetManager.loadText(`temp/${id}.atlas`);
-    this.assetManager.loadTexture(`temp/${id}.png`);
-    // requestAnimationFrame(() => this.load());
-    return this.load();
-  }
-  resize(bounds, canvas, mvp, gl) {
-    var w = canvas.clientWidth;
-    var h = canvas.clientHeight;
-    if (canvas.width != w || canvas.height != h) {
-      canvas.width = w;
-      canvas.height = h;
-    }
-
-    // magic
-    var centerX = 0;//(bounds.offset.x + bounds.size.x / 2) * 0;
-    var centerY = bounds.offset.y + bounds.size.y / 2 * 0.75;
-    var scaleX = bounds.size.x / canvas.width;
-    var scaleY = bounds.size.y / canvas.height;
-    var scale = Math.max(scaleX, scaleY) * 1.1;
-    if (scale < 1) scale = 1;
-    var width = canvas.width * scale;
-    var height = canvas.height * scale;
-
-    mvp.ortho2d(centerX - width / 2, centerY - height / 2, width, height);
-    gl.viewport(0, 0, canvas.width, canvas.height);
-  }
-  async  load() {
-    // Wait until the AssetManager has loaded all resources, then load the skeletons.
-    const data = await fetch(`temp/${this.id}.skel`)
+    this.assetManager.loadText(path + id + '.atlas');
+    this.assetManager.loadTexture(path + id + '.png');
+    const data = await fetch(path + id + '.skel')
       .then(res => res.arrayBuffer());
+    // requestAnimationFrame(() => this.load());
+    return this.load(data);
+  }
 
+  async  load(data) {
+    // Wait until the AssetManager has loaded all resources, then load the skeletons.
     while (!this.assetManager.isLoadingComplete()) {
       await sleep(100);
     }
-    this.skeletons[this.id] = await this.loadSkeleton(this.id, data);
+    this.skeletons[this.id] = await this.loadSkeleton(data);
     requestAnimationFrame(() => this.render());
-    return this.skeletons[this.id];
+    return this.skeletons[decodeURIComponent(this.id)];
   }
 
-  async  loadSkeleton(id, binary) {
+
+  async  loadSkeleton(binary) {
     const skin = 'default';
 
     // Load the texture atlas using name.atlas and name.png from the AssetManager.
     // The function passed to TextureAtlas is used to resolve relative paths.
-    const atlas = new SpineWebGl.TextureAtlas(this.assetManager.get('temp/' + id + '.atlas')
-      , path => this.assetManager.get('temp/' + path));
+    const { path, id } = this;
+    const _atlas = path + id + '.atlas';
+    const atlas = new SpineWebGl.TextureAtlas(this.assetManager.get(_atlas)
+      , el => this.assetManager.get(path + encodeURIComponent(el).replace('build_', '')));
     const atlasLoader = new SpineWebGl.AtlasAttachmentLoader(atlas);
     const skeletonJson = new SpineWebGl.SkeletonJson(atlasLoader);
 
-    const skel_bin = new Binary();
-    skel_bin.data = new Uint8Array(binary);
-    skel_bin.initJson();
-
-    this.animates = Object.keys(skel_bin.json.animations);
-    this.skins = Object.keys(skel_bin.json.skins);
+    const json = skel2Json(binary);
+    this.animates = Object.keys(json.animations);
+    this.skins = Object.keys(json.skins);
 
     // Create an AnimationState, and set the initial animation in looping mode.
-    const skeleton = new SpineWebGl.Skeleton(skeletonJson.readSkeletonData(skel_bin.json));
+    const skeleton = new SpineWebGl.Skeleton(skeletonJson.readSkeletonData(json));
     const bounds = this.calculateBounds(skeleton);
     const state = new SpineWebGl.AnimationState(new SpineWebGl.AnimationStateData(skeleton.data));
 
     skeleton.setSkinByName(skin);
     state.setAnimation(0, this.animates[this.curAnimate], true);
 
-    return { skeleton, state, bounds, premultipliedAlpha: false };
+    return { skeleton, state, bounds, premultipliedAlpha: true };
   }
+  calculateBounds(skeleton) {
+    skeleton.setToSetupPose();
+    skeleton.updateWorldTransform();
+    const offset = new SpineWebGl.Vector2();
+    const size = new SpineWebGl.Vector2();
+    skeleton.getBounds(offset, size, []);
+    return { offset: offset, size: size };
+  }
+
+
   render() {
     const now = Date.now() / 1000;
     var delta = now - this.lastFrameTime;
@@ -131,7 +112,7 @@ class Spine {
     // Update the MVP matrix to adjust for canvas size changes
     this.resize(this.skeletons[this.id].bounds, this.canvas, this.mvp, gl);
 
-    gl.clearColor(255, 255, 255, 0);
+    gl.clearColor(0, 0, 0, 0);
     gl.clear(gl.COLOR_BUFFER_BIT);
 
     // Apply the animation state based on the delta time.
@@ -154,6 +135,35 @@ class Spine {
     shader.unbind();
 
     requestAnimationFrame(() => this.render());
+  }
+
+  resize(bounds, canvas, mvp, gl) {
+    var w = canvas.clientWidth;
+    var h = canvas.clientHeight;
+    if (canvas.width != w || canvas.height != h) {
+      canvas.width = w;
+      canvas.height = h;
+    }
+
+    // let { x: bX, y: bY } = bounds.size;
+
+    // const checkInfinity = x => Math.abs(x) === Infinity;
+
+    // bX = checkInfinity(bX) ? 200 : bX;
+    // bY = checkInfinity(bY) ? 400 : bY;
+
+    // magic
+    var centerX = 0;
+    var centerY = 200;//bounds.offset.y + bounds.size.y / 2 * 1;
+    var scaleX = 200 / canvas.width;
+    var scaleY = 400 / canvas.height;
+    var scale = Math.max(scaleX, scaleY) * 2;
+    if (scale < 1) scale = 1;
+    var width = canvas.width * scale;
+    var height = canvas.height * scale;
+
+    mvp.ortho2d(centerX - width / 2, centerY - height / 2, width, height);
+    gl.viewport(0, 0, canvas.width, canvas.height);
   }
 
 }

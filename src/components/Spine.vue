@@ -1,6 +1,7 @@
 <template>
-  <div class="spin-panel">
-    <div class="control-button-wrapper" :style="{width}">
+  <div class="spine-panel">
+    <div class="spine-id">{{mode[0]}}</div>
+    <div class="control-button-wrapper">
       <div class="control-button">
         <el-button type="primary" size="mini" @click="changeAnimate(false)" class="el-icon-back"></el-button>
         <span
@@ -8,9 +9,17 @@
         >{{animates[curAnimate]}}</span>
         <el-button type="primary" size="mini" @click="changeAnimate(true)" class="el-icon-right"></el-button>
       </div>
-      <el-button @click="swtichId" circle type="primary" size="mini" class="el-icon-refresh"></el-button>
+      <div>
+        <el-button
+          @click="swtichId"
+          circle
+          type="primary"
+          size="mini"
+          class="el-icon-sort icon-switch"
+        ></el-button>
+      </div>
     </div>
-    <canvas style="z-index:1" :style="{width: width, height}" ref="container"></canvas>
+    <canvas class="spine-canvas" :style="{width: width, height}" ref="container"></canvas>
   </div>
 </template>
 
@@ -20,6 +29,7 @@ import { Button } from 'element-ui';
 import Spine from '../utils/Spine/initSpine';
 
 import Vue from 'vue';
+import { path } from '../utils/listVer';
 Vue.use(Button);
 
 // char_282_catap1
@@ -37,6 +47,10 @@ export default {
       default: 400,
       type: Number,
     },
+    id: {
+      required: true,
+      type: String
+    }
   },
   data() {
     return {
@@ -44,17 +58,17 @@ export default {
       curAnimate: 0,
       skeletons: {},
       skins: [],
-      id: 'char_291_aglina',
-      height: this.canvasWidth + 'px',
-      width: this.canvasWidth * 0.75 + 'px',
-      curSkeleton: null
+      height: (this.canvasWidth * 1.2) + 'px',
+      width: this.canvasWidth + 'px',
+      curSkeleton: null,
+      spinePath: path + 'char/spine/',
+      mode: ['build', 'fight_f', 'fight_b']
     };
   },
   methods: {
     swtichId() {
-      if (this.id === 'char_291_aglina') this.id = 'build_char_291_aglina';
-      else this.id = 'char_291_aglina';
-
+      this.mode.push(this.mode.shift());
+      console.log(this.mode);
       this.init();
     },
     changeAnimate(t) {
@@ -65,12 +79,17 @@ export default {
 
       const { state, skeleton } = this.spine.skeletons[this.id];
       console.log(this.curAnimate);
-      state.setAnimation(0, this.spine.animates[this.curAnimate], true);
+      const animate = this.spine.animates[this.curAnimate];
+      const loop = (/Start|Begin|End/.test(animate) ? false : true);
+      state.setAnimation(0, animate, loop);
       skeleton.setToSetupPose();
     },
     async init() {
       this.spine = new Spine(this.$refs.container);
-      this.skeleton = await this.spine.init(this.id);
+      const id = this.id,
+        pathd = this.spinePath + this.mode[0] + '/';
+
+      this.skeleton = await this.spine.init({ id, path: pathd });
       this.animates = this.spine.animates;
     }
   }
@@ -78,22 +97,7 @@ export default {
 };
 </script>
 
-<style lang="stylus" scoped>
-.control-button-wrapper {
-  position: absolute
-  bottom: 0 //28是el-button mini 的高度
-  display: flex
-  justify-content: space-between
-  z-index: 10
-}
-
-.control-button {
-  display: flex
-  justify-content: space-between
-  align-items: center
-  width: 180px
-}
-
+<style lang="stylus">
 .spine-panel {
   position: absolute
   bottom: 0
@@ -101,6 +105,10 @@ export default {
 
   &:hover {
     z-index: 10
+
+    .spin-id {
+      display: block
+    }
 
     &:after, &:before {
       display: none
@@ -111,24 +119,60 @@ export default {
     content: ''
     box-sizing: border-box
     position: absolute
+    z-index: -1
   }
 
   &:before {
     border-top: 25px solid hsl(0, 0%, 19%)
     border-left: 25px solid hsl(0, 0%, 19%)
-    top: 0
-    left: 0
-    width: 35%
-    height: 26.31%
+    top: 52px
+    left: 45px
+    width: 80px
+    height: 80px
   }
 
   &:after {
     border-bottom: 25px solid #c02a34
     border-right: 25px solid #c02a34
-    bottom: calc(35% - 28px)
-    right: 0%
-    width: 35%
-    height: 26.31%
+    bottom: 77px
+    right: 45px
+    width: 80px
+    height: 80px
+  }
+
+  .control-button-wrapper {
+    position: absolute
+    bottom: 0
+    display: flex
+    justify-content: space-between
+    align-items: center
+    z-index: 10
+    width: 225px
+    padding-left: 50px
+    height: 36px
+  }
+
+  .control-button {
+    display: flex
+    justify-content: space-between
+    align-items: center
+    width: 180px
+  }
+
+  .icon-switch {
+    transform: rotate(90deg)
+  }
+
+  .spine-id {
+    position: absolute
+    top: 0
+    left: 0
+    text-decoration: underline
+    display: none
+  }
+
+  .spine-canvas {
+    background: url('./bg2.png') no-repeat center
   }
 }
 </style>

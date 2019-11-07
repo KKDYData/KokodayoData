@@ -1,19 +1,28 @@
 <template>
   <el-carousel
     class="char-set-container-wrapper"
-    :height="(getScreenWidth() * (short ? 1.05: 0.82)) + 'px'"
+    :height="(getScreenWidth() * (short ? 1.25: 0.82)) + 'px'"
     :autoplay="false"
     indicator-position="outside"
     :loop="false"
+    @change="$event => curIndex = $event"
   >
+    <!-- 默认立绘小人 移动 -->
     <el-carousel-item v-if="short && setData && !setData[0].displaySkin">
-      <spine-panel class="spin-panel mobile" :canvasWidth="300"></spine-panel>
+      <spine-panel :id="id" class="spin-panel mobile" :canvasWidth="300"></spine-panel>
     </el-carousel-item>
-    <spine-panel v-if="!short" class="spine-panel" :canvasWidth="300"></spine-panel>
+    <!-- 默认立绘小人 pc -->
+    <spine-panel :id="id" v-if="!short && !setData[0].displaySkin" :canvasWidth="300"></spine-panel>
     <div v-for="(data, index) in setData" :key="index" :data="data" :short="short">
-      <el-carousel-item v-if="short && setData && setData[0].displaySkin">
-        <spine-panel class="spin-panel mobile" :canvasWidth="300"></spine-panel>
-      </el-carousel-item>
+      <!-- 皮肤小人 -->
+      <!-- <el-carousel-item v-if="setData && setData[0].displaySkin">
+      </el-carousel-item>-->
+      <spine-panel
+        v-if="curIndex === index && setData && setData[0].displaySkin"
+        :id="data.avatarId"
+        class="spin-panel"
+        :canvasWidth="300"
+      ></spine-panel>
       <el-carousel-item :key="index" style="font-size:13px">
         <div class="char-set-contianer-wrapper">
           <div :style="short ? '' : 'padding-left: 100px'">
@@ -83,7 +92,15 @@ export default {
     SpinePanel,
     ContentSlot,
   },
+  data() {
+    return {
+      curIndex: 0
+    };
+  },
   props: {
+    id: {
+      type: String
+    },
     setData: {
       required: true,
       type: Array

@@ -17,7 +17,7 @@
             >
               <el-tabs :value="activeSetPane">
                 <el-tab-pane label="一般" name="default">
-                  <set-panel v-if="showSet" :set-data="setData"></set-panel>
+                  <set-panel v-if="showSet" :set-data="setData" :id="data.charID"></set-panel>
                 </el-tab-pane>
                 <el-tab-pane v-if="skins && skins.length" label="皮肤" name="skins">
                   <set-panel v-if="showSet" :set-data="skins"></set-panel>
@@ -194,6 +194,7 @@ export default {
               charSet: this.getSkinSet(avatarId),
               profile: this.getSkinProile(avatarId),
               halfPic: this.getSkinhalfPic(avatarId),
+              avatarId: encodeURIComponent(avatarId),
               displaySkin
             };
           });

@@ -121,8 +121,9 @@ export default {
       this.$set(this.data[index], 'showTags', t);
     },
     async openDetails(agent) {
-      if (this.short) this.$router.push(this.path + '/details/' + agent.No);
-      else window.open(this.path + '/details/' + agent.No);
+      this.$router.push(this.path + '/details/' + agent.No);
+      // if (this.short) 
+      // else window.open(this.path + '/details/' + agent.No);
     },
     calFillAmount() {
       //通过css控制填充的margin？

@@ -781,4 +781,11 @@ SkeletonBinary.prototype = {
   }
 };
 
-export default SkeletonBinary;
+const skel2Json = binary => {
+  const skel_bin = new SkeletonBinary();
+  skel_bin.data = new Uint8Array(binary);
+  skel_bin.initJson();
+  return skel_bin.json;
+};
+
+export default skel2Json;
