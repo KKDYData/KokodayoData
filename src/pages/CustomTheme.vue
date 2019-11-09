@@ -4,7 +4,6 @@
     v-loading="!load"
     element-loading-background="rgba(168, 168, 168, 0.1)"
   >
-    <!-- :init-value="k === 'furni_set_beach' ? true: false" -->
     <div>
       <div
         class="custom-head-pic"

@@ -42,7 +42,8 @@ import { mapState } from 'vuex';
 
 export default {
   data() {
-    const path = process.env.NODE_ENV === 'development' ? '' : Mode;
+    const isBeta = process.env.NODE_ENV === 'development';
+    const path = isBeta ? '' : Mode;
     return {
       activeIndex: '1',
       activeIndex2: '1',
@@ -59,7 +60,7 @@ export default {
         },
         home: {
           path: path + '/',
-          text: 'Arknights Data'
+          text: isBeta ? 'ArkData Beta' : 'Arknights Data'
         },
         customtheme: {
           path: path + '/customtheme',

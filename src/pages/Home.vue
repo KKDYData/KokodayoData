@@ -1,21 +1,13 @@
 <template>
   <div class="home-wrapper">
-    <el-alert v-if="!isBeta" show-icon type="success" title="你现在访问的是稳定版" description>
-      大幅提高首页性能，625也能丝滑流畅
-      <el-link
-        type="warning"
-        href="https://github.com/odex21/ArknightsData"
-        target="_blank"
-      >源码已在Github公开，欢迎Star</el-link>
-    </el-alert>
-    <el-alert v-else show-icon type="warning" description>
-      <div slot="title">
-        这是Beta版,测试用。Dps柱状图准备重做，请自行分辨是否正确。
-        提醒： 先看单次伤害是否正确，然后看攻击间隔。因为要重做了，所以不会去处理边缘情况了。
-        现在这个图对有持续时间的一般技能是正确的例如（黑/普罗旺斯/银灰/斯卡蒂）
-        <el-link href="https://somedata.top/Arknights" type="success">稳定版链接</el-link>
-      </div>
-    </el-alert>
+    <div class="home-info">
+      <el-alert
+        show-icon
+        :type="1 ?  'warning': 'success'"
+        description
+        :closable="false"
+      >11.9号 晚上10点到次日2点服务器维护及搬迁到新域名</el-alert>
+    </div>
     <transition name="fade" mode="out-in">
       <home-layout v-if="load" :profileList="data" :tokenList="token"></home-layout>
     </transition>
@@ -80,5 +72,12 @@ export default {
   }
 };
 </script>
+
+<style lang="stylus" scoped>
+.home-info {
+  max-width: 1000px
+  margin: 0 auto
+}
+</style>
 
 
