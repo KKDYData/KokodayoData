@@ -168,7 +168,6 @@ export default {
     top: 0
     left: 0
     text-decoration: underline
-    display: none
   }
 
   .spine-canvas {
