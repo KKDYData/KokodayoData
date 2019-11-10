@@ -78,7 +78,7 @@ import { getProfilePath, } from '../../utils';
 import { path } from '../../utils/listVer';
 import { getClass_Chinese, } from '../../utils/string';
 
-import Mode from '../../stats';
+import { rootPath } from '../../stats';
 
 export default {
   props: {
@@ -93,6 +93,7 @@ export default {
       fillItems: [],
       fillItemWidth: { width: '100px' },
       rowPath: path,
+      path: rootPath
     };
   },
   watch: {
@@ -106,9 +107,6 @@ export default {
   },
   computed: {
     ...mapState(['short']),
-    path() {
-      return process.env.NODE_ENV === 'development' ? '' : Mode;
-    }
   },
 
   mounted() {

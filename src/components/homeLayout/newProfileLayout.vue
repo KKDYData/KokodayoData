@@ -107,7 +107,7 @@ import { Card, Tag } from 'element-ui';
 Vue.use(Card);
 Vue.use(Tag);
 
-import Mode from '../../stats';
+import { rootPath } from '../../stats';
 
 export default {
   props: {
@@ -115,14 +115,15 @@ export default {
     showKey: String,
     tags: Array,
     showTags: Boolean,
-    filterGroups: Object
+    filterGroups: Object,
   },
-
+  data() {
+    return {
+      path: rootPath
+    };
+  },
   computed: {
     ...mapState(['short']),
-    path() {
-      return process.env.NODE_ENV === 'development' ? '' : Mode;
-    },
     sortData() {
       if (!this.data || this.tags.length === 0) return;
       let res = new Map();
@@ -207,7 +208,7 @@ export default {
       };
     },
     profilePath(name) {
-      return getProfilePath(name);
+      return getProfilePath(name, true);
     }
   }
 };
