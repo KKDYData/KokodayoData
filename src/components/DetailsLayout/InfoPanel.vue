@@ -128,7 +128,6 @@ Vue.use(Progress);
 Vue.use(Slider);
 import AudioContainer from './AudioContainer';
 import ContentSlot from '../base/ContentSlot';
-import SpinePanel from '../Spine';
 import SetPanel from './SetPanel';
 
 import { mapActions, mapState } from 'vuex';
@@ -137,7 +136,6 @@ export default {
   components: {
     AudioContainer,
     ContentSlot,
-    SpinePanel,
     SetPanel
   },
   props: {

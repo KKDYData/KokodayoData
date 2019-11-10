@@ -2,13 +2,6 @@
   <div class="spine-panel" :style="'--border-width:' + borderWidth + 'px'">
     <div class="spine-id">{{mode[0]}}</div>
     <div class="control-button-wrapper">
-      <div class="control-button">
-        <el-button type="primary" size="mini" @click="changeAnimate(false)" class="el-icon-back"></el-button>
-        <span
-          style="display: inline-block;text-align: center; font-size: 13px"
-        >{{animates[curAnimate]}}</span>
-        <el-button type="primary" size="mini" @click="changeAnimate(true)" class="el-icon-right"></el-button>
-      </div>
       <div>
         <el-button
           @click="swtichId"
@@ -18,6 +11,13 @@
           class="el-icon-sort icon-switch"
         ></el-button>
       </div>
+      <div class="control-button">
+        <el-button type="primary" size="mini" @click="changeAnimate(false)" class="el-icon-back"></el-button>
+        <span
+          style="display: inline-block;text-align: center; font-size: 13px"
+        >{{animates[curAnimate]}}</span>
+        <el-button type="primary" size="mini" @click="changeAnimate(true)" class="el-icon-right"></el-button>
+      </div>
     </div>
     <canvas class="spine-canvas" :style="{width, height}" ref="container"></canvas>
   </div>
@@ -26,10 +26,10 @@
 <script>
 
 import { Button } from 'element-ui';
-import Spine from '../utils/Spine/initSpine';
+import Spine from '../../utils/Spine/initSpine';
 
 import Vue from 'vue';
-import { path } from '../utils/listVer';
+import { path } from '../../utils/listVer';
 Vue.use(Button);
 
 export default {
@@ -136,7 +136,7 @@ export default {
   &:after {
     border-bottom: var(--border-width) solid #c02a34
     border-right: var(--border-width) solid #c02a34
-    bottom: 21%
+    bottom: 24%
     right: 15%
     width: var(--border-size)
     height: var(--border-size)
@@ -149,8 +149,8 @@ export default {
     justify-content: space-between
     align-items: center
     z-index: 10
-    width: 2var --border-width
-    padding-left: 50px
+    width: 225px
+    //padding-left: 50px
     height: 36px
   }
 
@@ -173,7 +173,9 @@ export default {
   }
 
   .spine-canvas {
-    background: url('./bg2.png') no-repeat center
+    //background: url('./spine_background.svg') no-repeat center
+    background: url('./spine_back_2_0.5.png') no-repeat center
+    background-size: contain
   }
 }
 </style>

@@ -9,19 +9,17 @@
   >
     <!-- 默认立绘小人 移动 -->
     <el-carousel-item v-if="short && setData && !setData[0].displaySkin">
-      <spine-panel :id="id" class="spin-panel mobile" :canvasWidth="300"></spine-panel>
+      <spine-panel :id="id" class="spin-panel mobile" :canvasWidth="spineWidth"></spine-panel>
     </el-carousel-item>
     <!-- 默认立绘小人 pc -->
-    <spine-panel :id="id" v-if="!short && !setData[0].displaySkin" :canvasWidth="300"></spine-panel>
+    <spine-panel :id="id" v-if="!short && !setData[0].displaySkin" :canvasWidth="spineWidth"></spine-panel>
     <div v-for="(data, index) in setData" :key="index" :data="data" :short="short">
       <!-- 皮肤小人 -->
-      <!-- <el-carousel-item v-if="setData && setData[0].displaySkin">
-      </el-carousel-item>-->
       <spine-panel
         v-if="curIndex === index && setData && setData[0].displaySkin"
         :id="data.avatarId"
         class="spin-panel"
-        :canvasWidth="300"
+        :canvasWidth="spineWidth"
       ></spine-panel>
       <el-carousel-item :key="index" style="font-size:13px">
         <div class="char-set-contianer-wrapper">
@@ -75,7 +73,7 @@
 
 <script>
 
-import SpinePanel from '../../Spine';
+import SpinePanel from '../../SpinePanel';
 import ContentSlot from '../../base/ContentSlot';
 
 import { mapState } from 'vuex';
@@ -94,7 +92,9 @@ export default {
   },
   data() {
     return {
-      curIndex: 0
+      curIndex: 0,
+      width: 1159,
+      spineWidth: 300
     };
   },
   props: {
@@ -108,6 +108,10 @@ export default {
   },
   computed: {
     ...mapState(['short']),
+  },
+  beforeMount() {
+    this.width = this.getScreenWidth();
+    this.spineWidth = this.width / 1159 * 300;
 
   },
   filters: {
@@ -132,6 +136,7 @@ export default {
 <style lang="stylus" scoped>
 .char-set-contianer-wrapper {
   display: flex
+  height: 100%
 }
 
 .char-half-container {
