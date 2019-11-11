@@ -100,8 +100,6 @@ const changeDesc = (desc) => {
     reg2 = /\\n/g,
     ccVup = /(<@cc\.vup>)/g,
     ccVdown = /(<@cc\.(vdown|talpu|pn)>)/g,
-    // ccPn = /(<@cc.pn>)/g,
-    // ccTalpu = /(<@cc.talpu>)/g,
     baPn = /(<@ba\.pn>)/g,
     baVdown = /(<@ba\.vdown>)/g,
     ccRem = /(<@cc\.rem>)/g,
@@ -120,8 +118,6 @@ const changeDesc = (desc) => {
     .replace(reg2, '<br/>')
     .replace(ccVup, '<i style="color:#0098DC;font-style: normal;">')
     .replace(ccVdown, '<i style="color:#FF6237;font-style: normal;">')
-    // .replace(ccTalpu, '<i style="color:#FF6237;font-style: normal;">')
-    // .replace(ccPn, '<i style="color:#FF6237;">')
     .replace(baPn, '<i style="color:#FF6237;">')
     .replace(baVdown, '<i style="color:#FF6237;font-style: normal;">')
     .replace(ccRem, '<i style="color:#F49800;font-style: normal;">')
