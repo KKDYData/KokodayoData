@@ -172,7 +172,6 @@ export default {
   }
 
   .spine-canvas {
-    //background: url('./spine_background.svg') no-repeat center
     background: url('./spine_back_2_0.5.png') no-repeat center
     background-size: contain
   }
