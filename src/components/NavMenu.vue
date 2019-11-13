@@ -59,7 +59,7 @@ export default {
         },
         home: {
           path: path + '/',
-          text: isBeta ? 'ArkData Beta' : 'Arknights Data'
+          text: 'Arknights Data'
         },
         customtheme: {
           path: path + '/customtheme',
