@@ -37,13 +37,12 @@ Vue.use(MenuItem);
 Vue.use(Submenu);
 
 
-import Mode from '../stats';
+import { rootPath } from '../stats';
 import { mapState } from 'vuex';
 
 export default {
   data() {
-    const isBeta = process.env.NODE_ENV === 'development';
-    const path = isBeta ? '' : Mode;
+    const path = rootPath;
     return {
       activeIndex: '1',
       activeIndex2: '1',
@@ -75,9 +74,6 @@ export default {
   },
   computed: {
     ...mapState(['short']),
-    path() {
-      return process.env.NODE_ENV === 'development' ? '' : Mode;
-    }
   },
   watch: {
     '$route.path': function (val, oldVal) {

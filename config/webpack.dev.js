@@ -1,13 +1,11 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common');
 const webpack = require('webpack');
-const CleanWebPackPlugin = require('clean-webpack-plugin');
-const path = require('path');
 
+// new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
 module.exports = merge(common, {
   mode: 'development',
   plugins: [
-    new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(false),
@@ -52,7 +50,7 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/(computer|enemydata|customtheme|items)$/, to: context => {
+          from: /^\/(computer|enemydata|customtheme|items|test)$/, to: context => {
             return '/index.html';
           }
         },

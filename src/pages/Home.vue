@@ -3,10 +3,10 @@
     <div class="home-info">
       <el-alert
         show-icon
-        :type="1 ?  'warning': 'success'"
+        :type="isBeta ?  'warning': 'success'"
         description
         :closable="false"
-      >11.9号 晚上10点到次日2点服务器维护及搬迁到新域名</el-alert>
+      >已经迁移到新域名。看立绘的地方，多了小人可以看</el-alert>
     </div>
     <transition name="fade" mode="out-in">
       <home-layout v-if="load" :profileList="data" :tokenList="token"></home-layout>
@@ -21,7 +21,7 @@ Vue.use(link);
 Vue.use(Alert);
 
 import loadingC from '../components/base/Loading';
-import Mode from '../stats';
+import { devMode } from '../stats';
 
 const HomeLayout = () => ({
   component: import(/* webpackChunkName: "HomeLayout" */ '../components/homeLayout'),
@@ -40,7 +40,7 @@ export default {
       data: [],
       token: [],
       load: false,
-      isBeta: Mode === '/ArknightsBeta'
+      isBeta: devMode === '/ArknightsBeta'
     };
   },
   mounted() {

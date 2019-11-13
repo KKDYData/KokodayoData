@@ -4,7 +4,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueMeta from 'vue-meta';
 import NavMenu from './components/NavMenu';
-import Mode from './stats';
+import { rootPath } from './stats';
 import store from './store';
 
 Vue.use(VueRouter);
@@ -21,16 +21,16 @@ const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'./pages/C
 const Items = () => import(/* webpackChunkName: "Items" */'./pages/Items');
 
 const isDev = process.env.NODE_ENV === 'development';
-const path = isDev ? '/' : Mode + '/';
+const path = rootPath;
 
 const routes = [
   { path: path, component: Home },
-  { path: path + 'computer', component: Computer },
-  { path: path + 'details/:name', component: Details },
-  { path: path + 'enemydata', component: EnemyData },
-  { path: path + 'enemydata/:map', component: EnemyData },
-  { path: path + 'customtheme', component: CustomTheme },
-  { path: path + 'items', component: Items },
+  { path: path + '/computer', component: Computer },
+  { path: path + '/details/:name', component: Details },
+  { path: path + '/enemydata', component: EnemyData },
+  { path: path + '/enemydata/:map', component: EnemyData },
+  { path: path + '/customtheme', component: CustomTheme },
+  { path: path + '/items', component: Items },
 ];
 const router = new VueRouter({
   mode: 'history',

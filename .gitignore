@@ -1,7 +1,6 @@
 node_modules
-dist
-dist-Stable
-dist-Beta
+dist/workbox-v4.3.1
+build
 ArknightsBeta
 stats.json
 package-lock.json

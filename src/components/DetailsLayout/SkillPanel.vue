@@ -49,7 +49,7 @@
         </div>
 
         <div class="skill-name-level" v-if="!initLv &&  skill.levels.length > 1">
-          <skill-chart
+          <!-- <skill-chart
             v-if="!production && !initLv && skill.levels[0]"
             class="skill-name-level-item"
             :status="status"
@@ -58,7 +58,7 @@
             :profession="profession"
             :talent-potentail-up="talentPotentailUp"
             :description="description"
-          ></skill-chart>
+          ></skill-chart>-->
           <div class="skill-name-level-item">
             <div class="skill-title-level">
               <span>LV</span>

@@ -32,9 +32,8 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 3. 想要包养服务器的话，可以往支付宝打钱
    * 上次赫拉格池子当天UV6k，PV400k，9月份流量在150G，估计今年消费大概在800-1500，因为有120的优惠服务器(阿里云最低配 1M带宽，因为数据和图片基本放在OSS，而且有CDN，PWA做的还行，1M暂时还够用）和1元域名。
    * 之后会把服务器流水也在这边放出来  
-   
-    <img src="./assets/zfb.reszie.png" width = "300" alt="图片名称" />
-    <img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
+   <img src="./assets/zfb.reszie.png" width = "300" alt="图片名称" />
+   <img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
 
 ### 其它
 
