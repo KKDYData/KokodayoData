@@ -243,10 +243,9 @@ import {
 
 import { path } from '../../utils/listVer';
 
-import Mode from '../../stats';
 
 import { mapOptionsKey } from '../../utils/string';
-import devMode from '../../stats';
+import { devMode } from '../../stats';
 
 const EnemyDataLayout = () => ({
   component: import(
@@ -357,7 +356,7 @@ export default {
     },
     path() {
       return (
-        (process.env.NODE_ENV === 'development' ? '' : Mode) + '/enemydata/'
+        (process.env.NODE_ENV === 'development' ? '' : devMode) + '/enemydata/'
       );
     },
     mapDesc() {

@@ -167,7 +167,8 @@ window.addEventListener('resize', throttle(() => {
 }, 500));
 
 
-const getProfilePath = name => {
+const getProfilePath = (name, row) => {
+  if (row) return getDetailsProfilePath(name);
   return UA.ok ? `${path}char/portrait/${name}.png?x-oss-process=style/webp`
     : `${path}char/portrait/${name}.png`;
 

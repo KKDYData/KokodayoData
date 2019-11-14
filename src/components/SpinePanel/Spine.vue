@@ -116,32 +116,31 @@ export default {
     }
   }
 
-  &:before, &:after {
-    content: ''
-    box-sizing: border-box
-    position: absolute
-    z-index: -1
-  }
-
-  &:before {
-    border-color: hsl(0, 0%, 19%)
-    border-top: var(--border-width) solid
-    border-left: var(--border-width) solid
-    top: 14%
-    left: 14%
-    width: var(--border-size)
-    height: var(--border-size)
-  }
-
-  &:after {
-    border-bottom: var(--border-width) solid #c02a34
-    border-right: var(--border-width) solid #c02a34
-    bottom: 24%
-    right: 15%
-    width: var(--border-size)
-    height: var(--border-size)
-  }
-
+  /*&:before, &:after {
+      content: ''
+      box-sizing: border-box
+      position: absolute
+      z-index: -1
+    }
+  
+    &:before {
+      border-color: hsl(0, 0%, 19%)
+      border-top: var(--border-width) solid
+      border-left: var(--border-width) solid
+      top: 14%
+      left: 14%
+      width: var(--border-size)
+      height: var(--border-size)
+    }
+  
+    &:after {
+      border-bottom: var(--border-width) solid #c02a34
+      border-right: var(--border-width) solid #c02a34
+      bottom: 24%
+      right: 15%
+      width: var(--border-size)
+      height: var(--border-size)
+    }*/
   .control-button-wrapper {
     position: absolute
     bottom: 0
@@ -173,7 +172,6 @@ export default {
   }
 
   .spine-canvas {
-    //background: url('./spine_background.svg') no-repeat center
     background: url('./spine_back_2_0.5.png') no-repeat center
     background-size: contain
   }

@@ -241,8 +241,6 @@ export default {
       return res;
     },
     getSkinProile(id) {
-
-      console.log(path + 'char/profile/' + id + this.style, id);
       return path + 'char/profile/' + encodeURIComponent(id) + this.style;
     },
     getSkinhalfPic(id) {

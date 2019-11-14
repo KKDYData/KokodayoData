@@ -1,7 +1,7 @@
 <template>
   <el-carousel
     class="char-set-container-wrapper"
-    :height="(getScreenWidth() * (short ? 1.25: 0.82)) + 'px'"
+    :height="(getScreenWidth() * (short ? 1: 0.82)) + 'px'"
     :autoplay="false"
     indicator-position="outside"
     :loop="false"
@@ -73,7 +73,7 @@
 
 <script>
 
-import SpinePanel from '../../SpinePanel';
+const SpinePanel = () => import(/* webpackChunkName: "SpinePanel" */'../../SpinePanel');
 import ContentSlot from '../../base/ContentSlot';
 
 import { mapState } from 'vuex';
@@ -90,13 +90,6 @@ export default {
     SpinePanel,
     ContentSlot,
   },
-  data() {
-    return {
-      curIndex: 0,
-      width: 1159,
-      spineWidth: 300
-    };
-  },
   props: {
     id: {
       type: String
@@ -106,12 +99,23 @@ export default {
       type: Array
     }
   },
+
+  data() {
+    return {
+      curIndex: 0,
+      width: 1159,
+      spineWidth: 300
+    };
+  },
+
   computed: {
     ...mapState(['short']),
   },
   beforeMount() {
     this.width = this.getScreenWidth();
-    this.spineWidth = this.width / 1159 * 300;
+    if (!this.short) {
+      this.spineWidth = this.width / 1159 * 300;
+    }
 
   },
   filters: {
