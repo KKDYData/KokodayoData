@@ -2,56 +2,74 @@
   <div class="info-panel-container">
     <el-tabs :value="activeName">
       <el-tab-pane label="人员档案" name="first">
-        <div class="char-half-container-wrapper">
-          <el-image class="char-half-container" :src="setData[0].halfPic" fit="contain" lazy>
-            <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
+        <div class="char-base-info-container">
+          <div class="char-set-cv">
+            <div class="char-half-container">
+              <el-image class :src="setData[0].halfPic" fit="contain" lazy>
+                <div slot="error" class="image-slot">
+                  <i class="el-icon-picture-outline"></i>
+                </div>
+              </el-image>
             </div>
-          </el-image>
-          <div class="info-char-set-wrapper">
-            <el-popover
-              :visible-arrow="false"
-              placement="top-start"
-              :width="getScreenWidth()"
-              trigger="click"
-            >
-              <el-tabs :value="activeSetPane">
-                <el-tab-pane label="一般" name="default">
-                  <set-panel v-if="showSet" :set-data="setData" :id="data.charID"></set-panel>
-                </el-tab-pane>
-                <el-tab-pane v-if="skins && skins.length" label="皮肤" name="skins">
-                  <set-panel v-if="showSet" :set-data="skins"></set-panel>
-                </el-tab-pane>
-              </el-tabs>
-              <el-button
-                style="background: rgba(255, 255, 255, 0.85);"
-                @click="showSet=true"
-                size="mini"
-                slot="reference"
-                plain
-              >立绘/皮肤</el-button>
-            </el-popover>
+            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+              <div slot="title">画师</div>
+              <div slot="content">{{data.drawName}}</div>
+            </content-slot>
+            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+              <div slot="title">CV</div>
+              <div slot="content">{{data.infoName}}</div>
+            </content-slot>
+            <div class="info-char-set-wrapper">
+              <el-popover
+                :visible-arrow="false"
+                placement="top-start"
+                :width="getScreenWidth()"
+                trigger="click"
+              >
+                <el-tabs :value="activeSetPane">
+                  <el-tab-pane label="一般" name="default">
+                    <set-panel v-if="showSet" :set-data="setData" :id="data.charID"></set-panel>
+                  </el-tab-pane>
+                  <el-tab-pane v-if="skins && skins.length" label="皮肤" name="skins">
+                    <set-panel v-if="showSet" :set-data="skins"></set-panel>
+                  </el-tab-pane>
+                </el-tabs>
+                <el-button
+                  style="background: rgba(255, 255, 255, 0.85); margin-top: 10px"
+                  @click="showSet=true"
+                  size="mini"
+                  slot="reference"
+                  icon="el-icon-search"
+                >立绘/皮肤</el-button>
+              </el-popover>
+            </div>
           </div>
-          <div class="info-draw-name">
-            <span style="width: 32px; display: inline-block">画师</span>
-            <span>: {{data.drawName}}</span>
-          </div>
-          <div class="info-cv-name">
-            <span style="width: 32px; display: inline-block">CV</span>
-            <span>: {{data.infoName}}</span>
-          </div>
-        </div>
-        <div class="info-story-wrapper">
-          <div v-for="(story,index) in data.storyTextAudio" :key="story.storyTitle">
-            <div class="info-story-title" :style="index === 0 ? 'margin-left: 160px': ''">
+          <div v-for="story in data.storyTextAudio.slice(0, 2).reverse()" :key="story.storyTitle">
+            <div class="info-story-title" style="min-width: 150px">
               <span>
                 <b>{{story.storyTitle}}</b>
               </span>
             </div>
-            <div
-              class="info-story-content-wrapper"
-              :style="index === 0 ? 'margin-left: 160px; min-height: 267px': ''"
-            >
+            <div class="info-story-content-wrapper">
+              <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
+                <div class="info-story-unlock" v-if="p.unLockParam !== ''">
+                  <span>解锁需要好感：</span>
+                  <span>{{p.unLockParam | unlockStr}}</span>
+                </div>
+                <p v-html="changeText(p.storyText)"></p>
+              </div>
+            </div>
+            <div class="char-base-info"></div>
+          </div>
+        </div>
+        <div class="info-story-wrapper">
+          <div v-for="story in data.storyTextAudio.slice(2)" :key="story.storyTitle">
+            <div class="info-story-title">
+              <span>
+                <b>{{story.storyTitle}}</b>
+              </span>
+            </div>
+            <div class="info-story-content-wrapper">
               <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
                 <div class="info-story-unlock" v-if="p.unLockParam !== ''">
                   <span>解锁需要好感：</span>
@@ -128,7 +146,7 @@ Vue.use(Progress);
 Vue.use(Slider);
 import AudioContainer from './AudioContainer';
 import ContentSlot from '../base/ContentSlot';
-import SetPanel from './SetPanel';
+import SetPanel from '../base/SetPanel';
 
 import { mapActions, mapState } from 'vuex';
 
@@ -285,31 +303,21 @@ export default {
 
 
 <style lang="stylus" scoped>
+@import '../../styles/char.styl'
+
+.char-base-info-container {
+  display: flex
+  margin-bottom: 70px
+}
+
 .info-char-set-wrapper {
-  position: absolute
+  //position: absolute
   bottom: 45px
   right: 1px
 }
 
 .info-story-wrapper {
   padding: 0 10px
-}
-
-.info-wrapper {
-  margin-bottom: 200px
-}
-
-.char-half-container-wrapper {
-  float: left
-  width: 110px
-  padding-left: 10px
-  overflow: hidden
-  position: relative
-}
-
-.info-draw-name, .info-cv-name {
-  margin-left: 0px
-  white-space: nowrap
 }
 
 .info-word-audio-control {
@@ -343,16 +351,20 @@ export default {
   cursor: pointer
 }
 
-.charset-info {
-  position: absolute
-  bottom: 20px
-}
-
 @media screen and (max-width: 700px) {
   .info-word-audio-control {
     padding-left: 10px
     padding-top: 5px
     display: block
+  }
+
+  .char-base-info-container {
+    flex-wrap: wrap
+    justify-content: space-between
+  }
+
+  .char-set-cv {
+    margin-bottom: 30px
   }
 }
 </style>

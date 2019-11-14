@@ -42,7 +42,10 @@ export default {
   props: {
     filters: Array,
     label: String,
-    single: Boolean,
+    single: {
+      type: Boolean,
+      default: false
+    },
     default: String,
     disabled: {
       default: false,

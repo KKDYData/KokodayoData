@@ -1,4 +1,4 @@
-import './style.styl';
+import './styles/index.styl';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
@@ -19,6 +19,7 @@ const EnemyData = () => import(/* webpackChunkName: "Enemy" */'./pages/Enemy');
 const Footer = () => import(/* webpackChunkName: "EnemyData" */'./pages/Footer');
 const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'./pages/CustomTheme');
 const Items = () => import(/* webpackChunkName: "Items" */'./pages/Items');
+const Skins = () => import(/* webpackChunkName: "Skins" */'./pages/Skins');
 
 const isDev = process.env.NODE_ENV === 'development';
 const path = rootPath;
@@ -31,6 +32,7 @@ const routes = [
   { path: path + '/enemydata/:map', component: EnemyData },
   { path: path + '/customtheme', component: CustomTheme },
   { path: path + '/items', component: Items },
+  { path: path + '/skins', component: Skins },
 ];
 const router = new VueRouter({
   mode: 'history',
