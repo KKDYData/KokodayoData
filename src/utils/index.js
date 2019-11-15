@@ -389,8 +389,27 @@ const findStage = (map, tree) => {
   return target;
 };
 
+const getSkinsData = {
+  skins({ displaySkin, avatarId }) {
+    return {
+      charSet: this.getSkinSet(avatarId),
+      profile: this.getSkinProile(avatarId),
+      halfPic: this.getSkinhalfPic(avatarId),
+      avatarId: encodeURIComponent(avatarId),
+      displaySkin
+    };
+  },
+  getSkinProile(id) {
+    return path + 'char/profile/' + encodeURIComponent(id) + this.style;
+  },
+  getSkinhalfPic(id) {
+    return path + 'char/halfPic/' + encodeURIComponent(id) + this.style;
+  },
+  getSkinSet(id) {
+    return path + 'char/set/' + encodeURIComponent(id) + '.png';
+  },
 
-
+};
 export {
   TaskQueue,
   findValue,
@@ -407,6 +426,8 @@ export {
   calStatusEnd,
   preDefineCompute,
   preDefineGet,
+  changeKey,
+  getSkinsData,
 
   // 转换路径类，可能需要转义到string
   getProfilePath,
@@ -415,5 +436,4 @@ export {
 
   // 设备检测
   UA,
-  changeKey,
 };

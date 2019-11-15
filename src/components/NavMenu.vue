@@ -1,6 +1,7 @@
 <template>
   <div style="width: 100%">
     <el-menu
+      ref="nav-menu"
       :default-active="$route.path"
       class="el-menu-demo"
       mode="horizontal"
@@ -8,21 +9,20 @@
       text-color="#fff"
       active-text-color="#ffd04b"
       router
-      ref="nav-menu"
     >
-      <el-menu-item :index="routes.home.path">{{routes.home.text}}</el-menu-item>
-      <el-menu-item :index="routes.enemydata.path">{{routes.enemydata.text}}</el-menu-item>
+      <el-menu-item :index="routes.home.path">{{ routes.home.text }}</el-menu-item>
+      <el-menu-item :index="routes.enemydata.path">{{ routes.enemydata.text }}</el-menu-item>
       <template v-if="!short">
-        <el-menu-item :index="routes.items.path">{{routes.items.text}}</el-menu-item>
-        <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
-        <el-menu-item :index="routes.customtheme.path">{{routes.customtheme.text}}</el-menu-item>
+        <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
+        <el-menu-item :index="routes.computer.path">{{ routes.computer.text }}</el-menu-item>
+        <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>
       </template>
       <template v-else>
         <el-submenu index="2">
-          <template slot="title">{{moreText}}</template>
-          <el-menu-item :index="routes.items.path">{{routes.items.text}}</el-menu-item>
-          <el-menu-item :index="routes.computer.path">{{routes.computer.text}}</el-menu-item>
-          <el-menu-item :index="routes.customtheme.path">{{routes.customtheme.text}}</el-menu-item>
+          <template slot="title">{{ moreText }}</template>
+          <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
+          <el-menu-item :index="routes.computer.path">{{ routes.computer.text }}</el-menu-item>
+          <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>
         </el-submenu>
       </template>
     </el-menu>
@@ -35,7 +35,6 @@ import Vue from 'vue';
 Vue.use(Menu);
 Vue.use(MenuItem);
 Vue.use(Submenu);
-
 
 import { rootPath } from '../stats';
 import { mapState } from 'vuex';
@@ -73,10 +72,10 @@ export default {
     };
   },
   computed: {
-    ...mapState(['short']),
+    ...mapState(['short'])
   },
   watch: {
-    '$route.path': function (val, oldVal) {
+    '$route.path': function(val, oldVal) {
       //修复移动端菜单不回收的bug
       setTimeout(() => {
         this.$refs['nav-menu'].close('2');
@@ -95,7 +94,7 @@ export default {
       }
       this.moreText = '更多';
     }
-  },
+  }
 };
 </script>
 

@@ -5,96 +5,96 @@
         <div class="my-form-wrapper">
           <el-form-item label="角色星级" class="my-form-item-wrapper">
             <el-select
+              v-model="char.star"
               :size="short ? 'medium' : ''"
               class="my-form-item"
-              v-model="char.star"
               placeholder
             >
-              <el-option v-for="i in [0, 1, 2, 3, 4, 5]" :value="i" :key="i" :label="i + 1"></el-option>
+              <el-option v-for="i in [0, 1, 2, 3, 4, 5]" :key="i" :value="i" :label="i + 1" />
             </el-select>
           </el-form-item>
           <el-form-item label="当前等级" prop="level" class="my-form-item-wrapper">
             <el-input-number
+              v-model.number="char.level_now"
               :size="short ? 'medium' : ''"
               controls-position="right"
               class="my-form-item"
               :step="10"
               :min="0"
               :max="data.maxLevel[char.star][char.phases_now]"
-              v-model.number="char.level_now"
-            ></el-input-number>
+            />
           </el-form-item>
           <el-form-item label="精英阶段" class="my-form-item-wrapper">
             <el-select
+              v-model.number="char.phases_now"
               :size="short ? 'medium' : ''"
               class="my-form-item"
-              v-model.number="char.phases_now"
               placeholder="等级"
             >
-              <el-option v-for="i in phases" :value="i" :key="i"></el-option>
+              <el-option v-for="i in phases" :key="i" :value="i" />
             </el-select>
           </el-form-item>
         </div>
 
         <div class="my-form-wrapper">
-          <div class="my-form-item-fill"></div>
+          <div class="my-form-item-fill" />
           <el-form-item label="目标等级" prop="level" class="my-form-item-wrapper">
             <el-input-number
+              v-model.number="char.level"
               :size="short ? 'medium' : ''"
               controls-position="right"
               class="my-form-item"
               :step="10"
               :min="0"
               :max="data.maxLevel[char.star][char.phases]"
-              v-model.number="char.level"
-            ></el-input-number>
+            />
           </el-form-item>
 
           <el-form-item label="精英阶段" class="my-form-item-wrapper">
             <el-select
+              v-model.number="char.phases"
               :size="short ? 'medium' : ''"
               class="my-form-item"
-              v-model.number="char.phases"
               placeholder="等级"
             >
-              <el-option v-for="i in phases" :value="i" :key="i"></el-option>
+              <el-option v-for="i in phases" :key="i" :value="i" />
             </el-select>
           </el-form-item>
         </div>
         <div class="my-form-wrapper">
           <el-form-item label="有龙门币/千" class="my-form-item-wrapper" prop="base.money">
             <el-input-number
+              v-model="char.base.money"
               :size="short ? 'medium' : ''"
               controls-position="right"
               class="my-form-item"
-              v-model="char.base.money"
               :step="10"
               :min="0"
               placeholder="龙门币"
-            ></el-input-number>
+            />
           </el-form-item>
 
           <el-form-item label="基建经验|千/日" class="my-form-item-wrapper">
             <el-input-number
+              v-model.number="char.production.exp"
               :size="short ? 'medium' : ''"
               :step="10"
               :min="0"
               controls-position="right"
               class="my-form-item"
-              v-model.number="char.production.exp"
               placeholder="经验"
-            ></el-input-number>
+            />
           </el-form-item>
           <el-form-item label="基建龙币|千/日" class="my-form-item-wrapper">
             <el-input-number
+              v-model.number="char.production.money"
               :size="short ? 'medium' : ''"
               controls-position="right"
               :step="10"
               :min="0"
               class="my-form-item"
-              v-model.number="char.production.money"
               placeholder="经验"
-            ></el-input-number>
+            />
           </el-form-item>
         </div>
 
@@ -106,44 +106,44 @@
             class="my-form-item-wrapper"
           >
             <div slot="label">
-              <item-viewer class="exp-card" :item="card"></item-viewer>
+              <item-viewer class="exp-card" :item="card" />
             </div>
             <el-input-number
+              v-model.number="char.base.exp_cards[key]"
               :size="short ? 'medium' : ''"
               controls-position="right"
               class="my-form-item"
-              v-model.number="char.base.exp_cards[key]"
               placeholder="经验"
               :min="0"
               :step="10"
-            ></el-input-number>
+            />
           </el-form-item>
         </div>
       </el-form>
       <el-form label-width="80px" class="my-form-wrapper-result" inline>
         <el-form-item label="需要经验">
-          <span>{{ExpNeed}}</span>
+          <span>{{ ExpNeed }}</span>
         </el-form-item>
         <el-form-item label="需龙门币">
-          <span>{{MoneyNeed}}</span>
+          <span>{{ MoneyNeed }}</span>
         </el-form-item>
 
         <el-form-item label="已有经验">
-          <span>{{baseExp}}</span>
+          <span>{{ baseExp }}</span>
         </el-form-item>
       </el-form>
       <el-form label-width="80px" class="my-form-wrapper-result">
         <el-form-item label="刷CE5">
-          <span>{{CE5}}次, 需要理智{{CE5 * 30}}点, 天数 {{CE5 * 30 / 300}}</span>
+          <span>{{ CE5 }}次, 需要理智{{ CE5 * 30 }}点, 天数 {{ CE5 * 30 / 300 }}</span>
         </el-form-item>
         <el-form-item label="刷LS5">
-          <span>{{LS5}}次, 需要理智{{LS5 * 30}}点, 天数 {{LS5 * 30 / 300}}</span>
+          <span>{{ LS5 }}次, 需要理智{{ LS5 * 30 }}点, 天数 {{ LS5 * 30 / 300 }}</span>
         </el-form-item>
         <el-form-item label="基建+CE5">
-          <span>{{BCE5}}天</span>
+          <span>{{ BCE5 }}天</span>
         </el-form-item>
         <el-form-item label="基建+LS5">
-          <span>{{BLS5}}天</span>
+          <span>{{ BLS5 }}天</span>
         </el-form-item>
 
         <p>按一天300体力算（月卡）</p>
@@ -167,6 +167,9 @@ Vue.use(InputNumber);
 Vue.use(Alert);
 
 export default {
+  components: {
+    'item-viewer': ItemViewer
+  },
   data() {
     return {
       char: {
@@ -188,13 +191,7 @@ export default {
       exp_cards: exp_cards
     };
   },
-  components: {
-    'item-viewer': ItemViewer
-  },
-  beforeMount() {
-    console.log('下面是计算用的数据，可以复制去自己用');
-    console.log(this.data);
-  },
+
   computed: {
     ...mapState(['short']),
     phases() {
@@ -230,17 +227,21 @@ export default {
     BLS5() {
       const result = Math.ceil(
         (this.ExpNeed - this.baseExp) /
-        (74000 + this.char.production.exp * 1000)
+          (74000 + this.char.production.exp * 1000)
       );
       return result > -1 ? result : 0;
     },
     BCE5() {
       const result = Math.ceil(
         (this.MoneyNeed - this.char.base.money * 1000) /
-        (75000 + this.char.production.money * 1000)
+          (75000 + this.char.production.money * 1000)
       );
       return result > -1 ? result : 0;
     }
+  },
+  beforeMount() {
+    console.log('下面是计算用的数据，可以复制去自己用');
+    console.log(this.data);
   },
   methods: {
     calBase(target) {

@@ -3,13 +3,13 @@
     <div class="home-info">
       <el-alert
         show-icon
-        :type="isBeta ?  'warning': 'success'"
+        :type="isBeta ? 'warning': 'success'"
         description
         :closable="false"
       >已经迁移到新域名。看立绘的地方，多了小人可以看</el-alert>
     </div>
     <transition name="fade" mode="out-in">
-      <home-layout v-if="load" :profileList="data" :tokenList="token"></home-layout>
+      <home-layout v-if="load" :profile-list="data" :token-list="token" />
     </transition>
   </div>
 </template>
@@ -49,7 +49,8 @@ export default {
   methods: {
     linkStart() {
       this.getData().then(data => {
-        const agent = [], token = [];
+        const agent = [],
+          token = [];
         data.forEach(el => {
           if (el.class !== 'TOKEN') agent.push(el);
           else token.push(el);

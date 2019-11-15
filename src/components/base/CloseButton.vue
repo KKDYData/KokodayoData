@@ -1,6 +1,6 @@
 <template>
-  <el-button class="close-button" @click="close()" type="danger" size="mini">
-    <i class="el-icon-close"></i>
+  <el-button class="close-button" type="danger" size="mini" @click="close()">
+    <i class="el-icon-close" />
   </el-button>
 </template>
 

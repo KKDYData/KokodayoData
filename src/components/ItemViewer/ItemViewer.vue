@@ -27,30 +27,30 @@
               :src="itemPic"
             >
               <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline"></i>
+                <i class="el-icon-picture-outline" />
               </div>
             </el-image>
           </el-tooltip>
         </div>
-        <div style="text-align: center" v-if="num || weight">
+        <div v-if="num || weight" style="text-align: center">
           <span
             class="evolvcost-name-wrapper"
             :style="data.name.length > 6 ? 'font-size: 12px' : ''"
-          >{{data.name}}</span>
+          >{{ data.name }}</span>
           <div style="color:rgb(86, 86, 86)">
-            <span v-if="num">x{{num}}</span>
-            <span v-else>{{weight}}%</span>
+            <span v-if="num">x{{ num }}</span>
+            <span v-else>{{ weight }}%</span>
           </div>
         </div>
       </div>
       <div v-if="!noPopover">
         <div v-if="isHover === 'click'">
-          <close-button></close-button>
+          <close-button />
         </div>
-        <p v-if="type === 'FURN'" style="color: #828282">氛围 {{data.comfort}}</p>
-        <p v-if="type === 'FURN'" style="color: #828282">{{data.obtainApproach}}</p>
-        <p>{{data.usage}}</p>
-        <p>{{data.description}}</p>
+        <p v-if="type === 'FURN'" style="color: #828282">氛围 {{ data.comfort }}</p>
+        <p v-if="type === 'FURN'" style="color: #828282">{{ data.obtainApproach }}</p>
+        <p>{{ data.usage }}</p>
+        <p>{{ data.description }}</p>
         <div v-if="targetStageDrop">
           <el-divider content-position="left">
             <span>当前关卡</span>
@@ -61,7 +61,7 @@
             >
               统计次数
               <el-tooltip placement="top">
-                <i class="el-icon-info"></i>
+                <i class="el-icon-info" />
                 <div slot="content">
                   点击可以查看统计的
                   <color color="hsl(193, 78%, 69%)">总掉落数</color>/
@@ -71,7 +71,7 @@
             </span>
           </el-divider>
           <div class="item-stage-container">
-            <drop-line :data="targetStageDrop"></drop-line>
+            <drop-line :data="targetStageDrop" />
           </div>
         </div>
         <div v-if="type !== 'FURN'" class="item-popover">
@@ -85,7 +85,7 @@
               >
                 统计次数
                 <el-tooltip placement="top">
-                  <i class="el-icon-info"></i>
+                  <i class="el-icon-info" />
                   <div slot="content">
                     点击可以查看统计的
                     <color color="hsl(193, 78%, 69%)">总掉落数</color>/
@@ -95,7 +95,7 @@
               </span>
             </el-divider>
             <div class="item-stage-container">
-              <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage"></drop-line>
+              <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage" />
             </div>
           </div>
           <div v-if="data.buildingProductList.length > 0">
@@ -113,9 +113,9 @@
                   :num="goldCost"
                   class="item-formula-item"
                   :no-popover="true"
-                ></just-viewer>
-                <div class="item-formula-item" v-for="data in costs" :key="data.id">
-                  <just-viewer :no-popover="true" :item="data.id" :num="data.count"></just-viewer>
+                />
+                <div v-for="d in costs" :key="d.id" class="item-formula-item">
+                  <just-viewer :no-popover="true" :item="d.id" :num="d.count" />
                 </div>
               </div>
               <div v-if="listMode">
@@ -123,8 +123,8 @@
                   <span>合成随机产物</span>
                 </el-divider>
                 <div class="item-formula-container">
-                  <div v-for="data in extraOutcomeGroup" :key="data.id">
-                    <just-viewer class="item-formula-item" :no-popover="true" :item="data.itemId"></just-viewer>
+                  <div v-for="rd in extraOutcomeGroup" :key="rd.id">
+                    <just-viewer class="item-formula-item" :no-popover="true" :item="rd.itemId" />
                   </div>
                 </div>
               </div>
@@ -142,7 +142,12 @@ import { findStage, UA } from '../../utils';
 import { path } from '../../utils/listVer';
 import formula from '../../utils/data/formula.json';
 
-import { itemBackground, occPer_chinese, roomType, GOLD } from '../..//utils/string';
+import {
+  itemBackground,
+  occPer_chinese,
+  roomType,
+  GOLD
+} from '../..//utils/string';
 
 import { mapState } from 'vuex';
 import Vue from 'vue';
@@ -156,14 +161,13 @@ import DropLine from './DropLine';
 import Color from '../base/Color';
 import CloseButton from '../base/CloseButton';
 
-
 import { getItem } from '../../utils/fetch';
 
 // 可以考虑给id的话，只显示图片，不做数据拉取
 // 或者noPopover + {假数据}，反正只显示图片的话，实际也不需要拉数据显示
 // 但是考虑到数据有做缓存，实际不会增加http连接数
 export default {
-  name: 'just-viewer',
+  name: 'JustViewer',
   components: {
     DropLine,
     Color,
@@ -174,15 +178,27 @@ export default {
       required: true,
       type: [String, Object]
     },
-    num: Number,
-    type: String,
-    targetStage: String,
+    num: {
+      type: Number,
+      default: null
+    },
+    type: {
+      type: String,
+      default: null
+    },
+    targetStage: {
+      type: String,
+      default: null
+    },
     noPopover: {
       default: false,
       type: Boolean
     },
     small: Boolean,
-    weight: Number,
+    weight: {
+      default: null,
+      type: Number
+    },
     listMode: {
       default: false,
       type: Boolean
@@ -191,38 +207,32 @@ export default {
   data() {
     return {
       isHover:
-        process.env.NODE_ENV === 'development' ||
-          UA.isMobliePad || this.short
-          ? 'click' : 'hover',
+        process.env.NODE_ENV === 'development' || UA.isMobliePad || this.short
+          ? 'click'
+          : 'hover',
       data: typeof this.item !== 'string' ? this.item : undefined,
-      GOLD,
+      GOLD
     };
   },
-  watch: {
-    item(v) {
-      if (typeof this.item === 'string') {
-        getItem(this.item).then(el => this.data = el);
-      } else {
-        this.data = v;
-      }
-    }
-  },
-  created() {
-    if (typeof this.item === 'string') {
-      getItem(this.item).then(el => this.data = el);
-    }
-  },
+
   computed: {
     ...mapState(['stageTree', 'short']),
     formula() {
       if (!this.data) return;
-      return this.data.buildingProductList.filter(el => el.roomType === 'WORKSHOP').map(el => formula[el.formulaId]);
+      return this.data.buildingProductList
+        .filter(el => el.roomType === 'WORKSHOP')
+        .map(el => formula[el.formulaId]);
     },
     itemBackground() {
       return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};
     },
     itemPic() {
-      return (path + (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') + this.data.iconId + '_optimized.png');
+      return (
+        path +
+        (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') +
+        this.data.iconId +
+        '_optimized.png'
+      );
     },
 
     dropListRow() {
@@ -231,26 +241,32 @@ export default {
     targetStageDrop() {
       if (!this.targetStage || !this.dropListRow) return;
       else {
-        const tempRes = this.dropList.findIndex(
+        const tempRes = this.dropList.find(
           el => el.stageId === this.targetStage
         );
         if (tempRes > -1) {
+          // eslint-disable-next-line vue/no-side-effects-in-computed-properties
           const temp = this.dropList.splice(tempRes, 1)[0];
           return temp;
         }
-        // 找不到的情况， 先不改成etCost!!!
-        const target = this.dropListRow.find(el => el.stageId === this.targetStage);
+        // ?这是随机掉落，上面是主掉落,主掉落需要从所有掉落里分割出当前地图的掉落。
+        // ?因为这里不显示随机掉落（概率）的内容（有几十个）
+        // 找不到的情况， 先不改成etCost（活动）!!!
+        const target = this.dropListRow.find(
+          el => el.stageId === this.targetStage
+        );
         if (!target) return;
         const res = Object.assign({}, target);
         const stageData = findStage(target.stageId, this.stageTree);
         const temp = stageData.label.split(' ');
         res.stageCode = temp[0];
         res.rate = Math.round((target.quantity / target.times) * 100);
-        res.dropCost = Math.round((target.times / target.quantity) * stageData.apCost);
+        res.dropCost = Math.round(
+          (target.times / target.quantity) * stageData.apCost
+        );
         return res;
       }
     },
-
     dropList() {
       const list = this.dropListRow;
       if (this.stageTree) {
@@ -260,9 +276,6 @@ export default {
           if (stageData) {
             const temp = stageData.label.split(' ');
             res.stageCode = temp[0];
-            if (temp[0] === this.ta) {
-              res.target = true;
-            }
             if (list) {
               const dropInfo = list.find(
                 dropInfo => dropInfo.stageId === el.stageId
@@ -291,6 +304,20 @@ export default {
     },
     showDropInfo() {
       return this.dropList.filter(el => el.times);
+    }
+  },
+  watch: {
+    item(v) {
+      if (typeof this.item === 'string') {
+        getItem(this.item).then(el => (this.data = el));
+      } else {
+        this.data = v;
+      }
+    }
+  },
+  created() {
+    if (typeof this.item === 'string') {
+      getItem(this.item).then(el => (this.data = el));
     }
   },
   methods: {

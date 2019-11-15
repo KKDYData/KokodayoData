@@ -5,16 +5,16 @@
     <span
       class="item-data-name"
       :style="data.stageCode.length > 5 ? 'font-size: 0.9em': ''"
-    >{{data.stageCode}}</span>
-    <span class="item-occper">{{data.occPer? occper(data.occPer) : '概率掉落'}}</span>
+    >{{ data.stageCode }}</span>
+    <span class="item-occper">{{ data.occPer? occper(data.occPer) : '概率掉落' }}</span>
     <el-tooltip v-if="data.times" class="item-dropInfo" placement="top">
       <div slot="content">
-        <color color="hsl(350, 100%, 79%)">{{data.times}}</color>/
-        <color color="hsl(193, 78%, 69%)">{{data.quantity}}</color>
-        →{{data.rate}}%
+        <color color="hsl(350, 100%, 79%)">{{ data.times }}</color>/
+        <color color="hsl(193, 78%, 69%)">{{ data.quantity }}</color>
+        →{{ data.rate }}%
       </div>
-      <span v-if="data.dropCost">{{data.dropCost}} 理智/个</span>
-      <span v-else>{{data.dropCnt}}个/{{data.etCost}}票</span>
+      <span v-if="data.dropCost">{{ data.dropCost }} 理智/个</span>
+      <span v-else>{{ data.dropCnt }}个/{{ data.etCost }}票</span>
     </el-tooltip>
   </p>
 </template>
@@ -34,13 +34,14 @@ export default {
   },
   props: {
     data: {
+      type: Object,
       required: true
     }
   },
   methods: {
     occper(occ) {
       return occPer_chinese[occ];
-    },
+    }
   }
 };
 </script>

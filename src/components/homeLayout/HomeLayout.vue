@@ -1,34 +1,34 @@
 <template>
   <div class="home-layout-wrapper">
-    <div class="home-filter-wrapper" id="profile-panel">
+    <div id="profile-panel" class="home-filter-wrapper">
       <filter-group
+        ref="tokenFilter"
         label="切换"
         :filters="category.token"
         :single="true"
-        @filter="switchData($event)"
-        ref="tokenFilter"
         default="profileList"
-      ></filter-group>
+        @filter="switchData($event)"
+      />
       <filter-group
         label="职业"
         :filters="filterGroups.class"
-        @filter="resetFilter($event, 'class')"
         :disabled="agentFilterDisabled"
-      ></filter-group>
+        @filter="resetFilter($event, 'class')"
+      />
       <filter-group
         label="星级"
         :filters="filterGroups.star"
-        @filter="resetFilter($event, 'star')"
         :disabled="agentFilterDisabled"
-      ></filter-group>
+        @filter="resetFilter($event, 'star')"
+      />
       <filter-group
+        ref="gkzm"
         label="公招"
         :filters="filterGroups.gkzm"
         :single="true"
-        @filter="resetFilter($event, 'gkzm')"
-        ref="gkzm"
         :disabled="agentFilterDisabled"
-      ></filter-group>
+        @filter="resetFilter($event, 'gkzm')"
+      />
       <div class="tags-popover-wrapper">
         <el-popover
           popper-class="tags-popover-container"
@@ -41,12 +41,14 @@
           <div slot="reference">
             <div class="tags-selected-container">
               <el-button
-                :type="SelectedTagGz.length > 0 ?  'danger' : 'info'"
+                :type="SelectedTagGz.length > 0 ? 'danger' : 'info'"
                 :size="short? 'mini' :'medium'"
                 round
                 :style="short ? 'margin-left: 10px' : ''"
                 :disabled="agentFilterDisabled"
-              >标签</el-button>
+              >
+标签
+</el-button>
               <div class="tag-selected-content-container">
                 <transition name="fade" mode="out-in">
                   <div v-if="SelectedTagGz.length !== 0 ">
@@ -57,16 +59,18 @@
                     >
                       <el-tag
                         :size="short? 'medium' :'normal'"
-                        @close="handleClose(tag)"
                         :closable="!agentFilterDisabled"
                         effect="dark"
                         :type="agentFilterDisabled ? 'info': ''"
-                      >{{tag.text}}</el-tag>
+                        @close="handleClose(tag)"
+                      >
+{{ tag.text }}
+</el-tag>
                     </div>
                   </div>
                   <span
-                    style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
                     v-else
+                    style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
                   >点击打开标签面板</span>
                 </transition>
               </div>
@@ -74,40 +78,40 @@
           </div>
 
           <filter-group
+            ref="tagFilter"
             label="Tags"
             :filters="filterGroups.tags"
             @filter="resetFilter($event, 'tags')"
-            ref="tagFilter"
-          ></filter-group>
-          <div style="display:flex"></div>
+          />
+          <div style="display:flex" />
           <div style="direction: rtl">
-            <close-button></close-button>
+            <close-button />
           </div>
         </el-popover>
       </div>
     </div>
 
-    <el-tabs @tab-click="switchToNormal" style="padding: 0px" :value="currentMode">
+    <el-tabs style="padding: 0px" :value="currentMode" @tab-click="switchToNormal">
       <el-tab-pane label="一般模式" name="profile-layout">
         <profile-layout
           v-if="currentMode === 'profile-layout'"
-          :show-tags="showTag"
           ref="profile-layout"
+          :show-tags="showTag"
           :tags="SelectedTag"
           :filter-groups="filterGroups"
           :data="data"
-        ></profile-layout>
+        />
       </el-tab-pane>
       <el-tab-pane name="new-profile-layout" label="公开招募" lazy>
         <new-profile-layout
           v-if="currentMode === 'new-profile-layout'"
           :tags="SelectedTag"
-          :filterGroups="filterGroups"
+          :filter-groups="filterGroups"
           :data="data"
-        ></new-profile-layout>
+        />
       </el-tab-pane>
       <el-tab-pane name="expalain" label="说明&反馈" lazy>
-        <my-feedback :store="store"></my-feedback>
+        <my-feedback :store="store" />
       </el-tab-pane>
     </el-tabs>
   </div>
@@ -192,8 +196,18 @@ export default {
     CloseButton
   },
   props: {
-    profileList: Array,
-    tokenList: Array
+    profileList: {
+      default() {
+        return [];
+      },
+      type: Array
+    },
+    tokenList: {
+      default() {
+        return [];
+      },
+      type: Array
+    }
   },
   data() {
     return {
@@ -210,6 +224,26 @@ export default {
       currentMode: 'profile-layout',
       agentFilterDisabled: false
     };
+  },
+
+  computed: {
+    ...mapState(['short', 'extraSkins']),
+    filterGroups() {
+      return {
+        gkzm,
+        star: StarArr,
+        class: Object.values(class_chinese),
+        tags: TagsArr,
+      };
+    },
+    category() {
+      return {
+        token
+      };
+    },
+    orAgents() {
+      return this.rowData.filter(el => el.gkzm);
+    }
   },
   beforeMount() {
     this.store = localforage.createInstance({
@@ -243,25 +277,6 @@ export default {
           });
       }
     });
-  },
-  computed: {
-    ...mapState(['short', 'extraSkins']),
-    filterGroups() {
-      return {
-        gkzm,
-        star: StarArr,
-        class: Object.values(class_chinese),
-        tags: TagsArr,
-      };
-    },
-    category() {
-      return {
-        token
-      };
-    },
-    orAgents() {
-      return this.rowData.filter(el => el.gkzm);
-    }
   },
   methods: {
     switchData(e) {
