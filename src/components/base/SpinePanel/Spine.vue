@@ -1,30 +1,29 @@
 <template>
   <div class="spine-panel" :style="'--border-width:' + borderWidth + 'px'">
-    <div class="spine-id">{{mode[0]}}</div>
+    <div class="spine-id">{{ mode[0] }}</div>
     <div class="control-button-wrapper">
       <div>
         <el-button
-          @click="swtichId"
           circle
           type="primary"
           size="mini"
           class="el-icon-sort icon-switch"
-        ></el-button>
+          @click="swtichId"
+        />
       </div>
       <div class="control-button">
-        <el-button type="primary" size="mini" @click="changeAnimate(false)" class="el-icon-back"></el-button>
+        <el-button type="primary" size="mini" class="el-icon-back" @click="changeAnimate(false)" />
         <span
           style="display: inline-block;text-align: center; font-size: 13px"
-        >{{animates[curAnimate]}}</span>
-        <el-button type="primary" size="mini" @click="changeAnimate(true)" class="el-icon-right"></el-button>
+        >{{ animates[curAnimate] }}</span>
+        <el-button type="primary" size="mini" class="el-icon-right" @click="changeAnimate(true)" />
       </div>
     </div>
-    <canvas class="spine-canvas" :style="{width, height}" ref="container"></canvas>
+    <canvas ref="container" class="spine-canvas" :style="{width, height}" />
   </div>
 </template>
 
 <script>
-
 import { Button } from 'element-ui';
 import Spine from '../../../utils/Spine/initSpine';
 
@@ -33,13 +32,10 @@ import { path } from '../../../utils/listVer';
 Vue.use(Button);
 
 export default {
-  mounted() {
-    this.init();
-  },
   props: {
     canvasWidth: {
       default: 300,
-      type: Number,
+      type: Number
     },
     id: {
       required: true,
@@ -47,14 +43,14 @@ export default {
     }
   },
   data() {
-    const width = (this.canvasWidth);
+    const width = this.canvasWidth;
 
     return {
       animates: [],
       curAnimate: 0,
       skeletons: {},
       skins: [],
-      height: (width * 1.2) + 'px',
+      height: width * 1.2 + 'px',
       width: this.canvasWidth + 'px',
       curSkeleton: null,
       spinePath: path + 'char/spine/',
@@ -63,8 +59,11 @@ export default {
   },
   computed: {
     borderWidth() {
-      return this.canvasWidth / 300 * 25;
+      return (this.canvasWidth / 300) * 25;
     }
+  },
+  mounted() {
+    this.init();
   },
   methods: {
     swtichId() {
@@ -75,11 +74,12 @@ export default {
       this.curAnimate = t ? this.curAnimate + 1 : this.curAnimate - 1;
       if (this.curAnimate >= this.animates.length) this.curAnimate = 0;
       else if (this.curAnimate < 0)
-        this.curAnimate = this.animates.length !== 0 ? this.animates.length - 1 : 0;
+        this.curAnimate =
+          this.animates.length !== 0 ? this.animates.length - 1 : 0;
 
       const { state, skeleton } = this.spine.skeletons[this.id];
       const animate = this.spine.animates[this.curAnimate];
-      const loop = (/Start|Begin|End/.test(animate) ? false : true);
+      const loop = /Start|Begin|End/.test(animate) ? false : true;
       state.setAnimation(0, animate, loop);
       skeleton.setToSetupPose();
     },
@@ -92,7 +92,6 @@ export default {
       this.animates = this.spine.animates;
     }
   }
-
 };
 </script>
 

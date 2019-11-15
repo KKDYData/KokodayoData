@@ -4,28 +4,28 @@
       <div class="filter-button-wrapper">
         <el-button
           :size="short? 'mini' :'medium'"
-          @click="choseAll"
           :type="allChosed ? 'info': 'danger'"
-          :class="!allChosed  && !single ? 'filter-button filter-button-closeable' : 'filter-button'"
+          :class="!allChosed && !single ? 'filter-button filter-button-closeable' : 'filter-button'"
           :disabled="disabled"
+          @click="choseAll"
         >
-          {{label}}
+          {{ label }}
           <transition name="fade">
             <span v-if="!allChosed && !single" class="filter-close-icon">
-              <i class="el-icon-close"></i>
+              <i class="el-icon-close" />
             </span>
           </transition>
         </el-button>
         <el-button
-          :disabled="disabled"
           v-for="key in lists"
           :key="key.value"
-          @click="filter(key)"
+          :disabled="disabled"
           :size="short? 'mini' :'medium'"
           :type="key.chosed ? 'primary': ''"
           :plain="!key.chosed"
           class="filter-button"
-        >{{key.text}}</el-button>
+          @click="filter(key)"
+        >{{ key.text }}</el-button>
       </div>
     </div>
   </div>
@@ -40,13 +40,21 @@ Vue.use(Button);
 
 export default {
   props: {
-    filters: Array,
-    label: String,
-    single: {
-      type: Boolean,
-      default: false
+    filters: {
+      default() {
+        return [];
+      },
+      type: Array
     },
-    default: String,
+    label: {
+      default: '',
+      type: String
+    },
+    single: Boolean,
+    default: {
+      default: '',
+      type: String
+    },
     disabled: {
       default: false,
       type: Boolean
@@ -62,15 +70,7 @@ export default {
       })
     };
   },
-  watch: {
-    filters: function (newFilter, old) {
-      const res = newFilter.map(obj => {
-        if (!obj.chosed) obj.chosed = false;
-        return obj;
-      });
-      this.lists = res;
-    }
-  },
+
   computed: {
     ...mapState(['short']),
     allChosed() {
@@ -80,6 +80,15 @@ export default {
         return l === 0;
       }
       return l === this.filters.length || l === 0;
+    }
+  },
+  watch: {
+    filters: function(newFilter, old) {
+      const res = newFilter.map(obj => {
+        if (!obj.chosed) obj.chosed = false;
+        return obj;
+      });
+      this.lists = res;
     }
   },
   methods: {

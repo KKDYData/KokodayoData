@@ -2,12 +2,12 @@
   <div>
     <transition-group name="flip-list" class="profile-container">
       <div
-        class="profile-item"
         v-for="(agent, index) in data"
         :key="agent.name"
+        class="profile-item"
+        :style="{ width: showTags || agent.showTags ? '170px' : 'var(--imgWidth)'}"
         @mouseover="hoverShowTag(true, index)"
         @mouseleave="hoverShowTag(false, index)"
-        :style="{ width: showTags || agent.showTags ? '170px' : 'var(--imgWidth)'}"
       >
         <!--  -->
         <div class="profile-item-inner-wrapper">
@@ -19,17 +19,17 @@
             @click.native="openDetails(agent)"
           >
             <div slot="error" class="image-slot">
-              <i class="el-icon-picture-outline"></i>
+              <i class="el-icon-picture-outline" />
             </div>
           </el-image>
           <transition name="slide-fade">
-            <div class="tag-wrapper-1" v-if="showTags || agent.showTags">
-              <div v-for="(tag, index) in agent.tags" :key="tag">
-                <div class="tag-container long-tag" v-if="index > 2 || index === 0 &&  tag > 3">
+            <div v-if="showTags || agent.showTags" class="tag-wrapper-1">
+              <div v-for="(tag, i) in agent.tags" :key="tag">
+                <div v-if="i > 2 || i === 0 && tag > 3" class="tag-container long-tag">
                   <el-tag
                     :effect="tagHit(tag) ? 'dark' : 'plain'"
                     size="mini"
-                  >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
+                  >{{ i === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag }}</el-tag>
                 </div>
               </div>
               <div class="tag-container long-tag double-tag-container">
@@ -37,11 +37,11 @@
                   <span
                     class="double-tag"
                     :style="tagHit(agent.class) ? 'background-color: #313131; color: #fff': ''"
-                  >{{changeClassShort(agent.class)}}</span>
+                  >{{ changeClassShort(agent.class) }}</span>
                   <span
                     class="double-tag"
                     :style="tagHit(agent.tags[2]) ? 'background-color: #313131; color: #fff': ''"
-                  >{{agent.tags[2] === 'MELEE' ? '近' : '远'}}</span>
+                  >{{ agent.tags[2] === 'MELEE' ? '近' : '远' }}</span>
                 </el-tag>
               </div>
             </div>
@@ -50,18 +50,18 @@
             <div
               class="name-inner-ch"
               :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
-            >{{agent.name}}</div>
+            >{{ agent.name }}</div>
             <div class="name-inner-en">
-              {{agent.en}}
+              {{ agent.en }}
               <span
                 v-if="showTags && tagHit(agent.tags[1])"
-              >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
+              >{{ agent.tags[1] === '女' ? '♀' : '♂' }}</span>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="fill-item" :style="fillItemWidth" v-for="item in fillItems" :key="item"></div>
+      <div v-for="item in fillItems" :key="item" class="fill-item" :style="fillItemWidth" />
     </transition-group>
   </div>
 </template>
@@ -74,43 +74,58 @@ import { Tag, Image } from 'element-ui';
 Vue.use(Image);
 Vue.use(Tag);
 
-import { getProfilePath, } from '../../utils';
+import { getProfilePath } from '../../utils';
 import { path } from '../../utils/listVer';
-import { getClass_Chinese, } from '../../utils/string';
+import { getClass_Chinese } from '../../utils/string';
 
 import { rootPath } from '../../stats';
 
 export default {
-  props: {
-    data: Array,
-    showKey: String,
-    tags: Array,
-    showTags: Boolean,
-  },
   components: {},
+  props: {
+    data: {
+      default() {
+        return [];
+      },
+      type: Array
+    },
+    showKey: {
+      type: String,
+      default: ''
+    },
+    tags: {
+      default() {
+        return [];
+      },
+      type: Array
+    },
+    showTags: {
+      default: false,
+      type: Boolean
+    }
+  },
   data() {
     return {
-      fillItems: [],
+      fillItems: [1, 2, 3, 4, 5, 6, 7],
       fillItemWidth: { width: '100px' },
       rowPath: path,
       path: rootPath
     };
   },
+  computed: {
+    ...mapState(['short'])
+  },
   watch: {
-    showTags: function (v) {
+    showTags: function(v) {
       console.log('show? ' + v);
       this.calFillAmount();
     },
-    short: function (v) {
+    short: function(v) {
       this.calFillAmount();
     }
   },
-  computed: {
-    ...mapState(['short']),
-  },
-
   mounted() {
-    const self = this;
+    // const self = this;
     this.calFillAmount();
     window.addEventListener('resize', self.calFillAmount);
   },
@@ -125,25 +140,16 @@ export default {
     calFillAmount() {
       //通过css控制填充的margin？
       setTimeout(() => {
-
-        const width = this.$el.clientWidth,
-          target = document.querySelector('.profile-item');
+        const target = document.querySelector('.profile-item');
         const slice2 = x => +x.slice(0, -2);
         if (!target) return;
-        const
-          style = getComputedStyle(target),
+        const style = getComputedStyle(target),
           cWidth = style.width,
           vr = style['margin-right'],
           vl = style['margin-left'],
           res = slice2(cWidth) + slice2(vr) + slice2(vl);
 
         this.fillItemWidth = { width: res + 'px' };
-        let size = Math.floor(width / res);
-        const arr = [];
-        for (let i = 0; i < size; i++) {
-          arr.push(i);
-        }
-        this.fillItems = arr;
       }, 500);
     },
     tagHit(tag) {

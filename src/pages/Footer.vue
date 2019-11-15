@@ -28,10 +28,10 @@
       </div>
     </li>
     <li>
-      <span>网站最后更新时间: {{webVer}}</span>
+      <span>网站最后更新时间: {{ webVer }}</span>
     </li>
     <li v-if="showList">
-      <span>干员列表最后更新时间: {{listVer}}</span>
+      <span>干员列表最后更新时间: {{ listVer }}</span>
     </li>
   </div>
 </template>

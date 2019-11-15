@@ -11,7 +11,7 @@
       <p>出现章节的后续会加上，但是突袭已经地图关卡数据需要进关卡才能看</p>
       <p>更新寻路算法中。。。。。。</p>
     </el-alert>
-    <enemy-data ref="layout"></enemy-data>
+    <enemy-data ref="layout" />
   </div>
 </template>
 
@@ -23,9 +23,7 @@ import Vue from 'vue';
 Vue.use(Alert);
 
 const EnemyData = () => ({
-  component: import(
-    /* webpackChunkName: "EnemyData" */ '../components/EnemyData'
-  ),
+  component: import(/* webpackChunkName: "EnemyData" */ '../components/EnemyData'),
   loading: loadingC,
   error: loadingC,
   delay: 200,
