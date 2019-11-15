@@ -11,6 +11,8 @@
                 </div>
               </el-image>
             </div>
+          </div>
+          <div>
             <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
               <div slot="title">画师</div>
               <div slot="content">{{data.drawName}}</div>
@@ -39,27 +41,27 @@
                   @click="showSet=true"
                   size="mini"
                   slot="reference"
-                  icon="el-icon-search"
-                >立绘/皮肤</el-button>
+                >
+                  立绘/皮肤
+                  <i class="el-icon-search"></i>
+                </el-button>
               </el-popover>
             </div>
           </div>
-          <div v-for="story in data.storyTextAudio.slice(0, 2).reverse()" :key="story.storyTitle">
+          <div v-for="story in baseInfo" :key="story.storyTitle">
             <div class="info-story-title" style="min-width: 150px">
               <span>
                 <b>{{story.storyTitle}}</b>
               </span>
             </div>
             <div class="info-story-content-wrapper">
-              <div class="info-story-content" v-for="(p, index) in story.stories" :key="index">
-                <div class="info-story-unlock" v-if="p.unLockParam !== ''">
-                  <span>解锁需要好感：</span>
-                  <span>{{p.unLockParam | unlockStr}}</span>
-                </div>
-                <p v-html="changeText(p.storyText)"></p>
+              <div class="info-story-content" v-for="(v, k) in story.data" :key="k">
+                <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+                  <div slot="title">{{k}}</div>
+                  <div slot="content">{{v}}</div>
+                </content-slot>
               </div>
             </div>
-            <div class="char-base-info"></div>
           </div>
         </div>
         <div class="info-story-wrapper">
@@ -228,6 +230,25 @@ export default {
         });
       }
     },
+    baseInfo() {
+      if (!this.data) return;
+      return this.data.storyTextAudio.slice(0, 2).map(({ stories, storyTitle }) => {
+        const data = stories.map(({ storyText }) => storyText)
+          .map(str => {
+            const reg = new RegExp('【(.+)】(.+)\\n', 'g');
+            let matches;
+            let res = {};
+            while ((matches = reg.exec(str)) != null) {
+              res[matches[1]] = matches[2];
+            }
+            return res;
+          })[0];
+        return {
+          data,
+          storyTitle
+        };
+      });
+    }
 
   },
   filters: {
@@ -308,6 +329,8 @@ export default {
 .char-base-info-container {
   display: flex
   margin-bottom: 70px
+  justify-content: space-between
+  max-width: 700px
 }
 
 .info-char-set-wrapper {
@@ -361,6 +384,7 @@ export default {
   .char-base-info-container {
     flex-wrap: wrap
     justify-content: space-between
+    max-width: 340px
   }
 
   .char-set-cv {
