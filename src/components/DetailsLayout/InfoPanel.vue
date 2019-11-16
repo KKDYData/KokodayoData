@@ -25,7 +25,7 @@
               <el-popover
                 :visible-arrow="false"
                 placement="top-start"
-                :width="getScreenWidth()"
+                :width="width"
                 trigger="click"
               >
                 <close-button />
@@ -207,7 +207,8 @@ export default {
       setWords: normalSetWords,
       activeSetPane: 'default',
       path,
-      isMobliePad: UA.isMobliePad
+      isMobliePad: UA.isMobliePad,
+      width: getScreenWidth().width
     };
   },
 
@@ -305,9 +306,6 @@ export default {
       else if (index === 2) return 2;
       else return 1;
     },
-    getScreenWidth() {
-      return getScreenWidth();
-    }
   }
 };
 </script>

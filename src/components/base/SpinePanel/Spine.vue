@@ -1,15 +1,11 @@
 <template>
   <div class="spine-panel" :style="'--border-width:' + borderWidth + 'px'">
-    <div class="spine-id">{{ modeText[mode[0]] }}</div>
     <div class="control-button-wrapper">
-      <div>
-        <el-button
-          circle
-          type="primary"
-          size="mini"
-          class="el-icon-sort icon-switch"
-          @click="swtichId"
-        />
+      <div style="margin-bottom: 8px">
+        <el-button type="primary" size="mini" @click="swtichId">
+          {{ modeText[mode[0]] }}
+          <i class="el-icon-sort icon-switch" />
+        </el-button>
       </div>
       <div class="control-button">
         <el-button type="primary" size="mini" class="el-icon-back" @click="changeAnimate(false)" />
@@ -24,7 +20,7 @@
 </template>
 
 <script>
-import { Button } from 'element-ui';
+import { Button, Message } from 'element-ui';
 import Spine from '../../../utils/Spine/initSpine';
 
 import Vue from 'vue';
@@ -73,7 +69,10 @@ export default {
   methods: {
     swtichId() {
       this.mode.push(this.mode.shift());
-      this.init();
+      this.init().catch(err => {
+        console.error('初始化失败', err);
+        Message.info('切换失败，可能这个干员没有个模型，如果她/他真的有，请联系我们修复');
+      });
     },
     changeAnimate(t) {
       this.curAnimate = t ? this.curAnimate + 1 : this.curAnimate - 1;
@@ -147,8 +146,7 @@ export default {
     }*/
   .control-button-wrapper {
     position: absolute
-    bottom: 0
-    display: flex
+    bottom: 45px
     justify-content: space-between
     align-items: center
     z-index: 10
@@ -166,13 +164,6 @@ export default {
 
   .icon-switch {
     transform: rotate(90deg)
-  }
-
-  .spine-id {
-    position: absolute
-    top: 0
-    left: 0
-    text-decoration: underline
   }
 
   .spine-canvas {

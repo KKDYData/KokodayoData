@@ -24,10 +24,10 @@ export default {
   right: -5px
   top: -5px
   padding: 5px
+  z-index: 10
 }
 
 .close-button i {
   font-size: 2em
-  z-index: 10
 }
 </style>

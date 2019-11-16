@@ -1,17 +1,10 @@
 <template>
-  <div style="margin: 20px 0">
+  <div class="skins-panel">
     <div v-if="groups">
       <filter-button-group :filters="groups" label="分类" @filter="switchData" />
       <div class="skin-wrapper">
         <div v-for="skin in skinsData" :key="skin.avatarId">
-          <!-- {{ skin.avatarId }} -->
-
-          <el-popover
-            :visible-arrow="false"
-            placement="left"
-            :width="getScreenWidth()"
-            trigger="click"
-          >
+          <el-popover :visible-arrow="false" placement="left" :width="width" trigger="click">
             <div @blur="showId=''">
               <close-button />
               <set-panel v-if="skin.avatarId === showId" :id="skin.avatarId" :set-data="[skin]" />
@@ -63,7 +56,8 @@ export default {
     return {
       filteredData: null,
       filters: [],
-      showId: ''
+      showId: '',
+      width: 1200
     };
   },
   computed: {
@@ -90,26 +84,23 @@ export default {
   },
   mounted() {
     console.log(this.extraSkins);
+    this.width = getScreenWidth().width - 40;
   },
   methods: {
     switchData(e) {
       console.log(e);
       this.filters = e;
-      // this.filteredData = this.skinsData.filter(({ displaySkin }) => {
-      //   return e.find(
-      //     ({ skinGroupName }) => skinGroupName === displaySkin.skinGroupName
-      //   );
-      // });
     },
-    getScreenWidth() {
-      return getScreenWidth();
-    }
   }
 };
 </script>
 
 <style lang="stylus" scoped>
 @import '../styles/char.styl'
+
+.skins-panel {
+  margin: 20px
+}
 
 .skin-wrapper {
   display: flex
@@ -121,6 +112,10 @@ export default {
 }
 
 @media screen and (max-width: 700px) {
+  .skins-panel {
+    margin: 20px 0
+  }
+
   .skin-wrapper {
     display: flex
     flex-wrap: wrap

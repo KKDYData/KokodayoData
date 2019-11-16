@@ -1,7 +1,7 @@
 <template>
   <el-carousel
     class="char-set-panel"
-    :height="(getScreenWidth() * (short ? setData[0].displaySkin ? 1.7 : 1.3: 0.82)) + 'px'"
+    :height="height"
     :autoplay="false"
     indicator-position="outside"
     :loop="false"
@@ -27,6 +27,26 @@
       <!-- 立绘 -->
       <el-carousel-item :key="index" style="font-size:13px">
         <div class="char-set-container-wrapper">
+          <div v-if="data.displaySkin">
+            <div class="char-set-info-cotainer">
+              <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+                <template slot="title">系列</template>
+                <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
+              </content-slot>
+              <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+                <template slot="title">获得方式</template>
+                <template slot="content">{{ data.displaySkin.obtainApproach }}</template>
+              </content-slot>
+              <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+                <template slot="title">描述</template>
+                <template slot="content">{{ data.displaySkin.usage }}</template>
+              </content-slot>
+              <content-slot style="margin-top: 10px;" :long="true" :no-wrap="true">
+                <template slot="title">记录</template>
+                <template slot="content">{{ data.displaySkin.content | filterColor }}</template>
+              </content-slot>
+            </div>
+          </div>
           <div :style="short ? '' : 'padding-left: 100px'">
             <el-image class="char-set-container" :src="data.charSet">
               <div slot="error" class="image-slot">
@@ -34,47 +54,23 @@
               </div>
             </el-image>
           </div>
-          <div class="set-right-panel">
-            <div v-if="!short" class="char-profile-container">
+          <div v-if="!short" class="set-right-panel">
+            <div class="char-profile-container">
               <el-image :src="data.profile" />
             </div>
-            <div v-if="!short" class="char-half-container">
+            <div class="char-half-container">
               <el-image :src="data.halfPic" />
             </div>
-
-            <div v-if="data.displaySkin" style="margin-top: auto">
-              <div>
-                <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                  <template slot="title">系列</template>
-                  <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
-                </content-slot>
-                <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                  <template slot="title">获得方式</template>
-                  <template slot="content">{{ data.displaySkin.obtainApproach }}</template>
-                </content-slot>
-                <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                  <template slot="title">描述</template>
-                  <template slot="content">{{ data.displaySkin.usage }}</template>
-                </content-slot>
-                <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                  <template slot="title">记录</template>
-                  <template slot="content">{{ data.displaySkin.content | filterColor }}</template>
-                </content-slot>
-              </div>
-            </div>
-            <div v-else style="margin-top: auto">
-              <content-slot :long="true" :no-wrap="true">
-                <template slot="title">Default</template>
-                <template slot="content">{{ data.words }}</template>
-              </content-slot>
-            </div>
           </div>
-        </div>
-      </el-carousel-item>
 
-      <!-- 皮肤立绘小人 移动 -->
-      <el-carousel-item v-if="short && setData && ex">
-        <spine-panel :id="data.avatarId" class="spin-panel mobile" :canvas-width="spineWidth" />
+          <!-- 皮肤立绘小人 移动 -->
+          <spine-panel
+            v-if="short && setData && ex"
+            :id="data.avatarId"
+            class="spin-panel mobile"
+            :canvas-width="spineWidth"
+          />
+        </div>
       </el-carousel-item>
     </div>
   </el-carousel>
@@ -117,6 +113,7 @@ export default {
     return {
       curIndex: 0,
       width: 1159,
+      height: 1000,
       spineWidth: 300
     };
   },
@@ -125,12 +122,13 @@ export default {
     ...mapState(['short']),
     ex() {
       return this.setData[0].displaySkin;
-    }
+    },
   },
   beforeMount() {
-    this.width = this.getScreenWidth();
+    const { width, height } = this.getScreenWidth();
+    this.height = (height - 100) + 'px';
     if (!this.short) {
-      this.spineWidth = (this.width / 1159) * 300;
+      this.spineWidth = (width / 1159) * 300;
     }
   },
 
@@ -138,9 +136,17 @@ export default {
     getScreenWidth() {
       const w = document.body.clientWidth;
       const h = window.innerHeight;
-      const width = (w < h ? w : h) - 40;
-      console.log(width);
-      return width > 1200 ? 1200 : width;
+      if (w > h) {
+        return {
+          width: h * 1.5,
+          height: h
+        };
+      } else {
+        return {
+          width: w,
+          height: w * (this.short ? 1.8 : 0.8)
+        };
+      }
     }
   }
 };
@@ -155,9 +161,19 @@ export default {
   }
 }
 
+.char-set-info-cotainer {
+  width: 250px
+
+  &>>> .status-details-value {
+    text-align: left
+  }
+}
+
 .char-set-container-wrapper {
   display: flex
+  justify-content: space-between
   height: 100%
+  width: 100%
 }
 
 .char-half-container {
@@ -191,10 +207,6 @@ export default {
   width: 110px
   display: flex
   flex-flow: column
-
-  &>>> .status-details-value {
-    text-align: left
-  }
 }
 
 .spine-panel {
@@ -215,11 +227,21 @@ export default {
     height: 100%
   }
 
+  .char-set-panel {
+    &>>> .el-carousel__item {
+      overflow: scroll
+    }
+  }
+
   .set-right-panel {
     margin-right: 10px
     width: auto
     display: flex
     flex-flow: column
+  }
+
+  .char-set-info-cotainer {
+    width: 100%
   }
 }
 </style>

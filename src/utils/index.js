@@ -412,8 +412,17 @@ const getSkinsData = {
 const getScreenWidth = () => {
   const w = document.body.clientWidth;
   const h = window.innerHeight;
-  const width = (w < h ? w : h) - 40;
-  return width > 1200 ? 1200 : width;
+  if (w > h) {
+    return {
+      width: h * 1.5,
+      height: h
+    };
+  } else {
+    return {
+      width: w,
+      height: w * 0.8
+    };
+  }
 };
 export {
   TaskQueue,
