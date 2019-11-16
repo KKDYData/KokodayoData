@@ -404,7 +404,16 @@ const getSkinsData = {
   getSkinSet(id) {
     return path + 'char/set/' + encodeURIComponent(id) + '.png';
   },
+  style: !UA.ok
+    ? '_optimized.png'
+    : '_optimized.png?x-oss-process=style/small-test'
+};
 
+const getScreenWidth = () => {
+  const w = document.body.clientWidth;
+  const h = window.innerHeight;
+  const width = (w < h ? w : h) - 40;
+  return width > 1200 ? 1200 : width;
 };
 export {
   TaskQueue,
@@ -432,4 +441,5 @@ export {
 
   // 设备检测
   UA,
+  getScreenWidth,
 };

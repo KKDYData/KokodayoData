@@ -13,16 +13,26 @@
       <el-menu-item :index="routes.home.path">{{ routes.home.text }}</el-menu-item>
       <el-menu-item :index="routes.enemydata.path">{{ routes.enemydata.text }}</el-menu-item>
       <template v-if="!short">
-        <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
+        <el-menu-item
+          v-for="route in moveableRoutes"
+          :key="route.path"
+          :index="route.path"
+        >{{ route.text }}</el-menu-item>
+        <!-- <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
         <el-menu-item :index="routes.computer.path">{{ routes.computer.text }}</el-menu-item>
-        <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>
+        <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>-->
       </template>
       <template v-else>
         <el-submenu index="2">
           <template slot="title">{{ moreText }}</template>
-          <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
+          <el-menu-item
+            v-for="route in moveableRoutes"
+            :key="route.path"
+            :index="route.path"
+          >{{ route.text }}</el-menu-item>
+          <!-- <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
           <el-menu-item :index="routes.computer.path">{{ routes.computer.text }}</el-menu-item>
-          <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>
+          <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>-->
         </el-submenu>
       </template>
     </el-menu>
@@ -67,6 +77,24 @@ export default {
         items: {
           path: path + '/items',
           text: '材料'
+        }
+      },
+      moveableRoutes: {
+        computer: {
+          path: path + '/computer',
+          text: '经验计算'
+        },
+        customtheme: {
+          path: path + '/customtheme',
+          text: '家具'
+        },
+        items: {
+          path: path + '/items',
+          text: '材料'
+        },
+        skins: {
+          path: path + '/skins',
+          text: '皮肤'
         }
       }
     };

@@ -1,6 +1,6 @@
 <template>
   <div class="spine-panel" :style="'--border-width:' + borderWidth + 'px'">
-    <div class="spine-id">{{ mode[0] }}</div>
+    <div class="spine-id">{{ modeText[mode[0]] }}</div>
     <div class="control-button-wrapper">
       <div>
         <el-button
@@ -54,7 +54,12 @@ export default {
       width: this.canvasWidth + 'px',
       curSkeleton: null,
       spinePath: path + 'char/spine/',
-      mode: ['build', 'fight_f', 'fight_b']
+      mode: ['build', 'fight_f', 'fight_b'],
+      modeText: {
+        build: '基建',
+        fight_f: '战斗正',
+        fight_b: '战斗反'
+      }
     };
   },
   computed: {

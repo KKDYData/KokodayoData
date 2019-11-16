@@ -28,6 +28,7 @@
                 :width="getScreenWidth()"
                 trigger="click"
               >
+                <close-button />
                 <el-tabs :value="activeSetPane">
                   <el-tab-pane label="一般" name="default">
                     <set-panel v-if="showSet" :id="data.charID" :set-data="setData" />
@@ -127,34 +128,30 @@
 </template>
 
 <script>
-import { UA, getSkinsData } from '../../utils';
+import { UA, getSkinsData, getScreenWidth } from '../../utils';
 import { path } from '../../utils/listVer';
-import {
-  Carousel,
-  CarouselItem,
-  Tabs,
-  TabPane,
-  Button,
-  Progress,
-  Slider
-} from 'element-ui';
+import { Tabs, TabPane, Button, Progress, Slider, } from 'element-ui';
 import Vue from 'vue';
-Vue.use(Carousel);
-Vue.use(CarouselItem);
+
 Vue.use(Tabs);
 Vue.use(TabPane);
 Vue.use(Button);
 Vue.use(Progress);
 Vue.use(Slider);
+
 import AudioContainer from './AudioContainer';
 import SetPanel from '../base/SetPanel';
+import ContentSlot from '../base/ContentSlot';
+import CloseButton from '../base/CloseButton';
 
 import { mapActions, mapState } from 'vuex';
 
 export default {
   components: {
     AudioContainer,
-    SetPanel
+    SetPanel,
+    ContentSlot,
+    CloseButton
   },
   filters: {
     unlockStr(v) {
@@ -232,21 +229,9 @@ export default {
       if (this.data.charID) {
         return this.list.map(index => {
           return {
-            charSet:
-              path + 'char/set/' + this.data.charID + '_' + index + '.png',
-            profile:
-              path +
-              'char/profile/' +
-              this.data.charID +
-              (index - 1 ? '_' + index : '') +
-              this.style,
-            halfPic:
-              path +
-              'char/halfPic/' +
-              this.data.charID +
-              '_' +
-              index +
-              this.style,
+            charSet: path + 'char/set/' + this.data.charID + '_' + index + '.png',
+            profile: path + 'char/profile/' + this.data.charID + (index - 1 ? '_' + index : '') + this.style,
+            halfPic: path + 'char/halfPic/' + this.data.charID + '_' + index + this.style,
             words: this.setWords[index - 1]
           };
         });
@@ -321,10 +306,7 @@ export default {
       else return 1;
     },
     getScreenWidth() {
-      const w = document.body.clientWidth;
-      const h = window.innerHeight;
-      const width = (w < h ? w : h) - 40;
-      return width > 1200 ? 1200 : width;
+      return getScreenWidth();
     }
   }
 };

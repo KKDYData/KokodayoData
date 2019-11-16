@@ -22,39 +22,39 @@
             <div>
               <b>能力</b>
             </div>
-            <p>{{currEnemy.ability}}</p>
+            <p>{{ currEnemy.ability }}</p>
           </div>
         </enemy-status>
       </template>
     </enemy-data-drawer>
     <div
+      v-if="!simpleShow && waveData && data"
       class="enemy-data-layout-body"
       :style="short? {'max-height': '400px'} : {}"
-      v-if="!simpleShow && waveData && data"
     >
       <div
         v-for="({fragments, name, postDelay, preDelay, maxTimeWaitingForNextWave}, wIndex) in waveData"
         :key="wIndex"
       >
-        <my-title v-if="name" style="margin-top: 10px" :title="name || '一波'"></my-title>
+        <my-title v-if="name" style="margin-top: 10px" :title="name || '一波'" />
         <p
           v-if="waveData.length > 1 && (postDelay || preDelay || maxTimeWaitingForNextWave)"
-        >最大等待时间：{{maxTimeWaitingForNextWave}}s | 延迟：{{preDelay}}s</p>
+        >最大等待时间：{{ maxTimeWaitingForNextWave }}s | 延迟：{{ preDelay }}s</p>
         <div
-          class="wave-enemy-container"
           v-for="({actions, name, preDelay, time, enemyNum}, fIndex) in fragments"
           :key="fIndex"
+          class="wave-enemy-container"
         >
           <p class="wave-info" style="width: 100%; margin-bottom: -20px">
-            第{{fIndex+1}}波
-            <span style="color: hsl(218, 58%, 14%)">{{name}}</span>
+            第{{ fIndex+1 }}波
+            <span style="color: hsl(218, 58%, 14%)">{{ name }}</span>
             <span>
-              <i class="el-icon-position"></i>
-              {{time | time}}
+              <i class="el-icon-position" />
+              {{ time | time }}
               <span
                 style="margin-left: 10px"
-              >{{enemyNum}}/{{fragments[fragments.length - 1].enemyNum}}</span>
-              <span style="margin-left: 10px" v-if="preDelay">距离上一波{{preDelay}}s</span>
+              >{{ enemyNum }}/{{ fragments[fragments.length - 1].enemyNum }}</span>
+              <span v-if="preDelay" style="margin-left: 10px">距离上一波{{ preDelay }}s</span>
             </span>
           </p>
           <!-- .filter(el => mapData.routes[el.routeIndex]) -->
@@ -69,24 +69,24 @@
               :name="data[key].name"
               :src="enemyPicPath(key)"
               @click.native="showRoute(routeIndex)"
-            ></enemy-cube>
+            />
             <enemy-cube
-              style="background: linear-gradient(45deg, hsl(163, 100%, 6%), transparent);box-shadow: inset 0px 0px 0px 5px #313131"
               v-else-if="/trap_007_ballis/.test(key)"
+              style="background: linear-gradient(45deg, hsl(163, 100%, 6%), transparent);box-shadow: inset 0px 0px 0px 5px #313131"
               name="弩炮"
               :src="ballis"
-            ></enemy-cube>
+            />
             <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
-              <p>{{key.replace('trap_007_ballis', '弩炮')}}</p>
+              <p>{{ key.replace('trap_007_ballis', '弩炮') }}</p>
             </div>
             <div style class="enemy-cube-wave-info">
-              <div>数量:{{count}} 间隔:{{interval}}s</div>
+              <div>数量:{{ count }} 间隔:{{ interval }}s</div>
               <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
-                延迟: {{preDelay}}s
+                延迟: {{ preDelay }}s
                 <i
                   :style="selectedStlye[routeIndex] ? 'color: #313131' : ''"
                   class="el-icon-s-flag"
-                ></i>
+                />
               </div>
             </div>
           </div>
@@ -96,20 +96,20 @@
     <div v-else class="enemy-data-layout" :style="!short ? 'margin: 0 10px' : ''">
       <enemy-cube
         v-for="(enemy, key) in data"
-        @mouseover.native="mouseHoverOpen(key, enemy)"
-        @mouseleave.native="cancelOpen"
-        @click.native="openDetails(key, enemy)"
+        :key="enemy.enemyId"
         :name="enemy.name"
         :index="enemy.enemyIndex"
         :src="enemyPicPath(key)"
-        :key="enemy.enemyId"
-      ></enemy-cube>
+        @mouseover.native="mouseHoverOpen(key, enemy)"
+        @mouseleave.native="cancelOpen"
+        @click.native="openDetails(key, enemy)"
+      />
       <div
-        class="fill-item img-container"
-        :style="fillItemWidth"
         v-for="item in fillItems"
         :key="item"
-      ></div>
+        class="fill-item img-container"
+        :style="fillItemWidth"
+      />
     </div>
   </div>
 </template>
@@ -132,6 +132,13 @@ import { path } from '../../utils/listVer';
 
 export default {
   components: { EnemyStatus, EnemyDataDrawer, EnemyCube, MyTitle },
+  filters: {
+    time(v) {
+      const sec = Math.floor((v % 60) * 10) / 10,
+        min = Math.floor(v / 60);
+      return min > 0 ? min + ' 分 ' + sec + ' 秒' : sec + ' 秒';
+    }
+  },
   props: {
     data: {
       required: true
@@ -175,13 +182,6 @@ export default {
     // console.log(this.drawerSize);
     if (this.$el && this.$el.querySelector('.enemy-container')) this.calFillAmount();
     this.shortWidth = this.$el.clientWidth - 30;
-  },
-  filters: {
-    time(v) {
-      const sec = Math.floor((v % 60) * 10) / 10,
-        min = Math.floor(v / 60);
-      return min > 0 ? min + ' 分 ' + sec + ' 秒' : sec + ' 秒';
-    }
   },
   computed: {
     ...mapState(['screenWidth', 'short']),

@@ -1,28 +1,32 @@
 <template>
   <el-carousel
-    class="char-set-container-wrapper"
-    :height="(getScreenWidth() * (short ? 1: 0.82)) + 'px'"
+    class="char-set-panel"
+    :height="(getScreenWidth() * (short ? setData[0].displaySkin ? 1.7 : 1.3: 0.82)) + 'px'"
     :autoplay="false"
     indicator-position="outside"
     :loop="false"
     @change="$event => curIndex = $event"
   >
+    <!-- 默认立绘小人 pc -->
+    <spine-panel v-if="!short && !ex" :id="id" :canvas-width="spineWidth" />
+
     <!-- 默认立绘小人 移动 -->
-    <el-carousel-item v-if="short && setData && !setData[0].displaySkin">
+    <el-carousel-item v-if="short && setData && !ex">
       <spine-panel :id="id" class="spin-panel mobile" :canvas-width="spineWidth" />
     </el-carousel-item>
-    <!-- 默认立绘小人 pc -->
-    <spine-panel v-if="!short && !setData[0].displaySkin" :id="id" :canvas-width="spineWidth" />
+
     <div v-for="(data, index) in setData" :key="index" :data="data" :short="short">
-      <!-- 皮肤小人 -->
+      <!-- pc 皮肤小人 -->
       <spine-panel
-        v-if="curIndex === index && setData && setData[0].displaySkin"
+        v-if="!short && curIndex === index && setData && ex"
         :id="data.avatarId"
         class="spin-panel"
         :canvas-width="spineWidth"
       />
+
+      <!-- 立绘 -->
       <el-carousel-item :key="index" style="font-size:13px">
-        <div class="char-set-contianer-wrapper">
+        <div class="char-set-container-wrapper">
           <div :style="short ? '' : 'padding-left: 100px'">
             <el-image class="char-set-container" :src="data.charSet">
               <div slot="error" class="image-slot">
@@ -30,11 +34,11 @@
               </div>
             </el-image>
           </div>
-          <div v-if="!short" class="set-right-panel">
-            <div class="char-profile-container">
+          <div class="set-right-panel">
+            <div v-if="!short" class="char-profile-container">
               <el-image :src="data.profile" />
             </div>
-            <div class="char-half-container">
+            <div v-if="!short" class="char-half-container">
               <el-image :src="data.halfPic" />
             </div>
 
@@ -67,6 +71,11 @@
           </div>
         </div>
       </el-carousel-item>
+
+      <!-- 皮肤立绘小人 移动 -->
+      <el-carousel-item v-if="short && setData && ex">
+        <spine-panel :id="data.avatarId" class="spin-panel mobile" :canvas-width="spineWidth" />
+      </el-carousel-item>
     </div>
   </el-carousel>
 </template>
@@ -75,18 +84,16 @@
 const SpinePanel = () =>
   import(/* webpackChunkName: "SpinePanel" */ '../SpinePanel');
 import ContentSlot from '../ContentSlot';
-
-import { mapState } from 'vuex';
-
-import { Carousel } from 'element-ui';
-
+import { Carousel, CarouselItem } from 'element-ui';
 import Vue from 'vue';
+import { mapState } from 'vuex';
 Vue.use(Carousel);
+Vue.use(CarouselItem);
 
 export default {
   components: {
     SpinePanel,
-    ContentSlot
+    ContentSlot,
   },
   filters: {
     filterColor(v) {
@@ -98,7 +105,7 @@ export default {
   props: {
     id: {
       type: String,
-      required: true
+      default: null
     },
     setData: {
       required: true,
@@ -115,7 +122,10 @@ export default {
   },
 
   computed: {
-    ...mapState(['short'])
+    ...mapState(['short']),
+    ex() {
+      return this.setData[0].displaySkin;
+    }
   },
   beforeMount() {
     this.width = this.getScreenWidth();
@@ -137,7 +147,15 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.char-set-contianer-wrapper {
+.char-set-panel {
+  &>>> .el-carousel__item {
+    display: flex
+    justify-content: center
+    align-items: center
+  }
+}
+
+.char-set-container-wrapper {
   display: flex
   height: 100%
 }
@@ -173,6 +191,10 @@ export default {
   width: 110px
   display: flex
   flex-flow: column
+
+  &>>> .status-details-value {
+    text-align: left
+  }
 }
 
 .spine-panel {
@@ -185,5 +207,19 @@ export default {
   position: relative
   display: flex
   justify-content: center
+}
+
+@media screen and (max-width: 700px) {
+  .char-set-container-wrapper {
+    display: block
+    height: 100%
+  }
+
+  .set-right-panel {
+    margin-right: 10px
+    width: auto
+    display: flex
+    flex-flow: column
+  }
 }
 </style>

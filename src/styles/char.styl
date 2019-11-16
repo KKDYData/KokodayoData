@@ -7,16 +7,18 @@
   width: 110px
   position: relative
   font-size: 0
-  min-height: 200px
+  align-items: flex-end
+  display: flex
+  height: 220px
 }
 
 .char-profile-container {
   height: 110px
   position: relative
-}
 
-.char-profile-container + .char-half-container {
-  margin-top: 20px
+  & + .char-half-container {
+    margin-top: 20px
+  }
 }
 
 .char-half-container, .char-profile-container {

@@ -28,5 +28,6 @@ export default {
 
 .close-button i {
   font-size: 2em
+  z-index: 10
 }
 </style>
