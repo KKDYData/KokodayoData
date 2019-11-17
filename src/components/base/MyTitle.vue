@@ -1,24 +1,25 @@
 <template>
   <div class="title-container" :style="bg">
-    <div v-if="!right && control" @click="click" :class="{active: value, 'control-button': true}">
-      <div class="control-border"></div>
+    <div v-if="!right && control" :class="{active: value, 'control-button': true}" @click="click">
+      <div class="control-border" />
     </div>
     <div class="title">{{ title }}</div>
     <div
       v-if="right && control"
-      @click="click"
       :class="{active: value, 'control-button': true, right: true}"
+      @click="click"
     >
-      <div class="control-border"></div>
+      <div class="control-border" />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'slide-title',
+  name: 'SlideTitle',
   props: {
     right: {
+      type: Boolean,
       default: false
     },
     title: {
@@ -26,9 +27,10 @@ export default {
       type: String
     },
     control: {
+      type: Boolean,
       default: false
     },
-    backgroundColor: {
+    customBg: {
       type: String,
       default: '#414141'
     }
@@ -40,7 +42,7 @@ export default {
   },
   computed: {
     bg() {
-      return '--custombg:' + this.backgroundColor;
+      return '--custombg:' + this.customBg;
     }
   },
   methods: {

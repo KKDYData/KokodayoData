@@ -49,18 +49,25 @@
               </el-popover>
             </div>
           </div>
-          <div v-for="story in baseInfo" :key="story.storyTitle">
-            <div class="info-story-title" style="min-width: 150px">
-              <span>
-                <b>{{ story.storyTitle }}</b>
-              </span>
-            </div>
-            <div class="info-story-content-wrapper">
-              <div v-for="(v, k) in story.data" :key="k" class="info-story-content">
-                <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
-                  <div slot="title">{{ k }}</div>
-                  <div slot="content">{{ v }}</div>
-                </content-slot>
+          <div v-for="(story, index) in baseInfo" :key="story.storyTitle">
+            <div class="info-base-container" style="min-width: 150px; max-width: 45vw;">
+              <div class="info-story-title">
+                <span>
+                  <b>{{ story.storyTitle }}</b>
+                </span>
+              </div>
+              <div class="info-story-content-wrapper">
+                <div v-for="(v, k, i) in story.data" :key="k" class="info-story-content">
+                  <content-slot
+                    style="margin-top: 10px;"
+                    long
+                    :no-wrap="true"
+                    :width="i >= (index === 0 ? 7 : 5) ? 140 : null"
+                  >
+                    <div slot="title">{{ k }}</div>
+                    <div slot="content">{{ v }}</div>
+                  </content-slot>
+                </div>
               </div>
             </div>
           </div>
@@ -243,7 +250,7 @@ export default {
       if (!this.data) return;
       return this.data.storyTextAudio
         .slice(0, 2)
-        .map(({ stories, storyTitle }) => {
+        .map(({ stories, storyTitle }, i, arr) => {
           const data = stories
             .map(({ storyText }) => storyText)
             .map(str => {
@@ -253,6 +260,12 @@ export default {
               while ((matches = reg.exec(str)) != null) {
                 res[matches[1]] = matches[2];
               }
+              const lReg = /【(.{7})】\n?(.+)$/;
+              const last = lReg.exec(str);
+              if (last) {
+                res[last[1]] = last[2];
+              }
+
               return res;
             })[0];
           return {

@@ -7,10 +7,10 @@ const CleanWebPackPlugin = require('clean-webpack-plugin');
 module.exports = merge(prod, {
   mode: 'production',
   output: {
-    path: path.resolve('buid/test/home')
+    path: path.resolve('build/test/home')
   },
   plugins: [
-    new CleanWebPackPlugin(['buid/test/home'], { root: path.resolve(__dirname, '..') }),
+    new CleanWebPackPlugin(['build/test/home'], { root: path.resolve(__dirname, '..') }),
     new webpack.DefinePlugin({
       PRODUCTION: JSON.stringify(false)
     })

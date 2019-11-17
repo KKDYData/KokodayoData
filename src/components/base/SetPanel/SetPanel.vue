@@ -10,11 +10,6 @@
     <!-- 默认立绘小人 pc -->
     <spine-panel v-if="!short && !ex" :id="id" :canvas-width="spineWidth" />
 
-    <!-- 默认立绘小人 移动 -->
-    <el-carousel-item v-if="short && setData && !ex">
-      <spine-panel :id="id" class="spin-panel mobile" :canvas-width="spineWidth" />
-    </el-carousel-item>
-
     <div v-for="(data, index) in setData" :key="index" :data="data" :short="short">
       <!-- pc 皮肤小人 -->
       <spine-panel
@@ -47,7 +42,7 @@
               </content-slot>
             </div>
           </div>
-          <div :style="short ? '' : 'padding-left: 100px'">
+          <div>
             <el-image class="char-set-container" :src="data.charSet">
               <div slot="error" class="image-slot">
                 <i class="el-icon-picture-outline" />
@@ -63,6 +58,15 @@
             </div>
           </div>
 
+          <!-- 默认立绘小人 移动 -->
+          <!-- <el-carousel-item> -->
+          <spine-panel
+            v-if="short && setData && !ex"
+            :id="id"
+            class="spin-panel mobile"
+            :canvas-width="spineWidth"
+          />
+          <!-- </el-carousel-item> -->
           <!-- 皮肤立绘小人 移动 -->
           <spine-panel
             v-if="short && setData && ex"
@@ -83,6 +87,7 @@ import ContentSlot from '../ContentSlot';
 import { Carousel, CarouselItem } from 'element-ui';
 import Vue from 'vue';
 import { mapState } from 'vuex';
+import { getScreenWidth } from '../../../utils';
 Vue.use(Carousel);
 Vue.use(CarouselItem);
 
@@ -113,7 +118,7 @@ export default {
     return {
       curIndex: 0,
       width: 1159,
-      height: 1000,
+      height: '1000px',
       spineWidth: 300
     };
   },
@@ -125,7 +130,7 @@ export default {
     },
   },
   beforeMount() {
-    const { width, height } = this.getScreenWidth();
+    const { width, height } = getScreenWidth();
     this.height = (height - 100) + 'px';
     if (!this.short) {
       this.spineWidth = (width / 1159) * 300;
@@ -133,21 +138,7 @@ export default {
   },
 
   methods: {
-    getScreenWidth() {
-      const w = document.body.clientWidth;
-      const h = window.innerHeight;
-      if (w > h) {
-        return {
-          width: h * 1.5,
-          height: h
-        };
-      } else {
-        return {
-          width: w,
-          height: w * (this.short ? 1.8 : 0.8)
-        };
-      }
-    }
+
   }
 };
 </script>
@@ -161,19 +152,19 @@ export default {
   }
 }
 
-.char-set-info-cotainer {
-  width: 250px
-
-  &>>> .status-details-value {
-    text-align: left
-  }
-}
-
 .char-set-container-wrapper {
   display: flex
   justify-content: space-between
   height: 100%
   width: 100%
+}
+
+.char-set-container {
+  width: 58vw
+}
+
+.char-set-info-cotainer {
+  width: 20vw
 }
 
 .char-half-container {
@@ -225,6 +216,10 @@ export default {
   .char-set-container-wrapper {
     display: block
     height: 100%
+  }
+
+  .char-set-container {
+    width: 100%
   }
 
   .char-set-panel {

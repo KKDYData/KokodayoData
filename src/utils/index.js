@@ -410,17 +410,26 @@ const getSkinsData = {
 };
 
 const getScreenWidth = () => {
-  const w = document.body.clientWidth;
+  const short = store.state.short;
+  const w = document.body.clientWidth - (short ? 40 : 60);
   const h = window.innerHeight;
+  const radio = 1.5;
+
   if (w > h) {
+    if (h * radio > w) {
+      return {
+        width: w,
+        height: w / radio
+      };
+    }
     return {
-      width: h * 1.5,
+      width: h * radio,
       height: h
     };
   } else {
     return {
       width: w,
-      height: w * 0.8
+      height: short ? h * 0.95 : w * 0.8
     };
   }
 };

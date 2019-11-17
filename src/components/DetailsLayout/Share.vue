@@ -1,18 +1,18 @@
 <template>
   <transition name="el-fade-in">
-    <div v-if="visible">
-      <button @click="share" :data-clipboard-text="shareLink" class="el-circle-icon share">
-        <i class="el-icon-share"></i>
+    <div v-show="visible">
+      <button :data-clipboard-text="shareLink" class="el-circle-icon share" @click="share">
+        <i class="el-icon-share" />
       </button>
       <div
-        @click.stop="handleClick"
         :style="{
         'right': styleRight,
         'bottom': styleBottom
       }"
         class="el-circle-icon"
+        @click.stop="handleClick"
       >
-        <i class="el-icon-caret-top"></i>
+        <i class="el-icon-caret-top" />
       </div>
     </div>
   </transition>
@@ -31,7 +31,10 @@ export default {
       type: Number,
       default: 200
     },
-    target: [String],
+    target: {
+      type: [String],
+      default: null
+    },
     right: {
       type: Number,
       default: 40
@@ -48,6 +51,7 @@ export default {
       container: null,
       visible: false,
       throttledScrollHandler: null, // throttle(300, this.onScroll)
+      orgin: window.location.origin
     };
   },
 
@@ -59,7 +63,7 @@ export default {
       return `${this.right}px`;
     },
     shareLink() {
-      return 'https://somedata.top' + this.$route.fullPath;
+      return this.orgin + this.$route.fullPath;
     }
   },
 
@@ -92,6 +96,9 @@ export default {
     onScroll() {
       const scrollTop = this.el.scrollTop;
       this.visible = scrollTop >= this.visibilityHeight;
+      this.visible && setTimeout(() => {
+        this.visible = false;
+      }, 3000);
     },
     handleClick(e) {
       this.scrollToTop();

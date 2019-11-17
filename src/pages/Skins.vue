@@ -84,7 +84,7 @@ export default {
   },
   mounted() {
     console.log(this.extraSkins);
-    this.width = getScreenWidth().width - 40;
+    this.width = getScreenWidth().width;
   },
   methods: {
     switchData(e) {

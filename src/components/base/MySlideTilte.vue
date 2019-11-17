@@ -1,23 +1,24 @@
 <template>
   <div class="my-slide-title-wrapper">
-    <slot name="const-content"></slot>
+    <slot name="const-content" />
 
     <my-title
+      ref="title"
       :title="title"
       :control="control"
-      @click="click($event)"
       :custom-bg="customBg"
       :right="short"
       style="margin-bottom: 0"
-    ></my-title>
+      @click="click"
+    />
     <transition name="extra-button">
       <div v-if="!control || value" class="extra-button">
-        <slot name="extra-button"></slot>
+        <slot name="extra-button" />
       </div>
     </transition>
     <div style="margin-left: 10px">
       <el-collapse-transition>
-        <slot v-if="!control || value"></slot>
+        <slot v-if="!control || value" />
       </el-collapse-transition>
     </div>
   </div>
@@ -38,13 +39,16 @@ export default {
       type: String
     },
     control: {
+      type: Boolean,
       default: true
     },
     initValue: {
+      type: Boolean,
       default: false
     },
     customBg: {
-      type: String
+      type: String,
+      default: null
     }
   },
   data() {
@@ -59,6 +63,10 @@ export default {
     this.$emit('monuted', this);
   },
   methods: {
+    initClick(v) {
+      this.value = v;
+      this.$refs.title.click();
+    },
     click(v) {
       this.value = v;
       this.$emit('open', this);

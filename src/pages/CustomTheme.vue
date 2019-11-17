@@ -23,7 +23,7 @@
         v-for="([k, theme], index) in themes"
         :key="k"
         :title="theme.name ? theme.name : '散件'"
-        :custom-bg="`--custombg: linear-gradient(90deg, #414141 ${Math.max((10 - index) * 7, 0)}%, hsl(${index * 5 + 180}, 67%, 25%))`"
+        :custom-bg="`linear-gradient(90deg, #414141 ${Math.max((10 - index) * 7, 0)}%, hsl(${index * 5 + 180}, 67%, 25%))`"
         @open="loadData(theme, k, index, $event)"
         @monuted="initOpen(index, $event)"
       >
@@ -112,7 +112,7 @@ export default {
   methods: {
     initOpen(index, e) {
       if (index === 0) {
-        e.click(true);
+        e.initClick(true);
       }
     },
     async loadData(target, k, index, e) {

@@ -1,10 +1,10 @@
 <template>
   <div>
     <div :style="titleStyle" class="status-details-title">
-      <slot name="title"></slot>
+      <slot name="title" />
     </div>
     <div :style="contentStyle" class="status-details-value">
-      <slot name="content"></slot>
+      <slot name="content" />
     </div>
   </div>
 </template>
@@ -12,7 +12,10 @@
 <script>
 export default {
   props: {
-    width: Number,
+    width: {
+      type: Number,
+      default: null
+    },
     long: Boolean,
     noWrap: Boolean
   },
@@ -28,7 +31,7 @@ export default {
       return res;
     },
     contentStyle() {
-      return this.long ? { width: 'auto' } : {};
+      return this.long ? { width: 'auto', 'text-align': 'left' } : {};
     }
   }
 };
@@ -37,30 +40,30 @@ export default {
 
 <style lang="stylus" scoped>
 .status-details-title {
-  color: white;
-  background-color: #313131;
-  border-radius: 2px;
-  width: calc(80px + 0.5vw);
-  text-align: center;
-  display: inline-block;
-  font-size: 100%;
-  line-height: 100%;
-  padding: 2px 0;
-  box-shadow: 1px 1px 2px 1px #0000005e;
+  color: white
+  background-color: #313131
+  border-radius: 2px
+  width: calc(80px + 0.5vw)
+  text-align: center
+  display: inline-block
+  font-size: 100%
+  line-height: 100%
+  padding: 2px 0
+  box-shadow: 1px 1px 2px 1px #0000005e
 }
 
 .status-details-value {
-  display: inline-block;
+  display: inline-block
 }
 
 @media screen and (max-width: 900px) {
   .status-details-title {
-    display: block;
+    display: block
   }
 
   .status-details-value {
-    width: calc(80px + 0.5vw);
-    text-align: center;
+    width: calc(80px + 0.5vw)
+    text-align: center
   }
 }
 </style>
