@@ -12,7 +12,7 @@
               </el-image>
             </div>
           </div>
-          <div :style="short ? 'margin-left: 5vw' : ''">
+          <div :style="short ? 'margin-left: 5vw' : 'margin-left: 20px'">
             <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
               <div slot="title">画师</div>
               <div slot="content">{{ data.drawName }}</div>
@@ -333,7 +333,7 @@ export default {
   display: flex
   margin-bottom: 70px
   justify-content: space-between
-  max-width: 700px
+  max-width: 800px
 }
 
 .info-char-set-wrapper {
@@ -379,7 +379,7 @@ export default {
 
 .info-base-container {
   min-width: 150px
-  max-width: calc(49vw - 10px)
+  max-width: 250px
 }
 
 .info-base-container + .info-base-container {
@@ -391,6 +391,11 @@ export default {
     padding-left: 10px
     padding-top: 5px
     display: block
+  }
+
+  .info-base-container {
+    min-width: 150px
+    max-width: calc(49vw - 10px)
   }
 
   .char-base-info-container {
