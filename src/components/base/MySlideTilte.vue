@@ -48,7 +48,7 @@ export default {
     },
     customBg: {
       type: String,
-      default: null
+      default: undefined
     }
   },
   data() {

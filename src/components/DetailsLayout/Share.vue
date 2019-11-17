@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { throttle } from '../../utils';
+import { debounce } from '../../utils';
 import { Message } from 'element-ui';
 
 import Clipboard from 'clipboard';
@@ -69,7 +69,7 @@ export default {
 
   mounted() {
     this.init();
-    this.throttledScrollHandler = throttle(this.onScroll, 100);
+    this.throttledScrollHandler = debounce(this.onScroll, 100);
     this.container.addEventListener('scroll', this.throttledScrollHandler);
 
     new Clipboard('.share');
@@ -96,8 +96,11 @@ export default {
     onScroll() {
       const scrollTop = this.el.scrollTop;
       this.visible = scrollTop >= this.visibilityHeight;
+      console.log('1');
       this.visible && setTimeout(() => {
         this.visible = false;
+        console.log('2');
+
       }, 3000);
     },
     handleClick(e) {

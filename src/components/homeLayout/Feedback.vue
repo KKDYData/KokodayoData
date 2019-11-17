@@ -6,35 +6,42 @@
     >反馈群799872783！个人测试浏览器为s10下包括QQ浏览器，及iPadOS(iOS 13)的Safari、Chrome，Pc的Edge/Chrome</p>
     <p style="color: #515151">在Github提Issue也行</p>
     <div class="feedback-part">
-      <my-title title="反馈"></my-title>
+      <my-title title="反馈" />
       <div class="feedback-info-wrapper">
         <input-wrapper style="width: 50%" title="ID">
           <template>
-            <el-input v-model="id" placeholder="用于识别的ID"></el-input>
+            <el-input v-model="id" placeholder="用于识别的ID" />
           </template>
         </input-wrapper>
         <div class="feedback-button">
-          <el-button @click="feedback = ''" icon="el-icon-delete" circle plain></el-button>
-          <el-button @click="submitFb" type="primary">提交</el-button>
+          <el-button icon="el-icon-delete" circle plain @click="feedback = ''" />
+          <el-button type="primary" @click="submitFb">提交</el-button>
         </div>
       </div>
       <div>
         <input-wrapper title="标题">
           <template>
-            <el-input v-model="title" placeholder="可选标题"></el-input>
+            <el-input v-model="title" placeholder="可选标题" />
           </template>
         </input-wrapper>
       </div>
       <input-wrapper title="反馈">
         <el-input
+          v-model="feedback"
           type="textarea"
           :rows="2"
           placeholder="可以在内容后面留个邮箱，或者进群获取反馈进度。"
-          v-model="feedback"
-        ></el-input>
+        />
       </input-wrapper>
     </div>
     <div class="feedback-part">
+      <my-slide-title title="v0.9 新域名">
+        <div>
+          <p>1. 增加游戏里的spine 小人展示，及相对应的改进立绘面板，以及新增单独的皮肤页面</p>
+          <p>2. 因为各种原因，有部分干员的部分模型的文件还处于缺失状态</p>
+          <p>3. 修复各种组件在某些情况下异常表示的问题</p>
+        </div>
+      </my-slide-title>
       <my-slide-title title="v0.71 Bug修复">
         <div>
           <p>1.为了准备可能突然实装的凯尔希，把召唤物加入了豪华午餐。</p>
@@ -120,7 +127,8 @@ export default {
   },
   props: {
     store: {
-      required: true
+      required: true,
+      type: Object
     },
   },
   data() {

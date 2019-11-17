@@ -46,9 +46,7 @@
                 round
                 :style="short ? 'margin-left: 10px' : ''"
                 :disabled="agentFilterDisabled"
-              >
-标签
-</el-button>
+              >标签</el-button>
               <div class="tag-selected-content-container">
                 <transition name="fade" mode="out-in">
                   <div v-if="SelectedTagGz.length !== 0 ">
@@ -63,9 +61,7 @@
                         effect="dark"
                         :type="agentFilterDisabled ? 'info': ''"
                         @close="handleClose(tag)"
-                      >
-{{ tag.text }}
-</el-tag>
+                      >{{ tag.text }}</el-tag>
                     </div>
                   </div>
                   <span

@@ -12,7 +12,7 @@
               </el-image>
             </div>
           </div>
-          <div>
+          <div :style="short ? 'margin-left: 5vw' : ''">
             <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
               <div slot="title">画师</div>
               <div slot="content">{{ data.drawName }}</div>
@@ -49,25 +49,27 @@
               </el-popover>
             </div>
           </div>
-          <div v-for="(story, index) in baseInfo" :key="story.storyTitle">
-            <div class="info-base-container" style="min-width: 150px; max-width: 45vw;">
-              <div class="info-story-title">
-                <span>
-                  <b>{{ story.storyTitle }}</b>
-                </span>
-              </div>
-              <div class="info-story-content-wrapper">
-                <div v-for="(v, k, i) in story.data" :key="k" class="info-story-content">
-                  <content-slot
-                    style="margin-top: 10px;"
-                    long
-                    :no-wrap="true"
-                    :width="i >= (index === 0 ? 7 : 5) ? 140 : null"
-                  >
-                    <div slot="title">{{ k }}</div>
-                    <div slot="content">{{ v }}</div>
-                  </content-slot>
-                </div>
+          <div
+            v-for="(story, index) in baseInfo"
+            :key="story.storyTitle"
+            class="info-base-container"
+          >
+            <div class="info-story-title">
+              <span>
+                <b>{{ story.storyTitle }}</b>
+              </span>
+            </div>
+            <div class="info-story-content-wrapper">
+              <div v-for="(v, k, i) in story.data" :key="k" class="info-story-content">
+                <content-slot
+                  style="margin-top: 10px;"
+                  long
+                  :no-wrap="true"
+                  :width="i >= (index === 0 ? 7 : 5) ? 140 : null"
+                >
+                  <div slot="title">{{ k }}</div>
+                  <div slot="content">{{ v }}</div>
+                </content-slot>
               </div>
             </div>
           </div>
@@ -375,6 +377,15 @@ export default {
   cursor: pointer
 }
 
+.info-base-container {
+  min-width: 150px
+  max-width: calc(49vw - 10px)
+}
+
+.info-base-container + .info-base-container {
+  margin-left: 2vw
+}
+
 @media screen and (max-width: 700px) {
   .info-word-audio-control {
     padding-left: 10px
@@ -384,8 +395,7 @@ export default {
 
   .char-base-info-container {
     flex-wrap: wrap
-    justify-content: space-between
-    max-width: 340px
+    justify-content: flex-start
   }
 
   .char-set-cv {
