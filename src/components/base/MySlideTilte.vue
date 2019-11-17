@@ -53,11 +53,20 @@ export default {
   },
   data() {
     return {
-      value: this.initValue
+      value: this.initValue,
+      lock: false
     };
   },
   computed: {
     ...mapState(['short']),
+  },
+  watch: {
+    value(v) {
+      if (!v && this.$refs.title.value) {
+        this.lock = true;
+        this.$refs.title.click();
+      }
+    }
   },
   mounted() {
     this.$emit('monuted', this);
@@ -68,6 +77,10 @@ export default {
       this.$refs.title.click();
     },
     click(v) {
+      if (this.lock) {
+        this.lock = false;
+        return;
+      }
       this.value = v;
       this.$emit('open', this);
     },
