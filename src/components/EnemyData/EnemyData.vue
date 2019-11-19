@@ -1,7 +1,7 @@
 <template>
   <div
-    class="home-wrapper"
     v-loading.fullscreen.lock="load"
+    class="home-wrapper"
     element-loading-background="rgba(168, 168, 168, 0.1)"
   >
     <!-- 地图选择的抽屉 -->
@@ -21,14 +21,14 @@
       <div class="chapter-wrapper">
         <el-tree
           ref="chapter-tree"
-          @node-click="changeMapCode"
           :data="stageTree"
           accordion
           node-key="path"
           :highlight-current="true"
           :auto-expand-parent="true"
           :render-after-expand="false"
-        ></el-tree>
+          @node-click="changeMapCode"
+        />
       </div>
     </el-drawer>
     <!-- 主体 -->
@@ -37,32 +37,32 @@
       <!-- 地图信息、控制栏 -->
       <div ref="map-title-part" class="map-title-part">
         <div>
-          <el-button @click="drawer = true" type="primary">
-            {{selectedMap !== '' ? selectedMap : '选择地图'}}
-            <i class="el-icon-edit-outline"></i>
+          <el-button type="primary" @click="drawer = true">
+            {{ selectedMap !== '' ? selectedMap : '选择地图' }}
+            <i class="el-icon-edit-outline" />
           </el-button>
 
           <span :style="short ? 'margin-top: 10px; display: block' : ''">
             <el-button
-              @click="loadRunes"
               v-if="selMapDataEx && (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')"
               :type="!runesMode ? '': 'warning'"
               :plain="!runesMode"
               class="runes-mode-button"
+              @click="loadRunes"
             >突袭</el-button>
             <el-button
-              @click="laodRouteMap"
               v-if="selMapDataEx"
               :type="!showMap ? '': 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
+              @click="laodRouteMap"
             >地图</el-button>
             <el-button
-              @click="loopAllRoutes"
               v-if="devMode === '/ArknightsBeta' && selMapDataEx"
               :type="!showMap ? '': 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
+              @click="loopAllRoutes"
             >加载所有路线</el-button>
 
             <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
@@ -75,12 +75,12 @@
             </el-tooltip>
           </span>
         </div>
-        <div style="margin-left: 5px" ref="map-desc" v-if="selMapDataEx">
-          <p style="font-size: 0.9em" v-if="selMapDataEx.dangerLevel !== '-'">
+        <div v-if="selMapDataEx" ref="map-desc" style="margin-left: 5px">
+          <p v-if="selMapDataEx.dangerLevel !== '-'" style="font-size: 0.9em">
             <span>推荐等级</span>
-            <span style="color: #f49800;">{{selMapDataEx.dangerLevel}}</span>
+            <span style="color: #f49800;">{{ selMapDataEx.dangerLevel }}</span>
           </p>
-          <p style="font-size: 0.9em" :key="runesMode" v-html="mapDesc"></p>
+          <p :key="runesMode" style="font-size: 0.9em" v-html="mapDesc" />
         </div>
       </div>
       <div class="map-data-wrapper">
@@ -101,34 +101,35 @@
               style="position: relative; font-size: 0"
             >
               <el-image
-                @load="mapPicLoad = false"
                 class="map-pic-contianer"
                 fit="fill"
                 :src="mapPath"
-              ></el-image>
-              <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'"></div>
+                @load="mapPicLoad = false"
+                @error="loadPicFalse"
+              />
+              <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'" />
               <div
                 id="map-canvas-container-up"
                 :style="isEdge ? 'transform: perspective(1200px) rotateX(40deg); filter: none' : ''"
                 :class="showMap ? '' : 'map-canvas-bottom'"
-              ></div>
+              />
             </div>
-            <div class="left-layout"></div>
+            <div class="left-layout" />
           </div>
           <enemy-map-info
             v-if="!short && mapCode"
             :options="options"
-            :dropInfo="detailsDropList"
+            :drop-info="detailsDropList"
             :global-buffs="globalBuffs"
             :wave-time="waveTime"
-          ></enemy-map-info>
+          />
         </div>
       </div>
       <my-slide-title
         v-if="data"
+        ref="layout-control"
         :control="mapCode ? true : false"
         :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
-        ref="layout-control"
       >
         <div slot="extra-button">
           <el-button
@@ -145,8 +146,8 @@
             :plain="simpleShow ? false: true"
             @click="simpleShow = !simpleShow"
           >
-            <i class="el-icon-refresh"></i>
-            {{simpleShow ? '简要显示': '路线模式'}}
+            <i class="el-icon-refresh" />
+            {{ simpleShow ? '简要显示': '路线模式' }}
           </el-button>
           <el-tooltip v-if="mapCode && !simpleShow">
             <el-button type="info" size="mini">说明</el-button>
@@ -162,16 +163,16 @@
         </div>
         <!-- 不能用margin会影响动画，margin合并 -->
         <enemy-data-layout
-          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
-          ref="layout"
           v-if="!load && data"
+          ref="layout"
+          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
           :data="data"
           :map-data="selMapData"
           :runes-mode="runesMode"
           :simple-show="simpleShow"
           @showRoute="loopRoutes"
           @closeRoute="closeRoute"
-        ></enemy-data-layout>
+        />
       </my-slide-title>
       <my-slide-title v-if="short && mapCode" title="地图信息">
         <enemy-map-info
@@ -180,7 +181,7 @@
           :options="options"
           :global-buffs="globalBuffs"
           :wave-time="waveTime"
-        ></enemy-map-info>
+        />
       </my-slide-title>
       <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设">
         <map-pre-defined
@@ -188,7 +189,7 @@
           :pre-data="selMapData.predefines"
           :data="preData"
           :runes-data="runesMode ? selMapData.runes : null"
-        ></map-pre-defined>
+        />
       </my-slide-title>
       <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
       <map-drop-list
@@ -196,15 +197,13 @@
         style="margin-top: 20px"
         :drop-info="detailsDropList"
         :target-stage="mapCode"
-      ></map-drop-list>
+      />
     </div>
   </div>
 </template>
 <script>
 import loadingC from '../base/Loading';
-import MyTitle from '../base/MyTitle';
 import MySlideTitle from '../base/MySlideTilte';
-import ContentSlot from '../base/ContentSlot';
 import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
@@ -276,9 +275,7 @@ export default {
   },
   components: {
     EnemyDataLayout,
-    MyTitle,
     MySlideTitle,
-    ContentSlot,
     MapDropList,
     EnemyMapInfo,
     MapPreDefined
@@ -441,6 +438,12 @@ export default {
   },
 
   methods: {
+    loadPicFalse() {
+      Message.info('游戏地图的预览图片缺失，但是地图数据还是有的，敌人的路线一样可以看, 3s后自动打开地图');
+      setTimeout(() => {
+        this.laodRouteMap();
+      }, 3000);
+    },
     clearMap() {
       this.$refs['chapter-selecter'].closeDrawer();
       this.data = this.rowData;
