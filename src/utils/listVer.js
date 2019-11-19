@@ -1,6 +1,6 @@
-const charListVer = 4203734442751;//3584596121751;//9494734989651;
-const stageListVer = 9175062211751;//1569786667996;
-const enemyListVer = 1566883495135;
+const charListVer = 7120440414751;//3584596121751;//9494734989651;
+const stageListVer = 2781318314751;//1569786667996;
+const enemyListVer = 1574138107584;
 
 const dataPath = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'
   : 'https://andata.somedata.top';
