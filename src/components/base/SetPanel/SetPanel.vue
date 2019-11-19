@@ -22,8 +22,8 @@
       <!-- 立绘 -->
       <el-carousel-item :key="index" style="font-size:13px">
         <div class="char-set-container-wrapper">
-          <div v-if="data.displaySkin">
-            <div class="char-set-info-cotainer">
+          <div class="char-set-info-cotainer">
+            <div v-if="data.displaySkin">
               <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
                 <template slot="title">系列</template>
                 <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
@@ -42,6 +42,7 @@
               </content-slot>
             </div>
           </div>
+
           <div>
             <el-image class="char-set-container" :src="data.charSet">
               <div slot="error" class="image-slot">

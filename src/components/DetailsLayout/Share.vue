@@ -96,10 +96,8 @@ export default {
     onScroll() {
       const scrollTop = this.el.scrollTop;
       this.visible = scrollTop >= this.visibilityHeight;
-      console.log('1');
       this.visible && setTimeout(() => {
         this.visible = false;
-        console.log('2');
 
       }, 3000);
     },
