@@ -226,12 +226,16 @@ const changeAttackSpeed = (skill) => {
     if (p2.match(/:0.0/)) {
       p2 = p2.slice(0, -4);
       percent = '';
+    } else if (p2.match(/:0/)) {
+      p2 = p2.slice(0, -2);
+      percent = '';
     }
     if (p2.match(/-/)) {
       p2 = p2.slice(1);
       minus = true;
     }
     let temp = findValue(skill, 'blackboard', p2.toLowerCase());
+    console.log(temp);
     if (temp) {
       res = temp.value;
       if (minus) res *= -1;
