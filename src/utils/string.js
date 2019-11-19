@@ -552,6 +552,7 @@ const StageType = {
   a001: 'Act·1·骑兵与猎人',
   a003: 'Act·3·火蓝之心',
   act4d0: 'Act·4·战地秘闻',
+  act5d0: 'ACt·5·喧闹法则',
 };
 
 const Directions = {

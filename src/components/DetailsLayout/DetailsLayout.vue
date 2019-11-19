@@ -8,11 +8,11 @@
       effect="dark"
       :closable="false"
     >获取数据失败，若多次刷新无效，请联系管理员</el-alert>
-    <my-share></my-share>
-    <data-loading v-if="!loadingFail && !dataLoad"></data-loading>
+    <my-share />
+    <data-loading v-if="!loadingFail && !dataLoad" />
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
-        <agent-card :phases="phases" :data="data"></agent-card>
+        <agent-card :phases="phases" :data="data" />
         <!-- 属性面板 -->
         <div class="stats-wrapper">
           <div class="group-container-title">
@@ -24,55 +24,55 @@
                 <span class="status-phases-text">精英阶段</span>
                 <el-button
                   v-for="(item, index) in data.phases"
-                  @click="phases = index"
                   :key="index"
                   size="mini"
                   :type="phases === index ? 'primary': ''"
-                >{{index}}</el-button>
+                  @click="phases = index"
+                >{{ index }}</el-button>
               </div>
 
-              <div class="status-potential-wrapper" v-if="potentailUPList.length > 0">
+              <div v-if="potentailUPList.length > 0" class="status-potential-wrapper">
                 <span class="status-phases-text">潜能等级</span>
                 <div style="display: inline; font-size: 0px">
                   <el-button
-                    @click="potentialRanks = -1"
                     size="mini"
                     :type="potentialRanks === -1 ? 'primary': ''"
+                    @click="potentialRanks = -1"
                   >1</el-button>
                   <el-button
                     v-for="item in potentailUPList"
-                    @click="potentialRanks = item"
                     :key="item"
                     size="mini"
                     :type="potentialRanks === item ? 'primary': ''"
-                  >{{item + 2}}</el-button>
+                    @click="potentialRanks = item"
+                  >{{ item + 2 }}</el-button>
                 </div>
               </div>
               <div class="status-lv-favor-wrapper">
                 <div class="status-phases-lv">
                   <div class="status-phases-lv-title">
                     <span>等级</span>
-                    <span>{{level}}</span>
+                    <span>{{ level }}</span>
                   </div>
                   <div class="status-phases-lv-inner">
                     <el-slider
-                      :show-tooltip="false"
                       v-model="level"
+                      :show-tooltip="false"
                       :min="targetPhasese[0].level"
                       :max="targetPhasese[1].level"
-                    ></el-slider>
+                    />
                   </div>
                 </div>
-                <div class="status-favor-switch" v-if="data.favorKeyFrames">
-                  <el-switch active-color="#313131" v-model="isFavor" active-text="满信赖"></el-switch>
+                <div v-if="data.favorKeyFrames" class="status-favor-switch">
+                  <el-switch v-model="isFavor" active-color="#313131" active-text="满信赖" />
                 </div>
               </div>
             </div>
 
-            <char-status class="status-details-wrapper" :status="status"></char-status>
+            <char-status class="status-details-wrapper" :status="status" />
             <div class="status-range-wrapper">
               <div v-if="rangeId" class="status-range-inner-wrapper">
-                <range :range-id="rangeId"></range>
+                <range :range-id="rangeId" />
                 <div style="text-align: center;font-size: 14px">
                   <span>攻击范围</span>
                 </div>
@@ -83,7 +83,7 @@
         <!-- 天赋面板 -->
         <div v-if="talents.length > 0" class="tttt">
           <div class="group-container-title">天赋</div>
-          <talents-panel @talentPotentailUp="e => talentPotentailUp = e" :talents="talents"></talents-panel>
+          <talents-panel :talents="talents" @talentPotentailUp="e => talentPotentailUp = e" />
         </div>
         <!-- 技能面板 -->
         <div v-if="skills.length > 0" class="skill-container-wrapper">
@@ -95,16 +95,16 @@
             :profession="data.profession"
             :talent-potentail-up="talentPotentailUp"
             :description="data.description"
-          ></skill-panel>
+          />
         </div>
         <!-- 潜能面板 -->
-        <div style="margin-bottom: 20px" v-if="normal">
+        <div v-if="normal" style="margin-bottom: 20px">
           <div class="group-container-title">潜能</div>
           <div v-if="data.potentialRanks && data.potentialRanks.length" class="potency-container">
             <div v-for="(item, index) in data.potentialRanks" :key="index">
               <p>
-                <span class="potency-lv">潜能{{index + 2}}级:</span>
-                {{item.description}}
+                <span class="potency-lv">潜能{{ index + 2 }}级:</span>
+                {{ item.description }}
               </p>
             </div>
           </div>
@@ -119,18 +119,18 @@
           </div>
           <div class="evolvcost-wrapper">
             <div
-              class="evolvcost-container-wrapper"
               v-for="(data, key, index) in evolveCost"
-              :style="Object.keys(evolveCost).length === 1  && !short? 'margin: 0 0 10px' : ''"
               :key="index"
+              class="evolvcost-container-wrapper"
+              :style="Object.keys(evolveCost).length === 1 && !short? 'margin: 0 0 10px' : ''"
             >
               <div class="evolvcost-title-wrapper">
-                <span>精英阶段{{index + 1}}</span>
+                <span>精英阶段{{ index + 1 }}</span>
               </div>
               <div class="evolvcost-container">
-                <item-viewer :item="GOLD" :num="data.money" class="evolvcost-item-container"></item-viewer>
+                <item-viewer :item="GOLD" :num="data.money" class="evolvcost-item-container" />
                 <div v-for="item in data.items" :key="item.IconId" class="evolvcost-item-container">
-                  <item-viewer :item="item.item" :num="item.cost"></item-viewer>
+                  <item-viewer :item="item.item" :num="item.cost" />
                 </div>
               </div>
             </div>
@@ -140,12 +140,16 @@
         <!-- 技能升级消耗 -->
         <div v-if="skills.length > 0 && normal" class="skill-container-wrapper">
           <div class="group-container-title">技能升级消耗</div>
-          <skill-up-panel :allLevelCost="data.allSkillLvlup" :skills="skills" :seven="data.skills"></skill-up-panel>
+          <skill-up-panel
+            :all-level-cost="data.allSkillLvlup"
+            :skills="skills"
+            :seven="data.skills"
+          />
         </div>
 
         <!-- 基建面板 -->
         <div v-if="normal" class="tttt">
-          <building-data :building="data.buildingData"></building-data>
+          <building-data :building="data.buildingData" />
         </div>
         <div v-if="normal" class="group-container-title" style="margin-bottom: 0">
           <span>干员资料</span>
@@ -153,7 +157,7 @@
         <template slot="title">
           <span style="direction:rtl;width: 100%">打开</span>
         </template>
-        <info-panel v-if="info" :data="info" :list="setList" :words="words"></info-panel>
+        <info-panel v-if="info" :data="info" :list="setList" :words="words" />
       </div>
     </transition>
   </div>
@@ -240,32 +244,6 @@ export default {
       meta: [{ vmid: 'description', name: 'Description', content: content }]
     };
   },
-  created() {
-    this.name = this.$route.params.name;
-    console.log('getting data...');
-    getHeroData(this.name)
-      .catch(err => {
-        console.log(err);
-        return Promise.reject('no charactor');
-      })
-      .then(data => {
-        this.data = data;
-        this.phases = this.data.phases.length - 1;
-        this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
-        this.dataLoad = true;
-
-        this.getSkills();
-        if (this.data.profession === 'TOKEN') return;
-        // this.getRange();
-        this.getEvolveCost();
-        this.getInfo();
-        this.getWords();
-      })
-      .catch(err => {
-        console.log(err);
-        this.loadingFail = true;
-      });
-  },
   components: {
     Range,
     TalentsPanel,
@@ -299,6 +277,32 @@ export default {
       level: 1,
       talentPotentailUp: [false, false, false]
     };
+  },
+  created() {
+    this.name = this.$route.params.name;
+    console.log('getting data...');
+    getHeroData(this.name)
+      .catch(err => {
+        console.log(err);
+        return Promise.reject('no charactor');
+      })
+      .then(data => {
+        this.data = data;
+        this.phases = this.data.phases.length - 1;
+        this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
+        this.dataLoad = true;
+
+        this.getSkills();
+        if (this.data.profession === 'TOKEN') return;
+        // this.getRange();
+        this.getEvolveCost();
+        this.getInfo();
+        this.getWords();
+      })
+      .catch(err => {
+        console.log(err);
+        this.loadingFail = true;
+      });
   },
   computed: {
     ...mapState(['short']),
@@ -679,7 +683,7 @@ export default {
   padding-right: 5px;
 }
 
-@media screen and (min-width: 1200px) {
+@media screen and (min-width: 1250px) {
   .evolvcost-container-wrapper + .evolvcost-container-wrapper {
     border-left: 2px solid rgba(56, 56, 56, 0.6);
   }
