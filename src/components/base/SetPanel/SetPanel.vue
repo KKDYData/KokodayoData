@@ -22,8 +22,8 @@
       <!-- 立绘 -->
       <el-carousel-item :key="index" style="font-size:13px">
         <div class="char-set-container-wrapper">
-          <div v-if="data.displaySkin">
-            <div class="char-set-info-cotainer">
+          <div class="char-set-info-cotainer">
+            <div v-if="data.displaySkin">
               <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
                 <template slot="title">系列</template>
                 <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
@@ -42,6 +42,7 @@
               </content-slot>
             </div>
           </div>
+
           <div>
             <el-image class="char-set-container" :src="data.charSet">
               <div slot="error" class="image-slot">
@@ -144,6 +145,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../../../styles/char.styl'
+
 .char-set-panel {
   &>>> .el-carousel__item {
     display: flex
@@ -160,20 +163,19 @@ export default {
 }
 
 .char-set-container {
-  width: 58vw
+  width: 52vw
 }
 
 .char-set-info-cotainer {
   width: 20vw
 }
 
-.char-half-container {
-  width: 110px
-  position: relative
-  margin-top: 20px
-  font-size: 0
-}
-
+//.char-half-container {
+//width: 110px
+//position: relative
+//margin-top: 20px
+//font-size: 0
+//}
 .char-profile-container {
   height: 110px
   position: relative

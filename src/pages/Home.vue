@@ -6,7 +6,7 @@
         :type="isBeta ? 'warning': 'success'"
         description
         :closable="false"
-      >已经迁移到新域名。看立绘的地方，多了小人可以看</el-alert>
+      >已经迁移到新域名。图片等素材正在处理中</el-alert>
     </div>
     <transition name="fade" mode="out-in">
       <home-layout v-if="load" :profile-list="data" :token-list="token" />

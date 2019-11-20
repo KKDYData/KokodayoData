@@ -383,7 +383,7 @@ export default {
 }
 
 .info-base-container + .info-base-container {
-  margin-left: 2vw
+  margin-left: 20px
 }
 
 @media screen and (max-width: 700px) {
@@ -401,6 +401,10 @@ export default {
   .char-base-info-container {
     flex-wrap: wrap
     justify-content: flex-start
+  }
+
+  .info-base-container {
+    max-width: calc(49vw - 10px)
   }
 
   .char-set-cv {

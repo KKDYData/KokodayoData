@@ -1,54 +1,54 @@
 <template>
   <div v-if="skills && skills.length > 0" class="skill-container--inner-wrapper">
-    <div class="skill-container" v-for="(skill, index) in skills" :key="index">
+    <div v-for="(skill, index) in skills" :key="index" class="skill-container">
       <div class="skill-title">
-        <skill-container v-if="showPic" :skill="skills[index]"></skill-container>
-        <p v-else>{{skill.levels[index].name}}</p>
+        <skill-container v-if="showPic" :skill="skills[index]" />
+        <p v-else>{{ skill.levels[index].name }}</p>
         <div
-          class="skill-tiltle-part"
           v-if="skill.levels[sLevel[index]-1]"
+          class="skill-tiltle-part"
           :style="!showPic ? 'width: 100%; padding-left: 0' : ''"
         >
-          <div class="skill-status" v-if="skill.levels[sLevel[index]-1]">
+          <div v-if="skill.levels[sLevel[index]-1]" class="skill-status">
             <span>
               <span>
-                <i class="el-icon-caret-right"></i>
-                {{skill.levels[sLevel[index]-1].spData.initSp}}
+                <i class="el-icon-caret-right" />
+                {{ skill.levels[sLevel[index]-1].spData.initSp }}
               </span>
               <span>
-                <i class="el-icon-star-on"></i>
-                {{skill.levels[sLevel[index]-1].spData.spCost}}
+                <i class="el-icon-star-on" />
+                {{ skill.levels[sLevel[index]-1].spData.spCost }}
               </span>
             </span>
             <span v-if="skill.levels[sLevel[index]-1].duration > 0">
-              <i class="el-icon-timer"></i>
-              {{skill.levels[sLevel[index]-1].duration}}
+              <i class="el-icon-timer" />
+              {{ skill.levels[sLevel[index]-1].duration }}
             </span>
             <span
               v-if="skill.levels[0].spData.spType !== 8"
               class="skill-type"
               :style="changeSpType(skill.levels[0].spData.spType).style"
-            >{{changeSpType(skill.levels[0].spData.spType).value}}</span>
+            >{{ changeSpType(skill.levels[0].spData.spType).value }}</span>
             <span
               class="skill-type"
               :style="changeSkillType(skill.levels[0].skillType).style"
-            >{{changeSkillType(skill.levels[0].skillType).value}}</span>
+            >{{ changeSkillType(skill.levels[0].skillType).value }}</span>
           </div>
           <div class="skill-status-desc">
-            <span v-html="changeSkillDesc(skill.levels[sLevel[index]-1])"></span>
+            <span v-html="changeSkillDesc(skill.levels[sLevel[index]-1])" />
             <div
-              class="skill-range-button"
               v-if="showRange && skill.levels[sLevel[index]-1].rangeId"
+              class="skill-range-button"
             >
               <el-popover placement="right" width="200px" trigger="click">
-                <range :rangeId="skill.levels[sLevel[index]-1].rangeId"></range>
-                <el-button size="mini" slot="reference">查看范围</el-button>
+                <range :range-id="skill.levels[sLevel[index]-1].rangeId" />
+                <el-button slot="reference" size="mini">查看范围</el-button>
               </el-popover>
             </div>
           </div>
         </div>
 
-        <div class="skill-name-level" v-if="!initLv &&  skill.levels.length > 1">
+        <div v-if="!initLv && skill.levels.length > 1" class="skill-name-level">
           <!-- <skill-chart
             v-if="!production && !initLv && skill.levels[0]"
             class="skill-name-level-item"
@@ -62,13 +62,13 @@
           <div class="skill-name-level-item">
             <div class="skill-title-level">
               <span>LV</span>
-              <span>{{sLevel[index]}}</span>
+              <span>{{ sLevel[index] }}</span>
             </div>
             <div>
-              <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
-              <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
+              <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)" />
+              <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)" />
             </div>
-            <skill-list :skill="skill"></skill-list>
+            <skill-list :skill="skill" />
           </div>
         </div>
       </div>
@@ -82,7 +82,6 @@ import { changeAttackSpeed, } from '../../utils';
 import Range from './Range';
 import SkillContainer from './SkillContainer';
 import SkillList from './SkillList';
-import SkillChart from './SkillChart';
 
 import { mapState } from 'vuex';
 
@@ -90,7 +89,6 @@ export default {
   components: {
     Range,
     SkillContainer,
-    SkillChart,
     SkillList
   },
   props: {
