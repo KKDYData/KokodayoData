@@ -43,7 +43,7 @@
             </div>
           </div>
 
-          <div>
+          <div :style="!short ? {width: height}: {}">
             <el-image class="char-set-container" :src="data.charSet">
               <div slot="error" class="image-slot">
                 <i class="el-icon-picture-outline" />
@@ -163,11 +163,11 @@ export default {
 }
 
 .char-set-container {
-  width: 52vw
+  width: 100%
 }
 
 .char-set-info-cotainer {
-  width: 20vw
+  width: 250px
 }
 
 //.char-half-container {
