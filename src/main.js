@@ -1,11 +1,11 @@
-import './styles/index.styl';
+import '@/styles/index.styl';
 
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueMeta from 'vue-meta';
-import NavMenu from './components/NavMenu';
-import { rootPath } from './stats';
-import store from './store';
+import NavMenu from '@/components/NavMenu';
+import { rootPath } from '@/stats';
+import store from '@/store';
 
 Vue.use(VueRouter);
 Vue.use(VueMeta);

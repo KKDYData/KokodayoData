@@ -4,8 +4,6 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
-// const workbox = require('work')
-
 
 const swPlugins = [
   new WorkboxPlugin.InjectManifest({
@@ -89,7 +87,7 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.styl', '.vue', '.json'],
     alias: {
-      'src': path.resolve(__dirname, '../src')
+      '@': path.resolve(__dirname, '../src')
     }
   },
   externals: {
