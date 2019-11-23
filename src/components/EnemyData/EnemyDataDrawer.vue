@@ -2,38 +2,38 @@
   <el-drawer
     :direction="short ? 'btt' : 'rtl'"
     :visible="detailsOpen"
-    @close="$emit('update:detailsOpen', false)"
     :size="short ? '85%': drawerSize"
     :destroy-on-close="true"
-    :title="'敌人数据' +  (runesMode ? '[突袭]': '' )"
+    :title="'敌人数据' + (runesMode ? '[突袭]': '' )"
+    @close="$emit('update:detailsOpen', false)"
   >
     <div v-if="currentEnemy" class="enemy-drawer">
       <div style="display: flex;">
         <div class="enemy-img-container">
-          <el-image :src="picPath"></el-image>
+          <el-image :src="picPath" />
         </div>
         <div style="z-index: 1">
           <div style="display: flex">
             <div class="enemy-details-type-index-container">
               <span
                 :style="currentEnemy.enemyIndex.length > 2 ? 'font-size: 1em': ''"
-              >{{currentEnemy.enemyIndex}}</span>
+              >{{ currentEnemy.enemyIndex }}</span>
             </div>
             <div>
               <h1 style="margin: 0">
-                {{currentEnemy.name}}
+                {{ currentEnemy.name }}
                 <span
                   v-if="currentEnemy.level"
                   style="font-size: 0.5em"
-                >Level {{currentEnemy.level}}</span>
+                >Level {{ currentEnemy.level }}</span>
               </h1>
-              <h3 style="margin: 0">{{currentEnemy.enemyRace}}</h3>
+              <h3 style="margin: 0">{{ currentEnemy.enemyRace }}</h3>
             </div>
           </div>
           <div v-if="short" style="margin-left: 10px">
             <p>
               <span>攻击方式</span>
-              <span style="color: #000">{{currentEnemy.attackType}}</span>
+              <span style="color: #000">{{ currentEnemy.attackType }}</span>
             </p>
           </div>
           <!-- 原pc布局 -->
@@ -41,44 +41,44 @@
             <div class="enemy-status-abc-container">
               <div>
                 <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image style="width: 13px; " :src="smallPicPath +  'nj_optimized.png'"></el-image>
+                  <el-image style="width: 13px; " :src="smallPicPath + 'nj_optimized.png'" />
                   <div class="enemy-status-abc-title-text">耐久</div>
                 </div>
               </div>
-              <h1>{{currentEnemy.endure}}</h1>
+              <h1>{{ currentEnemy.endure }}</h1>
             </div>
             <div class="enemy-status-abc-container">
               <div class="enemy-status-abc-title" style="margin: 0">
-                <el-image style="width: 13px; " :src="smallPicPath +  'gj_optimized.png'"></el-image>
+                <el-image style="width: 13px; " :src="smallPicPath + 'gj_optimized.png'" />
                 <div class="enemy-status-abc-title-text">攻击力</div>
               </div>
-              <h1>{{currentEnemy.attack}}</h1>
+              <h1>{{ currentEnemy.attack }}</h1>
             </div>
             <div class="enemy-status-abc-container">
               <div>
                 <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image style="width: 13px; " :src="smallPicPath +  'fy_optimized.png'"></el-image>
+                  <el-image style="width: 13px; " :src="smallPicPath + 'fy_optimized.png'" />
                   <div class="enemy-status-abc-title-text">防御力</div>
                 </div>
               </div>
-              <h1>{{currentEnemy.defence}}</h1>
+              <h1>{{ currentEnemy.defence }}</h1>
             </div>
             <div class="enemy-status-abc-container">
               <div>
                 <div class="enemy-status-abc-title" style="margin: 0">
-                  <el-image style="width: 13px; " :src="smallPicPath +  'fk_optimized.png'"></el-image>
+                  <el-image style="width: 13px; " :src="smallPicPath + 'fk_optimized.png'" />
                   <div class="enemy-status-abc-title-text">法术抗性</div>
                 </div>
               </div>
-              <h1>{{currentEnemy.resistance}}</h1>
+              <h1>{{ currentEnemy.resistance }}</h1>
             </div>
           </div>
         </div>
 
-        <div class="enemy-boss-icon" v-if="currentEnemy.enemyLevel !== 'NORMAL'">
+        <div v-if="currentEnemy.enemyLevel !== 'NORMAL'" class="enemy-boss-icon">
           <el-image
             :src="path + 'logo/' + currentEnemy.enemyLevel.toLowerCase() + '_icon_optimized.png?x-oss-process=style/jpg-test'"
-          ></el-image>
+          />
         </div>
       </div>
 
@@ -88,55 +88,55 @@
             <div class="enemy-status-abc-title" style="margin: 0">
               <el-image
                 style="width: 13px; "
-                :src="smallPicPath +  'nj_optimized.png?x-oss-process=style/jpg-test'"
-              ></el-image>
+                :src="smallPicPath + 'nj_optimized.png?x-oss-process=style/jpg-test'"
+              />
               <div class="enemy-status-abc-title-text">耐久</div>
             </div>
           </div>
-          <h1>{{currentEnemy.endure}}</h1>
+          <h1>{{ currentEnemy.endure }}</h1>
         </div>
         <div class="enemy-status-abc-container">
           <div class="enemy-status-abc-title" style="margin: 0">
             <el-image
               style="width: 13px; "
-              :src="smallPicPath +  'gj_optimized.png?x-oss-process=style/jpg-test'"
-            ></el-image>
+              :src="smallPicPath + 'gj_optimized.png?x-oss-process=style/jpg-test'"
+            />
             <div class="enemy-status-abc-title-text">攻击力</div>
           </div>
-          <h1>{{currentEnemy.attack}}</h1>
+          <h1>{{ currentEnemy.attack }}</h1>
         </div>
         <div class="enemy-status-abc-container">
           <div>
             <div class="enemy-status-abc-title" style="margin: 0">
               <el-image
                 style="width: 13px; "
-                :src="smallPicPath +  'fy_optimized.png?x-oss-process=style/jpg-test'"
-              ></el-image>
+                :src="smallPicPath + 'fy_optimized.png?x-oss-process=style/jpg-test'"
+              />
               <div class="enemy-status-abc-title-text">防御力</div>
             </div>
           </div>
-          <h1>{{currentEnemy.defence}}</h1>
+          <h1>{{ currentEnemy.defence }}</h1>
         </div>
         <div class="enemy-status-abc-container">
           <div>
             <div class="enemy-status-abc-title" style="margin: 0">
               <el-image
                 style="width: 13px; "
-                :src="smallPicPath +  'fk_optimized.png?x-oss-process=style/jpg-test'"
-              ></el-image>
+                :src="smallPicPath + 'fk_optimized.png?x-oss-process=style/jpg-test'"
+              />
               <div class="enemy-status-abc-title-text">法术抗性</div>
             </div>
           </div>
-          <h1>{{currentEnemy.resistance}}</h1>
+          <h1>{{ currentEnemy.resistance }}</h1>
         </div>
       </div>
       <div>
         <div>
           <b>描述</b>
         </div>
-        <p>{{currentEnemy.description}}</p>
+        <p>{{ currentEnemy.description }}</p>
       </div>
-      <slot name="enemy-status"></slot>
+      <slot name="enemy-status" />
     </div>
   </el-drawer>
 </template>
@@ -161,7 +161,8 @@ export default {
       type: Boolean
     },
     currentEnemy: {
-      required: true
+      default: null,
+      type: Object
     },
     drawerSize: {
       default: '30%',

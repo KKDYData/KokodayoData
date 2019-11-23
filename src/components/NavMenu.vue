@@ -18,9 +18,6 @@
           :key="route.path"
           :index="route.path"
         >{{ route.text }}</el-menu-item>
-        <!-- <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
-        <el-menu-item :index="routes.computer.path">{{ routes.computer.text }}</el-menu-item>
-        <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>-->
       </template>
       <template v-else>
         <el-submenu index="2">
@@ -30,9 +27,6 @@
             :key="route.path"
             :index="route.path"
           >{{ route.text }}</el-menu-item>
-          <!-- <el-menu-item :index="routes.items.path">{{ routes.items.text }}</el-menu-item>
-          <el-menu-item :index="routes.computer.path">{{ routes.computer.text }}</el-menu-item>
-          <el-menu-item :index="routes.customtheme.path">{{ routes.customtheme.text }}</el-menu-item>-->
         </el-submenu>
       </template>
     </el-menu>
