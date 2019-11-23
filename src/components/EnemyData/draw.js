@@ -18,7 +18,8 @@ const abs = Math.abs;
 
 let noti, notiTime;
 
-const task = (mapBlock, mapData, heightType) => {
+const task = (mapBlock, mapData) => {
+  const { heightType, message, title, color } = mapData;
   return () => {
     let rightTrans = null;
     notiTime = +new Date();
@@ -31,30 +32,33 @@ const task = (mapBlock, mapData, heightType) => {
       });
     } else {
       noti.closed = false;
-      noti.message = mapData.message;
-      noti.title = mapData.title;
+      noti.message = message;
+      noti.title = title;
     }
     rightTrans = mapBlock.transition(0.7);
     rightTrans.attr({
       fillColor: 'rgba(92, 222, 255, 0.5)'
     });
-    setTimeout(() => {
-      // 颜色强制复原
-      mapBlock.attr({ fillColor: heightType !== 1 ? 'rgba(0, 0, 0, 0)' : mapData.color });
-      if (UA.isMobliePad) {
-        if (+ new Date - notiTime > 3000) {
-          noti.close();
+    if (!mapBlock.lock) {
+
+      setTimeout(() => {
+        // 颜色强制复原
+        mapBlock.attr({ fillColor: heightType !== 1 ? 'rgba(0, 0, 0, 0)' : color });
+        if (UA.isMobliePad) {
+          if (+ new Date - notiTime > 3000) {
+            noti.close();
+          }
         }
-      }
-    }, 3000);
-    mapBlock.on('mouseleave', (evt) => {
-      rightTrans.reverse();
-      noti.close();
-    });
+      }, 3000);
+      mapBlock.on('mouseleave', (evt) => {
+        rightTrans.reverse();
+        noti.close();
+      });
+    }
   };
 };
 
-const comparePoint = (x1, y1, x2, y2) => x1 === x2 && y1 === y2; //arr.slice(index + 1).filter(el => el.type !== 3).length !== 1;
+const isSamePoint = (x1, y1, x2, y2) => x1 === x2 && y1 === y2; //arr.slice(index + 1).filter(el => el.type !== 3).length !== 1;
 const compare = (x, y) => {
   if (x > y) return [y, x];
   else return [x, y];
@@ -82,10 +86,12 @@ const getBlockData = (data, key, blackboard) => {
 };
 
 
-const spawnMap = ({ map, tiles, branches }, np, paper, top) => {
+const spawnMap = (instance, branches, np, ) => {
+  const { paper, top, mapData } = instance;
+  const { map, tiles } = mapData;
   const myMap = map.map((el, row) => el.map((i, col) => {
     const { tileKey: key, passableMask, heightType, buildableType, blackboard } = tiles[i];
-    // 只剩下计算是否同行的作用了
+    // 只剩下计算是否通行的作用了
     const crossAble = /end/.test(key) ? 5 : /start/.test(key) ? 4 : /tel/.test(key) ? 3
       : /hole/.test(key) ? 6 : passableMask === 3 ? 1 : -1;
     const rc = [col, row];
@@ -196,7 +202,7 @@ const spawnMap = ({ map, tiles, branches }, np, paper, top) => {
       // 高层下面的地板
       mapBlockConfig.fillColor = '#414141';
     } else {
-      // 高层代理时间的地板
+      // 高层代理事件的地板
       mapBlockConfig.fillColor = 'rgba(0, 0, 0, 0)';
       mapBlockConfig.strokeColor = null;
     }
@@ -205,8 +211,13 @@ const spawnMap = ({ map, tiles, branches }, np, paper, top) => {
     if (isWL) writeLabel();
 
     if (top) {
-      const t = data ? task(mapBlock, { color: 'rgba(230,230,230, 0.5)', title: data.name, message: `等级${data.inst.level}${branches ? '  |  由敌人召唤，出现时间看梅菲斯特的技能' : ''}` }, heightType)
-        : task(mapBlock, typeData, heightType);
+      const t = data ? task(mapBlock, {
+        color: 'rgba(230,230,230, 0.5)',
+        title: data.name,
+        message: `等级${data.inst.level}${branches ? '  |  由敌人召唤，出现时间看梅菲斯特的技能' : ''}`,
+        heightType
+      })
+        : task(mapBlock, { ...typeData, heightType }, instance);
       mapBlock.on('click', t);
       mapBlock.on('mouseenter', t);
     }
@@ -234,6 +245,8 @@ class Map {
   top
   run = false
   finder
+  traps = []
+
   constructor(container, radio = 100, mapData = { width: 1600, height: 900 }, preData, top = false) {
     const config = {
       viewport: ['auto', 'auto'],
@@ -246,6 +259,10 @@ class Map {
     this.setDataBeta(mapData, preData);
     const sMap = this.map.map(el => el.map(el => el.crossAble > -1 && el.crossAble < 5 ? 0 : 1));
     this.grid = new PF.Grid(sMap);
+  }
+
+  addTrap(r) {
+    this.traps.push(r);
   }
   async ray(body) {
     return new Promise((resolve, reject) => {
@@ -357,7 +374,7 @@ class Map {
     this.mapData = mapData;
 
     this.paper.setResolution(mapData.width * this.mapRadio, mapData.height * this.mapRadio);
-    this.map = spawnMap({ ...mapData, branches }, np, this.paper, this.top);
+    this.map = spawnMap(this, branches, np);
   }
   setData(mapData, preData) {
     this.clearRoutes();
@@ -391,8 +408,8 @@ class Map {
     delete this.tempRoutes[x];
   }
 
-  checkObstacle(x1, y1, x2, y2) {
-    if (!this.grid) throw Error('No grid !');
+  checkObstacle(x1, y1, x2, y2, grid) {
+    if (!grid) throw Error('No grid !');
 
     const [minX, maxX] = compare(x1, x2);
     const [minY, maxY] = compare(y1, y2);
@@ -403,7 +420,7 @@ class Map {
       tx2 = x2 === minX ? 0 : gW,
       ty2 = y2 === minY ? 0 : gH;
 
-    const area = this.grid.nodes.filter((el, y) => y <= maxY && y >= minY)
+    const area = grid.nodes.filter((el, y) => y <= maxY && y >= minY)
       .map(arr => arr.filter((el, x) => x <= maxX && x >= minX).map(el => el.walkable ? 0 : 1));
 
     try {
@@ -412,15 +429,18 @@ class Map {
       console.error(ty2, tx2, area);
     }
 
+    // 全通
     const unWalkSize = area.flat().filter(x => x === 1).length;
     if (!unWalkSize) {
       return [x2, y2];
     } else {
+      // L型
       const [h, w] = compare(abs(x1 - x2), abs(y1 - y2));
       if (h === 1 && w > 2 && unWalkSize === 1) {
         return [x2, y2];
       }
 
+      // 2 * 2 以上的格子，正常寻路
       const temxp = PF.Util.compressPath(this.finder.findPath(tx1, ty1, tx2, ty2, new PF.Grid(area)));
       if (temxp.length === 0) {
         return [-1, -1];
@@ -431,6 +451,7 @@ class Map {
   }
 
   addRoutes(route, id, color) {
+    console.log(route);
     this.runningRoutes.add(id);
     const height = this.grid.height - 1;
 
@@ -464,12 +485,17 @@ class Map {
     const fly = route.motionMode === 1;
     const tempGrid = fly ? new PF.Grid(this.grid.width, this.grid.height) : this.grid.clone();
     tempGrid.setWalkableAt(endPos.col, height - endPos.row, true);
+    this.traps.forEach(([x, y]) => tempGrid.setWalkableAt(x, y, false));
 
     const splitPath = path.reduce((res, cur, index, arr) => {
       if (index + 1 === arr.length) return res;
       let { col, row } = cur;
       let { col: nCol, row: nRow, reachOffset } = arr[index + 1];
 
+      if (!tempGrid.nodes[height - nRow][nCol].walkable) {
+        nRow = arr[index + 1].row;
+        nCol = arr[index + 1].col;
+      }
       // 现在的点是空的，或者是隧道出口，跳过
       if ((col === 0 && row === 0) || arr[index + 1].type === 6) return res;
       // 下一个点是空的，且下下个点不是隧道出口，则这个点就是停止点，顺位到下下下个点，因为前面把type5，也就是进隧道的点过滤了，只有出隧道的点。
@@ -489,14 +515,14 @@ class Map {
 
       const isNotNeedFind = route.allowDiagonalMove;
 
-      //3点压缩， dx|dy === 1 
+      //开始寻路
       if (!fly && !holeType && isNotNeedFind) {
         let [tempCol, tempRow] = [col, row];
         let tempSection;
 
         let dx = abs(nCol - col), dy = abs(nRow - row);
         while ((dx + dy > 1)) {
-          [tempCol, tempRow] = this.checkObstacle(tempCol, tempRow, nCol, nRow);
+          [tempCol, tempRow] = this.checkObstacle(tempCol, tempRow, nCol, nRow, tempGrid);
           if (tempCol > -1 && tempRow > -1) {
             section.push([tempCol, tempRow]);
 
@@ -508,7 +534,7 @@ class Map {
             [tempCol, tempRow] = tempSection.shift();
 
             if (section.length > 1) {
-              while (comparePoint(tempCol, tempRow, ...section[section.length - 2])) {
+              while (isSamePoint(tempCol, tempRow, ...section[section.length - 2])) {
                 [tempCol, tempRow] = tempSection.shift();
               }
             }
@@ -519,17 +545,19 @@ class Map {
         }
 
         // 终点
-        if (!comparePoint(nCol, nRow, ...section[section.length - 1])) {
+        if (!isSamePoint(nCol, nRow, ...section[section.length - 1])) {
           section.push([nCol, nRow]);
         }
       }
 
+      // 终点的路径偏移
       if (section.length > 0 && reachOffset) {
         section[section.length - 1][0] += reachOffset.x;
         section[section.length - 1][1] -= reachOffset.y;
       }
 
       // 擦墙逻辑，如果找不到路，但是点不是隧道出口， 且下一个点有reachOffset，x,y 不等于0，就擦墙看看，在of1是可以和下一段的起点连上的。
+      //?但是of1里实际上那个虫子几乎没机会走去出那条路。 
       if (section.length === 0 && arr[index + 2].type !== 6 && reachOffset.x !== 0 && reachOffset.y !== 0) {
         section.push([col, row]);
         section.push([nCol + reachOffset.x, nRow - reachOffset.y]);
@@ -538,6 +566,7 @@ class Map {
 
         if (index + 1 < arr.length) {
           let [x, y] = el;
+          // 起点的偏移
           if (index === 0 && cur.reachOffset) {
             x += cur.reachOffset.x;
             y -= cur.reachOffset.y;
@@ -545,6 +574,7 @@ class Map {
 
           const next = arr[index + 1];
           const len = Math.sqrt((x - next[0]) ** 2 + (y - next[1]) ** 2);
+          // 防止零长线段导致绘图错误
           res.push({ path: this.spawnPathAlpha([[x, y], next]), time: len * 200 || 10 });
         }
       });
