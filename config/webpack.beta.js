@@ -5,14 +5,14 @@ const path = require('path');
 const CleanWebPackPlugin = require('clean-webpack-plugin');
 
 module.exports = merge(prod, {
-  mode: 'production',
   output: {
-    path: path.resolve('build/test/home')
+    path: path.resolve('build/test/home'),
+    publicPath: 'https://andata.somedata.top/'
   },
   plugins: [
-    new CleanWebPackPlugin(['build/test/home'], { root: path.resolve(__dirname, '..') }),
+    new CleanWebPackPlugin(['build/test/'], { root: path.resolve(__dirname, '..') }),
     new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(false)
+      'process.env.PRODUCTION': JSON.stringify('beta')
     })
   ]
 });

@@ -125,7 +125,7 @@ export default {
     return {
       sLevel: [initLv, initLv, initLv],
       // eslint-disable-next-line no-undef
-      production: PRODUCTION
+      production: process.env.PRODUCTION
     };
   },
   computed: {

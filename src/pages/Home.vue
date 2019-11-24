@@ -40,7 +40,7 @@ export default {
       data: [],
       token: [],
       load: false,
-      isBeta: devMode === '/ArknightsBeta'
+      isBeta: devMode === 'beta'
     };
   },
   mounted() {

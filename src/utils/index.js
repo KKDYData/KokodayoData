@@ -235,7 +235,6 @@ const changeAttackSpeed = (skill) => {
       minus = true;
     }
     let temp = findValue(skill, 'blackboard', p2.toLowerCase());
-    console.log(temp);
     if (temp) {
       res = temp.value;
       if (minus) res *= -1;

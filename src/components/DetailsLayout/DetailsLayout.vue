@@ -188,10 +188,8 @@ import {
 import AgentCard from './AgentCard';
 import Range from './Range';
 import TalentsPanel from './TalentsPanel';
-// import SkillPanel from './SkillPanel';
 import SkillUpPanel from './SkillUpCost';
 import BuildingData from './BuildingData';
-import InfoPanel from './InfoPanel';
 import ItemViewer from '../ItemViewer';
 import charStatus from '../base/charStatus';
 import DataLoading from '../base/Loading';
@@ -200,6 +198,16 @@ import MyShare from './Share';
 const SkillPanel = () => ({
   component: import(
     /* webpackChunkName: "SkillPanel" */ '../DetailsLayout/SkillPanel'
+  ),
+  loading: DataLoading,
+  error: DataLoading,
+  delay: 200,
+  timeout: 5000
+});
+
+const InfoPanel = () => ({
+  component: import(
+    /* webpackChunkName: "InfoPanel" */ './InfoPanel'
   ),
   loading: DataLoading,
   error: DataLoading,
@@ -744,7 +752,7 @@ export default {
 
 @media screen and (max-width: 700px) {
   .details-wrapper {
-    padding: 10px 10px;
+    padding: 10px 2.5vw;
   }
 
   /*  */
@@ -780,7 +788,6 @@ export default {
     margin-top: 10px;
     display: flex;
     align-items: center;
-    /* justify-content: space-between; */
     align-content: center;
   }
 

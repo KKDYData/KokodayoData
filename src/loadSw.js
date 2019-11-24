@@ -1,7 +1,6 @@
 import { MessageBox } from 'element-ui';
-import { devMode } from './stats';
 
-const swPath = devMode === '/' ? '/sw.js' : devMode + '/sw.js';
+const swPath = '/sw.js';
 export default () => {
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', async () => {

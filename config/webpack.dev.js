@@ -2,14 +2,13 @@ const merge = require('webpack-merge');
 const common = require('./webpack.common');
 const webpack = require('webpack');
 
-// new CleanWebPackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
 module.exports = merge(common, {
   mode: 'development',
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      PRODUCTION: JSON.stringify(false),
       VERSION: JSON.stringify(new Date()),
+      'process.env.PRODUCTION': JSON.stringify('beta')
     })
 
   ],
@@ -66,6 +65,14 @@ module.exports = merge(common, {
           }
         }]
     },
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(styl|stylus|css)$/,
+        use: ['style-loader', 'css-loader', 'stylus-loader'],
+      }
+    ]
   },
   resolve: {
     alias: {

@@ -387,6 +387,10 @@ export default {
 }
 
 @media screen and (max-width: 700px) {
+  .info-base-container + .info-base-container {
+    margin-left: 5vw
+  }
+
   .info-word-audio-control {
     padding-left: 10px
     padding-top: 5px
@@ -395,16 +399,12 @@ export default {
 
   .info-base-container {
     min-width: 150px
-    max-width: calc(49vw - 10px)
+    max-width: 45vw
   }
 
   .char-base-info-container {
     flex-wrap: wrap
     justify-content: flex-start
-  }
-
-  .info-base-container {
-    max-width: calc(49vw - 10px)
   }
 
   .char-set-cv {

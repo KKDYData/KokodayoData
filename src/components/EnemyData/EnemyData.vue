@@ -58,7 +58,7 @@
               @click="laodRouteMap"
             >地图</el-button>
             <el-button
-              v-if="devMode === '/ArknightsBeta' && selMapDataEx"
+              v-if="devMode === 'beta' && selMapDataEx"
               :type="!showMap ? '': 'warning'"
               :plain="!showMap"
               class="runes-mode-button"

@@ -3,12 +3,15 @@ const common = require('./webpack.common');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = merge(common, {
-  mode: 'production',
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
     new OptimizeCssAssetsPlugin({}),
+    new MiniCssExtractPlugin({
+      filename: 'assets/css/[name].[hash].css',
+    }),
   ],
   optimization: {
     runtimeChunk: 'single',
@@ -46,8 +49,18 @@ module.exports = merge(common, {
       }),
     ],
   },
+  module: {
+    rules: [
+      {
+        test: /\.(styl|stylus|css)$/,
+        use: [
+          { loader: MiniCssExtractPlugin.loader },
+          'css-loader', 'stylus-loader'],
+      },
+    ]
+  },
   output: {
-    filename: '[name].[contenthash].js',
+    filename: 'assets/js/[name].[contenthash].js',
   },
   resolve: {
     alias: {

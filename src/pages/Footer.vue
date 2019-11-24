@@ -30,7 +30,7 @@
     <li>
       <span>网站最后更新时间: {{ webVer }}</span>
     </li>
-    <li v-if="showList">
+    <li>
       <span>干员列表最后更新时间: {{ listVer }}</span>
     </li>
   </div>
@@ -40,19 +40,13 @@
 import { mapState } from 'vuex';
 import Vue from 'vue';
 
-import mode from '../stats';
 import { Link } from 'element-ui';
 Vue.use(Link);
 
-// eslint-disable-next-line no-undef
-const baseUrl = PRODUCTION ? mode + '/' : '/';
 
 export default {
   computed: {
-    ...mapState(['listVer', 'pageVer', 'webVer']),
-    showList() {
-      return this.$route.path === baseUrl;
-    }
+    ...mapState(['listVer', 'pageVer', 'webVer'])
   }
 };
 </script>
