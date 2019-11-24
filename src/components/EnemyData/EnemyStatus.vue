@@ -1,16 +1,16 @@
 <template>
   <div>
     <div>
-      <slot></slot>
+      <slot />
       <div v-if="talents.length > 0" :style="short ? 'margin: 30px 0' : 'margin-bottom: 20px'">
         <div>
           <b>能力·Blackboard</b>
         </div>
         <div v-for="(t) in filterTalents" :key="t.key" style="margin-bottom: 0px">
           <div class="status-details-title enemy-status-talent">
-            <span>{{t.key}}</span>
+            <span>{{ t.key }}</span>
           </div>
-          <span>{{t.value}}</span>
+          <span>{{ t.value }}</span>
         </div>
       </div>
     </div>
@@ -21,11 +21,11 @@
           <span class="status-phases-text">Level</span>
           <el-button
             v-for="(item, index) in status"
-            @click="level = index"
             :key="index"
             size="mini"
             :type="level === index ? 'primary': ''"
-          >{{index}}</el-button>
+            @click="level = index"
+          >{{ index }}</el-button>
           <el-tooltip
             popper-class="enemy-tooltip-item"
             class="enemy-status-tip"
@@ -33,82 +33,45 @@
             :content="'敌人的Level可以理解为敌人的版本，一个地图只会出现一种版本，突袭模式会有地图加成，不是更换版本'"
             placement="top-start"
           >
-            <i class="el-icon-info"></i>
+            <i class="el-icon-info" />
           </el-tooltip>
         </div>
-        <!-- <div>
-          <span class="status-phases-text">
-            <b>出现章节</b>
-          </span>
-          <template v-if="maps">
-            <el-button
-              v-for="map in maps"
-              :key="map"
-              @click="currentMap = map"
-              size="mini"
-              :type="currentMap === map ? 'primary': ''"
-            >{{currentMap === map ? map + '突袭' : map}}</el-button>
-            <div
-              @click="currentMap = ''"
-              style="margin-left: 10px; display: inline-block; cursor: pointer"
-              v-if="currentMap !== ''"
-            >
-              <i class="el-icon-close"></i>
-            </div>
-            <el-tooltip
-              class="enemy-status-tip"
-              effect="dark"
-              :content="'点一下左边，显示突袭数据'"
-              placement="top-start"
-            >
-              <i class="el-icon-info"></i>
-            </el-tooltip>
-          </template>
-          <template v-else>
-            <el-button
-              size="mini"
-              style="margin-left: 10px; display: inline-block; cursor: pointer"
-              class="no-map"
-              disabled
-            >???</el-button>
-          </template>
-        </div>-->
       </div>
     </div>
 
     <div class="enemy-status-wrapper" style="padding-bottom: 20px">
       <div class="enemy-data-tag-container">
-        <div class="enemy-data-tag" v-if="Tag.stunImmune.value">{{Tag.stunImmune.text}}</div>
-        <div class="enemy-data-tag" v-if="Tag.silenceImmune.value">{{Tag.silenceImmune.text}}</div>
+        <div v-if="Tag.stunImmune.value" class="enemy-data-tag">{{ Tag.stunImmune.text }}</div>
+        <div v-if="Tag.silenceImmune.value" class="enemy-data-tag">{{ Tag.silenceImmune.text }}</div>
       </div>
 
       <div class="status-details-talents-wrapper">
         <div class="status-details-wrapper">
           <content-slot
+            v-for="kData in filterKeys"
+            :key="kData[0]"
             class="status-details-container"
             :no-wrap="true"
             :long="true"
-            v-for="data in filterKeys"
-            :key="data[0]"
             :width="100"
           >
             <template slot="title">
-              <span>{{data[0]}}</span>
+              <span>{{ kData[0] }}</span>
             </template>
             <template slot="content">
               <transition name="fade">
-                <span>{{data[1]}}</span>
+                <span>{{ kData[1] }}</span>
               </transition>
-              <span v-if="data[0] === '攻击间隔'">s</span>
-              <span v-if="data[0] === 'LifePoint'">
+              <span v-if="kData[0] === '攻击间隔'">s</span>
+              <span v-if="kData[0] === 'LifePoint'">
                 <el-tooltip
                   popper-class="enemy-tooltip-item"
                   class="enemy-status-tip"
                   effect="dark"
-                  :content="'对基地造成的伤害，例如普通图基地生命有3点，这个敌人进去之后就会扣掉'+ data[1] + '点生命.'"
+                  :content="'对基地造成的伤害，例如普通图基地生命有3点，这个敌人进去之后就会扣掉'+ kData[1] + '点生命.'"
                   placement="top-start"
                 >
-                  <i class="el-icon-info" style="margin-right:0"></i>
+                  <i class="el-icon-info" style="margin-right:0" />
                 </el-tooltip>
               </span>
             </template>
@@ -122,26 +85,26 @@
             <b style="font-size: 1.2em">Extra·技能</b>
           </div>
           <div :style="0 ? '' :'display: flex'">
-            <div class="enemy-skill-container" v-for="(skill, index) in targetSkill" :key="index">
+            <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
               <div style="margin: 10px 0">
                 <span
                   style="font-size: 1.1em"
-                >{{skill.prefabKey === 'SummonBallis' ? '召唤弩炮': skill.prefabKey.toUpperCase()}}</span>
+                >{{ skill.prefabKey === 'SummonBallis' ? '召唤弩炮': skill.prefabKey.toUpperCase() }}</span>
               </div>
               <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
                 <div :style="short ?'margin-left: 10px' : ''">
                   <span>冷却时间:</span>
-                  <span>{{skill.cooldown}}</span>
+                  <span>{{ skill.cooldown }}</span>
                   <span>s</span>
                 </div>
                 <div :style="short? 'margin-left: 10px' : ''">
                   <span>初始冷却</span>
-                  <span>{{skill.initCooldown}}</span>
+                  <span>{{ skill.initCooldown }}</span>
                   <span>s</span>
                 </div>
-                <div :style="short? 'width: 100%; margin-left: 10px' : ''" v-if="skill.spCost > 0">
+                <div v-if="skill.spCost > 0" :style="short? 'width: 100%; margin-left: 10px' : ''">
                   <span>SP消耗</span>
-                  <span>{{skill.spCost}}</span>
+                  <span>{{ skill.spCost }}</span>
                 </div>
               </div>
               <div>
@@ -152,16 +115,16 @@
                 </div>
                 <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
                   <div
+                    v-for="bData in skill.blackboard"
+                    :key="bData.key"
                     :style="short? 'margin-left: 10px' : ''"
-                    v-for="data in skill.blackboard"
-                    :key="data.key"
                   >
-                    <span>{{changeBlackboardToCh(data.key)}}</span>
+                    <span>{{ changeBlackboardToCh(bData.key) }}</span>
                     <span>
-                      {{data.key === 'atk_scale'? data.value * 100 + '%' : data.key === 'range_radius'
-                      ? data.value * skillRangeRadius : data.value}}
+                      {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
+                      ? bData.value * skillRangeRadius : bData.value }}
                     </span>
-                    <span v-if="timeKey.includes(data.key)">s</span>
+                    <span v-if="timeKey.includes(bData.key)">s</span>
                   </div>
                 </div>
               </div>
@@ -197,14 +160,19 @@ export default {
       }
     },
     appearMap: {
+      default: null,
       type: Object
     },
-    keyName: String,
+    keyName: {
+      type: String,
+      default: null
+    },
     mapLevel: {
       type: Number,
       default: -1
     },
     mapData: {
+      default: null,
       type: Object
     },
     runesMode: {
@@ -276,8 +244,6 @@ export default {
       // 突袭情况，先判定有没有选地图
       const target = this.mapData;
 
-
-
       target.runes.forEach(data => {
         if (!data.blackboard.length) return;
         if (data.blackboard[0].key === 'enemy') {
@@ -292,6 +258,7 @@ export default {
               ? res.rangeScale * data.blackboard[0].value
               : data.blackboard[0].value;
           } else {
+            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
             this.skillRangeRadius = data.blackboard[0].value;
           }
         } else if (data.key !== 'gbuff_lifepoint') {
@@ -301,6 +268,7 @@ export default {
           });
         }
       });
+
       return this.status[lv].map(el => {
         if (res[el[2]]) {
           return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10];
@@ -422,7 +390,9 @@ export default {
         .replace('atkSpeedDown', '下降·')
         .replace('atkup', '攻击提升')
         .replace('_scale', '·倍率')
-        .replace('.atk', '·攻击');
+        .replace('.atk', '·攻击')
+        .replace('shield.def', '护盾·防御')
+        .replace('speedup.move_speed', '移动速度·提升');
 
       const Key = {
         'healaura.hp_recovery_per_sec': '治愈光环',

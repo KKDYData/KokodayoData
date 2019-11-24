@@ -371,7 +371,8 @@ const findStage = (map, tree) => {
   const splitTemp = map.split('_');
   let groupName = splitTemp[0];
   if (groupName === 'sub') groupName = 'main';
-  const group = tree.find(el => el.label === getStageType(groupName));
+  const type = getStageType(groupName);
+  const group = tree.find(el => el.label === type);
   let target;
   if (group.label === '主线') {
     const chapter = splitTemp[1].split('-');

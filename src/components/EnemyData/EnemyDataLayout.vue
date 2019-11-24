@@ -41,25 +41,24 @@
           v-if="waveData.length > 1 && (postDelay || preDelay || maxTimeWaitingForNextWave)"
         >最大等待时间：{{ maxTimeWaitingForNextWave }}s | 延迟：{{ preDelay }}s</p>
         <div
-          v-for="({actions, name, preDelay, time, enemyNum}, fIndex) in fragments"
+          v-for="({actions, _name, _preDelay, time, enemyNum}, fIndex) in fragments"
           :key="fIndex"
           class="wave-enemy-container"
         >
           <p class="wave-info" style="width: 100%; margin-bottom: -20px">
             第{{ fIndex+1 }}波
-            <span style="color: hsl(218, 58%, 14%)">{{ name }}</span>
+            <span style="color: hsl(218, 58%, 14%)">{{ _name }}</span>
             <span>
               <i class="el-icon-position" />
               {{ time | time }}
               <span
                 style="margin-left: 10px"
               >{{ enemyNum }}/{{ fragments[fragments.length - 1].enemyNum }}</span>
-              <span v-if="preDelay" style="margin-left: 10px">距离上一波{{ preDelay }}s</span>
+              <span v-if="_preDelay" style="margin-left: 10px">距离上一波{{ _preDelay }}s</span>
             </span>
           </p>
-          <!-- .filter(el => mapData.routes[el.routeIndex]) -->
           <div
-            v-for="({key, actionType, count, interval, preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
+            v-for="({key, actionType, count, interval, __preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
             :key="aIndex"
             class="wave-enemy-single"
           >
@@ -82,7 +81,7 @@
             <div style class="enemy-cube-wave-info">
               <div>数量:{{ count }} 间隔:{{ interval }}s</div>
               <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
-                延迟: {{ preDelay }}s
+                延迟: {{ __preDelay }}s
                 <i
                   :style="selectedStlye[routeIndex] ? 'color: #313131' : ''"
                   class="el-icon-s-flag"
@@ -141,10 +140,12 @@ export default {
   },
   props: {
     data: {
+      type: Object,
       required: true
     },
     mapData: {
-      type: Object
+      type: Object,
+      default: null
     },
     runesMode: {
       type: Boolean,
@@ -172,17 +173,6 @@ export default {
       selectedStlye: {}
     };
   },
-
-  watch: {
-    simpleShow(v) {
-      if (v) this.calFillAmount();
-    }
-  },
-  mounted() {
-    // console.log(this.drawerSize);
-    if (this.$el && this.$el.querySelector('.enemy-container')) this.calFillAmount();
-    this.shortWidth = this.$el.clientWidth - 30;
-  },
   computed: {
     ...mapState(['screenWidth', 'short']),
     drawerSize() {
@@ -196,6 +186,16 @@ export default {
       if (!this.mapData) return;
       return this.mapData.waves;
     }
+  },
+  watch: {
+    simpleShow(v) {
+      if (v) this.calFillAmount();
+    }
+  },
+  mounted() {
+    // console.log(this.drawerSize);
+    if (this.$el && this.$el.querySelector('.enemy-container')) this.calFillAmount();
+    this.shortWidth = this.$el.clientWidth - 30;
   },
   methods: {
     clearRoutes(v) {

@@ -4,30 +4,12 @@ const getKeyWithNull = (keys) => key => keys[key] ? keys[key] : null;
 
 // 拆包数据
 const evolveGoldCost = [
-  [
-    -1,
-    -1
-  ],
-  [
-    -1,
-    -1
-  ],
-  [
-    10000,
-    -1
-  ],
-  [
-    15000,
-    60000
-  ],
-  [
-    20000,
-    120000
-  ],
-  [
-    30000,
-    180000
-  ]
+  [-1, -1],
+  [-1, -1],
+  [10000, -1],
+  [15000, 60000],
+  [20000, 120000],
+  [30000, 180000]
 ];
 
 const exp_cards = {
@@ -553,6 +535,7 @@ const StageType = {
   a003: 'Act·3·火蓝之心',
   act4d0: 'Act·4·战地秘闻',
   act5d0: 'ACt·5·喧闹法则',
+  rune: '危机合约'
 };
 
 const Directions = {

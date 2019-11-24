@@ -451,7 +451,6 @@ class Map {
   }
 
   addRoutes(route, id, color) {
-    console.log(route);
     this.runningRoutes.add(id);
     const height = this.grid.height - 1;
 
@@ -477,7 +476,6 @@ class Map {
     });
     const path = pathPoints.map(el => ({ ...el.position, type: el.type, reachOffset: el.reachOffset }));
     const holeType = path.some(el => el.type === 6);
-    // const notSingleValidCheckPoint = path.filter(el => el.type === 0).length;
 
     if (path.length === 0 || startPos.row !== path[0].row || startPos.col !== path[0].col) path.unshift(startPos);
     if (path.length === 0 || endPos.row !== path[path.length - 1].row || endPos.col !== path[path.length - 1].col) path.push(endPos);
@@ -488,6 +486,7 @@ class Map {
     this.traps.forEach(([x, y]) => tempGrid.setWalkableAt(x, y, false));
 
     const splitPath = path.reduce((res, cur, index, arr) => {
+
       if (index + 1 === arr.length) return res;
       let { col, row } = cur;
       let { col: nCol, row: nRow, reachOffset } = arr[index + 1];
@@ -548,6 +547,8 @@ class Map {
         if (!isSamePoint(nCol, nRow, ...section[section.length - 1])) {
           section.push([nCol, nRow]);
         }
+      } else if (holeType && nCol && nRow !== height) {
+        section.push([nCol, nRow]);
       }
 
       // 终点的路径偏移

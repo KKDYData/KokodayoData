@@ -368,7 +368,7 @@ export default {
         : '';
     },
     globalBuffs() {
-      if (!this.selMapData) return {};
+      if (!this.selMapData) return [];
       const BuffKeys = {
         kill_to_add_cost: '杀敌额外回复',
         periodic_damage: '地图周期伤害'
@@ -389,7 +389,7 @@ export default {
     },
     options() {
       return !this.selMapData
-        ? {}
+        ? []
         : Object.entries(
           Object.assign(this.selMapData.options, this.selMapDataEx)
         )

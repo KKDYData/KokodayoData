@@ -1,44 +1,44 @@
 <template>
   <div class="map-option-container-wrapper">
-    <my-title v-if="showTitle" title="地图信息"></my-title>
+    <my-title v-if="showTitle" title="地图信息" />
     <div style="margin-bottom: 10px; color: #828282; font-size: 0.8em">3星通关时，经验和龙门币的获取会要有1.2倍加成</div>
     <div class="map-option-container">
       <content-slot
+        v-for="([k,v]) in options"
+        :key="k"
         class="map-option-content"
         :long="true"
         :no-wrap="true"
         :width="slotWidth"
-        v-for="([k,v]) in options"
-        :key="k"
       >
-        <template slot="title">{{k}}</template>
+        <template slot="title">{{ k }}</template>
         <template slot="content">
-          <span :style="v > 100 ? 'font-size: 14px': ''">{{v > 999 ? '0' : v}}</span>
+          <span :style="v > 100 ? 'font-size: 14px': ''">{{ v > 999 ? '0' : v }}</span>
         </template>
       </content-slot>
     </div>
     <div class="map-option-container">
       <content-slot
+        v-for="([k,v]) in globalBuffs"
+        :key="k"
         :long="true"
         :no-wrap="true"
         :width="150"
-        v-for="([k,v]) in globalBuffs"
-        :key="k"
         style="margin-bottom: 10px"
       >
-        <div slot="title">{{k}}</div>
-        <div slot="content" v-if="k !== '属性增益'">
+        <div slot="title">{{ k }}</div>
+        <div v-if="k !== '属性增益'" slot="content">
           <span
             v-for="{key, value} in v"
             :key="key"
             :style="value > 100 ? 'font-size: 14px;': ''"
-          >{{value == '999999' ? '0' : value}} {{Keys[key]}}</span>
+          >{{ value == '999999' ? '0' : value }} {{ Keys[key] }}</span>
         </div>
-        <div slot="content" v-else>属性已进行合并计算，在下面显示</div>
+        <div v-else slot="content">属性已进行合并计算，在下面显示</div>
       </content-slot>
       <content-slot :long="true" :no-wrap="true" :width="150">
         <div slot="title">总时长</div>
-        <div slot="content">{{waveTime | time}}</div>
+        <div slot="content">{{ waveTime | time }}</div>
       </content-slot>
     </div>
   </div>
@@ -60,11 +60,18 @@ export default {
     MyTitle,
     ContentSlot,
   },
+  filters: {
+    time(v) {
+      return Math.floor(v / 60) + ' min ' + Math.round(v % 60) + ' s';
+    }
+  },
   props: {
     options: {
+      type: Array,
       required: true
     },
     globalBuffs: {
+      type: Array,
       required: true
     },
     showTitle: {
@@ -72,12 +79,8 @@ export default {
       type: Boolean
     },
     waveTime: {
-      default: 0
-    }
-  },
-  filters: {
-    time(v) {
-      return Math.floor(v / 60) + ' min ' + Math.round(v % 60) + ' s';
+      default: 0,
+      type: Number
     }
   },
   data() {
