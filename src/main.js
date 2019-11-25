@@ -22,17 +22,16 @@ const Items = () => import(/* webpackChunkName: "Items" */'./pages/Items');
 const Skins = () => import(/* webpackChunkName: "Skins" */'./pages/Skins');
 
 const isDev = process.env.NODE_ENV === 'development';
-const path = rootPath;
 
 const routes = [
-  { path: path, component: Home },
-  { path: path + '/computer', component: Computer },
-  { path: path + '/details/:name', component: Details },
-  { path: path + '/enemydata', component: EnemyData },
-  { path: path + '/enemydata/:map', component: EnemyData },
-  { path: path + '/customtheme', component: CustomTheme },
-  { path: path + '/items', component: Items },
-  { path: path + '/skins', component: Skins },
+  { path: rootPath, component: Home },
+  { path: rootPath + '/computer', component: Computer },
+  { path: rootPath + '/details/:name', component: Details },
+  { path: rootPath + '/enemydata', component: EnemyData },
+  { path: rootPath + '/enemydata/:map', component: EnemyData },
+  { path: rootPath + '/customtheme', component: CustomTheme },
+  { path: rootPath + '/items', component: Items },
+  { path: rootPath + '/skins', component: Skins },
 ];
 const router = new VueRouter({
   mode: 'history',
@@ -61,11 +60,10 @@ new Vue({
   `
 });
 
-!isDev && import(/* webpackChunkName: "loadSw" */'./loadSw').then(res => {
+
+!isDev && import(/* webpackChunkName: "loadSw" */ './loadSw').then(res => {
   res.default();
 });
-
-
 
 
 store.dispatch('setDropList');

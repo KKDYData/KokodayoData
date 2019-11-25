@@ -27,7 +27,7 @@ module.exports = {
     ...swPlugins
   ],
   output: {
-    path: path.resolve('dist'),
+    path: path.resolve('build/dist'),
     filename: 'assets/js/[name].js',
     publicPath: '/',
 
