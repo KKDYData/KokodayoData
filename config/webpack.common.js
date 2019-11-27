@@ -4,6 +4,7 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
+
 const swPlugins = [
   new WorkboxPlugin.InjectManifest({
     swSrc: './src/sw.js',
@@ -22,7 +23,7 @@ module.exports = {
     new webpack.NamedModulesPlugin(),
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify(new Date()),
+      'process.env.VERSION': JSON.stringify(new Date()),
     }),
     ...swPlugins
   ],

@@ -12,8 +12,7 @@ export default new Vuex.Store({
     pageVer: '',
     enemyVer: '',
     apperMapVer: '',
-    // eslint-disable-next-line no-undef
-    webVer: new Date(VERSION).toLocaleString(),
+    webVer: new Date(process.env.VERSION).toLocaleString(),
     dropList: null,
     stageTree: null,
     extraSkins: null,
