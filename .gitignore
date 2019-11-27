@@ -3,6 +3,7 @@ build
 theme
 log.md
 script
+GameData
 
 stats.json
 yarn.lock
