@@ -62,7 +62,7 @@
           </el-form-item>
         </div>
         <div class="my-form-wrapper">
-          <el-form-item label="有龙门币/千" class="my-form-item-wrapper" prop="base.money">
+          <el-form-item label="有龙门币/千" class="my-form-item-wrapper long" prop="base.money">
             <el-input-number
               v-model="char.base.money"
               :size="short ? 'medium' : ''"
@@ -74,7 +74,7 @@
             />
           </el-form-item>
 
-          <el-form-item label="基建经验|千/日" class="my-form-item-wrapper">
+          <el-form-item label="基建经验|千/日" class="my-form-item-wrapper long">
             <el-input-number
               v-model.number="char.production.exp"
               :size="short ? 'medium' : ''"
@@ -85,7 +85,7 @@
               placeholder="经验"
             />
           </el-form-item>
-          <el-form-item label="基建龙币|千/日" class="my-form-item-wrapper">
+          <el-form-item label="基建龙币|千/日" class="my-form-item-wrapper long">
             <el-input-number
               v-model.number="char.production.money"
               :size="short ? 'medium' : ''"
@@ -227,14 +227,14 @@ export default {
     BLS5() {
       const result = Math.ceil(
         (this.ExpNeed - this.baseExp) /
-          (74000 + this.char.production.exp * 1000)
+        (74000 + this.char.production.exp * 1000)
       );
       return result > -1 ? result : 0;
     },
     BCE5() {
       const result = Math.ceil(
         (this.MoneyNeed - this.char.base.money * 1000) /
-          (75000 + this.char.production.money * 1000)
+        (75000 + this.char.production.money * 1000)
       );
       return result > -1 ? result : 0;
     }
@@ -341,6 +341,10 @@ export default {
 
   .my-form-item-wrapper {
     width: 106px
+
+    &.long >>> .el-form-item__label {
+      font-size: 12px
+    }
   }
 
   .my-form-item {

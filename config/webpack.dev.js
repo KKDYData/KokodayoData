@@ -7,7 +7,6 @@ module.exports = merge(common, {
   plugins: [
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
-      VERSION: JSON.stringify(new Date()),
       'process.env.PRODUCTION': JSON.stringify('beta')
     })
 

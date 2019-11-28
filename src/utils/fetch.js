@@ -24,6 +24,8 @@ const fetchPut = (url, data) => {
     .catch(err => Promise.reject(err));
 };
 
+// const checkWebVer = ('/api/arknights/check', )
+
 const submitFeedback = content => {
   return fetchPut('/api/arknights/feedback', content)
     .catch(err => console.error(err))
