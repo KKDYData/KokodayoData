@@ -2,15 +2,15 @@
   <div>
     <el-popover
       :disabled="!attackType"
-      :placement="short ? 'right':  'left'"
+      :placement="short ? 'right': 'left'"
       :popper-class="short ? 'mobile-rotate' : ''"
     >
-      <div class="data-toggle" slot="reference">
+      <div slot="reference" class="data-toggle">
         <div
           style="font-size: 14px; color: #515151"
-        >{{'单次' + (attackType? '伤害' : '效果')}}{{skillAtk}}</div>
+        >{{ '单次' + (attackType? '伤害' : '效果') }}{{ skillAtk }}</div>
         <div v-if="attackType" class="el-circle-icon" style="position: unset; margin-left: 10px">
-          <i class="el-icon-data-line"></i>
+          <i class="el-icon-data-line" />
         </div>
       </div>
       <div v-if="attackType">
@@ -19,21 +19,21 @@
           <el-tooltip placement="left">
             <span>
               计算方式
-              <i class="el-icon-info"></i>
+              <i class="el-icon-info" />
             </span>
             <div slot="content">
-              {{!magic ? '（面板攻击力 * 攻击倍率 * 攻击力增加 - 防御） / 攻击间隔 * 攻击速度'
+              {{ !magic ? '（面板攻击力 * 攻击倍率 * 攻击力增加 - 防御） / 攻击间隔 * 攻击速度'
               : '（面板攻击力 * 攻击倍率 * 攻击力增加 * （100-魔抗）） / 攻击间隔 * 攻击速度' }}
             </div>
           </el-tooltip>
         </div>
-        <div class="chart-body" ref="chart"></div>
+        <div ref="chart" class="chart-body" />
         <div class="chart-details-container">
-          <div>攻击间隔: {{baseAttackTime | format}}</div>
-          <div>| 攻击速度: {{speedUp | format}}</div>
-          <div>| 攻击次数: {{attackTimes}}</div>
-          <div>| 减防数值/比例: {{defDown | format}} / {{defDownScale | format}}</div>
-          <div>| 减抗数值/比例: {{margicResistance}} / {{margicResistanceR}}</div>
+          <div>攻击间隔: {{ baseAttackTime | format }}</div>
+          <div>| 攻击速度: {{ speedUp | format }}</div>
+          <div>| 攻击次数: {{ attackTimes }}</div>
+          <div>| 减防数值/比例: {{ defDown | format }} / {{ defDownScale | format }}</div>
+          <div>| 减抗数值/比例: {{ margicResistance }} / {{ margicResistanceR }}</div>
         </div>
       </div>
     </el-popover>
@@ -106,6 +106,11 @@ const mergeDefR = (temp, res) => {
 };
 
 export default {
+  filters: {
+    format(v) {
+      return Math.round(v * 100) / 100;
+    }
+  },
   props: {
     skill: {
       required: true
@@ -130,11 +135,6 @@ export default {
     return {
       chart: null,
     };
-  },
-  filters: {
-    format(v) {
-      return Math.round(v * 100) / 100;
-    }
   },
   computed: {
     ...mapState(['short']),
