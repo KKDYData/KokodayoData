@@ -24,7 +24,13 @@ const fetchPut = (url, data) => {
     .catch(err => Promise.reject(err));
 };
 
-// const checkWebVer = ('/api/arknights/check', )
+const checkWebVer = () => fetchPut('/api/arknights/check', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 10 });
+checkWebVer().then(({ res }) => {
+  store.commit('setisNeedUpdate', res);
+  console.log(res);
+}).catch(err => {
+  console.error(`err: ${err}`);
+});
 
 const submitFeedback = content => {
   return fetchPut('/api/arknights/feedback', content)

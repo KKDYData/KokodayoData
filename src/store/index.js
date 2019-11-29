@@ -17,7 +17,8 @@ export default new Vuex.Store({
     stageTree: null,
     extraSkins: null,
     short: UA.isMoblie || window.innerWidth < 600 ? true : false,
-    screenWidth: document.body.clientWidth
+    screenWidth: document.body.clientWidth,
+    isNeedUpdate: false,
   },
   getters: {
     itemDropList: (state) => id => {
@@ -54,6 +55,9 @@ export default new Vuex.Store({
     setExtraSkins: (state, list) => {
       state.extraSkins = list;
     },
+    setisNeedUpdate(state, v) {
+      state.isNeedUpdate = v;
+    }
   },
   ...actions
 });

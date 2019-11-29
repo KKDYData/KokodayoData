@@ -3,9 +3,9 @@ import '@/styles/index.styl';
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueMeta from 'vue-meta';
-import NavMenu from '@/components/NavMenu';
 import { rootPath } from '@/stats';
 import store from '@/store';
+import App from './App';
 
 Vue.use(VueRouter);
 Vue.use(VueMeta);
@@ -16,7 +16,6 @@ const Home = () => import(/* webpackChunkName: "Home" */'./pages/Home');
 const Details = () => import(/* webpackChunkName: "Details" */'./pages/Details');
 const Computer = () => import(/* webpackChunkName: "Computer" */'./pages/Computer');
 const EnemyData = () => import(/* webpackChunkName: "Enemy" */'./pages/Enemy');
-const Footer = () => import(/* webpackChunkName: "EnemyData" */'./pages/Footer');
 const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'./pages/CustomTheme');
 const Items = () => import(/* webpackChunkName: "Items" */'./pages/Items');
 const Skins = () => import(/* webpackChunkName: "Skins" */'./pages/Skins');
@@ -45,19 +44,7 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: {
-    NavMenu,
-    Footer
-  },
-  template: `
-    <div id="app">
-      <nav-menu />
-      <transition name="fade" mode="out-in">
-        <router-view class="view"></router-view>
-      </transition>
-      <Footer />
-    </div>
-  `
+  render: h => h(App)
 });
 
 
