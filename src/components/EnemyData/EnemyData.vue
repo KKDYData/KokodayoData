@@ -55,7 +55,7 @@
               :type="!showMap ? '': 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
-              @click="laodRouteMap"
+              @click="openMap"
             >地图</el-button>
             <el-button
               v-if="devMode === 'beta' && selMapDataEx"
@@ -107,11 +107,12 @@
                 @load="mapPicLoad = false"
                 @error="loadPicFalse"
               />
-              <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'" />
-              <div
-                id="map-canvas-container-up"
-                :style="isEdge ? 'transform: perspective(1200px) rotateX(40deg); filter: none' : ''"
-                :class="showMap ? '' : 'map-canvas-bottom'"
+              <canvas
+                id="map-canvas-container"
+                ref="canvas"
+                width="890"
+                height="500"
+                :style="showMap ? '' : 'left: -5000px'"
               />
             </div>
             <div class="left-layout" />
@@ -208,6 +209,9 @@ import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
 
+import { initSomeMap } from './initData.js';
+
+
 
 
 import { Tree, Drawer, Button, Image, Loading, Message } from 'element-ui';
@@ -297,7 +301,7 @@ export default {
       pTranisitionTemp: 0,
       treeId: '',
       mapPicLoad: true,
-      showMap: false,
+      showMap: true,
       watchTree: false,
       simpleShow: true,
       preData: null,
@@ -436,12 +440,15 @@ export default {
   created() {
     this.linkStart();
   },
+  mounted() {
+    // this.choseMap();
+  },
 
   methods: {
     loadPicFalse() {
       Message.info('游戏地图的预览图片缺失，但是地图数据还是有的，敌人的路线一样可以看, 3s后自动打开地图');
       setTimeout(() => {
-        this.laodRouteMap();
+        this.openMap();
       }, 3000);
     },
     clearMap() {
@@ -557,20 +564,11 @@ export default {
             // 去掉地图的loading遮罩
             this.mapPicLoad = false;
 
-            const { Map } = await import('./draw');
             await this.$nextTick();
-            this.map = new Map(
-              '#map-canvas-container',
-              100,
+            this.map = initSomeMap(
               mapData,
+              this.$refs.canvas,
               this.preData
-            );
-            this.mapUp = new Map(
-              '#map-canvas-container-up',
-              100,
-              mapData,
-              this.preData,
-              true
             );
           };
           if (window.spritejs) {
@@ -583,9 +581,10 @@ export default {
     },
     // 子组件传出来清空map的事件处理
     clearRoutes() {
-      this.map.clearRoutes();
-      this.mapUp.clearRoutes();
-      this.$refs.layout.clearRoutes();
+      console.log('clear map');
+      // this.map.clearRoutes();
+      // this.mapUp.clearRoutes();
+      // this.$refs.layout.clearRoutes();
     },
     checkCodeBase() {
       if (!this.map) {
@@ -628,11 +627,11 @@ export default {
         );
         queue.next();
       } else {
-        this.laodRouteMap();
+        this.openMap();
         setTimeout(this.loopAllRoutes, 500);
       }
     },
-    laodRouteMap() {
+    openMap() {
       if (this.showMap) {
         this.showMap = false;
       } else {
@@ -749,12 +748,13 @@ export default {
   border-radius: 2px
 }
 
-#map-canvas-container-up, #map-canvas-container {
+#map-canvas-container {
   position: absolute
   height: 100%
   width: 100%
   top: 0
-  transform: perspective(1200px) rotateX(40deg)
+  left: 0
+  //transform: perspective(1200px) rotateX(40deg)
 }
 
 filter() {
@@ -765,17 +765,16 @@ filter() {
   filter: arguments
 }
 
-#map-canvas-container-up {
-  filter(drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6)))
-  transform: perspective(1200px) rotateX(40deg) translateZ(calc(var(--height) * 0.05))
-  transition: transform 0.7s ease
-}
+//#map-canvas-container-up {
+//filter(drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6)))
+//transform: perspective(1200px) rotateX(40deg) translateZ(calc(var(--height) * 0.05))
+//transition: transform 0.7s ease
+//}
 
-#map-canvas-container-up.map-canvas-bottom {
-  left: -5000px
-  transform: perspective(1200px) rotateX(40deg)
-}
-
+//#map-canvas-container-up.map-canvas-bottom {
+//left: -5000px
+//transform: perspective(1200px) rotateX(40deg)
+//}
 @media screen and (min-width: 1350px) {
   .map-data-container {
     margin-bottom: 20px
@@ -807,10 +806,6 @@ filter() {
     min-width: 360px
     box-sizing: border-box
     padding: 3vw
-  }
-
-  #map-canvas-container-up {
-    filter: drop-shadow(1vw 4vw 10px rgba(0, 0, 0, 0.6))
   }
 }
 
