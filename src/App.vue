@@ -3,7 +3,7 @@
     <div v-if="isNeedUpdate" class="need-update">
       <p>
         <i class="el-alert__icon el-icon-warning is-big" />
-        <span>当前版本落后，请刷新页面以获取最新版本</span>
+        <span>当前版本落后，后台正在更新，请骚等。如果长时间没提升刷新，请尝试手动刷新以更新</span>
       </p>
       <p>如果遇到更新问题，请进群799872783咨询</p>
     </div>

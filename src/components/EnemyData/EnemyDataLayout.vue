@@ -41,7 +41,7 @@
           v-if="waveData.length > 1 && (postDelay || preDelay || maxTimeWaitingForNextWave)"
         >最大等待时间：{{ maxTimeWaitingForNextWave }}s | 延迟：{{ preDelay }}s</p>
         <div
-          v-for="({actions, _name, _preDelay, time, enemyNum}, fIndex) in fragments"
+          v-for="({actions, _name, preDelay:_preDelay, time, enemyNum}, fIndex) in fragments"
           :key="fIndex"
           class="wave-enemy-container"
         >
@@ -58,7 +58,7 @@
             </span>
           </p>
           <div
-            v-for="({key, actionType, count, interval, __preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
+            v-for="({key, actionType, count, interval, preDelay: __preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
             :key="aIndex"
             class="wave-enemy-single"
           >
