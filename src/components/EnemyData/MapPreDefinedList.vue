@@ -1,17 +1,17 @@
 <template>
   <div v-if="myList && myList.length > 0">
     <div style="padding: 20px 0">
-      <span style="border-bottom: 1px solid #313131">{{title}}</span>
+      <span style="border-bottom: 1px solid #313131">{{ title }}</span>
     </div>
     <div class="predefine-list">
-      <div class="predefine-item" v-for="(item, index) in myList" :key="index">
+      <div v-for="(item, index) in myList" :key="index" class="predefine-item">
         <el-popover popper-class="fuck-outline" :width="300" :title="item.name">
-          <div class="fuck-outline" slot="reference">
-            <char-cube class="predefine-item-bg" :src="getSrc(item.key)" width="100px"></char-cube>
+          <div slot="reference" class="fuck-outline">
+            <char-cube class="predefine-item-bg" :src="getSrc(item.key)" width="100px" />
             <div>
               <span
                 style="color: #525252"
-              >{{item.name + (item.alias ? '#' + item.alias.split('#')[1] : '') + (item.initialCnt ? ` x ${item.initialCnt}` : '')}}</span>
+              >{{ item.name + (item.alias ? '#' + item.alias.split('#')[1] : '') + (item.initialCnt ? ` x ${item.initialCnt}` : '') }}</span>
             </div>
           </div>
           <div v-if="showPosition" class="predefine-position">
@@ -19,29 +19,29 @@
               <div class="status-details-title">位置</div>
               <div class="predefine-position-item">
                 <span>x</span>
-                <span>{{item.position.col}}</span>
+                <span>{{ item.position.col }}</span>
                 <span style="margin-left: 10px">y</span>
-                <span>{{item.position.row}}</span>
+                <span>{{ item.position.row }}</span>
               </div>
             </div>
             <div v-if="item.direction > -1" class="predefine-positon-inner">
               <div class="status-details-title">方向</div>
-              <div class="predefine-position-item">{{getDirection(item.direction)}}</div>
+              <div class="predefine-position-item">{{ getDirection(item.direction) }}</div>
             </div>
           </div>
           <char-status
             v-if="showStatus"
             style="margin-top: 15px"
             :compact="true"
-            :statusToChFc="statusToChFc"
+            :status-to-ch-fc="statusToChFc"
             :status="item.targetData"
-          ></char-status>
+          />
           <skill-panel
             :style="{'margin-top': '-20px'}"
             :show-pic="false"
             :skills="item.targetSkill"
             :init-lv="item.mainSkillLvl"
-          ></skill-panel>
+          />
         </el-popover>
       </div>
     </div>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { getProfilePath, findValue } from '../../utils';
+import { getDetailsProfilePath, findValue } from '../../utils';
 import charCube from '../base/charCube';
 import charStatus from '../base/charStatus';
 import loadingC from '../base/Loading';
@@ -79,15 +79,6 @@ export default {
     showPosition: { default: true, type: Boolean },
     runesData: { default: null }
   },
-  methods: {
-    getSrc(key) {
-      return getProfilePath(key);
-    },
-    getDirection(k) {
-
-      return Directions[k];
-    }
-  },
   computed: {
     myList() {
       if (this.runesData) {
@@ -109,6 +100,15 @@ export default {
       } else {
         return this.list;
       }
+    }
+  },
+  methods: {
+    getSrc(key) {
+      return getDetailsProfilePath(key);
+    },
+    getDirection(k) {
+
+      return Directions[k];
     }
   }
 };

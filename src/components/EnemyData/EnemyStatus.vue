@@ -84,7 +84,7 @@
           <div>
             <b style="font-size: 1.2em">Extra·技能</b>
           </div>
-          <div :style="0 ? '' :'display: flex'">
+          <div :style="0 ? '' :'display: flex;  flex-wrap: wrap'">
             <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
               <div style="margin: 10px 0">
                 <span
@@ -421,7 +421,11 @@ export default {
 
         damage_scale: '倍率',
         atk_scale: '倍率',
-        hp_recovery_per_sec: '倍率'
+        hp_recovery_per_sec: '倍率',
+
+        reborn_invincible: '复活隐身',
+        attackfreeze: '攻击冻结',
+        periodic_damage: '周期伤害'
       };
       const changeKey = key => key2str[key] || key.toUpperCase();
 
@@ -513,6 +517,7 @@ export default {
 .enemy-skill-container {
   flex-grow: 0.5;
   flex-shrink: 0.5;
+  margin-top: 30px;
 }
 
 .enemy-skill-container + .enemy-skill-container {

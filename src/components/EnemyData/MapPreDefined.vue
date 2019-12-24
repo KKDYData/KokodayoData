@@ -4,22 +4,26 @@
       class="predefine-list-contianer"
       title="预设道具"
       :list="data.tokenInsts"
-      :statusToChFc="statusToChFc"
-    ></map-predefined-list>
-    <map-predefined-list class="predefine-list-contianer" title="预下场角色" :list="data.characterInsts"></map-predefined-list>
+      :status-to-ch-fc="statusToChFc"
+    />
+    <map-predefined-list
+      class="predefine-list-contianer"
+      title="预下场角色"
+      :list="data.characterInsts"
+    />
     <map-predefined-list
       class="predefine-list-contianer"
       title="预设角色卡"
       :list="data.characterCards"
       :show-position="false"
-    ></map-predefined-list>
+    />
     <map-predefined-list
       class="predefine-list-contianer"
       title="道具卡"
       :list="data.tokenCards"
       :runes-data="runesData"
       :show-position="false"
-    ></map-predefined-list>
+    />
   </div>
 </template>
 
@@ -31,6 +35,9 @@ import MapPredefinedList from './MapPreDefinedList';
 import { mapState } from 'vuex';
 
 export default {
+  components: {
+    MapPredefinedList
+  },
   props: {
     preData: {
       required: true
@@ -41,9 +48,6 @@ export default {
     runesData: {
       default: Object
     }
-  },
-  components: {
-    MapPredefinedList
   },
   data() {
     return {
