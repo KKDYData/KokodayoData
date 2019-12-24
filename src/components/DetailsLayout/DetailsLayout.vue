@@ -119,7 +119,7 @@
           </div>
           <div class="evolvcost-wrapper">
             <div
-              v-for="(data, key, index) in evolveCost"
+              v-for="(cost, key, index) in evolveCost"
               :key="index"
               class="evolvcost-container-wrapper"
               :style="Object.keys(evolveCost).length === 1 && !short? 'margin: 0 0 10px' : ''"
@@ -128,8 +128,8 @@
                 <span>精英阶段{{ index + 1 }}</span>
               </div>
               <div class="evolvcost-container">
-                <item-viewer :item="GOLD" :num="data.money" class="evolvcost-item-container" />
-                <div v-for="item in data.items" :key="item.IconId" class="evolvcost-item-container">
+                <item-viewer :item="GOLD" :num="cost.money" class="evolvcost-item-container" />
+                <div v-for="item in cost.items" :key="item.IconId" class="evolvcost-item-container">
                   <item-viewer :item="item.item" :num="item.cost" />
                 </div>
               </div>
@@ -286,32 +286,6 @@ export default {
       talentPotentailUp: [false, false, false]
     };
   },
-  created() {
-    this.name = this.$route.params.name;
-    console.log('getting data...');
-    getHeroData(this.name)
-      .catch(err => {
-        console.log(err);
-        return Promise.reject('no charactor');
-      })
-      .then(data => {
-        this.data = data;
-        this.phases = this.data.phases.length - 1;
-        this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
-        this.dataLoad = true;
-
-        this.getSkills();
-        if (this.data.profession === 'TOKEN') return;
-        // this.getRange();
-        this.getEvolveCost();
-        this.getInfo();
-        this.getWords();
-      })
-      .catch(err => {
-        console.log(err);
-        this.loadingFail = true;
-      });
-  },
   computed: {
     ...mapState(['short']),
     normal() {
@@ -382,6 +356,7 @@ export default {
         });
         return res;
       }
+      return null;
     },
     targetPhasese() {
       return this.data.phases[this.phases].attributesKeyFrames;
@@ -390,6 +365,8 @@ export default {
       if (this.data) {
         return calStatusEnd(this.data, this.level, this.targetPhasese, this.isFavor, this.potentailStatusUP);
       }
+      return null;
+
     },
     potentailUPList() {
       if (!this.data) return;
@@ -441,7 +418,34 @@ export default {
           };
         }
       }
+      return null;
     }
+  },
+  created() {
+    this.name = this.$route.params.name;
+    console.log('getting data...');
+    getHeroData(this.name)
+      .catch(err => {
+        console.log(err);
+        return Promise.reject('no charactor');
+      })
+      .then(data => {
+        this.data = data;
+        this.phases = this.data.phases.length - 1;
+        this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
+        this.dataLoad = true;
+
+        this.getSkills();
+        if (this.data.profession === 'TOKEN') return;
+        // this.getRange();
+        this.getEvolveCost();
+        this.getInfo();
+        this.getWords();
+      })
+      .catch(err => {
+        console.log(err);
+        this.loadingFail = true;
+      });
   },
   methods: {
     evolvCost(t) {

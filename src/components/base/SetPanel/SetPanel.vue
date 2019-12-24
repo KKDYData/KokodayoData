@@ -1,5 +1,6 @@
 <template>
   <el-carousel
+    id="wrapper"
     class="char-set-panel"
     :height="height"
     :autoplay="false"
@@ -20,7 +21,7 @@
       />
 
       <!-- 立绘 -->
-      <el-carousel-item :key="index" style="font-size:13px">
+      <el-carousel-item :id="`char-set-container-${index}`" :key="index" style="font-size:13px">
         <div class="char-set-container-wrapper">
           <div class="char-set-info-cotainer">
             <div v-if="data.displaySkin">
@@ -91,6 +92,8 @@ import { mapState } from 'vuex';
 import { getScreenWidth } from '../../../utils';
 Vue.use(Carousel);
 Vue.use(CarouselItem);
+import phyTouch from 'phy-touch';
+import Transfrom from 'phy-touch/transformjs';
 
 export default {
   components: {
@@ -129,6 +132,38 @@ export default {
     ex() {
       return this.setData[0].displaySkin;
     },
+  },
+  async mounted() {
+    const radio = this.ex ? 2.6 : 2.3;
+    for (let i = 0;i < this.setData.length;i++) {
+      const target = document.body.querySelector(`#char-set-container-${i}`).querySelector('.char-set-container-wrapper');
+      // const { height } = target.getBoundingClientRect();
+      const opt = {
+        touch: '#wrapper',//反馈触摸的dom
+        vertical: true,//不必需，默认是true代表监听竖直方向touch
+        target: target, //运动的对象
+        property: 'translateY',  //被运动的属性
+        min: -window.innerWidth * radio + window.innerHeight,
+        max: 0,
+        sensitivity: 0.5,//不必需,触摸区域的灵敏度，默认值为1，可以为负数
+        factor: 1,//不必需,表示触摸位移运动位移与被运动属性映射关系，默认值是1
+        moveFactor: 1,//不必需,表示touchmove位移与被运动属性映射关系，默认值是1
+        step: 45,//用于校正到step的整数倍
+        bindSelf: false,
+        maxSpeed: 2, //不必需，触摸反馈的最大速度限制 
+        value: 0,
+        change: function (value) { },
+        touchStart: function (evt, value) { },
+        touchMove: function (evt, value) { },
+        touchEnd: function (evt, value) { },
+        tap: function (evt, value) { },
+        pressMove: function (evt, value) { },
+        animationEnd: function (value) { } //运动结束
+      };
+      Transfrom(target);
+      new phyTouch(opt);
+    }
+
   },
   beforeMount() {
     const { width, height } = getScreenWidth();
@@ -217,7 +252,7 @@ export default {
 @media screen and (max-width: 700px) {
   .char-set-container-wrapper {
     display: block
-    height: 100%
+    height: auto
   }
 
   .char-set-container {
@@ -226,7 +261,8 @@ export default {
 
   .char-set-panel {
     &>>> .el-carousel__item {
-      overflow: scroll
+      display: block
+      //overflow: scroll
     }
   }
 

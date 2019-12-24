@@ -17,6 +17,7 @@ const mapReact = {
 const abs = Math.abs;
 
 let noti, notiTime;
+const notiStayTime = 3000;
 
 const task = (mapBlock, mapData) => {
   const { heightType, message, title, color } = mapData;
@@ -45,11 +46,11 @@ const task = (mapBlock, mapData) => {
         // 颜色强制复原
         mapBlock.attr({ fillColor: heightType !== 1 ? 'rgba(0, 0, 0, 0)' : color });
         if (UA.isMobliePad) {
-          if (+ new Date - notiTime > 3000) {
+          if (+ new Date - notiTime > notiStayTime) {
             noti.close();
           }
         }
-      }, 3000);
+      }, notiStayTime);
       mapBlock.on('mouseleave', (evt) => {
         rightTrans.reverse();
         noti.close();

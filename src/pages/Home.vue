@@ -6,7 +6,7 @@
         :type="isBeta ? 'warning': 'success'"
         description
         :closable="false"
-      >增加危机合约地图数据</el-alert>
+      >更新神射手观察表现</el-alert>
     </div>
     <transition name="fade" mode="out-in">
       <home-layout v-if="load" :profile-list="data" :token-list="token" />

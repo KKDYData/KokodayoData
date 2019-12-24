@@ -44,15 +44,21 @@
         <div v-if="Tag.stunImmune.value" class="enemy-data-tag">{{ Tag.stunImmune.text }}</div>
         <div v-if="Tag.silenceImmune.value" class="enemy-data-tag">{{ Tag.silenceImmune.text }}</div>
       </div>
-
+      <div v-if="data[0] && data[0].enemyData.extra">
+        <content-slot long no-wrap>
+          <div slot="title">额外记录</div>
+          <div slot="content">—</div>
+        </content-slot>
+        <p v-for="(item, index) in data[0].enemyData.extra" :key="index">{{ item }}</p>
+      </div>
       <div class="status-details-talents-wrapper">
         <div class="status-details-wrapper">
           <content-slot
             v-for="kData in filterKeys"
             :key="kData[0]"
             class="status-details-container"
-            :no-wrap="true"
-            :long="true"
+            no-wrap
+            long
             :width="100"
           >
             <template slot="title">
@@ -91,41 +97,34 @@
                   style="font-size: 1.1em"
                 >{{ skill.prefabKey === 'SummonBallis' ? '召唤弩炮': skill.prefabKey.toUpperCase() }}</span>
               </div>
-              <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
-                <div :style="short ?'margin-left: 10px' : ''">
-                  <span>冷却时间:</span>
-                  <span>{{ skill.cooldown }}</span>
-                  <span>s</span>
-                </div>
-                <div :style="short? 'margin-left: 10px' : ''">
-                  <span>初始冷却</span>
-                  <span>{{ skill.initCooldown }}</span>
-                  <span>s</span>
-                </div>
-                <div v-if="skill.spCost > 0" :style="short? 'width: 100%; margin-left: 10px' : ''">
-                  <span>SP消耗</span>
-                  <span>{{ skill.spCost }}</span>
-                </div>
+              <div :style="short? 'margin-left: 10px' : ''">
+                <span>初始冷却</span>
+                <span>{{ skill.initCooldown }}</span>
+                <span>s</span>
               </div>
-              <div>
-                <div style="margin: 20px 0 10px">
+              <div v-if="skill.spCost > 0" :style="short? 'width: 100%; margin-left: 10px' : ''">
+                <span>SP消耗</span>
+                <span>{{ skill.spCost }}</span>
+              </div>
+            </div>
+            <div>
+              <div style="margin: 20px 0 10px">
+                <span>
+                  <b style="opacity: 0.5">效果</b>
+                </span>
+              </div>
+              <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
+                <div
+                  v-for="bData in skill.blackboard"
+                  :key="bData.key"
+                  :style="short? 'margin-left: 10px' : ''"
+                >
+                  <span>{{ changeBlackboardToCh(bData.key) }}</span>
                   <span>
-                    <b style="opacity: 0.5">效果</b>
+                    {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
+                    ? bData.value * skillRangeRadius : bData.value }}
                   </span>
-                </div>
-                <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
-                  <div
-                    v-for="bData in skill.blackboard"
-                    :key="bData.key"
-                    :style="short? 'margin-left: 10px' : ''"
-                  >
-                    <span>{{ changeBlackboardToCh(bData.key) }}</span>
-                    <span>
-                      {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
-                      ? bData.value * skillRangeRadius : bData.value }}
-                    </span>
-                    <span v-if="timeKey.includes(bData.key)">s</span>
-                  </div>
+                  <span v-if="timeKey.includes(bData.key)">s</span>
                 </div>
               </div>
             </div>

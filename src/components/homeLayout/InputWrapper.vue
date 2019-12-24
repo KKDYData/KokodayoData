@@ -2,9 +2,9 @@
   <div class="feedback-info" style="display: flex">
     <span
       :style="{width: width + 'px', 'min-width': width + 'px' ,'margin-right': '10px'}"
-    >{{title}}</span>
+    >{{ title }}</span>
     <div class="feedback-content">
-      <slot></slot>
+      <slot />
     </div>
   </div>
 </template>
@@ -27,13 +27,13 @@ export default {
 
 <style lang="stylus" scoped>
 .feedback-info {
-  display: flex;
-  align-items: center;
-  margin: 10px 0;
+  display: flex
+  align-items: center
+  margin: 10px 0
 }
 
 .feedback-content {
-  flex-grow: 1;
+  flex-grow: 1
 }
 </style>
 

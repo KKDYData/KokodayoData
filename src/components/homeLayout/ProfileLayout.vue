@@ -116,11 +116,11 @@ export default {
     ...mapState(['short'])
   },
   watch: {
-    showTags: function(v) {
+    showTags: function (v) {
       console.log('show? ' + v);
       this.calFillAmount();
     },
-    short: function(v) {
+    short: function (v) {
       this.calFillAmount();
     }
   },
@@ -131,7 +131,8 @@ export default {
   },
   methods: {
     hoverShowTag(t, index) {
-      this.$set(this.data[index], 'showTags', t);
+      if (!this.short)
+        this.$set(this.data[index], 'showTags', t);
     },
     async openDetails(agent) {
       if (this.short) this.$router.push(this.path + '/details/' + agent.No);
