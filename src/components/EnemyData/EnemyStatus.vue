@@ -106,25 +106,25 @@
                 <span>SP消耗</span>
                 <span>{{ skill.spCost }}</span>
               </div>
-            </div>
-            <div>
-              <div style="margin: 20px 0 10px">
-                <span>
-                  <b style="opacity: 0.5">效果</b>
-                </span>
-              </div>
-              <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
-                <div
-                  v-for="bData in skill.blackboard"
-                  :key="bData.key"
-                  :style="short? 'margin-left: 10px' : ''"
-                >
-                  <span>{{ changeBlackboardToCh(bData.key) }}</span>
+              <div>
+                <div style="margin: 20px 0 10px">
                   <span>
-                    {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
-                    ? bData.value * skillRangeRadius : bData.value }}
+                    <b style="opacity: 0.5">效果</b>
                   </span>
-                  <span v-if="timeKey.includes(bData.key)">s</span>
+                </div>
+                <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
+                  <div
+                    v-for="bData in skill.blackboard"
+                    :key="bData.key"
+                    :style="short? 'margin-left: 10px' : ''"
+                  >
+                    <span>{{ changeBlackboardToCh(bData.key) }}</span>
+                    <span>
+                      {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
+                      ? bData.value * skillRangeRadius : bData.value }}
+                    </span>
+                    <span v-if="timeKey.includes(bData.key)">s</span>
+                  </div>
                 </div>
               </div>
             </div>
