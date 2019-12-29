@@ -245,8 +245,9 @@ export default {
 
       target.runes.forEach(data => {
         if (!data.blackboard.length) return;
-        if (data.blackboard[0].key === 'enemy') {
-          if (data.blackboard[0].valueStr !== this.keyName) return;
+        const single = data.blackboard.find(data => data.key === 'enemy');
+        if (single) {
+          if (single.valueStr !== this.keyName) return;
           data.blackboard.forEach(el => {
             const key = changeKey(el.key);
             res[key] = res[key] ? res[key] * el.value : el.value;
@@ -269,6 +270,7 @@ export default {
       });
 
       return this.status[lv].map(el => {
+        if (res.attackSpeed && el[2] === 'baseAttackTime') return [el[0], Math.floor(el[1] / res.attackSpeed * 10) / 10];
         if (res[el[2]]) {
           return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10];
         } else {
