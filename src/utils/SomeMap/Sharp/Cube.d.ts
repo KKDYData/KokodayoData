@@ -32,6 +32,9 @@ export interface CubeAnimationOption extends CubeSetOption {
 export interface FaceColor {
     [index: number]: string;
 }
+export declare const CUBE_LINES: number[][];
+export declare const CUBE_FACE: number[][];
+export declare const CUBE_VERTICES: number[][];
 declare class Cube extends Base {
     width: number;
     length: number;

@@ -12,7 +12,7 @@ declare class PathLine extends Line {
     color: number;
     constructor(opt: PathLineOption);
     update(): void;
-    animate(time?: number, color?: number): Promise<unknown>;
+    animate(_time: number, _color: number): Promise<unknown>;
     set strokeStyle(set: string | CanvasGradient);
     get strokeStyle(): "？？？？？？？" | CanvasGradient;
     set gradientColors(colors: GradientColor[]);

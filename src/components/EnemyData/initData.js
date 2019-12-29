@@ -2,6 +2,8 @@ import SomeMap from '@/utils/SomeMap';
 
 import { Notification } from 'element-ui';
 
+let instance;
+
 const initSomeMap = (testData, container) => {
 
   const { mapData, routes } = testData;
@@ -52,14 +54,21 @@ const initSomeMap = (testData, container) => {
 
   console.log(container);
 
-  return new SomeMap(
-    container,
-    (160 / 360) * Math.PI * 2,
-    3500,
-    mapData,
-    routes
-  );
+  if (!instance)
+    instance = new SomeMap(
+      container,
+      (160 / 360) * Math.PI * 2,
+      3500,
+      mapData,
+      routes
+    );
+  else {
 
+    instance.init(mapData, routes);
+    instance.draw(true);
+  }
+
+  return instance;
 };
 
 export {

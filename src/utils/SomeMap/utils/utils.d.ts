@@ -12,7 +12,7 @@ declare class TaskQueue {
     running: number;
     queue: P[];
     finalTask: Function;
-    constructor(concurrency: number, finalTask?: () => void, queue?: never[]);
+    constructor(concurrency?: number, finalTask?: () => void, queue?: P[]);
     pushTask(task: P): void;
     clear(): void;
     next(): void;
