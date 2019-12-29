@@ -1,5 +1,5 @@
-const getKey = (keys) => key => keys[key] ? keys[key] : key;
-const getKeyWithNull = (keys) => key => keys[key] ? keys[key] : null;
+const getKey = (keys) => key => keys[key] ? keys[key] : key
+const getKeyWithNull = (keys) => key => keys[key] ? keys[key] : null
 
 
 // 拆包数据
@@ -10,7 +10,7 @@ const evolveGoldCost = [
   [15000, 60000],
   [20000, 120000],
   [30000, 180000]
-];
+]
 
 const exp_cards = {
   2001: {
@@ -136,7 +136,7 @@ const exp_cards = {
     ],
     buildingProductList: []
   },
-};
+}
 
 const GOLD = {
   itemId: '4001',
@@ -181,7 +181,7 @@ const GOLD = {
     }
   ],
   buildingProductList: []
-};
+}
 
 const tileInfo = {
   'tile_bigforce': {
@@ -320,7 +320,7 @@ const tileInfo = {
     'description': '可以放置远程单位，不可通行',
     color: 'rgba(125, 253, 244, 0.9)',
   }
-};
+}
 
 // css属性
 const starColor = [
@@ -330,7 +330,7 @@ const starColor = [
   [282, 35, 15],
   [40, 100, 50],
   [25, 95, 55]
-];
+]
 
 const charBorderColor = {
   0: {
@@ -349,7 +349,7 @@ const charBorderColor = {
     background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), hsla(40, 100%, 95%, 1))`,
   },
   5: {},
-};
+}
 
 const charNameColor = {
   0: { background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2] + 13}%, 1), transparent)`, },
@@ -358,7 +358,7 @@ const charNameColor = {
   3: { background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2] + 17}%, 1),transparent)` },
   4: { background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), transparent)`, },
   5: { background: `linear-gradient(16deg, hsla(${starColor[5][0]}, ${starColor[5][1]}%, ${starColor[5][2]}%, 1), transparent)`, },
-};
+}
 
 const itemBackground = {
   0: {
@@ -403,7 +403,7 @@ const itemBackground = {
                   rgb(250, 215, 138) 0 0 5px 4px inset,
                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
   },
-};
+}
 
 
 
@@ -430,7 +430,7 @@ const TagsArr = [
   { isTag: true, text: '女性干员', value: '女' },
   { isTag: true, text: '资深干员', value: 4 },
   { isTag: true, text: '高级资深干员', value: 5 },
-];
+]
 
 const StarArr = [
   { isTag: false, text: 1, value: 0, short: 1 },
@@ -439,7 +439,7 @@ const StarArr = [
   { isTag: false, text: 4, value: 3, short: 4 },
   { isTag: false, text: 5, value: 4, short: 5 },
   { isTag: false, text: 6, value: 5, short: 6 },
-];
+]
 
 const potentialToStatus = {
   0: 'maxHp',
@@ -450,7 +450,7 @@ const potentialToStatus = {
   5: 'blockCnt',
   7: 'baseAttackTime',
   21: 'respawnTime'
-};
+}
 
 const mapOptionsKey = {
   characterLimit: '可部署干员数',
@@ -467,7 +467,7 @@ const mapOptionsKey = {
   goldGain: '龙门币获得',
   // isTrainingLevel: '训练？',
   // functionDisableMask: 'mask？'
-};
+}
 
 
 const occPer_chinese = {
@@ -476,19 +476,19 @@ const occPer_chinese = {
   OFTEN: '小概率',
   USUAL: '概率掉率',
   ALMOST: '大概率'
-};
+}
 
 const roomType = {
   WORKSHOP: '加工站',
   MANUFACTURE: '制造站'
-};
+}
 
 
 const campToCode = {
   切尔诺伯格: '01',
   龙门外环: '02',
   龙门市区: '03'
-};
+}
 
 const statusToCh_M1 = {
   maxHp: '生命上限',
@@ -505,7 +505,7 @@ const statusToCh_M1 = {
   // silenceImmune: '免疫沉默'
   // massLevel: '重量等级',
   // baseForeLevel: '力量等级'
-};
+}
 
 const statusToCh_M2 = {
   maxHp: '生命上限',
@@ -516,11 +516,11 @@ const statusToCh_M2 = {
   blockCnt: '阻挡数',
   magicResistance: '法术抵抗',
   baseAttackTime: '攻击间隔'
-};
+}
 
 const statusToCh_M3 = {
   atk: '攻击',
-};
+}
 
 const StageType = {
   main: '主线',
@@ -536,14 +536,14 @@ const StageType = {
   act4d0: 'Act·4·战地秘闻',
   act5d0: 'ACt·5·喧闹法则',
   rune: '危机合约'
-};
+}
 
 const Directions = {
   3: '←',
   2: '↓',
   1: '→',
   0: '↑'
-};
+}
 
 const keys = {
   damage: '伤害',
@@ -553,19 +553,19 @@ const keys = {
   atk_scale: '攻击倍率',
   def: '防御',
   HP_RECOVERY_PER_SEC_BY_MAX_HP_RATIO: '每秒HP回复百分比'
-};
+}
 
 
 
 
 // 展示的面板属性，返回空值则不显示
-const statusToCh = getKeyWithNull(statusToCh_M1);
-const statusToChChar = getKeyWithNull(statusToCh_M2);
-const statusToChToken = getKeyWithNull(statusToCh_M3);
+const statusToCh = getKeyWithNull(statusToCh_M1)
+const statusToChChar = getKeyWithNull(statusToCh_M2)
+const statusToChToken = getKeyWithNull(statusToCh_M3)
 
-const getPotentialToStatus = getKey(potentialToStatus);
-const getStageType = getKey(StageType);
-const blockKeys = getKey(keys);
+const getPotentialToStatus = getKey(potentialToStatus)
+const getStageType = getKey(StageType)
+const blockKeys = getKey(keys)
 
 const class_chinese = {
   MEDIC: { isTag: false, text: '医疗', value: 'MEDIC' },
@@ -576,12 +576,12 @@ const class_chinese = {
   TANK: { isTag: false, text: '重装', value: 'TANK' },
   SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL' },
   SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT' },
-};
+}
 
 const getClass_Chinese = en => {
-  if (en === 'TOKEN') return '召唤物';
-  return class_chinese[en].text;
-};
+  if (en === 'TOKEN') return '召唤物'
+  return class_chinese[en].text
+}
 
 
 export {
@@ -616,4 +616,4 @@ export {
   Directions,
   blockKeys,
   tileInfo
-};
+}

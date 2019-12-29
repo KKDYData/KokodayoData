@@ -126,7 +126,7 @@ const importEcharts = (init) => {
 };
 
 const importSpriteJs = (init) => {
-  importScript('https://unpkg.com/spritejs/dist/spritejs.min.js', init);
+  importScript('https://unpkg.com/spritejs@2/dist/spritejs.min.js', init);
 };
 
 
