@@ -98,8 +98,8 @@
               <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage" />
             </div>
           </div>
-          <div v-if="data.buildingProductList.length > 0">
-            <el-divider v-if="formula.length > 0" content-position="left">
+          <div v-if="data.buildingProductList.length > 0 && formula.length > 0">
+            <el-divider content-position="left">
               <span>合成配方</span>
             </el-divider>
             <div
@@ -218,10 +218,11 @@ export default {
   computed: {
     ...mapState(['stageTree', 'short']),
     formula() {
-      if (!this.data) return;
+      if (!this.data) return [];
       return this.data.buildingProductList
         .filter(el => el.roomType === 'WORKSHOP')
-        .map(el => formula[el.formulaId]);
+        .map(el => formula[el.formulaId])
+        .filter(e => e);
     },
     itemBackground() {
       return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};

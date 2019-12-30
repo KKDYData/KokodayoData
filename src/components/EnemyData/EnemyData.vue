@@ -55,7 +55,7 @@
               :type="!showMap ? '': 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
-              @click="laodRouteMap"
+              @click="openMap"
             >地图</el-button>
             <el-button
               v-if="devMode === 'beta' && selMapDataEx"
@@ -107,11 +107,12 @@
                 @load="mapPicLoad = false"
                 @error="loadPicFalse"
               />
-              <div id="map-canvas-container" :style="showMap ? '' : 'left: -5000px'" />
-              <div
-                id="map-canvas-container-up"
-                :style="isEdge ? 'transform: perspective(1200px) rotateX(40deg); filter: none' : ''"
-                :class="showMap ? '' : 'map-canvas-bottom'"
+              <canvas
+                v-show="showMap"
+                id="map-canvas-container"
+                ref="canvas"
+                width="890"
+                height="500"
               />
             </div>
             <div class="left-layout" />
@@ -171,7 +172,7 @@
           :runes-mode="runesMode"
           :simple-show="simpleShow"
           @showRoute="loopRoutes"
-          @closeRoute="closeRoute"
+          @closeRoute="loopRoutes"
         />
       </my-slide-title>
       <my-slide-title v-if="short && mapCode" title="地图信息">
@@ -208,6 +209,9 @@ import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
 
+import { initSomeMap } from './initData.js';
+
+
 
 
 import { Tree, Drawer, Button, Image, Loading, Message } from 'element-ui';
@@ -226,7 +230,6 @@ import {
   findStage,
   preDefineGet,
   UA,
-  TaskQueue,
   findValue
 } from '../../utils';
 
@@ -237,7 +240,6 @@ import {
   getCharItem,
   getItem,
   getFurn,
-  importSpriteJs
 } from '../../utils/fetch';
 
 import { path } from '../../utils/listVer';
@@ -297,7 +299,7 @@ export default {
       pTranisitionTemp: 0,
       treeId: '',
       mapPicLoad: true,
-      showMap: false,
+      showMap: true,
       watchTree: false,
       simpleShow: true,
       preData: null,
@@ -428,20 +430,26 @@ export default {
         this.map
       ) {
         console.log('load predefinedData');
-        this.map.setData(this.selMapData, this.preData);
-        this.mapUp.setData(this.selMapData, this.preData);
+        this.map = initSomeMap(
+          this.selMapData,
+          this.$refs.canvas,
+          this.preData
+        );
       }
     }
   },
   created() {
     this.linkStart();
   },
+  mounted() {
+    // this.choseMap();
+  },
 
   methods: {
     loadPicFalse() {
       Message.info('游戏地图的预览图片缺失，但是地图数据还是有的，敌人的路线一样可以看, 3s后自动打开地图');
       setTimeout(() => {
-        this.laodRouteMap();
+        this.openMap();
       }, 3000);
     },
     clearMap() {
@@ -549,43 +557,24 @@ export default {
         this.getPreData();
         this.pTransition();
 
-        if (this.map) {
-          this.map.setData(mapData, this.preData);
-          this.mapUp.setData(mapData, this.preData);
-        } else {
-          const initMap = async () => {
-            // 去掉地图的loading遮罩
-            this.mapPicLoad = false;
 
-            const { Map } = await import('./draw');
-            await this.$nextTick();
-            this.map = new Map(
-              '#map-canvas-container',
-              100,
-              mapData,
-              this.preData
-            );
-            this.mapUp = new Map(
-              '#map-canvas-container-up',
-              100,
-              mapData,
-              this.preData,
-              true
-            );
-          };
-          if (window.spritejs) {
-            initMap();
-          } else {
-            importSpriteJs(initMap);
-          }
-        }
+        // 去掉地图的loading遮罩
+        this.mapPicLoad = false;
+        this.map = null;
+        await this.$nextTick();
+        this.map = initSomeMap(
+          mapData,
+          this.$refs.canvas,
+          this.preData
+        );
+
+
       }
     },
     // 子组件传出来清空map的事件处理
     clearRoutes() {
-      this.map.clearRoutes();
-      this.mapUp.clearRoutes();
-      this.$refs.layout.clearRoutes();
+      console.log('clear map');
+      this.map.deleteAll();
     },
     checkCodeBase() {
       if (!this.map) {
@@ -602,37 +591,19 @@ export default {
       const route = this.selMapData.routes[index];
       console.log(index, color, route);
       if (!route) throw Error('没有这个线路');
-      if (route.motionMode === 1) this.mapUp.addRoutes(route, index, color);
-      else this.map.addRoutes(route, index, color);
+      this.map.loopRoute(index, color);
     },
     loopAllRoutes() {
       if (this.checkCodeBase()) {
         console.log('load all routes begin');
         this.showMap = true;
-        const tasks = this.selMapData.routes
-          .filter(el => el)
-          .map((route, index) => {
-            return () => {
-              const color = Math.round(360 * Math.random());
-              console.log(index, color);
-              if (route.motionMode !== 1)
-                this.map.addRoutes(route, index, color);
-              return Promise.resolve();
-            };
-          });
-
-        const queue = new TaskQueue(
-          5,
-          () => console.log('load all Success'),
-          tasks
-        );
-        queue.next();
+        this.map.loopRoutes();
       } else {
-        this.laodRouteMap();
+        this.openMap();
         setTimeout(this.loopAllRoutes, 500);
       }
     },
-    laodRouteMap() {
+    openMap() {
       if (this.showMap) {
         this.showMap = false;
       } else {
@@ -642,13 +613,6 @@ export default {
           Message('地图数据还没加载完成，请重试');
         }
       }
-    },
-    closeRoute(index) {
-      console.log('close', index);
-      if (this.checkCodeBase()) {
-        this.map.deleteRoute(index);
-        this.mapUp.deleteRoute(index);
-      } else Message('地图数据还没加载完成，等一会再看看吧');
     },
     linkStart() {
       return this.getData().then(data => {
@@ -749,12 +713,12 @@ export default {
   border-radius: 2px
 }
 
-#map-canvas-container-up, #map-canvas-container {
+#map-canvas-container {
   position: absolute
   height: 100%
   width: 100%
   top: 0
-  transform: perspective(1200px) rotateX(40deg)
+  left: 0
 }
 
 filter() {
@@ -763,17 +727,6 @@ filter() {
   -o-filter: arguments
   -ms-filter: arguments
   filter: arguments
-}
-
-#map-canvas-container-up {
-  filter(drop-shadow(calc(var(--height) * 0.03) calc(var(--height) * 0.08) 18px rgba(0, 0, 0, 0.6)))
-  transform: perspective(1200px) rotateX(40deg) translateZ(calc(var(--height) * 0.05))
-  transition: transform 0.7s ease
-}
-
-#map-canvas-container-up.map-canvas-bottom {
-  left: -5000px
-  transform: perspective(1200px) rotateX(40deg)
 }
 
 @media screen and (min-width: 1350px) {
@@ -807,10 +760,6 @@ filter() {
     min-width: 360px
     box-sizing: border-box
     padding: 3vw
-  }
-
-  #map-canvas-container-up {
-    filter: drop-shadow(1vw 4vw 10px rgba(0, 0, 0, 0.6))
   }
 }
 

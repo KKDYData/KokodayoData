@@ -85,22 +85,17 @@
         </div>
       </div>
 
-      <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
-        <div>
-          <b style="font-size: 1.2em">Extra·技能</b>
-        </div>
-        <div :style="0 ? '' :'display: flex'">
-          <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
-            <div style="margin: 10px 0">
-              <span
-                style="font-size: 1.1em"
-              >{{ skill.prefabKey === 'SummonBallis' ? '召唤弩炮': skill.prefabKey.toUpperCase() }}</span>
-            </div>
-            <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
-              <div :style="short ?'margin-left: 10px' : ''">
-                <span>冷却时间:</span>
-                <span>{{ skill.cooldown }}</span>
-                <span>s</span>
+      <div>
+        <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
+          <div>
+            <b style="font-size: 1.2em">Extra·技能</b>
+          </div>
+          <div :style="0 ? '' :'display: flex;  flex-wrap: wrap'">
+            <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
+              <div style="margin: 10px 0">
+                <span
+                  style="font-size: 1.1em"
+                >{{ skill.prefabKey === 'SummonBallis' ? '召唤弩炮': skill.prefabKey.toUpperCase() }}</span>
               </div>
               <div :style="short? 'margin-left: 10px' : ''">
                 <span>初始冷却</span>
@@ -111,25 +106,25 @@
                 <span>SP消耗</span>
                 <span>{{ skill.spCost }}</span>
               </div>
-            </div>
-            <div>
-              <div style="margin: 20px 0 10px">
-                <span>
-                  <b style="opacity: 0.5">效果</b>
-                </span>
-              </div>
-              <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
-                <div
-                  v-for="bData in skill.blackboard"
-                  :key="bData.key"
-                  :style="short? 'margin-left: 10px' : ''"
-                >
-                  <span>{{ changeBlackboardToCh(bData.key) }}</span>
+              <div>
+                <div style="margin: 20px 0 10px">
                   <span>
-                    {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
-                    ? bData.value * skillRangeRadius : bData.value }}
+                    <b style="opacity: 0.5">效果</b>
                   </span>
-                  <span v-if="timeKey.includes(bData.key)">s</span>
+                </div>
+                <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
+                  <div
+                    v-for="bData in skill.blackboard"
+                    :key="bData.key"
+                    :style="short? 'margin-left: 10px' : ''"
+                  >
+                    <span>{{ changeBlackboardToCh(bData.key) }}</span>
+                    <span>
+                      {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
+                      ? bData.value * skillRangeRadius : bData.value }}
+                    </span>
+                    <span v-if="timeKey.includes(bData.key)">s</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -250,8 +245,9 @@ export default {
 
       target.runes.forEach(data => {
         if (!data.blackboard.length) return;
-        if (data.blackboard[0].key === 'enemy') {
-          if (data.blackboard[0].valueStr !== this.keyName) return;
+        const single = data.blackboard.find(data => data.key === 'enemy');
+        if (single) {
+          if (single.valueStr !== this.keyName) return;
           data.blackboard.forEach(el => {
             const key = changeKey(el.key);
             res[key] = res[key] ? res[key] * el.value : el.value;
@@ -274,6 +270,7 @@ export default {
       });
 
       return this.status[lv].map(el => {
+        if (res.attackSpeed && el[2] === 'baseAttackTime') return [el[0], Math.floor(el[1] / res.attackSpeed * 10) / 10];
         if (res[el[2]]) {
           return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10];
         } else {
@@ -425,7 +422,11 @@ export default {
 
         damage_scale: '倍率',
         atk_scale: '倍率',
-        hp_recovery_per_sec: '倍率'
+        hp_recovery_per_sec: '倍率',
+
+        reborn_invincible: '复活隐身',
+        attackfreeze: '攻击冻结',
+        periodic_damage: '周期伤害'
       };
       const changeKey = key => key2str[key] || key.toUpperCase();
 
@@ -517,6 +518,7 @@ export default {
 .enemy-skill-container {
   flex-grow: 0.5;
   flex-shrink: 0.5;
+  margin-top: 30px;
 }
 
 .enemy-skill-container + .enemy-skill-container {
