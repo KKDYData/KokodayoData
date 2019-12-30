@@ -575,6 +575,7 @@ export default {
     clearRoutes() {
       console.log('clear map');
       this.map.deleteAll();
+      this.$refs.layout.clearRoutes();
     },
     checkCodeBase() {
       if (!this.map) {
