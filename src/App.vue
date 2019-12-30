@@ -17,7 +17,7 @@
 <script>
 import NavMenu from '@/components/NavMenu';
 import { mapState } from 'vuex';
-const Footer = () => import(/* webpackChunkName: "EnemyData" */'./pages/Footer');
+const Footer = () => import(/* webpackChunkName: "Footer" */'./pages/Footer');
 
 export default {
   components: {
