@@ -1,4 +1,4 @@
-import SomeMap from '@/utils/SomeMap';
+import SomeMap from 'kkdy-somemap';
 
 import { Notification } from 'element-ui';
 

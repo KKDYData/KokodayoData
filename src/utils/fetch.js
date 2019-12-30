@@ -25,7 +25,7 @@ const fetchPut = (url, data) => {
 };
 
 const checkWebVer = () => fetchPut('/api/arknights/check', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 10 });
-checkWebVer().then(({ res }) => {
+process.env.NODE_ENV === 'production' && checkWebVer().then(({ res }) => {
   store.commit('setisNeedUpdate', res);
   console.log(res);
 }).catch(err => {
