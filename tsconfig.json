@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "noEmit": true,
+    "baseUrl": "./",
+    "sourceMap": true,
+    "paths": {
+      "@/*": [
+        "src/*"
+      ],
+      "src": [
+        "src/*"
+      ]
+    },
+  },
+  "exclude": [
+    "build",
+    "config",
+    "dist"
+  ]
+}

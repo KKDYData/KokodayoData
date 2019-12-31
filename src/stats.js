@@ -4,4 +4,5 @@ const rootPath = '';
 export {
   devMode,
   rootPath
-}; 
+};
+
