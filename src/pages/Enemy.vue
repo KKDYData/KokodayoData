@@ -11,7 +11,8 @@
       <p>更新词条翻译算法。</p>
       <p>危机合约的buff计算还没加入</p>
     </el-alert>-->
-    <enemy-data ref="layout" />
+    <new />
+    <!-- <enemy-data ref="layout" /> -->
   </div>
 </template>
 
@@ -20,6 +21,7 @@ import loadingC from '../components/base/Loading';
 import { Alert } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Alert);
+import New from '@/components/EnemyData/New';
 
 const EnemyData = () => ({
   component: import(/* webpackChunkName: "EnemyData" */ '../components/EnemyData'),
@@ -31,7 +33,8 @@ const EnemyData = () => ({
 
 export default {
   components: {
-    EnemyData
+    EnemyData,
+    New
   },
   data() {
     return {};

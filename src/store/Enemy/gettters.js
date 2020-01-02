@@ -3,10 +3,10 @@ import { path } from '@/utils/listVer';
 import { mapOptionsKey } from '@/utils/string';
 
 const getters = {
-  drawerSize({ state, getters, rootState }) {
+  drawerSize(state, getters, rootState) {
     return Math.floor((300 / rootState.screenWidth) * 100) + '%';
   },
-  waveTime({ state, getters, rootState }) {
+  waveTime(state, getters, rootState) {
     let enemyNum = 0;
     // 看起来像是简单算个时间，但是实际上，顺便把数量和每波开始的时间加进数据了
     return state.selMapData
@@ -34,7 +34,7 @@ const getters = {
         0
       ) : 0;
   },
-  showPredefine({ state, getters, rootState }) {
+  showPredefine(state, getters, rootState) {
     if (!state.selMapData || !state.selMapData.predefines) return false;
     return (
       Object.values(state.selMapData.predefines).reduce(
@@ -43,10 +43,10 @@ const getters = {
       ) > 0
     );
   },
-  mapDesc({ state, getters, rootState }) {
+  mapDesc(state, getters, rootState) {
     return state.selMapDataEx ? changeDesc(state.selMapDataEx.description) : '';
   },
-  mapPath({ state, getters, rootState }) {
+  mapPath(state, getters, rootState) {
     return state.mapCode
       ? path +
       'map/pic/' +
@@ -54,7 +54,7 @@ const getters = {
       '_optimized.png?x-oss-process=style/jpg-test'
       : '';
   },
-  globalBuffs({ state, getters, rootState }) {
+  globalBuffs(state, getters, rootState) {
     if (!state.selMapData) return [];
     const BuffKeys = {
       kill_to_add_cost: '杀敌额外回复',
@@ -74,7 +74,7 @@ const getters = {
       })
       .filter(el => el);
   },
-  options({ state, getters, rootState }) {
+  options(state, getters, rootState) {
     return !state.selMapData
       ? []
       : Object.entries(
@@ -99,7 +99,7 @@ const getters = {
           return [mapOptionsKey[k], v];
         });
   },
-  direction({ state, getters, rootState }) {
+  direction(state, getters, rootState) {
     return state.short ? 'btt' : 'rtl';
   }
 };

@@ -1,3 +1,5 @@
+const SET_DATA = 'SET_DATA';
+
 const mutations = {
   clearMap(state) {
     state.data = state.rowData;
@@ -8,8 +10,14 @@ const mutations = {
     state.runesMode = false;
     state.preData = null;
   },
+  [SET_DATA](state, { key, value }) {
+    if (typeof state[key] === undefined)
+      console.error('state dose not has this property');
+    state[key] = value;
+  }
 };
 
 export {
-  mutations
+  mutations,
+  SET_DATA
 };

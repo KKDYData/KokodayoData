@@ -5,20 +5,21 @@
     <my-title
       ref="title"
       :title="title"
-      :control="control"
       :custom-bg="customBg"
       :right="short"
       style="margin-bottom: 0"
+      control
+      :init="init"
       @click="click"
     />
     <transition name="extra-button">
-      <div v-if="!control || value" class="extra-button">
+      <div v-if="active" class="extra-button">
         <slot name="extra-button" />
       </div>
     </transition>
     <div style="margin-left: 10px">
       <el-collapse-transition>
-        <slot v-if="!control || value" />
+        <slot v-if="active" />
       </el-collapse-transition>
     </div>
   </div>
@@ -29,7 +30,8 @@ import MyTitle from './MyTitle';
 import Vue from 'vue';
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
 Vue.component(CollapseTransition.name, CollapseTransition);
-import { mapState } from 'vuex';
+// todo change short get from props
+// import { mapState } from 'vuex';
 
 export default {
   components: { MyTitle },
@@ -42,7 +44,7 @@ export default {
       type: Boolean,
       default: true
     },
-    initValue: {
+    init: {
       type: Boolean,
       default: false
     },
@@ -53,12 +55,18 @@ export default {
   },
   data() {
     return {
-      value: this.initValue,
-      lock: false
+      value: this.init,
+      lock: false,
+      short: false
     };
   },
+
   computed: {
-    ...mapState(['short']),
+    // ...mapState(['short']),
+    active() {
+      if (!this.control) return true;
+      else return this.value;
+    }
   },
   watch: {
     value(v) {
@@ -68,8 +76,13 @@ export default {
       }
     }
   },
+  created() {
+    console.log('what');
+  },
   mounted() {
     this.$emit('monuted', this);
+    console.log('slide', this.value);
+
   },
   methods: {
     initClick(v) {

@@ -504,7 +504,7 @@ export default {
         this.mapCode = shortCode;
         this.$router.push(this.path + shortCode);
 
-// 没看懂
+        //! 没看懂
         setTimeout(() => {
           this.load = false;
           this.mapPicLoad = false;

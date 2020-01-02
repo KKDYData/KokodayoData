@@ -1,5 +1,5 @@
 <template>
-  <div class="title-container" :style="bg">
+  <div class="title-container" :style="{background}">
     <div v-if="!right && control" :class="{active: value, 'control-button': true}" @click="click">
       <div class="control-border" />
     </div>
@@ -33,22 +33,26 @@ export default {
     customBg: {
       type: String,
       default: '#414141'
+    },
+    init: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      value: false
+      value: this.init
     };
   },
   computed: {
-    bg() {
-      return '--custombg:' + this.customBg;
+    background() {
+      return this.customBg;
     }
   },
   methods: {
     click() {
       this.value = !this.value;
-      // undefined 不是很好看
+      //  不是很好看
       /**
        * @property {boolean} value - 控制器状态
        */
@@ -70,7 +74,6 @@ export default {
   font-size: 0
   height: 20px
   border-radius: 2px
-  background: var(--custombg)
 
   &:hover {
     .control-border {

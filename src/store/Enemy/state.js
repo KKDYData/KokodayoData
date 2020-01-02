@@ -8,7 +8,7 @@ const state = {
   load: false,
   drawer: false,
   selectedMap: '',
-  selMapData: null,
+  selMapData: '',
   mapCode: '',
   selMapDataEx: null,
   selMapNode: null,

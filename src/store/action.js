@@ -1,5 +1,7 @@
-import { fetchGet, getStageList, fetchByKey } from '../utils/fetch';
-import { getStageType } from '../utils/string';
+import {
+  fetchGet, getStageList, fetchByKey,
+} from '@/utils/fetch';
+import { getStageType } from '@/utils/string';
 const url = 'https://penguin-stats.io/PenguinStats/api/result/matrix';
 
 const change = (list) => {
