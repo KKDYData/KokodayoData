@@ -95,9 +95,7 @@ export default {
   },
   computed: {
     currThemePic() {
-      return `${this.path}custom/themes/${
-        this.currKey
-      }_optimized.png?x-oss-process=style/jpg-test`;
+      return `${this.path}custom/themes/${this.currKey}_optimized.png?x-oss-process=style/jpg-test`;
     }
   },
   async created() {

@@ -32,6 +32,8 @@
     "pathfinding": "^0.4.18",
     "phy-touch": "^0.1.0",
     "spritejs": "^2.29.5",
+    "ts-loader": "^6.2.1",
+    "typescript": "^3.7.2",
     "ua-parser-js": "^0.7.20",
     "vue": "^2.6.10",
     "vue-meta": "^2.2.0",

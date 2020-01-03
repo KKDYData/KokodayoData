@@ -4,7 +4,6 @@ const webpack = require('webpack');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 const WorkboxPlugin = require('workbox-webpack-plugin');
 
-
 const swPlugins = [
   new WorkboxPlugin.InjectManifest({
     swSrc: './src/sw.js',
@@ -66,10 +65,14 @@ module.exports = {
         }
 
       },
+      {
+        test: /\.tsx?$/,
+        loader: ['babel-loader', 'ts-loader']
+      }
     ]
   },
   resolve: {
-    extensions: ['.js', '.styl', '.vue', '.json'],
+    extensions: ['.ts', '.tsx', '.js', '.styl', '.vue', '.json'],
     alias: {
       '@': path.resolve(__dirname, '../src')
     }

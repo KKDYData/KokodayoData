@@ -262,8 +262,7 @@ export default {
   metaInfo() {
     return {
       titleTemplate: `${
-        this.selectedMap ? this.selectedMap + ' |' : ''
-      }敌人图鉴 | 明日方舟`,
+        this.selectedMap ? this.selectedMap + ' |' : ''}敌人图鉴 | 明日方舟`,
       meta: [
         {
           vmid: 'description',

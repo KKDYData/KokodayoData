@@ -1,54 +1,54 @@
 <template>
-  <my-slide-title title="掉落" :init-value="true">
-    <div class="map-drop-container-wrapper">
-      <div class="map-drop-list-wrapper">
-        <drop-list
-          class="flex-list"
-          v-if="firstDrop.length > 0"
-          :list="firstDrop"
-          title="首次掉落"
-          :target-stage="targetStage"
-        ></drop-list>
-        <drop-list
-          class="flex-list"
-          v-if="commonDrop.length > 0"
-          :list="commonDrop"
-          title="常规掉落"
-          :target-stage="targetStage"
-        ></drop-list>
-        <drop-list
-          class="flex-list"
-          v-if="rarityDrop.length > 0"
-          :list="rarityDrop"
-          title="稀有掉落"
-          :target-stage="targetStage"
-        ></drop-list>
-      </div>
+  <div class="map-drop-container-wrapper">
+    <div class="map-drop-list-wrapper">
       <drop-list
-        v-if="almostDrop.length > 0"
-        :list="almostDrop"
-        title="概率掉落"
+        v-if="firstDrop.length > 0"
+        class="flex-list"
+        :list="firstDrop"
+        title="首次掉落"
         :target-stage="targetStage"
-      ></drop-list>
+      />
+      <drop-list
+        v-if="commonDrop.length > 0"
+        class="flex-list"
+        :list="commonDrop"
+        title="常规掉落"
+        :target-stage="targetStage"
+      />
+      <drop-list
+        v-if="rarityDrop.length > 0"
+        class="flex-list"
+        :list="rarityDrop"
+        title="稀有掉落"
+        :target-stage="targetStage"
+      />
     </div>
-  </my-slide-title>
+    <drop-list
+      v-if="almostDrop.length > 0"
+      :list="almostDrop"
+      title="概率掉落"
+      :target-stage="targetStage"
+    />
+  </div>
 </template>
 
 <script>
 import DropList from './DropList';
-import MySlideTitle from '../base/MySlideTilte';
 import { mapState } from 'vuex';
 
 export default {
   components: {
-    MySlideTitle,
     DropList,
   },
   props: {
     dropInfo: {
+      type: Array,
       required: true
     },
-    targetStage: String
+    targetStage: {
+      type: String,
+      required: true
+    }
   },
 
   computed: {

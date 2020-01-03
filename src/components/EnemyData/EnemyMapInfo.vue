@@ -36,10 +36,12 @@
         </div>
         <div v-else slot="content">属性已进行合并计算，在下面显示</div>
       </content-slot>
-      <content-slot :long="true" :no-wrap="true" :width="150">
-        <div slot="title">总时长</div>
-        <div slot="content">{{ waveTime | time }}</div>
-      </content-slot>
+      <div style="width: 100%">
+        <content-slot :long="true" :no-wrap="true" :width="150">
+          <div slot="title">总时长</div>
+          <div slot="content">{{ waveTime | time }}</div>
+        </content-slot>
+      </div>
     </div>
   </div>
 </template>
@@ -105,7 +107,6 @@ export default {
 
 <style lang="stylus" scoped>
 .map-option-container-wrapper {
-  margin-left: 5vw
   max-width: 450px
   min-width: 385px
 }
