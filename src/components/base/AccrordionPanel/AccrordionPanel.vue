@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="muti-wrapper">
     <slot />
   </div>
 </template>
@@ -33,10 +33,17 @@ export default {
   },
   methods: {
     handleItemClick(item) {
-      console.log(name);
-      this.value = item.name;
+      this.activeName = item.name;
     }
   }
 
 };
 </script>
+
+<style lang="stylus" scoped>
+.muti-wrapper {
+  display: flex
+  flex-flow: column
+  height: 100%
+}
+</style>

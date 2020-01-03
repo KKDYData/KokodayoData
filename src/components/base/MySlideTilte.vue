@@ -9,15 +9,15 @@
       :right="short"
       style="margin-bottom: 0"
       control
-      :init="init"
+      :state="active"
       @click="click"
     />
     <transition name="extra-button">
       <div v-if="active" class="extra-button">
-        <slot name="extra-button" />
+        <slot name="button" />
       </div>
     </transition>
-    <div style="margin-left: 10px">
+    <div class="content-wrapper">
       <el-collapse-transition>
         <slot v-if="active" />
       </el-collapse-transition>
@@ -94,7 +94,8 @@ export default {
         this.lock = false;
         return;
       }
-      this.value = v;
+      console.log(v);
+      this.value = !v;
       this.$emit('open', this);
     },
     close() {
@@ -115,7 +116,18 @@ export default {
 
 .my-slide-title-wrapper {
   position: relative
-  margin: 20px 0
+
+  & + .my-slide-title-wrapper {
+    margin-top: 20px
+  }
+
+  .content-wrapper {
+    will-change: height
+    position: relative
+    overflow: hidden
+    box-sizing: border-box
+    padding: 20px 10px 10px
+  }
 }
 
 @media screen and (min-width: 700px) {

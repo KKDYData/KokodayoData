@@ -1,7 +1,7 @@
 <template>
   <div class="home-wrapper" element-loading-background="rgba(168, 168, 168, 0.1)">
     <!-- 地图选择的抽屉 -->
-    <!-- <el-drawer
+    <el-drawer
       ref="chapter-selecter"
       title="章节选择"
       :visible.sync="drawer"
@@ -26,7 +26,7 @@
           @node-click="changeMapCode"
         />
       </div>
-    </el-drawer>-->
+    </el-drawer>
     <!-- 主体 -->
     <div class="map-wrapper">
       <div class="map-title-part">
@@ -83,14 +83,73 @@
 
       <div class="right-panel">
         <accordion-panel v-model="activePanel">
-          <slide-panel control title="test:a" name="a">
-            <p>test</p>
+          <slide-panel title="敌人数据" name="x">
+            <template v-slot:button>
+              <div>
+                <el-button
+                  v-if="!simpleShow && mapCode"
+                  size="mini"
+                  type="danger"
+                  class="clear-route-button"
+                  @click="clearRoutes"
+                >清空路线</el-button>
+                <el-button
+                  v-if="mapCode"
+                  size="mini"
+                  type="info"
+                  :plain="simpleShow ? false: true"
+                  @click="simpleShow = !simpleShow"
+                >
+                  <i class="el-icon-refresh" />
+                  {{ simpleShow ? '简要显示': '路线模式' }}
+                </el-button>
+                <el-tooltip v-if="mapCode && !simpleShow">
+                  <el-button type="info" size="mini">说明</el-button>
+                  <div slot="content">
+                    <p>假设这波开始的时间是2分10秒, 敌人延迟4秒，间隔30</p>
+                    <p>在上面地图方块中出现X秒的意思是</p>
+                    <p>会在这个标出时间的方块上停留X秒</p>
+                    <p>延迟4s，就是这个敌人2分14秒的时候出发</p>
+                    <p>数量2，间隔30秒</p>
+                    <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
+                  </div>
+                </el-tooltip>
+              </div>
+            </template>
+            <enemy-data-layout
+              v-if="!load && data"
+              ref="layout"
+              :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
+              :data="data"
+              :map-data="selMapData"
+              :runes-mode="runesMode"
+              :simple-show="simpleShow"
+            />
           </slide-panel>
-          <slide-panel title="test:a" name="b">
-            <p>test</p>
+          <slide-panel control title="地图信息" name="a">
+            <enemy-map-info
+              style="margin-top: 20px"
+              :show-title="false"
+              :options="options"
+              :global-buffs="globalBuffs"
+              :wave-time="waveTime"
+            />
           </slide-panel>
-          <slide-panel title="test:a" name="c">
-            <p>test</p>
+          <slide-panel v-if="showPredefine" title="地图预设" name="b">
+            <map-pre-defined
+              style="margin-top: 10px"
+              :pre-data="selMapData.predefines"
+              :data="preData"
+              :runes-data="runesMode ? selMapData.runes : null"
+            />
+          </slide-panel>
+          <slide-panel title="掉落" name="c">
+            <map-drop-list
+              v-if="mapCode && detailsDropList.length > 0"
+              style="margin-top: 20px"
+              :drop-info="detailsDropList"
+              :target-stage="mapCode"
+            />
           </slide-panel>
         </accordion-panel>
       </div>
@@ -99,7 +158,6 @@
 </template>
 <script>
 import loadingC from '../base/Loading';
-import MySlideTitle from '../base/MySlideTilte';
 import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
@@ -110,8 +168,9 @@ import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel';
 import { Tree, Drawer, Button, Image, Loading } from 'element-ui';
 
 import Vue from 'vue';
-import { createNamespacedHelpers } from 'vuex';
-const { mapState, mapActions, mapGetters } = createNamespacedHelpers('enemy');
+import { SET_DATA } from '../../store/Enemy/mutations';
+import { createNamespacedHelpers, mapState as Root } from 'vuex';
+const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy');
 
 Vue.use(Loading);
 Vue.use(Button);
@@ -147,7 +206,6 @@ export default {
   },
   components: {
     EnemyDataLayout,
-    MySlideTitle,
     MapDropList,
     EnemyMapInfo,
     MapPreDefined,
@@ -157,22 +215,35 @@ export default {
   data() {
     return {
       load: false,
-      activePanel: 'a'
+      activePanel: 'x',
+      simpleShow: true,
+      drawer: false
     };
   },
   computed: {
     ...mapState([
-      'drawer',
+      'data',
       'selectedMap',
       'short',
       'selMapDataEx',
+      'selMapData',
       'devMode',
       'mapCode',
       'showMap',
       'runesMode',
+      'preData',
+      'detailsDropList',
+      'selMapNode',
+      'path'
     ]),
+    ...Root(['stageTree']),
     ...mapGetters([
-      'mapDesc'
+      'mapDesc',
+      'options',
+      'globalBuffs',
+      'waveTime',
+      'showPredefine',
+      'drawerSize'
     ])
   },
   mounted() {
@@ -180,11 +251,43 @@ export default {
   },
   methods: {
     ...mapActions(['linkStart', 'loadRunes']),
+    ...mapMutations([SET_DATA], 'clearMap'),
     openMap() {
 
     },
     loopAllRoutes() {
 
+    },
+    changeMapCode(data) {
+      if (!data.children) {
+        let codeFromPath = data.path;
+        let shortCode = codeFromPath
+          .replace('weekly', 'wk')
+          .replace('promote', 'pro');
+
+        this.$refs['chapter-selecter'].closeDrawer();
+
+        this.load = true;
+        this[SET_DATA]({ key: 'mapPicLoad', value: true });
+        // this.mapPicLoad = true;
+
+        this[SET_DATA]({ key: 'runesMode', value: false });
+        // this.runesMode = false;
+        this[SET_DATA]({ key: 'selMapNode', value: data });
+        this[SET_DATA]({ key: 'mapCode', value: shortCode });
+
+        // this.selMapNode = data;
+        // this.mapCode = shortCode;
+        console.log(this.path, shortCode);
+        this.$router.push(this.path + shortCode);
+
+        //! 没看懂
+        setTimeout(() => {
+          this.load = false;
+          this[SET_DATA]({ key: 'mapPicLoad', value: false });
+          // this.mapPicLoad = false;
+        }, 500);
+      }
     }
 
   }
@@ -198,21 +301,18 @@ export default {
 }
 
 .map-wrapper {
-  margin: 0 auto
-  max-width: 1200px
   height: calc(100vh - 60px)
-  background-color: rgba(230, 25, 144, 0.3)
-  padding: 20px
+  //background-color: rgba(230, 25, 144, 0.3)
   display: grid
-  grid-template-columns: 1000px 570px 1fr
+  grid-template-columns: minmax(1000px, auto) 500px
   grid-template-rows: 80px 1fr 1fr
   grid-gap: 20px 50px
-  overflow: hidden
+  padding: 20px
 
   .map-title-part {
     grid-row: 1 / 2
     grid-column: 1 / 3
-    background-color: rgba(144, 25, 230, 0.3)
+    //background-color: rgba(144, 25, 230, 0.3)
   }
 
   .map-title-part-2 {
@@ -221,16 +321,10 @@ export default {
     margin: 0 0 20px
   }
 
-  .map-data-wrapper {
-    .map-data-container {
-      margin-bottom: 20px
-      display: flex
-    }
-  }
-
   .left-panel, .right-panel, .left-bottom {
     width: 100%
     height: 100%
+    position: relative
   }
 
   .left-bottom {
@@ -238,20 +332,15 @@ export default {
     grid-column: 1 / 2
   }
 
-  .left-panel, .right-panel {
-    width: 100%
-    height: 100%
+  .left-panel {
     grid-row: 2 / 3
     grid-column: 1 / 2
     background-color: rgba(24, 230, 144, 0.3)
   }
 
   .right-panel {
-    width: 100%
-    height: 100%
     grid-row: 2 / 4
     grid-column: 2 / 3
-    background-color: rgba(24, 230, 144, 0.3)
   }
 
   --height: 1000px
@@ -260,14 +349,6 @@ export default {
     width: 100%
     height: calc(var(--height) * 0.56)
     box-sizing: border-box
-  }
-
-  .map-pic-contianer {
-    height: calc(var(--height) * 0.56)
-    width: calc(var(--height) * 1)
-    box-sizing: border-box
-    border: 2px solid #313131
-    //opacity: 0.5
   }
 }
 
@@ -284,6 +365,7 @@ export default {
   width: 100%
 }
 
+//todo use postcss?
 filter() {
   -moz-filter: arguments
   -webkit-filter: arguments
@@ -292,49 +374,26 @@ filter() {
   filter: arguments
 }
 
-@media screen and (min-width: 1350px) {
-  .map-data-container {
-    margin-bottom: 20px
-    display: flex
-    flex-wrap: wrap
-  }
-
+@media screen and (min-width: 1900px) {
   .map-wrapper {
-    min-width: calc(100% - 40px)
+    max-width: 1900px
+    margin: 0 auto
   }
 }
 
-@media screen and (min-width: 1500px) {
+@media screen and (max-width: 1600px) {
   .map-wrapper {
-    //--height: 500px
+    min-width: 1300px
+    grid-template-columns: 60% 34%
+    grid-template-rows: 80px 1fr 1fr
+    grid-gap: 20px 2%
+    padding: 1%
   }
 }
 
-@media screen and (min-width: 1600px) {
+@media screen and (max-width: 1300px) {
   .map-wrapper {
-    //--height: 500px
-    min-width: 1600px
-  }
-}
-
-@media screen and (max-width: 800px) {
-  .map-wrapper {
-    --height: calc(52.8vw)
-    min-width: 360px
-    box-sizing: border-box
-    padding: 3vw
-  }
-}
-
-@media screen and (max-width: 500px) {
-  .runes-mode-button {
-    padding-top: 5px
-    padding-bottom: 5px
-  }
-
-  .chapter-wrapper {
-    //margin-bottom 有70px， 1px防止滚动穿透
-    min-height: calc(100% - 69px)
+    min-width: auto
   }
 }
 </style>

@@ -134,7 +134,7 @@ body {
   width: 200px
 }
 
-.el-dialog__wrapper {
+.el-drawer__wrapper {
   position: fixed
   top: 0
   right: 0
@@ -173,4 +173,10 @@ body {
   .enemy-drawer {
     min-height: calc(100% + 1px)
   }
+}
+
+//todo test drawer animation
+.el-drawer__open .el-drawer.rtl {
+  //-webkit-animation: rtl-drawer-in 0.3s 1ms
+  animation: rtl-drawer-in 3s 1ms
 }

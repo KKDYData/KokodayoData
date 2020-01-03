@@ -1,10 +1,9 @@
 <template>
-  <div>
+  <div class="container">
     <enemy-data-drawer
       :details-open.sync="detailsOpen"
       :runes-mode="runesMode"
       :current-enemy="currEnemy"
-      :drawer-size="drawerSize"
       :pic-path="enemyPicPath(showKey)"
     >
       <template slot="enemy-status">
@@ -173,11 +172,9 @@ export default {
       selectedStlye: {}
     };
   },
+
   computed: {
     ...mapState(['screenWidth', 'short']),
-    drawerSize() {
-      return Math.floor((600 / this.screenWidth) * 100) + '%';
-    },
     appearMap() {
       // 之后改成从vuex拿
       return {};
@@ -188,6 +185,9 @@ export default {
     }
   },
   watch: {
+    screenWidth(v) {
+      console.log('dafdaf ??????????', v);
+    },
     simpleShow(v) {
       if (v) this.calFillAmount();
     }
@@ -272,7 +272,7 @@ export default {
       if (size > 30) {
         throw new Error('Some thing wrong!', size);
       }
-      for (let i = 0; i < size; i++) {
+      for (let i = 0;i < size;i++) {
         arr.push(i);
       }
       this.fillItems = arr;
@@ -283,22 +283,26 @@ export default {
 
 <style lang="stylus" scoped>
 .enemy-data-layout-body {
-  max-height: 40vh
+  //todo maybe have something better code
+  max-height: 60vh
   overflow-y: scroll
   flex-grow: 1
   position: relative
-  padding-top: 40px
+  //padding-top: 40px
   //吃掉title的margin-buttom 20px
-  margin-top: -20px
+  margin-top: 20px
+  //height: 100%
 }
 
 .enemy-data-layout {
+  max-height: 60vh
   display: flex
   flex-wrap: wrap
   /*justify-content: start;*/
   margin: 0 auto
   max-width: 1200px
   padding: 0px 20px 0
+  overflow-y: scroll
 }
 
 .wave-enemy-container {

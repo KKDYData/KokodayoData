@@ -34,7 +34,8 @@
     <!-- 主体 -->
 
     <div class="map-wrapper">
-      <div class="map-title-part">
+      <!-- 地图信息、控制栏 -->
+      <div ref="map-title-part" class="map-title-part">
         <div>
           <el-button type="primary" @click="drawer = true">
             {{ selectedMap !== '' ? selectedMap : '选择地图' }}
@@ -74,8 +75,14 @@
             </el-tooltip>
           </span>
         </div>
+        <div v-if="selMapDataEx" ref="map-desc" style="margin-left: 5px">
+          <p v-if="selMapDataEx.dangerLevel !== '-'" style="font-size: 0.9em">
+            <span>推荐等级</span>
+            <span style="color: #f49800;">{{ selMapDataEx.dangerLevel }}</span>
+          </p>
+          <p :key="runesMode" style="font-size: 0.9em" v-html="mapDesc" />
+        </div>
       </div>
-      <!-- 地图信息、控制栏 -->
       <div class="map-data-wrapper">
         <el-alert
           v-if="isEdge && showMap"
@@ -119,90 +126,79 @@
           />
         </div>
       </div>
-      <div class="right-panel">
-        <my-slide-title
-          v-if="data"
-          ref="layout-control"
-          :control="mapCode ? true : false"
-          :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
-        >
-          <div slot="extra-button">
-            <el-button
-              v-if="!simpleShow && mapCode"
-              size="mini"
-              type="danger"
-              class="clear-route-button"
-              @click="clearRoutes"
-            >清空路线</el-button>
-            <el-button
-              v-if="mapCode"
-              size="mini"
-              type="info"
-              :plain="simpleShow ? false: true"
-              @click="simpleShow = !simpleShow"
-            >
-              <i class="el-icon-refresh" />
-              {{ simpleShow ? '简要显示': '路线模式' }}
-            </el-button>
-            <el-tooltip v-if="mapCode && !simpleShow">
-              <el-button type="info" size="mini">说明</el-button>
-              <div slot="content">
-                <p>假设这波开始的时间是2分10秒, 敌人延迟4秒，间隔30</p>
-                <p>在上面地图方块中出现X秒的意思是</p>
-                <p>会在这个标出时间的方块上停留X秒</p>
-                <p>延迟4s，就是这个敌人2分14秒的时候出发</p>
-                <p>数量2，间隔30秒</p>
-                <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
-              </div>
-            </el-tooltip>
-          </div>
-          <!-- 不能用margin会影响动画，margin合并 -->
-          <enemy-data-layout
-            v-if="!load && data"
-            ref="layout"
-            :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
-            :data="data"
-            :map-data="selMapData"
-            :runes-mode="runesMode"
-            :simple-show="simpleShow"
-            @showRoute="loopRoutes"
-            @closeRoute="loopRoutes"
-          />
-        </my-slide-title>
-        <my-slide-title v-if="short && mapCode" title="地图信息">
-          <enemy-map-info
-            style="margin-top: 20px"
-            :show-title="false"
-            :options="options"
-            :global-buffs="globalBuffs"
-            :wave-time="waveTime"
-          />
-        </my-slide-title>
-        <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设">
-          <map-pre-defined
-            style="margin-top: 10px"
-            :pre-data="selMapData.predefines"
-            :data="preData"
-            :runes-data="runesMode ? selMapData.runes : null"
-          />
-        </my-slide-title>
-        <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
-        <map-drop-list
-          v-if="mapCode && detailsDropList.length > 0"
-          style="margin-top: 20px"
-          :drop-info="detailsDropList"
-          :target-stage="mapCode"
-        />
-      </div>
-      <div class="map-title-part-2">
-        <div v-if="selMapDataEx" ref="map-desc" style="margin-left: 5px">
-          <p v-if="selMapDataEx.dangerLevel !== '-'" style="font-size: 0.9em">
-            <span>推荐等级</span>
-            <span style="color: #f49800;">{{ selMapDataEx.dangerLevel }}</span>
-          </p>
-          <p :key="runesMode" style="font-size: 0.9em" v-html="mapDesc" />
+      <my-slide-title
+        v-if="data"
+        ref="layout-control"
+        :control="mapCode ? true : false"
+        :title="selectedMap === '' ? '所有敌人' : '出现敌人'"
+      >
+        <div slot="extra-button">
+          <el-button
+            v-if="!simpleShow && mapCode"
+            size="mini"
+            type="danger"
+            class="clear-route-button"
+            @click="clearRoutes"
+          >清空路线</el-button>
+          <el-button
+            v-if="mapCode"
+            size="mini"
+            type="info"
+            :plain="simpleShow ? false: true"
+            @click="simpleShow = !simpleShow"
+          >
+            <i class="el-icon-refresh" />
+            {{ simpleShow ? '简要显示': '路线模式' }}
+          </el-button>
+          <el-tooltip v-if="mapCode && !simpleShow">
+            <el-button type="info" size="mini">说明</el-button>
+            <div slot="content">
+              <p>假设这波开始的时间是2分10秒, 敌人延迟4秒，间隔30</p>
+              <p>在上面地图方块中出现X秒的意思是</p>
+              <p>会在这个标出时间的方块上停留X秒</p>
+              <p>延迟4s，就是这个敌人2分14秒的时候出发</p>
+              <p>数量2，间隔30秒</p>
+              <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
+            </div>
+          </el-tooltip>
         </div>
-      </div>
+        <!-- 不能用margin会影响动画，margin合并 -->
+        <enemy-data-layout
+          v-if="!load && data"
+          ref="layout"
+          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
+          :data="data"
+          :map-data="selMapData"
+          :runes-mode="runesMode"
+          :simple-show="simpleShow"
+          @showRoute="loopRoutes"
+          @closeRoute="loopRoutes"
+        />
+      </my-slide-title>
+      <my-slide-title v-if="short && mapCode" title="地图信息">
+        <enemy-map-info
+          style="margin-top: 20px"
+          :show-title="false"
+          :options="options"
+          :global-buffs="globalBuffs"
+          :wave-time="waveTime"
+        />
+      </my-slide-title>
+      <my-slide-title v-if="mapCode && showPredefine && preData" title="地图预设">
+        <map-pre-defined
+          style="margin-top: 10px"
+          :pre-data="selMapData.predefines"
+          :data="preData"
+          :runes-data="runesMode ? selMapData.runes : null"
+        />
+      </my-slide-title>
+      <!-- 一不小心吧silde写到dropList里面了，不过效果一样，不管了 -->
+      <map-drop-list
+        v-if="mapCode && detailsDropList.length > 0"
+        style="margin-top: 20px"
+        :drop-info="detailsDropList"
+        :target-stage="mapCode"
+      />
     </div>
   </div>
 </template>
@@ -212,8 +208,8 @@ import MySlideTitle from '../base/MySlideTilte';
 import MapDropList from './MapDropList';
 import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
-import { initSomeMap } from './initData.js';
 
+import { initSomeMap } from './initData.js';
 
 
 
@@ -265,7 +261,8 @@ const EnemyDataLayout = () => ({
 export default {
   metaInfo() {
     return {
-      titleTemplate: `${this.selectedMap ? this.selectedMap + ' |' : ''}敌人图鉴 | 明日方舟`,
+      titleTemplate: `${
+        this.selectedMap ? this.selectedMap + ' |' : ''}敌人图鉴 | 明日方舟`,
       meta: [
         {
           vmid: 'description',
@@ -287,7 +284,6 @@ export default {
   data() {
     const browser = UA.Browser;
     return {
-      short: true,
       data: null,
       rowData: [],
       load: false,
@@ -299,6 +295,7 @@ export default {
       selMapNode: null,
       detailsDropList: [],
       runesMode: false,
+      pTranisitionTemp: 0,
       treeId: '',
       mapPicLoad: true,
       showMap: true,
@@ -312,7 +309,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(['stageTree', 'screenWidth']),
+    ...mapState(['stageTree', 'screenWidth', 'short']),
     drawerSize() {
       return Math.floor((300 / this.screenWidth) * 100) + '%';
     },
@@ -463,9 +460,12 @@ export default {
       this.selMapDataEx = null;
       this.runesMode = false;
       this.preData = null;
+      this.pTransition();
     },
     async loadRunes() {
-
+      this.pTranisitionTemp = window.getComputedStyle(
+        this.$refs['map-title-part']
+      ).height;
       if (!this.runesMode) {
         this.selMapDataEx = await getMapDataListVer(this.mapCode + '%23f%23');
         this.runesMode = true;
@@ -473,6 +473,19 @@ export default {
         this.runesMode = false;
         this.selMapDataEx = await getMapDataListVer(this.mapCode);
       }
+      this.pTransition();
+    },
+    // 让每个地图的文字说明高度变化地更好看的动画函数，需要先设置好pTranisitionTemp，保存原先的高度
+    async pTransition() {
+      const target = this.$refs['map-title-part'];
+      target.style.height = 'auto';
+      await this.$nextTick();
+      if (!target) return;
+      const targetHeight = window.getComputedStyle(target).height;
+      target.style.height = this.pTranisitionTemp;
+      setTimeout(() => {
+        target.style.height = targetHeight;
+      }, 50);
     },
     async loadMap(map) {
       const parent = map || this.$route.params.map;
@@ -490,21 +503,19 @@ export default {
     // 选择章节
     changeMapCode(data) {
       if (!data.children) {
-        let codeFromPath = data.path;
-        let shortCode = codeFromPath
-          .replace('weekly', 'wk')
-          .replace('promote', 'pro');
-
         this.$refs['chapter-selecter'].closeDrawer();
         this.load = true;
         this.mapPicLoad = true;
 
         this.runesMode = false;
         this.selMapNode = data;
+        let codeFromPath = data.path;
+        let shortCode = codeFromPath
+          .replace('weekly', 'wk')
+          .replace('promote', 'pro');
         this.mapCode = shortCode;
         this.$router.push(this.path + shortCode);
 
-        //! 没看懂
         setTimeout(() => {
           this.load = false;
           this.mapPicLoad = false;
@@ -522,6 +533,10 @@ export default {
       });
 
       if (mapData) {
+        this.pTranisitionTemp = window.getComputedStyle(
+          this.$refs['map-title-part']
+        ).height;
+
         exData.stageDropInfo &&
           this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
             data => (this.detailsDropList = data)
@@ -539,6 +554,7 @@ export default {
         this.selMapData = mapData;
         this.selMapDataEx = exData;
         this.getPreData();
+        this.pTransition();
 
 
         // 去掉地图的loading遮罩
@@ -656,22 +672,15 @@ export default {
   max-width: 1200px
   padding: 20px
   //min-width: 1000px
-  display: grid
-  grid-template-columns: 1000px 1fr
-  grid-template-rows: 80px 1fr 1fr
-  grid-gap: 20px 50px
+  //有空再算一下，到底应该给多少，先随便给个80
+  min-height: 80vh
+  display: flex
+  flex-direction: column
   overflow: hidden
 
   .map-title-part {
-    grid-row: 1 / 2
-    grid-column: 1 / 4
     margin: 0 0 20px
-  }
-
-  .map-title-part-2 {
-    grid-row: 3 / 3
-    grid-column: 1 / 3
-    margin: 0 0 20px
+    transition: height 1s cubic-bezier(0.68, -0.55, 0.27, 1.55)
   }
 
   .map-data-wrapper {
@@ -681,28 +690,16 @@ export default {
     }
   }
 
-  .left-panel, .right-panel {
-    //display: inline-block
-    width: 100%
-  }
-
-  .right-panel {
-    width: 100%
-    grid-row: 2 / 4
-    grid-column: 3 / 4
-  }
-
-  --height: 1000px
+  --height: 28vw
 
   .map-left-panel {
-    width: 100%
-    height: calc(var(--height) * 0.56)
+    width: calc(var(--height) * 1.78)
     box-sizing: border-box
   }
 
   .map-pic-contianer {
-    height: calc(var(--height) * 0.56)
-    width: calc(var(--height) * 1)
+    height: var(--height)
+    width: calc(var(--height) * 1.78)
     box-sizing: border-box
     border: 2px solid #313131
     //opacity: 0.5
@@ -746,14 +743,14 @@ filter() {
 
 @media screen and (min-width: 1500px) {
   .map-wrapper {
-    //--height: 500px
+    --height: 500px
   }
 }
 
 @media screen and (min-width: 1600px) {
   .map-wrapper {
-    //--height: 500px
-    min-width: 1600px
+    --height: 500px
+    min-width: 1520px
   }
 }
 

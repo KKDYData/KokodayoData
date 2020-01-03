@@ -6,6 +6,9 @@ const getters = {
   drawerSize(state, getters, rootState) {
     return Math.floor((300 / rootState.screenWidth) * 100) + '%';
   },
+  drawerSizeDouble(state, getters, rootState) {
+    return Math.floor((300 / rootState.screenWidth) * 100 * 2) + '%';
+  },
   waveTime(state, getters, rootState) {
     let enemyNum = 0;
     // 看起来像是简单算个时间，但是实际上，顺便把数量和每波开始的时间加进数据了
@@ -64,9 +67,11 @@ const getters = {
     const globalBuffs = state.selMapData.globalBuffs
       ? state.selMapData.globalBuffs
       : [];
+    console.log(state.selMapData);
     const target = state.runesMode
-      ? [...globalBuffs, ...state.selMapData.runes]
+      ? [...globalBuffs]
       : [...globalBuffs];
+    if (state.selMapData.runes) target.push(...state.selMapData.runes);
     return target
       .map(({ prefabKey, key, blackboard }) => {
         const k = prefabKey ? prefabKey : key;
@@ -85,6 +90,7 @@ const getters = {
           v = k === 'costIncreaseTime' ? Math.round(10 / v) / 10 : v;
           let costBuff;
           if (state.runesMode) {
+            console.log('runes mode', state.runesMode);
             if (k === 'maxLifePoint') {
               const lifePointBuff = findValue(state.selMapData, 'runes', 'gbuff_lifepoint');
               if (lifePointBuff) {

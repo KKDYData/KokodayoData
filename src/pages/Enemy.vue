@@ -11,7 +11,7 @@
       <p>更新词条翻译算法。</p>
       <p>危机合约的buff计算还没加入</p>
     </el-alert>-->
-    <new />
+    <new ref="layout" />
     <!-- <enemy-data ref="layout" /> -->
   </div>
 </template>
@@ -40,14 +40,16 @@ export default {
     return {};
   },
   beforeRouteUpdate(to, from, next) {
-    this.$refs.layout.loadMap(to.params.map);
+    //todo
+    this.$refs.layout.linkStart(to.params.map);
     next();
   },
   beforeRouteLeave(to, from, next) {
+    //todo
     if (/enemydata(\/)?$/.test(to.path)) {
       this.$refs.layout.clearMap();
     } else if (/enemydata\/.+$/.test(to.path)) {
-      this.$refs.layout.loadMap(to.params.map);
+      this.$refs.layout.linkStart(to.params.map);
     }
     next();
   }

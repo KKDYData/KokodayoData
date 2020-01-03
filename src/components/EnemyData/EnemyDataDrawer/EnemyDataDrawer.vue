@@ -1,8 +1,10 @@
 <template>
+  <!-- direction="ltr"1 -->
   <el-drawer
     :direction="short ? 'btt' : 'rtl'"
     :visible="detailsOpen"
-    :size="short ? '85%': drawerSize"
+    :append-to-body="true"
+    :size="drawerSizeDouble"
     :destroy-on-close="true"
     :title="'敌人数据' + (runesMode ? '[突袭]': '' )"
     @close="$emit('update:detailsOpen', false)"
@@ -71,13 +73,17 @@
 
 <script>
 import { path } from '@/utils/listVer';
-import { mapState } from 'vuex';
 import BaseStatusBox from './BaseStatusBox';
 
 import { Image, Drawer } from 'element-ui';
 import Vue from 'vue';
 Vue.use(Image);
 Vue.use(Drawer);
+
+
+import { createNamespacedHelpers, mapState as Root } from 'vuex';
+const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy');
+
 
 export default {
   components: {
@@ -96,10 +102,6 @@ export default {
       default: null,
       type: Object
     },
-    drawerSize: {
-      default: '30%',
-      type: String
-    },
     picPath: {
       required: true,
       type: String
@@ -113,6 +115,7 @@ export default {
   },
   computed: {
     ...mapState(['short']),
+    ...mapGetters(['drawerSizeDouble'])
   }
 };
 </script>

@@ -2,9 +2,9 @@ import { devMode, rootPath } from '@/stats';
 
 const state = {
   path: (process.env.NODE_ENV === 'development' ? '' : rootPath) + '/enemydata/',
-  short: true,
+  short: false,
   data: null,
-  rowData: [],
+  rawData: [],
   load: false,
   drawer: false,
   selectedMap: '',

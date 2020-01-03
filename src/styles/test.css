@@ -222,57 +222,47 @@
 }
 
 .el-drawer.rtl {
-  -webkit-animation: rtl-drawer-out .3s;
-  animation: rtl-drawer-out .3s;
+  -webkit-animation: rtl-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: rtl-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
   right: 0
 }
 
 .el-drawer__open .el-drawer.rtl {
-  -webkit-animation: rtl-drawer-in .3s 1ms;
-  animation: rtl-drawer-in .3s 1ms
+  -webkit-animation: rtl-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: rtl-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s
 }
 
 .el-drawer.ltr {
-  -webkit-animation: ltr-drawer-out .3s;
-  animation: ltr-drawer-out .3s;
+  -webkit-animation: ltr-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: ltr-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
   left: 0
 }
 
 .el-drawer__open .el-drawer.ltr {
-  -webkit-animation: ltr-drawer-in .3s 1ms;
-  animation: ltr-drawer-in .3s 1ms
+  -webkit-animation: ltr-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: ltr-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s
 }
 
 .el-drawer.ttb {
-  -webkit-animation: ttb-drawer-out .3s;
-  animation: ttb-drawer-out .3s;
+  -webkit-animation: ttb-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: ttb-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
   top: 0
 }
 
 .el-drawer__open .el-drawer.ttb {
-  -webkit-animation: ttb-drawer-in .3s 1ms;
-  animation: ttb-drawer-in .3s 1ms
+  -webkit-animation: ttb-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: ttb-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s
 }
 
 .el-drawer.btt {
-  -webkit-animation: btt-drawer-out .3s;
-  animation: btt-drawer-out .3s;
+  -webkit-animation: btt-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: btt-drawer-out 225ms cubic-bezier(0, 0, .2, 1) 0s;
   bottom: 0
 }
 
 .el-drawer__open .el-drawer.btt {
-  -webkit-animation: btt-drawer-in .3s 1ms;
-  animation: btt-drawer-in .3s 1ms
-}
-
-.el-drawer__wrapper {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  overflow: hidden;
-  margin: 0
+  -webkit-animation: btt-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: btt-drawer-in 225ms cubic-bezier(0, 0, .2, 1) 0s
 }
 
 .el-drawer__header {
@@ -326,10 +316,10 @@
 }
 
 .el-drawer-fade-enter-active {
-  -webkit-animation: el-drawer-fade-in .3s;
-  animation: el-drawer-fade-in .3s
+  -webkit-animation: el-drawer-fade-in 225ms cubic-bezier(0, 0, .2, 1) 0s;
+  animation: el-drawer-fade-in 225ms cubic-bezier(0, 0, .2, 1) 0s
 }
 
 .el-drawer-fade-leave-active {
-  animation: el-drawer-fade-in .3s reverse
+  animation: el-drawer-fade-in 225ms cubic-bezier(0, 0, .2, 1) 0s reverse
 }

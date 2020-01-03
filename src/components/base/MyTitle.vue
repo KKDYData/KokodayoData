@@ -1,12 +1,12 @@
 <template>
   <div class="title-container" :style="{background}">
-    <div v-if="!right && control" :class="{active: value, 'control-button': true}" @click="click">
+    <div v-if="!right && control" :class="{active: state, 'control-button': true}" @click="click">
       <div class="control-border" />
     </div>
     <div class="title">{{ title }}</div>
     <div
       v-if="right && control"
-      :class="{active: value, 'control-button': true, right: true}"
+      :class="{active: state, 'control-button': true, right: true}"
       @click="click"
     >
       <div class="control-border" />
@@ -34,15 +34,10 @@ export default {
       type: String,
       default: '#414141'
     },
-    init: {
+    state: {
       type: Boolean,
       default: false
     }
-  },
-  data() {
-    return {
-      value: this.init
-    };
   },
   computed: {
     background() {
@@ -51,12 +46,11 @@ export default {
   },
   methods: {
     click() {
-      this.value = !this.value;
       //  不是很好看
       /**
        * @property {boolean} value - 控制器状态
        */
-      this.$emit('click', this.value);
+      this.$emit('click', this.state);
     }
   }
 };

@@ -35,7 +35,8 @@ const getItemList = (list) => {
 const actions = {
   linkStart({ dispatch, commit, getters, rootState }) {
     return getEnemyList().then(data => {
-      commit(SET_DATA, { key: 'data', value: data[0] });
+      console.log('enemy data', data);
+      commit(SET_DATA, { key: 'rawData', value: data });
       if (rootState.stageTree) dispatch('loadMap');
       else commit(SET_DATA, { key: 'watchTree', value: true });
     });
@@ -54,7 +55,7 @@ const actions = {
     }
   },
   async choseMap({ commit, state, dispatch }, data) {
-    console.log(state.mapCode);
+    console.log('map code', state.mapCode);
     const [mapData, exData] = await Promise.all([
       getMapData('level_' + data.path.replace('kc', 'killcost')),
       getMapDataListVer(state.mapCode)
@@ -72,13 +73,14 @@ const actions = {
       // ! to watch
       // ! if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
 
-      const data = Object.entries(state.rowData).reduce((res, [k, v]) => {
+      const data = Object.entries(state.rawData).reduce((res, [k, v]) => {
         const target = mapData.enemyDbRefs.find(el => el.id === k);
         if (target) {
           res[k] = Object.assign({}, v, target);
           return res;
         } else return res;
       }, {});
+      console.log();
       commit(SET_DATA, { key: 'data', value: data });
       commit(SET_DATA, { key: 'selectedMap', value: data.label });
       commit(SET_DATA, { key: 'selMapData', value: mapData });
@@ -126,13 +128,14 @@ const actions = {
     });
   },
   async loadRunes({ state, dispatch, commit, getters }) {
-    if (!state.runesMode) {
-      state.selMapDataEx = await getMapDataListVer(state.mapCode + '%23f%23');
-      state.runesMode = true;
-    } else {
-      state.runesMode = false;
-      state.selMapDataEx = await getMapDataListVer(state.mapCode);
-    }
+    // todo
+    // if (!state.runesMode) {
+    //   state.selMapDataEx = await getMapDataListVer(state.mapCode + '%23f%23');
+    //   state.runesMode = true;
+    // } else {
+    //   state.runesMode = false;
+    //   state.selMapDataEx = await getMapDataListVer(state.mapCode);
+    // }
   },
 };
 export {
