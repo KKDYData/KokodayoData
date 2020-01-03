@@ -73,15 +73,15 @@ const actions = {
       // ! to watch
       // ! if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
 
-      const data = Object.entries(state.rawData).reduce((res, [k, v]) => {
+      const enemyData = Object.entries(state.rawData).reduce((res, [k, v]) => {
         const target = mapData.enemyDbRefs.find(el => el.id === k);
         if (target) {
           res[k] = Object.assign({}, v, target);
           return res;
         } else return res;
       }, {});
-      console.log();
-      commit(SET_DATA, { key: 'data', value: data });
+      console.log(data);
+      commit(SET_DATA, { key: 'data', value: enemyData });
       commit(SET_DATA, { key: 'selectedMap', value: data.label });
       commit(SET_DATA, { key: 'selMapData', value: mapData });
       commit(SET_DATA, { key: 'selMapDataEx', value: exData });

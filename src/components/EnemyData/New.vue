@@ -52,7 +52,7 @@
           >地图</el-button>
           <el-button
             v-if="devMode === 'beta' && selMapDataEx"
-            :type="!showMap ? '': 'warning'"
+            :type="!loopAll ? '': 'warning'"
             :plain="!showMap"
             class="runes-mode-button"
             @click="loopAllRoutes"
@@ -217,7 +217,8 @@ export default {
       load: false,
       activePanel: 'x',
       simpleShow: true,
-      drawer: false
+      drawer: false,
+      loopAll: false
     };
   },
   computed: {
@@ -234,7 +235,8 @@ export default {
       'preData',
       'detailsDropList',
       'selMapNode',
-      'path'
+      'path',
+      'map'
     ]),
     ...Root(['stageTree']),
     ...mapGetters([
@@ -255,8 +257,21 @@ export default {
     openMap() {
 
     },
-    loopAllRoutes() {
+    clearRoutes() {
+      this.map.deleteAll();
+      this.$refs.layout.clearRoutes();
+      this.loopAll = false;
 
+    },
+    loopAllRoutes() {
+      if (!this.loopAll) {
+        this.map.loopRoutes();
+        this.loopAll = true;
+      }
+      else {
+        this.loopAll = false;
+        this.map.deleteAll();
+      }
     },
     changeMapCode(data) {
       if (!data.children) {

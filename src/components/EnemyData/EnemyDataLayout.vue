@@ -115,7 +115,6 @@
 <script>
 import { Image, Drawer, Button } from 'element-ui';
 import Vue from 'vue';
-import { mapState } from 'vuex';
 Vue.use(Image);
 Vue.use(Drawer);
 Vue.use(Button);
@@ -125,8 +124,11 @@ import EnemyStatus from './EnemyStatus';
 import EnemyDataDrawer from './EnemyDataDrawer';
 import EnemyCube from './EnemyCube';
 
-import { getEnemyData } from '../../utils/fetch';
-import { path } from '../../utils/listVer';
+import { getEnemyData } from '@/utils/fetch';
+import { path } from '@/utils/listVer';
+
+import { createNamespacedHelpers, mapState as Root } from 'vuex';
+const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy');
 
 export default {
   components: { EnemyStatus, EnemyDataDrawer, EnemyCube, MyTitle },
@@ -174,7 +176,8 @@ export default {
   },
 
   computed: {
-    ...mapState(['screenWidth', 'short']),
+    ...Root(['screenWidth']),
+    ...mapState(['short', 'map']),
     appearMap() {
       // 之后改成从vuex拿
       return {};
@@ -186,7 +189,7 @@ export default {
   },
   watch: {
     screenWidth(v) {
-      console.log('dafdaf ??????????', v);
+      console.log('screenWidth change', v);
     },
     simpleShow(v) {
       if (v) this.calFillAmount();
@@ -203,13 +206,13 @@ export default {
       this.selectedRoutes.clear();
     },
     showRoute(index) {
+      const color = Math.round(360 * Math.random());
       if (this.selectedRoutes.has(index)) {
         this.$emit('closeRoute', index);
         this.$set(this.selectedStlye, index, '');
         this.selectedRoutes.delete(index);
       } else {
         this.selectedRoutes.add(index);
-        const color = Math.round(360 * Math.random());
         this.$set(
           this.selectedStlye,
           index,
@@ -218,6 +221,8 @@ export default {
         console.log(this.selectedRoutes, color);
         this.$emit('showRoute', index, color);
       }
+      this.map.loopRoute(index, color);
+
     },
     enemyPicPath(key) {
       return this.path + key + '.png?x-oss-process=style/jpg-test';
@@ -272,7 +277,7 @@ export default {
       if (size > 30) {
         throw new Error('Some thing wrong!', size);
       }
-      for (let i = 0;i < size;i++) {
+      for (let i = 0; i < size; i++) {
         arr.push(i);
       }
       this.fillItems = arr;
@@ -302,7 +307,7 @@ export default {
   margin: 0 auto
   max-width: 1200px
   padding: 0px 20px 0
-  overflow-y: scroll
+  //overflow-y: scroll
 }
 
 .wave-enemy-container {
