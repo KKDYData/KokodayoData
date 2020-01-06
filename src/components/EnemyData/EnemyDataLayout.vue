@@ -91,7 +91,7 @@
         </div>
       </div>
     </div>
-    <div v-else class="enemy-data-layout" :style="!short ? 'margin: 0 10px' : ''">
+    <div v-else class="enemy-data-layout">
       <enemy-cube
         v-for="(enemy, key) in data"
         :key="enemy.enemyId"
@@ -128,7 +128,7 @@ import { getEnemyData } from '@/utils/fetch';
 import { path } from '@/utils/listVer';
 
 import { createNamespacedHelpers, mapState as Root } from 'vuex';
-const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy');
+const { mapState } = createNamespacedHelpers('enemy');
 
 export default {
   components: { EnemyStatus, EnemyDataDrawer, EnemyCube, MyTitle },
@@ -141,7 +141,7 @@ export default {
   },
   props: {
     data: {
-      type: Object,
+      type: [Array, Object],
       required: true
     },
     mapData: {
@@ -300,14 +300,10 @@ export default {
 }
 
 .enemy-data-layout {
-  max-height: 60vh
   display: flex
   flex-wrap: wrap
   /*justify-content: start;*/
   margin: 0 auto
-  max-width: 1200px
-  padding: 0px 20px 0
-  //overflow-y: scroll
 }
 
 .wave-enemy-container {

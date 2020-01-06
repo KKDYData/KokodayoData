@@ -86,7 +86,7 @@ const actions = {
       commit(SET_DATA, { key: 'selMapData', value: mapData });
       commit(SET_DATA, { key: 'selMapDataEx', value: exData });
 
-      dispatch('getPreData');
+      await dispatch('getPreData');
 
 
       // 去掉地图的loading遮罩
@@ -129,13 +129,15 @@ const actions = {
   },
   async loadRunes({ state, dispatch, commit, getters }) {
     // todo
-    // if (!state.runesMode) {
-    //   state.selMapDataEx = await getMapDataListVer(state.mapCode + '%23f%23');
-    //   state.runesMode = true;
-    // } else {
-    //   state.runesMode = false;
-    //   state.selMapDataEx = await getMapDataListVer(state.mapCode);
-    // }
+    if (!state.runesMode) {
+      const runesData = await getMapDataListVer(state.mapCode + '%23f%23');
+      commit(SET_DATA, { key: 'selMapDataEx', value: runesData });
+      commit(SET_DATA, { key: 'runesMode', value: true });
+    } else {
+      const data = await getMapDataListVer(state.mapCode);
+      commit(SET_DATA, { key: 'selMapDataEx', value: data });
+      commit(SET_DATA, { key: 'runesMode', value: false });
+    }
   },
 };
 export {

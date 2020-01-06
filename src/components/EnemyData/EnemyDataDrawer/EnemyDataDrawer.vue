@@ -4,7 +4,7 @@
     :direction="short ? 'btt' : 'rtl'"
     :visible="detailsOpen"
     :append-to-body="true"
-    :size="drawerSizeDouble"
+    :size="short ? '80%' : drawerSizeDouble"
     :destroy-on-close="true"
     :title="'敌人数据' + (runesMode ? '[突袭]': '' )"
     @close="$emit('update:detailsOpen', false)"
@@ -82,7 +82,7 @@ Vue.use(Drawer);
 
 
 import { createNamespacedHelpers, mapState as Root } from 'vuex';
-const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy');
+const { mapGetters } = createNamespacedHelpers('enemy');
 
 
 export default {
@@ -114,8 +114,8 @@ export default {
     };
   },
   computed: {
-    ...mapState(['short']),
-    ...mapGetters(['drawerSizeDouble'])
+    ...Root(['short']),
+    ...mapGetters(['drawerSizeDouble', 'drawerSize'])
   }
 };
 </script>

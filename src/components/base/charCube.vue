@@ -2,7 +2,7 @@
   <div class="agent-card-pic" :style="{width, height: width}">
     <el-image style="height:100%;width:100%" :src="src">
       <div slot="error" class="image-slot">
-        <i class="el-icon-picture-outline"></i>
+        <i class="el-icon-picture-outline" />
       </div>
     </el-image>
   </div>
@@ -16,9 +16,11 @@ Vue.use(Image);
 export default {
   props: {
     src: {
+      type: String,
       required: true
     },
     width: {
+      type: String,
       default: ''
     }
   }
@@ -36,8 +38,10 @@ export default {
 
 @media screen and (max-width: 700px) {
   .agent-card-pic {
-    width: calc(90px + 2vw)
-    height: calc(90px + 2vw)
+    --imgW: calc(80px + 5vw)
+    height: var(--imgW)
+    width: var(--imgW)
+    min-width: var(--imgW)
   }
 }
 </style>

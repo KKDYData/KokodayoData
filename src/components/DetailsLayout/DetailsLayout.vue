@@ -217,8 +217,6 @@ const InfoPanel = () => ({
 
 import {
   Card,
-  Collapse,
-  CollapseItem,
   InputNumber,
   Switch,
   Button,
@@ -232,8 +230,6 @@ import {
 import { mapState } from 'vuex';
 import Vue from 'vue';
 Vue.use(Card);
-Vue.use(Collapse);
-Vue.use(CollapseItem);
 Vue.use(Image);
 Vue.use(InputNumber);
 Vue.use(Switch);

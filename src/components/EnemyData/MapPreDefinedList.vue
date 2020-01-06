@@ -7,12 +7,17 @@
       <div v-for="(item, index) in myList" :key="index" class="predefine-item">
         <el-popover popper-class="fuck-outline" :width="300" :title="item.name">
           <div slot="reference" class="fuck-outline">
-            <char-cube class="predefine-item-bg" :src="getSrc(item.key)" width="100px" />
-            <div>
+            <enemy-cube
+              class="predefine-item-bg"
+              :src="getSrc(item.key)"
+              :name="item.name + (item.alias ? '#' + item.alias.split('#')[1] : '') + (item.initialCnt ? ` x ${item.initialCnt}` : '')"
+            />
+            <!-- <char-cube class="predefine-item-bg" :src="getSrc(item.key)" width="100px" /> -->
+            <!-- <div>
               <span
                 style="color: #525252"
               >{{ item.name + (item.alias ? '#' + item.alias.split('#')[1] : '') + (item.initialCnt ? ` x ${item.initialCnt}` : '') }}</span>
-            </div>
+            </div>-->
           </div>
           <div v-if="showPosition" class="predefine-position">
             <div class="predefine-positon-inner">
@@ -50,9 +55,9 @@
 
 <script>
 import { getDetailsProfilePath, findValue } from '../../utils';
-import charCube from '../base/charCube';
 import charStatus from '../base/charStatus';
 import loadingC from '../base/Loading';
+import EnemyCube from './EnemyCube';
 
 const SkillPanel = () => ({
   component: import(
@@ -70,7 +75,7 @@ import { Directions } from '../../utils/string';
 Vue.use(Popover);
 
 export default {
-  components: { charCube, charStatus, SkillPanel },
+  components: { charStatus, SkillPanel, EnemyCube },
   props: {
     list: { required: true },
     statusToChFc: {},
@@ -124,7 +129,7 @@ export default {
   margin: 0 10px
 }
 
-.predefine-item-bg {
+.predefine-item-bg >>> .enemy-img-container {
   background: linear-gradient(45deg, #000a1d, transparent)
   border: 5px solid #280332
   box-sizing: border-box
@@ -161,7 +166,7 @@ export default {
 
 @media screen and (max-width: 500px) {
   .predefine-item {
-    margin: 2vw 1vw
+    margin: 0
   }
 }
 </style>

@@ -35,43 +35,49 @@
           <i class="el-icon-edit-outline" />
         </el-button>
 
-        <span :style="short ? 'margin-top: 10px; display: block' : ''">
-          <el-button
-            v-if="selMapDataEx && (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')"
-            :type="!runesMode ? '': 'warning'"
-            :plain="!runesMode"
-            class="runes-mode-button"
-            @click="loadRunes"
-          >突袭</el-button>
-          <el-button
-            v-if="selMapDataEx"
-            :type="!showMap ? '': 'warning'"
-            :plain="!showMap"
-            class="runes-mode-button"
-            @click="openMap"
-          >地图</el-button>
-          <el-button
-            v-if="devMode === 'beta' && selMapDataEx"
-            :type="!loopAll ? '': 'warning'"
-            :plain="!showMap"
-            class="runes-mode-button"
-            @click="loopAllRoutes"
-          >加载所有路线</el-button>
-
-          <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
-            <el-button type="info">地图说明</el-button>
-            <div slot="content">
-              <p>白色是路，浅黄是不能放干员的路，</p>
-              <p>蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑</p>
-              <p>粉色或者其它颜色是特别功能地板，点击查看效果</p>
-            </div>
-          </el-tooltip>
-        </span>
+        <div v-if="selMapDataEx" class="title-button-wrapper">
+          <div v-if=" (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')">
+            <el-button
+              :type="!runesMode ? '': 'warning'"
+              :plain="!runesMode"
+              class="runes-mode-button"
+              @click="loadRunes"
+            >突袭</el-button>
+          </div>
+          <div>
+            <el-button
+              :type="!showMap ? '': 'warning'"
+              :plain="!showMap"
+              class="runes-mode-button"
+              @click="openMap"
+            >地图</el-button>
+          </div>
+          <div>
+            <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
+              <el-button type="info">地图说明</el-button>
+              <div slot="content">
+                <p>白色是路，浅黄是不能放干员的路，</p>
+                <p>蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑</p>
+                <p>粉色或者其它颜色是特别功能地板，点击查看效果</p>
+              </div>
+            </el-tooltip>
+          </div>
+          <div class="long-button">
+            <el-button
+              v-if="devMode === 'beta'"
+              :type="!loopAll ? '': 'warning'"
+              :plain="!showMap"
+              class="runes-mode-button"
+              @click="loopAllRoutes"
+            >加载所有路线</el-button>
+          </div>
+        </div>
+        <my-title v-else style="margin-top: 30px" title="全部敌人" />
       </div>
-      <div class="left-panel">
+      <div v-if="selectedMap" class="left-panel">
         <canvas v-show="showMap" id="map-canvas-container" ref="canvas" width="890" height="500" />
       </div>
-      <div class="left-bottom">
+      <div v-if="selectedMap" class="left-bottom">
         <div v-if="selMapDataEx" ref="map-desc" style="margin-left: 5px">
           <p v-if="selMapDataEx.dangerLevel !== '-'" style="font-size: 0.9em">
             <span>推荐等级</span>
@@ -81,11 +87,43 @@
         </div>
       </div>
 
-      <div class="right-panel">
+      <div v-if="selectedMap" class="right-panel">
         <accordion-panel v-model="activePanel">
+          <slide-panel control title="调整视角" name="t">
+            <div>
+              <div class="theta-controller" style="z-index: 10">
+                <div for="theta">
+                  Theta
+                  <span>{{ t }}</span>
+                </div>
+                <el-slider
+                  id="theta"
+                  v-model="t"
+                  type="range"
+                  :min="100"
+                  :max="180"
+                  @input="updateTheta"
+                />
+              </div>
+              <div class="theta-controller" style="z-index: 10">
+                <div for="perspective">
+                  PERSPECTIVE
+                  <span>{{ p }}</span>
+                </div>
+                <el-slider
+                  id="theta"
+                  v-model="p"
+                  type="range"
+                  :min="1000"
+                  :max="9000"
+                  @input="updatePerspective"
+                />
+              </div>
+            </div>
+          </slide-panel>
           <slide-panel title="敌人数据" name="x">
             <template v-slot:button>
-              <div>
+              <div style="text-align: right">
                 <el-button
                   v-if="!simpleShow && mapCode"
                   size="mini"
@@ -153,6 +191,15 @@
           </slide-panel>
         </accordion-panel>
       </div>
+      <div v-if="!selectedMap" class="enemy-all">
+        <enemy-data-layout
+          v-if="rawData"
+          ref="layout"
+          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
+          :data="rawData"
+          :simple-show="true"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -163,9 +210,10 @@ import EnemyMapInfo from './EnemyMapInfo';
 import MapPreDefined from './MapPreDefined';
 import AccordionPanel from '@/components/base/AccrordionPanel';
 import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel';
+import MyTitle from '@/components/base/MyTitle';
 
 
-import { Tree, Drawer, Button, Image, Loading } from 'element-ui';
+import { Tree, Drawer, Button, Image, Loading, Slider } from 'element-ui';
 
 import Vue from 'vue';
 import { SET_DATA } from '../../store/Enemy/mutations';
@@ -177,6 +225,7 @@ Vue.use(Button);
 Vue.use(Tree);
 Vue.use(Drawer);
 Vue.use(Image);
+Vue.use(Slider);
 
 
 const EnemyDataLayout = () => ({
@@ -210,7 +259,8 @@ export default {
     EnemyMapInfo,
     MapPreDefined,
     SlidePanel,
-    AccordionPanel
+    AccordionPanel,
+    MyTitle
   },
   data() {
     return {
@@ -218,14 +268,15 @@ export default {
       activePanel: 'x',
       simpleShow: true,
       drawer: false,
-      loopAll: false
+      loopAll: false,
+      t: 140,
+      p: 3000
     };
   },
   computed: {
     ...mapState([
       'data',
       'selectedMap',
-      'short',
       'selMapDataEx',
       'selMapData',
       'devMode',
@@ -236,9 +287,10 @@ export default {
       'detailsDropList',
       'selMapNode',
       'path',
-      'map'
+      'map',
+      'rawData'
     ]),
-    ...Root(['stageTree']),
+    ...Root(['stageTree', 'short',]),
     ...mapGetters([
       'mapDesc',
       'options',
@@ -246,14 +298,23 @@ export default {
       'waveTime',
       'showPredefine',
       'drawerSize'
-    ])
+    ]),
+    theta() {
+      console.log('theta', this.t);
+      return (this.t / 360) * Math.PI;
+    }
+  },
+  watch: {
+    preData() {
+
+    }
   },
   mounted() {
     this.linkStart();
   },
   methods: {
     ...mapActions(['linkStart', 'loadRunes']),
-    ...mapMutations([SET_DATA], 'clearMap'),
+    ...mapMutations([SET_DATA, 'clearMap']),
     openMap() {
 
     },
@@ -303,6 +364,12 @@ export default {
           // this.mapPicLoad = false;
         }, 500);
       }
+    },
+    updateTheta() {
+      this.map.setPerspective({ theta: this.theta * 2 });
+    },
+    updatePerspective() {
+      this.map.setPerspective({ perspective: { PERSPECTIVE: +this.p } });
     }
 
   }
@@ -316,11 +383,11 @@ export default {
 }
 
 .map-wrapper {
-  height: calc(100vh - 60px)
+  //height: calc(100vh - 60px)
   //background-color: rgba(230, 25, 144, 0.3)
   display: grid
   grid-template-columns: minmax(1000px, auto) 500px
-  grid-template-rows: 80px 1fr 1fr
+  grid-template-rows: 80px 56% 1fr
   grid-gap: 20px 50px
   padding: 20px
 
@@ -345,6 +412,7 @@ export default {
   .left-bottom {
     grid-row: 3 / 4
     grid-column: 1 / 2
+    border-top: 1px solid #818181
   }
 
   .left-panel {
@@ -358,12 +426,10 @@ export default {
     grid-column: 2 / 3
   }
 
-  --height: 1000px
-
-  .map-left-panel {
-    width: 100%
-    height: calc(var(--height) * 0.56)
-    box-sizing: border-box
+  .enemy-all {
+    overflow-y: scroll
+    grid-row: 2 / 4
+    grid-column: 1 / 4
   }
 }
 
@@ -389,6 +455,14 @@ filter() {
   filter: arguments
 }
 
+.title-button-wrapper {
+  margin-top: 15px
+  display: grid
+  grid-template-columns: repeat(4, min-content)
+  grid-gap: 20px 2%
+  width: 400px
+}
+
 @media screen and (min-width: 1900px) {
   .map-wrapper {
     max-width: 1900px
@@ -396,12 +470,10 @@ filter() {
   }
 }
 
-@media screen and (max-width: 1600px) {
+@media screen and (max-width: 1920px) {
   .map-wrapper {
     min-width: 1300px
     grid-template-columns: 60% 34%
-    grid-template-rows: 80px 1fr 1fr
-    grid-gap: 20px 2%
     padding: 1%
   }
 }
@@ -409,6 +481,40 @@ filter() {
 @media screen and (max-width: 1300px) {
   .map-wrapper {
     min-width: auto
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .map-wrapper {
+    min-width: auto
+    height: auto
+    grid-template-columns: 60% 34%
+    grid-template-rows: 120px auto 54vw 1fr
+    grid-gap: 20px 2%
+    padding: 1%
+
+    .left-bottom {
+      grid-row: 2 / 3
+      grid-column: 1 / 3
+      border-top: 1px solid #818181
+    }
+
+    .left-panel {
+      grid-row: 3 / 4
+      grid-column: 1 / 3
+      background-color: rgba(24, 230, 144, 0.3)
+    }
+
+    .right-panel {
+      grid-row: 4 / 5
+      grid-column: 1 / 3
+    }
+  }
+
+  .title-button-wrapper {
+    .long-button {
+      grid-column: 1 / 4
+    }
   }
 }
 </style>

@@ -4,7 +4,7 @@ import { Notification } from 'element-ui';
 
 let instance;
 
-const initSomeMap = (testData, container) => {
+const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI * 2, persective = 3000) => {
 
   const { mapData, routes } = testData;
   const mapdata = Object.assign({}, mapData);
@@ -12,6 +12,7 @@ const initSomeMap = (testData, container) => {
   let noti, notiTime;
   const notiStayTime = 3000;
   const hitCubes = [];
+
   mapdata.tiles.forEach((e) => {
     e.events = {
       click: [
@@ -52,20 +53,21 @@ const initSomeMap = (testData, container) => {
 
   });
 
-  console.log(container);
-
+  // todo merge predata
+  console.log(theta, persective);
   if (!instance)
     instance = new SomeMap(
       container,
-      (160 / 360) * Math.PI * 2,
-      3500,
+      theta,
+      persective,
       mapData,
       routes
     );
   else {
-
+    instance.looping = true;
+    instance.config(container, 3500, (160 / 360) * Math.PI * 2);
     instance.init(mapData, routes);
-    instance.draw(true);
+    instance.loop();
   }
 
   return instance;

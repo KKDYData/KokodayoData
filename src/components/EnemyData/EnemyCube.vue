@@ -2,11 +2,11 @@
   <div slot="reference" class="enemy-container">
     <div class="enemy-img-container">
       <div v-if="index" class="enemy-index-container">
-        <span>{{index}}</span>
+        <span>{{ index }}</span>
       </div>
-      <el-image :src="src"></el-image>
+      <el-image :src="src" />
       <div>
-        <span :style="name.length > 6 ? 'font-size: 14px' : ''">{{name}}</span>
+        <span :style="name.length > 6 ? 'font-size: 14px' : ''">{{ name }}</span>
       </div>
     </div>
   </div>
@@ -20,10 +20,12 @@ Vue.use(Image);
 export default {
   props: {
     src: {
+      type: String,
       required: true
     },
     index: {
-      type: true
+      type: [Number, String],
+      default: 0
     },
     name: {
       type: String,
@@ -39,32 +41,32 @@ export default {
   margin: 30px 0
   margin-right: 20px
   cursor: pointer
+}
 
-  .enemy-img-container {
-    height: 100px
-    width: 100px
-    min-width: 100px
-    position: relative
+.enemy-index-container {
+  position: absolute
+  z-index: 1
+  background-color: rgba(0, 0, 0, 0.5)
+  color: white
+  top: -2px
+  left: -2px
+  padding: 2px 5px
+}
 
-    &:before {
-      content: ''
-      border: var(--border)
-      width: 100%
-      height: 100%
-      position: absolute
-      box-sizing: border-box
-      z-index: 1
-    }
-  }
+.enemy-img-container {
+  height: 100px
+  width: 100px
+  min-width: 100px
+  position: relative
 
-  .enemy-index-container {
+  &:before {
+    content: ''
+    border: var(--border)
+    width: 100%
+    height: 100%
     position: absolute
+    box-sizing: border-box
     z-index: 1
-    background-color: rgba(0, 0, 0, 0.5)
-    color: white
-    top: -2px
-    left: -2px
-    padding: 2px 5px
   }
 }
 

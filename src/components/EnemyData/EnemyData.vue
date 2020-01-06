@@ -432,7 +432,9 @@ export default {
         this.map = initSomeMap(
           this.selMapData,
           this.$refs.canvas,
-          this.preData
+          this.preData,
+          this.t,
+          this.p
         );
       }
     }
@@ -564,7 +566,9 @@ export default {
         this.map = initSomeMap(
           mapData,
           this.$refs.canvas,
-          this.preData
+          this.preData,
+          this.t,
+          this.p
         );
 
 
