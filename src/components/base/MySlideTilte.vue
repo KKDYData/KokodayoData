@@ -57,7 +57,7 @@ export default {
     return {
       value: this.init,
       lock: false,
-      short: false
+      short: true
     };
   },
 
@@ -112,6 +112,7 @@ export default {
   left: 10px
   top: 36px
   z-index: 2
+  width: calc(100% - 30px)
 }
 
 .my-slide-title-wrapper {

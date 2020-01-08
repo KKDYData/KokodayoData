@@ -13,8 +13,14 @@
 body {
   margin: 0
   background-color: white
-  overflow-x: hidden
   width: 100vw
+  overflow-x: hidden
+}
+
+@media screen and (min-width: 1200px) {
+  body {
+    width: calc(100vw - 17px)
+  }
 }
 
 #app {
@@ -34,19 +40,18 @@ body {
   font-size: 14px
 }
 
-.el-icon-picture-outline {
-  font-family: element-icons !important
-  font-style: normal
-  font-weight: 400
-  font-variant: normal
-  text-transform: none
-  line-height: 1
-  vertical-align: baseline
-  display: inline-block
-  -webkit-font-smoothing: antialiased
-  -moz-osx-font-smoothing: grayscale
-}
-
+//.el-icon-picture-outline {
+//font-family: element-icons !important
+//font-style: normal
+//font-weight: 400
+//font-variant: normal
+//text-transform: none
+//line-height: 1
+//vertical-align: baseline
+//display: inline-block
+//-webkit-font-smoothing: antialiased
+//-moz-osx-font-smoothing: grayscale
+//}
 .item-popover-class {
   padding: 20px !important
   outline: none
@@ -130,29 +135,34 @@ body {
   padding: 0 10px
 }
 
+//? EnemyStatus el-tooltip
 .enemy-tooltip-item {
   width: 200px
 }
 
 .el-drawer__wrapper {
-  position: fixed
-  top: 0
-  right: 0
-  bottom: 0
-  left: 0
-  overflow: auto
-  margin: 0
-
+  //? 让它能滚动
   .el-drawer__body {
     overflow-y: scroll
     overflow-x: hidden
     margin-right: -17px
     padding-right: 17px
   }
-}
 
-.el-drawer__container {
-  overflow-x: hidden
+  .el-drawer__header {
+    outline: none
+
+    //? 好好的focus你个大头鬼？
+    &>:first-child {
+      &:focus {
+        outline: none
+      }
+    }
+  }
+
+  .el-drawer__container {
+    overflow-x: hidden
+  }
 }
 
 @media screen and (min-width: 1000px) {
@@ -173,10 +183,4 @@ body {
   .enemy-drawer {
     min-height: calc(100% + 1px)
   }
-}
-
-//todo test drawer animation
-.el-drawer__open .el-drawer.rtl {
-  //-webkit-animation: rtl-drawer-in 0.3s 1ms
-  animation: rtl-drawer-in 3s 1ms
 }

@@ -1,7 +1,7 @@
-import { state } from './state';
-import { getters } from './gettters';
-import { mutations } from './mutations';
-import { actions } from './action';
+import { state } from './state'
+import { getters } from './gettters'
+import { mutations } from './mutations'
+import { actions } from './action'
 
 export const EnemyPanel = {
   namespaced: true,
@@ -9,5 +9,5 @@ export const EnemyPanel = {
   getters,
   mutations,
   actions
-};
+}
 

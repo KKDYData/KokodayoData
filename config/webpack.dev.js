@@ -15,10 +15,10 @@ module.exports = merge(common, {
   devServer: {
     contentBase: './dist',
     hot: true,
-    public: 'http://localhost:8080',
     proxy: {
       '/api': 'http://127.0.0.1:8444',
     },
+    port: 8899,
     host: '0.0.0.0',
     historyApiFallback: {
       rewrites: [
@@ -69,7 +69,14 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.(styl|stylus|css)$/,
-        use: ['style-loader', 'css-loader', 'stylus-loader'],
+        use: ['style-loader', 'css-loader', 'stylus-loader', {
+          loader: 'style-resources-loader',
+          options: {
+            patterns: [
+              'src/styles/fn.styl',
+            ]
+          }
+        }],
       }
     ]
   },

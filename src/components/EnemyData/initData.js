@@ -1,6 +1,7 @@
 import SomeMap from 'kkdy-somemap';
 
 import { Notification } from 'element-ui';
+import { Directions } from '@/utils/string';
 
 let instance;
 
@@ -11,14 +12,28 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
 
   let noti, notiTime;
   const notiStayTime = 3000;
-  const hitCubes = [];
+  const hitCubes = new Set();
+
+
+  if (predata && predata.tokenInsts) predata.tokenInsts.forEach(e => {
+    const tIndex = e.position.col + e.position.row * mapData.width;
+    const target = mapData.tiles[tIndex];
+    target.extra = {
+      name: e.name + Directions[e.direction],
+      description: e.description || '详见地图预设面板',
+      color: [123, 213, 111, 0.3],
+    };
+  });
 
   mapdata.tiles.forEach((e) => {
     e.events = {
       click: [
         (cube) => {
           notiTime = +new Date();
-          hitCubes.push(cube);
+          hitCubes.forEach(e => e.restore());
+          hitCubes.clear();
+          hitCubes.add(cube);
+
           if (!noti || noti.closed) {
             noti = Notification({
               title: cube.tileInfo.name,
@@ -65,7 +80,7 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
     );
   else {
     instance.looping = true;
-    instance.config(container, 3500, (160 / 360) * Math.PI * 2);
+    instance.config(container, persective, theta);
     instance.init(mapData, routes);
     instance.loop();
   }

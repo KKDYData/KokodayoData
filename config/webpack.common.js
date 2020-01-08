@@ -12,6 +12,8 @@ const swPlugins = [
   })
 ];
 
+
+
 module.exports = {
   entry: './src/main.js',
   plugins: [
@@ -72,7 +74,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.styl', '.vue', '.json'],
+    extensions: ['.js', '.styl', '.vue', '.json'],
     alias: {
       '@': path.resolve(__dirname, '../src')
     }
@@ -80,5 +82,5 @@ module.exports = {
   externals: {
     spritejs: 'spritejs',
     echarts: 'echarts'
-  }
+  },
 };

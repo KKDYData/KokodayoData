@@ -2,15 +2,15 @@
   <div class="agent-card-container-wrapper">
     <el-card style=" margin-bottom: 20px; position: relative;">
       <div class="agent-card-container">
-        <char-cube class="agent-card-pic" :style="`--logo-link: url(${logo})`" :src="profile"></char-cube>
+        <char-cube class="agent-card-pic" :style="`--logo-link: url(${logo})`" :src="profile" />
         <div class="agent-card-title-wrapper">
           <div class="title-first">
             <div>
               <span class="agent-card-title-name">
-                <span style="color: rgb(49, 49, 49);font-family:FZYaSong-H-GBK;">{{data.name}}</span>
+                <span style="color: rgb(49, 49, 49);font-family:FZYaSong-H-GBK;">{{ data.name }}</span>
                 <span
                   style="font-size: 0.7em; color: rgb(150, 150, 150);font-weight: normal"
-                >{{data.appellation}}</span>
+                >{{ data.appellation }}</span>
               </span>
             </div>
             <div>
@@ -22,16 +22,16 @@
                   :details="data.name"
                 >
                   <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
+                    <i class="el-icon-picture-outline" />
                   </div>
                 </el-image>
                 <span style="font-family:FZYaSong-H-GBK;">{{ profession }}</span>
-                <el-image class="agent-card-star-pic" :src="rarityPath" fit="contain"></el-image>
+                <el-image class="agent-card-star-pic" :src="rarityPath" fit="contain" />
               </div>
               <div class="intro-2-wrapper">
-                <span v-if="!descArrary" class="intro-2" v-html="desc"></span>
-                <span v-else-if="desc.length > 1" v-html="desc[phases]" class="intro-2"></span>
-                <span v-else v-html="desc[0]" class="intro-2"></span>
+                <span v-if="!descArrary" class="intro-2" v-html="desc" />
+                <span v-else-if="desc.length > 1" class="intro-2" v-html="desc[phases]" />
+                <span v-else class="intro-2" v-html="desc[0]" />
               </div>
             </div>
           </div>
@@ -39,32 +39,32 @@
       </div>
       <div class="details-wrapper-fixed">
         <p class="intro-0">
-          <span>{{data.itemUsage}}</span>
+          <span>{{ data.itemUsage }}</span>
         </p>
         <p class="intro-1">
-          <span>{{data.itemDesc}}</span>
+          <span>{{ data.itemDesc }}</span>
         </p>
         <div class="char-camp-pic" :style="`--logo-link: url(${logo})`">
-          <div class="agent-card-camp-container" v-if="data.team > -1">
+          <div v-if="data.team > -1" class="agent-card-camp-container">
             <div class="agent-card-camp-en">
-              <span>{{team.teamKey.toUpperCase()}}</span>
+              <span>{{ team.teamKey.toUpperCase() }}</span>
             </div>
             <div class="agent-card-camp-chinese" :style="`background-color: #${team.color}`">
               <span
                 :style="`padding: 0 5px;color: ${team.color !== 'ffffff' ? '#fff' : 'rgb(136,136,136)'}`"
-              >{{team.teamName}}</span>
+              >{{ team.teamName }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="agent-card-tags">
         <el-tag
+          v-for="tag in data.tagList"
+          :key="tag"
           :size="short ? 'mini' :'medium'"
           effect="dark"
           type="info"
-          v-for="tag in  data.tagList"
-          :key="tag"
-        >{{tag}}</el-tag>
+        >{{ tag }}</el-tag>
       </div>
     </el-card>
   </div>
@@ -72,27 +72,31 @@
 
 
 <script>
-import { Card, Tag, Image, Popover } from 'element-ui';
-import Vue from 'vue';
-import { mapState } from 'vuex';
-Vue.use(Card);
-Vue.use(Tag);
-Vue.use(Image);
-Vue.use(Popover);
+import { Card, Tag, Image, Popover } from 'element-ui'
+import Vue from 'vue'
+import { mapState } from 'vuex'
+Vue.use(Card)
+Vue.use(Tag)
+Vue.use(Image)
+Vue.use(Popover)
 
-import Team from './handbook_team_table.json';
+import Team from './handbook_team_table.json'
 import {
   changeDesc,
   getDetailsProfilePath,
   changeAttackSpeed
-} from '../../utils';
+} from '../../utils'
 
-import { getClass_Chinese } from '../../utils/string';
-import { path } from '../../utils/listVer';
+import { getClass_Chinese } from '../../utils/string'
+import { path } from '../../utils/listVer'
 
-import charCube from '../base/charCube';
+import charCube from '../base/charCube'
 
 export default {
+
+  components: {
+    charCube
+  },
   props: {
     data: {
       type: Object,
@@ -103,52 +107,48 @@ export default {
       required: true
     }
   },
-
-  components: {
-    charCube
-  },
   computed: {
     ...mapState(['short']),
     profile() {
-      return getDetailsProfilePath(this.$route.params.name);
+      return getDetailsProfilePath(this.$route.params.name)
     },
     professionPic() {
-      if (this.data.profession === 'TOKEN') return;
+      if (this.data.profession === 'TOKEN') return
       return (
         path +
         'others/icon_profession_' +
         this.data.profession.toLowerCase() +
         '_lighten.png'
-      );
+      )
     },
     profession() {
-      return getClass_Chinese(this.data.profession);
+      return getClass_Chinese(this.data.profession)
     },
     rarityPath() {
-      return path + 'others/rarity_' + this.data.rarity + '_optimized.png';
+      return path + 'others/rarity_' + this.data.rarity + '_optimized.png'
     },
     desc() {
-      if (!this.data.trait) return changeDesc(this.data.description);
+      if (!this.data.trait) return changeDesc(this.data.description)
       else if (this.data.trait.candidates) {
         return this.data.trait.candidates.map(el => {
           return changeAttackSpeed({
             description: el.overrideDescripton ? el.overrideDescripton : this.data.description,
             blackboard: el.blackboard
-          });
-        });
-      }
+          })
+        })
+      } else return ''
     },
     descArrary() {
-      return Array.isArray(this.desc);
+      return Array.isArray(this.desc)
     },
     logo() {
-      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '_optimized.png' : '';
+      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '_optimized.png' : ''
     },
     team() {
-      return Team[this.data.team];
+      return Team[this.data.team]
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

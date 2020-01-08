@@ -56,9 +56,9 @@
             <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
               <el-button type="info">地图说明</el-button>
               <div slot="content">
-                <p>白色是路，浅黄是不能放干员的路，</p>
-                <p>蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑</p>
-                <p>粉色或者其它颜色是特别功能地板，点击查看效果</p>
+                <p>点击地板砖，会有砖的基本说明，</p>
+                <p>被重写的地图模块，因为旧的实现对于点击事件的捕获有问题</p>
+                <p>也是因为这个问题，所以一直没有加摆箱子的功能</p>
               </div>
             </el-tooltip>
           </div>
@@ -72,8 +72,8 @@
             >加载所有路线</el-button>
           </div>
         </div>
-        <my-title v-else style="margin-top: 30px" title="全部敌人" />
       </div>
+      <!--! 地图 kkdy-somemap -->
       <div v-if="selectedMap" class="left-panel">
         <canvas v-show="showMap" id="map-canvas-container" ref="canvas" width="890" height="500" />
       </div>
@@ -89,48 +89,9 @@
 
       <div v-if="selectedMap" class="right-panel">
         <accordion-panel v-model="activePanel">
-          <slide-panel control title="调整视角" name="t">
-            <div>
-              <div class="theta-controller" style="z-index: 10">
-                <div for="theta">
-                  Theta
-                  <span>{{ t }}</span>
-                </div>
-                <el-slider
-                  id="theta"
-                  v-model="t"
-                  type="range"
-                  :min="100"
-                  :max="180"
-                  @input="updateTheta"
-                />
-              </div>
-              <div class="theta-controller" style="z-index: 10">
-                <div for="perspective">
-                  PERSPECTIVE
-                  <span>{{ p }}</span>
-                </div>
-                <el-slider
-                  id="theta"
-                  v-model="p"
-                  type="range"
-                  :min="1000"
-                  :max="9000"
-                  @input="updatePerspective"
-                />
-              </div>
-            </div>
-          </slide-panel>
           <slide-panel title="敌人数据" name="x">
             <template v-slot:button>
-              <div style="text-align: right">
-                <el-button
-                  v-if="!simpleShow && mapCode"
-                  size="mini"
-                  type="danger"
-                  class="clear-route-button"
-                  @click="clearRoutes"
-                >清空路线</el-button>
+              <div style="text-align: left">
                 <el-button
                   v-if="mapCode"
                   size="mini"
@@ -141,6 +102,13 @@
                   <i class="el-icon-refresh" />
                   {{ simpleShow ? '简要显示': '路线模式' }}
                 </el-button>
+                <el-button
+                  v-if="!simpleShow && mapCode"
+                  size="mini"
+                  type="danger"
+                  class="clear-route-button"
+                  @click="clearRoutes"
+                >清空路线</el-button>
                 <el-tooltip v-if="mapCode && !simpleShow">
                   <el-button type="info" size="mini">说明</el-button>
                   <div slot="content">
@@ -157,7 +125,7 @@
             <enemy-data-layout
               v-if="!load && data"
               ref="layout"
-              :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
+              :style="mapCode? 'padding-top: 40px':''"
               :data="data"
               :map-data="selMapData"
               :runes-mode="runesMode"
@@ -165,13 +133,43 @@
             />
           </slide-panel>
           <slide-panel control title="地图信息" name="a">
-            <enemy-map-info
-              style="margin-top: 20px"
-              :show-title="false"
-              :options="options"
-              :global-buffs="globalBuffs"
-              :wave-time="waveTime"
-            />
+            <div class="map-info-wrapper">
+              <div class="theta-controller" style="z-index: 10">
+                <div for="theta">
+                  地图角度
+                  <span>{{ t }}</span>
+                </div>
+                <el-slider
+                  id="theta"
+                  v-model="t"
+                  type="range"
+                  :min="100"
+                  :max="180"
+                  @input="updateTheta"
+                />
+              </div>
+              <div class="theta-controller" style="z-index: 10">
+                <div for="perspective">
+                  视距
+                  <span>{{ p }}</span>
+                </div>
+                <el-slider
+                  id="theta"
+                  v-model="p"
+                  type="range"
+                  :min="1000"
+                  :max="9000"
+                  @input="updatePerspective"
+                />
+              </div>
+              <enemy-map-info
+                style="margin-top: 20px"
+                :show-title="false"
+                :options="options"
+                :global-buffs="globalBuffs"
+                :wave-time="waveTime"
+              />
+            </div>
           </slide-panel>
           <slide-panel v-if="showPredefine" title="地图预设" name="b">
             <map-pre-defined
@@ -192,40 +190,35 @@
         </accordion-panel>
       </div>
       <div v-if="!selectedMap" class="enemy-all">
-        <enemy-data-layout
-          v-if="rawData"
-          ref="layout"
-          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
-          :data="rawData"
-          :simple-show="true"
-        />
+        <enemy-data-layout v-if="rawData" ref="layout" :data="rawData" :simple-show="true" />
       </div>
     </div>
   </div>
 </template>
 <script>
-import loadingC from '../base/Loading';
-import MapDropList from './MapDropList';
-import EnemyMapInfo from './EnemyMapInfo';
-import MapPreDefined from './MapPreDefined';
-import AccordionPanel from '@/components/base/AccrordionPanel';
-import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel';
-import MyTitle from '@/components/base/MyTitle';
+import loadingC from '../base/Loading'
+import MapDropList from './MapDropList'
+import EnemyMapInfo from './EnemyMapInfo'
+import MapPreDefined from './MapPreDefined'
+import AccordionPanel from '@/components/base/AccrordionPanel'
+import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel'
+import MyTitle from '@/components/base/MyTitle'
 
 
-import { Tree, Drawer, Button, Image, Loading, Slider } from 'element-ui';
+import { Tree, Drawer, Button, Image, Loading, Slider } from 'element-ui'
 
-import Vue from 'vue';
-import { SET_DATA } from '../../store/Enemy/mutations';
-import { createNamespacedHelpers, mapState as Root } from 'vuex';
-const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy');
+import Vue from 'vue'
+import { SET_DATA } from '../../store/Enemy/mutations'
+import { createNamespacedHelpers, mapState as Root } from 'vuex'
+import { debounce } from '../../utils'
+const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy')
 
-Vue.use(Loading);
-Vue.use(Button);
-Vue.use(Tree);
-Vue.use(Drawer);
-Vue.use(Image);
-Vue.use(Slider);
+Vue.use(Loading)
+Vue.use(Button)
+Vue.use(Tree)
+Vue.use(Drawer)
+Vue.use(Image)
+Vue.use(Slider)
 
 
 const EnemyDataLayout = () => ({
@@ -236,7 +229,7 @@ const EnemyDataLayout = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 export default {
   metaInfo() {
@@ -251,7 +244,7 @@ export default {
             : '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
         }
       ]
-    };
+    }
   },
   components: {
     EnemyDataLayout,
@@ -260,7 +253,6 @@ export default {
     MapPreDefined,
     SlidePanel,
     AccordionPanel,
-    MyTitle
   },
   data() {
     return {
@@ -271,7 +263,7 @@ export default {
       loopAll: false,
       t: 140,
       p: 3000
-    };
+    }
   },
   computed: {
     ...mapState([
@@ -300,17 +292,17 @@ export default {
       'drawerSize'
     ]),
     theta() {
-      console.log('theta', this.t);
-      return (this.t / 360) * Math.PI;
-    }
-  },
-  watch: {
-    preData() {
-
+      console.log('theta', this.t)
+      return (this.t / 360) * Math.PI
     }
   },
   mounted() {
-    this.linkStart();
+    if (this.$route.params) this.clearMap()
+    this.linkStart()
+    window.addEventListener('resize', debounce(() => {
+      this.linkStart()
+      console.log('resize & reinit somemap')
+    }, 1000))
   },
   methods: {
     ...mapActions(['linkStart', 'loadRunes']),
@@ -319,61 +311,61 @@ export default {
 
     },
     clearRoutes() {
-      this.map.deleteAll();
-      this.$refs.layout.clearRoutes();
-      this.loopAll = false;
+      this.map.deleteAll()
+      this.$refs.layout.clearRoutes()
+      this.loopAll = false
 
     },
     loopAllRoutes() {
       if (!this.loopAll) {
-        this.map.loopRoutes();
-        this.loopAll = true;
+        this.map.loopRoutes()
+        this.loopAll = true
       }
       else {
-        this.loopAll = false;
-        this.map.deleteAll();
+        this.loopAll = false
+        this.map.deleteAll()
       }
     },
     changeMapCode(data) {
       if (!data.children) {
-        let codeFromPath = data.path;
+        let codeFromPath = data.path
         let shortCode = codeFromPath
           .replace('weekly', 'wk')
-          .replace('promote', 'pro');
+          .replace('promote', 'pro')
 
-        this.$refs['chapter-selecter'].closeDrawer();
+        this.$refs['chapter-selecter'].closeDrawer()
 
-        this.load = true;
-        this[SET_DATA]({ key: 'mapPicLoad', value: true });
+        this.load = true
+        this[SET_DATA]({ key: 'mapPicLoad', value: true })
         // this.mapPicLoad = true;
 
-        this[SET_DATA]({ key: 'runesMode', value: false });
+        this[SET_DATA]({ key: 'runesMode', value: false })
         // this.runesMode = false;
-        this[SET_DATA]({ key: 'selMapNode', value: data });
-        this[SET_DATA]({ key: 'mapCode', value: shortCode });
+        this[SET_DATA]({ key: 'selMapNode', value: data })
+        this[SET_DATA]({ key: 'mapCode', value: shortCode })
 
         // this.selMapNode = data;
         // this.mapCode = shortCode;
-        console.log(this.path, shortCode);
-        this.$router.push(this.path + shortCode);
+        console.log(this.path, shortCode)
+        this.$router.push(this.path + shortCode)
 
         //! 没看懂
         setTimeout(() => {
-          this.load = false;
-          this[SET_DATA]({ key: 'mapPicLoad', value: false });
+          this.load = false
+          this[SET_DATA]({ key: 'mapPicLoad', value: false })
           // this.mapPicLoad = false;
-        }, 500);
+        }, 500)
       }
     },
     updateTheta() {
-      this.map.setPerspective({ theta: this.theta * 2 });
+      this.map.setPerspective({ theta: this.theta * 2 })
     },
     updatePerspective() {
-      this.map.setPerspective({ perspective: { PERSPECTIVE: +this.p } });
+      this.map.setPerspective({ perspective: { PERSPECTIVE: +this.p } })
     }
 
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -383,13 +375,13 @@ export default {
 }
 
 .map-wrapper {
-  //height: calc(100vh - 60px)
-  //background-color: rgba(230, 25, 144, 0.3)
   display: grid
-  grid-template-columns: minmax(1000px, auto) 500px
-  grid-template-rows: 80px 56% 1fr
+  --cwidth: calc(100vw - 600px)
+  grid-template-columns: var(--cwidth) 500px
+  grid-template-rows: 80px calc(var(--cwidth) * 0.56) 1fr
   grid-gap: 20px 50px
   padding: 20px
+  overflow: hidden
 
   .map-title-part {
     grid-row: 1 / 2
@@ -418,7 +410,7 @@ export default {
   .left-panel {
     grid-row: 2 / 3
     grid-column: 1 / 2
-    background-color: rgba(24, 230, 144, 0.3)
+    border: 1px solid #818181
   }
 
   .right-panel {
@@ -430,6 +422,7 @@ export default {
     overflow-y: scroll
     grid-row: 2 / 4
     grid-column: 1 / 4
+    overflow: hidden
   }
 }
 
@@ -473,7 +466,6 @@ filter() {
 @media screen and (max-width: 1920px) {
   .map-wrapper {
     min-width: 1300px
-    grid-template-columns: 60% 34%
     padding: 1%
   }
 }
@@ -484,7 +476,45 @@ filter() {
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1000px) and (min-width: 600px) {
+  .map-wrapper {
+    min-width: auto
+    height: auto
+    --cwidth: calc(100vw - 350px)
+    grid-template-columns: var(--cwidth) 300px
+    grid-template-rows: 80px calc(var(--cwidth) * 0.56) 1fr
+    grid-gap: 20px 2%
+    padding: 1%
+
+    //? 小屏下的方块的尺寸
+    &>>> .enemy-img-container {
+      width: 80px
+      height: 80px
+      min-width: auto
+
+      .small {
+        font-size: 11px
+      }
+
+      .normal {
+        font-size: 14px
+      }
+
+      &:before {
+        content: ''
+        border: 5px solid
+        border-color: var(--border)
+        width: 100%
+        height: 100%
+        position: absolute
+        box-sizing: border-box
+        z-index: 1
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
   .map-wrapper {
     min-width: auto
     height: auto

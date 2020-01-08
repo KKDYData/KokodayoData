@@ -166,7 +166,6 @@
         <enemy-data-layout
           v-if="!load && data"
           ref="layout"
-          :style="short && !mapCode? 'margin-top: -10px':'padding-top: 20px'"
           :data="data"
           :map-data="selMapData"
           :runes-mode="runesMode"

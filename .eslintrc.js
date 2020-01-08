@@ -37,7 +37,7 @@ module.exports = {
         ],
         semi: [
             "error",
-            "always"
+            "never"
         ],
         "no-unused-vars": ["error", { "args": "none" }],
         "vue/max-attributes-per-line": ["error", {

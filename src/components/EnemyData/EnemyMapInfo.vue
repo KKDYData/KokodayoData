@@ -128,7 +128,6 @@ export default {
   .map-option-container-wrapper {
     min-width: auto
     max-width: inherit
-    margin: 0 0 20px 2vw
   }
 
   .map-option-container {

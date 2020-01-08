@@ -44,7 +44,7 @@
           :key="fIndex"
           class="wave-enemy-container"
         >
-          <p class="wave-info" style="width: 100%; margin-bottom: -20px">
+          <p class="wave-info">
             第{{ fIndex+1 }}波
             <span style="color: hsl(218, 58%, 14%)">{{ _name }}</span>
             <span>
@@ -56,35 +56,32 @@
               <span v-if="_preDelay" style="margin-left: 10px">距离上一波{{ _preDelay }}s</span>
             </span>
           </p>
-          <div
-            v-for="({key, actionType, count, interval, preDelay: __preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
-            :key="aIndex"
-            class="wave-enemy-single"
-          >
-            <enemy-cube
-              v-if="data[key]"
-              :style="selectedStlye[routeIndex]"
-              :name="data[key].name"
-              :src="enemyPicPath(key)"
-              @click.native="showRoute(routeIndex)"
-            />
-            <enemy-cube
-              v-else-if="/trap_007_ballis/.test(key)"
-              style="background: linear-gradient(45deg, hsl(163, 100%, 6%), transparent);box-shadow: inset 0px 0px 0px 5px #313131"
-              name="弩炮"
-              :src="ballis"
-            />
-            <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
-              <p>{{ key.replace('trap_007_ballis', '弩炮') }}</p>
-            </div>
-            <div style class="enemy-cube-wave-info">
-              <div>数量:{{ count }} 间隔:{{ interval }}s</div>
-              <div style="display: flex;justify-content: space-between; width: calc(100% - 20px)">
-                延迟: {{ __preDelay }}s
-                <i
-                  :style="selectedStlye[routeIndex] ? 'color: #313131' : ''"
-                  class="el-icon-s-flag"
-                />
+
+          <div class="enemy-data-layout wave">
+            <div
+              v-for="({key, actionType, count, interval, preDelay: __preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
+              :key="aIndex"
+              class="wave-enemy-single"
+            >
+              <enemy-cube
+                v-if="data[key]"
+                :style="selectedStlye[routeIndex]"
+                :name="data[key].name"
+                :src="enemyPicPath(key)"
+                @click.native="showRoute(routeIndex)"
+              />
+              <enemy-cube
+                v-else-if="/trap_007_ballis/.test(key)"
+                style="background: linear-gradient(45deg, hsl(163, 100%, 6%), transparent);box-shadow: inset 0px 0px 0px 5px #313131"
+                name="弩炮"
+                :src="ballis"
+              />
+              <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
+                <p>{{ key.replace('trap_007_ballis', '弩炮') }}</p>
+              </div>
+              <div style class="enemy-cube-wave-info">
+                <div>数量:{{ count }} 间隔:{{ interval }}s</div>
+                <div>延迟: {{ __preDelay }}s</div>
               </div>
             </div>
           </div>
@@ -98,45 +95,37 @@
         :name="enemy.name"
         :index="enemy.enemyIndex"
         :src="enemyPicPath(key)"
-        @mouseover.native="mouseHoverOpen(key, enemy)"
-        @mouseleave.native="cancelOpen"
         @click.native="openDetails(key, enemy)"
-      />
-      <div
-        v-for="item in fillItems"
-        :key="item"
-        class="fill-item img-container"
-        :style="fillItemWidth"
       />
     </div>
   </div>
 </template>
 
 <script>
-import { Image, Drawer, Button } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Image);
-Vue.use(Drawer);
-Vue.use(Button);
-import MyTitle from '../base/MyTitle';
+import { Image, Drawer, Button } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Image)
+Vue.use(Drawer)
+Vue.use(Button)
+import MyTitle from '../base/MyTitle'
 
-import EnemyStatus from './EnemyStatus';
-import EnemyDataDrawer from './EnemyDataDrawer';
-import EnemyCube from './EnemyCube';
+import EnemyStatus from './EnemyStatus'
+import EnemyDataDrawer from './EnemyDataDrawer'
+import EnemyCube from './EnemyCube'
 
-import { getEnemyData } from '@/utils/fetch';
-import { path } from '@/utils/listVer';
+import { getEnemyData } from '@/utils/fetch'
+import { path } from '@/utils/listVer'
 
-import { createNamespacedHelpers, mapState as Root } from 'vuex';
-const { mapState } = createNamespacedHelpers('enemy');
+import { createNamespacedHelpers, mapState as Root } from 'vuex'
+const { mapState } = createNamespacedHelpers('enemy')
 
 export default {
   components: { EnemyStatus, EnemyDataDrawer, EnemyCube, MyTitle },
   filters: {
     time(v) {
       const sec = Math.floor((v % 60) * 10) / 10,
-        min = Math.floor(v / 60);
-      return min > 0 ? min + ' 分 ' + sec + ' 秒' : sec + ' 秒';
+        min = Math.floor(v / 60)
+      return min > 0 ? min + ' 分 ' + sec + ' 秒' : sec + ' 秒'
     }
   },
   props: {
@@ -165,14 +154,12 @@ export default {
       currentData: [],
       smallPicPath: path + 'others/',
       fillItemWidth: { width: '100px' },
-      fillItems: [],
-      shortWidth: 350,
       detailsOpen: false,
       currEnemy: null,
       debounceOpen: null,
       selectedRoutes: new Set(),
       selectedStlye: {}
-    };
+    }
   },
 
   computed: {
@@ -180,110 +167,82 @@ export default {
     ...mapState(['short', 'map']),
     appearMap() {
       // 之后改成从vuex拿
-      return {};
+      return {}
     },
     waveData() {
-      if (!this.mapData) return;
-      return this.mapData.waves;
+      if (!this.mapData) return
+      return this.mapData.waves
     }
   },
   watch: {
     screenWidth(v) {
-      console.log('screenWidth change', v);
+      console.log('screenWidth change', v)
     },
-    simpleShow(v) {
-      if (v) this.calFillAmount();
-    }
   },
   mounted() {
-    // console.log(this.drawerSize);
-    if (this.$el && this.$el.querySelector('.enemy-container')) this.calFillAmount();
-    this.shortWidth = this.$el.clientWidth - 30;
   },
   methods: {
     clearRoutes(v) {
-      this.selectedStlye = {};
-      this.selectedRoutes.clear();
+      this.selectedStlye = {}
+      this.selectedRoutes.clear()
     },
     showRoute(index) {
-      const color = Math.round(360 * Math.random());
+      const color = Math.round(360 * Math.random())
       if (this.selectedRoutes.has(index)) {
-        this.$emit('closeRoute', index);
-        this.$set(this.selectedStlye, index, '');
-        this.selectedRoutes.delete(index);
+        this.$emit('closeRoute', index)
+        this.$set(this.selectedStlye, index, '')
+        this.selectedRoutes.delete(index)
       } else {
-        this.selectedRoutes.add(index);
+        this.selectedRoutes.add(index)
         this.$set(
           this.selectedStlye,
           index,
-          `--border: 7px solid hsl(${color}, 100%, 50%)`
-        );
-        console.log(this.selectedRoutes, color);
-        this.$emit('showRoute', index, color);
+          `--border: hsl(${color}, 100%, 50%)`
+        )
+        console.log(this.selectedRoutes, color)
+        this.$emit('showRoute', index, color)
       }
-      this.map.loopRoute(index, color);
+      this.map.loopRoute(index, color)
 
     },
     enemyPicPath(key) {
-      return this.path + key + '.png?x-oss-process=style/jpg-test';
+      return this.path + key + '.png?x-oss-process=style/jpg-test'
     },
     async openDetails(key, v, index) {
-      this.showKey = key;
-      this.detailsOpen = true;
-      this.currEnemy = v;
+      this.showKey = key
+      this.detailsOpen = true
+      this.currEnemy = v
       if (key !== 'enemy_1503_talula') {
-        this.currentData = await getEnemyData(key);
+        this.currentData = await getEnemyData(key)
         if (v.overwrittenData) {
-          const index = this.currentData.findIndex(el => el.level === v.level);
-          const target = this.currentData[index];
+          const index = this.currentData.findIndex(el => el.level === v.level)
+          const target = this.currentData[index]
           this.currentData[index].enemyData = Object.keys(target.enemyData).reduce((res, key) => {
             if (v.overwrittenData[key]) {
               if (v.overwrittenData[key].m_defined) {
-                res[key] = v.overwrittenData[key].m_value;
+                res[key] = v.overwrittenData[key].m_value
               } else if (key === 'attributes') {
                 res.attributes = Object.keys(res.attributes).reduce((res, key) => {
                   if (v.overwrittenData.attributes[key].m_defined) {
-                    res[key].m_defined = true;
-                    res[key].m_value = v.overwrittenData.attributes[key].m_value;
+                    res[key].m_defined = true
+                    res[key].m_value = v.overwrittenData.attributes[key].m_value
                   }
-                  return res;
-                }, res.attributes);
+                  return res
+                }, res.attributes)
               }
             }
-            return res;
-          }, target.enemyData);
+            return res
+          }, target.enemyData)
         }
 
       }
     },
-    mouseHoverOpen(...args) {
-      clearTimeout(this.debounceOpen);
-      this.debounceOpen = setTimeout(this.openDetails, 1000, ...args);
-    },
     cancelOpen() {
-      clearTimeout(this.debounceOpen);
+      clearTimeout(this.debounceOpen)
     },
-    calFillAmount() {
-      if (!this.data) return;
-      const width = this.$el.clientWidth,
-        target = this.$el.querySelector('.enemy-container'),
-        style = getComputedStyle(target),
-        cWidth = style.width,
-        vw = style['margin-right'],
-        res = (+cWidth.slice(0, -2) + +vw.slice(0, -2));
-      this.fillItemWidth = { width: res + 'px' };
-      let size = Math.floor(width / res);
-      const arr = [];
-      if (size > 30) {
-        throw new Error('Some thing wrong!', size);
-      }
-      for (let i = 0; i < size; i++) {
-        arr.push(i);
-      }
-      this.fillItems = arr;
-    }
+
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -291,19 +250,9 @@ export default {
   //todo maybe have something better code
   max-height: 60vh
   overflow-y: scroll
-  flex-grow: 1
+  overflow-x: hidden
   position: relative
-  //padding-top: 40px
-  //吃掉title的margin-buttom 20px
-  margin-top: 20px
-  //height: 100%
-}
-
-.enemy-data-layout {
-  display: flex
-  flex-wrap: wrap
-  /*justify-content: start;*/
-  margin: 0 auto
+  grid-template-columns: 1fr 1fr
 }
 
 .wave-enemy-container {
@@ -329,10 +278,28 @@ export default {
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (min-width: 600px) {
   .enemy-data-layout {
-    padding: 20px 0 0
+    display: grid
+    grid-template-columns: repeat(auto-fill, 120px)
+    grid-gap: 40px 0
     justify-content: center
+    width: 100%
+    max-width: 1200px
+
+    &.wave {
+      justify-content: start
+    }
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .enemy-data-layout {
+    display: grid
+    grid-template-columns: 1fr 1fr 1fr
+    grid-gap: 40px 0
+    justify-items: center
+    width: 100%
   }
 }
 </style>

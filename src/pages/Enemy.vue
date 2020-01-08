@@ -11,17 +11,13 @@
       <p>更新词条翻译算法。</p>
       <p>危机合约的buff计算还没加入</p>
     </el-alert>-->
-    <new ref="layout" />
+    <enemy-data ref="layout" />
     <!-- <enemy-data ref="layout" /> -->
   </div>
 </template>
 
 <script>
-import loadingC from '../components/base/Loading';
-import { Alert } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Alert);
-import New from '@/components/EnemyData/New';
+import loadingC from '../components/base/Loading'
 
 const EnemyData = () => ({
   component: import(/* webpackChunkName: "EnemyData" */ '../components/EnemyData'),
@@ -29,29 +25,30 @@ const EnemyData = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 export default {
   components: {
     EnemyData,
-    New
   },
   data() {
-    return {};
+    return {}
   },
   beforeRouteUpdate(to, from, next) {
     //todo
-    this.$refs.layout.linkStart(to.params.map);
-    next();
+    console.log('update')
+    this.$refs.layout.linkStart(to.params.map)
+    next()
   },
   beforeRouteLeave(to, from, next) {
+    console.log('leave')
     //todo
     if (/enemydata(\/)?$/.test(to.path)) {
-      this.$refs.layout.clearMap();
+      this.$refs.layout.clearMap()
     } else if (/enemydata\/.+$/.test(to.path)) {
-      this.$refs.layout.linkStart(to.params.map);
+      this.$refs.layout.linkStart(to.params.map)
     }
-    next();
+    next()
   }
-};
+}
 </script>

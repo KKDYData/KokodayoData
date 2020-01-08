@@ -67,25 +67,25 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { mapState } from 'vuex';
+import Vue from 'vue'
+import { mapState } from 'vuex'
 
-import { Tag, Image } from 'element-ui';
-Vue.use(Image);
-Vue.use(Tag);
+import { Tag, Image } from 'element-ui'
+Vue.use(Image)
+Vue.use(Tag)
 
-import { getProfilePath } from '../../utils';
-import { path } from '../../utils/listVer';
-import { getClass_Chinese } from '../../utils/string';
+import { getProfilePath } from '../../utils'
+import { path } from '../../utils/listVer'
+import { getClass_Chinese } from '../../utils/string'
 
-import { rootPath } from '../../stats';
+import { rootPath } from '../../stats'
 
 export default {
   components: {},
   props: {
     data: {
       default() {
-        return [];
+        return []
       },
       type: Array
     },
@@ -95,7 +95,7 @@ export default {
     },
     tags: {
       default() {
-        return [];
+        return []
       },
       type: Array
     },
@@ -110,60 +110,60 @@ export default {
       fillItemWidth: { width: '100px' },
       rowPath: path,
       path: rootPath
-    };
+    }
   },
   computed: {
     ...mapState(['short'])
   },
   watch: {
     showTags: function (v) {
-      console.log('show? ' + v);
-      this.calFillAmount();
+      console.log('show? ' + v)
+      this.calFillAmount()
     },
     short: function (v) {
-      this.calFillAmount();
+      this.calFillAmount()
     }
   },
   mounted() {
     // const self = this;
-    this.calFillAmount();
-    window.addEventListener('resize', self.calFillAmount);
+    this.calFillAmount()
+    window.addEventListener('resize', self.calFillAmount)
   },
   methods: {
     hoverShowTag(t, index) {
       if (!this.short)
-        this.$set(this.data[index], 'showTags', t);
+        this.$set(this.data[index], 'showTags', t)
     },
     async openDetails(agent) {
-      if (this.short) this.$router.push(this.path + '/details/' + agent.No);
-      else window.open(this.path + '/details/' + agent.No);
+      if (1 || this.short) this.$router.push(this.path + '/details/' + agent.No)
+      else window.open(this.path + '/details/' + agent.No)
     },
     calFillAmount() {
       //通过css控制填充的margin？
       setTimeout(() => {
-        const target = document.querySelector('.profile-item');
-        const slice2 = x => +x.slice(0, -2);
-        if (!target) return;
+        const target = document.querySelector('.profile-item')
+        const slice2 = x => +x.slice(0, -2)
+        if (!target) return
         const style = getComputedStyle(target),
           cWidth = style.width,
           vr = style['margin-right'],
           vl = style['margin-left'],
-          res = slice2(cWidth) + slice2(vr) + slice2(vl);
+          res = slice2(cWidth) + slice2(vr) + slice2(vl)
 
-        this.fillItemWidth = { width: res + 'px' };
-      }, 500);
+        this.fillItemWidth = { width: res + 'px' }
+      }, 500)
     },
     tagHit(tag) {
-      return this.tags.find(el => el.value === tag);
+      return this.tags.find(el => el.value === tag)
     },
     profilePath(name) {
-      return getProfilePath(name);
+      return getProfilePath(name)
     },
     changeClassShort(c) {
-      return getClass_Chinese(c);
+      return getClass_Chinese(c)
     }
   }
-};
+}
 </script>
 <style lang="stylus" scoped>
 .flip-list-move {

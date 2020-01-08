@@ -4,7 +4,7 @@
     :direction="short ? 'btt' : 'rtl'"
     :visible="detailsOpen"
     :append-to-body="true"
-    :size="short ? '80%' : drawerSizeDouble"
+    :size="short ? '90%' : drawerSizeDouble"
     :destroy-on-close="true"
     :title="'敌人数据' + (runesMode ? '[突袭]': '' )"
     @close="$emit('update:detailsOpen', false)"

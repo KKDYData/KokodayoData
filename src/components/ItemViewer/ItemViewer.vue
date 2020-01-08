@@ -138,30 +138,30 @@
 
 
 <script>
-import { findStage, UA } from '../../utils';
-import { path } from '../../utils/listVer';
-import formula from '../../utils/data/formula.json';
+import { findStage, UA } from '../../utils'
+import { path } from '../../utils/listVer'
+import formula from '../../utils/data/formula.json'
 
 import {
   itemBackground,
   occPer_chinese,
   roomType,
   GOLD
-} from '../..//utils/string';
+} from '../..//utils/string'
 
-import { mapState } from 'vuex';
-import Vue from 'vue';
-import { Popover, Divider, Image, Tooltip } from 'element-ui';
-Vue.use(Popover);
-Vue.use(Divider);
-Vue.use(Image);
-Vue.use(Tooltip);
+import { mapState } from 'vuex'
+import Vue from 'vue'
+import { Popover, Divider, Image, Tooltip } from 'element-ui'
+Vue.use(Popover)
+Vue.use(Divider)
+Vue.use(Image)
+Vue.use(Tooltip)
 
-import DropLine from './DropLine';
-import Color from '../base/Color';
-import CloseButton from '../base/CloseButton';
+import DropLine from './DropLine'
+import Color from '../base/Color'
+import CloseButton from '../base/CloseButton'
 
-import { getItem } from '../../utils/fetch';
+import { getItem } from '../../utils/fetch'
 
 // 可以考虑给id的话，只显示图片，不做数据拉取
 // 或者noPopover + {假数据}，反正只显示图片的话，实际也不需要拉数据显示
@@ -212,20 +212,20 @@ export default {
           : 'hover',
       data: typeof this.item !== 'string' ? this.item : undefined,
       GOLD
-    };
+    }
   },
 
   computed: {
     ...mapState(['stageTree', 'short']),
     formula() {
-      if (!this.data) return [];
+      if (!this.data) return []
       return this.data.buildingProductList
         .filter(el => el.roomType === 'WORKSHOP')
         .map(el => formula[el.formulaId])
-        .filter(e => e);
+        .filter(e => e)
     },
     itemBackground() {
-      return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};
+      return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {}
     },
     itemPic() {
       return (
@@ -233,103 +233,103 @@ export default {
         (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') +
         this.data.iconId +
         '_optimized.png'
-      );
+      )
     },
 
     dropListRow() {
-      return this.$store.getters.itemDropList(this.data.itemId);
+      return this.$store.getters.itemDropList(this.data.itemId)
     },
     targetStageDrop() {
-      if (!this.targetStage || !this.dropListRow) return;
+      if (!this.targetStage || !this.dropListRow) return
       else {
         const tempRes = this.dropList.find(
           el => el.stageId === this.targetStage
-        );
+        )
         if (tempRes > -1) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          const temp = this.dropList.splice(tempRes, 1)[0];
-          return temp;
+          const temp = this.dropList.splice(tempRes, 1)[0]
+          return temp
         }
         // ?这是随机掉落，上面是主掉落,主掉落需要从所有掉落里分割出当前地图的掉落。
         // ?因为这里不显示随机掉落（概率）的内容（有几十个）
         // 找不到的情况， 先不改成etCost（活动）!!!
         const target = this.dropListRow.find(
           el => el.stageId === this.targetStage
-        );
-        if (!target) return;
-        const res = Object.assign({}, target);
-        const stageData = findStage(target.stageId, this.stageTree);
-        const temp = stageData.label.split(' ');
-        res.stageCode = temp[0];
-        res.rate = Math.round((target.quantity / target.times) * 100);
+        )
+        if (!target) return
+        const res = Object.assign({}, target)
+        const stageData = findStage(target.stageId, this.stageTree)
+        const temp = stageData.label.split(' ')
+        res.stageCode = temp[0]
+        res.rate = Math.round((target.quantity / target.times) * 100)
         res.dropCost = Math.round(
           (target.times / target.quantity) * stageData.apCost
-        );
-        return res;
+        )
+        return res
       }
     },
     dropList() {
-      const list = this.dropListRow;
+      const list = this.dropListRow
       if (this.stageTree) {
         return this.data.stageDropList.map(el => {
-          let res = Object.assign({}, el);
-          const stageData = findStage(el.stageId, this.stageTree);
+          let res = Object.assign({}, el)
+          const stageData = findStage(el.stageId, this.stageTree)
           if (stageData) {
-            const temp = stageData.label.split(' ');
-            res.stageCode = temp[0];
+            const temp = stageData.label.split(' ')
+            res.stageCode = temp[0]
             if (list) {
               const dropInfo = list.find(
                 dropInfo => dropInfo.stageId === el.stageId
-              );
+              )
               if (dropInfo) {
-                res = Object.assign(res, dropInfo);
+                res = Object.assign(res, dropInfo)
                 res.rate = Math.round(
                   (dropInfo.quantity / dropInfo.times) * 100
-                );
+                )
                 res.dropCost = Math.round(
                   (dropInfo.times / dropInfo.quantity) * stageData.apCost
-                );
+                )
                 if (res.dropCost < 1) {
-                  res.apCost = stageData.apCost;
-                  res.etCost = stageData.etCost;
-                  res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times);
+                  res.apCost = stageData.apCost
+                  res.etCost = stageData.etCost
+                  res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times)
                 }
               }
             }
           }
-          return res;
-        });
+          return res
+        })
       } else {
-        return this.data.stageDropList;
+        return this.data.stageDropList
       }
     },
     showDropInfo() {
-      return this.dropList.filter(el => el.times);
+      return this.dropList.filter(el => el.times)
     }
   },
   watch: {
     item(v) {
       if (typeof this.item === 'string') {
-        getItem(this.item).then(el => (this.data = el));
+        getItem(this.item).then(el => (this.data = el))
       } else {
-        this.data = v;
+        this.data = v
       }
     }
   },
   created() {
     if (typeof this.item === 'string') {
-      getItem(this.item).then(el => (this.data = el));
+      getItem(this.item).then(el => (this.data = el))
     }
   },
   methods: {
     occper(occ) {
-      return occPer_chinese[occ];
+      return occPer_chinese[occ]
     },
     roomName(id) {
-      return roomType[id];
+      return roomType[id]
     }
   }
-};
+}
 </script>
 
  <style lang="stylus" scoped>
