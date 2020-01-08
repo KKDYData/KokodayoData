@@ -225,8 +225,8 @@ export default {
     ...mapState(['extraSkins', 'short']),
     style() {
       return !UA.ok
-        ? '_optimized.png'
-        : '_optimized.png?x-oss-process=style/small-test'
+        ? '.png'
+        : '.png?x-oss-process=style/small-test'
     },
     skins() {
       if (this.extraSkins) {
