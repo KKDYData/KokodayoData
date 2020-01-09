@@ -10,7 +10,7 @@
     @close="$emit('update:detailsOpen', false)"
   >
     <div v-if="currentEnemy" class="enemy-drawer">
-      <div style="display: flex;">
+      <div class="enemy-drawer-header">
         <div class="enemy-img-container">
           <el-image :src="picPath" />
         </div>
@@ -72,17 +72,17 @@
 </template>
 
 <script>
-import { path } from '@/utils/listVer';
-import BaseStatusBox from './BaseStatusBox';
+import { path } from '@/utils/listVer'
+import BaseStatusBox from './BaseStatusBox'
 
-import { Image, Drawer } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Image);
-Vue.use(Drawer);
+import { Image, Drawer } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Image)
+Vue.use(Drawer)
 
 
-import { createNamespacedHelpers, mapState as Root } from 'vuex';
-const { mapGetters } = createNamespacedHelpers('enemy');
+import { createNamespacedHelpers, mapState as Root } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('enemy')
 
 
 export default {
@@ -111,13 +111,13 @@ export default {
     return {
       bossIcon: path + 'logo/boss_icon.png?x-oss-process=style/jpg-test',
       path,
-    };
+    }
   },
   computed: {
     ...Root(['short']),
     ...mapGetters(['drawerSizeDouble', 'drawerSize'])
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -171,10 +171,17 @@ export default {
 
 .enemy-drawer {
   padding: 0 20px 30px
+
+  &-header {
+    display: flex
+    position: relative
+  }
 }
 
 .enemy-boss-icon {
   filter: invert(100%) contrast(2) opacity(0.15)
+  position: absolute
+  right: 20px
 }
 
 @media screen and (max-width: 700px) {
@@ -191,7 +198,6 @@ export default {
   }
 
   .enemy-boss-icon {
-    position: absolute
     right: 20px
   }
 }

@@ -127,7 +127,11 @@ const actions = {
   async loadRunes({ state, dispatch, commit, getters }) {
     // todo
     if (!state.runesMode) {
-      const runesData = await getMapDataListVer(state.mapCode + '%23f%23')
+      const runesData = await getMapDataListVer(state.mapCode + '%23f%23').catch(err => {
+        console.log('可能没索引，但就是有突袭数据')
+        return {}
+      })
+
       commit(SET_DATA, { key: 'selMapDataEx', value: runesData })
       commit(SET_DATA, { key: 'runesMode', value: true })
     } else {

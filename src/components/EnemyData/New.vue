@@ -30,13 +30,17 @@
     <!-- 主体 -->
     <div class="map-wrapper">
       <div class="map-title-part">
-        <el-button type="primary" @click="drawer = true">
-          {{ selectedMap ? selectedMap : '选择地图' }}
-          <i class="el-icon-edit-outline" />
-        </el-button>
+        <div style="width: 100%">
+          <el-button type="primary" @click="drawer = true">
+            {{ selectedMap ? selectedMap : '选择地图' }}
+            <i class="el-icon-edit-outline" />
+          </el-button>
+        </div>
 
         <div v-if="selMapDataEx" class="title-button-wrapper">
-          <div v-if=" (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR')">
+          <div
+            v-if=" (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR' || selMapData.runes)"
+          >
             <el-button
               :type="!runesMode ? '': 'warning'"
               :plain="!runesMode"
@@ -64,7 +68,6 @@
           </div>
           <div class="long-button">
             <el-button
-              v-if="devMode === 'beta'"
               :type="!loopAll ? '': 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
@@ -261,7 +264,7 @@ export default {
       simpleShow: true,
       drawer: false,
       loopAll: false,
-      t: 140,
+      t: 125,
       p: 3000
     }
   },
@@ -386,6 +389,9 @@ export default {
   .map-title-part {
     grid-row: 1 / 2
     grid-column: 1 / 3
+    display: flex
+    align-items: center
+    flex-wrap: wrap
     //background-color: rgba(144, 25, 230, 0.3)
   }
 
@@ -532,7 +538,6 @@ filter() {
     .left-panel {
       grid-row: 3 / 4
       grid-column: 1 / 3
-      background-color: rgba(24, 230, 144, 0.3)
     }
 
     .right-panel {

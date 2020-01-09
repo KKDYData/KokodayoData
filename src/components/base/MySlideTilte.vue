@@ -26,10 +26,10 @@
 </template>
 
 <script>
-import MyTitle from './MyTitle';
-import Vue from 'vue';
-import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
-Vue.component(CollapseTransition.name, CollapseTransition);
+import MyTitle from './MyTitle'
+import Vue from 'vue'
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
+Vue.component(CollapseTransition.name, CollapseTransition)
 // todo change short get from props
 // import { mapState } from 'vuex';
 
@@ -58,51 +58,48 @@ export default {
       value: this.init,
       lock: false,
       short: true
-    };
+    }
   },
 
   computed: {
     // ...mapState(['short']),
     active() {
-      if (!this.control) return true;
-      else return this.value;
+      if (!this.control) return true
+      else return this.value
     }
   },
   watch: {
     value(v) {
       if (!v && this.$refs.title.value) {
-        this.lock = true;
-        this.$refs.title.click();
+        this.lock = true
+        this.$refs.title.click()
       }
     }
   },
-  created() {
-    console.log('what');
-  },
   mounted() {
-    this.$emit('monuted', this);
-    console.log('slide', this.value);
+    this.$emit('monuted', this)
+    console.log('slide', this.value)
 
   },
   methods: {
     initClick(v) {
-      this.value = v;
-      this.$refs.title.click();
+      this.value = v
+      this.$refs.title.click()
     },
     click(v) {
       if (this.lock) {
-        this.lock = false;
-        return;
+        this.lock = false
+        return
       }
-      console.log(v);
-      this.value = !v;
-      this.$emit('open', this);
+      console.log(v)
+      this.value = !v
+      this.$emit('open', this)
     },
     close() {
-      this.value = false;
+      this.value = false
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
