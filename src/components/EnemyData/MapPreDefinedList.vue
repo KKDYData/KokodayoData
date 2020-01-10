@@ -54,10 +54,10 @@
 </template>
 
 <script>
-import { getDetailsProfilePath, findValue } from '../../utils';
-import charStatus from '../base/charStatus';
-import loadingC from '../base/Loading';
-import EnemyCube from './EnemyCube';
+import { getDetailsProfilePath, findValue } from '../../utils'
+import charStatus from '../base/charStatus'
+import loadingC from '../base/Loading'
+import EnemyCube from './EnemyCube'
 
 const SkillPanel = () => ({
   component: import(
@@ -67,12 +67,12 @@ const SkillPanel = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
-import { Popover } from 'element-ui';
-import Vue from 'vue';
-import { Directions } from '../../utils/string';
-Vue.use(Popover);
+import { Popover } from 'element-ui'
+import Vue from 'vue'
+import { Directions } from '../../utils/string'
+Vue.use(Popover)
 
 export default {
   components: { charStatus, SkillPanel, EnemyCube },
@@ -88,41 +88,43 @@ export default {
     myList() {
       if (this.runesData) {
         // 仅检测箱子数量，测试一下
-        const checkTokenInsts = Object.values(this.runesData).find(el => el.key === 'cbuff_token_initial_cnt');
+        const checkTokenInsts = Object.values(this.runesData).find(el => el.key === 'cbuff_token_initial_cnt')
         if (checkTokenInsts) {
           const res = this.list.map(el => {
-            let initialCnt = el.initialCnt;
-            const charKey = findValue(checkTokenInsts, 'blackboard', 'char').valueStr;
+            let initialCnt = el.initialCnt
+            const charKey = findValue(checkTokenInsts, 'blackboard', 'char').valueStr
             if (charKey && el.key === charKey) {
-              initialCnt += findValue(checkTokenInsts, 'blackboard', 'value').value;
+              initialCnt += findValue(checkTokenInsts, 'blackboard', 'value').value
             }
-            return { ...el, initialCnt };
-          });
-          return res;
+            return { ...el, initialCnt }
+          })
+          return res
         } else {
-          return this.list;
+          return this.list
         }
       } else {
-        return this.list;
+        return this.list
       }
     }
   },
   methods: {
     getSrc(key) {
-      return getDetailsProfilePath(key);
+      return getDetailsProfilePath(key)
     },
     getDirection(k) {
 
-      return Directions[k];
+      return Directions[k]
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
 .predefine-list {
-  display: flex
-  flex-wrap: wrap
+  display: grid
+  grid-template-columns: repeat(auto-fill, 100px)
+  justify-content: space-around
+  grid-gap: 20px 0
 }
 
 .predefine-item {
@@ -131,7 +133,7 @@ export default {
 
 .predefine-item-bg >>> .enemy-img-container {
   background: linear-gradient(45deg, #000a1d, transparent)
-  border: 5px solid #280332
+  //border: 5px solid #280332
   box-sizing: border-box
 }
 

@@ -5,11 +5,7 @@
         <div class="char-base-info-container">
           <div class="char-set-cv">
             <div class="char-half-container">
-              <el-image class :src="setData[0].halfPic" fit="contain" lazy>
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline" />
-                </div>
-              </el-image>
+              <div class="image-inner" :style="{backgroundImage: `url('${setData[0].halfPic}')`}" />
             </div>
           </div>
           <div :style="short ? 'margin-left: 5vw' : 'margin-left: 20px'">

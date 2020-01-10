@@ -20,16 +20,11 @@
             placement="top-start"
             style="outline: none"
           >
-            <el-image
-              :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
+            <c-image
+              :class="(type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer' ) + ' cbg'"
               :style="itemBackground"
-              fit="contain"
               :src="itemPic"
-            >
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline" />
-              </div>
-            </el-image>
+            />
           </el-tooltip>
         </div>
         <div v-if="num || weight" style="text-align: center">
@@ -151,15 +146,16 @@ import {
 
 import { mapState } from 'vuex'
 import Vue from 'vue'
-import { Popover, Divider, Image, Tooltip } from 'element-ui'
+import { Popover, Divider, Tooltip } from 'element-ui'
 Vue.use(Popover)
 Vue.use(Divider)
-Vue.use(Image)
 Vue.use(Tooltip)
 
 import DropLine from './DropLine'
 import Color from '../base/Color'
 import CloseButton from '../base/CloseButton'
+import CImage from '@/components/base/CImage'
+
 
 import { getItem } from '../../utils/fetch'
 
@@ -171,7 +167,8 @@ export default {
   components: {
     DropLine,
     Color,
-    CloseButton
+    CloseButton,
+    CImage
   },
   props: {
     item: {
@@ -341,7 +338,7 @@ export default {
    box-sizing: border-box
    border-radius: 50%
    box-shadow: inset 0 0 0 2px black
-   background: grey
+   background-color: grey
    border: 2px solid rgb(249, 198, 19)
    overflow: visible
    margin: 0 auto

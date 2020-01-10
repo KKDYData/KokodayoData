@@ -1,10 +1,6 @@
 <template>
   <div class="skill-pic-contianer">
-    <el-image :src="path" lazy>
-      <div slot="error" class="image-slot">
-        <i class="el-icon-picture-outline" />
-      </div>
-    </el-image>
+    <c-image :src="path" />
     <div class="skill-name-wrapper">
       <span
         :style="skill.levels[0].name.length > 6 ? 'font-size: 13px': ''"
@@ -15,14 +11,16 @@
 
 <script>
 import { path } from '../../utils/listVer'
+import CImage from '@/components/base/CImage'
 
-import { Image } from 'element-ui'
-import Vue from 'vue'
-Vue.use(Image)
 
 export default {
+  components: {
+    CImage
+  },
   props: {
     skill: {
+      type: Object,
       required: true
     }
   },

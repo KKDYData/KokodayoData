@@ -1,10 +1,10 @@
-const merge = require('webpack-merge');
-const prod = require('./webpack.prod');
-const webpack = require('webpack');
-const path = require('path');
-const CleanWebPackPlugin = require('clean-webpack-plugin');
+const merge = require('webpack-merge')
+const prod = require('./webpack.prod')
+const webpack = require('webpack')
+const path = require('path')
+const CleanWebPackPlugin = require('clean-webpack-plugin')
 
-const publicPath = 'https://andata.somedata.top/build/test/';
+const publicPath = 'https://andata.somedata.top/build/test/'
 
 module.exports = merge(prod, {
   output: {
@@ -18,4 +18,4 @@ module.exports = merge(prod, {
       'process.env.PUBLIC_PATH': JSON.stringify(publicPath)
     })
   ]
-});
+})

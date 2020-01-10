@@ -202,27 +202,26 @@
   </div>
 </template>
 <script>
-import loadingC from '../base/Loading';
-import MySlideTitle from '../base/MySlideTilte';
-import MapDropList from './MapDropList';
-import EnemyMapInfo from './EnemyMapInfo';
-import MapPreDefined from './MapPreDefined';
+import loadingC from '../base/Loading'
+import MySlideTitle from '../base/MySlideTilte'
+import MapDropList from './MapDropList'
+import EnemyMapInfo from './EnemyMapInfo'
+import MapPreDefined from './MapPreDefined'
 
-import { initSomeMap } from './initData.js';
-
-
+import { initSomeMap } from './initData.js'
 
 
-import { Tree, Drawer, Button, Image, Loading, Message } from 'element-ui';
 
-import Vue from 'vue';
-import { mapState } from 'vuex';
 
-Vue.use(Loading);
-Vue.use(Button);
-Vue.use(Tree);
-Vue.use(Drawer);
-Vue.use(Image);
+import { Tree, Drawer, Button, Loading, Message } from 'element-ui'
+
+import Vue from 'vue'
+import { mapState } from 'vuex'
+
+Vue.use(Loading)
+Vue.use(Button)
+Vue.use(Tree)
+Vue.use(Drawer)
 
 import {
   changeDesc,
@@ -230,7 +229,7 @@ import {
   preDefineGet,
   UA,
   findValue
-} from '../../utils';
+} from '../../utils'
 
 import {
   getEnemyList,
@@ -239,13 +238,13 @@ import {
   getCharItem,
   getItem,
   getFurn,
-} from '../../utils/fetch';
+} from '../../utils/fetch'
 
-import { path } from '../../utils/listVer';
+import { path } from '../../utils/listVer'
 
 
-import { mapOptionsKey } from '../../utils/string';
-import { devMode, rootPath } from '../../stats';
+import { mapOptionsKey } from '../../utils/string'
+import { devMode, rootPath } from '../../stats'
 
 const EnemyDataLayout = () => ({
   component: import(
@@ -255,7 +254,7 @@ const EnemyDataLayout = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 export default {
   metaInfo() {
@@ -271,7 +270,7 @@ export default {
             : '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
         }
       ]
-    };
+    }
   },
   components: {
     EnemyDataLayout,
@@ -281,7 +280,7 @@ export default {
     MapPreDefined
   },
   data() {
-    const browser = UA.Browser;
+    const browser = UA.Browser
     return {
       data: null,
       rowData: [],
@@ -305,15 +304,15 @@ export default {
       mapUp: null,
       isEdge: browser.name === 'Edge' && browser.major < 19,
       devMode
-    };
+    }
   },
   computed: {
     ...mapState(['stageTree', 'screenWidth', 'short']),
     drawerSize() {
-      return Math.floor((300 / this.screenWidth) * 100) + '%';
+      return Math.floor((300 / this.screenWidth) * 100) + '%'
     },
     waveTime() {
-      let enemyNum = 0;
+      let enemyNum = 0
       // 看起来像是简单算个时间，但是实际上，顺便把数量和每波开始的时间加进数据了
       return this.selMapData
         ? this.selMapData.waves.reduce(
@@ -322,42 +321,42 @@ export default {
             cur.preDelay +
             cur.postDelay +
             cur.fragments.reduce((fRes, cur) => {
-              let fTemp = fRes + cur.preDelay;
-              cur.time = fTemp;
+              let fTemp = fRes + cur.preDelay
+              cur.time = fTemp
 
               enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
-                if (el.actionType === 0) return res + el.count;
-                else return res;
-              }, enemyNum);
+                if (el.actionType === 0) return res + el.count
+                else return res
+              }, enemyNum)
 
               fTemp += cur.actions.reduce((res, cur) => {
-                const curTime = cur.preDelay + cur.interval * cur.count;
+                const curTime = cur.preDelay + cur.interval * cur.count
                 // 找出每波最长的
-                return Math.max(res, curTime);
-              }, 0);
-              return fTemp;
+                return Math.max(res, curTime)
+              }, 0)
+              return fTemp
             }, 0),
           0
         )
-        : 0;
+        : 0
     },
 
     showPredefine() {
-      if (!this.selMapData || !this.selMapData.predefines) return false;
+      if (!this.selMapData || !this.selMapData.predefines) return false
       return (
         Object.values(this.selMapData.predefines).reduce(
           (res, cur) => (res += cur.length),
           0
         ) > 0
-      );
+      )
     },
     path() {
       return (
         (process.env.NODE_ENV === 'development' ? '' : rootPath) + '/enemydata/'
-      );
+      )
     },
     mapDesc() {
-      return this.selMapDataEx ? changeDesc(this.selMapDataEx.description) : '';
+      return this.selMapDataEx ? changeDesc(this.selMapDataEx.description) : ''
     },
     mapPath() {
       return this.mapCode
@@ -365,27 +364,27 @@ export default {
         'map/pic/' +
         this.mapCode +
         '_optimized.png?x-oss-process=style/jpg-test'
-        : '';
+        : ''
     },
     globalBuffs() {
-      if (!this.selMapData) return [];
+      if (!this.selMapData) return []
       const BuffKeys = {
         kill_to_add_cost: '杀敌额外回复',
         periodic_damage: '地图周期伤害'
         // ebuff_attribute: '属性增益'
-      };
+      }
       const globalBuffs = this.selMapData.globalBuffs
         ? this.selMapData.globalBuffs
-        : [];
+        : []
       const target = this.runesMode
         ? [...globalBuffs, ...this.selMapData.runes]
-        : [...globalBuffs];
+        : [...globalBuffs]
       return target
         .map(({ prefabKey, key, blackboard }) => {
-          const k = prefabKey ? prefabKey : key;
-          if (BuffKeys[k]) return [BuffKeys[k], blackboard];
+          const k = prefabKey ? prefabKey : key
+          if (BuffKeys[k]) return [BuffKeys[k], blackboard]
         })
-        .filter(el => el);
+        .filter(el => el)
     },
     options() {
       return !this.selMapData
@@ -395,31 +394,31 @@ export default {
         )
           .filter(([k, v]) => mapOptionsKey[k])
           .map(([k, v]) => {
-            v = k === 'costIncreaseTime' ? Math.round(10 / v) / 10 : v;
-            let costBuff;
+            v = k === 'costIncreaseTime' ? Math.round(10 / v) / 10 : v
+            let costBuff
             if (this.runesMode) {
               if (k === 'maxLifePoint') {
-                const lifePointBuff = findValue(this.selMapData, 'runes', 'gbuff_lifepoint');
+                const lifePointBuff = findValue(this.selMapData, 'runes', 'gbuff_lifepoint')
                 if (lifePointBuff) {
-                  v = findValue(lifePointBuff, 'blackboard', 'value').value;
+                  v = findValue(lifePointBuff, 'blackboard', 'value').value
                 }
               }
               if (k === 'costIncreaseTime' && (costBuff = findValue(this.selMapData, 'runes', 'cbuff_cost_recovery'))) {
                 // 暂时只保留0.3，不然会换行
-                v = Math.round((v / findValue(costBuff, 'blackboard', 'scale').value) * 10) / 10;
+                v = Math.round((v / findValue(costBuff, 'blackboard', 'scale').value) * 10) / 10
               }
             }
-            return [mapOptionsKey[k], v];
-          });
+            return [mapOptionsKey[k], v]
+          })
     },
     direction() {
-      return this.short ? 'btt' : 'rtl';
+      return this.short ? 'btt' : 'rtl'
     }
   },
   watch: {
     stageTree(v) {
-      if (v && this.watchTree) this.loadMap();
-      this.watchTree = false;
+      if (v && this.watchTree) this.loadMap()
+      this.watchTree = false
     },
     preData(v) {
       if (
@@ -427,19 +426,19 @@ export default {
         Object.values(v).reduce((res, cur) => res + cur.length, 0) > 0 &&
         this.map
       ) {
-        console.log('load predefinedData');
+        console.log('load predefinedData')
         this.map = initSomeMap(
           this.selMapData,
           this.$refs.canvas,
           this.preData,
           this.t,
           this.p
-        );
+        )
       }
     }
   },
   created() {
-    this.linkStart();
+    this.linkStart()
   },
   mounted() {
     // this.choseMap();
@@ -447,81 +446,81 @@ export default {
 
   methods: {
     loadPicFalse() {
-      Message.info('游戏地图的预览图片缺失，但是地图数据还是有的，敌人的路线一样可以看, 3s后自动打开地图');
+      Message.info('游戏地图的预览图片缺失，但是地图数据还是有的，敌人的路线一样可以看, 3s后自动打开地图')
       setTimeout(() => {
-        this.openMap();
-      }, 3000);
+        this.openMap()
+      }, 3000)
     },
     clearMap() {
-      this.$refs['chapter-selecter'].closeDrawer();
-      this.data = this.rowData;
-      this.mapCode = '';
-      this.selectedMap = '';
-      this.selMapData = null;
-      this.selMapDataEx = null;
-      this.runesMode = false;
-      this.preData = null;
-      this.pTransition();
+      this.$refs['chapter-selecter'].closeDrawer()
+      this.data = this.rowData
+      this.mapCode = ''
+      this.selectedMap = ''
+      this.selMapData = null
+      this.selMapDataEx = null
+      this.runesMode = false
+      this.preData = null
+      this.pTransition()
     },
     async loadRunes() {
       this.pTranisitionTemp = window.getComputedStyle(
         this.$refs['map-title-part']
-      ).height;
+      ).height
       if (!this.runesMode) {
-        this.selMapDataEx = await getMapDataListVer(this.mapCode + '%23f%23');
-        this.runesMode = true;
+        this.selMapDataEx = await getMapDataListVer(this.mapCode + '%23f%23')
+        this.runesMode = true
       } else {
-        this.runesMode = false;
-        this.selMapDataEx = await getMapDataListVer(this.mapCode);
+        this.runesMode = false
+        this.selMapDataEx = await getMapDataListVer(this.mapCode)
       }
-      this.pTransition();
+      this.pTransition()
     },
     // 让每个地图的文字说明高度变化地更好看的动画函数，需要先设置好pTranisitionTemp，保存原先的高度
     async pTransition() {
-      const target = this.$refs['map-title-part'];
-      target.style.height = 'auto';
-      await this.$nextTick();
-      if (!target) return;
-      const targetHeight = window.getComputedStyle(target).height;
-      target.style.height = this.pTranisitionTemp;
+      const target = this.$refs['map-title-part']
+      target.style.height = 'auto'
+      await this.$nextTick()
+      if (!target) return
+      const targetHeight = window.getComputedStyle(target).height
+      target.style.height = this.pTranisitionTemp
       setTimeout(() => {
-        target.style.height = targetHeight;
-      }, 50);
+        target.style.height = targetHeight
+      }, 50)
     },
     async loadMap(map) {
-      const parent = map || this.$route.params.map;
-      if (!parent || !this.stageTree) return;
-      const target = findStage(parent, this.stageTree);
+      const parent = map || this.$route.params.map
+      if (!parent || !this.stageTree) return
+      const target = findStage(parent, this.stageTree)
       if (target) {
         this.mapCode = target.path
           .replace('weekly', 'wk')
-          .replace('promote', 'pro');
-        this.choseMap(target);
+          .replace('promote', 'pro')
+        this.choseMap(target)
       } else {
-        console.log('没有这个地图，路由失败');
+        console.log('没有这个地图，路由失败')
       }
     },
     // 选择章节
     changeMapCode(data) {
       if (!data.children) {
-        this.$refs['chapter-selecter'].closeDrawer();
-        this.load = true;
-        this.mapPicLoad = true;
+        this.$refs['chapter-selecter'].closeDrawer()
+        this.load = true
+        this.mapPicLoad = true
 
-        this.runesMode = false;
-        this.selMapNode = data;
-        let codeFromPath = data.path;
+        this.runesMode = false
+        this.selMapNode = data
+        let codeFromPath = data.path
         let shortCode = codeFromPath
           .replace('weekly', 'wk')
-          .replace('promote', 'pro');
-        this.mapCode = shortCode;
-        this.$router.push(this.path + shortCode);
+          .replace('promote', 'pro')
+        this.mapCode = shortCode
+        this.$router.push(this.path + shortCode)
 
         setTimeout(() => {
-          this.load = false;
-          this.mapPicLoad = false;
-          this.$refs['layout-control'].click(true);
-        }, 500);
+          this.load = false
+          this.mapPicLoad = false
+          this.$refs['layout-control'].click(true)
+        }, 500)
       }
     },
     async choseMap(data) {
@@ -529,107 +528,107 @@ export default {
         getMapData('level_' + data.path.replace('kc', 'killcost')),
         getMapDataListVer(this.mapCode)
       ]).catch(err => {
-        Message.error('获取数据失败');
-        return [];
-      });
+        Message.error('获取数据失败')
+        return []
+      })
 
       if (mapData) {
         this.pTranisitionTemp = window.getComputedStyle(
           this.$refs['map-title-part']
-        ).height;
+        ).height
 
         exData.stageDropInfo &&
           this.getItemList(exData.stageDropInfo.displayDetailRewards).then(
             data => (this.detailsDropList = data)
-          );
+          )
 
-        if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
+        if (this.$refs.layout) this.$refs.layout.clearRoutes(true)
         this.data = Object.entries(this.rowData).reduce((res, [k, v]) => {
-          const target = mapData.enemyDbRefs.find(el => el.id === k);
+          const target = mapData.enemyDbRefs.find(el => el.id === k)
           if (target) {
-            res[k] = Object.assign({}, v, target);
-            return res;
-          } else return res;
-        }, {});
-        this.selectedMap = data.label;
-        this.selMapData = mapData;
-        this.selMapDataEx = exData;
-        this.getPreData();
-        this.pTransition();
+            res[k] = Object.assign({}, v, target)
+            return res
+          } else return res
+        }, {})
+        this.selectedMap = data.label
+        this.selMapData = mapData
+        this.selMapDataEx = exData
+        this.getPreData()
+        this.pTransition()
 
 
         // 去掉地图的loading遮罩
-        this.mapPicLoad = false;
-        this.map = null;
-        await this.$nextTick();
+        this.mapPicLoad = false
+        this.map = null
+        await this.$nextTick()
         this.map = initSomeMap(
           mapData,
           this.$refs.canvas,
           this.preData,
           this.t,
           this.p
-        );
+        )
 
 
       }
     },
     // 子组件传出来清空map的事件处理
     clearRoutes() {
-      console.log('clear map');
-      this.map.deleteAll();
-      this.$refs.layout.clearRoutes();
+      console.log('clear map')
+      this.map.deleteAll()
+      this.$refs.layout.clearRoutes()
     },
     checkCodeBase() {
       if (!this.map) {
-        Message('地图数据还没加载完成，等一会再看看吧');
-        return false;
-      } else return true;
+        Message('地图数据还没加载完成，等一会再看看吧')
+        return false
+      } else return true
     },
     loopRoutes(index, color) {
-      if (!this.checkCodeBase()) return;
+      if (!this.checkCodeBase()) return
 
       if (!this.showMap) {
-        this.showMap = true;
+        this.showMap = true
       }
-      const route = this.selMapData.routes[index];
-      console.log(index, color, route);
-      if (!route) throw Error('没有这个线路');
-      this.map.loopRoute(index, color);
+      const route = this.selMapData.routes[index]
+      console.log(index, color, route)
+      if (!route) throw Error('没有这个线路')
+      this.map.loopRoute(index, color)
     },
     loopAllRoutes() {
       if (this.checkCodeBase()) {
-        console.log('load all routes begin');
-        this.showMap = true;
-        this.map.loopRoutes();
+        console.log('load all routes begin')
+        this.showMap = true
+        this.map.loopRoutes()
       } else {
-        this.openMap();
-        setTimeout(this.loopAllRoutes, 500);
+        this.openMap()
+        setTimeout(this.loopAllRoutes, 500)
       }
     },
     openMap() {
       if (this.showMap) {
-        this.showMap = false;
+        this.showMap = false
       } else {
         if (this.checkCodeBase()) {
-          this.showMap = true;
+          this.showMap = true
         } else {
-          Message('地图数据还没加载完成，请重试');
+          Message('地图数据还没加载完成，请重试')
         }
       }
     },
     linkStart() {
       return this.getData().then(data => {
-        this.data = this.rowData = data[0];
+        this.data = this.rowData = data[0]
         // this.appearMap = data[1];
-        if (this.stageTree) this.loadMap();
-        else this.watchTree = true;
-      });
+        if (this.stageTree) this.loadMap()
+        else this.watchTree = true
+      })
     },
     getData() {
-      return Promise.all([getEnemyList()]);
+      return Promise.all([getEnemyList()])
     },
     getItemList(list) {
-      if (!list) return Promise.resolve([]);
+      if (!list) return Promise.resolve([])
       return Promise.all(
         list.map(async el => ({
           data: await (el.type === 'FURN'
@@ -640,28 +639,28 @@ export default {
           type: el.type,
           dropType: el.dropType
         }))
-      );
+      )
     },
     async getPreData() {
-      this.preData = null;
-      const data = this.selMapData.predefines;
-      if (!data) return;
+      this.preData = null
+      const data = this.selMapData.predefines
+      if (!data) return
       const tasks = [
         preDefineGet('tokenInsts', data),
         preDefineGet('tokenCards', data),
         preDefineGet('characterInsts', data),
         preDefineGet('characterCards', data)
-      ];
+      ]
       const [
         tokenInsts,
         tokenCards,
         characterInsts,
         characterCards
-      ] = await Promise.all(tasks);
-      this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
+      ] = await Promise.all(tasks)
+      this.preData = { tokenInsts, tokenCards, characterInsts, characterCards }
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

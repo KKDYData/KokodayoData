@@ -12,7 +12,7 @@
     <div v-if="currentEnemy" class="enemy-drawer">
       <div class="enemy-drawer-header">
         <div class="enemy-img-container">
-          <el-image :src="picPath" />
+          <c-image :src="picPath" />
         </div>
         <div style="z-index: 1">
           <div style="display: flex">
@@ -22,7 +22,7 @@
               >{{ currentEnemy.enemyIndex }}</span>
             </div>
             <div>
-              <h1 style="margin: 0">
+              <h1 :style="(currentEnemy.name.length > 5 ? 'font-size: 1.3em':'' ) +'; margin: 0'">
                 {{ currentEnemy.name }}
                 <span
                   v-if="currentEnemy.level"
@@ -48,7 +48,7 @@
         </div>
 
         <div v-if="currentEnemy.enemyLevel !== 'NORMAL'" class="enemy-boss-icon">
-          <el-image
+          <c-image
             :src="path + 'logo/' + currentEnemy.enemyLevel.toLowerCase() + '_icon_optimized.png?x-oss-process=style/jpg-test'"
           />
         </div>
@@ -74,7 +74,7 @@
 <script>
 import { path } from '@/utils/listVer'
 import BaseStatusBox from './BaseStatusBox'
-
+import CImage from '@/components/base/CImage'
 import { Image, Drawer } from 'element-ui'
 import Vue from 'vue'
 Vue.use(Image)
@@ -87,7 +87,8 @@ const { mapGetters } = createNamespacedHelpers('enemy')
 
 export default {
   components: {
-    BaseStatusBox
+    BaseStatusBox,
+    CImage
   },
   props: {
     detailsOpen: {

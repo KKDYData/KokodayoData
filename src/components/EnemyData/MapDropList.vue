@@ -33,8 +33,8 @@
 </template>
 
 <script>
-import DropList from './DropList';
-import { mapState } from 'vuex';
+import DropList from './DropList'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -53,20 +53,24 @@ export default {
 
   computed: {
     ...mapState(['short']),
+    // 首次掉落
     firstDrop() {
-      return this.dropInfo.filter(el => el.dropType === 1 || el.dropType === 8);
+      return this.dropInfo.filter(el => el.dropType === 1 || el.dropType === 8)
     },
+    // 常规掉落
     commonDrop() {
-      return this.dropInfo.filter(el => el.dropType === 2);
+      return this.dropInfo.filter(el => el.dropType === 2)
     },
+    // 稀有掉落
     rarityDrop() {
-      return this.dropInfo.filter(el => el.dropType === 3);
+      return this.dropInfo.filter(el => el.dropType === 3)
     },
+    // 罕见
     almostDrop() {
-      return this.dropInfo.filter(el => el.dropType === 4);
+      return this.dropInfo.filter(el => el.dropType === 4)
     },
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

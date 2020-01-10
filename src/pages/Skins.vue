@@ -10,11 +10,7 @@
               <set-panel v-if="skin.avatarId === showId" :id="skin.avatarId" :set-data="[skin]" />
             </div>
             <div slot="reference" class="char-half-container" @click="showId = skin.avatarId">
-              <el-image class :src="skin.halfPic" fit="contain">
-                <div slot="error" class="image-slot">
-                  <i class="el-icon-picture-outline" />
-                </div>
-              </el-image>
+              <c-image class :src="skin.halfPic" fit="contain" />
             </div>
           </el-popover>
 
@@ -31,26 +27,27 @@
 </template>
 
 <script>
-import store from '../store';
-import { mapState } from 'vuex';
-import FilterButtonGroup from '../components/base/FilterButtonGroup';
-import Loading from '../components/base/Loading';
-import { getSkinsData, getScreenWidth } from '../utils';
-import { Image, Popover } from 'element-ui';
-import SetPanel from '../components/base/SetPanel';
-import CloseButton from '../components/base/CloseButton';
+import store from '../store'
+import { mapState } from 'vuex'
+import FilterButtonGroup from '../components/base/FilterButtonGroup'
+import Loading from '../components/base/Loading'
+import { getSkinsData, getScreenWidth } from '../utils'
+import { Popover } from 'element-ui'
+import SetPanel from '../components/base/SetPanel'
+import CloseButton from '../components/base/CloseButton'
+import CImage from '@/components/base/CImage'
 
-store.dispatch('setExtraSkins');
-import Vue from 'vue';
-Vue.use(Image);
-Vue.use(Popover);
+store.dispatch('setExtraSkins')
+import Vue from 'vue'
+Vue.use(Popover)
 
 export default {
   components: {
     FilterButtonGroup,
     Loading,
     SetPanel,
-    CloseButton
+    CloseButton,
+    CImage
   },
   data() {
     return {
@@ -58,41 +55,41 @@ export default {
       filters: [],
       showId: '',
       width: 1200
-    };
+    }
   },
   computed: {
     ...mapState(['extraSkins', 'short']),
     skinsData() {
-      if (!this.extraSkins) return [];
+      if (!this.extraSkins) return []
       else
         return this.extraSkins
           .map(el => getSkinsData.skins(el))
           .filter(({ displaySkin }) => {
-            if (!this.filters.length) return true;
+            if (!this.filters.length) return true
             return this.filters.find(
               ({ key }) => key === displaySkin.skinGroupName
-            );
-          });
+            )
+          })
     },
     groups() {
-      if (!this.extraSkins) return [];
+      if (!this.extraSkins) return []
       const set = new Set(
         this.extraSkins.map(({ displaySkin }) => displaySkin.skinGroupName)
-      );
-      return [...set].map(el => ({ key: el, text: el }));
+      )
+      return [...set].map(el => ({ key: el, text: el }))
     }
   },
   mounted() {
-    console.log(this.extraSkins);
-    this.width = getScreenWidth().width;
+    console.log(this.extraSkins)
+    this.width = getScreenWidth().width
   },
   methods: {
     switchData(e) {
-      console.log(e);
-      this.filters = e;
+      console.log(e)
+      this.filters = e
     },
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

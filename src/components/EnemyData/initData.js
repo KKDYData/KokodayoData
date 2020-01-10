@@ -7,7 +7,7 @@ let instance
 
 const blackboardToStr = (data) => data.map(e => e.key + ' : ' + e.value).join(';')
 
-const initSomeMap = (testData, container, predata, theta = (125 / 360) * Math.PI * 2, persective = 3000) => {
+const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI * 2, persective = 3000) => {
 
   const { mapData, routes } = testData
   const mapdata = Object.assign({}, mapData)

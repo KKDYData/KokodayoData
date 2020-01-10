@@ -1,6 +1,5 @@
 <template>
   <div class="new-profile-layout-container">
-    <slot />
     <div style="margin-left: 10px; color: rgb(168,168,168)">
       <p>不用选仅公招！排列已经去掉了公招不出的干员。</p>
       <p>
@@ -24,19 +23,12 @@
             class="other-mode-agent"
             :style="bgColor(agent.tags[0])"
           >
-            <el-popover trigger="click">
+            <c-popper :options="popoverOptions" trigger="click">
               <div class="other-mode-popover">
                 <router-link :to="path + '/details/' + agent.No">
-                  <el-image
-                    fit="cover"
-                    class="img-container"
-                    :alt="agent.name"
-                    :src="profilePath(agent.No)"
-                  >
-                    <div slot="error" class="image-slot">
-                      <i class="el-icon-picture-outline" />
-                    </div>
-                  </el-image>
+                  <div class="img-container">
+                    <c-image :alt="agent.name" :src="profilePath(agent.No)" />
+                  </div>
                 </router-link>
                 <div class="other-mode-popover-details">
                   <div class="other-mode-popover-details-title other-mode-link">
@@ -45,12 +37,9 @@
                       <span
                         :style="agent.tags[1] === '女' ? 'color: pink;' : ''"
                       >{{ agent.tags[1] === '女' ? '♀' : '♂' }}</span>
-                      <el-image
-                        class="other-mode-popover-class-icon"
-                        :alt="agent.class"
-                        :title="changeClassShort(agent.class)"
-                        :src="class_icon(agent.class)"
-                      />
+                      <div class="other-mode-popover-class-icon">
+                        <c-image :src="class_icon(agent.class)" />
+                      </div>
                     </router-link>
                   </div>
                   <div style="margin-top: 10px;">
@@ -60,17 +49,17 @@
                         :key="tag"
                         class="other-mode-popover-tag"
                         effect="dark"
+                        size="mini"
                         type="info"
                       >{{ index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag }}</el-tag>
                     </template>
                   </div>
-                  <!-- <span>{{agent.tags}}</span> -->
                 </div>
               </div>
               <div slot="reference">
                 <span style="cursor: pointer">{{ agent.name }}</span>
               </div>
-            </el-popover>
+            </c-popper>
           </div>
         </div>
       </el-card>
@@ -108,8 +97,15 @@ Vue.use(Card)
 Vue.use(Tag)
 
 import { rootPath } from '../../stats'
+import CImage from '@/components/base/CImage'
+import CPopper from '@/components/base/Popper/Popper'
+
 
 export default {
+  components: {
+    CImage,
+    CPopper
+  },
   props: {
     data: Array,
     showKey: String,
@@ -119,7 +115,12 @@ export default {
   },
   data() {
     return {
-      path: rootPath
+      path: rootPath,
+      popoverOptions: {
+        // flip: {
+        //   // abled: false
+        // }
+      }
     }
   },
   computed: {
@@ -202,9 +203,7 @@ export default {
       const targetColor = starColor[star]
 
       return {
-        'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${
-          targetColor[2]
-          }%, 1)`
+        'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${targetColor[2]}%, 1)`
       }
     },
     profilePath(name) {
@@ -214,71 +213,81 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="stylus"  scoped>
 .other-mode-agent {
-  display: inline-block;
-  padding: 5px;
-  color: white;
-  margin: 5px;
-  border-radius: 4px;
-  min-width: 25px;
-  text-align: center;
+  display: inline-block
+  padding: 5px
+  color: white
+  margin: 5px
+  border-radius: 4px
+  min-width: 25px
+  text-align: center
 }
 
 .new-profile-layout-container {
-  /* width: calc(100vw - 40px); */
-  /* max-height: 70vh; */
-  max-width: 950px;
-  background-color: white;
+  /*width: calc(100vw - 40px);*/
+  /*max-height: 70vh;*/
+  max-width: 950px
+  background-color: white
 }
+
 .other-mode-link span {
-  /* color: white; */
-  color: black;
-  text-decoration: none;
+  /*color: white;*/
+  color: black
+  text-decoration: none
 }
+
 .other-mode-link a {
-  text-decoration: none;
+  text-decoration: none
 }
 
 .img-container {
-  width: 60px;
-  height: 60px;
+  width: 60px
+  height: 60px
 }
+
 .new-mode-group-container {
-  display: flex;
-  flex-wrap: wrap;
+  display: flex
+  flex-wrap: wrap
 }
+
 .new-mode-group {
-  min-width: 150px;
-  margin: 10px;
+  min-width: 150px
+  margin: 10px
 }
 
 .other-mode-popover {
-  display: flex;
+  display: flex
 }
 
 .other-mode-popover-details {
-  margin-left: 10px;
+  margin-left: 10px
+  display: flex
+  flex-direction: column
+  justify-content: space-around
+
+  &-title {
+    font-size: 20px
+    line-height: 100%
+  }
 }
 
 .other-mode-popover-tag {
-  margin: 5px 5px 0;
+  margin: 5px 5px 0
 }
 
 .other-mode-popover-class-icon {
-  width: 20px;
-  height: 20px;
-  vertical-align: bottom;
-}
-
-.other-mode-popover-details-title {
-  font-size: 20px;
-  line-height: 100%;
+  width: 20px
+  height: 20px
+  vertical-align: bottom
+  display: inline-block
+  border-radius: 3px
+  overflow: hidden
 }
 
 .other-mode-popover-tag.el-tag--dark.el-tag--info {
-  background-color: #313131;
-  border-color: #313131;
+  background-color: #313131
+  border-color: #313131
 }
 </style>
 

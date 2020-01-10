@@ -5,7 +5,7 @@
         <div v-if="index" class="enemy-index-container">
           <span>{{ index }}</span>
         </div>
-        <el-image :src="src" />
+        <div class="image-inner" :style="{backgroundImage: `url('${src}')`}" />
       </div>
     </div>
     <div :class="(name.length > 6 ? 'small' : '') + ' normal'">{{ name }}</div>
@@ -13,9 +13,6 @@
 </template>
 
 <script>
-import { Image } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Image);
 
 export default {
   props: {
@@ -32,7 +29,7 @@ export default {
       required: true
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -43,7 +40,7 @@ export default {
 
 .enemy-index-container {
   position: absolute
-  z-index: 1
+  z-index: 2
   background-color: rgba(0, 0, 0, 0.5)
   color: white
   top: -2px

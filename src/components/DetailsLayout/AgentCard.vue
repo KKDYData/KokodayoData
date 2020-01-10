@@ -15,18 +15,13 @@
             </div>
             <div>
               <div class="agent-card-title-class">
-                <el-image
-                  v-if="professionPic"
-                  class="agent-card-pro-pic"
-                  :src="professionPic"
-                  :details="data.name"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline" />
-                  </div>
-                </el-image>
-                <span style="font-family:FZYaSong-H-GBK;">{{ profession }}</span>
-                <el-image class="agent-card-star-pic" :src="rarityPath" fit="contain" />
+                <div v-if="professionPic" class="agent-card-pro-pic">
+                  <div class="image-inner" :style="{backgroundImage: `url('${professionPic}')`}" />
+                </div>
+                <span style="font-family:FZYaSong-H-GBK; margin-left: 3px">{{ profession }}</span>
+                <div class="agent-card-star-pic">
+                  <div class="image-inner" :style="{backgroundImage: `url('${rarityPath}')`}" />
+                </div>
               </div>
               <div class="intro-2-wrapper">
                 <span v-if="!descArrary" class="intro-2" v-html="desc" />
@@ -72,13 +67,11 @@
 
 
 <script>
-import { Card, Tag, Image, Popover } from 'element-ui'
+import { Card, Tag } from 'element-ui'
 import Vue from 'vue'
 import { mapState } from 'vuex'
 Vue.use(Card)
 Vue.use(Tag)
-Vue.use(Image)
-Vue.use(Popover)
 
 import Team from './handbook_team_table.json'
 import {
@@ -165,12 +158,23 @@ export default {
   font-size: 0
   display: flex
   align-items: center
-}
 
-.agent-card-title-class span {
-  font-size: 38px
-  word-break: keep-all
-  line-height: 40px
+  span {
+    font-size: 38px
+    word-break: keep-all
+    line-height: 40px
+  }
+
+  .agent-card-pro-pic {
+    vertical-align: middle
+    width: 40px
+    height: 40px
+  }
+
+  .agent-card-star-pic {
+    height: 40px
+    width: 200px
+  }
 }
 
 .agent-card-title-wrapper {
@@ -203,18 +207,6 @@ export default {
   display: flex
   align-items: center
   margin: 5px 0
-}
-
-.intro-2-control {
-  display: flex
-
-  & >>> .el-button.is-circle {
-    padding: 2px
-  }
-}
-
-.intro-2-control-button {
-  margin-left: 5px
 }
 
 .intro-2 {
@@ -252,12 +244,6 @@ export default {
   right: 0
   top: 0
   font-size: 0
-}
-
-.agent-card-pro-pic {
-  vertical-align: middle
-  width: 40px
-  height: 40px
 }
 
 .agent-card-tags span + span {
@@ -303,23 +289,55 @@ export default {
     min-height: calc(90px + 2vw)
     height: auto
     flex-grow: 0
+
+    .agent-card-title-wrapper {
+      margin: 0
+      position: relative
+      z-index: 1
+      flex: 1
+    }
+  }
+
+  .agent-card-pic {
+    display: inline-block
+    width: calc(100px + 5vw)
+    height: calc(100px + 5vw)
+    font-size: 12px
+    flex-shrink: 1
+    position: relative
+    top: -20px
+    left: -20px
+  }
+
+  .agent-card-title-class {
+    display: flex
+    align-items: center
+
+    span {
+      font-size: calc(15px + 0.5vw)
+    }
+
+    .agent-card-pro-pic {
+      vertical-align: middle
+      width: 20px
+      height: 20px
+    }
+
+    .agent-card-star-pic {
+      height: calc(15px + 0.5vw)
+      flex: 1
+      margin-right: auto
+      width: min-content
+    }
   }
 
   .agent-card-container-wrapper >>> .el-card__body {
     padding-bottom: 30px
   }
 
-  .agent-card-title-class span {
-    font-size: calc(15px + 0.5vw)
-  }
-
-  .agent-card-title-name {
+  //??
+  .agent-card-title-class, .agent-card-title-name {
     font-size: 20px
-  }
-
-  .agent-card-title-wrapper {
-    margin-left: calc(100px + 5vw)
-    z-index: 1
   }
 
   .details-wrapper-fixed {
@@ -345,26 +363,6 @@ export default {
     padding-top: 10px
   }
 
-  .agent-card-pro-pic {
-    vertical-align: middle
-    width: 20px
-    height: 20px
-  }
-
-  .agent-card-pic {
-    display: inline-block
-    width: calc(100px + 5vw)
-    height: calc(100px + 5vw)
-    font-size: 12px
-    position: absolute
-    /*position: relative;*/
-    flex-shrink: 1
-    flex-grow: 1
-    top: -20px
-    left: -20px
-    vertical-align: middle
-  }
-
   .agent-card-camp-chinese {
     box-shadow: rgba(82, 82, 82, 0.4) 0px 0px 2px 0px
     border-top-right-radius: 3px
@@ -386,19 +384,6 @@ export default {
 
   .char-camp-pic::before {
     opacity: 0.4
-  }
-
-  .agent-card-star-pic {
-    height: calc(15px + 0.5vw)
-    width: auto
-  }
-
-  .intro-2-control {
-    flex-direction: column
-
-    & >>> .el-button.is-circle {
-      padding: 2px
-    }
   }
 }
 </style>

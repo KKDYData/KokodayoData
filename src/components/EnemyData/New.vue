@@ -205,10 +205,9 @@ import EnemyMapInfo from './EnemyMapInfo'
 import MapPreDefined from './MapPreDefined'
 import AccordionPanel from '@/components/base/AccrordionPanel'
 import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel'
-import MyTitle from '@/components/base/MyTitle'
 
 
-import { Tree, Drawer, Button, Image, Loading, Slider } from 'element-ui'
+import { Tree, Drawer, Button, Loading, Slider } from 'element-ui'
 
 import Vue from 'vue'
 import { SET_DATA } from '../../store/Enemy/mutations'
@@ -220,7 +219,6 @@ Vue.use(Loading)
 Vue.use(Button)
 Vue.use(Tree)
 Vue.use(Drawer)
-Vue.use(Image)
 Vue.use(Slider)
 
 
@@ -264,7 +262,7 @@ export default {
       simpleShow: true,
       drawer: false,
       loopAll: false,
-      t: 125,
+      t: 140,
       p: 3000
     }
   },
@@ -429,6 +427,7 @@ export default {
     grid-row: 2 / 4
     grid-column: 1 / 4
     overflow: hidden
+    padding-top: 10px
   }
 }
 
@@ -544,6 +543,14 @@ filter() {
       grid-row: 4 / 5
       grid-column: 1 / 3
     }
+  }
+
+  #map-canvas-container {
+    position: relative
+    top: -10%
+    left: -10%
+    height: 120%
+    width: 120%
   }
 
   .title-button-wrapper {
