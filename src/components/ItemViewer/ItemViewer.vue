@@ -1,6 +1,6 @@
 <template>
   <div class="item-viewer-container">
-    <el-popover
+    <h-popping
       v-if="data"
       popper-class="item-popover-class"
       placement="top"
@@ -10,6 +10,17 @@
       :title="data.name"
       :disabled="noPopover"
     >
+      <div slot="title">
+        <div style="display: flex; align-items: center;margin-bottom: -30px">
+          <c-image
+            :class="(type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer' ) + ' cbg title-item'"
+            :style="itemBackground"
+            :src="itemPic"
+          />
+          {{ data.name }}
+          <!-- <div style="margin-right: auto"></div> -->
+        </div>
+      </div>
       <!-- 去掉 ios 点击边框 -->
       <div slot="reference" style="outline: none" :class="noPopover ? 'short-force' : ''">
         <div>
@@ -39,9 +50,6 @@
         </div>
       </div>
       <div v-if="!noPopover">
-        <div v-if="isHover === 'click'">
-          <close-button />
-        </div>
         <p v-if="type === 'FURN'" style="color: #828282">氛围 {{ data.comfort }}</p>
         <p v-if="type === 'FURN'" style="color: #828282">{{ data.obtainApproach }}</p>
         <p>{{ data.usage }}</p>
@@ -127,7 +135,7 @@
           </div>
         </div>
       </div>
-    </el-popover>
+    </h-popping>
   </div>
 </template>
 
@@ -153,11 +161,11 @@ Vue.use(Tooltip)
 
 import DropLine from './DropLine'
 import Color from '../base/Color'
-import CloseButton from '../base/CloseButton'
 import CImage from '@/components/base/CImage'
 
 
 import { getItem } from '../../utils/fetch'
+import HPopping from '@/components/base/Popping'
 
 // 可以考虑给id的话，只显示图片，不做数据拉取
 // 或者noPopover + {假数据}，反正只显示图片的话，实际也不需要拉数据显示
@@ -167,8 +175,8 @@ export default {
   components: {
     DropLine,
     Color,
-    CloseButton,
-    CImage
+    CImage,
+    HPopping
   },
   props: {
     item: {
@@ -430,6 +438,11 @@ export default {
    }
  }
 
+ .title-item {
+   margin: 0
+   margin-right: 20px
+ }
+
  @media screen and (max-width: 700px) {
    .evolvcost-item-contianer {
      width: calc(45px + 2vw)
@@ -446,7 +459,6 @@ export default {
 
    .item-popover {
      overflow-x: hidden
-     max-height: 300px
    }
 
    .item-popover .is-left {
