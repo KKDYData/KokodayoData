@@ -28,11 +28,11 @@
 </template>
 
 <script>
-import { getProfilePath, UA } from '../../utils';
-import { statusToChToken } from '../../utils/string';
-import MapPredefinedList from './MapPreDefinedList';
+import { getProfilePath, UA } from '../../utils'
+import { statusToChToken } from '../../utils/string'
+import MapPredefinedList from './MapPreDefinedList'
 
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -62,18 +62,18 @@ export default {
         process.env.NODE_ENV === 'development' || UA.isMobliePad ||
           this.short ? 'click' : 'hover',
       lock: false
-    };
+    }
   },
   computed: {
     ...mapState(['short']),
   },
   methods: {
     getSrc(key) {
-      return getProfilePath(key);
+      return getProfilePath(key)
     },
   }
 
-};
+}
 </script>
 
 <style lang="stylus" scoped>

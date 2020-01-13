@@ -69,7 +69,14 @@ module.exports = merge(common, {
     rules: [
       {
         test: /\.(styl|stylus|css)$/,
-        use: ['style-loader', 'css-loader', 'stylus-loader'],
+        use: ['style-loader', 'css-loader', 'stylus-loader', {
+          loader: 'style-resources-loader',
+          options: {
+            patterns: [
+              'src/styles/fn.styl',
+            ]
+          }
+        }],
       }
     ]
   },

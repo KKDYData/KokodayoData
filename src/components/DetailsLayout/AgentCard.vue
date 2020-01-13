@@ -2,36 +2,31 @@
   <div class="agent-card-container-wrapper">
     <el-card style=" margin-bottom: 20px; position: relative;">
       <div class="agent-card-container">
-        <char-cube class="agent-card-pic" :style="`--logo-link: url(${logo})`" :src="profile"></char-cube>
+        <char-cube class="agent-card-pic" :style="`--logo-link: url(${logo})`" :src="profile" />
         <div class="agent-card-title-wrapper">
           <div class="title-first">
             <div>
               <span class="agent-card-title-name">
-                <span style="color: rgb(49, 49, 49);font-family:FZYaSong-H-GBK;">{{data.name}}</span>
+                <span style="color: rgb(49, 49, 49);font-family:FZYaSong-H-GBK;">{{ data.name }}</span>
                 <span
                   style="font-size: 0.7em; color: rgb(150, 150, 150);font-weight: normal"
-                >{{data.appellation}}</span>
+                >{{ data.appellation }}</span>
               </span>
             </div>
             <div>
               <div class="agent-card-title-class">
-                <el-image
-                  v-if="professionPic"
-                  class="agent-card-pro-pic"
-                  :src="professionPic"
-                  :details="data.name"
-                >
-                  <div slot="error" class="image-slot">
-                    <i class="el-icon-picture-outline"></i>
-                  </div>
-                </el-image>
-                <span style="font-family:FZYaSong-H-GBK;">{{ profession }}</span>
-                <el-image class="agent-card-star-pic" :src="rarityPath" fit="contain"></el-image>
+                <div v-if="professionPic" class="agent-card-pro-pic">
+                  <div class="image-inner" :style="{backgroundImage: `url('${professionPic}')`}" />
+                </div>
+                <span style="font-family:FZYaSong-H-GBK; margin-left: 3px">{{ profession }}</span>
+                <div class="agent-card-star-pic">
+                  <div class="image-inner" :style="{backgroundImage: `url('${rarityPath}')`}" />
+                </div>
               </div>
               <div class="intro-2-wrapper">
-                <span v-if="!descArrary" class="intro-2" v-html="desc"></span>
-                <span v-else-if="desc.length > 1" v-html="desc[phases]" class="intro-2"></span>
-                <span v-else v-html="desc[0]" class="intro-2"></span>
+                <span v-if="!descArrary" class="intro-2" v-html="desc" />
+                <span v-else-if="desc.length > 1" class="intro-2" v-html="desc[phases]" />
+                <span v-else class="intro-2" v-html="desc[0]" />
               </div>
             </div>
           </div>
@@ -39,32 +34,32 @@
       </div>
       <div class="details-wrapper-fixed">
         <p class="intro-0">
-          <span>{{data.itemUsage}}</span>
+          <span>{{ data.itemUsage }}</span>
         </p>
         <p class="intro-1">
-          <span>{{data.itemDesc}}</span>
+          <span>{{ data.itemDesc }}</span>
         </p>
         <div class="char-camp-pic" :style="`--logo-link: url(${logo})`">
-          <div class="agent-card-camp-container" v-if="data.team > -1">
+          <div v-if="data.team > -1" class="agent-card-camp-container">
             <div class="agent-card-camp-en">
-              <span>{{team.teamKey.toUpperCase()}}</span>
+              <span>{{ team.teamKey.toUpperCase() }}</span>
             </div>
             <div class="agent-card-camp-chinese" :style="`background-color: #${team.color}`">
               <span
                 :style="`padding: 0 5px;color: ${team.color !== 'ffffff' ? '#fff' : 'rgb(136,136,136)'}`"
-              >{{team.teamName}}</span>
+              >{{ team.teamName }}</span>
             </div>
           </div>
         </div>
       </div>
       <div class="agent-card-tags">
         <el-tag
+          v-for="tag in data.tagList"
+          :key="tag"
           :size="short ? 'mini' :'medium'"
           effect="dark"
           type="info"
-          v-for="tag in  data.tagList"
-          :key="tag"
-        >{{tag}}</el-tag>
+        >{{ tag }}</el-tag>
       </div>
     </el-card>
   </div>
@@ -72,27 +67,29 @@
 
 
 <script>
-import { Card, Tag, Image, Popover } from 'element-ui';
-import Vue from 'vue';
-import { mapState } from 'vuex';
-Vue.use(Card);
-Vue.use(Tag);
-Vue.use(Image);
-Vue.use(Popover);
+import { Card, Tag } from 'element-ui'
+import Vue from 'vue'
+import { mapState } from 'vuex'
+Vue.use(Card)
+Vue.use(Tag)
 
-import Team from './handbook_team_table.json';
+import Team from './handbook_team_table.json'
 import {
   changeDesc,
   getDetailsProfilePath,
   changeAttackSpeed
-} from '../../utils';
+} from '../../utils'
 
-import { getClass_Chinese } from '../../utils/string';
-import { path } from '../../utils/listVer';
+import { getClass_Chinese } from '../../utils/string'
+import { path } from '../../utils/listVer'
 
-import charCube from '../base/charCube';
+import charCube from '../base/charCube'
 
 export default {
+
+  components: {
+    charCube
+  },
   props: {
     data: {
       type: Object,
@@ -103,52 +100,48 @@ export default {
       required: true
     }
   },
-
-  components: {
-    charCube
-  },
   computed: {
     ...mapState(['short']),
     profile() {
-      return getDetailsProfilePath(this.$route.params.name);
+      return getDetailsProfilePath(this.$route.params.name)
     },
     professionPic() {
-      if (this.data.profession === 'TOKEN') return;
+      if (this.data.profession === 'TOKEN') return
       return (
         path +
         'others/icon_profession_' +
         this.data.profession.toLowerCase() +
         '_lighten.png'
-      );
+      )
     },
     profession() {
-      return getClass_Chinese(this.data.profession);
+      return getClass_Chinese(this.data.profession)
     },
     rarityPath() {
-      return path + 'others/rarity_' + this.data.rarity + '_optimized.png';
+      return path + 'others/rarity_' + this.data.rarity + '_optimized.png'
     },
     desc() {
-      if (!this.data.trait) return changeDesc(this.data.description);
+      if (!this.data.trait) return changeDesc(this.data.description)
       else if (this.data.trait.candidates) {
         return this.data.trait.candidates.map(el => {
           return changeAttackSpeed({
             description: el.overrideDescripton ? el.overrideDescripton : this.data.description,
             blackboard: el.blackboard
-          });
-        });
-      }
+          })
+        })
+      } else return ''
     },
     descArrary() {
-      return Array.isArray(this.desc);
+      return Array.isArray(this.desc)
     },
     logo() {
-      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '_optimized.png' : '';
+      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '_optimized.png' : ''
     },
     team() {
-      return Team[this.data.team];
+      return Team[this.data.team]
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -165,12 +158,23 @@ export default {
   font-size: 0
   display: flex
   align-items: center
-}
 
-.agent-card-title-class span {
-  font-size: 38px
-  word-break: keep-all
-  line-height: 40px
+  span {
+    font-size: 38px
+    word-break: keep-all
+    line-height: 40px
+  }
+
+  .agent-card-pro-pic {
+    vertical-align: middle
+    width: 40px
+    height: 40px
+  }
+
+  .agent-card-star-pic {
+    height: 40px
+    width: 200px
+  }
 }
 
 .agent-card-title-wrapper {
@@ -203,18 +207,6 @@ export default {
   display: flex
   align-items: center
   margin: 5px 0
-}
-
-.intro-2-control {
-  display: flex
-
-  & >>> .el-button.is-circle {
-    padding: 2px
-  }
-}
-
-.intro-2-control-button {
-  margin-left: 5px
 }
 
 .intro-2 {
@@ -252,12 +244,6 @@ export default {
   right: 0
   top: 0
   font-size: 0
-}
-
-.agent-card-pro-pic {
-  vertical-align: middle
-  width: 40px
-  height: 40px
 }
 
 .agent-card-tags span + span {
@@ -303,23 +289,55 @@ export default {
     min-height: calc(90px + 2vw)
     height: auto
     flex-grow: 0
+
+    .agent-card-title-wrapper {
+      margin: 0
+      position: relative
+      z-index: 1
+      flex: 1
+    }
+  }
+
+  .agent-card-pic {
+    display: inline-block
+    width: calc(100px + 5vw)
+    height: calc(100px + 5vw)
+    font-size: 12px
+    flex-shrink: 1
+    position: relative
+    top: -20px
+    left: -20px
+  }
+
+  .agent-card-title-class {
+    display: flex
+    align-items: center
+
+    span {
+      font-size: calc(15px + 0.5vw)
+    }
+
+    .agent-card-pro-pic {
+      vertical-align: middle
+      width: 20px
+      height: 20px
+    }
+
+    .agent-card-star-pic {
+      height: calc(15px + 0.5vw)
+      flex: 1
+      margin-right: auto
+      width: min-content
+    }
   }
 
   .agent-card-container-wrapper >>> .el-card__body {
     padding-bottom: 30px
   }
 
-  .agent-card-title-class span {
-    font-size: calc(15px + 0.5vw)
-  }
-
-  .agent-card-title-name {
+  //??
+  .agent-card-title-class, .agent-card-title-name {
     font-size: 20px
-  }
-
-  .agent-card-title-wrapper {
-    margin-left: calc(100px + 5vw)
-    z-index: 1
   }
 
   .details-wrapper-fixed {
@@ -345,26 +363,6 @@ export default {
     padding-top: 10px
   }
 
-  .agent-card-pro-pic {
-    vertical-align: middle
-    width: 20px
-    height: 20px
-  }
-
-  .agent-card-pic {
-    display: inline-block
-    width: calc(100px + 5vw)
-    height: calc(100px + 5vw)
-    font-size: 12px
-    position: absolute
-    /*position: relative;*/
-    flex-shrink: 1
-    flex-grow: 1
-    top: -20px
-    left: -20px
-    vertical-align: middle
-  }
-
   .agent-card-camp-chinese {
     box-shadow: rgba(82, 82, 82, 0.4) 0px 0px 2px 0px
     border-top-right-radius: 3px
@@ -386,19 +384,6 @@ export default {
 
   .char-camp-pic::before {
     opacity: 0.4
-  }
-
-  .agent-card-star-pic {
-    height: calc(15px + 0.5vw)
-    width: auto
-  }
-
-  .intro-2-control {
-    flex-direction: column
-
-    & >>> .el-button.is-circle {
-      padding: 2px
-    }
   }
 }
 </style>

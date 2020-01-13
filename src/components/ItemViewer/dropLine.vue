@@ -3,6 +3,7 @@
     <!-- 似乎是以前物资筹备关卡的名字比较长 -->
     <!-- :style="data.stageId !== 'wk_kc_1' && data.stageId !== 'wk_melee_1' ? '' : 'width: auto'" -->
     <span
+      v-if="data.stageCode"
       class="item-data-name"
       :style="data.stageCode.length > 5 ? 'font-size: 0.9em': ''"
     >{{ data.stageCode }}</span>
@@ -20,13 +21,13 @@
 </template>
 
 <script>
-import { Tooltip } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Tooltip);
+import { Tooltip } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Tooltip)
 
-import { occPer_chinese } from '../../utils/string';
+import { occPer_chinese } from '../../utils/string'
 
-import Color from '../base/Color';
+import Color from '../base/Color'
 
 export default {
   components: {
@@ -40,10 +41,10 @@ export default {
   },
   methods: {
     occper(occ) {
-      return occPer_chinese[occ];
+      return occPer_chinese[occ]
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

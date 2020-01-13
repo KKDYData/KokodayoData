@@ -5,17 +5,17 @@
 </template>
 
 <script>
-import { Button } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Button);
+import { Button } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Button)
 
 export default {
   methods: {
     close() {
-      document.body.click();
+      document.body.click()
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

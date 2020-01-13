@@ -1,4 +1,5 @@
 module.exports = {
+    root: true,
     env: {
         browser: true,
         es6: true,
@@ -24,7 +25,8 @@ module.exports = {
         "no-console": "off",
         indent: [
             "error",
-            2
+            2,
+            { "SwitchCase": 1 }
         ],
         "linebreak-style": [
             "error",
@@ -36,11 +38,11 @@ module.exports = {
         ],
         semi: [
             "error",
-            "always"
+            "never"
         ],
         "no-unused-vars": ["error", { "args": "none" }],
         "vue/max-attributes-per-line": ["error", {
-            "singleline": 4,
+            "singleline": 6,
             "multiline": {
                 "max": 1,
                 "allowFirstLine": false
@@ -49,6 +51,15 @@ module.exports = {
         "vue/html-indent": 0,
         "vue/multiline-html-element-content-newline": 0,
         "vue/no-v-html": 0,
-        "vue/singleline-html-element-content-newline": 0
+        "vue/singleline-html-element-content-newline": 0,
+        "vue/html-self-closing": ["error", {
+            "html": {
+                "void": "always",
+                "normal": "always",
+                "component": "always"
+            },
+            "svg": "always",
+            "math": "always",
+        }]
     }
-};
+}

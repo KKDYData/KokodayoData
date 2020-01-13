@@ -1,16 +1,18 @@
 <template>
-  <el-drawer
+  <!-- direction="ltr"1 -->
+  <h-drawer
     :direction="short ? 'btt' : 'rtl'"
     :visible="detailsOpen"
-    :size="short ? '85%': drawerSize"
+    :append-to-body="true"
+    :size="short ? '90%' : drawerSizeDouble"
     :destroy-on-close="true"
     :title="'敌人数据' + (runesMode ? '[突袭]': '' )"
     @close="$emit('update:detailsOpen', false)"
   >
     <div v-if="currentEnemy" class="enemy-drawer">
-      <div style="display: flex;">
+      <div class="enemy-drawer-header">
         <div class="enemy-img-container">
-          <el-image :src="picPath" />
+          <c-image :src="picPath" />
         </div>
         <div style="z-index: 1">
           <div style="display: flex">
@@ -20,7 +22,7 @@
               >{{ currentEnemy.enemyIndex }}</span>
             </div>
             <div>
-              <h1 style="margin: 0">
+              <h1 :style="(currentEnemy.name.length > 5 ? 'font-size: 1.3em':'' ) +'; margin: 0'">
                 {{ currentEnemy.name }}
                 <span
                   v-if="currentEnemy.level"
@@ -46,7 +48,7 @@
         </div>
 
         <div v-if="currentEnemy.enemyLevel !== 'NORMAL'" class="enemy-boss-icon">
-          <el-image
+          <c-image
             :src="path + 'logo/' + currentEnemy.enemyLevel.toLowerCase() + '_icon_optimized.png?x-oss-process=style/jpg-test'"
           />
         </div>
@@ -66,22 +68,29 @@
       </div>
       <slot name="enemy-status" />
     </div>
-  </el-drawer>
+  </h-drawer>
 </template>
 
 <script>
-import { path } from '@/utils/listVer';
-import { mapState } from 'vuex';
-import BaseStatusBox from './BaseStatusBox';
+import { path } from '@/utils/listVer'
+import BaseStatusBox from './BaseStatusBox'
+import CImage from '@/components/base/CImage'
+import { Image, Drawer } from 'element-ui'
+import HDrawer from '@/components/base/Drawer'
+import Vue from 'vue'
+Vue.use(Image)
+Vue.use(Drawer)
 
-import { Image, Drawer } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Image);
-Vue.use(Drawer);
+
+import { createNamespacedHelpers, mapState as Root } from 'vuex'
+const { mapGetters } = createNamespacedHelpers('enemy')
+
 
 export default {
   components: {
-    BaseStatusBox
+    BaseStatusBox,
+    CImage,
+    HDrawer
   },
   props: {
     detailsOpen: {
@@ -96,10 +105,6 @@ export default {
       default: null,
       type: Object
     },
-    drawerSize: {
-      default: '30%',
-      type: String
-    },
     picPath: {
       required: true,
       type: String
@@ -109,12 +114,13 @@ export default {
     return {
       bossIcon: path + 'logo/boss_icon.png?x-oss-process=style/jpg-test',
       path,
-    };
+    }
   },
   computed: {
-    ...mapState(['short']),
+    ...Root(['short']),
+    ...mapGetters(['drawerSizeDouble', 'drawerSize'])
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -168,10 +174,17 @@ export default {
 
 .enemy-drawer {
   padding: 0 20px 30px
+
+  &-header {
+    display: flex
+    position: relative
+  }
 }
 
 .enemy-boss-icon {
   filter: invert(100%) contrast(2) opacity(0.15)
+  position: absolute
+  right: 20px
 }
 
 @media screen and (max-width: 700px) {
@@ -188,7 +201,6 @@ export default {
   }
 
   .enemy-boss-icon {
-    position: absolute
     right: 20px
   }
 }

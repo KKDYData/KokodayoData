@@ -1,61 +1,64 @@
 <template>
-  <el-popover :visible-arrow="false">
+  <h-popping :visible-arrow="false" size="90%" :width="600">
+    <div slot="title">{{ skills.levels[0].name }}-技能详情</div>
     <div slot="reference" class="el-circle-icon" style="position: unset; margin-left: 10px">
-      <i class="el-icon-more"></i>
+      <i class="el-icon-more" />
     </div>
     <div style="max-height: 80vh; overflow-y: scroll">
-      <div v-for="(skill, index) in skill.levels" :key="index" style="margin: 10px">
+      <div v-for="(skill, index) in skills.levels" :key="index" style="margin: 10px">
         <div style="display: flex; align-items: baseline;">
           <div>
             <span>
               <span>
-                <i class="el-icon-caret-right"></i>
-                {{skill.spData.initSp}}
+                <i class="el-icon-caret-right" />
+                {{ skill.spData.initSp }}
               </span>
               <span>
-                <i class="el-icon-star-on"></i>
-                {{skill.spData.spCost}}
+                <i class="el-icon-star-on" />
+                {{ skill.spData.spCost }}
               </span>
             </span>
             <span v-if="skill.duration > 0">
-              <i class="el-icon-timer"></i>
-              {{skill.duration}}
+              <i class="el-icon-timer" />
+              {{ skill.duration }}
             </span>
           </div>
-          <div style="margin-left: auto; font-size: 1.5em">
-            Level
-            <span>{{index + 1}}</span>
+          <div style="margin-left: auto; font-size: 1.3em">
+            <span v-if="index < 7">Level{{ index + 1 }}</span>
+            <span v-else>专精{{ index - 6 }}</span>
           </div>
         </div>
         <div class="skill-status-desc">
-          <span v-html="changeSkillDesc(skill)"></span>
+          <span v-html="changeSkillDesc(skill)" />
         </div>
       </div>
     </div>
-  </el-popover>
+  </h-popping>
 </template>
 
 
 <script>
-import { changeAttackSpeed } from '../../utils';
-import Range from './Range';
+import { changeAttackSpeed } from '../../utils'
+import HPopping from '@/components/base/Popping'
 
 export default {
   components: {
-    Range
+    HPopping
   },
   props: {
-    skill: {
+    skills: {
+      type: Object,
       required: true
     },
-    showRange: {
-      default: true
+    short: {
+      type: Boolean,
+      required: true
     }
   },
   methods: {
     changeSkillDesc(skill) {
-      return changeAttackSpeed(skill);
+      return changeAttackSpeed(skill)
     }
   }
-};
+}
 </script>
