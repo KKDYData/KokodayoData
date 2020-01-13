@@ -4,16 +4,15 @@
       <filter-button-group :filters="groups" label="分类" @filter="switchData" />
       <div class="skin-wrapper">
         <div v-for="skin in skinsData" :key="skin.avatarId">
-          <el-popover :visible-arrow="false" placement="left" :width="width" trigger="click">
+          <h-popping size="90%" placement="left" :width="width" trigger="click">
+            <div slot="title">{{ skin.displaySkin.skinName }}</div>
             <div @blur="showId=''">
-              <close-button />
               <set-panel v-if="skin.avatarId === showId" :id="skin.avatarId" :set-data="[skin]" />
             </div>
             <div slot="reference" class="char-half-container" @click="showId = skin.avatarId">
               <c-image class :src="skin.halfPic" fit="contain" />
             </div>
-          </el-popover>
-
+          </h-popping>
           <div />
         </div>
         <div class="char-half-container fill" />
@@ -32,14 +31,12 @@ import { mapState } from 'vuex'
 import FilterButtonGroup from '../components/base/FilterButtonGroup'
 import Loading from '../components/base/Loading'
 import { getSkinsData, getScreenWidth } from '../utils'
-import { Popover } from 'element-ui'
 import SetPanel from '../components/base/SetPanel'
 import CloseButton from '../components/base/CloseButton'
 import CImage from '@/components/base/CImage'
+import HPopping from '@/components/base/Popping'
 
 store.dispatch('setExtraSkins')
-import Vue from 'vue'
-Vue.use(Popover)
 
 export default {
   components: {
@@ -47,7 +44,8 @@ export default {
     Loading,
     SetPanel,
     CloseButton,
-    CImage
+    CImage,
+    HPopping
   },
   data() {
     return {

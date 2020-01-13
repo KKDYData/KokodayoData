@@ -1,7 +1,7 @@
 <template>
   <div class="home-wrapper" element-loading-background="rgba(168, 168, 168, 0.1)">
     <!-- 地图选择的抽屉 -->
-    <el-drawer
+    <h-drawer
       ref="chapter-selecter"
       title="章节选择"
       :visible.sync="drawer"
@@ -26,7 +26,7 @@
           @node-click="changeMapCode"
         />
       </div>
-    </el-drawer>
+    </h-drawer>
     <!-- 主体 -->
     <div class="map-wrapper">
       <div class="map-title-part">
@@ -176,6 +176,7 @@
           </slide-panel>
           <slide-panel v-if="showPredefine" title="地图预设" name="b">
             <map-pre-defined
+              v-if="preData"
               style="margin-top: 10px"
               :pre-data="selMapData.predefines"
               :data="preData"
@@ -205,6 +206,7 @@ import EnemyMapInfo from './EnemyMapInfo'
 import MapPreDefined from './MapPreDefined'
 import AccordionPanel from '@/components/base/AccrordionPanel'
 import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel'
+import HDrawer from '@/components/base/Drawer'
 
 
 import { Tree, Drawer, Button, Loading, Slider } from 'element-ui'
@@ -254,6 +256,7 @@ export default {
     MapPreDefined,
     SlidePanel,
     AccordionPanel,
+    HDrawer
   },
   data() {
     return {

@@ -62,7 +62,7 @@ export default {
     height: 100%
     position: absolute
     box-sizing: border-box
-    z-index: 1
+    z-index: 2
   }
 }
 
@@ -102,7 +102,6 @@ export default {
       height: 100%
       position: absolute
       box-sizing: border-box
-      z-index: 1
     }
   }
 }

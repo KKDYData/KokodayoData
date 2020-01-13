@@ -679,6 +679,11 @@
 }
 
 .el-drawer__close-btn {
+  /* 定位到右上角 */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 999;
   border: none;
   cursor: pointer;
   font-size: 20px;

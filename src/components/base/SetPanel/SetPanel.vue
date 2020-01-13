@@ -51,7 +51,7 @@
             class="char-set-container"
           >
             <r-image
-              :preview-src-list="[data.charSet]"
+              :preview-src-list="short ? [data.charSet] : []"
               :src="data.charSet"
               @load="setLoad = false"
             />
@@ -89,8 +89,8 @@
 </template>
 
 <script>
-import phyTouch from 'phy-touch'
-import Transfrom from 'phy-touch/transformjs'
+// import phyTouch from 'phy-touch'
+// import Transfrom from 'phy-touch/transformjs'
 
 import { Carousel, CarouselItem, Loading } from 'element-ui'
 import Vue from 'vue'
@@ -151,40 +151,40 @@ export default {
     },
   },
   async mounted() {
-    const radio = this.ex ? 2.6 : 2.3
-    for (let i = 0;i < this.setData.length;i++) {
-      const target = document.body.querySelector(`#char-set-container-${i}`).querySelector('.char-set-container-wrapper')
-      // const { height } = target.getBoundingClientRect();
-      const opt = {
-        touch: '#wrapper',//反馈触摸的dom
-        vertical: true,//不必需，默认是true代表监听竖直方向touch
-        target: target, //运动的对象
-        property: 'translateY',  //被运动的属性
-        min: -window.innerWidth * radio + window.innerHeight,
-        max: 0,
-        sensitivity: 0.5,//不必需,触摸区域的灵敏度，默认值为1，可以为负数
-        factor: 1,//不必需,表示触摸位移运动位移与被运动属性映射关系，默认值是1
-        moveFactor: 1,//不必需,表示touchmove位移与被运动属性映射关系，默认值是1
-        step: 45,//用于校正到step的整数倍
-        bindSelf: false,
-        maxSpeed: 2, //不必需，触摸反馈的最大速度限制 
-        value: 0,
-        change: function (value) { },
-        touchStart: function (evt, value) { },
-        touchMove: function (evt, value) { },
-        touchEnd: function (evt, value) { },
-        tap: function (evt, value) { },
-        pressMove: function (evt, value) { },
-        animationEnd: function (value) { } //运动结束
-      }
-      Transfrom(target)
-      new phyTouch(opt)
-    }
+    // const radio = this.ex ? 2.6 : 2.3
+    // for (let i = 0;i < this.setData.length;i++) {
+    //   const target = document.body.querySelector(`#char-set-container-${i}`).querySelector('.char-set-container-wrapper')
+    //   // const { height } = target.getBoundingClientRect();
+    //   const opt = {
+    //     touch: '#wrapper',//反馈触摸的dom
+    //     vertical: true,//不必需，默认是true代表监听竖直方向touch
+    //     target: target, //运动的对象
+    //     property: 'translateY',  //被运动的属性
+    //     min: -window.innerWidth * radio + window.innerHeight,
+    //     max: 0,
+    //     sensitivity: 0.5,//不必需,触摸区域的灵敏度，默认值为1，可以为负数
+    //     factor: 1,//不必需,表示触摸位移运动位移与被运动属性映射关系，默认值是1
+    //     moveFactor: 1,//不必需,表示touchmove位移与被运动属性映射关系，默认值是1
+    //     step: 45,//用于校正到step的整数倍
+    //     bindSelf: false,
+    //     maxSpeed: 2, //不必需，触摸反馈的最大速度限制 
+    //     value: 0,
+    //     change: function (value) { },
+    //     touchStart: function (evt, value) { },
+    //     touchMove: function (evt, value) { },
+    //     touchEnd: function (evt, value) { },
+    //     tap: function (evt, value) { },
+    //     pressMove: function (evt, value) { },
+    //     animationEnd: function (value) { } //运动结束
+    //   }
+    //   Transfrom(target)
+    //   new phyTouch(opt)
+    // }
 
   },
   beforeMount() {
     const { width, height } = getScreenWidth()
-    this.height = (height - 100) + 'px'
+    this.height = (height * 0.9 - 100) + 'px'
     if (!this.short) {
       this.spineWidth = (width / 1159) * 300
     }
@@ -278,7 +278,7 @@ export default {
   .char-set-panel {
     &>>> .el-carousel__item {
       display: block
-      //overflow: scroll
+      overflow: scroll
     }
   }
 

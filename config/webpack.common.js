@@ -13,7 +13,6 @@ const swPlugins = [
 ]
 
 
-
 module.exports = {
   entry: './src/main.js',
   plugins: [
@@ -49,13 +48,16 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
             cacheDirectory: true
-          }
-        }
+          },
+        },
+        include: [
+          path.resolve(__dirname, '../src'),
+          /kkdy-somemap/
+        ]
       },
       {
         test: /\.vue$/,
@@ -82,6 +84,6 @@ module.exports = {
   },
   externals: {
     spritejs: 'spritejs',
-    echarts: 'echarts'
+    echarts: 'echarts',
   },
 }

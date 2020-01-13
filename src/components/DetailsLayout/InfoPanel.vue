@@ -18,14 +18,8 @@
               <div slot="content">{{ data.infoName }}</div>
             </content-slot>
             <div class="info-char-set-wrapper">
-              <el-popover
-                :visible-arrow="false"
-                placement="top-start"
-                :width="width"
-                trigger="click"
-              >
-                <close-button />
-                <el-tabs :value="activeSetPane">
+              <h-popping no-title placement="top-start" :width="width" size="90%" trigger="click">
+                <el-tabs :value="activeSetPane" style="padding-top: 5px">
                   <el-tab-pane label="一般" name="default">
                     <set-panel v-if="showSet" :id="data.charID" :set-data="setData" />
                   </el-tab-pane>
@@ -42,7 +36,7 @@
                   立绘/皮肤
                   <i class="el-icon-search" />
                 </el-button>
-              </el-popover>
+              </h-popping>
             </div>
           </div>
           <div
@@ -145,9 +139,9 @@ Vue.use(Progress)
 Vue.use(Slider)
 
 import AudioContainer from './AudioContainer'
+import HPopping from '@/components/base/Popping'
 import SetPanel from '../base/SetPanel'
 import ContentSlot from '../base/ContentSlot'
-import CloseButton from '../base/CloseButton'
 
 import { mapActions, mapState } from 'vuex'
 
@@ -156,7 +150,7 @@ export default {
     AudioContainer,
     SetPanel,
     ContentSlot,
-    CloseButton
+    HPopping
   },
   filters: {
     unlockStr(v) {

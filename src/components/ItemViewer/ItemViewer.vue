@@ -12,29 +12,24 @@
     >
       <div slot="title">
         <div style="display: flex; align-items: center;margin-bottom: -30px">
-          <c-image
-            :class="(type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer' ) + ' cbg title-item'"
-            :style="itemBackground"
-            :src="itemPic"
+          <h-item
+            class="title-item"
+            :item-pic="itemPic"
+            :item-background="itemBackground"
+            :type="type"
           />
           {{ data.name }}
-          <!-- <div style="margin-right: auto"></div> -->
         </div>
       </div>
       <!-- 去掉 ios 点击边框 -->
       <div slot="reference" style="outline: none" :class="noPopover ? 'short-force' : ''">
         <div>
-          <el-tooltip
-            :disabled="!noPopover"
-            effect="dark"
-            :content="data.name"
-            placement="top-start"
-            style="outline: none"
-          >
-            <c-image
-              :class="(type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer' ) + ' cbg'"
-              :style="itemBackground"
-              :src="itemPic"
+          <el-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
+            <h-item
+              class="stupid-ios"
+              :item-pic="itemPic"
+              :item-background="itemBackground"
+              :type="type"
             />
           </el-tooltip>
         </div>
@@ -127,7 +122,12 @@
                 </el-divider>
                 <div class="item-formula-container">
                   <div v-for="rd in extraOutcomeGroup" :key="rd.id">
-                    <just-viewer class="item-formula-item" :no-popover="true" :item="rd.itemId" />
+                    <just-viewer
+                      :tool-tip="true"
+                      class="item-formula-item"
+                      :no-popover="true"
+                      :item="rd.itemId"
+                    />
                   </div>
                 </div>
               </div>
@@ -161,22 +161,20 @@ Vue.use(Tooltip)
 
 import DropLine from './DropLine'
 import Color from '../base/Color'
-import CImage from '@/components/base/CImage'
 
 
 import { getItem } from '../../utils/fetch'
 import HPopping from '@/components/base/Popping'
+import HItem from './Item'
 
-// 可以考虑给id的话，只显示图片，不做数据拉取
-// 或者noPopover + {假数据}，反正只显示图片的话，实际也不需要拉数据显示
-// 但是考虑到数据有做缓存，实际不会增加http连接数
+
 export default {
   name: 'JustViewer',
   components: {
     DropLine,
     Color,
-    CImage,
-    HPopping
+    HPopping,
+    HItem
   },
   props: {
     item: {
@@ -207,6 +205,10 @@ export default {
     listMode: {
       default: false,
       type: Boolean
+    },
+    toolTip: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -338,27 +340,6 @@ export default {
 </script>
 
  <style lang="stylus" scoped>
- .evolvcost-item-contianer {
-   /*margin: 5px 10px;*/
-   width: 70px
-   height: 70px
-   display: block
-   box-sizing: border-box
-   border-radius: 50%
-   box-shadow: inset 0 0 0 2px black
-   background-color: grey
-   border: 2px solid rgb(249, 198, 19)
-   overflow: visible
-   margin: 0 auto
- }
-
- .evolvcost-item-contianer>>>img {
-   width: 128%
-   height: 128%
-   margin-top: -14%
-   margin-left: -14%
- }
-
  .item-popover {
    &.is-left {
      left: 20px
@@ -381,24 +362,6 @@ export default {
 
  .weekly {
    width: auto
- }
-
- .furn-item {
-   width: 70px
-   min-height: 70px
-   display: block
-   box-sizing: border-box
-   border-radius: 3px
-   box-shadow: inset 0px 6px 13px 0px #4a4a4a
-   background: url('../../assets/bbbj_optimized.png')
-   background-size: cover
-   /*overflow: visible;*/
-   padding: 9px 0
-
-   & >>> img {
-     width: calc(100% - 1px)
-     box-shadow: 1px 1px 0px 1px #6b6b6b63, 1px -1px 0px 0px #fff
-   }
  }
 
  .item-formula-container {
@@ -444,11 +407,6 @@ export default {
  }
 
  @media screen and (max-width: 700px) {
-   .evolvcost-item-contianer {
-     width: calc(45px + 2vw)
-     height: calc(45px + 2vw)
-   }
-
    .evolvcost-name-wrapper {
      font-size: 14px
    }

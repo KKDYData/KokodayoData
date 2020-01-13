@@ -23,16 +23,16 @@
             <slot name="title">
               <span role="heading" tabindex="0" :title="title">{{ title }}</span>
             </slot>
-            <button
-              v-if="showClose"
-              :aria-label="`close ${title || 'drawer'}`"
-              class="el-drawer__close-btn"
-              type="button"
-              @click="closeDrawer"
-            >
-              <i class="el-dialog__close el-icon el-icon-close" />
-            </button>
           </header>
+          <button
+            v-if="showClose"
+            :aria-label="`close ${title || 'drawer'}`"
+            class="el-drawer__close-btn"
+            type="button"
+            @click="closeDrawer"
+          >
+            <i class="el-dialog__close el-icon el-icon-close" />
+          </button>
           <section v-if="rendered" class="el-drawer__body">
             <slot />
           </section>

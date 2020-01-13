@@ -1,6 +1,6 @@
 <template>
   <!-- direction="ltr"1 -->
-  <el-drawer
+  <h-drawer
     :direction="short ? 'btt' : 'rtl'"
     :visible="detailsOpen"
     :append-to-body="true"
@@ -68,7 +68,7 @@
       </div>
       <slot name="enemy-status" />
     </div>
-  </el-drawer>
+  </h-drawer>
 </template>
 
 <script>
@@ -76,6 +76,7 @@ import { path } from '@/utils/listVer'
 import BaseStatusBox from './BaseStatusBox'
 import CImage from '@/components/base/CImage'
 import { Image, Drawer } from 'element-ui'
+import HDrawer from '@/components/base/Drawer'
 import Vue from 'vue'
 Vue.use(Image)
 Vue.use(Drawer)
@@ -88,7 +89,8 @@ const { mapGetters } = createNamespacedHelpers('enemy')
 export default {
   components: {
     BaseStatusBox,
-    CImage
+    CImage,
+    HDrawer
   },
   props: {
     detailsOpen: {

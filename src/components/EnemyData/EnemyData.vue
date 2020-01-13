@@ -68,6 +68,7 @@
             <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
               <el-button type="info">地图说明</el-button>
               <div slot="content">
+                <p>在地图信息里，可以调整地图的摄像机角度和距离</p>
                 <p>白色是路，浅黄是不能放干员的路，</p>
                 <p>蓝色是能放干员的高台, 橙色是隧道出入口，深蓝是坑</p>
                 <p>粉色或者其它颜色是特别功能地板，点击查看效果</p>

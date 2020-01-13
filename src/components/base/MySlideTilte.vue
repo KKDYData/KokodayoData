@@ -78,8 +78,6 @@ export default {
   },
   mounted() {
     this.$emit('monuted', this)
-    console.log('slide', this.value)
-
   },
   methods: {
     initClick(v) {
@@ -91,7 +89,6 @@ export default {
         this.lock = false
         return
       }
-      console.log(v)
       this.value = !v
       this.$emit('open', this)
     },

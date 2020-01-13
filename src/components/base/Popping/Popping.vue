@@ -1,41 +1,44 @@
 <template>
   <div>
-    <div v-if="short" @click="openDrawer">
+    <div v-if="short || disabled" class="stupid-ios" @click="openDrawer">
       <slot name="reference" />
     </div>
-    <h-drawer
-      v-if="short"
-      :visible.sync="drawer"
-      width="80%"
-      size="75%"
-      direction="btt"
-      :show-close="false"
-      :append-to-body="true"
-      @close="closeHandler"
-    >
-      <div slot="title">
-        <slot name="title" />
-      </div>
-      <div style="padding: 0 20px 20px">
+    <div v-if="!disabled">
+      <h-drawer
+        v-if="short"
+        :visible.sync="drawer"
+        width="80%"
+        :size="size"
+        direction="btt"
+        :show-close="true"
+        :append-to-body="true"
+        :with-header="!noTitle"
+        @close="closeHandler"
+      >
+        <div slot="title">
+          <slot name="title" />
+        </div>
+        <div style="padding: 0 20px 20px">
+          <slot />
+        </div>
+      </h-drawer>
+      <el-popover
+        v-else
+        :visible-arrow="true"
+        popper-class="item-popover-class"
+        placement="top"
+        :width="width"
+        :trigger="isHover"
+        :open-delay="500"
+        :title="title"
+        :disabled="disabled"
+      >
+        <div slot="reference" class="stupid-ios">
+          <slot name="reference" />
+        </div>
         <slot />
-      </div>
-    </h-drawer>
-    <el-popover
-      v-else
-      :visible-arrow="false"
-      popper-class="item-popover-class"
-      placement="top"
-      :width="!short? 350 : 250"
-      :trigger="isHover"
-      :open-delay="500"
-      :title="title"
-      :disabled="disable"
-    >
-      <div slot="reference">
-        <slot name="reference" />
-      </div>
-      <slot />
-    </el-popover>
+      </el-popover>
+    </div>
   </div>
 </template>
 <script>
@@ -65,7 +68,15 @@ export default {
       type: String,
       default: ''
     },
-    disable: {
+    disabled: {
+      type: Boolean,
+      default: false
+    },
+    size: {
+      type: String,
+      default: '75%'
+    },
+    noTitle: {
       type: Boolean,
       default: false
     }
@@ -80,7 +91,7 @@ export default {
   },
   methods: {
     openDrawer() {
-      console.log('open')
+      if (this.disabled) return
       this.drawer = true
       prevOverflow = document.body.style.overflow
       document.body.style.overflow = 'hidden'

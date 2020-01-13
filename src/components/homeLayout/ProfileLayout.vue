@@ -132,7 +132,7 @@ export default {
         this.$set(this.data[index], 'showTags', t)
     },
     async openDetails(agent) {
-      if (1 || this.short) this.$router.push(this.path + '/details/' + agent.No)
+      if (this.short) this.$router.push(this.path + '/details/' + agent.No)
       else window.open(this.path + '/details/' + agent.No)
     },
     calFillAmount() {
