@@ -49,7 +49,6 @@ import Vue from 'vue'
 Vue.use(Popover)
 
 
-let prevOverflow = ''
 
 export default {
   components: {
@@ -93,13 +92,10 @@ export default {
     openDrawer() {
       if (this.disabled) return
       this.drawer = true
-      prevOverflow = document.body.style.overflow
-      document.body.style.overflow = 'hidden'
-      // setTimeout(() => {
-      // }, 1000)
+
     },
     closeHandler() {
-      document.body.style.overflow = prevOverflow
+
     }
   }
 }

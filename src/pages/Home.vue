@@ -14,14 +14,14 @@
   </div>
 </template>
 <script>
-import { getProfileList } from '../utils/fetch';
-import { Alert, link } from 'element-ui';
-import Vue from 'vue';
-Vue.use(link);
-Vue.use(Alert);
+import { getProfileList } from '../utils/fetch'
+import { Alert, link } from 'element-ui'
+import Vue from 'vue'
+Vue.use(link)
+Vue.use(Alert)
 
-import loadingC from '../components/base/Loading';
-import { devMode } from '../stats';
+import loadingC from '../components/base/Loading'
+import { devMode } from '../stats'
 
 const HomeLayout = () => ({
   component: import(/* webpackChunkName: "HomeLayout" */ '../components/homeLayout'),
@@ -29,7 +29,7 @@ const HomeLayout = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 export default {
   components: {
@@ -41,37 +41,37 @@ export default {
       token: [],
       load: false,
       isBeta: devMode === 'beta'
-    };
+    }
   },
   mounted() {
-    this.linkStart();
+    this.linkStart()
   },
   methods: {
     linkStart() {
       this.getData().then(data => {
         const agent = [],
-          token = [];
+          token = []
         data.forEach(el => {
-          if (el.class !== 'TOKEN') agent.push(el);
-          else token.push(el);
-        });
-        this.data = agent;
-        this.token = token;
-        this.load = true;
-      });
+          if (el.class !== 'TOKEN') agent.push(el)
+          else token.push(el)
+        })
+        this.data = agent
+        this.token = token
+        this.load = true
+      })
     },
     getData() {
       return getProfileList().then(source => {
         source.forEach((el, index, arr) => {
-          el.index = index;
-          el.tagHit = 0;
-          el.showTags = false;
-        });
-        return source.reverse();
-      });
+          el.index = index
+          el.tagHit = 0
+          el.showTags = false
+        })
+        return source.reverse()
+      })
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
