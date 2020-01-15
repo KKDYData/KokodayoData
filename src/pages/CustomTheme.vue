@@ -17,7 +17,7 @@
           @load="themePicLoad = false"
         />
       </div>
-      <div v-if="rowData" class="custom-head-title">{{ rowData[currKey].name }}</div>
+      <div v-if="rowData" class="custom-head-title">{{ rowData[currKey].name || "散件" }}</div>
     </div>
     <transition-group name="flip-list">
       <my-slide-title
