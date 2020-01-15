@@ -36,8 +36,8 @@ export default {
   position: absolute
   width: 128%
   height: 128%
-  margin-top: -14%
-  margin-left: -14%
+  top: -14%
+  left: -14%
 }
 
 .evolvcost-item-contianer {

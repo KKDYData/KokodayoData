@@ -9,6 +9,7 @@
       :open-delay="500"
       :title="data.name"
       :disabled="noPopover"
+      :size="drawerSize + '%'"
     >
       <div slot="title">
         <div style="display: flex; align-items: center;margin-bottom: -30px">
@@ -21,8 +22,7 @@
           {{ data.name }}
         </div>
       </div>
-      <!-- 去掉 ios 点击边框 -->
-      <div slot="reference" style="outline: none" :class="noPopover ? 'short-force' : ''">
+      <div slot="reference" :class="small ? 'short-force' : ''">
         <div>
           <el-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
             <h-item
@@ -62,8 +62,8 @@
                 <i class="el-icon-info" />
                 <div slot="content">
                   点击可以查看统计的
-                  <color color="hsl(193, 78%, 69%)">总掉落数</color>/
-                  <color color="hsl(350, 100%, 79%)">总场次</color>
+                  <color color="hsl(193, 78%, 69%)">掉落数</color>/
+                  <color color="hsl(350, 100%, 79%)">样本数</color>
                 </div>
               </el-tooltip>
             </span>
@@ -86,8 +86,8 @@
                   <i class="el-icon-info" />
                   <div slot="content">
                     点击可以查看统计的
-                    <color color="hsl(193, 78%, 69%)">总掉落数</color>/
-                    <color color="hsl(350, 100%, 79%)">总场次</color>
+                    <color color="hsl(193, 78%, 69%)">掉落数</color>/
+                    <color color="hsl(350, 100%, 79%)">样本数</color>
                   </div>
                 </el-tooltip>
               </span>
@@ -111,9 +111,16 @@
                   :num="goldCost"
                   class="item-formula-item"
                   :no-popover="true"
+                  small
                 />
                 <div v-for="d in costs" :key="d.id" class="item-formula-item">
-                  <just-viewer :no-popover="true" :item="d.id" :num="d.count" />
+                  <just-viewer
+                    :drawer-size="drawerSize - 5"
+                    :no-popover="false"
+                    :item="d.id"
+                    :num="d.count"
+                    small
+                  />
                 </div>
               </div>
               <div v-if="listMode">
@@ -127,6 +134,7 @@
                       class="item-formula-item"
                       :no-popover="true"
                       :item="rd.itemId"
+                      small
                     />
                   </div>
                 </div>
@@ -197,7 +205,10 @@ export default {
       default: false,
       type: Boolean
     },
-    small: Boolean,
+    small: {
+      type: Boolean,
+      default: false
+    },
     weight: {
       default: null,
       type: Number
@@ -209,6 +220,10 @@ export default {
     toolTip: {
       type: Boolean,
       default: false
+    },
+    drawerSize: {
+      type: Number,
+      default: 80
     }
   },
   data() {
@@ -218,7 +233,8 @@ export default {
           ? 'click'
           : 'hover',
       data: typeof this.item !== 'string' ? this.item : undefined,
-      GOLD
+      GOLD,
+      show: false
     }
   },
 
@@ -296,8 +312,8 @@ export default {
                 res.dropCost = Math.round(
                   (dropInfo.times / dropInfo.quantity) * stageData.apCost
                 )
+                res.apCost = stageData.apCost
                 if (res.dropCost < 1) {
-                  res.apCost = stageData.apCost
                   res.etCost = stageData.etCost
                   res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times)
                 }

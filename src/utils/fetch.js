@@ -3,6 +3,7 @@ import {
   stageListVer,
   enemyListVer,
   dataPath,
+  target,
   api,
   path
 } from './listVer'
@@ -67,7 +68,7 @@ const fetchGetSliceSet = (key, setKey) => {
 }
 
 const fetchByKey = (keyPath) => {
-  return key => fetchGet(`${dataPath}/data/${keyPath}/${key}.json`)
+  return key => fetchGet(`${dataPath}/${target}/${keyPath}/${key}.json`)
     .catch(err => {
       console.error('error', err)
       return Promise.reject('no data')

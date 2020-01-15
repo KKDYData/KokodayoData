@@ -14,6 +14,7 @@
         :append-to-body="true"
         :with-header="!noTitle"
         @close="closeHandler"
+        @opened="openHandler"
       >
         <div slot="title">
           <slot name="title" />
@@ -32,6 +33,8 @@
         :open-delay="500"
         :title="title"
         :disabled="disabled"
+        @show="openHandler"
+        @hide="closeHandler"
       >
         <div slot="reference" class="stupid-ios">
           <slot name="reference" />
@@ -89,13 +92,15 @@ export default {
     ...mapState(['short']),
   },
   methods: {
+    openHandler() {
+      this.$emit('opened')
+    },
     openDrawer() {
       if (this.disabled) return
       this.drawer = true
-
     },
     closeHandler() {
-
+      this.$emit('closed')
     }
   }
 }

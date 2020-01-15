@@ -439,9 +439,17 @@ const getScreenWidth = () => {
     }
   }
 }
+
+const sleep = time => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), time)
+  })
+}
+
 export {
   TaskQueue,
   findValue,
+  sleep,
 
   // 业务相关类
   debounce,

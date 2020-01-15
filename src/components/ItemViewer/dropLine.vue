@@ -7,11 +7,15 @@
       class="item-data-name"
       :style="data.stageCode.length > 5 ? 'font-size: 0.9em': ''"
     >{{ data.stageCode }}</span>
+    <span
+      v-if="data.apCost || data.etCost"
+      class="item-occper"
+    >{{ data.apCost ? `${data.apCost}理智` : `${data.etCost}票` }}</span>
     <span class="item-occper">{{ data.occPer? occper(data.occPer) : '概率掉落' }}</span>
     <el-tooltip v-if="data.times" class="item-dropInfo" placement="top">
       <div slot="content">
-        <color color="hsl(350, 100%, 79%)">{{ data.times }}</color>/
-        <color color="hsl(193, 78%, 69%)">{{ data.quantity }}</color>
+        <color color="hsl(193, 78%, 69%)">{{ data.quantity }}</color>/
+        <color color="hsl(350, 100%, 79%)">{{ data.times }}</color>
         →{{ data.rate }}%
       </div>
       <span v-if="data.dropCost">{{ data.dropCost }} 理智/个</span>
