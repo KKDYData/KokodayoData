@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import loadingC from '../components/base/Loading';
+import loadingC from '../components/base/Loading'
 
 const DetailsLayout = () => ({
   component: import(/* webpackChunkName: "DetailsLayout" */ '../components/DetailsLayout'),
@@ -12,11 +12,11 @@ const DetailsLayout = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 export default {
   metaInfo: {
-    titleTemplate: '%s | 干员详情 | 明日方舟'
+    titleTemplate: '%s | 干员详情 | Kokodayo'
   },
   components: {
     'details-layout': DetailsLayout
@@ -25,7 +25,7 @@ export default {
     return {
       data: [],
       load: false
-    };
+    }
   }
-};
+}
 </script>

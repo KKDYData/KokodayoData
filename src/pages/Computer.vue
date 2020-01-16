@@ -6,11 +6,11 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { Alert } from 'element-ui';
-Vue.use(Alert);
+import Vue from 'vue'
+import { Alert } from 'element-ui'
+Vue.use(Alert)
 
-import loadingC from '../components/base/Loading';
+import loadingC from '../components/base/Loading'
 
 const ComputerLayout = () => ({
   component: import(/* webpackChunkName: "ComputerLayout" */ '../components/ComputerLayout'),
@@ -18,16 +18,16 @@ const ComputerLayout = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 export default {
   metaInfo: {
-    title: '升级消耗计算器 | 明日方舟'
+    title: '升级消耗计算器 | Kokodayo'
   },
   components: {
     'computer-layout': ComputerLayout
   }
-};
+}
 </script>
 
 <style scoped>

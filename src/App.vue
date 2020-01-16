@@ -7,33 +7,49 @@
       </p>
       <p>如果遇到更新问题，请进群799872783咨询</p>
     </div>
-    <nav-menu />
+    <top-menu />
     <transition name="fade" mode="out-in">
-      <router-view class="view" />
+      <router-view v-if="ok" class="view" />
+      <div v-else>
+        <!-- <el-input v-model="key" placeholder="填点什么" /> -->
+      </div>
     </transition>
     <Footer />
   </div>
 </template>
 <script>
-import NavMenu from '@/components/NavMenu';
-import { mapState } from 'vuex';
-const Footer = () => import(/* webpackChunkName: "EnemyData" */'./pages/Footer');
+import TopMenu from '@/components/TopMenu'
+import { mapState } from 'vuex'
+import { devMode } from './stats'
+// import Vue from 'vue'
+// import { Input } from 'element-ui'
+// Vue.use(Input)
+const Footer = () => import(/* webpackChunkName: "EnemyData" */'./pages/Footer')
 
 export default {
   components: {
-    NavMenu,
-    Footer
+    Footer,
+    TopMenu
   },
   data() {
     return {
       isOrientation: false,
-      loading: true
-    };
+      loading: true,
+      ok: 1 || devMode !== 'beta' || process.env.NODE_ENV === 'development',
+      key: ''
+    }
   },
   computed: {
     ...mapState(['isNeedUpdate'])
-  }
-};
+  },
+  watch: {
+    key(v) {
+      if (v === 'kokodayo test') {
+        this.ok = true
+      }
+    }
+  },
+}
 </script>
 <style lang="stylus" scoped>
 .need-update {

@@ -14,7 +14,7 @@ module.exports = merge(prod, {
   plugins: [
     new CleanWebPackPlugin(['build/stable/'], { root: path.resolve(__dirname, '..') }),
     new webpack.DefinePlugin({
-      'process.env.PRODUCTION': JSON.stringify('beta'),
+      'process.env.PRODUCTION': JSON.stringify('stable'),
       'process.env.PUBLIC_PATH': JSON.stringify(publicPath)
 
     })

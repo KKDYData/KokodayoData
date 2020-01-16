@@ -5,7 +5,7 @@ import { getHeroData, getSkill } from './fetch'
 import UaParser from 'ua-parser-js'
 
 
-const debounce = function (action, idle, ...args) {
+const debounce = (action, idle, ...args) => {
   let last
   return (e) => {
     clearTimeout(last)
@@ -14,7 +14,7 @@ const debounce = function (action, idle, ...args) {
 }
 
 
-const throttle = function (action, delay, ...args) {
+const throttle = (action, delay, ...args) => {
   let last = 0
   // 传的参数是类似requestAnimationFrame的TimeEvent
   return (event) => {
@@ -439,9 +439,17 @@ const getScreenWidth = () => {
     }
   }
 }
+
+const sleep = time => {
+  return new Promise(resolve => {
+    setTimeout(() => resolve(), time)
+  })
+}
+
 export {
   TaskQueue,
   findValue,
+  sleep,
 
   // 业务相关类
   debounce,

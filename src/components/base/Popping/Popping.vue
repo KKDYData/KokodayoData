@@ -9,11 +9,13 @@
         :visible.sync="drawer"
         width="80%"
         :size="size"
-        direction="btt"
+        :direction="direction"
         :show-close="true"
         :append-to-body="true"
         :with-header="!noTitle"
+        :custom-class="customClass"
         @close="closeHandler"
+        @opened="openHandler"
       >
         <div slot="title">
           <slot name="title" />
@@ -32,11 +34,15 @@
         :open-delay="500"
         :title="title"
         :disabled="disabled"
+        @show="openHandler"
+        @hide="closeHandler"
       >
-        <div slot="reference" class="stupid-ios">
+        <div slot="reference" class="stupid-ios" @click="openDrawer">
           <slot name="reference" />
         </div>
-        <slot />
+        <div v-if="drawer">
+          <slot />
+        </div>
       </el-popover>
     </div>
   </div>
@@ -78,7 +84,15 @@ export default {
     noTitle: {
       type: Boolean,
       default: false
-    }
+    },
+    direction: {
+      type: String,
+      default: 'btt'
+    },
+    customClass: {
+      type: String,
+      default: ''
+    },
   },
   data() {
     return {
@@ -88,14 +102,21 @@ export default {
   computed: {
     ...mapState(['short']),
   },
+  watch: {
+    short(v) {
+      console.log('short change', v)
+    }
+  },
   methods: {
+    openHandler() {
+      this.$emit('opened')
+    },
     openDrawer() {
       if (this.disabled) return
       this.drawer = true
-
     },
     closeHandler() {
-
+      this.$emit('closed')
     }
   }
 }

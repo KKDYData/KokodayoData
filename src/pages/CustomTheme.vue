@@ -80,6 +80,9 @@ import RImage from '@/components/base/RImage'
 const ease = t => bsr(t, 0.38, 0.93, 0.78, 1.02)
 
 export default {
+  metaInfo: {
+    title: '家具图鉴 | Kokodayo'
+  },
   components: { MySlideTitle, FurniList, RImage },
   data() {
     return {
