@@ -127,7 +127,7 @@ export default {
   cursor: pointer
 
   &:-webkit-any-link {
-    color: none
+    color: inherit
     cursor: pointer
     text-decoration: none
   }
