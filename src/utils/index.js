@@ -209,6 +209,8 @@ const decNoValue = (res, data, str) => {
   else return -1
 }
 
+const wrapColor = (str, color) => `<i style="color:${color};font-style: normal;">${str}</i>`
+
 const exSkill = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2'])
 const changeAttackSpeed = (skill) => {
   const str = changeDesc(skill.description)
@@ -255,7 +257,7 @@ const changeAttackSpeed = (skill) => {
       unit = '%'
     }
     // 只有白雪 !text
-    const inject = text ? `(${value}${unit})` : `<i style="color:#F49800;font-style: normal;">(${value}${unit})</i>`
+    const inject = text ? `(${value}${unit})` : wrapColor(`(${value}${unit})`, '#F49800')// `<i style="color:#F49800;font-style: normal;">(${value}${unit})</i>`
     const tempIndex = text ? 4 + text[0].length : (res.match('略微增大') ? 4 : 0) + 4
 
     const temp = res.split('')
@@ -269,7 +271,7 @@ const changeAttackSpeed = (skill) => {
   const text = getValueDesc(res, atkSpeedIndex, 4)
   if (atkSpeedIndex > -1 && text) {
     const value = attack_speed.value
-    const inject = text ? `(${value})` : `<i style="color:#F49800;font-style: normal;">(${value})</i>`
+    const inject = text ? `(${value})` : wrapColor(`(${value})`, '#F49800')//`<i style="color:#F49800;font-style: normal;">(${value})</i>`
     const tempIndex = (text ? text[0].length : 4) + (res.match(/略微/) ? 2 : 0)
 
     const temp = res.split('')
@@ -282,8 +284,14 @@ const changeAttackSpeed = (skill) => {
   if (spUp) {
     const temp = res.split('')
     const value = findValue(skill, 'blackboard', 'sp_recovery_per_sec').value
-    temp.splice(spUp.index + 6, 0, `<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`)
+    temp.splice(spUp.index + 6, 0, wrapColor(`(${value * 100}%)`, '#F49800'))//`<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`)
     res = temp.join('')
+  }
+
+  // 阿
+  if (res.match(/生命.+减少/)) {
+    const hp_ratio = findValue(skill, 'blackboard', 'hp_ratio')
+    res += wrapColor(`(每秒减少${hp_ratio.value * 100}%)`, '#F49800')
   }
 
   return res
