@@ -1,12 +1,12 @@
 <template>
-  <div class="title-container" :style="bg">
-    <div v-if="!right && control" :class="{active: value, 'control-button': true}" @click="click">
+  <div class="title-container" :style="{background}">
+    <div v-if="!right && control" :class="{active: state, 'control-button': true}" @click="click">
       <div class="control-border" />
     </div>
     <div class="title">{{ title }}</div>
     <div
       v-if="right && control"
-      :class="{active: value, 'control-button': true, right: true}"
+      :class="{active: state, 'control-button': true, right: true}"
       @click="click"
     >
       <div class="control-border" />
@@ -33,26 +33,24 @@ export default {
     customBg: {
       type: String,
       default: '#414141'
+    },
+    state: {
+      type: Boolean,
+      default: false
     }
   },
-  data() {
-    return {
-      value: false
-    };
-  },
   computed: {
-    bg() {
-      return '--custombg:' + this.customBg;
+    background() {
+      return this.customBg;
     }
   },
   methods: {
     click() {
-      this.value = !this.value;
-      // undefined 不是很好看
+      //  不是很好看
       /**
        * @property {boolean} value - 控制器状态
        */
-      this.$emit('click', this.value);
+      this.$emit('click', this.state);
     }
   }
 };
@@ -70,7 +68,6 @@ export default {
   font-size: 0
   height: 20px
   border-radius: 2px
-  background: var(--custombg)
 
   &:hover {
     .control-border {

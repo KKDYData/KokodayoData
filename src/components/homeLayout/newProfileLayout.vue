@@ -1,6 +1,6 @@
 <template>
   <div class="new-profile-layout-container">
-    <slot></slot>
+    <slot />
     <div style="margin-left: 10px; color: rgb(168,168,168)">
       <p>不用选仅公招！排列已经去掉了公招不出的干员。</p>
       <p>
@@ -16,7 +16,7 @@
         style="margin-bottom: 20px"
       >
         <!-- <div>{{item[0]}}</div> -->
-        <div>{{item[0]}}</div>
+        <div>{{ item[0] }}</div>
         <div>
           <div
             v-for="agent in item[1].agents.sort((a, b) => b.tags[0] - a.tags[0])"
@@ -27,48 +27,38 @@
             <el-popover trigger="click">
               <div class="other-mode-popover">
                 <router-link :to="path + '/details/' + agent.No">
-                  <el-image
-                    fit="cover"
-                    class="img-container"
-                    :alt="agent.name"
-                    :src="profilePath(agent.No)"
-                  >
-                    <div slot="error" class="image-slot">
-                      <i class="el-icon-picture-outline"></i>
-                    </div>
-                  </el-image>
+                  <div class="img-container">
+                    <c-image :alt="agent.name" :src="profilePath(agent.No)" />
+                  </div>
                 </router-link>
                 <div class="other-mode-popover-details">
                   <div class="other-mode-popover-details-title other-mode-link">
                     <router-link :to="path + '/details/' + agent.No">
-                      <span class="other-mode-popover-details-title-name">{{agent.name}}</span>
+                      <span class="other-mode-popover-details-title-name">{{ agent.name }}</span>
                       <span
                         :style="agent.tags[1] === '女' ? 'color: pink;' : ''"
-                      >{{agent.tags[1] === '女' ? '♀' : '♂'}}</span>
-                      <el-image
-                        class="other-mode-popover-class-icon"
-                        :alt="agent.class"
-                        :title="changeClassShort(agent.class)"
-                        :src="class_icon(agent.class)"
-                      ></el-image>
+                      >{{ agent.tags[1] === '女' ? '♀' : '♂' }}</span>
+                      <div class="other-mode-popover-class-icon">
+                        <c-image :src="class_icon(agent.class)" />
+                      </div>
                     </router-link>
                   </div>
                   <div style="margin-top: 10px;">
                     <template v-for="(tag, index) in agent.tags">
                       <el-tag
                         v-if="index === 0 && tag > 3 || index > 1"
-                        class="other-mode-popover-tag"
                         :key="tag"
+                        class="other-mode-popover-tag"
                         effect="dark"
+                        size="mini"
                         type="info"
-                      >{{index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag}}</el-tag>
+                      >{{ index === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag }}</el-tag>
                     </template>
                   </div>
-                  <!-- <span>{{agent.tags}}</span> -->
                 </div>
               </div>
               <div slot="reference">
-                <span style="cursor: pointer">{{agent.name}}</span>
+                <span style="cursor: pointer">{{ agent.name }}</span>
               </div>
             </el-popover>
           </div>
@@ -82,32 +72,32 @@
 
 // 排列组合
 const arrange = (arr, index = 0, group = []) => {
-  const res = [];
-  res.push([arr[index]]);
-  for (let i = 0; i < group.length; i++) {
-    res.push([...group[i], arr[index]]);
+  const res = []
+  res.push([arr[index]])
+  for (let i = 0;i < group.length;i++) {
+    res.push([...group[i], arr[index]])
   }
-  group = group.concat(res);
-  if (index + 1 >= arr.length) return group;
-  else return arrange(arr, index + 1, group);
-};
+  group = group.concat(res)
+  if (index + 1 >= arr.length) return group
+  else return arrange(arr, index + 1, group)
+}
 
 import {
   sort,
   getProfilePath,
   getClass_icon
-} from '../../utils';
+} from '../../utils'
 
-import { getClass_Chinese, starColor } from '../../utils/string';
+import { getClass_Chinese, starColor } from '../../utils/string'
 
-import { mapState } from 'vuex';
-import Vue from 'vue';
+import { mapState } from 'vuex'
+import Vue from 'vue'
 
-import { Card, Tag } from 'element-ui';
-Vue.use(Card);
-Vue.use(Tag);
+import { Card, Tag } from 'element-ui'
+Vue.use(Card)
+Vue.use(Tag)
 
-import { rootPath } from '../../stats';
+import { rootPath } from '../../stats'
 
 export default {
   props: {
@@ -120,98 +110,96 @@ export default {
   data() {
     return {
       path: rootPath
-    };
+    }
   },
   computed: {
     ...mapState(['short']),
     sortData() {
-      if (!this.data || this.tags.length === 0) return;
-      let res = new Map();
-      const resData = this.data.filter(el => el.gkzm);
+      if (!this.data || this.tags.length === 0) return
+      let res = new Map()
+      const resData = this.data.filter(el => el.gkzm)
       const filterGroups = Object.keys(this.filterGroups)
         .filter(el => el !== 'gkzm')
         .map(key => ({
           key: key,
           filters: this.filterGroups[key].filter(el => el.chosed)
-        }));
+        }))
       resData.forEach(agent => {
-        const hitTag = [];
+        const hitTag = []
 
         filterGroups.forEach(group => {
-          const key = group.key;
-          if (!group.filters.length) return;
+          const key = group.key
+          if (!group.filters.length) return
 
           if (Array.isArray(agent[key]))
             agent[key].forEach(tag => {
 
-              let find = group.filters.find(el => el.value === tag);
+              let find = group.filters.find(el => el.value === tag)
               if (find) {
-                hitTag.push(find);
+                hitTag.push(find)
               }
-            });
+            })
           else {
             // 全是数组了，这个好像没什么用了
-            const find = group.filters.find(el => el.value === agent[key]);
+            const find = group.filters.find(el => el.value === agent[key])
             if (find) {
-              hitTag.push(find);
+              hitTag.push(find)
             }
           }
-        });
+        })
 
-        if (hitTag.length === 0) return;
-        let resArr = arrange(hitTag);
-        let i = resArr.length;
+        if (hitTag.length === 0) return
+        let resArr = arrange(hitTag)
+        let i = resArr.length
         while (i-- > 0) {
-          const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join('，');
+          const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join('，')
           if (!res.get(key)) {
-            res.set(key, { agents: [agent], keys: resArr[i] });
+            res.set(key, { agents: [agent], keys: resArr[i] })
           } else {
-            res.get(key).agents.push(agent);
+            res.get(key).agents.push(agent)
           }
         }
-      });
+      })
       // 滤掉6星
       res = [...res].map(el => {
         if (el[0].indexOf('高级资深干员') < 0) {
-          el[1].agents = el[1].agents.filter(el => el.tags[0] < 5);
+          el[1].agents = el[1].agents.filter(el => el.tags[0] < 5)
         }
-        return el;
-      }).filter(el => el[1].agents.length);
-      console.log('new LayoutFilter');
+        return el
+      }).filter(el => el[1].agents.length)
+      console.log('new LayoutFilter')
 
       res = sort(res, (a, b) => {
-        const tempA = a[1].keys;
-        const tempB = b[1].keys;
+        const tempA = a[1].keys
+        const tempB = b[1].keys
         if (tempA.length === 1 && tempB.length === 1) {
-          return tempA[0].isTag > tempB[0].isTag;
+          return tempA[0].isTag > tempB[0].isTag
         } else {
-          return tempB.length < tempA.length;
+          return tempB.length < tempA.length
         }
-      });
-      return res;
+      })
+      return res
     }
   },
   methods: {
     class_icon(c) {
-      return getClass_icon(c);
+      return getClass_icon(c)
     },
     changeClassShort(c) {
-      return getClass_Chinese(c);
+      return getClass_Chinese(c)
     },
     bgColor(star) {
-      const targetColor = starColor[star];
+      const targetColor = starColor[star]
 
       return {
-        'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${
-          targetColor[2]
-        }%, 1)`
-      };
+        'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${targetColor[2]}%, 1)`
+      }
     },
     profilePath(name) {
-      return getProfilePath(name, true);
+      return getProfilePath(name, true)
     }
   }
-};
+}
 </script>
 
 <style scoped>

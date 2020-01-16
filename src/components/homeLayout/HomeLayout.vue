@@ -31,14 +31,14 @@
       />
       <div class="tags-popover-wrapper">
         <el-popover
-          popper-class="tags-popover-container"
+          popper-class="tags-popover-container stupid-ios"
           placement="top"
           trigger="click"
           :visible-arrow="false"
           :width="short ? 320 : 800"
           :disabled="agentFilterDisabled"
         >
-          <div slot="reference">
+          <div slot="reference" class="stupid-ios">
             <div class="tags-selected-container">
               <el-button
                 :type="SelectedTagGz.length > 0 ? 'danger' : 'info'"
@@ -114,27 +114,27 @@
 </template>
 
 <script>
-import localforage from 'localforage';
+import localforage from 'localforage'
 
-import Vue from 'vue';
-import { mapState } from 'vuex';
+import Vue from 'vue'
+import { mapState } from 'vuex'
 
-import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui';
-import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
-Vue.component(CollapseTransition.name, CollapseTransition);
-Vue.use(Button);
-Vue.use(Popover);
-Vue.use(Tag);
-Vue.use(Tabs);
-Vue.use(TabPane);
+import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui'
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
+Vue.component(CollapseTransition.name, CollapseTransition)
+Vue.use(Button)
+Vue.use(Popover)
+Vue.use(Tag)
+Vue.use(Tabs)
+Vue.use(TabPane)
 
-import FilterButtonGroup from '../base/FilterButtonGroup';
-import loadingC from '../base/Loading';
-import ProfileLayout from './ProfileLayout';
-import CloseButton from '../base/CloseButton';
+import FilterButtonGroup from '../base/FilterButtonGroup'
+import loadingC from '../base/Loading'
+import ProfileLayout from './ProfileLayout'
+import CloseButton from '../base/CloseButton'
 
-import { sort } from '../../utils';
-import { TagsArr, class_chinese, StarArr } from '../../utils/string';
+import { sort } from '../../utils'
+import { TagsArr, class_chinese, StarArr } from '../../utils/string'
 
 
 
@@ -146,7 +146,7 @@ const newProfileLayout = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 const myFeedback = () => ({
   component: import(/* webpackChunkName: "newProfileLayout" */ './Feedback'),
@@ -154,22 +154,22 @@ const myFeedback = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
-const gkzm = [{ isTag: false, text: '仅公招', value: true }];
+const gkzm = [{ isTag: false, text: '仅公招', value: true }]
 const token = [
   { isTag: false, text: '干员', value: 'profileList' },
   { isTag: false, text: '召唤物', value: 'tokenList' },
-];
+]
 
 if (typeof Array.prototype.flat !== 'function') {
   Array.prototype.flat = function (num) {
-    return this.reduce((pre, cur) => pre.concat(cur));
-  };
+    return this.reduce((pre, cur) => pre.concat(cur))
+  }
 }
 
-const version = 191022;
-const forceUnregister = 191023;
+const version = 191022
+const forceUnregister = 191023
 
 export default {
   metaInfo() {
@@ -182,7 +182,7 @@ export default {
           content: '干员数据、语音、立绘、敌人图鉴、地图数据、计算器，公开招募，由Dr.阿凡提提供'
         }
       ]
-    };
+    }
   },
   components: {
     'filter-group': FilterButtonGroup,
@@ -194,13 +194,13 @@ export default {
   props: {
     profileList: {
       default() {
-        return [];
+        return []
       },
       type: Array
     },
     tokenList: {
       default() {
-        return [];
+        return []
       },
       type: Array
     }
@@ -219,7 +219,7 @@ export default {
       showOtherPanel: false,
       currentMode: 'profile-layout',
       agentFilterDisabled: false
-    };
+    }
   },
 
   computed: {
@@ -230,86 +230,86 @@ export default {
         star: StarArr,
         class: Object.values(class_chinese),
         tags: TagsArr,
-      };
+      }
     },
     category() {
       return {
         token
-      };
+      }
     },
     orAgents() {
-      return this.rowData.filter(el => el.gkzm);
+      return this.rowData.filter(el => el.gkzm)
     }
   },
   beforeMount() {
     this.store = localforage.createInstance({
       name: 'testDB'
-    });
+    })
     this.store.getItem('filterGroups').then(filterGroups => {
       if (filterGroups && filterGroups._version === version) {
         //恢复上次的筛选条件
         Object.keys(filterGroups).forEach(key => {
           if (key !== '_version')
-            this.$set(this.filterGroups, key, filterGroups[key]);
-        });
-        console.log('reset');
-        this.data = this.profileList;
-        this.resetFilter();
+            this.$set(this.filterGroups, key, filterGroups[key])
+        })
+        console.log('reset')
+        this.data = this.profileList
+        this.resetFilter()
       } else {
-        console.log('_noVersion');
-        this.store.setItem('_filterVersion', version);
-        this.data = this.profileList;
+        console.log('_noVersion')
+        this.store.setItem('_filterVersion', version)
+        this.data = this.profileList
       }
-    });
+    })
 
-    if (!navigator.serviceWorker) return;
+    if (!navigator.serviceWorker) return
     this.store.getItem('forceUnregister').then(date => {
       if (!date || date < forceUnregister) {
-        console.log(`强制注销serverWorker, 当前记录：${date}, 目标记录${forceUnregister}`);
+        console.log(`强制注销serverWorker, 当前记录：${date}, 目标记录${forceUnregister}`)
         navigator.serviceWorker.getRegistrations()
           .then((registrations) => {
-            registrations.forEach(el => el.unregister());
-            this.store.setItem('forceUnregister', forceUnregister);
-          });
+            registrations.forEach(el => el.unregister())
+            this.store.setItem('forceUnregister', forceUnregister)
+          })
       }
-    });
+    })
   },
   methods: {
     switchData(e) {
-      this.rowData = e.length === 1 ? this[e[0].value] : this.profileList;
+      this.rowData = e.length === 1 ? this[e[0].value] : this.profileList
       if (e[0].value !== 'profileList') {
-        this.data = this.rowData;
-        this.agentFilterDisabled = true;
+        this.data = this.rowData
+        this.agentFilterDisabled = true
       }
       else {
-        this.agentFilterDisabled = false;
-        this.resetFilter();
+        this.agentFilterDisabled = false
+        this.resetFilter()
       }
     },
     getClientWidth() {
-      return this.$el.clientWidth - 50;
+      return this.$el.clientWidth - 50
     },
     switchToNormal(tab) {
-      this.currentMode = tab.name;
+      this.currentMode = tab.name
       if (tab.name === 'profile-layout')
         this.$nextTick().then(() => {
           this.$refs['profile-layout'] &&
-            this.$refs['profile-layout'].calFillAmount();
-        });
+            this.$refs['profile-layout'].calFillAmount()
+        })
     },
     handleClose(tag) {
-      tag.chosed = false;
-      this.resetFilter();
+      tag.chosed = false
+      this.resetFilter()
     },
     sortData(key) {
       const less = this.showTag
         ? (a, b) => {
           return a.tagHit === b.tagHit
             ? a.index > b.index
-            : a.tagHit > b.tagHit;
+            : a.tagHit > b.tagHit
         }
-        : (a, b) => a.index > b.index;
-      this.data = [...sort(key, less)];
+        : (a, b) => a.index > b.index
+      this.data = [...sort(key, less)]
     },
 
     async resetFilter(group, p) {
@@ -317,16 +317,16 @@ export default {
         this.store.setItem('filterGroups', {
           ...this.filterGroups,
           _version: version
-        });
-      };
-      setTimeout(saveTask, 1000);
+        })
+      }
+      setTimeout(saveTask, 1000)
 
       //判定是否是公招模式
       let targetData = this.filterGroups.gkzm[0].chosed
         ? this.orAgents
-        : this.rowData;
+        : this.rowData
 
-      const starFilter = this.filterGroups.star.filter(el => el.chosed);
+      const starFilter = this.filterGroups.star.filter(el => el.chosed)
       targetData =
         starFilter.length > 0
           ? targetData.filter(
@@ -335,86 +335,86 @@ export default {
                 star => Number(star.value) === el.tags[0]
               ) > -1
           )
-          : targetData;
+          : targetData
       const filters = Object.keys(this.filterGroups).map(el => [
         el,
         this.filterGroups[el].filter(el => el.chosed)
-      ]);
+      ])
 
       //所有选择的标签，包括公招、星级、职业、Tags
-      this.SelectedTag = [...filters.map(el => el[1])].flat(1);
+      this.SelectedTag = [...filters.map(el => el[1])].flat(1)
 
       //公招用的Tags,用于显示在角色头像旁边
       this.SelectedTagGz = [
         ...filters
           .filter(el => el[0] !== 'star' && el[0] !== 'class')
           .map(el => el[1])
-      ].flat(1);
+      ].flat(1)
 
-      this.showTag = this.SelectedTagGz.length > 0 ? true : false;
+      this.showTag = this.SelectedTagGz.length > 0 ? true : false
       //是否过滤
       const isFilter = filters
         .map(el => el[1].length && el[0] !== 'star' && el[0] !== 'gkzm')
-        .reduce((pre, cur) => pre + cur);
+        .reduce((pre, cur) => pre + cur)
       if (isFilter > 0) {
         //重新筛选， 重置tagHit
-        targetData.forEach(el => this.$set(el, 'tagHit', 0));
+        targetData.forEach(el => this.$set(el, 'tagHit', 0))
         targetData = targetData.filter(el => {
-          let find = !this.showTag;
+          let find = !this.showTag
 
           for (let data of filters) {
-            const group = data[1];
+            const group = data[1]
 
             //没有、或者是星级、公开招募则跳过判定
             if (group.length < 1 || data[0] === 'gkzm' || data[0] === 'star') {
-              continue;
+              continue
             }
 
             //多选筛选(公招模式)，不需要break, Tags
             if (this.showTag && data[0] === 'tags') {
               el.tags.forEach(tag => {
                 if (group.find(t => t.value === tag)) {
-                  find = true;
-                  el.tagHit++;
+                  find = true
+                  el.tagHit++
                 }
-              });
-              continue;
+              })
+              continue
             }
 
             //单选筛选，需要break
-            const propertys = data[0].split('.');
-            let groupFind = false;
+            const propertys = data[0].split('.')
+            let groupFind = false
             for (let i in group) {
-              let key = el;
-              for (let i = 0; i < propertys.length; i++) {
-                key = key[propertys[i]];
+              let key = el
+              for (let i = 0;i < propertys.length;i++) {
+                key = key[propertys[i]]
               }
 
               if (String(key) === String(group[i].value)) {
-                el.tagHit++;
-                groupFind = true;
-                break;
+                el.tagHit++
+                groupFind = true
+                break
               }
             }
 
             //普通筛选，有一个不符合，即终止循环，返回false
             if (!this.showTag) {
               if (!groupFind) {
-                find = false;
-                break;
+                find = false
+                break
               }
             }
 
             //Tags模式，找到了就真，找不到，就保持原值。
-            find = groupFind ? groupFind : find;
+            find = groupFind ? groupFind : find
           }
-          return find;
-        });
+          return find
+        })
       }
-      this.sortData(targetData);
+      this.sortData(targetData)
     }
   }
-};
+}
 </script>
 <style>
 .home-filter-wrapper {

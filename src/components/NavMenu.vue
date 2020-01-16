@@ -34,18 +34,18 @@
 </template>
 
 <script>
-import { Menu, MenuItem, Submenu } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Menu);
-Vue.use(MenuItem);
-Vue.use(Submenu);
+import { Menu, MenuItem, Submenu } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Menu)
+Vue.use(MenuItem)
+Vue.use(Submenu)
 
-import { rootPath } from '../stats';
-import { mapState } from 'vuex';
+import { rootPath } from '../stats'
+import { mapState } from 'vuex'
 
 export default {
   data() {
-    const path = rootPath;
+    const path = rootPath
     return {
       activeIndex: '1',
       activeIndex2: '1',
@@ -91,7 +91,7 @@ export default {
           text: '皮肤'
         }
       }
-    };
+    }
   },
   computed: {
     ...mapState(['short'])
@@ -100,24 +100,24 @@ export default {
     '$route.path': function(val, oldVal) {
       //修复移动端菜单不回收的bug
       setTimeout(() => {
-        this.$refs['nav-menu'].close('2');
-      }, 100);
+        this.$refs['nav-menu'].close('2')
+      }, 100)
 
-      const arr = Object.keys(this.routes);
-      let i = 0;
+      const arr = Object.keys(this.routes)
+      let i = 0
       while (i < arr.length) {
-        const temp = arr[i];
+        const temp = arr[i]
         if (new RegExp(temp).test(this.$route.path) && temp !== 'enemydata') {
-          this.moreText = this.routes[arr[i]].text;
-          return;
+          this.moreText = this.routes[arr[i]].text
+          return
         }
-        console.log(temp, this.$route.path);
-        i++;
+        console.log(temp, this.$route.path)
+        i++
       }
-      this.moreText = '更多';
+      this.moreText = '更多'
     }
   }
-};
+}
 </script>
 
 

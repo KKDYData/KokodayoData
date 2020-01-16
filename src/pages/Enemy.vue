@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-alert show-icon type="warning" description>
+    <!--     <el-alert show-icon type="warning" description>
       <div slot="title">注意</div>
       <p>
         在所有敌人有个简要模式，点按切为路线模式。
@@ -10,16 +10,14 @@
       <p>出现章节的后续会加上，但是突袭已经地图关卡数据需要进关卡才能看</p>
       <p>更新词条翻译算法。</p>
       <p>危机合约的buff计算还没加入</p>
-    </el-alert>
+    </el-alert>-->
     <enemy-data ref="layout" />
+    <!-- <enemy-data ref="layout" /> -->
   </div>
 </template>
 
 <script>
-import loadingC from '../components/base/Loading';
-import { Alert } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Alert);
+import loadingC from '../components/base/Loading'
 
 const EnemyData = () => ({
   component: import(/* webpackChunkName: "EnemyData" */ '../components/EnemyData'),
@@ -27,26 +25,30 @@ const EnemyData = () => ({
   error: loadingC,
   delay: 200,
   timeout: 5000
-});
+})
 
 export default {
   components: {
-    EnemyData
+    EnemyData,
   },
   data() {
-    return {};
+    return {}
   },
   beforeRouteUpdate(to, from, next) {
-    this.$refs.layout.loadMap(to.params.map);
-    next();
+    //todo
+    console.log('update')
+    this.$refs.layout.linkStart(to.params.map)
+    next()
   },
   beforeRouteLeave(to, from, next) {
+    console.log('leave')
+    //todo
     if (/enemydata(\/)?$/.test(to.path)) {
-      this.$refs.layout.clearMap();
+      this.$refs.layout.clearMap()
     } else if (/enemydata\/.+$/.test(to.path)) {
-      this.$refs.layout.loadMap(to.params.map);
+      this.$refs.layout.linkStart(to.params.map)
     }
-    next();
+    next()
   }
-};
+}
 </script>

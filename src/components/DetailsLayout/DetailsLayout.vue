@@ -164,16 +164,16 @@
 </template>
 
 <script>
-import { changeAttackSpeed, calStatusEnd, } from '../../utils';
+import { changeAttackSpeed, calStatusEnd, } from '../../utils'
 import {
   getHeroData,
   getSkill,
   getItem,
   getCharWords,
   getCharInfo,
-} from '../../utils/fetch';
+} from '../../utils/fetch'
 
-import { path } from '../../utils/listVer';
+import { path } from '../../utils/listVer'
 
 import {
   evolveGoldCost,
@@ -181,19 +181,19 @@ import {
   itemBackground,
   GOLD,
   statusToChChar
-} from '../../utils/string';
+} from '../../utils/string'
 
 
 
-import AgentCard from './AgentCard';
-import Range from './Range';
-import TalentsPanel from './TalentsPanel';
-import SkillUpPanel from './SkillUpCost';
-import BuildingData from './BuildingData';
-import ItemViewer from '../ItemViewer';
-import charStatus from '../base/charStatus';
-import DataLoading from '../base/Loading';
-import MyShare from './Share';
+import AgentCard from './AgentCard'
+import Range from './Range'
+import TalentsPanel from './TalentsPanel'
+import SkillUpPanel from './SkillUpCost'
+import BuildingData from './BuildingData'
+import ItemViewer from '../ItemViewer'
+import charStatus from '../base/charStatus'
+import DataLoading from '../base/Loading'
+import MyShare from './Share'
 
 const SkillPanel = () => ({
   component: import(
@@ -203,7 +203,7 @@ const SkillPanel = () => ({
   error: DataLoading,
   delay: 200,
   timeout: 5000
-});
+})
 
 const InfoPanel = () => ({
   component: import(
@@ -213,44 +213,38 @@ const InfoPanel = () => ({
   error: DataLoading,
   delay: 200,
   timeout: 5000
-});
+})
 
 import {
   Card,
-  Collapse,
-  CollapseItem,
   InputNumber,
   Switch,
   Button,
-  Image,
   Popover,
   Tag,
   Alert,
   Slider
-} from 'element-ui';
+} from 'element-ui'
 
-import { mapState } from 'vuex';
-import Vue from 'vue';
-Vue.use(Card);
-Vue.use(Collapse);
-Vue.use(CollapseItem);
-Vue.use(Image);
-Vue.use(InputNumber);
-Vue.use(Switch);
-Vue.use(Button);
-Vue.use(Popover);
-Vue.use(Tag);
-Vue.use(Alert);
-Vue.use(Slider);
+import { mapState } from 'vuex'
+import Vue from 'vue'
+Vue.use(Card)
+Vue.use(InputNumber)
+Vue.use(Switch)
+Vue.use(Button)
+Vue.use(Popover)
+Vue.use(Tag)
+Vue.use(Alert)
+Vue.use(Slider)
 
 export default {
   metaInfo() {
-    const title = this.data && this.data.name;
-    const content = this.data && this.data.itemUsage;
+    const title = this.data && this.data.name
+    const content = this.data && this.data.itemUsage
     return {
       title,
       meta: [{ vmid: 'description', name: 'Description', content: content }]
-    };
+    }
   },
   components: {
     Range,
@@ -284,125 +278,125 @@ export default {
       GOLD: GOLD,
       level: 1,
       talentPotentailUp: [false, false, false]
-    };
+    }
   },
   computed: {
     ...mapState(['short']),
     normal() {
-      return this.data && this.data.profession !== 'TOKEN';
+      return this.data && this.data.profession !== 'TOKEN'
     },
     rangeId() {
       // 针对白雪
 
-      const talent = this.talents.filter(el => el.condidate.filter(el => /攻击范围扩大/.test(el.description) && el.rangeId).length);
+      const talent = this.talents.filter(el => el.condidate.filter(el => /攻击范围扩大/.test(el.description) && el.rangeId).length)
       if (talent.length) {
         const id = talent.reduce((res, cur) => {
           return cur.condidate.reduce((res, cur) => {
             if (cur.unlockCondition.phase <= this.phases && cur.unlockCondition.level <= this.level) {
-              res = cur.rangeId;
+              res = cur.rangeId
             }
-            return res;
-          }, res);
-        }, '');
-        if (id) return id;
+            return res
+          }, res)
+        }, '')
+        if (id) return id
       }
 
-      return this.data.phases[this.phases].rangeId;
+      return this.data.phases[this.phases].rangeId
     },
     setList() {
-      if (!this.data) return [];
-      if (this.name === 'char_002_amiya') return [1, '1%2B', 2];
-      return this.data.rarity > 2 ? [1, 2] : [1];
+      if (!this.data) return []
+      if (this.name === 'char_002_amiya') return [1, '1%2B', 2]
+      return this.data.rarity > 2 ? [1, 2] : [1]
     },
     evoCostArr() {
-      if (!this.data || this.data.rarity < 3) return;
-      const arr = this.data.rarity === 2 ? [0] : [0, 1];
-      return arr;
+      if (!this.data || this.data.rarity < 3) return
+      const arr = this.data.rarity === 2 ? [0] : [0, 1]
+      return arr
     },
     talents() {
       if (this.data) {
-        const arr = [];
-        if (!this.data.talents) return [];
+        const arr = []
+        if (!this.data.talents) return []
         for (let wrapper of this.data.talents) {
-          const tGroup = wrapper.candidates;
-          if (!tGroup) continue;
+          const tGroup = wrapper.candidates
+          if (!tGroup) continue
           for (let talent of tGroup) {
-            const res = changeAttackSpeed(talent);
-            talent.description = res;
+            const res = changeAttackSpeed(talent)
+            talent.description = res
             //console.log(res);
-            arr.push(talent);
+            arr.push(talent)
           }
         }
-        const res = [];
+        const res = []
 
         res.push({
           name: arr[0].name,
           condidate: [arr[0]]
-        });
+        })
         arr.reduce((pre, cur) => {
           if (pre.name !== cur.name) {
             res.push({
               name: cur.name,
               condidate: [cur]
-            });
-            return cur;
+            })
+            return cur
           }
           if (cur.requiredPotentialRank !== 0) {
-            pre.potentailUP = cur;
+            pre.potentailUP = cur
           } else {
-            res[res.length - 1].condidate.push(cur);
+            res[res.length - 1].condidate.push(cur)
           }
-          return cur;
-        });
-        return res;
+          return cur
+        })
+        return res
       }
-      return null;
+      return null
     },
     targetPhasese() {
-      return this.data.phases[this.phases].attributesKeyFrames;
+      return this.data.phases[this.phases].attributesKeyFrames
     },
     status() {
       if (this.data) {
-        return calStatusEnd(this.data, this.level, this.targetPhasese, this.isFavor, this.potentailStatusUP);
+        return calStatusEnd(this.data, this.level, this.targetPhasese, this.isFavor, this.potentailStatusUP)
       }
-      return null;
+      return null
 
     },
     potentailUPList() {
-      if (!this.data) return;
-      const res = [];
+      if (!this.data) return
+      const res = []
       this.data.potentialRanks.forEach((el, index) => {
-        let haveValue = false;
-        if (!el.buff) return;
+        let haveValue = false
+        if (!el.buff) return
         el.buff.attributes.attributeModifiers.forEach(el => {
-          if (el.attributeType) haveValue = true;
-        });
-        res.push(index);
-        return haveValue;
-      });
-      return res;
+          if (el.attributeType) haveValue = true
+        })
+        res.push(index)
+        return haveValue
+      })
+      return res
     },
     potentailStatusUP() {
-      const rank = this.potentialRanks;
-      const data = this.data.potentialRanks;
-      if (!data) return;
+      const rank = this.potentialRanks
+      const data = this.data.potentialRanks
+      if (!data) return
 
       return data.reduce((target, el, index) => {
-        if (index > rank || !el.buff) return target;
+        if (index > rank || !el.buff) return target
         if (!el.buff.attributes.attributeModifiers)
-          throw new Error('你是假数据！' + JSON.stringify(el.buff));
+          throw new Error('你是假数据！' + JSON.stringify(el.buff))
         const temp = el.buff.attributes.attributeModifiers.reduce((res, el) => {
           // type = 0 是生命提升，没有小于0的
           // if (!el.attributeType) return res;
           res.push({
             type: getPotentialToStatus(el.attributeType),
             value: el.value
-          });
-          return res;
-        }, []);
-        target.push(temp);
-        return target;
-      }, []);
+          })
+          return res
+        }, [])
+        target.push(temp)
+        return target
+      }, [])
     },
     objectSpanMethod({ row, column, rowIndex, columnIndex }) {
       if (columnIndex === 0) {
@@ -410,83 +404,83 @@ export default {
           return {
             rowspan: 2,
             colspan: 1
-          };
+          }
         } else {
           return {
             rowspan: 0,
             colspan: 0
-          };
+          }
         }
       }
-      return null;
+      return null
     }
   },
   created() {
-    this.name = this.$route.params.name;
-    console.log('getting data...');
+    this.name = this.$route.params.name
+    console.log('getting data...')
     getHeroData(this.name)
       .catch(err => {
-        console.log(err);
-        return Promise.reject('no charactor');
+        console.log(err)
+        return Promise.reject('no charactor')
       })
       .then(data => {
-        this.data = data;
-        this.phases = this.data.phases.length - 1;
-        this.level = this.data.phases[this.phases].attributesKeyFrames[1].level;
-        this.dataLoad = true;
+        this.data = data
+        this.phases = this.data.phases.length - 1
+        this.level = this.data.phases[this.phases].attributesKeyFrames[1].level
+        this.dataLoad = true
 
-        this.getSkills();
-        if (this.data.profession === 'TOKEN') return;
+        this.getSkills()
+        if (this.data.profession === 'TOKEN') return
         // this.getRange();
-        this.getEvolveCost();
-        this.getInfo();
-        this.getWords();
+        this.getEvolveCost()
+        this.getInfo()
+        this.getWords()
       })
       .catch(err => {
-        console.log(err);
-        this.loadingFail = true;
-      });
+        console.log(err)
+        this.loadingFail = true
+      })
   },
   methods: {
     evolvCost(t) {
-      return evolveGoldCost[this.data.rarity][t];
+      return evolveGoldCost[this.data.rarity][t]
     },
     statusToChChar(key) {
-      return statusToChChar(key);
+      return statusToChChar(key)
     },
     itemPic(id) {
-      return path + 'item/pic/' + id + '.png';
+      return path + 'item/pic/' + id + '.png'
     },
     getInfo() {
-      getCharInfo(this.name).then(res => this.info = res);
+      getCharInfo(this.name).then(res => this.info = res)
     },
     getWords() {
-      getCharWords(this.name).then(res => this.words = res);
+      getCharWords(this.name).then(res => this.words = res)
     },
     getSkills() {
-      if (!this.data) return;
+      if (!this.data) return
       const data = [...this.data.skills]
         .map(skill => {
           if (skill.skillId)
-            return getSkill(skill.skillId);
-        });
-      Promise.all(data).then(arr => this.skills = arr.filter(el => el));
+            return getSkill(skill.skillId)
+        })
+      Promise.all(data).then(arr => this.skills = arr.filter(el => el))
     },
     getEvolveCost() {
-      if (!this.data || !this.normal) return;
-      const data = [...this.data.phases];
-      for (let i = 0; i < data.length - 1; i++) {
+      if (!this.data || !this.normal) return
+      const data = [...this.data.phases]
+      for (let i = 0;i < data.length - 1;i++) {
         Promise.all(data[i + 1].evolveCost.map(p => getItem(p.id).then(item => ({ cost: p.count, item }))))
           .then(items => {
-            this.$set(this.evolveCost, i, { money: evolveGoldCost[this.data.rarity][i], items });
-          });
+            this.$set(this.evolveCost, i, { money: evolveGoldCost[this.data.rarity][i], items })
+          })
       }
     },
     itemBackground(rarity) {
-      return itemBackground[rarity];
+      return itemBackground[rarity]
     }
   }
-};
+}
 </script>
 
 <style scoped>

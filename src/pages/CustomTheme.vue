@@ -10,13 +10,14 @@
         class="custom-head-pic"
         element-loading-background="rgba(0, 0, 0, 0.5)"
       >
-        <el-image fit="fill" :src="currThemePic" @load="themePicLoad = false">
-          <div slot="error" class="image-slot">
-            <i class="el-icon-picture-outline" />
-          </div>
-        </el-image>
+        <r-image
+          :preview-src-list="[currThemePic]"
+          fit="fill"
+          :src="currThemePic"
+          @load="themePicLoad = false"
+        />
       </div>
-      <div v-if="rowData" class="custom-head-title">{{ rowData[currKey].name }}</div>
+      <div v-if="rowData" class="custom-head-title">{{ rowData[currKey].name || "散件" }}</div>
     </div>
     <transition-group name="flip-list">
       <my-slide-title
@@ -64,20 +65,25 @@
 </template>
 
 <script>
-import MySlideTitle from '../components/base/MySlideTilte';
-import FurniList from '../components/base/FurniLIst';
-import { bsr } from '../utils';
-import { getThemeList, getFurn } from '../utils/fetch';
-import { path } from '../utils/listVer';
+import MySlideTitle from '../components/base/MySlideTilte'
+import FurniList from '../components/base/FurniLIst'
+import { bsr } from '../utils'
+import { getThemeList, getFurn } from '../utils/fetch'
+import { path } from '../utils/listVer'
 
-import { Loading } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Loading);
+import { Loading } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Loading)
 
-const ease = t => bsr(t, 0.38, 0.93, 0.78, 1.02);
+import RImage from '@/components/base/RImage'
+
+const ease = t => bsr(t, 0.38, 0.93, 0.78, 1.02)
 
 export default {
-  components: { MySlideTitle, FurniList },
+  metaInfo: {
+    title: '家具图鉴 | Kokodayo'
+  },
+  components: { MySlideTitle, FurniList, RImage },
   data() {
     return {
       rowData: null,
@@ -91,71 +97,69 @@ export default {
       currOpen: null,
       currKey: 'furni_set_beach',
       themePicLoad: true
-    };
+    }
   },
   computed: {
     currThemePic() {
-      return `${this.path}custom/themes/${
-        this.currKey
-      }_optimized.png?x-oss-process=style/jpg-test`;
+      return `${this.path}custom/themes/${this.currKey}_optimized.png?x-oss-process=style/jpg-test`
     }
   },
   async created() {
-    const data = await getThemeList();
-    this.rowData = data;
-    const arr = Object.entries(data).reverse();
-    this.themes = arr;
-    const temp = this.themes.shift();
-    this.themes.push(temp);
-    this.load = true;
+    const data = await getThemeList()
+    this.rowData = data
+    const arr = Object.entries(data).reverse()
+    this.themes = arr
+    const temp = this.themes.shift()
+    this.themes.push(temp)
+    this.load = true
   },
   methods: {
     initOpen(index, e) {
       if (index === 0) {
-        e.initClick(true);
+        e.initClick(true)
       }
     },
     async loadData(target, k, index, e) {
-      let top = document.body.scrollTop || document.documentElement.scrollTop;
-      const anima = top / window.innerHeight > 0.5;
+      let top = document.body.scrollTop || document.documentElement.scrollTop
+      const anima = top / window.innerHeight > 0.5
       if (!anima) {
-        this.currKey = k;
-        const temp = this.themes.splice(index, 1);
-        this.themes.unshift(...temp);
+        this.currKey = k
+        const temp = this.themes.splice(index, 1)
+        this.themes.unshift(...temp)
       } else {
         setTimeout(() => {
-          top = document.body.scrollTop || document.documentElement.scrollTop;
-          const total = top;
-          const time = (top / window.innerHeight) * 700;
-          let start;
+          top = document.body.scrollTop || document.documentElement.scrollTop
+          const total = top
+          const time = (top / window.innerHeight) * 700
+          let start
           const toTop = timeStamp => {
-            if (!start) start = timeStamp;
-            const progress = Math.min((timeStamp - start) / time, 1);
-            const b = ease(progress);
-            top = (1 - b) * total;
-            document.body.scrollTop = document.documentElement.scrollTop = top;
+            if (!start) start = timeStamp
+            const progress = Math.min((timeStamp - start) / time, 1)
+            const b = ease(progress)
+            top = (1 - b) * total
+            document.body.scrollTop = document.documentElement.scrollTop = top
             if (progress < 1) {
-              requestAnimationFrame(toTop);
+              requestAnimationFrame(toTop)
             }
-          };
-          requestAnimationFrame(toTop);
-          const temp = this.themes.splice(index, 1);
-          this.themes.unshift(...temp);
+          }
+          requestAnimationFrame(toTop)
+          const temp = this.themes.splice(index, 1)
+          this.themes.unshift(...temp)
 
           setTimeout(() => {
-            this.currKey = k;
-          }, time + 300);
-        }, 500);
+            this.currKey = k
+          }, time + 300)
+        }, 500)
       }
 
-      const theme = target;
+      const theme = target
 
-      this.themePicLoad = true;
+      this.themePicLoad = true
       if (!this.groupList[k]) {
-        this.load = false;
+        this.load = false
         if (k === 'bulkFurns') {
-          const list = await Promise.all(theme.map(el => getFurn(el)));
-          this.$set(this.groupList, k, list);
+          const list = await Promise.all(theme.map(el => getFurn(el)))
+          this.$set(this.groupList, k, list)
         } else {
           const lists = await Promise.all(
             theme.groups.map(({ comfort, furniture, name }) =>
@@ -165,54 +169,54 @@ export default {
                 comfort
               }))
             )
-          );
+          )
 
           const comfort = lists.reduce((res, cur) => {
             return (res +=
               cur.comfort +
-              cur.list.reduce((res, cur) => (res += cur.comfort), 0));
-          }, 0);
+              cur.list.reduce((res, cur) => (res += cur.comfort), 0))
+          }, 0)
 
-          let extraFurn, extraFurnComfort;
+          let extraFurn, extraFurnComfort
           if (theme.extraFurn) {
             extraFurn = await Promise.all(
               theme.extraFurn.map(([k, count]) =>
                 getFurn(k).then(item => ({ ...item, count }))
               )
-            );
+            )
             extraFurnComfort =
               comfort +
               extraFurn.reduce(
                 (res, cur) => (res += cur.comfort * (cur.count - 1)),
                 0
-              );
+              )
           }
 
           const price = lists.reduce(
             (res, cur) =>
               (res += cur.list.reduce((res, cur) => {
-                let p = cur.processedProductCount * 2;
-                if (p % 10 === 6) p--;
-                cur.price = p;
-                return (res += p);
+                let p = cur.processedProductCount * 2
+                if (p % 10 === 6) p--
+                cur.price = p
+                return (res += p)
               }, 0)),
             0
-          );
-          this.$set(this.extraComfort, k, extraFurnComfort);
-          this.$set(this.comfortList, k, comfort);
-          this.$set(this.priceList, k, price);
-          this.$set(this.groupList, k, { lists, comfort, price, extraFurn });
+          )
+          this.$set(this.extraComfort, k, extraFurnComfort)
+          this.$set(this.comfortList, k, comfort)
+          this.$set(this.priceList, k, price)
+          this.$set(this.groupList, k, { lists, comfort, price, extraFurn })
         }
-        this.load = true;
+        this.load = true
       }
       if (this.currOpen && e !== this.currOpen) {
-        this.currOpen.close();
+        this.currOpen.close()
       }
-      this.currOpen = e;
-      this.themePicLoad = false;
+      this.currOpen = e
+      this.themePicLoad = false
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

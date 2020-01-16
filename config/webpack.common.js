@@ -1,9 +1,8 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const webpack = require('webpack');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
-const WorkboxPlugin = require('workbox-webpack-plugin');
-
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
+const VueLoaderPlugin = require('vue-loader/lib/plugin')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const swPlugins = [
   new WorkboxPlugin.InjectManifest({
@@ -11,7 +10,8 @@ const swPlugins = [
     swDest: 'sw.js',
     importWorkboxFrom: 'local'
   })
-];
+]
+
 
 module.exports = {
   entry: './src/main.js',
@@ -48,13 +48,16 @@ module.exports = {
       },
       {
         test: /\.m?js$/,
-        exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
             cacheDirectory: true
-          }
-        }
+          },
+        },
+        include: [
+          path.resolve(__dirname, '../src'),
+          /kkdy-somemap/
+        ]
       },
       {
         test: /\.vue$/,
@@ -66,16 +69,21 @@ module.exports = {
         }
 
       },
+      {
+        test: /\.tsx?$/,
+        loader: ['babel-loader', 'ts-loader']
+      }
     ]
   },
   resolve: {
     extensions: ['.js', '.styl', '.vue', '.json'],
     alias: {
-      '@': path.resolve(__dirname, '../src')
+      '@': path.resolve(__dirname, '../src'),
+      // 'element-ui': path.resolve(__dirname, '../src/element')
     }
   },
   externals: {
     spritejs: 'spritejs',
-    echarts: 'echarts'
-  }
-};
+    echarts: 'echarts',
+  },
+}

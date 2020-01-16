@@ -2,7 +2,7 @@
   <div class="enemy-status-abc-container">
     <div>
       <div class="enemy-status-abc-title" style="margin: 0">
-        <el-image style="width: 13px; " :src="smallPicPath + 'nj_optimized.png'" />
+        <c-image style="width: 13px; height:13px " :src="smallPicPath + 'nj_optimized.png'" />
         <div class="enemy-status-abc-title-text">{{ type }}</div>
       </div>
     </div>
@@ -10,8 +10,13 @@
   </div>
 </template>
 <script>
-import { path } from '@/utils/listVer';
+import { path } from '@/utils/listVer'
+import CImage from '@/components/base/CImage'
+
 export default {
+  components: {
+    CImage
+  },
   props: {
     level: {
       type: String,
@@ -25,9 +30,9 @@ export default {
   data() {
     return {
       smallPicPath: path + 'others/',
-    };
+    }
   }
-};
+}
 </script>
 <style lang="stylus" scoped>
 .enemy-status-abc-container {

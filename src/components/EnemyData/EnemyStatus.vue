@@ -136,16 +136,16 @@
 </template>
 
 <script>
-import { Button, Tooltip } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Button);
-Vue.use(Tooltip);
+import { Button, Tooltip } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Button)
+Vue.use(Tooltip)
 
-import { mapState } from 'vuex';
-import ContentSlot from '../base/ContentSlot';
+import { mapState } from 'vuex'
+import ContentSlot from '../base/ContentSlot'
 
-import { changeKey } from '../../utils';
-import { statusToCh } from '../../utils/string';
+import { changeKey } from '../../utils'
+import { statusToCh } from '../../utils/string'
 
 export default {
   components: {
@@ -155,7 +155,7 @@ export default {
     data: {
       type: Array,
       default: function () {
-        return { message: 'hello' };
+        return { message: 'hello' }
       }
     },
     appearMap: {
@@ -211,150 +211,150 @@ export default {
       talents: [],
       currentMap: '',
       skillRangeRadius: 1
-    };
+    }
   },
 
   computed: {
     ...mapState(['short']),
     targetSkill() {
-      if (this.skills.length < 1) return;
-      if (this.mapLevel > -1) return this.skills[this.mapLevel];
-      else return this.skills[this.level];
+      if (this.skills.length < 1) return
+      if (this.mapLevel > -1) return this.skills[this.mapLevel]
+      else return this.skills[this.level]
     },
     filterKeys() {
-      const res = {};
+      const res = {}
 
       // 不选地图，选等级，非突袭，level为用户选择的等级
       if (this.mapLevel < 0) {
-        return this.status[this.level];
+        return this.status[this.level]
       }
 
       //选地图非突袭，mapLevel为地图所选择的等级
       if (this.mapLevel > -1 && !this.runesMode) {
-        return this.status[this.mapLevel];
+        return this.status[this.mapLevel]
       }
 
 
-      const lv = this.mapLevel;
+      const lv = this.mapLevel
 
       // 防止数据没加载好，不是很安全，有空改一下
-      if (!this.status[lv]) return this.status[0];
+      if (!this.status[lv]) return this.status[0]
 
       // 突袭情况，先判定有没有选地图
-      const target = this.mapData;
+      const target = this.mapData
 
       target.runes.forEach(data => {
-        if (!data.blackboard.length) return;
-        const single = data.blackboard.find(data => data.key === 'enemy');
+        if (!data.blackboard.length) return
+        const single = data.blackboard.find(data => data.key === 'enemy')
         if (single) {
-          if (single.valueStr !== this.keyName) return;
+          if (single.valueStr !== this.keyName) return
           data.blackboard.forEach(el => {
-            const key = changeKey(el.key);
-            res[key] = res[key] ? res[key] * el.value : el.value;
-          });
+            const key = changeKey(el.key)
+            res[key] = res[key] ? res[key] * el.value : el.value
+          })
         } else if (/radius/.exec(data.key)) {
           if (!/skill/.exec(data.key)) {
             res.rangeScale = res.rangeScale
               ? res.rangeScale * data.blackboard[0].value
-              : data.blackboard[0].value;
+              : data.blackboard[0].value
           } else {
             // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-            this.skillRangeRadius = data.blackboard[0].value;
+            this.skillRangeRadius = data.blackboard[0].value
           }
         } else if (data.key !== 'gbuff_lifepoint') {
           data.blackboard.forEach(el => {
-            const key = changeKey(el.key);
-            res[key] = res[key] ? res[key] * el.value : el.value;
-          });
+            const key = changeKey(el.key)
+            res[key] = res[key] ? res[key] * el.value : el.value
+          })
         }
-      });
+      })
 
       return this.status[lv].map(el => {
-        if (res.attackSpeed && el[2] === 'baseAttackTime') return [el[0], Math.floor(el[1] / res.attackSpeed * 10) / 10];
+        if (res.attackSpeed && el[2] === 'baseAttackTime') return [el[0], Math.floor(el[1] / res.attackSpeed * 10) / 10]
         if (res[el[2]]) {
-          return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10];
+          return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10]
         } else {
-          return [el[0], el[1]];
+          return [el[0], el[1]]
         }
-      });
+      })
     },
     filterTalents() {
       const findTalent = key => {
-        if (key < 0) throw Error('天赋查询失败');
-        if (this.talents[key]) return this.talents[key];
-        else return findTalent(key - 1);
-      };
-      const row = findTalent(this.level);
+        if (key < 0) throw Error('天赋查询失败')
+        if (this.talents[key]) return this.talents[key]
+        else return findTalent(key - 1)
+      }
+      const row = findTalent(this.level)
       return row.map(el => {
-        let v = el.value;
+        let v = el.value
         if (/(duration)/.test(el.key)) {
-          v = v + 's';
+          v = v + 's'
         }
         if (/((up|down|scale)\.atk)|\.hp_ratio|healaura|speed/.test(el.key)) {
-          v = v * 100 + '%';
+          v = v * 100 + '%'
         } else if (/defdown\.def/.test(el.key)) {
           if (Math.abs(v) < 1) {
-            v = v * 100 + '%';
+            v = v * 100 + '%'
           }
         }
         return {
           key: this.changeTalentsBlackBordtoCh(el.key),
           value: v
-        };
-      });
+        }
+      })
     },
   },
   watch: {
     currentMap(v) {
-      if (v === '') this.skillRangeRadius = 1;
+      if (v === '') this.skillRangeRadius = 1
     },
     data() {
-      if (!this.data) return [];
-      const tagKey = { stunImmune: '免疫眩晕', silenceImmune: '免疫沉默' };
-      this.talents = [];
+      if (!this.data) return []
+      const tagKey = { stunImmune: '免疫眩晕', silenceImmune: '免疫沉默' }
+      this.talents = []
 
       this.status = this.data.map((list, i) => {
-        const res = [];
+        const res = []
 
         const findDefinedValue = (key, curI) => {
-          if (curI < 0) return 0;
+          if (curI < 0) return 0
           const target =
             this.data[curI].enemyData[key] ||
-            this.data[curI].enemyData.attributes[key];
-          if (target.m_defined) return target.m_value;
-          else return findDefinedValue(key, curI - 1);
-        };
+            this.data[curI].enemyData.attributes[key]
+          if (target.m_defined) return target.m_value
+          else return findDefinedValue(key, curI - 1)
+        }
 
         Object.keys(list.enemyData.attributes).forEach(key => {
-          const name = statusToCh(key);
+          const name = statusToCh(key)
           if (name) {
-            res.push([name, findDefinedValue(key, i), key]);
+            res.push([name, findDefinedValue(key, i), key])
           } else if (i === 0) {
             if (tagKey[key]) {
-              this.Tag[key].value = findDefinedValue(key, i);
+              this.Tag[key].value = findDefinedValue(key, i)
             }
           }
-        });
+        })
 
         if (list.enemyData.talentBlackboard)
-          this.talents.push(list.enemyData.talentBlackboard);
+          this.talents.push(list.enemyData.talentBlackboard)
         res.push([
           '攻击范围/格',
           findDefinedValue('rangeRadius', i),
           'rangeScale'
-        ]);
+        ])
         // console.log(findDefinedValue('rangeRadius', i) + '|range');
-        res.push(['LifePoint', findDefinedValue('lifePointReduce', i)]);
+        res.push(['LifePoint', findDefinedValue('lifePointReduce', i)])
 
-        return res;
-      });
+        return res
+      })
       this.skills = this.data
         .map(list => list.enemyData.skills)
-        .filter(el => el);
+        .filter(el => el)
       if (this.skills.length < this.data.length && this.skills.length === 1) {
-        let i = this.data.length;
+        let i = this.data.length
         while (--i) {
-          this.skills.push(this.skills[0]);
+          this.skills.push(this.skills[0])
         }
       }
     }
@@ -371,12 +371,12 @@ export default {
         dist: '消失',
         branch_id: '地图装置ID',
         stun: '眩晕'
-      };
-      return Key[key] || key;
+      }
+      return Key[key] || key
     },
     changeTalentsBlackBordtoCh(key) {
-      const temp = key.split('.');
-      if (temp.length < 2) return key;
+      const temp = key.split('.')
+      if (temp.length < 2) return key
 
       const key2str = {
         hp_ratio: '触发血线',
@@ -427,13 +427,13 @@ export default {
         reborn_invincible: '复活隐身',
         attackfreeze: '攻击冻结',
         periodic_damage: '周期伤害'
-      };
-      const changeKey = key => key2str[key] || key.toUpperCase();
+      }
+      const changeKey = key => key2str[key] || key.toUpperCase()
 
-      return changeKey(temp[0]) + '·' + changeKey(temp[1]);
+      return changeKey(temp[0]) + '·' + changeKey(temp[1])
     }
   }
-};
+}
 </script>
 
 <style scoped>

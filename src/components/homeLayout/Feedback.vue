@@ -1,16 +1,23 @@
 <template>
   <div style="padding: 0 20px">
-    <el-link href="https://somedata.top/ArknightsBeta" type="info">Beta版链接</el-link>
-    <p
-      style="color: #515151"
-    >反馈群799872783！个人测试浏览器为s10下包括QQ浏览器，及iPadOS(iOS 13)的Safari、Chrome，Pc的Edge/Chrome</p>
+    <el-link href="https://test.kokodayo.fun" type="info">
+      Beta版链接
+      <sup>new</sup>
+    </el-link>
+    <p style="color: #515151">反馈群799872783(需要答一个简单的问题)！</p>
+    <p>
+      <b>
+        <u>目前兼容到安卓5+，ios10+，不支持ie</u>
+      </b>
+    </p>
     <p style="color: #515151">在Github提Issue也行</p>
     <div class="feedback-part">
       <my-title title="反馈" />
+      <p>ID不是游戏ID，是让我记住你是谁的名称...</p>
       <div class="feedback-info-wrapper">
         <input-wrapper style="width: 50%" title="ID">
           <template>
-            <el-input v-model="id" placeholder="用于识别的ID" />
+            <el-input v-model="id" placeholder="用于识别的ID，不是游戏id，是让我稍微记住你是谁的id..." />
           </template>
         </input-wrapper>
         <div class="feedback-button">
@@ -30,11 +37,18 @@
           v-model="feedback"
           type="textarea"
           :rows="2"
-          placeholder="可以在内容后面留个邮箱，或者进群获取反馈进度。"
+          placeholder="在这里提交的反馈，会发邮件到我邮箱，所以可以在内容后面留个邮箱"
         />
       </input-wrapper>
     </div>
     <div class="feedback-part">
+      <my-slide-title title="v1.0 准备中">
+        <div>
+          <p>1. 增加游戏里的spine 小人展示，及相对应的改进立绘面板，以及新增单独的皮肤页面</p>
+          <p>2. 因为各种原因，有部分干员的部分模型的文件还处于缺失状态</p>
+          <p>3. 修复各种组件在某些情况下异常表示的问题</p>
+        </div>
+      </my-slide-title>
       <my-slide-title title="v0.9 新域名">
         <div>
           <p>1. 增加游戏里的spine 小人展示，及相对应的改进立绘面板，以及新增单独的皮肤页面</p>
@@ -107,17 +121,17 @@
 </template>
 
 <script>
-import { Input, Button, Message, MessageBox, Alert } from 'element-ui';
-import Vue from 'vue';
-Vue.use(Input);
-Vue.use(Button);
-Vue.use(Alert);
-import InputWrapper from './InputWrapper';
-import MyTitle from '../base/MyTitle';
-import MySlideTitle from '../base/MySlideTilte';
+import { Input, Button, Message, MessageBox, Alert } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Input)
+Vue.use(Button)
+Vue.use(Alert)
+import InputWrapper from './InputWrapper'
+import MyTitle from '../base/MyTitle'
+import MySlideTitle from '../base/MySlideTilte'
 
-import { submitFeedback } from '../../utils/fetch';
-import { mapState } from 'vuex';
+import { submitFeedback } from '../../utils/fetch'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -137,48 +151,48 @@ export default {
       id: '',
       title: '',
       debounceLogFb: null
-    };
+    }
   },
   computed: {
     ...mapState(['short']),
   },
   watch: {
     feedback() {
-      clearTimeout(this.debounceLogFb);
+      clearTimeout(this.debounceLogFb)
       this.debounceLogFb = setTimeout(async () => {
-        await this.store.setItem('tempFeedback', this.feedback);
-        console.log('save success');
-      }, 1000);
+        await this.store.setItem('tempFeedback', this.feedback)
+        console.log('save success')
+      }, 1000)
     }
   },
   async mounted() {
-    const lastFeedback = await this.store.getItem('tempFeedback');
-    const lastFeedbackID = await this.store.getItem('feedbackID');
+    const lastFeedback = await this.store.getItem('tempFeedback')
+    const lastFeedbackID = await this.store.getItem('feedbackID')
     if (lastFeedback) {
-      this.feedback = lastFeedback;
-      Message.success('成功恢复上次反馈但未提交的内容');
+      this.feedback = lastFeedback
+      Message.success('成功恢复上次反馈但未提交的内容')
     }
     if (lastFeedbackID) {
-      this.id = lastFeedbackID;
+      this.id = lastFeedbackID
     }
   },
   methods: {
     async submitFb() {
       if (!this.id) {
-        Message.warning('必须填ID');
-        return;
+        Message.warning('必须填ID')
+        return
       }
       if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(this.id)) {
-        Message.warning('ID不能包含特殊符号');
-        return;
+        Message.warning('ID不能包含特殊符号')
+        return
       }
       if (!this.feedback) {
-        Message.warning('反馈内容不能为空');
-        return;
+        Message.warning('反馈内容不能为空')
+        return
       }
-      const lastId = await this.store.getItem('feedbackID');
+      const lastId = await this.store.getItem('feedbackID')
       if (!lastId) {
-        await this.store.setItem('feedbackID', this.id);
+        await this.store.setItem('feedbackID', this.id)
       }
       if (lastId && lastId !== this.id) {
         await MessageBox.confirm(
@@ -186,38 +200,38 @@ export default {
           'ID不一致'
         )
           .then(el => {
-            this.id = lastId;
+            this.id = lastId
           })
           .catch(el => {
-            this.store.setItem('feedbackID', this.id);
-          });
+            this.store.setItem('feedbackID', this.id)
+          })
       }
       MessageBox.confirm(
         `内容: ${this.feedback}`,
         `确认提交内容, ID: ${this.id}`
       )
         .then(el => {
-          this.submit();
+          this.submit()
         })
         .catch(el => {
-          Message.info('取消');
-        });
+          Message.info('取消')
+        })
     },
     submit() {
-      const data = { title: this.title, id: this.id, content: this.feedback };
+      const data = { title: this.title, id: this.id, content: this.feedback }
       return submitFeedback(data)
         .catch(err => {
-          console.error(err);
+          console.error(err)
         })
         .then(res => {
           MessageBox.confirm('反馈成功，感谢你的支持',
-            '如果没留邮箱建议进群哦～');
-          this.feedback = '';
-          this.store.setItem('tempFeedback', '');
-        });
+            '如果没留邮箱建议进群哦～')
+          this.feedback = ''
+          this.store.setItem('tempFeedback', '')
+        })
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

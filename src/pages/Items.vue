@@ -5,10 +5,9 @@
 </template>
 
 <script>
-import DropList from '../components/EnemyData/DropList';
-import { getItem } from '../utils/fetch';
-import list from '../utils/items.json';
-import { TaskQueue } from '../utils';
+import DropList from '../components/EnemyData/DropList'
+import { getItem } from '../utils/fetch'
+import list from '../utils/items.json'
 
 export default {
   components: {
@@ -17,24 +16,14 @@ export default {
   data() {
     return {
       items: []
-    };
+    }
   },
   mounted() {
     Promise.all(list.map(el => getItem(el))).then(arr => {
-      const queue = new TaskQueue(
-        3,
-        () => {},
-        arr.map(el => () =>
-          new Promise(resolve => {
-            this.items.push(el);
-            setTimeout(resolve, 100);
-          })
-        )
-      );
-      queue.next();
-    });
+      this.items = arr
+    })
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

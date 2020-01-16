@@ -1,1 +1,1 @@
-export { default } from './EnemyData';
+export { default } from './New'

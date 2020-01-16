@@ -68,7 +68,7 @@
               <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)" />
               <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)" />
             </div>
-            <skill-list :skill="skill" />
+            <skill-list :short="short" :skills="skill" />
           </div>
         </div>
       </div>
@@ -77,13 +77,13 @@
 </template>
 
 <script>
-import { changeAttackSpeed, } from '../../utils';
+import { changeAttackSpeed, } from '../../utils'
 
-import Range from './Range';
-import SkillContainer from './SkillContainer';
-import SkillList from './SkillList';
+import Range from './Range'
+import SkillContainer from './SkillContainer'
+import SkillList from './SkillList'
 
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -121,25 +121,25 @@ export default {
     }
   },
   data() {
-    const initLv = this.initLv ? this.initLv : 7;
+    const initLv = this.initLv ? this.initLv : 7
     return {
       sLevel: [initLv, initLv, initLv],
       // eslint-disable-next-line no-undef
       production: process.env.PRODUCTION
-    };
+    }
   },
   computed: {
     ...mapState(['short']),
   },
   methods: {
     sLevelAdd(index, i) {
-      let num = this.sLevel[index] + i;
+      let num = this.sLevel[index] + i
       if (num > this.skills[0].levels.length)
-        num = this.skills[0].levels.length;
-      if (num < 1) num = 1;
+        num = this.skills[0].levels.length
+      if (num < 1) num = 1
       if (num < 8) {
-        this.sLevel = [num, num, num];
-      } else this.$set(this.sLevel, index, num);
+        this.sLevel = [num, num, num]
+      } else this.$set(this.sLevel, index, num)
     },
     changeSpType(type) {
       const typeList = {
@@ -167,8 +167,8 @@ export default {
             'background-color': 'rgb(243, 172, 4)'
           }
         }
-      };
-      return typeList[type];
+      }
+      return typeList[type]
     },
     changeSkillType(type) {
       const typeList = {
@@ -181,14 +181,14 @@ export default {
         2: {
           value: '自动触发'
         }
-      };
-      return typeList[type];
+      }
+      return typeList[type]
     },
     changeSkillDesc(skill) {
-      return changeAttackSpeed(skill);
+      return changeAttackSpeed(skill)
     }
   }
-};
+}
 </script>
 
 

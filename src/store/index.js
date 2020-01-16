@@ -3,10 +3,14 @@ import Vue from 'vue';
 import actions from './action';
 import { UA } from '../utils';
 import { charListVer } from '../utils/listVer';
+import { EnemyPanel } from './Enemy';
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
+  modules: {
+    enemy: EnemyPanel
+  },
   state: {
     listVer: new Date(+charListVer.toString().split('').reverse().join('')).toLocaleString(),
     pageVer: '',

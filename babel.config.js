@@ -1,5 +1,5 @@
 module.exports = function (api) {
-  api.cache(true);
+  api.cache(true)
 
   const presets = [
     [
@@ -15,7 +15,7 @@ module.exports = function (api) {
         }
       }
     ],
-  ];
+  ]
   const plugins = [
     [
       '@babel/plugin-proposal-class-properties',
@@ -30,10 +30,10 @@ module.exports = function (api) {
         'styleLibraryName': '~theme'
       }
     ]
-  ];
+  ]
 
   return {
     presets,
     plugins
-  };
-};
+  }
+}

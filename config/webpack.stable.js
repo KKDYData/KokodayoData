@@ -1,10 +1,10 @@
-const merge = require('webpack-merge');
-const prod = require('./webpack.prod');
-const webpack = require('webpack');
-const path = require('path');
-const CleanWebPackPlugin = require('clean-webpack-plugin');
+const merge = require('webpack-merge')
+const prod = require('./webpack.prod')
+const webpack = require('webpack')
+const path = require('path')
+const CleanWebPackPlugin = require('clean-webpack-plugin')
 
-const publicPath = 'https://andata.somedata.top/build/stable/';
+const publicPath = 'https://andata.somedata.top/build/stable/'
 
 module.exports = merge(prod, {
   output: {
@@ -19,4 +19,4 @@ module.exports = merge(prod, {
 
     })
   ]
-});
+})

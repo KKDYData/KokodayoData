@@ -1,6 +1,6 @@
 <template>
   <div class="item-viewer-container">
-    <el-popover
+    <h-popping
       v-if="data"
       popper-class="item-popover-class"
       placement="top"
@@ -9,27 +9,28 @@
       :open-delay="500"
       :title="data.name"
       :disabled="noPopover"
+      :size="drawerSize + '%'"
     >
-      <!-- 去掉 ios 点击边框 -->
-      <div slot="reference" style="outline: none" :class="noPopover ? 'short-force' : ''">
+      <div slot="title">
+        <div style="display: flex; align-items: center;margin-bottom: -30px">
+          <h-item
+            class="title-item"
+            :item-pic="itemPic"
+            :item-background="itemBackground"
+            :type="type"
+          />
+          {{ data.name }}
+        </div>
+      </div>
+      <div slot="reference" :class="small ? 'short-force' : ''">
         <div>
-          <el-tooltip
-            :disabled="!noPopover"
-            effect="dark"
-            :content="data.name"
-            placement="top-start"
-            style="outline: none"
-          >
-            <el-image
-              :class="type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'"
-              :style="itemBackground"
-              fit="contain"
-              :src="itemPic"
-            >
-              <div slot="error" class="image-slot">
-                <i class="el-icon-picture-outline" />
-              </div>
-            </el-image>
+          <el-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
+            <h-item
+              class="stupid-ios"
+              :item-pic="itemPic"
+              :item-background="itemBackground"
+              :type="type"
+            />
           </el-tooltip>
         </div>
         <div v-if="num || weight" style="text-align: center">
@@ -44,9 +45,6 @@
         </div>
       </div>
       <div v-if="!noPopover">
-        <div v-if="isHover === 'click'">
-          <close-button />
-        </div>
         <p v-if="type === 'FURN'" style="color: #828282">氛围 {{ data.comfort }}</p>
         <p v-if="type === 'FURN'" style="color: #828282">{{ data.obtainApproach }}</p>
         <p>{{ data.usage }}</p>
@@ -64,8 +62,8 @@
                 <i class="el-icon-info" />
                 <div slot="content">
                   点击可以查看统计的
-                  <color color="hsl(193, 78%, 69%)">总掉落数</color>/
-                  <color color="hsl(350, 100%, 79%)">总场次</color>
+                  <color color="hsl(193, 78%, 69%)">掉落数</color>/
+                  <color color="hsl(350, 100%, 79%)">样本数</color>
                 </div>
               </el-tooltip>
             </span>
@@ -88,8 +86,8 @@
                   <i class="el-icon-info" />
                   <div slot="content">
                     点击可以查看统计的
-                    <color color="hsl(193, 78%, 69%)">总掉落数</color>/
-                    <color color="hsl(350, 100%, 79%)">总场次</color>
+                    <color color="hsl(193, 78%, 69%)">掉落数</color>/
+                    <color color="hsl(350, 100%, 79%)">样本数</color>
                   </div>
                 </el-tooltip>
               </span>
@@ -113,9 +111,16 @@
                   :num="goldCost"
                   class="item-formula-item"
                   :no-popover="true"
+                  small
                 />
                 <div v-for="d in costs" :key="d.id" class="item-formula-item">
-                  <just-viewer :no-popover="true" :item="d.id" :num="d.count" />
+                  <just-viewer
+                    :drawer-size="drawerSize - 5"
+                    :no-popover="false"
+                    :item="d.id"
+                    :num="d.count"
+                    small
+                  />
                 </div>
               </div>
               <div v-if="listMode">
@@ -124,7 +129,13 @@
                 </el-divider>
                 <div class="item-formula-container">
                   <div v-for="rd in extraOutcomeGroup" :key="rd.id">
-                    <just-viewer class="item-formula-item" :no-popover="true" :item="rd.itemId" />
+                    <just-viewer
+                      :tool-tip="true"
+                      class="item-formula-item"
+                      :no-popover="true"
+                      :item="rd.itemId"
+                      small
+                    />
                   </div>
                 </div>
               </div>
@@ -132,46 +143,46 @@
           </div>
         </div>
       </div>
-    </el-popover>
+    </h-popping>
   </div>
 </template>
 
 
 <script>
-import { findStage, UA } from '../../utils';
-import { path } from '../../utils/listVer';
-import formula from '../../utils/data/formula.json';
+import { findStage, UA } from '../../utils'
+import { path } from '../../utils/listVer'
+import formula from '../../utils/data/formula.json'
 
 import {
   itemBackground,
   occPer_chinese,
   roomType,
   GOLD
-} from '../..//utils/string';
+} from '../..//utils/string'
 
-import { mapState } from 'vuex';
-import Vue from 'vue';
-import { Popover, Divider, Image, Tooltip } from 'element-ui';
-Vue.use(Popover);
-Vue.use(Divider);
-Vue.use(Image);
-Vue.use(Tooltip);
+import { mapState } from 'vuex'
+import Vue from 'vue'
+import { Popover, Divider, Tooltip } from 'element-ui'
+Vue.use(Popover)
+Vue.use(Divider)
+Vue.use(Tooltip)
 
-import DropLine from './DropLine';
-import Color from '../base/Color';
-import CloseButton from '../base/CloseButton';
+import DropLine from './DropLine'
+import Color from '../base/Color'
 
-import { getItem } from '../../utils/fetch';
 
-// 可以考虑给id的话，只显示图片，不做数据拉取
-// 或者noPopover + {假数据}，反正只显示图片的话，实际也不需要拉数据显示
-// 但是考虑到数据有做缓存，实际不会增加http连接数
+import { getItem } from '../../utils/fetch'
+import HPopping from '@/components/base/Popping'
+import HItem from './Item'
+
+
 export default {
   name: 'JustViewer',
   components: {
     DropLine,
     Color,
-    CloseButton
+    HPopping,
+    HItem
   },
   props: {
     item: {
@@ -194,7 +205,10 @@ export default {
       default: false,
       type: Boolean
     },
-    small: Boolean,
+    small: {
+      type: Boolean,
+      default: false
+    },
     weight: {
       default: null,
       type: Number
@@ -202,6 +216,14 @@ export default {
     listMode: {
       default: false,
       type: Boolean
+    },
+    toolTip: {
+      type: Boolean,
+      default: false
+    },
+    drawerSize: {
+      type: Number,
+      default: 80
     }
   },
   data() {
@@ -211,21 +233,22 @@ export default {
           ? 'click'
           : 'hover',
       data: typeof this.item !== 'string' ? this.item : undefined,
-      GOLD
-    };
+      GOLD,
+      show: false
+    }
   },
 
   computed: {
     ...mapState(['stageTree', 'short']),
     formula() {
-      if (!this.data) return [];
+      if (!this.data) return []
       return this.data.buildingProductList
         .filter(el => el.roomType === 'WORKSHOP')
         .map(el => formula[el.formulaId])
-        .filter(e => e);
+        .filter(e => e)
     },
     itemBackground() {
-      return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {};
+      return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {}
     },
     itemPic() {
       return (
@@ -233,127 +256,106 @@ export default {
         (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') +
         this.data.iconId +
         '_optimized.png'
-      );
+      )
     },
 
     dropListRow() {
-      return this.$store.getters.itemDropList(this.data.itemId);
+      return this.$store.getters.itemDropList(this.data.itemId)
     },
     targetStageDrop() {
-      if (!this.targetStage || !this.dropListRow) return;
+      if (!this.targetStage || !this.dropListRow) return
       else {
         const tempRes = this.dropList.find(
           el => el.stageId === this.targetStage
-        );
+        )
         if (tempRes > -1) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          const temp = this.dropList.splice(tempRes, 1)[0];
-          return temp;
+          const temp = this.dropList.splice(tempRes, 1)[0]
+          return temp
         }
         // ?这是随机掉落，上面是主掉落,主掉落需要从所有掉落里分割出当前地图的掉落。
         // ?因为这里不显示随机掉落（概率）的内容（有几十个）
         // 找不到的情况， 先不改成etCost（活动）!!!
         const target = this.dropListRow.find(
           el => el.stageId === this.targetStage
-        );
-        if (!target) return;
-        const res = Object.assign({}, target);
-        const stageData = findStage(target.stageId, this.stageTree);
-        const temp = stageData.label.split(' ');
-        res.stageCode = temp[0];
-        res.rate = Math.round((target.quantity / target.times) * 100);
+        )
+        if (!target) return
+        const res = Object.assign({}, target)
+        const stageData = findStage(target.stageId, this.stageTree)
+        const temp = stageData.label.split(' ')
+        res.stageCode = temp[0]
+        res.rate = Math.round((target.quantity / target.times) * 100)
         res.dropCost = Math.round(
           (target.times / target.quantity) * stageData.apCost
-        );
-        return res;
+        )
+        return res
       }
     },
     dropList() {
-      const list = this.dropListRow;
+      const list = this.dropListRow
       if (this.stageTree) {
         return this.data.stageDropList.map(el => {
-          let res = Object.assign({}, el);
-          const stageData = findStage(el.stageId, this.stageTree);
+          let res = Object.assign({}, el)
+          const stageData = findStage(el.stageId, this.stageTree)
           if (stageData) {
-            const temp = stageData.label.split(' ');
-            res.stageCode = temp[0];
+            const temp = stageData.label.split(' ')
+            res.stageCode = temp[0]
             if (list) {
               const dropInfo = list.find(
                 dropInfo => dropInfo.stageId === el.stageId
-              );
+              )
               if (dropInfo) {
-                res = Object.assign(res, dropInfo);
+                res = Object.assign(res, dropInfo)
                 res.rate = Math.round(
                   (dropInfo.quantity / dropInfo.times) * 100
-                );
+                )
                 res.dropCost = Math.round(
                   (dropInfo.times / dropInfo.quantity) * stageData.apCost
-                );
+                )
+                res.apCost = stageData.apCost
                 if (res.dropCost < 1) {
-                  res.apCost = stageData.apCost;
-                  res.etCost = stageData.etCost;
-                  res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times);
+                  res.etCost = stageData.etCost
+                  res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times)
                 }
               }
             }
           }
-          return res;
-        });
+          return res
+        })
       } else {
-        return this.data.stageDropList;
+        return this.data.stageDropList
       }
     },
     showDropInfo() {
-      return this.dropList.filter(el => el.times);
+      return this.dropList.filter(el => el.times)
     }
   },
   watch: {
     item(v) {
       if (typeof this.item === 'string') {
-        getItem(this.item).then(el => (this.data = el));
+        getItem(this.item).then(el => (this.data = el))
       } else {
-        this.data = v;
+        this.data = v
       }
     }
   },
   created() {
     if (typeof this.item === 'string') {
-      getItem(this.item).then(el => (this.data = el));
+      getItem(this.item).then(el => (this.data = el))
     }
   },
   methods: {
     occper(occ) {
-      return occPer_chinese[occ];
+      return occPer_chinese[occ]
     },
     roomName(id) {
-      return roomType[id];
+      return roomType[id]
     }
   }
-};
+}
 </script>
 
  <style lang="stylus" scoped>
- .evolvcost-item-contianer {
-   /*margin: 5px 10px;*/
-   width: 70px
-   height: 70px
-   display: block
-   box-sizing: border-box
-   border-radius: 50%
-   box-shadow: inset 0 0 0 2px black
-   background: grey
-   border: 2px solid rgb(249, 198, 19)
-   overflow: visible
-   margin: 0 auto
- }
-
- .evolvcost-item-contianer>>>img {
-   width: 128%
-   height: 128%
-   margin-top: -14%
-   margin-left: -14%
- }
-
  .item-popover {
    &.is-left {
      left: 20px
@@ -376,24 +378,6 @@ export default {
 
  .weekly {
    width: auto
- }
-
- .furn-item {
-   width: 70px
-   min-height: 70px
-   display: block
-   box-sizing: border-box
-   border-radius: 3px
-   box-shadow: inset 0px 6px 13px 0px #4a4a4a
-   background: url('../../assets/bbbj_optimized.png')
-   background-size: cover
-   /*overflow: visible;*/
-   padding: 9px 0
-
-   & >>> img {
-     width: calc(100% - 1px)
-     box-shadow: 1px 1px 0px 1px #6b6b6b63, 1px -1px 0px 0px #fff
-   }
  }
 
  .item-formula-container {
@@ -433,12 +417,12 @@ export default {
    }
  }
 
- @media screen and (max-width: 700px) {
-   .evolvcost-item-contianer {
-     width: calc(45px + 2vw)
-     height: calc(45px + 2vw)
-   }
+ .title-item {
+   margin: 0
+   margin-right: 20px
+ }
 
+ @media screen and (max-width: 700px) {
    .evolvcost-name-wrapper {
      font-size: 14px
    }
@@ -449,7 +433,6 @@ export default {
 
    .item-popover {
      overflow-x: hidden
-     max-height: 300px
    }
 
    .item-popover .is-left {

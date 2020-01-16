@@ -1,11 +1,12 @@
-const merge = require('webpack-merge');
-const common = require('./webpack.common');
-const webpack = require('webpack');
-const TerserPlugin = require('terser-webpack-plugin');
-const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const merge = require('webpack-merge')
+const common = require('./webpack.common')
+const webpack = require('webpack')
+const TerserPlugin = require('terser-webpack-plugin')
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin')
+const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 
 module.exports = merge(common, {
+  mode: 'production',
   plugins: [
     new webpack.HashedModuleIdsPlugin(),
     new OptimizeCssAssetsPlugin({}),
@@ -55,7 +56,16 @@ module.exports = merge(common, {
         test: /\.(styl|stylus|css)$/,
         use: [
           { loader: MiniCssExtractPlugin.loader },
-          'css-loader', 'stylus-loader'],
+          'css-loader',
+          'stylus-loader',
+          {
+            loader: 'style-resources-loader',
+            options: {
+              patterns: [
+                'src/styles/fn.styl',
+              ]
+            }
+          }],
       },
     ]
   },
@@ -71,4 +81,4 @@ module.exports = merge(common, {
     spritejs: 'spritejs',
     echarts: 'echarts'
   }
-});
+})

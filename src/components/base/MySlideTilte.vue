@@ -5,31 +5,33 @@
     <my-title
       ref="title"
       :title="title"
-      :control="control"
       :custom-bg="customBg"
       :right="short"
       style="margin-bottom: 0"
+      control
+      :state="active"
       @click="click"
     />
     <transition name="extra-button">
-      <div v-if="!control || value" class="extra-button">
-        <slot name="extra-button" />
+      <div v-if="active" class="extra-button">
+        <slot name="button" />
       </div>
     </transition>
-    <div style="margin-left: 10px">
+    <div class="content-wrapper">
       <el-collapse-transition>
-        <slot v-if="!control || value" />
+        <slot v-if="active" />
       </el-collapse-transition>
     </div>
   </div>
 </template>
 
 <script>
-import MyTitle from './MyTitle';
-import Vue from 'vue';
-import CollapseTransition from 'element-ui/lib/transitions/collapse-transition';
-Vue.component(CollapseTransition.name, CollapseTransition);
-import { mapState } from 'vuex';
+import MyTitle from './MyTitle'
+import Vue from 'vue'
+import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
+Vue.component(CollapseTransition.name, CollapseTransition)
+// todo change short get from props
+// import { mapState } from 'vuex';
 
 export default {
   components: { MyTitle },
@@ -42,7 +44,7 @@ export default {
       type: Boolean,
       default: true
     },
-    initValue: {
+    init: {
       type: Boolean,
       default: false
     },
@@ -53,42 +55,48 @@ export default {
   },
   data() {
     return {
-      value: this.initValue,
-      lock: false
-    };
+      value: this.init,
+      lock: false,
+      short: true
+    }
   },
+
   computed: {
-    ...mapState(['short']),
+    // ...mapState(['short']),
+    active() {
+      if (!this.control) return true
+      else return this.value
+    }
   },
   watch: {
     value(v) {
       if (!v && this.$refs.title.value) {
-        this.lock = true;
-        this.$refs.title.click();
+        this.lock = true
+        this.$refs.title.click()
       }
     }
   },
   mounted() {
-    this.$emit('monuted', this);
+    this.$emit('monuted', this)
   },
   methods: {
     initClick(v) {
-      this.value = v;
-      this.$refs.title.click();
+      this.value = v
+      this.$refs.title.click()
     },
     click(v) {
       if (this.lock) {
-        this.lock = false;
-        return;
+        this.lock = false
+        return
       }
-      this.value = v;
-      this.$emit('open', this);
+      this.value = !v
+      this.$emit('open', this)
     },
     close() {
-      this.value = false;
+      this.value = false
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -98,11 +106,23 @@ export default {
   left: 10px
   top: 36px
   z-index: 2
+  width: calc(100% - 30px)
 }
 
 .my-slide-title-wrapper {
   position: relative
-  margin: 20px 0
+
+  & + .my-slide-title-wrapper {
+    margin-top: 20px
+  }
+
+  .content-wrapper {
+    will-change: height
+    position: relative
+    overflow: hidden
+    box-sizing: border-box
+    padding: 20px 10px 10px
+  }
 }
 
 @media screen and (min-width: 700px) {
