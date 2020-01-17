@@ -104,11 +104,9 @@ export default {
   display: flex
   justify-content: center
   align-items: center
-  height: 25vw
   flex-wrap: wrap
 
   p {
-    margin: 2vw
     width: 100vw
     text-align: center
 
