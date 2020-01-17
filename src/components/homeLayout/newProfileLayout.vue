@@ -35,9 +35,6 @@
                   <div class="other-mode-popover-details-title other-mode-link">
                     <router-link :to="path + '/details/' + agent.No">
                       <span class="other-mode-popover-details-title-name">{{ agent.name }}</span>
-                      <span
-                        :style="agent.tags[1] === '女' ? 'color: pink;' : ''"
-                      >{{ agent.tags[1] === '女' ? '♀' : '♂' }}</span>
                       <div class="other-mode-popover-class-icon">
                         <c-image :src="class_icon(agent.class)" />
                       </div>

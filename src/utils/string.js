@@ -426,8 +426,7 @@ const TagsArr = [
   { isTag: true, text: '控场', value: '控场' },
   { isTag: true, text: '远程位', value: 'RANGED' },
   { isTag: true, text: '近战位', value: 'MELEE' },
-  { isTag: true, text: '男性干员', value: '男' },
-  { isTag: true, text: '女性干员', value: '女' },
+  { isTag: true, text: '支援机械', value: '支援机械' },
   { isTag: true, text: '资深干员', value: 4 },
   { isTag: true, text: '高级资深干员', value: 5 },
 ]

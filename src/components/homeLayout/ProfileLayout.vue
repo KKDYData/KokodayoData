@@ -46,12 +46,7 @@
               class="name-inner-ch"
               :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
             >{{ agent.name }}</div>
-            <div class="name-inner-en">
-              {{ agent.en }}
-              <span
-                v-if="showTags && tagHit(agent.tags[1])"
-              >{{ agent.tags[1] === '女' ? '♀' : '♂' }}</span>
-            </div>
+            <div class="name-inner-en">{{ agent.en }}</div>
           </div>
         </div>
       </div>
