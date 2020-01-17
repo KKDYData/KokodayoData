@@ -35,12 +35,12 @@
                   <div class="other-mode-popover-details-title other-mode-link">
                     <router-link :to="path + '/details/' + agent.No">
                       <span class="other-mode-popover-details-title-name">{{ agent.name }}</span>
-                      <div class="other-mode-popover-class-icon">
-                        <c-image :src="class_icon(agent.class)" />
-                      </div>
                     </router-link>
+                    <div class="other-mode-popover-class-icon">
+                      <c-image :src="class_icon(agent.class)" />
+                    </div>
                   </div>
-                  <div style="margin-top: 10px;">
+                  <div style="margin-top: 5px;">
                     <template v-for="(tag, index) in agent.tags">
                       <el-tag
                         v-if="index === 0 && tag > 3 || index > 1"
@@ -71,7 +71,7 @@
 const arrange = (arr, index = 0, group = []) => {
   const res = []
   res.push([arr[index]])
-  for (let i = 0;i < group.length;i++) {
+  for (let i = 0; i < group.length; i++) {
     res.push([...group[i], arr[index]])
   }
   group = group.concat(res)
@@ -95,8 +95,13 @@ Vue.use(Card)
 Vue.use(Tag)
 
 import { rootPath } from '../../stats'
+import CImage from '@/components/base/CImage'
+
 
 export default {
+  components: {
+    CImage
+  },
   props: {
     data: Array,
     showKey: String,
@@ -240,6 +245,7 @@ export default {
 
 .other-mode-popover {
   display: flex;
+  align-items: center;
 }
 
 .other-mode-popover-details {
@@ -254,11 +260,13 @@ export default {
   width: 20px;
   height: 20px;
   vertical-align: bottom;
+  margin-left: 4px;
 }
 
 .other-mode-popover-details-title {
   font-size: 20px;
   line-height: 100%;
+  display: flex;
 }
 
 .other-mode-popover-tag.el-tag--dark.el-tag--info {
