@@ -3,10 +3,14 @@
     <div v-if="isNeedUpdate" class="need-update">
       <p>
         <i class="el-alert__icon el-icon-warning is-big" />
-        <span>当前版本落后，请尝试点击下面按钮</span>
+        <span>当前版本落后，请尝试点击下面的更新（刷新）按钮</span>
       </p>
-      <el-button size="mini" @click="update">更新</el-button>
-      <el-button size="mini" @click="refresh">如果多次更新无效，请点击这里</el-button>
+      <div>
+        <el-button size="mini" @click="update">更新</el-button>
+      </div>
+      <div>
+        <el-button size="mini" @click="refresh">如果多次更新无效，请点击这里3次</el-button>
+      </div>
       <p>如果点完上面的都不行，那就清除浏览器数据</p>
     </div>
     <top-menu />
@@ -44,7 +48,8 @@ export default {
       loading: true,
       ok: 1 || devMode !== 'beta' || process.env.NODE_ENV === 'development',
       key: '',
-      status: ''
+      status: '',
+      unregistHit: 0
     }
   },
   computed: {
@@ -75,21 +80,10 @@ export default {
   },
   methods: {
     update() {
-      navigator.serviceWorker.getRegistrations()
-        .then((registrations) => {
-          this.status = 'updating...'
-          registrations.update()
-            .then(res => {
-              this.status = 'done'
-              alert('s:' + res)
-            })
-            .catch(err => {
-              alert(err)
-            })
-          window.location.reload()
-        })
+      window.location.reload()
     },
     refresh() {
+      if (++this.unregistHit < 3) return
       console.log('强制注销serverWorker')
       const store = localforage.createInstance({
         name: 'testDB'
