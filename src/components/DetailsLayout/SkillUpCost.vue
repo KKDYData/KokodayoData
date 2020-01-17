@@ -1,9 +1,9 @@
 <template>
   <div v-if="skills.length > 0" class="skill-container--inner-wrapper">
-    <div class="skill-container" v-for="(skill, index) in unlockCond" :key="skill.name">
+    <div v-for="(skill, index) in unlockCond" :key="skill.name" class="skill-container">
       <div class="skill-title">
         <div class="skill-pic-container-wrapper">
-          <skill-container :skill="skills[index]"></skill-container>
+          <skill-container :skill="skills[index]" />
         </div>
         <div class="skill-tiltle-part">
           <div class="skill-title-text">
@@ -11,12 +11,12 @@
           </div>
           <div class="skill-lvUpCost-wrapper">
             <item-viewer
-              v-for="(skill, index) in picList[index]"
-              :key="index"
+              v-for="(skill, i) in picList[index]"
+              :key="i"
               class="item-viwer-flex-default"
               :item="skill.item"
               :num="skill.count"
-            ></item-viewer>
+            />
           </div>
         </div>
       </div>
@@ -27,22 +27,22 @@
           <span>
             精英
             <span
-              :style="skill.data[sLevel[index]].unlockCond.phase > 0 ?  'color: #f49800' : ''"
-            >{{skill.data[sLevel[index]].unlockCond.phase}}</span>
+              :style="skill.data[sLevel[index]].unlockCond.phase > 0 ? 'color: #f49800' : ''"
+            >{{ skill.data[sLevel[index]].unlockCond.phase }}</span>
             /
-            <span>{{skill.data[sLevel[index]].unlockCond.level}}</span>
+            <span>{{ skill.data[sLevel[index]].unlockCond.level }}</span>
           </span>
         </div>
         <div>
           <span class="skill-title-level">
             LV
-            <span>{{sLevel[index] + 1}}</span>
-            <i class="el-icon-right"></i>
-            <span>{{sLevel[index] + 2}}</span>
-            <span></span>
+            <span>{{ sLevel[index] + 1 }}</span>
+            <i class="el-icon-right" />
+            <span>{{ sLevel[index] + 2 }}</span>
+            <span />
           </span>
-          <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)"></el-button>
-          <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)"></el-button>
+          <el-button icon="el-icon-minus" size="mini" circle @click="sLevelAdd(index, -1)" />
+          <el-button circle icon="el-icon-plus" size="mini" @click="sLevelAdd(index, 1)" />
         </div>
       </div>
     </div>
@@ -50,12 +50,12 @@
 </template>
 
 <script>
-import { getItem } from '../../utils/fetch';
-import { itemBackground } from '../../utils/string';
-import ItemViewer from '../ItemViewer';
-import SkillContainer from './SkillContainer';
+import { getItem } from '../../utils/fetch'
+import { itemBackground } from '../../utils/string'
+import ItemViewer from '../ItemViewer'
+import SkillContainer from './SkillContainer'
 
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -71,63 +71,63 @@ export default {
     },
     seven: Array,
   },
-  beforeMount() {
-    for (let i = 0; i < this.unlockCond.length; i++) {
-      this.sLevelAdd(i, 0);
-    }
-  },
   data() {
     return {
       sLevel: this.skills[0].levels.length > 7 ? [6, 6, 6] : [5, 5, 5],
       picList: { 0: [], 1: [], 2: [] }
-    };
+    }
+  },
+  beforeMount() {
+    for (let i = 0;i < this.unlockCond.length;i++) {
+      this.sLevelAdd(i, 0)
+    }
   },
   computed: {
     ...mapState(['short']),
     unlockCond() {
-      const res = [];
-      for (let i = 0; i < this.skills.length; i++) {
+      const res = []
+      for (let i = 0;i < this.skills.length;i++) {
         res.push({
           Id: this.skills[i],
           data: [...this.allLevelCost, ...this.seven[i].levelUpCostCond]
-        });
+        })
       }
-      return res;
+      return res
     }
   },
   methods: {
     itemBackground(rarity) {
-      return itemBackground[rarity];
+      return itemBackground[rarity]
     },
     sLevelAdd(index, i) {
-      let num = this.sLevel[index] + i;
+      let num = this.sLevel[index] + i
       if (num > this.unlockCond[index].data.length - 1)
-        num = this.unlockCond[index].data.length - 1;
-      if (num < 0) num = 0;
+        num = this.unlockCond[index].data.length - 1
+      if (num < 0) num = 0
       // 拆包出来的奇怪词条
-      let p = num < 6 ? 'lvlUpCost' : 'levelUpCost';
+      let p = num < 6 ? 'lvlUpCost' : 'levelUpCost'
 
       Promise.all(
         this.unlockCond[index].data[num][p].map(async p => {
-          const item = await getItem(p.id);
+          const item = await getItem(p.id)
           const res = {
             item: item,
             count: p.count
-          };
-          return res;
+          }
+          return res
         })
       ).then(arr => {
         if (p === 'levelUpCost') {
-          this.$set(this.picList, index, arr);
-          this.$set(this.sLevel, index, num);
+          this.$set(this.picList, index, arr)
+          this.$set(this.sLevel, index, num)
         } else {
-          this.picList = [arr, arr, arr];
-          this.sLevel = [num, num, num];
+          this.picList = [arr, arr, arr]
+          this.sLevel = [num, num, num]
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 
 <style scoped>

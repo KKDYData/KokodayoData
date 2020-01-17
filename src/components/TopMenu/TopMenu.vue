@@ -71,6 +71,12 @@ export default {
           decs: '掉率查询 合成配方',
         },
         {
+          name: 'skins',
+          path: '/skins',
+          text: '时装',
+          decs: '...',
+        },
+        {
           name: 'customtheme',
           path: '/customtheme',
           text: '家具图鉴',
