@@ -25,7 +25,7 @@ const fetchPut = (url, data) => {
     .catch(err => Promise.reject(err))
 }
 
-const checkWebVer = () => fetchPut('/api/arknights/check', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 10 })
+const checkWebVer = () => fetchPut('/api/arknights/check', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 3 })
 process.env.NODE_ENV === 'production' && checkWebVer().then(({ res }) => {
   store.commit('setisNeedUpdate', res)
   console.log(res)

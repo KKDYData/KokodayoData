@@ -136,6 +136,7 @@ import CloseButton from '../base/CloseButton'
 import { sort } from '../../utils'
 import { TagsArr, class_chinese, StarArr } from '../../utils/string'
 
+const version = 200117
 
 
 const newProfileLayout = () => ({
@@ -167,9 +168,6 @@ if (typeof Array.prototype.flat !== 'function') {
     return this.reduce((pre, cur) => pre.concat(cur))
   }
 }
-
-const version = 200117
-const forceUnregister = 200116
 
 export default {
   metaInfo() {
@@ -259,18 +257,6 @@ export default {
         console.log('_noVersion')
         this.store.setItem('_filterVersion', version)
         this.data = this.profileList
-      }
-    })
-
-    if (!navigator.serviceWorker) return
-    this.store.getItem('forceUnregister').then(date => {
-      if (!date || date < forceUnregister) {
-        console.log(`强制注销serverWorker, 当前记录：${date}, 目标记录${forceUnregister}`)
-        navigator.serviceWorker.getRegistrations()
-          .then((registrations) => {
-            registrations.forEach(el => el.unregister())
-            this.store.setItem('forceUnregister', forceUnregister)
-          })
       }
     })
   },
