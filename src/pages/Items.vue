@@ -41,21 +41,17 @@ export default {
 
 <style lang="stylus" scoped>
 .item-list-panel {
-  max-width: 800px
-  margin: 10px auto
+  width: 100%
   min-height: 80vh
+  display: flex
+  justify-content: center
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 450px) {
   .item-list-panel {
-    max-width: auto
-    padding: 5vw
-  }
-}
-
-@media screen and (max-width: 400px) {
-  .item-list-panel {
-    width: 300px
+    width: 100vw
+    padding: 3vw
+    box-sizing: border-box
   }
 }
 </style>

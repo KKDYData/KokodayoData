@@ -47,6 +47,8 @@ export default {
 
 <style lang="stylus" scoped>
 .map-drop-container {
+  max-width: 800px
+
   &.common {
     min-width: 200px
   }

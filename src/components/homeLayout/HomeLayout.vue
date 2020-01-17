@@ -168,8 +168,8 @@ if (typeof Array.prototype.flat !== 'function') {
   }
 }
 
-const version = 191022
-const forceUnregister = 191023
+const version = 200117
+const forceUnregister = 200116
 
 export default {
   metaInfo() {
