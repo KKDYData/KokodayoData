@@ -124,9 +124,11 @@ export default {
       if (!this.data.trait) return changeDesc(this.data.description)
       else if (this.data.trait.candidates) {
         return this.data.trait.candidates.map(el => {
+          console.log(this.data)
           return changeAttackSpeed({
             description: el.overrideDescripton ? el.overrideDescripton : this.data.description,
-            blackboard: el.blackboard
+            blackboard: el.blackboard,
+            type: this.data.name
           })
         })
       } else return ''
