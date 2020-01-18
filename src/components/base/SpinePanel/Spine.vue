@@ -20,12 +20,12 @@
 </template>
 
 <script>
-import { Button, Message } from 'element-ui';
-import Spine from '../../../utils/Spine/initSpine';
+import { Button, Message } from 'element-ui'
+import Spine from '../../../utils/Spine/initSpine'
 
-import Vue from 'vue';
-import { path } from '../../../utils/listVer';
-Vue.use(Button);
+import Vue from 'vue'
+import { path } from '../../../utils/listVer'
+Vue.use(Button)
 
 export default {
   props: {
@@ -39,7 +39,7 @@ export default {
     }
   },
   data() {
-    const width = this.canvasWidth;
+    const width = this.canvasWidth
 
     return {
       animates: [],
@@ -56,47 +56,54 @@ export default {
         fight_f: '战斗正',
         fight_b: '战斗反'
       }
-    };
+    }
   },
   computed: {
     borderWidth() {
-      return (this.canvasWidth / 300) * 25;
+      return (this.canvasWidth / 300) * 25
     }
   },
   mounted() {
-    this.init();
+    this.init()
   },
   methods: {
     swtichId() {
-      this.mode.push(this.mode.shift());
+      this.mode.push(this.mode.shift())
       this.init().catch(err => {
-        console.error('初始化失败', err);
-        Message.info('切换失败，可能这个干员没有个模型，如果她/他真的有，请联系我们修复');
-      });
+        console.error('初始化失败', err)
+        Message.info('切换失败，可能这个干员没有个模型，如果她/他真的有，请联系我们修复')
+      })
+        .then(() => {
+          const { state, skeleton } = this.spine.skeletons[this.id]
+          this.curAnimate = 0
+          const animate = this.spine.animates[0]
+          state.setAnimation(0, animate, false)
+          skeleton.setToSetupPose()
+        })
     },
     changeAnimate(t) {
-      this.curAnimate = t ? this.curAnimate + 1 : this.curAnimate - 1;
-      if (this.curAnimate >= this.animates.length) this.curAnimate = 0;
+      this.curAnimate = t ? this.curAnimate + 1 : this.curAnimate - 1
+      if (this.curAnimate >= this.animates.length) this.curAnimate = 0
       else if (this.curAnimate < 0)
         this.curAnimate =
-          this.animates.length !== 0 ? this.animates.length - 1 : 0;
+          this.animates.length !== 0 ? this.animates.length - 1 : 0
 
-      const { state, skeleton } = this.spine.skeletons[this.id];
-      const animate = this.spine.animates[this.curAnimate];
-      const loop = /Start|Begin|End/.test(animate) ? false : true;
-      state.setAnimation(0, animate, loop);
-      skeleton.setToSetupPose();
+      const { state, skeleton } = this.spine.skeletons[this.id]
+      const animate = this.spine.animates[this.curAnimate]
+      const loop = /Start|Begin|End/.test(animate) ? false : true
+      state.setAnimation(0, animate, loop)
+      skeleton.setToSetupPose()
     },
     async init() {
-      this.spine = new Spine(this.$refs.container);
+      this.spine = new Spine(this.$refs.container)
       const id = this.id,
-        pathd = this.spinePath + this.mode[0] + '/';
+        pathd = this.spinePath + this.mode[0] + '/'
 
-      this.skeleton = await this.spine.init({ id, path: pathd });
-      this.animates = this.spine.animates;
+      this.skeleton = await this.spine.init({ id, path: pathd })
+      this.animates = this.spine.animates
     }
   }
-};
+}
 </script>
 
 <style lang="stylus">
