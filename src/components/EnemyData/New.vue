@@ -464,10 +464,11 @@ filter() {
   width: 400px
 }
 
-@media screen and (min-width: 1900px) {
+@media screen and (min-width: 1920px) {
   .map-wrapper {
     max-width: 1900px
     margin: 0 auto
+    --cwidth: 1300px
   }
 }
 
