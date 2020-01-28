@@ -35,8 +35,8 @@
                   >{{ changeClassShort(agent.class) }}</span>
                   <span
                     class="double-tag"
-                    :style="tagHit(agent.tags[2]) ? 'background-color: #313131; color: #fff': ''"
-                  >{{ agent.tags[2] === 'MELEE' ? '近' : '远' }}</span>
+                    :style="tagHit(agent.tags[1]) ? 'background-color: #313131; color: #fff': ''"
+                  >{{ agent.tags[1] === 'MELEE' ? '近' : '远' }}</span>
                 </el-tag>
               </div>
             </div>
