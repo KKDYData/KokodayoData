@@ -237,7 +237,8 @@ export default {
 
 .skill-tiltle-part {
   padding-left: 20px
-  width: calc(70% - 100px)
+  //width: calc(70% - 100px)
+  flex: 1
 }
 
 .skill-title-level {
@@ -249,9 +250,10 @@ export default {
   display: flex
   align-items: flex-end
   flex-wrap: wrap
-  padding-right: 20px
-  flex-grow: 1
+  padding: 0 20px
   width: min-content
+  word-break: keep-all
+  white-space: nowrap
 }
 
 .skill-type {

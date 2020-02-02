@@ -5,8 +5,8 @@
       <i class="el-icon-more" />
     </div>
     <div style="max-height: 80vh; overflow-y: scroll">
-      <div v-for="(skill, index) in skills.levels" :key="index" style="margin: 10px">
-        <div style="display: flex; align-items: baseline;">
+      <div v-for="(skill, index) in skills.levels" :key="index" style="margin: 20px 10px">
+        <div class="skill-list-title">
           <div>
             <span>
               <span>
@@ -23,7 +23,7 @@
               {{ skill.duration }}
             </span>
           </div>
-          <div style="margin-left: auto; font-size: 1.3em">
+          <div class="skill-list-title-lv">
             <span v-if="index < 7">Level{{ index + 1 }}</span>
             <span v-else>专精{{ index - 6 }}</span>
           </div>
@@ -62,3 +62,16 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.skill-list-title {
+  display: flex
+  align-items: baseline
+  border-bottom: 1px solid rgba(125, 125, 125, 0.2)
+
+  &-lv {
+    margin-left: auto
+    font-size: 1.3em
+  }
+}
+</style>

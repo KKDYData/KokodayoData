@@ -5,37 +5,37 @@
         <div class="talent-name-wrapper">
           <span
             :style="!short && item.name && item.name.length > 5 ? 'font-size: 13px': ''"
-          >{{item.name}}</span>
+          >{{ item.name }}</span>
           <div class="talent-desc-change-button">
             <el-button
               v-if="item.condidate[0].potentailUP"
-              @click="openTalentPotentailUP(index)"
               size="mini"
               :type="!showTalentPotentailUP[index] ? 'info' : 'warning'"
+              @click="openTalentPotentailUP(index)"
             >
               潜能提升
               <i
                 :class="!showTalentPotentailUP[index] ? 'el-icon-star-off' : 'el-icon-star-on'"
-              ></i>
+              />
             </el-button>
           </div>
         </div>
         <div
-          class="talent-desc-container"
           v-for="talent in item.condidate"
           :key="talent.description"
+          class="talent-desc-container"
         >
           <div class="talent-condition-wrapper">
-            <span>精英{{talent.unlockCondition.phase}}/{{talent.unlockCondition.level}}级</span>
+            <span>精英{{ talent.unlockCondition.phase }}/{{ talent.unlockCondition.level }}级</span>
           </div>
 
           <div class="talent-desc-content-wrapper">
             <div v-if="!showTalentPotentailUP[index]" class="talent-desc-content">
-              <span v-html="talent.description"></span>
+              <span v-html="talent.description" />
             </div>
             <div v-else class="talent-desc-content">
-              <span v-html="talent.potentailUP.description"></span>
-              <span>(需要潜能{{talent.potentailUP.requiredPotentialRank + 1}}级)</span>
+              <span v-html="talent.potentailUP.description" />
+              <span>(需要潜能{{ talent.potentailUP.requiredPotentialRank + 1 }}级)</span>
             </div>
           </div>
         </div>
@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState } from 'vuex'
 
 export default {
   props: {
@@ -56,18 +56,18 @@ export default {
   data() {
     return {
       showTalentPotentailUP: [false, false, false]
-    };
+    }
   },
   computed: {
     ...mapState(['short']),
   },
   methods: {
     openTalentPotentailUP(t) {
-      this.$set(this.showTalentPotentailUP, t, !this.showTalentPotentailUP[t]);
-      this.$emit('talentPotentailUp', this.showTalentPotentailUP);
+      this.$set(this.showTalentPotentailUP, t, !this.showTalentPotentailUP[t])
+      this.$emit('talentPotentailUp', this.showTalentPotentailUP)
     }
   }
-};
+}
 </script>
 
 <style scoped>
@@ -80,51 +80,34 @@ export default {
   padding-left: 1vw;
 }
 
-.talent-name-wrapper,
 .talent-container-wrapper {
   display: flex;
   position: relative;
+  justify-content: space-between;
   flex-wrap: wrap;
-}
-.talent-container-wrapper {
   min-width: 700px;
 }
 
 .talent-container {
-  width: calc(50% - 7px);
+  width: 45%;
   min-width: 350px;
   margin: 10px 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  align-content: center;
   position: relative;
-}
-
-.talent-container:nth-child(2n) {
-  border-left: 2px solid rgba(56, 56, 56, 0.6);
-  padding-left: 10px;
 }
 
 /* 天赋名字 */
 .talent-name-wrapper {
-  position: absolute;
-  height: 100%;
-  width: 90px;
-  border-right: 1px solid rgba(158, 158, 158, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  border-bottom: 1px solid #818181;
+  padding-bottom: 3px;
+  margin-bottom: 10px;
+  width: 70%;
 }
 
 /* 天赋内容 */
 .talent-desc-container {
-  padding: 5px 10px;
+  padding: 5px;
   position: relative;
   min-width: 250px;
-  min-height: 60px;
-  width: calc(100% - 120px);
-  margin-left: 100px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -132,7 +115,7 @@ export default {
 }
 
 .talent-condition-wrapper {
-  padding-right: 10px;
+  margin-right: 10px;
   width: 100px;
   word-break: keep-all;
 }
@@ -145,10 +128,9 @@ export default {
 }
 
 .talent-desc-change-button {
-  position: absolute;
-  bottom: -1px;
-  width: 100%;
-  text-align: center;
+  margin-left: 10px;
+  display: inline;
+  vertical-align: bottom;
 }
 .talent-desc-change-button .el-button--mini {
   padding: 2px 4px 2px 8px;
@@ -166,7 +148,7 @@ export default {
     min-width: 350px;
   }
   .talent-container {
-    width: calc(100% - 2px);
+    width: 100%;
     min-width: 300px;
     margin: 0;
     margin-bottom: 20px;
@@ -180,11 +162,11 @@ export default {
 
   .talent-name-wrapper {
     position: relative;
-    height: 20px;
-    width: calc(100% - 20px);
+    width: 80%;
     border-right: none;
     border-bottom: 1px solid rgba(158, 158, 158, 0.4);
     justify-content: start;
+    box-sizing: border-box;
   }
 
   .talent-name-wrapper span {
@@ -193,11 +175,10 @@ export default {
 
   /* 天赋内容 */
   .talent-desc-container {
-    height: 60px;
     width: 100%;
     margin-left: 0px;
     flex-wrap: wrap;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .talent-desc-container + .talent-desc-container {
     padding-top: 20px;
@@ -220,13 +201,6 @@ export default {
     display: inline-block;
     padding-right: 10px;
     font-size: 15px;
-  }
-
-  .talent-desc-change-button {
-    right: 0px;
-    width: auto;
-    top: -3px;
-    /* text-align: right; */
   }
 }
 </style>

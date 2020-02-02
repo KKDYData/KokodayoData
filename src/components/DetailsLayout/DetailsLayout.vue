@@ -124,8 +124,10 @@
               class="evolvcost-container-wrapper"
               :style="Object.keys(evolveCost).length === 1 && !short? 'margin: 0 0 10px' : ''"
             >
-              <div class="evolvcost-title-wrapper">
-                <span>精英阶段{{ index + 1 }}</span>
+              <div>
+                <div class="evolvcost-title-wrapper">
+                  <span>精英阶段{{ index + 1 }}</span>
+                </div>
               </div>
               <div class="evolvcost-container">
                 <item-viewer :item="GOLD" :num="cost.money" class="evolvcost-item-container" />
@@ -501,7 +503,6 @@ export default {
 .details-wrapper {
   min-width: 340px;
   max-width: 1200px;
-  /* min-width: 1200px; */
   background-color: white;
   margin: 0 auto;
   padding: 20px;
@@ -533,6 +534,7 @@ export default {
 .status-details-wrapper {
   width: calc(calc(100% - 350px) * 0.5);
   border-right: 1px solid hsla(0, 0%, 62%, 0.4);
+  box-sizing: border-box;
 }
 
 /* 潜能 */
@@ -605,7 +607,6 @@ export default {
 
 .status-title-wrapper {
   position: relative;
-  width: 100%;
   width: calc(100% - 20px);
 
   display: flex;
@@ -643,38 +644,30 @@ export default {
   justify-content: space-between;
 }
 .evolvcost-container {
-  position: relative;
-  min-width: 250px;
-  width: calc(100% - 120px);
-  margin-left: 100px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
   align-content: center;
 }
-.cost-money {
-  vertical-align: middle;
-}
-/*  */
 
-.evolvcost-item-container {
-  min-width: 120px;
-}
+/*  */
 
 .evolvcost-container-wrapper {
   position: relative;
-  min-width: 340px;
   margin: 30px 0;
+  flex: 1;
+  display: flex;
 }
 
 .evolvcost-title-wrapper {
-  position: absolute;
+  /* position: absolute; */
   height: 100%;
   width: 90px;
   border-right: 1px solid rgba(158, 158, 158, 0.4);
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 1;
 }
 
 /*  */
@@ -687,12 +680,6 @@ export default {
 }
 .potency-lv {
   padding-right: 5px;
-}
-
-@media screen and (min-width: 1250px) {
-  .evolvcost-container-wrapper + .evolvcost-container-wrapper {
-    border-left: 2px solid rgba(56, 56, 56, 0.6);
-  }
 }
 
 @media screen and (max-width: 900px) {
@@ -709,7 +696,6 @@ export default {
   }
   .status-title-wrapper {
     position: relative;
-    width: 100%;
     width: calc(100% - 20px);
 
     display: flex;
@@ -721,6 +707,7 @@ export default {
     padding-left: 5px;
     padding-top: 20px;
     height: auto;
+    box-sizing: border-box;
   }
 
   .status-wrapper {
@@ -754,14 +741,11 @@ export default {
   }
 
   /*  */
-  .evolvcost-item-container {
-    min-width: 80px;
-  }
-  /*  */
   .evolvcost-container-wrapper {
     min-width: 340px;
     padding: 0 0 20px 10px;
     margin: 0;
+    display: block;
   }
 
   .evolvcost-container-wrapper + .evolvcost-container-wrapper {

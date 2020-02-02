@@ -211,7 +211,9 @@ const decNoValue = (res, data, str) => {
 
 const wrapColor = (str, color) => `<i style="color:${color};font-style: normal;">${str}</i>`
 
-const exSkill = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2'])
+const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2'])
+const exSkill2 = new Map([['skchr_angel_3', '据实测攻击间隔缩短效果翻倍']])
+
 const changeAttackSpeed = (skill) => {
   const str = changeDesc(skill.description)
   let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
@@ -252,7 +254,7 @@ const changeAttackSpeed = (skill) => {
     const text = getValueDesc(res, AtkBasetimeIndex, 4)
     let value = skill_base_time.value
     let unit = 's'
-    if (exSkill.has(skill.prefabId)) {
+    if (exSkill1.has(skill.prefabId)) {
       value = value * 10 * 10
       unit = '%'
     }
@@ -292,6 +294,10 @@ const changeAttackSpeed = (skill) => {
   if (res.match(/生命.+减少/)) {
     const hp_ratio = findValue(skill, 'blackboard', 'hp_ratio')
     res += wrapColor(`(每秒减少${hp_ratio.value * 100}%)`, '#F49800')
+  }
+
+  if (exSkill2.has(skill.prefabId)) {
+    res += `<br /> ${wrapColor(exSkill2.get(skill.prefabId), '#f14040')}`
   }
 
   return res
