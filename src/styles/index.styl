@@ -35,11 +35,11 @@ body {
 }
 
 .router-drawer {
-  background-color: rgba(0, 0, 0, 0.8) !important
+  background: linear-gradient(171deg, #313131 37%, rgba(60, 66, 90, 0.67)) !important
 
   .el-drawer__header {
-    background-color: rgba(31, 31, 31, 1) !important
-    height: 43px
+    background-color: #313131 !important
+    height: 20px
     margin: 0
     padding: 0
   }
@@ -65,6 +65,12 @@ body {
   background-repeat: no-repeat
 }
 
+textarea {
+  -webkit-appearance: none
+  -moz-appearance: none
+  appearance: none
+}
+
 .stupid-ios {
   border: none
   outline: none
@@ -81,22 +87,6 @@ body {
   }
 }
 
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s ease
-}
-
-.fade-enter, .fade-leave-to {
-  opacity: 0
-}
-
-.extra-button-enter-active {
-  transition: opacity 0.3s ease 0.2s
-}
-
-.extra-button-enter, .fade-leave-to {
-  opacity: 0
-}
-
 .tags-popover-container {
   max-width: 959px
 }
@@ -108,10 +98,6 @@ body {
 .span-underline {
   color: #828282
   border-bottom: 1px solid #313131
-}
-
-.flip-list-move {
-  transition: transform 0.7s
 }
 
 .el-circle-icon {
@@ -135,12 +121,9 @@ body {
   left: 175px !important
 }
 
+//echart
 .chart-body div:first-of-type {
   z-index: 0
-}
-
-.el-image img {
-  width: 100%
 }
 
 .status-lv-favor-wrapper .el-switch__label.is-active {

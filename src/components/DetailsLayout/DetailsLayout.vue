@@ -789,10 +789,6 @@ export default {
     align-content: center;
   }
 
-  .evolvcost-name-wrapper {
-    font-size: 14px;
-  }
-
   .status-range-wrapper {
     width: calc(45% - 20px);
     min-width: auto;

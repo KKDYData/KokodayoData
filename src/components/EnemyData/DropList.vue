@@ -7,7 +7,6 @@
       <div v-for="item in list" :key="item.data ? item.data.itemId : item.itemId">
         <item-viewer
           :target-stage="targetStage"
-          :style="{margin: '10px'}"
           :type="item.type"
           :item="item.data ? item.data : item"
           :list-mode="listMode"

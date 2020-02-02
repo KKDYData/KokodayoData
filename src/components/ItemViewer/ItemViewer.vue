@@ -1,5 +1,5 @@
 <template>
-  <div class="item-viewer-container">
+  <div class="item-viewer-container" :class="{small: small}">
     <h-popping
       v-if="data"
       popper-class="item-popover-class"
@@ -22,7 +22,7 @@
           {{ data.name }}
         </div>
       </div>
-      <div slot="reference" :class="small ? 'short-force' : ''">
+      <div slot="reference">
         <div>
           <el-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
             <h-item
@@ -30,12 +30,13 @@
               :item-pic="itemPic"
               :item-background="itemBackground"
               :type="type"
+              :small="small"
             />
           </el-tooltip>
         </div>
         <div v-if="num || weight" style="text-align: center">
           <span
-            class="evolvcost-name-wrapper"
+            class="item-name"
             :style="data.name.length > 6 ? 'font-size: 12px' : ''"
           >{{ data.name }}</span>
           <div style="color:rgb(86, 86, 86)">
@@ -356,6 +357,14 @@ export default {
 </script>
 
  <style lang="stylus" scoped>
+ .item-viewer-container {
+   margin: 10px
+
+   &.small {
+     margin: 8px
+   }
+ }
+
  .item-popover {
    &.is-left {
      left: 20px
@@ -389,13 +398,18 @@ export default {
    padding: 5px
  }
 
+ .item-name {
+   word-break: keep-all
+   white-space: nowrap
+ }
+
  .short-force { //强制缩小
    .evolvcost-item-contianer {
      width: 45px
      height: 45px
    }
 
-   .evolvcost-name-wrapper {
+   .item-name {
      font-size: 13px
    }
 
@@ -423,12 +437,20 @@ export default {
  }
 
  @media screen and (max-width: 700px) {
-   .evolvcost-name-wrapper {
+   .item-viewer-container {
+     margin: vw(10)
+
+     &.small {
+       margin: vw(5)
+     }
+   }
+
+   .item-name {
      font-size: 14px
    }
 
    .item-stage-container {
-     padding-left: 30px
+     padding-left: vw(60)
    }
 
    .item-popover {
@@ -436,11 +458,11 @@ export default {
    }
 
    .item-popover .is-left {
-     padding: 10px
+     padding: vw(20)
    }
 
    .item-popover .el-divider--horizontal {
-     width: calc(100% - 10px)
+     width: calc(100%)
    }
  }
 </style>

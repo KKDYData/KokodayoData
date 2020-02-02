@@ -37,25 +37,30 @@ export default {
 
 
 
-<style scoped>
+<style lang="stylus" scoped>
 .skill-pic-contianer {
-  width: 100px;
-  height: 100px;
-  position: relative;
-  vertical-align: middle;
+  width: 100px
+  height: 100px
+  position: relative
+  vertical-align: middle
+  display: inline-block
 }
 
 .skill-name-wrapper {
-  text-align: center;
-  font-size: 15px;
+  text-align: center
+  font-size: 15px
 }
+
 @media screen and (max-width: 700px) {
   .skill-pic-contianer {
-    width: calc(65px + 1vw);
-    height: calc(65px + 1vw);
+    width: vw(140)
+    height: vw(140)
   }
+
   .skill-name-wrapper {
-    font-size: calc(12px + 0.2vw);
+    font-size: vw(28)
+    white-space: nowrap
+    word-break: keep-all
   }
 }
 </style>

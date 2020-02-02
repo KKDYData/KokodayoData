@@ -1,28 +1,26 @@
 <template>
-  <div v-if="skills.length > 0" class="skill-container--inner-wrapper">
+  <div v-if="skills.length > 0" class="skill-containers-wrapper">
     <div v-for="(skill, index) in unlockCond" :key="skill.name" class="skill-container">
-      <div class="skill-title">
-        <div class="skill-pic-container-wrapper">
-          <skill-container :skill="skills[index]" />
-        </div>
-        <div class="skill-tiltle-part">
-          <div class="skill-title-text">
+      <div class="skill-body">
+        <skill-container :skill="skills[index]" />
+        <div class="skill-body-part">
+          <div class="skill-body-text">
             <span>所需材料：</span>
           </div>
-          <div class="skill-lvUpCost-wrapper">
+          <div class="skill-body-lvUpCost-wrapper">
             <item-viewer
-              v-for="(skill, i) in picList[index]"
+              v-for="(s, i) in picList[index]"
               :key="i"
-              class="item-viwer-flex-default"
-              :item="skill.item"
-              :num="skill.count"
+              class="skill-body-item"
+              :item="s.item"
+              :num="s.count"
             />
           </div>
         </div>
       </div>
 
-      <div class="skill-control-container">
-        <div class="skill-status">
+      <div class="skill-control">
+        <div class="skill-control-status">
           需要：
           <span>
             精英
@@ -34,7 +32,7 @@
           </span>
         </div>
         <div>
-          <span class="skill-title-level">
+          <span class="skill-control-lv">
             LV
             <span>{{ sLevel[index] + 1 }}</span>
             <i class="el-icon-right" />
@@ -59,27 +57,27 @@ import { mapState } from 'vuex'
 
 export default {
   components: {
-    'item-viewer': ItemViewer,
-    'skill-container': SkillContainer
+    ItemViewer,
+    SkillContainer
   },
   props: {
     skills: {
+      type: Array,
       required: true
     },
     allLevelCost: {
+      type: Array,
       required: true
     },
-    seven: Array,
+    seven: {
+      type: Array,
+      default: () => []
+    },
   },
   data() {
     return {
       sLevel: this.skills[0].levels.length > 7 ? [6, 6, 6] : [5, 5, 5],
       picList: { 0: [], 1: [], 2: [] }
-    }
-  },
-  beforeMount() {
-    for (let i = 0;i < this.unlockCond.length;i++) {
-      this.sLevelAdd(i, 0)
     }
   },
   computed: {
@@ -93,6 +91,11 @@ export default {
         })
       }
       return res
+    }
+  },
+  beforeMount() {
+    for (let i = 0;i < this.unlockCond.length;i++) {
+      this.sLevelAdd(i, 0)
     }
   },
   methods: {
@@ -130,182 +133,222 @@ export default {
 }
 </script>
 
-<style scoped>
-.skill-container--inner-wrapper {
-  margin-top: 30px;
-}
-/* part 4 */
-
-.group-container-title {
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
-  background-color: #414141;
-  padding-left: 1vw;
-}
-
-.skill-lvUpCost-wrapper {
-  display: flex;
-  align-items: center;
-  flex-basis: 80px;
-}
-.item-viwer-flex-default {
-  min-width: 100px;
+<style lang="stylus" scoped>
+.skill-containers-wrapper {
+  margin-top: 30px
 }
 
 .skill-container {
-  padding-bottom: 10px;
-  position: relative;
-  /* height: 140px; */
-  display: flex;
-  margin: 20px 0 0 0;
-  align-items: stretch;
+  padding-bottom: 10px
+  position: relative
+  display: flex
+  margin: 20px 0 0 0
+  align-items: stretch
 }
 
 .skill-container + .skill-container {
-  border-top: 1px solid rgb(235, 238, 245);
-  padding-top: 30px;
+  border-top: 1px solid rgb(235, 238, 245)
+  padding-top: 30px
 }
 
-.skill-title {
-  position: relative;
-  display: flex;
-  /* align-items: center; */
-  justify-content: start;
-  padding: 0 5px;
-  width: calc(70% - 10px);
-  min-height: 123px;
-  border-right: 1px solid rgba(158, 158, 158, 0.4);
-}
+.skill-body {
+  position: relative
+  display: flex
+  justify-content: start
+  padding: 0 5px
+  width: calc(70% - 10px)
+  min-height: 123px
+  border-right: 1px solid rgba(158, 158, 158, 0.4)
 
-.skill-tiltle-part {
-  padding-left: 20px;
-  width: calc(70% - 100px);
-}
-.skill-title-level {
-  display: inline-block;
-  left: 0;
-  padding-right: 2vw;
-}
-.skill-control-container {
-  text-align: right;
-  width: 30%;
-  padding-right: 20px;
-}
-.skill-pic-contianer {
-  flex-shrink: 0.5;
-  width: 100px;
-  height: 100px;
-  position: relative;
-  vertical-align: middle;
-}
-.skill-name-wrapper {
-  text-align: center;
-}
-
-.skill-status,
-.skill-status + div {
-  height: 50%;
-}
-
-.skill-status-desc {
-  font-size: 16px;
-  color: #606266;
-}
-.skill-status span + span {
-  padding-right: 5px;
-}
-
-.evolvcost-item-count {
-  text-align: center;
-  font-size: 15px;
-}
-
-.skill-title-text {
-  padding-bottom: 20px;
-}
-
-@media screen and (max-width: 700px) {
-  .skill-container--inner-wrapper {
-    margin-bottom: 30px;
+  &-part {
+    padding-left: 20px
+    width: calc(70% - 100px)
   }
-  .item-viwer-flex-default {
-    min-width: 80px;
+
+  &-lvUpCost-wrapper {
+    display: flex
+    align-items: center
+    flex-basis: 80px
   }
+
+  &-text {
+    padding-bottom: 20px
+  }
+}
+
+.skill-control {
+  text-align: right
+  width: 30%
+  padding-right: 20px
+
+  &-status, &-status + div {
+    height: 50%
+  }
+
+  &-status-desc {
+    font-size: 16px
+    color: #606266
+  }
+
+  &-status span + span {
+    padding-right: 5px
+  }
+
+  &-lv {
+    display: inline-block
+    left: 0
+    padding-right: 2vw
+  }
+}
+
+/*@media screen and (max-width: 700px) {
+  .skill-containers-wrapper {
+    margin-bottom: 30px
+  }
+
   .skill-lvUpCost-wrapper {
-    flex-basis: 70px;
+    flex-basis: 70px
   }
+
   .skill-container {
-    display: block;
+    display: block
   }
+
   .skill-status {
-    font-size: calc(12px + 0.7vw);
-    display: inline;
+    font-size: calc(12px + 0.7vw)
+    display: inline
   }
+
   .skill-status + div {
-    font-size: calc(12px + 0.7vw);
-    display: inline;
+    font-size: calc(12px + 0.7vw)
+    display: inline
   }
+
   .skill-status-desc {
-    font-size: calc(13px + 0.5vw);
+    font-size: calc(13px + 0.5vw)
   }
-  .talents-effects-desc {
-    font-size: calc(12px + 0.5vw);
+
+  .skill-body {
+    margin-top: 15px
+    border: none
   }
-  .skill-title {
-    margin-top: 15px;
-    border: none;
+
+  .skill-body-level {
+    display: inline-block
+    padding-left: 10vw
+    padding-right: 2vw
   }
-  .skill-title-level {
-    display: inline-block;
-    padding-left: 10vw;
-    padding-right: 2vw;
+
+  .skill-body-part {
+    flex-wrap: wrap
+    padding-left: 5vw
+    width: calc(100% - 100px)
+    border: none
   }
-  .skill-tiltle-part {
-    flex-wrap: wrap;
-    padding-left: 5vw;
-    width: calc(100% - 100px);
-    border: none;
+
+  .skill-control {
+    text-align: left
+    padding-top: 10px
+    width: auto
   }
-  .skill-control-container {
-    text-align: left;
-    padding-top: 10px;
-    width: auto;
-  }
+
   .skill-container {
-    margin-top: 10px;
-    padding-bottom: 0px;
-    height: 160px;
+    margin-top: 10px
+    padding-bottom: 0px
+    height: 160px
   }
 
   .skill-container + .skill-container {
-    padding: 10px 0;
+    padding: 10px 0
   }
 
-  .skill-range-button {
-    position: absolute;
-    bottom: -25px;
-    z-index: 1;
-  }
   .skill-pic-contianer {
-    width: calc(65px + 1vw);
-    height: calc(65px + 1vw);
-  }
-  .skill-name-wrapper {
-    font-size: calc(12px + 0.1vw);
+    width: calc(65px + 1vw)
+    height: calc(65px + 1vw)
   }
 
-  .group-container-title {
-    margin-bottom: 5px;
+  .skill-container--inner-wrapper {
+    margin-bottom: 5px
   }
 
-  .evolvcost-item-count {
-    font-size: calc(12px + 0.5vw);
+  .skill-body-text {
+    font-size: calc(13px + 0.5vw)
+    padding-bottom: 5px
+  }
+}*/
+@media screen and (max-width: 500px) {
+  .skill-containers-wrapper {
+    margin-bottom: vw(60)
   }
 
-  .skill-title-text {
-    font-size: calc(13px + 0.5vw);
-    padding-bottom: 5px;
+  .skill-container {
+    display: block
+    margin-top: 10px
+    padding-bottom: 0px
+    height: vw(320)
+  }
+
+  .skill-container + .skill-container {
+    padding: 10px 0
+  }
+
+  .skill-body {
+    margin-top: vw(30)
+    border: none
+    width: 100%
+
+    &-item {
+      flex-basis: vw(150)
+    }
+
+    &-lvUpCost-wrapper {
+      flex-basis: 70px
+    }
+
+    &-level {
+      display: inline-block
+      padding-left: 10vw
+      padding-right: 2vw
+    }
+
+    &-part {
+      flex-wrap: wrap
+      flex: 1
+      padding-left: 5vw
+      border: none
+      width: auto
+    }
+
+    &-text {
+      font-size: calc(13px + 0.5vw)
+      padding-bottom: 5px
+    }
+  }
+
+  .skill-control {
+    text-align: left
+    padding-top: 10px
+    width: auto
+    display: flex
+    justify-content: space-between
+
+    &-status {
+      font-size: calc(12px + 0.7vw)
+      display: inline
+    }
+
+    &-status + div {
+      font-size: calc(12px + 0.7vw)
+      display: inline
+    }
+
+    &-status-desc {
+      font-size: calc(13px + 0.5vw)
+    }
+
+    &-lv {
+      padding-right: vw(30)
+    }
   }
 }
 </style>

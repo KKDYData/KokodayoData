@@ -12,8 +12,8 @@
     </div>
     <div v-else class="mobile-menu">
       <div class="top-menu">
-        <route-item top :short="short" :data="home" />
-        <h-drawer ref="drawer" custom-class="router-drawer" size="50%" direction="ttb">
+        <route-item ref="route" top :short="short" :data="home" @mounted="routeMounte" />
+        <h-drawer ref="drawer" custom-class="router-drawer" :size="size" direction="ttb">
           <div slot="reference" class="router-more">
             更多
             <sup>new</sup>
@@ -44,6 +44,7 @@ export default {
   },
   data() {
     return {
+      size: '50%',
       currentRoute: 'home',
       home: {
         name: 'home',
@@ -74,7 +75,7 @@ export default {
           name: 'skins',
           path: '/skins',
           text: '时装',
-          decs: '...',
+          decs: '皮肤',
         },
         {
           name: 'customtheme',
@@ -82,13 +83,27 @@ export default {
           text: '家具图鉴',
           decs: '家具套装 散件',
         },
+        {
+          name: 'info',
+          path: '/info',
+          text: '关于',
+          decs: 'Q&A 捐款 更新内容 反馈',
+        },
       ],
     }
   },
   computed: {
     ...mapState(['short'])
   },
+  mounted() {
+
+  },
   methods: {
+    routeMounte() {
+      console.log(this.$refs.route)
+      this.size = (this.$refs.route.$el.clientHeight * (this.routes.length + 3) / window.innerHeight * 100) + '%'
+
+    },
     go() {
       console.log('go')
       this.$refs.drawer.drawer = false

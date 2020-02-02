@@ -1,8 +1,5 @@
 <template>
-  <div
-    :style="itemBackground"
-    :class="(type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer' ) + ' cbg'"
-  >
+  <div :style="itemBackground" class="base-item cbg" :class="typeClass">
     <c-image class="evolvcost-item-contianer-wrapper" :src="itemPic" />
   </div>
 </template>
@@ -26,12 +23,33 @@ export default {
     itemPic: {
       type: String,
       default: ''
+    },
+    small: {
+      type: Boolean,
+      default: false
+    }
+  },
+  computed: {
+    typeClass() {
+      const type = this.type === 'FURN' ? 'furn-item' : 'evolvcost-item-contianer'
+      const small = this.small ? 'small' : ''
+      return type + ' ' + small
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
+.base-item {
+  width: 70px
+  height: 70px
+
+  &.small {
+    width: 45px
+    height: 45px
+  }
+}
+
 .evolvcost-item-contianer-wrapper {
   position: absolute
   width: 128%
@@ -49,14 +67,11 @@ export default {
   border-radius: 50%
   overflow: visible
   margin: 0 auto
-  width: 70px
-  height: 70px
   position: relative
 }
 
 .furn-item {
   position: relative
-  width: 70px
   min-height: 70px
   display: block
   box-sizing: border-box
@@ -65,9 +80,6 @@ export default {
   background: url('../../assets/bbbj_optimized.png')
   background-size: cover
   padding: 9px 0
-
-  & >>> img {
-  }
 
   .evolvcost-item-contianer-wrapper {
     position: absolute
@@ -80,10 +92,15 @@ export default {
   }
 }
 
-@media screen and (max-width: 700px) {
-  .evolvcost-item-contianer {
-    width: calc(45px + 2vw)
-    height: calc(45px + 2vw)
+@media screen and (max-width: 500px) {
+  .base-item {
+    width: vw(117)
+    height: vw(117)
+
+    &.small {
+      width: vw(97)
+      height: vw(97)
+    }
   }
 }
 </style>

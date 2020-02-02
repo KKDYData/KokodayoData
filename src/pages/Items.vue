@@ -50,7 +50,7 @@ export default {
 @media screen and (max-width: 450px) {
   .item-list-panel {
     width: 100vw
-    padding: 3vw
+    padding: vw(30)
     box-sizing: border-box
   }
 }

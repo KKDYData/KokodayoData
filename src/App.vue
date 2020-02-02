@@ -30,7 +30,7 @@ import { devMode } from './stats'
 // import Vue from 'vue'
 // import { Input } from 'element-ui'
 // Vue.use(Input)
-const Footer = () => import(/* webpackChunkName: "EnemyData" */'./pages/Footer')
+const Footer = () => import(/* webpackChunkName: "EnemyData" */'./components/Footer')
 const forceUnregister = 200116
 import localforage from 'localforage'
 import { Button } from 'element-ui'

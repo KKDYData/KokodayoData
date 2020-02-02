@@ -106,16 +106,11 @@
           :data="data"
         />
       </el-tab-pane>
-      <el-tab-pane name="expalain" label="说明&反馈" lazy>
-        <my-feedback :store="store" />
-      </el-tab-pane>
     </el-tabs>
   </div>
 </template>
 
 <script>
-import localforage from 'localforage'
-
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
@@ -133,24 +128,17 @@ import loadingC from '../base/Loading'
 import ProfileLayout from './ProfileLayout'
 import CloseButton from '../base/CloseButton'
 
-import { sort } from '../../utils'
-import { TagsArr, class_chinese, StarArr } from '../../utils/string'
+import { sort } from '@/utils'
+import { localStore } from '@/localStore'
+import { TagsArr, class_chinese, StarArr } from '@/utils/string'
 
+
+// ?筛选数组逻辑更换的日期
 const version = 200117
-
-
 const newProfileLayout = () => ({
   component: import(
     /* webpackChunkName: "newProfileLayout" */ './newProfileLayout'
   ),
-  loading: loadingC,
-  error: loadingC,
-  delay: 200,
-  timeout: 5000
-})
-
-const myFeedback = () => ({
-  component: import(/* webpackChunkName: "newProfileLayout" */ './Feedback'),
   loading: loadingC,
   error: loadingC,
   delay: 200,
@@ -172,7 +160,7 @@ if (typeof Array.prototype.flat !== 'function') {
 export default {
   metaInfo() {
     return {
-      titleTemplate: 'ArknightsData 一个平平无奇的明日方舟数据库 0.8 Wiki|维基|数据',
+      titleTemplate: 'ArknightsData 一个平平无奇的明日方舟数据库 0.99 Wiki|维基|数据',
       meta: [
         {
           vmid: 'description',
@@ -186,7 +174,6 @@ export default {
     'filter-group': FilterButtonGroup,
     ProfileLayout,
     newProfileLayout,
-    myFeedback,
     CloseButton
   },
   props: {
@@ -240,9 +227,7 @@ export default {
     }
   },
   beforeMount() {
-    this.store = localforage.createInstance({
-      name: 'testDB'
-    })
+    this.store = localStore
     this.store.getItem('filterGroups').then(filterGroups => {
       if (filterGroups && filterGroups._version === version) {
         //恢复上次的筛选条件

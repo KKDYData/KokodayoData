@@ -93,35 +93,44 @@ export default {
   },
   props: {
     skills: {
+      type: [Object, Array],
       required: true
     },
     showPic: {
+      type: Boolean,
       default: true
     },
     showRange: {
+      type: Boolean,
       default: true
     },
     initLv: {
+      default: undefined,
       type: Number
     },
     status: {
-      required: false
+      type: Object,
+      default: null,
     },
     talents: {
-      required: false
+      type: [Object, Array],
+      default: null,
     },
     profession: {
-      tyep: String
+      default: '',
+      type: String
     },
     talentPotentailUp: {
-      required: false
+      type: [Object, Array],
+      default: null,
     },
     description: {
+      type: String,
       default: ''
     }
   },
   data() {
-    const initLv = this.initLv ? this.initLv : 7
+    const initLv = this.initLv !== undefined ? this.initLv : 7
     return {
       sLevel: [initLv, initLv, initLv],
       // eslint-disable-next-line no-undef

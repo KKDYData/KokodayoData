@@ -1,4 +1,5 @@
 import '@/styles/index.styl'
+import '@/styles/animation.styl'
 // import '../theme/index.css'
 
 import Vue from 'vue'

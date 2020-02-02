@@ -126,7 +126,11 @@ export default {
   position: relative
   cursor: pointer
 
-  &:-webkit-any-link {
+  &:focus {
+    outline: none
+  }
+
+  &:any-link {
     cursor: pointer
     text-decoration: none
   }

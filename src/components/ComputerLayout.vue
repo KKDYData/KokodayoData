@@ -153,18 +153,18 @@
 </template>
 
 <script>
-import data from '../utils/data/level.json';
-import ItemViewer from './ItemViewer';
-import Vue from 'vue';
-import { Form, FormItem, Select, Option, InputNumber, Alert } from 'element-ui';
-import { exp_cards } from '../utils/string';
-import { mapState } from 'vuex';
-Vue.use(Form);
-Vue.use(FormItem);
-Vue.use(Select);
-Vue.use(Option);
-Vue.use(InputNumber);
-Vue.use(Alert);
+import data from '../utils/data/level.json'
+import ItemViewer from './ItemViewer'
+import Vue from 'vue'
+import { Form, FormItem, Select, Option, InputNumber, Alert } from 'element-ui'
+import { exp_cards } from '../utils/string'
+import { mapState } from 'vuex'
+Vue.use(Form)
+Vue.use(FormItem)
+Vue.use(Select)
+Vue.use(Option)
+Vue.use(InputNumber)
+Vue.use(Alert)
 
 export default {
   components: {
@@ -189,93 +189,93 @@ export default {
       },
       data: data,
       exp_cards: exp_cards
-    };
+    }
   },
 
   computed: {
     ...mapState(['short']),
     phases() {
-      const star = this.char.star;
-      if (star < 2) return [0];
-      else if (star === 2) return [0, 1];
-      else return [0, 1, 2];
+      const star = this.char.star
+      if (star < 2) return [0]
+      else if (star === 2) return [0, 1]
+      else return [0, 1, 2]
     },
     MoneyNeed() {
-      return this.calBase('characterUpgradeCostMap');
+      return this.calBase('characterUpgradeCostMap')
     },
     ExpNeed() {
-      return this.calBase('characterExpMap');
+      return this.calBase('characterExpMap')
     },
     baseExp() {
-      let res = 0;
+      let res = 0
       this.char.base.exp_cards.forEach((el, index) => {
-        res += el * this.exp_cards['200' + (index + 1)].exp;
+        res += el * this.exp_cards['200' + (index + 1)].exp
         // return (cur += pre * this.exp_cards['200' + (cIndex + 1)].exp);
-      });
-      return res;
+      })
+      return res
     },
     CE5() {
       const result = Math.ceil(
         (this.MoneyNeed - this.char.base.money * 1000 - this.LS5 * 360) / 7500
-      );
-      return result > -1 ? result : 0;
+      )
+      return result > -1 ? result : 0
     },
     LS5() {
-      const result = Math.ceil((this.ExpNeed - this.baseExp) / 7400);
-      return result > -1 ? result : 0;
+      const result = Math.ceil((this.ExpNeed - this.baseExp) / 7400)
+      return result > -1 ? result : 0
     },
     BLS5() {
       const result = Math.ceil(
         (this.ExpNeed - this.baseExp) /
         (74000 + this.char.production.exp * 1000)
-      );
-      return result > -1 ? result : 0;
+      )
+      return result > -1 ? result : 0
     },
     BCE5() {
       const result = Math.ceil(
         (this.MoneyNeed - this.char.base.money * 1000) /
         (75000 + this.char.production.money * 1000)
-      );
-      return result > -1 ? result : 0;
+      )
+      return result > -1 ? result : 0
     }
   },
   beforeMount() {
-    console.log('下面是计算用的数据，可以复制去自己用');
-    console.log(this.data);
+    console.log('下面是计算用的数据，可以复制去自己用')
+    console.log(this.data)
   },
   methods: {
     calBase(target) {
       const star = this.char.star,
-        phases = this.char.phases;
-      const maxLv = this.data.maxLevel[this.char.star][this.char.phases];
-      let level = this.char.level - 1;
-      if (level > maxLv) level = maxLv;
-      let need = 0;
-      for (let i = this.char.phases_now; i < phases + 1; i++) {
+        phases = this.char.phases
+      const maxLv = this.data.maxLevel[this.char.star][this.char.phases]
+      let level = this.char.level - 1
+      if (level > maxLv) level = maxLv
+      let need = 0
+      for (let i = this.char.phases_now;i < phases + 1;i++) {
         // console.log(`now phases: ${i}, targetP: ${phases}}`);
         for (
           let j = i === this.char.phases_now ? this.char.level_now - 1 : 0;
           j < this.data.maxLevel[star][i] - 1;
           j++
         ) {
-          if (i === phases && j > level - 1) break;
+          if (i === phases && j > level - 1) break
           // console.log(`i:${i}, phases: ${phases}`);
-          need += this.data[target][i][j];
+          need += this.data[target][i][j]
           // console.log(`j: ${j}, maxlv: ${level}, need: ${need}`);
         }
       }
       if (target === 'characterUpgradeCostMap') {
         // debugger;
         // console.log(need);
-        for (let i = this.char.phases_now; i < phases; i++) {
-          need += this.data.evolveGoldCost[star][i];
+        for (let i = this.char.phases_now;i < phases;i++) {
+          need += this.data.evolveGoldCost[star][i]
         }
       }
       // console.log('need_____' + need);
-      return need;
+      return need
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -303,7 +303,7 @@ export default {
   display: flex
   flex-grow: 1
   flex-wrap: wrap
-  max-width: 800px
+  max-width: 900px
   margin: 0px auto
   height: 80px
   justify-content: space-between
@@ -327,7 +327,7 @@ export default {
   max-width: 100px
 }
 
-@media screen and (max-width: 800px) {
+@media screen and (max-width: 900px) {
   .my-form-wrapper {
     height: 100px
     font-size: 13px

@@ -20,7 +20,7 @@
           <transition name="slide-fade">
             <div v-if="showTags || agent.showTags" class="tag-wrapper-1">
               <div v-for="(tag, i) in agent.tags" :key="tag">
-                <div v-if="i > 2 || i === 0 && tag > 3" class="tag-container long-tag">
+                <div v-if="i > 1 || i === 0 && tag > 3" class="tag-container long-tag">
                   <el-tag
                     :effect="tagHit(tag) ? 'dark' : 'plain'"
                     size="mini"
