@@ -1,0 +1,124 @@
+.talent-wrapper {
+  display: flex
+  position: relative
+  justify-content: space-between
+  flex-wrap: wrap
+  min-width: 700px
+}
+
+.talent {
+  width: 45%
+  margin: 10px 0
+  position: relative
+
+  /*天赋名字*/
+  &-title {
+    border-bottom: 1px solid #818181
+    padding-bottom: 3px
+    margin-bottom: 10px
+    width: 70%
+
+    &-change-button {
+      margin-left: 10px
+      display: inline
+      vertical-align: bottom
+
+      .el-button--mini {
+        padding: 2px 4px 2px 8px
+        border-radius: 2px
+      }
+
+      .el-button--warning:focus, .el-button--warning:hover {
+        background-color: #f49800
+        border-color: #f49800
+      }
+    }
+  }
+
+  /*天赋内容*/
+  &-desc {
+    padding: 5px
+    position: relative
+    min-width: 250px
+    display: flex
+    align-items: center
+    justify-content: space-between
+    align-content: center
+
+    &-condition {
+      margin-right: 10px
+      width: 100px
+      word-break: keep-all
+    }
+
+    &-content {
+      position: relative
+      display: inline-block
+      flex-grow: 1
+      padding-right: 10px
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .talent-wrapper {
+    min-width: auto
+  }
+
+  .talent {
+    width: 100%
+    margin: 0
+    margin-bottom: 20px
+
+    & + & {
+      border: none
+      padding-top: 20px
+      border-top: 2px solid rgba(56, 56, 56, 0.6)
+    }
+
+    &-title {
+      position: relative
+      width: 80%
+      border-right: none
+      border-bottom: 1px solid rgba(158, 158, 158, 0.4)
+      justify-content: start
+      box-sizing: border-box
+
+      span {
+        padding-left: 10px
+      }
+    }
+
+    /*天赋内容*/
+    &-desc {
+      width: 100%
+      margin-left: 0px
+      flex-wrap: wrap
+      margin-top: 10px
+
+      & + & {
+        padding-top: 20px
+        border-top: 1px solid rgba(158, 158, 158, 0.4)
+      }
+
+      &-condition {
+        width: calc(100% - 10px)
+        padding-bottom: 10px
+        font-size: 13px
+        direction: rtl
+      }
+
+      &-condition span {
+        border-bottom: 2px solid rgba(247, 203, 10, 0.582)
+      }
+
+      &-content-item {
+        padding-bottom: 10px
+        position: relative
+        display: inline-block
+        padding-right: 10px
+        font-size: 15px
+      }
+    }
+  }
+}

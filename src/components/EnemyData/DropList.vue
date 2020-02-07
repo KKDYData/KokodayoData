@@ -4,14 +4,14 @@
       <span class="span-underline">{{ title }}</span>
     </p>
     <div class="map-common-droplist">
-      <div v-for="item in list" :key="item.data ? item.data.itemId : item.itemId">
-        <item-viewer
-          :target-stage="targetStage"
-          :type="item.type"
-          :item="item.data ? item.data : item"
-          :list-mode="listMode"
-        />
-      </div>
+      <item-viewer
+        v-for="item in list"
+        :key="item.data ? item.data.itemId : item.itemId"
+        :target-stage="targetStage"
+        :type="item.type"
+        :item="item.data ? item.data : item"
+        :list-mode="listMode"
+      />
     </div>
   </div>
 </template>
@@ -24,23 +24,28 @@ export default {
   components: {
     ItemViewer
   },
-  computed: {
-    ...mapState(['short']),
-  },
   props: {
     list: {
       required: true,
       type: Array
     },
     title: {
+      default: null,
       type: String
     },
-    targetStage: String,
+    targetStage: {
+      default: null,
+      type: String
+    },
     listMode: {
       default: false,
       type: Boolean
     }
-  }
+  },
+  computed: {
+    ...mapState(['short']),
+  },
+
 }
 </script>
 

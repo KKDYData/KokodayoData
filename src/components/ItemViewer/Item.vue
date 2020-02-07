@@ -1,6 +1,6 @@
 <template>
   <div :style="itemBackground" class="base-item cbg" :class="typeClass">
-    <c-image class="evolvcost-item-contianer-wrapper" :src="itemPic" />
+    <c-image class="item-contianer-wrapper--inner" :src="itemPic" />
   </div>
 </template>
 <script>
@@ -50,7 +50,7 @@ export default {
   }
 }
 
-.evolvcost-item-contianer-wrapper {
+.item-contianer-wrapper--inner {
   position: absolute
   width: 128%
   height: 128%
@@ -81,7 +81,7 @@ export default {
   background-size: cover
   padding: 9px 0
 
-  .evolvcost-item-contianer-wrapper {
+  .item-contianer-wrapper--inner {
     position: absolute
     width: 100%
     height: 100%

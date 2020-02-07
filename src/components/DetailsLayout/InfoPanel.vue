@@ -8,12 +8,12 @@
               <div class="image-inner" :style="{backgroundImage: `url('${setData[0].halfPic}')`}" />
             </div>
           </div>
-          <div :style="short ? 'margin-left: 5vw' : 'margin-left: 20px'">
-            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+          <div class="info-painter-cv">
+            <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
               <div slot="title">画师</div>
               <div slot="content">{{ data.drawName }}</div>
             </content-slot>
-            <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+            <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
               <div slot="title">CV</div>
               <div slot="content">{{ data.infoName }}</div>
             </content-slot>
@@ -50,13 +50,8 @@
               </span>
             </div>
             <div class="info-story-content-wrapper">
-              <div v-for="(v, k, i) in story.data" :key="k" class="info-story-content">
-                <content-slot
-                  style="margin-top: 10px;"
-                  long
-                  :no-wrap="true"
-                  :width="i >= (index === 0 ? 7 : 5) ? 140 : null"
-                >
+              <div v-for="([k, v], i) in story.data" :key="k" class="info-story-content">
+                <content-slot long :no-wrap="true" :width="i < (index === 0 ? 7 : 5) ? 70 : null">
                   <div slot="title">{{ k }}</div>
                   <div slot="content">{{ v }}</div>
                 </content-slot>
@@ -73,7 +68,7 @@
             </div>
             <div class="info-story-content-wrapper">
               <div v-for="(p, index) in story.stories" :key="index" class="info-story-content">
-                <div v-if="p.unLockParam !== ''" class="info-story-unlock">
+                <div v-if="p.unLockParam !== ''" class="info-story-content-unlock">
                   <span>解锁需要好感：</span>
                   <span>{{ p.unLockParam | unlockStr }}</span>
                 </div>
@@ -84,7 +79,7 @@
         </div>
       </el-tab-pane>
       <el-tab-pane label="语音记录" name="second">
-        <div class="info-words-wrapper">
+        <div class="info-word-wrapper">
           <div v-if="!short && !isMobliePad" style="display: flex; align-items: center">
             <div style="padding-right: 10px">
               <span>volume:</span>
@@ -98,16 +93,16 @@
               />
             </div>
           </div>
-          <div v-for="(word, index) in words" :key="word.charWordId" class="info-word-container">
-            <div class="info-word-audio-title">
-              <div style="padding-right: 5px;">
-                <b style="line-height:20px">{{ word.voiceTitle }}</b>
+          <div v-for="(word, index) in words" :key="word.charWordId" class="info-word">
+            <div class="info-word-audio">
+              <div class="info-word-audio-title">
+                <b>{{ word.voiceTitle }}</b>
               </div>
               <template v-if="data.infoName !== '--'">
-                <div class="word-control-button" @click="playVoice(index)">
+                <div class="info-word-audio-buttonn" @click="playVoice(index)">
                   <i class="el-icon-video-play" />
                 </div>
-                <div class="word-control-button" @click="pausePlayVoice(index)">
+                <div class="info-word-audio-buttonn" @click="pausePlayVoice(index)">
                   <i class="el-icon-video-pause" />
                 </div>
                 <audio-container
@@ -127,7 +122,7 @@
 </template>
 
 <script>
-import { UA, getSkinsData, getScreenWidth } from '../../utils'
+import { UA, getSkinsData, getScreenWidth, sort } from '../../utils'
 import { path } from '../../utils/listVer'
 import { Tabs, TabPane, Button, Progress, Slider, } from 'element-ui'
 import Vue from 'vue'
@@ -243,23 +238,21 @@ export default {
       return this.data.storyTextAudio
         .slice(0, 2)
         .map(({ stories, storyTitle }, i, arr) => {
-          const data = stories
+          const base = stories
             .map(({ storyText }) => storyText)
             .map(str => {
               const reg = new RegExp('【(.+)】(.+)\\n', 'g')
               let matches
-              let res = {}
+              let res = []
               while ((matches = reg.exec(str)) != null) {
-                res[matches[1]] = matches[2]
+                res.push(matches.slice(1, 3))
               }
               const lReg = /【(.{7})】\n?(.+)$/
               const last = lReg.exec(str)
-              if (last) {
-                res[last[1]] = last[2]
-              }
-
+              if (last) res.push(last.slice(1, 3))
               return res
             })[0]
+          const data = sort(base, ((pre, cur) => pre[0].length < cur[0].length))
           return {
             data,
             storyTitle
@@ -327,7 +320,6 @@ export default {
 }
 
 .info-char-set-wrapper {
-  //position: absolute
   bottom: 45px
   right: 1px
 }
@@ -336,49 +328,72 @@ export default {
   padding: 0 10px
 }
 
-.info-word-audio-control {
-  height: 30px
-  vertical-align: middle
-  padding-left: 20px
-}
+.info-word {
+  & + & {
+    border-top: 1px solid #e4e7ed
+  }
 
-.info-word-audio-title {
-  padding-top: 20px
-  display: flex
-  align-items: center
-}
+  &-audio {
+    padding-top: 20px
+    display: flex
+    align-items: center
 
-.info-word-container + .info-word-container {
-  border-top: 1px solid #e4e7ed
-}
+    &-title {
+      padding-right: 5px
+    }
 
-.info-words-wrapper {
-  padding: 0 10px
-}
+    &-control {
+      height: 30px
+      vertical-align: middle
+      padding-left: 20px
+    }
 
-.word-control-button {
-  font-size: 0
-  margin: 0 5px
-}
+    &-buttonn {
+      font-size: 0
+      margin: 0 5px
 
-.word-control-button i {
-  font-size: 20px
-  vertical-align: middle
-  cursor: pointer
+      i {
+        font-size: 20px
+        vertical-align: middle
+        cursor: pointer
+      }
+    }
+  }
+
+  &-wrapper {
+    padding: 0 10px
+  }
 }
 
 .info-base-container {
-  min-width: 150px
   max-width: 250px
+
+  & + & {
+    padding-left: 20px
+  }
 }
 
-.info-base-container + .info-base-container {
-  margin-left: 20px
+.info-painter-cv {
+  padding-left: 20px
+  box-sizing: border-box
+
+  &-item {
+    margin-top: 10px
+  }
 }
 
 @media screen and (max-width: 700px) {
-  .info-base-container + .info-base-container {
-    margin-left: 5vw
+  .info-base-container {
+    & + & {
+      padding-left: 5vw
+      box-sizing: border-box
+    }
+  }
+
+  .info-painter-cv {
+    padding-left: 5vw
+    min-width: 50%
+    box-sizing: border-box
   }
 
   .info-word-audio-control {
@@ -388,8 +403,7 @@ export default {
   }
 
   .info-base-container {
-    min-width: 150px
-    max-width: 45vw
+    max-width: vw(335)
   }
 
   .char-base-info-container {
@@ -399,6 +413,20 @@ export default {
 
   .char-set-cv {
     margin-bottom: 30px
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .info-base-container {
+    & + & {
+      padding-left: 1vw
+    }
+  }
+
+  .info-painter-cv {
+    &-item {
+      margin-top: vw(10)
+    }
   }
 }
 </style>

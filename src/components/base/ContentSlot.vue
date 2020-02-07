@@ -1,15 +1,16 @@
 <template>
-  <div>
-    <div :style="titleStyle" class="status-details-title">
+  <div class="base-content" :class="{long: long}">
+    <div :style="titleStyle" class="base-content-title">
       <slot name="title" />
     </div>
-    <div :style="contentStyle" class="status-details-value">
+    <div class="base-content-value">
       <slot name="content" />
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   props: {
     width: {
@@ -20,50 +21,104 @@ export default {
     noWrap: Boolean
   },
   computed: {
+    ...mapState(['short']),
     titleStyle() {
-      const res = {};
+      const res = {}
       if (this.width) {
-        res.width = this.width + 'px';
+        res.width = this.short ? `${this.width / 750 * 200}vw` : this.width + 'px'
       }
       if (this.noWrap) {
-        res.display = 'inline-block';
+        res.display = 'inline-block'
       }
-      return res;
+      return res
     },
-    contentStyle() {
-      return this.long ? { width: 'auto', 'text-align': 'left' } : {};
-    }
   }
-};
+}
 </script>
 
 
 <style lang="stylus" scoped>
-.status-details-title {
-  color: white
-  background-color: #313131
-  border-radius: 2px
-  width: calc(80px + 0.5vw)
-  text-align: center
-  display: inline-block
-  font-size: 100%
-  line-height: 100%
-  padding: 2px 0
-  box-shadow: 1px 1px 2px 1px #0000005e
+.base-content {
+  &-title {
+    color: white
+    background-color: #313131
+    text-align: center
+    display: inline-block
+    font-size: 100%
+    line-height: 100%
+    border-radius: 2px
+    width: calc(80px + 0.5vw)
+    padding: 2px 0
+    box-shadow: 1px 1px 2px 1px #00005e
+  }
+
+  &-value {
+    display: inline-block
+  }
 }
 
-.status-details-value {
-  display: inline-block
+.long {
+  .base-content {
+    &-title {
+      width: auto
+      padding: 2px 10px
+      margin: 5px 5px 5px 0
+      display: inline-block
+    }
+
+    &-value {
+      display: inline-block
+      width: auto
+      text-align: left
+      padding: 0
+    }
+  }
 }
 
 @media screen and (max-width: 900px) {
-  .status-details-title {
+  .base-content {
+    &-title {
+      display: block
+    }
+
+    &-value {
+      width: calc(80px + 0.5vw)
+      text-align: center
+    }
+  }
+
+  .base-content-title {
     display: block
   }
 
-  .status-details-value {
-    width: calc(80px + 0.5vw)
-    text-align: center
+  .base-content-value {
+    padding-top: 5px
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .base-content {
+    font-size: vw(30)
+
+    &-title {
+      display: block
+      border-radius: vw(4)
+      width: vw(160)
+      padding: vw(4) 0
+      box-shadow: vw(2) vw(2) vw(4) vw(2) #00005e
+    }
+
+    &-value {
+      width: vw(160)
+    }
+  }
+
+  .base-content-title {
+    display: block
+  }
+
+  .base-content-value {
+    padding-top: vw(10)
   }
 }
 </style>

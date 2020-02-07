@@ -6,12 +6,10 @@
         <div>
           <b>能力·Blackboard</b>
         </div>
-        <div v-for="(t) in filterTalents" :key="t.key" style="margin-bottom: 0px">
-          <div class="status-details-title enemy-status-talent">
-            <span>{{ t.key }}</span>
-          </div>
-          <span>{{ t.value }}</span>
-        </div>
+        <content-slot v-for="(t) in filterTalents" :key="t.key" long no-wrap>
+          <div slot="title">{{ t.key }}</div>
+          <div slot="content">{{ t.value }}</div>
+        </content-slot>
       </div>
     </div>
     <div style="display: flex; align-items: center; margin: 10px 0">
@@ -59,7 +57,7 @@
             class="status-details-container"
             no-wrap
             long
-            :width="100"
+            :width="short ? 82: 100"
           >
             <template slot="title">
               <span>{{ kData[0] }}</span>
@@ -290,7 +288,7 @@ export default {
         if (/(duration)/.test(el.key)) {
           v = v + 's'
         }
-        if (/((up|down|scale)\.atk)|\.hp_ratio|healaura|speed/.test(el.key)) {
+        if (/((reborn|up|down|scale)\.atk)|\.hp_ratio|healaura|speed/.test(el.key)) {
           v = v * 100 + '%'
         } else if (/defdown\.def/.test(el.key)) {
           if (Math.abs(v) < 1) {
@@ -453,10 +451,9 @@ export default {
 .status-details-container {
   flex-grow: 0.5;
   width: 50%;
-  margin: 10px 0;
 }
 
-.status-details-title {
+/* .status-details-title {
   color: white;
   background-color: #313131;
   border-radius: 2px;
@@ -467,12 +464,12 @@ export default {
   line-height: 100%;
   padding: 2px 0;
   box-shadow: 1px 1px 2px 1px #0000005e;
-}
+} */
 
-.status-details-value {
+/* .status-details-value {
   display: inline-block;
   margin-left: 5px;
-}
+} */
 .status-phases-wrapper {
   width: 50%;
 }
@@ -531,12 +528,12 @@ export default {
   margin: 0 40px 0 20px;
 }
 
-.status-details-title.enemy-status-talent {
+/* .status-details-title.enemy-status-talent {
   width: auto;
   padding: 2px 10px;
   margin: 5px 5px 5px 0;
   max-width: 180px;
-}
+} */
 
 .el-button.no-map:hover {
   border: 1px solid #ebeef5;

@@ -35,10 +35,8 @@
           </el-tooltip>
         </div>
         <div v-if="num || weight" style="text-align: center">
-          <span
-            class="item-name"
-            :style="data.name.length > 6 ? 'font-size: 12px' : ''"
-          >{{ data.name }}</span>
+          <!-- :style="data.name.length > 6 ? 'font-size: 12px' : ''" -->
+          <span class="item-name">{{ data.name }}</span>
           <div style="color:rgb(86, 86, 86)">
             <span v-if="num">x{{ num }}</span>
             <span v-else>{{ weight }}%</span>
@@ -130,13 +128,7 @@
                 </el-divider>
                 <div class="item-formula-container">
                   <div v-for="rd in extraOutcomeGroup" :key="rd.id">
-                    <just-viewer
-                      :tool-tip="true"
-                      class="item-formula-item"
-                      :no-popover="true"
-                      :item="rd.itemId"
-                      small
-                    />
+                    <just-viewer :tool-tip="true" :no-popover="true" :item="rd.itemId" small />
                   </div>
                 </div>
               </div>
@@ -357,78 +349,10 @@ export default {
 </script>
 
  <style lang="stylus" scoped>
- .item-viewer-container {
-   margin: 10px
-
-   &.small {
-     margin: 8px
-   }
- }
-
- .item-popover {
-   &.is-left {
-     left: 20px
-     padding: 0
-   }
- }
-
- .item-divider-extra {
-   display: inline-block
-   background-color: #fff
-   padding: 0 10px
-   position: absolute
-   top: 0
-   right: - 242px
- }
-
- .item-stage-container {
-   padding-left: 40px
- }
-
- .weekly {
-   width: auto
- }
-
+ //?popping slot 里的类
  .item-formula-container {
    display: flex
    flex-wrap: wrap
- }
-
- .item-formula-item {
-   padding: 5px
- }
-
- .item-name {
-   word-break: keep-all
-   white-space: nowrap
- }
-
- .short-force { //强制缩小
-   .evolvcost-item-contianer {
-     width: 45px
-     height: 45px
-   }
-
-   .item-name {
-     font-size: 13px
-   }
-
-   .item-stage-container {
-     padding-left: 30px
-   }
-
-   .item-popover {
-     overflow-x: hidden
-     max-height: 300px
-   }
-
-   .item-popover .is-left {
-     padding: 10px
-   }
-
-   .item-popover .el-divider--horizontal {
-     width: calc(100% - 10px)
-   }
  }
 
  .title-item {
@@ -436,33 +360,126 @@ export default {
    margin-right: 20px
  }
 
+ .item-viewer-container {
+   margin: 10px
+
+   &.small {
+     margin: 8px
+   }
+
+   .item-popover {
+     &.el-divider__text.is-left {
+       left: 20px
+       padding: 0
+     }
+   }
+
+   .item-divider-extra {
+     display: inline-block
+     background-color: #fff
+     padding: 0 10px
+     position: absolute
+     top: 0
+     right: - 242px
+   }
+
+   .item-stage-container {
+     padding-left: 40px
+   }
+
+   .weekly {
+     width: auto
+   }
+
+   .item-formula-item {
+     padding: 5px
+     margin: 0
+     width: 80px
+   }
+
+   .item-name {
+     word-break: keep-all
+     white-space: nowrap
+   }
+
+   .short-force { //强制缩小
+     .evolvcost-item-contianer {
+       width: 45px
+       height: 45px
+     }
+
+     .item-name {
+       font-size: 13px
+     }
+
+     .item-stage-container {
+       padding-left: 30px
+     }
+
+     .item-popover {
+       overflow-x: hidden
+       max-height: 300px
+     }
+
+     .item-popover .el-divider__text.is-left {
+       padding: 10px
+     }
+
+     .item-popover .el-divider--horizontal {
+       width: calc(100% - 10px)
+     }
+   }
+ }
+
  @media screen and (max-width: 700px) {
+   .title-item {
+     margin-right: vw(20)
+   }
+
    .item-viewer-container {
      margin: vw(10)
 
      &.small {
        margin: vw(5)
      }
+
+     .item-name {
+       font-size: 14px
+     }
+
+     .item-stage-container {
+       padding-left: vw(60)
+     }
+
+     .item-popover {
+       overflow-x: hidden
+     }
+
+     .item-popover .el-divider__text.is-left {
+       padding: vw(20)
+     }
+
+     .item-popover .el-divider--horizontal {
+       width: 100%
+     }
+   }
+ }
+
+ @media screen and (max-width: 500px) {
+   .item-viewer-container {
+     margin: vw(10)
+
+     &.small {
+       margin: vw(5)
+     }
+
+     .item-name {
+       font-size: vw(28)
+     }
    }
 
-   .item-name {
-     font-size: 14px
-   }
-
-   .item-stage-container {
-     padding-left: vw(60)
-   }
-
-   .item-popover {
-     overflow-x: hidden
-   }
-
-   .item-popover .is-left {
-     padding: vw(20)
-   }
-
-   .item-popover .el-divider--horizontal {
-     width: calc(100%)
+   .item-formula-item {
+     width: vw(135)
    }
  }
 </style>

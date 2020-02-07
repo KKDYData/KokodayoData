@@ -12,7 +12,7 @@
     </div>
     <div v-else class="mobile-menu">
       <div class="top-menu">
-        <route-item ref="route" top :short="short" :data="home" @mounted="routeMounte" />
+        <route-item ref="route" top :short="short" :data="home" />
         <h-drawer ref="drawer" custom-class="router-drawer" :size="size" direction="ttb">
           <div slot="reference" class="router-more">
             更多
@@ -96,14 +96,10 @@ export default {
     ...mapState(['short'])
   },
   mounted() {
-
+    if (this.short)
+      this.size = (this.$refs.route.$el.clientHeight * (this.routes.length + 3) / window.innerHeight * 100) + '%'
   },
   methods: {
-    routeMounte() {
-      console.log(this.$refs.route)
-      this.size = (this.$refs.route.$el.clientHeight * (this.routes.length + 3) / window.innerHeight * 100) + '%'
-
-    },
     go() {
       console.log('go')
       this.$refs.drawer.drawer = false

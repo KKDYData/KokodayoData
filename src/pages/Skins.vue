@@ -32,7 +32,6 @@ import FilterButtonGroup from '../components/base/FilterButtonGroup'
 import Loading from '../components/base/Loading'
 import { getSkinsData, getScreenWidth } from '../utils'
 import SetPanel from '../components/base/SetPanel'
-import CloseButton from '../components/base/CloseButton'
 import CImage from '@/components/base/CImage'
 import HPopping from '@/components/base/Popping'
 
@@ -43,7 +42,6 @@ export default {
     FilterButtonGroup,
     Loading,
     SetPanel,
-    CloseButton,
     CImage,
     HPopping
   },

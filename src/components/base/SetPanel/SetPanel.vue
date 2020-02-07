@@ -25,19 +25,19 @@
         <div class="char-set-container-wrapper">
           <div class="char-set-info-cotainer">
             <div v-if="data.displaySkin">
-              <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+              <content-slot style="margin-top: 10px" :width="60" long no-wrap>
                 <template slot="title">系列</template>
                 <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
               </content-slot>
-              <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+              <content-slot style="margin-top: 10px" :width="60" long no-wrap>
                 <template slot="title">获得方式</template>
                 <template slot="content">{{ data.displaySkin.obtainApproach }}</template>
               </content-slot>
-              <content-slot style="margin-top: 10px" :long="true" :no-wrap="true">
+              <content-slot style="margin-top: 10px" :width="60" long no-wrap>
                 <template slot="title">描述</template>
                 <template slot="content">{{ data.displaySkin.usage }}</template>
               </content-slot>
-              <content-slot style="margin-top: 10px;" :long="true" :no-wrap="true">
+              <content-slot style="margin-top: 10px;" :width="60" long no-wrap>
                 <template slot="title">记录</template>
                 <template slot="content">{{ data.displaySkin.content | filterColor }}</template>
               </content-slot>
@@ -221,12 +221,6 @@ export default {
   width: 250px
 }
 
-//.char-half-container {
-//width: 110px
-//position: relative
-//margin-top: 20px
-//font-size: 0
-//}
 .char-profile-container {
   height: 110px
   position: relative

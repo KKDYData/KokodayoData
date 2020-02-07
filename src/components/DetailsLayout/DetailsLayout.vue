@@ -14,80 +14,74 @@
       <div v-if="dataLoad">
         <agent-card :phases="phases" :data="data" />
         <!-- 属性面板 -->
-        <div class="stats-wrapper">
-          <div class="group-container-title">
-            <span>属性</span>
-          </div>
-          <div class="status-wrapper">
-            <div class="status-phases-wrapper">
-              <div class="status-phases-control-container">
-                <span class="status-phases-text">精英阶段</span>
-                <el-button
-                  v-for="(item, index) in data.phases"
-                  :key="index"
-                  size="mini"
-                  :type="phases === index ? 'primary': ''"
-                  @click="phases = index"
-                >{{ index }}</el-button>
-              </div>
-
-              <div v-if="potentailUPList.length > 0" class="status-potential-wrapper">
-                <span class="status-phases-text">潜能等级</span>
-                <div style="display: inline; font-size: 0px">
-                  <el-button
-                    size="mini"
-                    :type="potentialRanks === -1 ? 'primary': ''"
-                    @click="potentialRanks = -1"
-                  >1</el-button>
-                  <el-button
-                    v-for="item in potentailUPList"
-                    :key="item"
-                    size="mini"
-                    :type="potentialRanks === item ? 'primary': ''"
-                    @click="potentialRanks = item"
-                  >{{ item + 2 }}</el-button>
-                </div>
-              </div>
-              <div class="status-lv-favor-wrapper">
-                <div class="status-phases-lv">
-                  <div class="status-phases-lv-title">
-                    <span>等级</span>
-                    <span>{{ level }}</span>
-                  </div>
-                  <div class="status-phases-lv-inner">
-                    <el-slider
-                      v-model="level"
-                      :show-tooltip="false"
-                      :min="targetPhasese[0].level"
-                      :max="targetPhasese[1].level"
-                    />
-                  </div>
-                </div>
-                <div v-if="data.favorKeyFrames" class="status-favor-switch">
-                  <el-switch v-model="isFavor" active-color="#313131" active-text="满信赖" />
-                </div>
-              </div>
+        <my-title title="属性" />
+        <div class="status-container">
+          <div class="status-switcher">
+            <div class="status-switcher-phases">
+              <span class="status-switcher-title">精英阶段</span>
+              <el-button
+                v-for="(item, index) in data.phases"
+                :key="index"
+                size="mini"
+                :type="phases === index ? 'primary': ''"
+                @click="phases = index"
+              >{{ index }}</el-button>
             </div>
 
-            <char-status class="status-details-wrapper" :status="status" />
-            <div class="status-range-wrapper">
-              <div v-if="rangeId" class="status-range-inner-wrapper">
-                <range :range-id="rangeId" />
-                <div style="text-align: center;font-size: 14px">
-                  <span>攻击范围</span>
+            <div v-if="potentailUPList.length > 0" class="status-switcher-potential">
+              <span class="status-switcher-title">潜能等级</span>
+              <el-button
+                size="mini"
+                :type="potentialRanks === -1 ? 'primary': ''"
+                @click="potentialRanks = -1"
+              >1</el-button>
+              <el-button
+                v-for="item in potentailUPList"
+                :key="item"
+                size="mini"
+                :type="potentialRanks === item ? 'primary': ''"
+                @click="potentialRanks = item"
+              >{{ item + 2 }}</el-button>
+            </div>
+            <div class="status-switcher-lf">
+              <div class="status-switcher-lf-lv">
+                <div class="status-switcher-lf-lv-title">
+                  <span>等级</span>
+                  <span>{{ level }}</span>
                 </div>
+                <div class="status-switcher-lf-lv-inner">
+                  <el-slider
+                    v-model="level"
+                    :show-tooltip="false"
+                    :min="targetPhasese[0].level"
+                    :max="targetPhasese[1].level"
+                  />
+                </div>
+              </div>
+              <div v-if="data.favorKeyFrames" class="status-switcher-lf-favor">
+                <el-switch v-model="isFavor" active-color="#313131" active-text="满信赖" />
+              </div>
+            </div>
+          </div>
+
+          <char-status class="status-details-wrapper" :status="status" />
+          <div v-if="rangeId" class="status-range-wrapper">
+            <div class="status-range">
+              <range :range-id="rangeId" />
+              <div class="status-range-title">
+                <span>攻击范围</span>
               </div>
             </div>
           </div>
         </div>
         <!-- 天赋面板 -->
+        <my-title title="天赋" />
         <div v-if="talents.length > 0" class="tttt">
-          <div class="group-container-title">天赋</div>
           <talents-panel :talents="talents" @talentPotentailUp="e => talentPotentailUp = e" />
         </div>
         <!-- 技能面板 -->
-        <div v-if="skills.length > 0" class="skill-container-wrapper">
-          <div class="group-container-title">技能</div>
+        <my-title title="技能" />
+        <div v-if="skills.length > 0" class="tttt">
           <skill-panel
             :status="status"
             :skills="skills"
@@ -98,9 +92,9 @@
           />
         </div>
         <!-- 潜能面板 -->
-        <div v-if="normal" style="margin-bottom: 20px">
-          <div class="group-container-title">潜能</div>
-          <div v-if="data.potentialRanks && data.potentialRanks.length" class="potency-container">
+        <my-title title="潜能" />
+        <div v-if="normal" class="tttt potency-container">
+          <div v-if="data.potentialRanks && data.potentialRanks.length" class>
             <div v-for="(item, index) in data.potentialRanks" :key="index">
               <p>
                 <span class="potency-lv">潜能{{ index + 2 }}级:</span>
@@ -114,52 +108,51 @@
         </div>
         <!-- 精英化材料消耗 -->
         <div v-if="Object.keys(evolveCost).length > 0">
-          <div class="group-container-title">
-            <span>精英化材料消耗</span>
-          </div>
-          <div class="evolvcost-wrapper">
+          <my-title title="精英化材料消耗" />
+          <div class="evolvcost-wrapper tttt">
             <div
               v-for="(cost, key, index) in evolveCost"
               :key="index"
-              class="evolvcost-container-wrapper"
+              class="evolvcost-list"
               :style="Object.keys(evolveCost).length === 1 && !short? 'margin: 0 0 10px' : ''"
             >
               <div>
-                <div class="evolvcost-title-wrapper">
+                <div class="evolvcost-list-title">
                   <span>精英阶段{{ index + 1 }}</span>
                 </div>
               </div>
-              <div class="evolvcost-container">
-                <item-viewer :item="GOLD" :num="cost.money" class="evolvcost-item-container" />
-                <div v-for="item in cost.items" :key="item.IconId" class="evolvcost-item-container">
-                  <item-viewer :item="item.item" :num="item.cost" />
-                </div>
+              <div class="evolvcost-list-item">
+                <item-viewer :item="GOLD" :num="cost.money" class="evolvcost-list-item-one" />
+                <item-viewer
+                  v-for="item in cost.items"
+                  :key="item.IconId"
+                  class="evolvcost-list-item-one"
+                  :item="item.item"
+                  :num="item.cost"
+                />
+                <div />
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- 技能升级消耗 -->
-        <div v-if="skills.length > 0 && normal" class="skill-container-wrapper">
-          <div class="group-container-title">技能升级消耗</div>
-          <skill-up-panel
-            :all-level-cost="data.allSkillLvlup"
-            :skills="skills"
-            :seven="data.skills"
-          />
+          <!-- 技能升级消耗 -->
+          <div v-if="skills.length > 0 && normal">
+            <my-title title="技能升级消耗" />
+            <skill-up-panel
+              :all-level-cost="data.allSkillLvlup"
+              :skills="skills"
+              :seven="data.skills"
+              class="tttt"
+            />
+          </div>
+          <!-- 基建面板 -->
+          <div v-if="normal">
+            <my-title title="基建技能" />
+            <building-data class="tttt" :building="data.buildingData" />
+            <my-title title="干员资料" />
+            <info-panel v-if="info" class="tttt" :data="info" :list="setList" :words="words" />
+          </div>
         </div>
-
-        <!-- 基建面板 -->
-        <div v-if="normal" class="tttt">
-          <building-data :building="data.buildingData" />
-        </div>
-        <div v-if="normal" class="group-container-title" style="margin-bottom: 0">
-          <span>干员资料</span>
-        </div>
-        <template slot="title">
-          <span style="direction:rtl;width: 100%">打开</span>
-        </template>
-        <info-panel v-if="info" :data="info" :list="setList" :words="words" />
       </div>
     </transition>
   </div>
@@ -195,6 +188,7 @@ import BuildingData from './BuildingData'
 import ItemViewer from '../ItemViewer'
 import charStatus from '../base/charStatus'
 import DataLoading from '../base/Loading'
+import MyTitle from '@/components/base/MyTitle'
 import MyShare from './Share'
 
 const SkillPanel = () => ({
@@ -259,7 +253,8 @@ export default {
     DataLoading,
     AgentCard,
     charStatus,
-    MyShare
+    MyShare,
+    MyTitle
   },
   data() {
     return {
@@ -485,300 +480,336 @@ export default {
 }
 </script>
 
-<style scoped>
-/*  extra  */
-.desc-extra {
-  color: rebeccapurple;
-  font-style: normal;
-}
-/*  */
-.group-container-title {
-  font-weight: bold;
-  color: white;
-  margin-bottom: 20px;
-  background-color: #414141;
-  padding-left: 1vw;
-  box-shadow: 1px 1px 1px 0px rgba(0, 0, 0, 0.15);
-}
+<style lang="stylus" scoped>
 .details-wrapper {
-  min-width: 340px;
-  max-width: 1200px;
-  background-color: white;
-  margin: 0 auto;
-  padding: 20px;
+  //min-width: 340px
+  max-width: 1200px
+  background-color: white
+  margin: 0 auto
+  padding: 20px
 }
 
-/*  */
-/*  */
-/* part 2 */
-.status-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
+.evolvcost-list-item-one {
+  width: 100px
+  box-sizing: border-box
+  margin: 0
 }
 
-.status-phases-wrapper {
-  padding: 12px 0 12px 10px;
+.tttt {
+  padding: 0 10px 20px
 }
 
-/* 改button颜色 */
-.status-phases-wrapper .el-button--mini {
-  background-color: rgba(172, 172, 172, 0.34);
-  border: none;
-  border-bottom: 2px solid;
-  color: rgb(255, 255, 255);
+/**/
+/*part 2*/
+.status-container {
+  position: relative
+  display: flex
+  //justify-content: space-between
+  align-items: center
+  flex-wrap: wrap
+  padding-bottom: 20px
 }
 
+.status-switcher {
+  padding: 12px 0 12px 10px
+  min-width: 335px
+
+  /*潜能*/
+  &-potential {
+    margin-top: 10px
+  }
+
+  &-title {
+    padding-right: 10px
+  }
+
+  &-lf {
+    display: flex
+    align-items: center
+
+    &-lv {
+      display: flex
+      align-items: center
+      width: 200px
+
+      &-title {
+        width: 40px
+        padding-bottom: 4px
+        white-space: nowrap
+      }
+
+      &-inner {
+        width: 80%
+        margin-left: 25px
+      }
+    }
+
+    &-favor {
+      padding-bottom: 10px
+      display: inline
+      padding-top: 10px
+      margin-left: 25px
+    }
+  }
+
+  /*改button颜色*/
+  .el-button--mini {
+    background-color: rgba(172, 172, 172, 0.34)
+    border: none
+    border-bottom: 2px solid
+    color: rgb(255, 255, 255)
+  }
+
+  .el-button {
+    &--primary, &:hover {
+      color: rgb(255, 208, 75)
+      background-color: #313131
+      border-bottom: 2px solid rgb(255, 208, 75)
+
+      &:focus {
+        color: rgb(255, 208, 75)
+        background-color: rgb(84, 92, 100)
+        border-bottom-color: rgb(255, 208, 75)
+      }
+    }
+  }
+}
+
+//属性面板
 .status-details-wrapper {
-  width: calc(calc(100% - 350px) * 0.5);
-  border-right: 1px solid hsla(0, 0%, 62%, 0.4);
-  box-sizing: border-box;
-}
-
-/* 潜能 */
-.status-potential-wrapper {
-  margin-top: 10px;
-  font-size: 0px;
-}
-
-.status-potential-wrapper .el-button--mini {
-  background-color: rgba(172, 172, 172, 0.34);
-  border: none;
-  border-bottom: 2px solid;
-  color: rgb(255, 255, 255);
-}
-
-.status-phases-wrapper .el-button--primary:focus,
-.status-potential-wrapper .el-button--primary:focus {
-  color: rgb(255, 208, 75);
-  background-color: rgb(84, 92, 100);
-  border-bottom-color: rgb(255, 208, 75);
-}
-
-.status-phases-wrapper .el-button:hover,
-.status-phases-wrapper .el-button--primary,
-.status-potential-wrapper .el-button:hover,
-.status-potential-wrapper .el-button--primary {
-  color: rgb(255, 208, 75);
-  background-color: #313131;
-  border-bottom: 2px solid rgb(255, 208, 75);
-}
-
-.status-phases-control-container {
-  font-size: 0;
-}
-
-.status-phases-text {
-  padding-right: 10px;
-  font-size: 1rem;
-}
-
-.status-lv-favor-wrapper {
-  display: flex;
-  align-items: center;
-}
-
-.status-phases-lv {
-  display: flex;
-  align-items: center;
-  width: 200px;
-}
-.status-phases-lv-inner {
-  width: 80%;
-  margin-left: 25px;
-}
-
-.status-phases-lv-title {
-  width: 40px;
-  padding-bottom: 4px;
-  white-space: nowrap;
-}
-
-.status-favor-switch {
-  padding-bottom: 10px;
-  display: inline;
-}
-.status-favor-switch {
-  padding-top: 10px;
-  margin-left: 25px;
-}
-
-.status-title-wrapper {
-  position: relative;
-  width: calc(100% - 20px);
-
-  display: flex;
+  border-right: 1px solid hsla(0, 0%, 62%, 0.4)
+  box-sizing: border-box
+  flex: 1
+  min-width: 420px
 }
 
 .status-range-wrapper {
-  /* width: 20%; */
-  margin-right: 5%;
-  display: flex;
-  justify-content: center;
-}
-.status-range-inner-wrapper {
-  min-width: 170px;
-  max-height: 200px;
-}
-.status-range-fill {
-  width: 120px;
-}
-.status-range-fill::before {
-  content: "";
-  margin-top: 100%;
-  display: block;
+  width: 20%
+  margin: 0 auto
+  display: flex
+  justify-content: center
+  flex: 0.5
 }
 
-/*  */
-/*  */
-.skill-container-wrapper {
-  margin-top: 20px;
+.status-range {
+  width: 100%
+
+  &-title {
+    text-align: center
+    font-size: 14px
+  }
 }
-/*  */
-/* part 5 */
+
+/**/
 .evolvcost-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-}
-.evolvcost-container {
-  display: flex;
-  align-items: center;
-  align-content: center;
+  display: flex
+  flex-wrap: wrap
+  justify-content: space-between
 }
 
-/*  */
+/**/
+.evolvcost-list {
+  position: relative
+  margin: 30px 0
+  flex: 1
+  display: flex
 
-.evolvcost-container-wrapper {
-  position: relative;
-  margin: 30px 0;
-  flex: 1;
-  display: flex;
+  &-item {
+    display: flex
+    align-items: center
+    align-content: center
+  }
+
+  &-title {
+    height: 100%
+    width: 90px
+    border-right: 1px solid rgba(158, 158, 158, 0.4)
+    box-sizing: border-box
+    display: flex
+    align-items: center
+    justify-content: center
+    flex: 1
+  }
 }
 
-.evolvcost-title-wrapper {
-  /* position: absolute; */
-  height: 100%;
-  width: 90px;
-  border-right: 1px solid rgba(158, 158, 158, 0.4);
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: 1;
-}
-
-/*  */
-
-.stats-wrapper {
-  margin: 20px 0px;
-}
+/**/
 .potency-container {
-  padding-left: 20px;
-}
-.potency-lv {
-  padding-right: 5px;
+  padding-left: 10px
+
+  .potency-lv {
+    padding-right: 5px
+  }
 }
 
 @media screen and (max-width: 900px) {
-  .el-button + .el-button {
-    margin-left: calc(3px + 1vw);
-  }
-  .status-wrapper {
-    height: auto;
-    justify-content: space-between;
-  }
-
-  .status-phases-text {
-    margin-bottom: 10px;
-  }
-  .status-title-wrapper {
-    position: relative;
-    width: calc(100% - 20px);
-
-    display: flex;
-  }
-
-  /* part 2 */
   .status-details-wrapper {
-    width: 50%;
-    padding-left: 5px;
-    padding-top: 20px;
-    height: auto;
-    box-sizing: border-box;
+    flex: 1
+    min-width: auto
   }
-
-  .status-wrapper {
-    position: relative;
-    height: auto;
-  }
-
-  .status-phases-wrapper {
-    width: 100%;
-    border-bottom: 1px solid rgba(158, 158, 158, 0.4);
-  }
-
-  .status-favor-switch {
-    padding: 0;
-    margin-left: 20px;
-    display: inline;
-  }
-
-  /*  */
 
   .status-range-wrapper {
-    width: calc(30% - 20px);
-    min-width: auto;
-    margin-right: calc(10% + 10px);
+    flex: 1
+  }
+
+  .status-range {
+    width: 100%
+
+    &-title {
+      text-align: center
+      font-size: 14px
+    }
+  }
+
+  .el-button + .el-button {
+    margin-left: calc(3px + 1vw)
+  }
+
+  .status-container {
+    height: auto
+    justify-content: space-between
+  }
+
+  .status-switcher-title {
+    margin-bottom: 10px
+  }
+
+  .status-title-wrapper {
+    position: relative
+    width: calc(100% - 20px)
+    display: flex
+  }
+
+  /*part 2*/
+  .status-details-wrapper {
+    width: 50%
+    padding-top: 20px
+    height: auto
+  }
+
+  .status-container {
+    position: relative
+    height: auto
+  }
+
+  .status-switcher {
+    width: 100%
+    flex: auto
+    box-sizing: border-box
+    border-bottom: 1px solid rgba(158, 158, 158, 0.4)
+  }
+
+  .status-switcher-lf-favor {
+    padding: 0
+    margin-left: 20px
+    display: inline
+  }
+
+  /**/
+  .status-range-wrapper {
+    width: 50%
+    margin: 0
+    min-width: auto
   }
 }
 
 @media screen and (max-width: 700px) {
   .details-wrapper {
-    padding: 10px 2.5vw;
+    padding: 10px vw(20)
   }
 
-  /*  */
-  .evolvcost-container-wrapper {
-    min-width: 340px;
-    padding: 0 0 20px 10px;
-    margin: 0;
-    display: block;
+  /**/
+  .evolvcost-list {
+    padding: 0 0 20px
+    margin: 0
+    display: block
+
+    & + & {
+      border: none
+      border-top: 1px solid rgb(235, 238, 245)
+      padding-top: 20px
+    }
+
+    &-item-one {
+      width: vw(170)
+    }
+
+    &-title {
+      position: relative
+      height: 20px
+      border-right: none
+      border-bottom: 1px solid rgba(158, 158, 158, 0.4)
+      justify-content: start
+      font-size: calc(13px + 0.5vw)
+    }
+
+    &-item {
+      position: relative
+      min-width: 250px
+      margin-left: 0px
+      margin-top: 10px
+      display: flex
+      align-items: center
+      align-content: center
+    }
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .tttt {
+    padding: 0 vw(20) vw(20)
   }
 
-  .evolvcost-container-wrapper + .evolvcost-container-wrapper {
-    border: none;
-    border-top: 1px solid rgb(235, 238, 245);
-    padding-top: 20px;
+  //属性面板
+  .status-details-wrapper {
+    width: 50%
+    padding-top: vw(20)
+    height: auto
   }
 
-  .evolvcost-title-wrapper {
-    position: relative;
-    height: 20px;
-    border-right: none;
-    border-bottom: 1px solid rgba(158, 158, 158, 0.4);
-    justify-content: start;
-    font-size: calc(13px + 0.5vw);
-  }
-  .evolvcost-container {
-    position: relative;
-    min-width: 250px;
-    width: calc(100% - 20px);
-    margin-left: 0px;
-    margin-top: 10px;
-    display: flex;
-    align-items: center;
-    align-content: center;
+  .status-container {
+    padding-bottom: vw(20)
   }
 
-  .status-range-wrapper {
-    width: calc(45% - 20px);
-    min-width: auto;
-    margin-right: calc(2.5% + 3px);
+  .status-switcher {
+    .status-switcher-lf-lv {
+      width: 55vw
+    }
+
+    padding: vw(24) vw(20)
+    font-size: vw(32)
+
+    .el-switch__label * {
+      font-size: vw(32)
+    }
+
+    .el-button--mini {
+      padding: vw(14) vw(30)
+      font-size: vw(24)
+    }
+
+    .el-button + .el-button[data-v-8949beae] {
+      margin-left: vw(10)
+    }
+
+    .el-switch__core {
+      height: vw(40)
+      width: vw(80) !important
+      border-width: vw(2)
+      border-radius: vw(20)
+
+      &:after {
+        top: vw(2)
+        left: vw(2)
+        width: vw(32)
+        height: vw(32)
+      }
+    }
+
+    .el-switch.is-checked .el-switch__core:after {
+      margin-left: vw(-34)
+      left: 100%
+    }
   }
-  /*  */
 }
 </style>
 

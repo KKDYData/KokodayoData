@@ -51,7 +51,7 @@ export default {
   font-size: 15px
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 500px) {
   .skill-pic-contianer {
     width: vw(140)
     height: vw(140)
@@ -59,7 +59,6 @@ export default {
 
   .skill-name-wrapper {
     font-size: vw(28)
-    white-space: nowrap
     word-break: keep-all
   }
 }

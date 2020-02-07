@@ -215,7 +215,7 @@ export default {
     width: 20px
     transition: all 0.3s linear
     padding-bottom: 0
-    will-change: font-size padding width
+    will-change: font-size, padding, width
     opacity: 0
 
     &.route-item-text {
