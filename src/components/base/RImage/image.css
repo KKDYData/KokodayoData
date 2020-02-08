@@ -407,6 +407,10 @@
   display: block;
 }
 
+.el-image__inner--half {
+  opacity: 0.3;
+}
+
 .el-image__placeholder {
   background: #F5F7FA;
 }

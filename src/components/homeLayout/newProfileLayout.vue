@@ -54,7 +54,7 @@
                   </div>
                 </div>
               </div>
-              <div slot="reference">
+              <div slot="reference" class="click">
                 <span style="cursor: pointer">{{ agent.name }}</span>
               </div>
             </el-popover>
@@ -71,7 +71,7 @@
 const arrange = (arr, index = 0, group = []) => {
   const res = []
   res.push([arr[index]])
-  for (let i = 0; i < group.length; i++) {
+  for (let i = 0;i < group.length;i++) {
     res.push([...group[i], arr[index]])
   }
   group = group.concat(res)

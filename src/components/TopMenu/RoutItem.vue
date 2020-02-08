@@ -145,7 +145,7 @@ export default {
 
   &-text {
     color: white
-    font-size: 0.9em
+    font-size: 0.9rem
     text-align: center
   }
 
@@ -198,7 +198,7 @@ export default {
     display: flex
     justify-content: center
     align-items: end
-    height: 1.2em
+    height: 1.2rem
   }
 
   .route-animate-static {
@@ -211,7 +211,7 @@ export default {
   }
 
   .route-item-animate {
-    font-size: 1em
+    font-size: 1rem
     width: 20px
     transition: all 0.3s linear
     padding-bottom: 0
@@ -225,14 +225,14 @@ export default {
 
     &.k-big {
       width: 27px
-      font-size: 1.3em
+      font-size: 1.3rem
       padding-bottom: 2px
       opacity: 0.3
     }
 
     &.k-n {
       width: 25px
-      font-size: 1.05em
+      font-size: 1.05rem
       padding-bottom: 0px
       opacity: 1
     }

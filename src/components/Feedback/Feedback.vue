@@ -128,7 +128,7 @@ export default {
       title: '',
       email: '',
       debounceLogFb: null,
-      store: localStore
+      store: localStore()
     }
   },
   computed: {

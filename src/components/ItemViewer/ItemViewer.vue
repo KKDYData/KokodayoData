@@ -26,7 +26,7 @@
         <div>
           <el-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
             <h-item
-              class="stupid-ios"
+              class="click"
               :item-pic="itemPic"
               :item-background="itemBackground"
               :type="type"
@@ -35,7 +35,6 @@
           </el-tooltip>
         </div>
         <div v-if="num || weight" style="text-align: center">
-          <!-- :style="data.name.length > 6 ? 'font-size: 12px' : ''" -->
           <span class="item-name">{{ data.name }}</span>
           <div style="color:rgb(86, 86, 86)">
             <span v-if="num">x{{ num }}</span>
@@ -55,17 +54,7 @@
               v-if="showDropInfo"
               :style="short ? 'right: -144px' : ''"
               class="item-divider-extra"
-            >
-              统计次数
-              <el-tooltip placement="top">
-                <i class="el-icon-info" />
-                <div slot="content">
-                  点击可以查看统计的
-                  <color color="hsl(193, 78%, 69%)">掉落数</color>/
-                  <color color="hsl(350, 100%, 79%)">样本数</color>
-                </div>
-              </el-tooltip>
-            </span>
+            >统计次数</span>
           </el-divider>
           <div class="item-stage-container">
             <drop-line :data="targetStageDrop" />
@@ -79,18 +68,22 @@
                 v-if="showDropInfo"
                 :style="short ? 'top: 10px; right: -165px' : ''"
                 class="item-divider-extra"
-              >
-                统计次数
-                <el-tooltip placement="top">
-                  <i class="el-icon-info" />
-                  <div slot="content">
-                    点击可以查看统计的
-                    <color color="hsl(193, 78%, 69%)">掉落数</color>/
-                    <color color="hsl(350, 100%, 79%)">样本数</color>
-                  </div>
-                </el-tooltip>
-              </span>
+              >统计次数</span>
             </el-divider>
+            <div class="item-drop-info">
+              <span v-if="dropList.length > 20">
+                当前排序方式 {{ sortFunc.name }}
+                <el-button size="mini" type="primary" @click="switchSortFunc">切换</el-button>
+              </span>
+              <el-tooltip placement="top">
+                <el-button size="mini" type="primary">说明</el-button>
+                <div slot="content">
+                  点击右边数据可以查看详细数据 |
+                  <color color="hsl(193, 78%, 69%)">掉落数</color>/
+                  <color color="hsl(350, 100%, 79%)">样本数 ↓</color>
+                </div>
+              </el-tooltip>
+            </div>
             <div class="item-stage-container">
               <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage" />
             </div>
@@ -142,7 +135,7 @@
 
 
 <script>
-import { findStage, UA } from '../../utils'
+import { findStage, UA, sort } from '../../utils'
 import { path } from '../../utils/listVer'
 import formula from '../../utils/data/formula.json'
 
@@ -168,6 +161,45 @@ import { getItem } from '../../utils/fetch'
 import HPopping from '@/components/base/Popping'
 import HItem from './Item'
 
+
+const getItmeDropData = (el, stageTree, list) => {
+  let res = Object.assign({}, el)
+  const stageData = findStage(el.stageId, stageTree)
+  if (stageData) {
+    const temp = stageData.label.split(' ')
+    res.stageCode = temp[0]
+    if (list) {
+      const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId)
+      if (dropInfo) {
+        res = Object.assign(res, dropInfo)
+        res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100)
+        res.dropCost = dropInfo.quantity ? Math.round((dropInfo.times / dropInfo.quantity) * stageData.apCost) : '∞'
+        res.apCost = stageData.apCost
+        if (res.dropCost < 1) {
+          res.etCost = stageData.etCost
+          res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times)
+        }
+      }
+    }
+  }
+  return res
+}
+
+const sortFunc1 = {
+  key: 0,
+  func: (pre, cur) => pre.dropCost < cur.dropCost,
+  name: '消耗',
+}
+const sortFunc2 = {
+  key: 1,
+  func: (pre, cur) => pre.quantity > cur.times,
+  name: '样本数量'
+}
+
+const sortFuncArr = {
+  0: sortFunc1,
+  1: sortFunc2
+}
 
 export default {
   name: 'JustViewer',
@@ -227,7 +259,8 @@ export default {
           : 'hover',
       data: typeof this.item !== 'string' ? this.item : undefined,
       GOLD,
-      show: false
+      show: false,
+      sortFunc: sortFuncArr[1]
     }
   },
 
@@ -244,12 +277,9 @@ export default {
       return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {}
     },
     itemPic() {
-      return (
-        path +
-        (this.type === 'FURN' ? 'custom/furnitures/pic/' : 'item/pic/') +
-        this.data.iconId +
-        '_optimized.png'
-      )
+      if (this.type === 'FURN')
+        return `${path}custom/furnitures/pic/${this.data.id}_optimized.png`
+      else return `${path}item/pic/${this.data.iconId}_optimized.png`
     },
 
     dropListRow() {
@@ -286,34 +316,12 @@ export default {
     },
     dropList() {
       const list = this.dropListRow
-      if (this.stageTree) {
-        return this.data.stageDropList.map(el => {
-          let res = Object.assign({}, el)
-          const stageData = findStage(el.stageId, this.stageTree)
-          if (stageData) {
-            const temp = stageData.label.split(' ')
-            res.stageCode = temp[0]
-            if (list) {
-              const dropInfo = list.find(
-                dropInfo => dropInfo.stageId === el.stageId
-              )
-              if (dropInfo) {
-                res = Object.assign(res, dropInfo)
-                res.rate = Math.round(
-                  (dropInfo.quantity / dropInfo.times) * 100
-                )
-                res.dropCost = Math.round(
-                  (dropInfo.times / dropInfo.quantity) * stageData.apCost
-                )
-                res.apCost = stageData.apCost
-                if (res.dropCost < 1) {
-                  res.etCost = stageData.etCost
-                  res.dropCnt = Math.round(dropInfo.quantity / dropInfo.times)
-                }
-              }
-            }
-          }
-          return res
+      if (this.stageTree && list) {
+        if (this.data.itemId === 'randomMaterial_2') {
+          return sort(list.map((el => getItmeDropData(el, this.stageTree, list)))
+            .filter(el => el.dropCost !== '∞'), this.sortFunc.func)
+        } else return this.data.stageDropList.map(el => {
+          return getItmeDropData(el, this.stageTree, list)
         })
       } else {
         return this.data.stageDropList
@@ -330,12 +338,14 @@ export default {
       } else {
         this.data = v
       }
-    }
+    },
   },
   created() {
     if (typeof this.item === 'string') {
       getItem(this.item).then(el => (this.data = el))
     }
+  },
+  mounted() {
   },
   methods: {
     occper(occ) {
@@ -343,6 +353,10 @@ export default {
     },
     roomName(id) {
       return roomType[id]
+    },
+    switchSortFunc() {
+      if (this.sortFunc.key === 0) this.sortFunc = sortFuncArr[1]
+      else this.sortFunc = sortFuncArr[0]
     }
   }
 }
@@ -358,6 +372,11 @@ export default {
  .title-item {
    margin: 0
    margin-right: 20px
+ }
+
+ .item-drop-info {
+   text-align: right
+   font-size: 14px
  }
 
  .item-viewer-container {
@@ -466,6 +485,20 @@ export default {
  }
 
  @media screen and (max-width: 500px) {
+   .item-drop-info {
+     text-align: right
+     font-size: vw(28)
+
+     .el-button--mini {
+       padding: vw(7) vw(20)
+       font-size: vw(28)
+     }
+
+     .el-button + .el-button[data-v-8949beae] {
+       margin-left: vw(10)
+     }
+   }
+
    .item-viewer-container {
      margin: vw(10)
 

@@ -13,7 +13,10 @@
               <c-image class :src="skin.halfPic" fit="contain" />
             </div>
           </h-popping>
-          <div />
+          <div
+            v-if="!short"
+            style="text-align: center; margin-bottom: 20px"
+          >{{ skin.displaySkin.skinName }}</div>
         </div>
         <div class="char-half-container fill" />
         <div class="char-half-container fill" />

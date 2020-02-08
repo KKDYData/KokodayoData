@@ -3,6 +3,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
+const ImageminPlugin = require('imagemin-webpack')
 
 const swPlugins = [
   new WorkboxPlugin.InjectManifest({
@@ -24,6 +25,26 @@ module.exports = {
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
       'process.env.VERSION': JSON.stringify(new Date()),
+    }),
+    new ImageminPlugin({
+      bail: false, // Ignore errors on corrupted images
+      cache: true,
+      imageminOptions: {
+        plugins: [
+          ['mozjpeg', { quality: 40 }],
+          ['pngquant', { quality: [0.6, 0.8] }],
+          [
+            'svgo',
+            {
+              plugins: [
+                {
+                  removeViewBox: false
+                }
+              ]
+            }
+          ]
+        ]
+      }
     }),
     ...swPlugins
   ],

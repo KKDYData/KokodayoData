@@ -31,14 +31,14 @@
       />
       <div class="tags-popover-wrapper">
         <el-popover
-          popper-class="tags-popover-container stupid-ios"
+          popper-class="tags-popover-container click"
           placement="top"
           trigger="click"
           :visible-arrow="false"
           :width="short ? 320 : 800"
           :disabled="agentFilterDisabled"
         >
-          <div slot="reference" class="stupid-ios">
+          <div slot="reference" class="click">
             <div class="tags-selected-container">
               <el-button
                 :type="SelectedTagGz.length > 0 ? 'danger' : 'info'"
@@ -174,7 +174,7 @@ export default {
     'filter-group': FilterButtonGroup,
     ProfileLayout,
     newProfileLayout,
-    CloseButton
+    CloseButton,
   },
   props: {
     profileList: {
@@ -227,7 +227,7 @@ export default {
     }
   },
   beforeMount() {
-    this.store = localStore
+    this.store = localStore()
     this.store.getItem('filterGroups').then(filterGroups => {
       if (filterGroups && filterGroups._version === version) {
         //恢复上次的筛选条件
@@ -404,7 +404,6 @@ export default {
   padding-top: 20px;
   max-width: 1000px;
   min-height: 500px;
-  margin: 0 auto;
 }
 
 .tags-popover-wrapper {

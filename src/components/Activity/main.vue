@@ -1,0 +1,87 @@
+<template>
+  <div>
+    <div class="activity-wrapper">
+      <r-image :preview-src-list="[activityPic]" class="activity-img" :src="activityPic" />
+      <div class="activity-title">元宵刷图活动</div>
+      <div class="activity-content">
+        <div>大部分地图会掉落【岁过华灯】,为了方便，把它单独放了出来，点击可以查看掉落详情</div>
+        <item-viewer class="activity-item" type="item" item="randomMaterial_2" />
+        <div>
+          <span class="activity-info-need">如果消耗理智非常少，注意检查样本数</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import ItemViewer from '@/components/ItemViewer'
+import RImage from '@/components/base/RImage'
+
+export default {
+  components: {
+    ItemViewer,
+    RImage
+  },
+  data() {
+    return {
+      activityPic: require('./img/yuanxiao.jpg')
+    }
+  }
+}
+</script>
+
+<style lang="stylus" scoped>
+.activity-wrapper {
+  padding: 0 10px
+  height: 340px
+}
+
+.activity {
+  &-item {
+    display: inline-block
+  }
+
+  &-content {
+    height: 200px
+  }
+
+  &-title {
+    font-size: 20px
+    color: #313131
+  }
+
+  &-info-need {
+    font-size: 14px
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .activity {
+    &-wrapper {
+      padding: 0 vw(20)
+      height: vw(600)
+    }
+
+    &-img {
+      height: vw(210)
+    }
+
+    &-item {
+      display: inline-block
+    }
+
+    &-content {
+      height: vw(300)
+    }
+
+    &-title {
+      font-size: vw(40)
+    }
+
+    &-info-need {
+      font-size: vw(28)
+    }
+  }
+}
+</style>

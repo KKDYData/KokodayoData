@@ -1,8 +1,23 @@
 <template>
   <div class="home-wrapper">
-    <transition name="fade" mode="out-in">
-      <home-layout v-if="load" :profile-list="data" :token-list="token" />
-    </transition>
+    <div class="home-activity">
+      <slide-title
+        v-if="!short || activityState !== 'unset'"
+        :init="activityState"
+        class="home-title"
+        :control="short"
+        title="最近活动"
+        @open="handleActivity"
+      >
+        <activity />
+      </slide-title>
+    </div>
+    <div class="home-base">
+      <my-title class="home-title" title="干员列表" />
+      <transition name="fade" mode="out-in">
+        <home-layout v-if="load" :profile-list="data" :token-list="token" />
+      </transition>
+    </div>
   </div>
 </template>
 <script>
@@ -14,6 +29,11 @@ Vue.use(Alert)
 
 import loadingC from '../components/base/Loading'
 import { devMode } from '../stats'
+import MyTitle from '@/components/base/MyTitle'
+import SlideTitle from '@/components/base/MySlideTilte'
+import { localStore } from '@/localStore'
+import { mapState } from 'vuex'
+
 
 const HomeLayout = () => ({
   component: import(/* webpackChunkName: "HomeLayout" */ '../components/homeLayout'),
@@ -23,20 +43,43 @@ const HomeLayout = () => ({
   timeout: 5000
 })
 
+const Activity = () => ({
+  component: import(/* webpackChunkName: "HomeLayout" */ '../components/Activity'),
+  loading: loadingC,
+  error: loadingC,
+  delay: 200,
+  timeout: 5000
+})
+
 export default {
   components: {
-    'home-layout': HomeLayout
+    HomeLayout,
+    MyTitle,
+    Activity,
+    SlideTitle
   },
   data() {
     return {
       data: [],
       token: [],
       load: false,
-      isBeta: devMode === 'beta'
+      isBeta: devMode === 'beta',
+      activityState: 'unset',
+      store: localStore()
     }
+  },
+  computed: {
+    ...mapState(['short'])
+  },
+  created() {
   },
   mounted() {
     this.linkStart()
+    this.store.getItem('home-activity-state').then((state) => {
+      this.activityState = state === null ? true : state
+      console.log('act ', state)
+    })
+
   },
   methods: {
     linkStart() {
@@ -61,15 +104,51 @@ export default {
         })
         return source.reverse()
       })
+    },
+    handleActivity(el) {
+      console.log(el, el.value)
+      this.store.setItem('home-activity-state', el.value)
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-.home-info {
-  max-width: 1000px
-  margin: 0 auto
+.home-wrapper {
+  display: grid
+  grid-template-columns: 350px 1fr
+}
+
+.home {
+  &-base {
+    margin: 20px 10px 0
+  }
+
+  &-activity {
+    margin: 20px 40px 0 10px
+  }
+
+  &-title {
+    max-width: 1000px
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .home {
+    &-wrapper {
+      display: grid
+      grid-template-columns: 1fr
+      margin-top: vw(20)
+    }
+
+    &-base {
+      margin: vw(20) vw(10)
+    }
+
+    &-activity {
+      margin: vw(20) vw(10)
+    }
+  }
 }
 </style>
 

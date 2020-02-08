@@ -8,12 +8,11 @@
     </slot>
     <img
       v-else
-      v-show="!showViewer"
       class="el-image__inner"
+      :class="{ 'el-image__inner--center': alignCenter, 'el-image__preview': preview , 'el-image__inner--half': showViewer}"
       v-bind="$attrs"
       :src="src"
       :style="imageStyle"
-      :class="{ 'el-image__inner--center': alignCenter, 'el-image__preview': preview }"
       v-on="$listeners"
       @click="clickHandler"
     />

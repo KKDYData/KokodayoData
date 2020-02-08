@@ -1,6 +1,6 @@
 import localforage from 'localforage'
 
-const localStore = localforage.createInstance({
+const localStore = () => localforage.createInstance({
   name: 'testDB'
 })
 

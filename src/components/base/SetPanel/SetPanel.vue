@@ -23,21 +23,25 @@
       <!-- 立绘 -->
       <el-carousel-item :id="`char-set-container-${index}`" :key="index" style="font-size:13px">
         <div class="char-set-container-wrapper">
-          <div class="char-set-info-cotainer">
+          <div class="char-set-info">
             <div v-if="data.displaySkin">
-              <content-slot style="margin-top: 10px" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="60" long no-wrap>
+                <template slot="title">名称</template>
+                <template slot="content">{{ data.displaySkin.skinName }}</template>
+              </content-slot>
+              <content-slot class="char-set-info-item" :width="60" long no-wrap>
                 <template slot="title">系列</template>
                 <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
               </content-slot>
-              <content-slot style="margin-top: 10px" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="60" long no-wrap>
                 <template slot="title">获得方式</template>
                 <template slot="content">{{ data.displaySkin.obtainApproach }}</template>
               </content-slot>
-              <content-slot style="margin-top: 10px" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="60" long no-wrap>
                 <template slot="title">描述</template>
                 <template slot="content">{{ data.displaySkin.usage }}</template>
               </content-slot>
-              <content-slot style="margin-top: 10px;" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="60" long no-wrap>
                 <template slot="title">记录</template>
                 <template slot="content">{{ data.displaySkin.content | filterColor }}</template>
               </content-slot>
@@ -184,7 +188,7 @@ export default {
   },
   beforeMount() {
     const { width, height } = getScreenWidth()
-    this.height = (height * 0.9 - 100) + 'px'
+    this.height = (height * 0.8 - 42) + 'px'
     if (!this.short) {
       this.spineWidth = (width / 1159) * 300
     }
@@ -217,7 +221,7 @@ export default {
   width: 100%
 }
 
-.char-set-info-cotainer {
+.char-set-info {
   width: 250px
 }
 
@@ -283,7 +287,7 @@ export default {
     flex-flow: column
   }
 
-  .char-set-info-cotainer {
+  .char-set-info {
     width: 100%
   }
 }

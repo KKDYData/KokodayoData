@@ -111,18 +111,16 @@
                   </span>
                 </div>
                 <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
-                  <div
+                  <content-slot
                     v-for="bData in skill.blackboard"
                     :key="bData.key"
                     :style="short? 'margin-left: 10px' : ''"
+                    long
+                    no-wrap
                   >
-                    <span>{{ changeBlackboardToCh(bData.key) }}</span>
-                    <span>
-                      {{ bData.key === 'atk_scale'? bData.value * 100 + '%' : bData.key === 'range_radius'
-                      ? bData.value * skillRangeRadius : bData.value }}
-                    </span>
-                    <span v-if="timeKey.includes(bData.key)">s</span>
-                  </div>
+                    <div slot="title">{{ changeBlackboardToCh(bData.key) }}</div>
+                    <div slot="content">{{ addUnit(bData.value, bData.key) }}</div>
+                  </content-slot>
                 </div>
               </div>
             </div>
@@ -284,17 +282,7 @@ export default {
       }
       const row = findTalent(this.level)
       return row.map(el => {
-        let v = el.value
-        if (/(duration)/.test(el.key)) {
-          v = v + 's'
-        }
-        if (/((reborn|up|down|scale)\.atk)|\.hp_ratio|healaura|speed/.test(el.key)) {
-          v = v * 100 + '%'
-        } else if (/defdown\.def/.test(el.key)) {
-          if (Math.abs(v) < 1) {
-            v = v * 100 + '%'
-          }
-        }
+        let v = this.addUnit(el.value, el.key)
         return {
           key: this.changeTalentsBlackBordtoCh(el.key),
           value: v
@@ -358,6 +346,19 @@ export default {
     }
   },
   methods: {
+    addUnit(v, key) {
+      if (/(duration|freeze)/.test(key)) {
+        v = v + 's'
+      }
+      if (/((reborn|up|down|scale)\.atk)|\.hp_ratio|healaura|speed/.test(key)) {
+        v = v * 100 + '%'
+      } else if (/defdown\.def/.test(key)) {
+        if (Math.abs(v) < 1) {
+          v = v * 100 + '%'
+        }
+      }
+      return v
+    },
     changeBlackboardToCh(key) {
       const Key = {
         atk_scale: '倍率',
@@ -368,7 +369,8 @@ export default {
         move_speed: '移动速度',
         dist: '消失',
         branch_id: '地图装置ID',
-        stun: '眩晕'
+        stun: '眩晕',
+        freeze: '冻结'
       }
       return Key[key] || key
     },
@@ -397,6 +399,7 @@ export default {
         magic_resistance: '法抗',
 
         reborn: '复活',
+        freeze: '冻结',
 
         enrage: '暴怒',
 

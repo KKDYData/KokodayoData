@@ -96,8 +96,9 @@ export default {
     ...mapState(['short'])
   },
   mounted() {
+    const height = this.$refs.route && this.$refs.route.$el ? this.$refs.route.$el.clientHeight : 42
     if (this.short)
-      this.size = (this.$refs.route.$el.clientHeight * (this.routes.length + 3) / window.innerHeight * 100) + '%'
+      this.size = (height * (this.routes.length + 3) / window.innerHeight * 100) + '%'
   },
   methods: {
     go() {

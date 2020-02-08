@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="short || disabled" class="stupid-ios" @click="openDrawer">
+    <div v-if="short || disabled" class="click" @click="openDrawer">
       <slot name="reference" />
     </div>
     <div v-if="!disabled">
@@ -37,7 +37,7 @@
         @show="openHandler"
         @hide="closeHandler"
       >
-        <div slot="reference" class="stupid-ios" @click="openDrawer">
+        <div slot="reference" class="click" @click="openDrawer">
           <slot name="reference" />
         </div>
         <div v-if="drawer">
