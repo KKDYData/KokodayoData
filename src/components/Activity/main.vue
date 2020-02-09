@@ -9,6 +9,12 @@
         <div>
           <span class="activity-info-need">如果消耗理智非常少，注意检查样本数</span>
         </div>
+        <div class="activity-info-need">
+          <a target="_blank" href="https://penguin-stats.io/">数据来源&收集：企鹅物流</a>
+        </div>
+      </div>
+      <div>
+        <span class="activity-info-need">最近在家用13寸笔记本维护，所以 测试没之前全，有些小bug没发现，望见谅。</span>
       </div>
     </div>
   </div>
@@ -60,7 +66,7 @@ export default {
   .activity {
     &-wrapper {
       padding: 0 vw(20)
-      height: vw(600)
+      height: vw(640)
     }
 
     &-img {

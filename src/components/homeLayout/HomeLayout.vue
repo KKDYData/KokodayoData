@@ -160,7 +160,7 @@ if (typeof Array.prototype.flat !== 'function') {
 export default {
   metaInfo() {
     return {
-      titleTemplate: 'ArknightsData 一个平平无奇的明日方舟数据库 0.99 Wiki|维基|数据',
+      titleTemplate: 'Kokodayo | ArknightsData | kkdy 一个平平无奇的明日方舟数据库 0.99 Wiki|维基|数据',
       meta: [
         {
           vmid: 'description',

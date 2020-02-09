@@ -5,12 +5,11 @@
         v-for="(agent, index) in data"
         :key="agent.name"
         class="profile-item"
-        :style="{ width: showTags || agent.showTags ? '170px' : 'var(--imgWidth)'}"
         @mouseover="hoverShowTag(true, index)"
         @mouseleave="hoverShowTag(false, index)"
       >
         <!--  -->
-        <div class="profile-item-inner-wrapper">
+        <div class="profile-item-inner-wrapper" :class="{'show-tags': showTags || agent.showTags }">
           <c-image
             class="img-container"
             :alt="agent.name"
@@ -175,17 +174,11 @@ export default {
   display: inline-block
   --imgWidth: 106px
   box-sizing: border-box
-  margin: 10px
 
+  //margin: 10px
   &:hover {
     filter: drop-shadow(1px 1px 1px #818181)
   }
-}
-
-//套个div包裹使得增减干员列表时有流畅的动画
-.profile-item-inner-wrapper {
-  position: relative
-  cursor: pointer
 }
 
 .tag-container {
@@ -294,19 +287,92 @@ export default {
   z-index: -1
 }
 
-@media screen and (max-width: 700px) {
-  .profile-item {
-    margin: 10px 5px
+//套个div包裹使得增减干员列表时有流畅的动画
+.profile-item-inner-wrapper {
+  position: relative
+  cursor: pointer
+  margin: 10px
+
+  &.show-tags {
+    width: 170px
   }
 }
 
-@media screen and (max-width: 375px) {
+@media screen and (max-width: 1300px) {
+  .profile-container {
+    width: 870px
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .profile-container {
+    width: 720px
+  }
+}
+
+@media screen and (max-width: 1100px) {
+  .profile-container {
+    width: 620px
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .profile-container {
+    width: vw(720)
+  }
+
+  .profile-item {
+    &-inner-wrapper {
+      margin: vw(5) vw(12)
+
+      &.show-tags {
+        width: vw(123)
+      }
+    }
+
+    --imgWidth: vw(70)
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .profile-container {
+    width: vw(720)
+  }
+
+  .profile-item {
+    &-inner-wrapper {
+      margin: vw(5) vw(12 * 1.3)
+
+      &.show-tags {
+        width: vw(90 * 1.65)
+      }
+    }
+
+    --imgWidth: vw(90)
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .profile-item {
+    //margin: 10px 5px
+  }
+}
+
+@media screen and (max-width: 500px) {
   .tag-wrapper-1 {
     right: 15px
   }
 
   .profile-item {
-    --imgWidth: 96px
+    &-inner-wrapper {
+      margin: vw(5) vw(12)
+
+      &.show-tags {
+        width: calc(var(--imgWidth) * 1.74)
+      }
+    }
+
+    --imgWidth: vw(180)
   }
 }
 </style>

@@ -65,7 +65,8 @@ export default {
       load: false,
       isBeta: devMode === 'beta',
       activityState: 'unset',
-      store: localStore()
+      store: localStore(),
+      innerWidth: window.innerWidth
     }
   },
   computed: {
@@ -133,7 +134,7 @@ export default {
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 1000px) {
   .home {
     &-wrapper {
       display: grid

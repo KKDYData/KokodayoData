@@ -192,7 +192,7 @@ const sortFunc1 = {
 }
 const sortFunc2 = {
   key: 1,
-  func: (pre, cur) => pre.quantity > cur.times,
+  func: (pre, cur) => pre.times > cur.times,
   name: '样本数量'
 }
 
@@ -318,8 +318,7 @@ export default {
       const list = this.dropListRow
       if (this.stageTree && list) {
         if (this.data.itemId === 'randomMaterial_2') {
-          return sort(list.map((el => getItmeDropData(el, this.stageTree, list)))
-            .filter(el => el.dropCost !== '∞'), this.sortFunc.func)
+          return sort(list.map((el => getItmeDropData(el, this.stageTree, list))).filter(el => el.dropCost !== '∞'), this.sortFunc.func)
         } else return this.data.stageDropList.map(el => {
           return getItmeDropData(el, this.stageTree, list)
         })

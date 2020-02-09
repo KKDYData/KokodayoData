@@ -49,12 +49,11 @@ export default {
 <style lang="stylus" >
 a {
   color: #818181
-  cursor: default
+  cursor: pointer
   text-decoration: none
 
   &:any-link, &:-webkit-any-link，&:-moz-any-link {
     color: #818181
-    cursor: default
     text-decoration: none
   }
 }
