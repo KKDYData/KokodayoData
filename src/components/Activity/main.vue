@@ -1,11 +1,15 @@
 <template>
   <div>
     <div class="activity-wrapper">
-      <r-image :preview-src-list="[activityPic]" class="activity-img" :src="activityPic" />
+      <div class="activity-img">
+        <r-image :preview-src-list="[activityPic]" :src="activityPic" />
+      </div>
       <div class="activity-title">元宵刷图活动</div>
       <div class="activity-content">
         <div>大部分地图会掉落【岁过华灯】,为了方便，把它单独放了出来，点击可以查看掉落详情</div>
-        <item-viewer class="activity-item" type="item" item="randomMaterial_2" />
+        <div style="height: 100px">
+          <item-viewer class="activity-item" type="item" item="randomMaterial_2" />
+        </div>
         <div>
           <span class="activity-info-need">如果消耗理智非常少，注意检查样本数</span>
         </div>
@@ -40,7 +44,6 @@ export default {
 <style lang="stylus" scoped>
 .activity-wrapper {
   padding: 0 10px
-  height: 340px
 }
 
 .activity {
@@ -49,7 +52,11 @@ export default {
   }
 
   &-content {
-    height: 200px
+    //height: 200px
+  }
+
+  &-img {
+    height: 90x
   }
 
   &-title {
@@ -66,7 +73,6 @@ export default {
   .activity {
     &-wrapper {
       padding: 0 vw(20)
-      height: vw(640)
     }
 
     &-img {
@@ -78,7 +84,7 @@ export default {
     }
 
     &-content {
-      height: vw(300)
+      //height: vw(300)
     }
 
     &-title {
