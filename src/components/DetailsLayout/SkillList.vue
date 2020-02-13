@@ -1,5 +1,5 @@
 <template>
-  <h-popping :visible-arrow="false" size="90%" :width="600">
+  <h-popping :visible-arrow="false" size="90%" :width="800" placement="left">
     <div slot="title">{{ skills.levels[0].name }}-技能详情</div>
     <div slot="reference" class="el-circle-icon" style="position: unset; margin-left: 10px">
       <i class="el-icon-more" />
