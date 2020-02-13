@@ -39,6 +39,7 @@
               </h-popping>
             </div>
           </div>
+
           <div
             v-for="(story, index) in baseInfo"
             :key="story.storyTitle"
@@ -59,22 +60,28 @@
             </div>
           </div>
         </div>
+        <div class="info-token-desc">
+          <content-slot long-content :width="145">
+            <div slot="title">信物描述</div>
+            <div slot="content">{{ data.tokenDesc }}</div>
+          </content-slot>
+        </div>
         <div class="info-story-wrapper">
           <div v-for="story in data.storyTextAudio.slice(2)" :key="story.storyTitle">
-            <div class="info-story-title">
-              <span>
-                <b>{{ story.storyTitle }}</b>
-              </span>
-            </div>
-            <div class="info-story-content-wrapper">
-              <div v-for="(p, index) in story.stories" :key="index" class="info-story-content">
-                <div v-if="p.unLockParam !== ''" class="info-story-content-unlock">
-                  <span>解锁需要好感：</span>
-                  <span>{{ p.unLockParam | unlockStr }}</span>
-                </div>
-                <p v-html="changeText(p.storyText)" />
+            <content-slot :width="145" long-content>
+              <div slot="title">
+                <span>{{ story.storyTitle }}</span>
               </div>
-            </div>
+              <div slot="content">
+                <div v-for="(p, index) in story.stories" :key="index" class="info-story-content">
+                  <div v-if="p.unLockParam !== ''" class="info-story-content-unlock">
+                    <span>解锁需要好感：</span>
+                    <span>{{ p.unLockParam | unlockStr }}</span>
+                  </div>
+                  <p v-html="changeText(p.storyText)" />
+                </div>
+              </div>
+            </content-slot>
           </div>
         </div>
       </el-tab-pane>
@@ -325,7 +332,7 @@ export default {
 }
 
 .info-story-wrapper {
-  padding: 0 10px
+  //padding: 0 10px
 }
 
 .info-word {
@@ -382,6 +389,10 @@ export default {
   }
 }
 
+.info-token-desc {
+  margin: 20px 0
+}
+
 @media screen and (max-width: 700px) {
   .info-base-container {
     & + & {
@@ -409,6 +420,7 @@ export default {
   .char-base-info-container {
     flex-wrap: wrap
     justify-content: flex-start
+    margin-bottom: 30px
   }
 
   .char-set-cv {
@@ -427,6 +439,10 @@ export default {
     &-item {
       margin-top: vw(10)
     }
+  }
+
+  .info-token-desc {
+    margin: vw(20) 0
   }
 }
 </style>

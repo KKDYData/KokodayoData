@@ -1,5 +1,5 @@
 <template>
-  <div class="base-content" :class="{long: long}">
+  <div class="base-content" :class="{long, 'long-content': longContent}">
     <div :style="titleStyle" class="base-content-title">
       <slot name="title" />
     </div>
@@ -18,7 +18,11 @@ export default {
       default: null
     },
     long: Boolean,
-    noWrap: Boolean
+    noWrap: Boolean,
+    longContent: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapState(['short']),
@@ -43,7 +47,7 @@ export default {
     color: white
     background-color: #313131
     text-align: center
-    display: inline-block
+    //display: inline-block
     font-size: 100%
     line-height: 100%
     border-radius: 2px
@@ -54,6 +58,7 @@ export default {
 
   &-value {
     display: inline-block
+    padding-top: 10px
   }
 }
 
@@ -75,6 +80,16 @@ export default {
   }
 }
 
+.long-content {
+  .base-content {
+    &-value {
+      display: block
+      width: 100%
+      text-align: left
+    }
+  }
+}
+
 @media screen and (max-width: 900px) {
   .base-content {
     &-title {
@@ -84,15 +99,8 @@ export default {
     &-value {
       width: calc(80px + 0.5vw)
       text-align: center
+      padding-top: 5px
     }
-  }
-
-  .base-content-title {
-    display: block
-  }
-
-  .base-content-value {
-    padding-top: 5px
   }
 }
 
@@ -110,15 +118,8 @@ export default {
 
     &-value {
       width: vw(160)
+      padding-top: vw(10)
     }
-  }
-
-  .base-content-title {
-    display: block
-  }
-
-  .base-content-value {
-    padding-top: vw(10)
   }
 }
 </style>

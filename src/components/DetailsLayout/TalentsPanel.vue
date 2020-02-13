@@ -18,7 +18,7 @@
         </div>
       </div>
       <div v-for="talent in item.condidate" :key="talent.description" class="talent-desc">
-        <div>
+        <div class="talent-desc-title">
           <div class="talent-desc-condition">
             <span>精英{{ talent.unlockCondition.phase }}/{{ talent.unlockCondition.level }}级</span>
           </div>

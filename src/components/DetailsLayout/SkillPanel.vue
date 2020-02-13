@@ -12,14 +12,12 @@
       >
         <div v-if="skill.levels[sLevel[index]-1]" class="skill-status">
           <span>
-            <span>
-              <i class="el-icon-caret-right" />
-              {{ skill.levels[sLevel[index]-1].spData.initSp }}
-            </span>
-            <span>
-              <i class="el-icon-star-on" />
-              {{ skill.levels[sLevel[index]-1].spData.spCost }}
-            </span>
+            <i class="el-icon-caret-right" />
+            {{ skill.levels[sLevel[index]-1].spData.initSp }}
+          </span>
+          <span>
+            <i class="el-icon-star-on" />
+            {{ skill.levels[sLevel[index]-1].spData.spCost }}
           </span>
           <span v-if="skill.levels[sLevel[index]-1].duration > 0">
             <i class="el-icon-timer" />

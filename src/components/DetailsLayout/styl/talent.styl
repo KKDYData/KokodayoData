@@ -60,65 +60,116 @@
   }
 }
 
-@media screen and (max-width: 700px) {
-  .talent-wrapper {
-    min-width: auto
+simple(type, ttop = 1) {
+  ptop(scale = 1) {
+    if (ttop == 40) {
+      vw(20 * scale)
+    } else if (type == 'px') {
+      20px
+    } else {
+      0
+    }
   }
 
   .talent {
     width: 100%
     margin: 0
-    margin-bottom: 20px
 
-    & + & {
+    & + .talent {
       border: none
-      padding-top: 20px
-      border-top: 2px solid rgba(56, 56, 56, 0.6)
+      padding-top: ptop(1)
+      margin-top: ptop(1)
+      border-top: size(type, 2) solid rgba(56, 56, 56, 0.15)
     }
 
     &-title {
       position: relative
       width: 80%
       border-right: none
-      border-bottom: 1px solid rgba(158, 158, 158, 0.4)
+      border-bottom: size(type, 1) solid rgba(158, 158, 158, 0.4)
       justify-content: start
       box-sizing: border-box
-
-      span {
-        padding-left: 10px
-      }
     }
 
     /*天赋内容*/
     &-desc {
       width: 100%
-      margin-left: 0px
+      margin-left: size(type, 0)
       flex-wrap: wrap
-      margin-top: 10px
+      padding: 0
 
-      & + & {
-        padding-top: 20px
-        border-top: 1px solid rgba(158, 158, 158, 0.4)
+      & + .talent-desc {
+        margin-top: ptop(0.7)
+        padding-top: ptop(0.7)
+        border-top: size(type, 1) dashed rgba(158, 158, 158, 0.5)
+      }
+
+      &-content {
+        width: 100%
       }
 
       &-condition {
-        width: calc(100% - 10px)
-        padding-bottom: 10px
-        font-size: 13px
+        width: 100%
+        margin-bottom: size(type, 10)
+        font-size: size(type, 13)
         direction: rtl
-      }
-
-      &-condition span {
-        border-bottom: 2px solid rgba(247, 203, 10, 0.582)
+        border-bottom: size(type, 2) solid rgba(247, 203, 10, 0.582)
       }
 
       &-content-item {
-        padding-bottom: 10px
         position: relative
         display: inline-block
-        padding-right: 10px
-        font-size: 15px
+        padding-right: size(type, 10)
+        //padding-bottom: size(type, 10)
+        font-size: size(type, 15)
       }
+    }
+  }
+}
+
+.simple {
+  &.talent-wrapper {
+    min-width: auto
+  }
+
+  simple('px')
+}
+
+talent-desc-title(value) {
+  .talent {
+    &-desc {
+      &-title {
+        margin-left: value
+      }
+    }
+  }
+}
+
+boxShadow(type, x, y, blur, spread, c) {
+  box-shadow: size(type, x) size(type, y) size(type, blur) size(type, spread) c
+}
+
+item-shadow(type) {
+  boxShadow(type, 3, 2, 7, 1, rgba(114, 114, 114, 0.37))
+}
+
+@media screen and (max-width: 700px) {
+  //simple('px')
+  .talent-wrapper {
+    min-width: auto
+    talent-desc-title(auto)
+  }
+}
+
+@media screen and (max-width: 500px) {
+  simple('vw', 40)
+
+  .simple {
+    simple('vw', 40)
+
+    &.talent-wrapper {
+      min-width: auto
+      talent-desc-title(0)
     }
   }
 }

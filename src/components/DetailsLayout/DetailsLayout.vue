@@ -449,7 +449,11 @@ export default {
       return path + 'item/pic/' + id + '.png'
     },
     getInfo() {
-      getCharInfo(this.name).then(res => this.info = res)
+      getCharInfo(this.name).then(res => {
+        console.log(this.data)
+        const { tokenDesc } = this.data
+        this.info = Object.assign(res, { tokenDesc })
+      })
     },
     getWords() {
       getCharWords(this.name).then(res => this.words = res)
@@ -466,7 +470,7 @@ export default {
     getEvolveCost() {
       if (!this.data || !this.normal) return
       const data = [...this.data.phases]
-      for (let i = 0;i < data.length - 1;i++) {
+      for (let i = 0; i < data.length - 1; i++) {
         Promise.all(data[i + 1].evolveCost.map(p => getItem(p.id).then(item => ({ cost: p.count, item }))))
           .then(items => {
             this.$set(this.evolveCost, i, { money: evolveGoldCost[this.data.rarity][i], items })

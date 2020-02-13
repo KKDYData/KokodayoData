@@ -15,6 +15,7 @@ module.exports = function (api) {
         }
       }
     ],
+    ['@vue/babel-preset-jsx']
   ]
   const plugins = [
     [

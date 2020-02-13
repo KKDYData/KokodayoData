@@ -1,0 +1,62 @@
+
+boxShadow(type, x, y, blur, spread, c) {
+  box-shadow: size(type, x) size(type, y) size(type, blur) size(type, spread) c
+}
+
+item-shadow(type) {
+  boxShadow(type, 3, 2, 7, 1, rgba(114, 114, 114, 0.37))
+}
+
+buildFunc(type = 'vw', size = 1fr) {
+  l(len) {
+    size(type, len)
+  }
+
+  .building {
+    &-wrapper {
+      margin: l(20) auto
+      max-width: 1500px
+      display: grid
+      grid-template-columns: size
+      grid-gap: l(20)
+      justify-items: center
+      justify-content: center
+    }
+
+    &-item {
+      position: relative
+      padding: l(10)
+      border-radius: l(10)
+      width: 100%
+      box-sizing: border-box
+      item-shadow(type)
+    }
+
+    &-title {
+      display: flex
+      width: 100%
+      align-items: center
+      margin-bottom: size(px, 10)
+
+      &-name {
+        font-size: l(20)
+      }
+
+      &-pic {
+        margin-right: l(10)
+        right: 0
+        top: 0
+        width: size(type, 30)
+        height: @width
+      }
+    }
+  }
+}
+
+.normal {
+  buildFunc('px', repeat(auto-fill, 400px))
+}
+
+.mobile {
+  buildFunc('vw', vw(710))
+}

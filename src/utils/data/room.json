@@ -1,0 +1,66 @@
+{
+  "CONTROL": {
+    "id": "CONTROL",
+    "name": "控制中枢",
+    "category": "SPECIAL",
+    "color": "#313131",
+    "description": "罗德岛舰船系统的控制中枢，支撑着各个区域的规划建设。"
+  },
+  "POWER": {
+    "id": "POWER",
+    "name": "发电站",
+    "category": "OUTPUT",
+    "color": "hsl(80, 72%, 48%)",
+    "description": "罗德岛的电力生产设施，凭借源石引擎生产与传输电力。"
+  },
+  "MANUFACTURE": {
+    "id": "MANUFACTURE",
+    "name": "制造站",
+    "category": "OUTPUT",
+    "color": "hsl(48, 100%, 50%)",
+    "fontColor": "#020108",
+    "description": "罗德岛的资源生产设施，利用设备将原材料转化为工业原料，或产出种种器物。"
+  },
+  "TRADING": {
+    "id": "TRADING",
+    "name": "贸易站",
+    "category": "OUTPUT",
+    "color": "hsl(199, 100%, 57%)",
+    "description": "罗德岛的商业贸易设施，用以处理与各个势力间的贸易合同与商务协议，获取罗德岛必须的研究与活动资金。"
+  },
+  "DORMITORY": {
+    "id": "DORMITORY",
+    "name": "宿舍",
+    "category": "CUSTOM",
+    "color": "#22cdb5",
+    "description": "罗德岛干员的标准住宿设施，向干员们提供了休息与活动的必须设备。"
+  },
+  "WORKSHOP": {
+    "id": "WORKSHOP",
+    "name": "加工站",
+    "category": "FUNCTION",
+    "color": "#795548",
+    "description": "罗德岛的资源加工设施，利用设备将工业原料加工成各类材料，或分解成其他类型的原料。"
+  },
+  "HIRE": {
+    "id": "HIRE",
+    "name": "办公室",
+    "category": "FUNCTION",
+    "color": "#818181",
+    "description": "罗德岛的公务处理设施，用以处理罗德岛的各类综合事务。"
+  },
+  "TRAINING": {
+    "id": "TRAINING",
+    "name": "训练室",
+    "category": "FUNCTION",
+    "color": "rgb(232, 21, 0)",
+    "description": "罗德岛的干员训练设施，通过各类训练设备，为干员提供锻炼与自我磨练的空间。"
+  },
+  "MEETING": {
+    "id": "MEETING",
+    "category": "FUNCTION",
+    "name": "会客室",
+    "color": "#385387",
+    "description": "罗德岛的对外接待设施，多数访问与会面都在这里进行。"
+  }
+}

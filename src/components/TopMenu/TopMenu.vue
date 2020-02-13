@@ -89,6 +89,12 @@ export default {
           text: '关于',
           decs: 'Q&A 捐款 更新内容 反馈',
         },
+        {
+          name: 'building',
+          path: '/building',
+          text: '基建技能',
+          decs: '...',
+        },
       ],
     }
   },

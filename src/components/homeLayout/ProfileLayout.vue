@@ -360,12 +360,13 @@ export default {
 
 @media screen and (max-width: 500px) {
   .tag-wrapper-1 {
-    right: 15px
+    right: vw(10)
+    font-size: vw(24)
   }
 
   .profile-item {
     &-inner-wrapper {
-      margin: vw(5) vw(12)
+      margin: vw(15) vw(12)
 
       &.show-tags {
         width: calc(var(--imgWidth) * 1.74)

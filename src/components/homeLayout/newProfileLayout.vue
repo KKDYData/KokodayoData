@@ -16,27 +16,27 @@
         style="margin-bottom: 20px"
       >
         <!-- <div>{{item[0]}}</div> -->
-        <div>{{ item[0] }}</div>
+        <div class="new-mode-group-title">{{ item[0] }}</div>
         <div>
           <div
             v-for="agent in item[1].agents.sort((a, b) => b.tags[0] - a.tags[0])"
             :key="agent.name"
-            class="other-mode-agent"
+            class="new-mode-agent"
             :style="bgColor(agent.tags[0])"
           >
             <el-popover trigger="click">
-              <div class="other-mode-popover">
+              <div class="new-mode-popover">
                 <router-link :to="path + '/details/' + agent.No">
                   <div class="img-container">
                     <c-image :alt="agent.name" :src="profilePath(agent.No)" />
                   </div>
                 </router-link>
-                <div class="other-mode-popover-details">
-                  <div class="other-mode-popover-details-title other-mode-link">
+                <div class="new-mode-popover-details">
+                  <div class="new-mode-popover-details-title new-mode-link">
                     <router-link :to="path + '/details/' + agent.No">
-                      <span class="other-mode-popover-details-title-name">{{ agent.name }}</span>
+                      <span class="new-mode-popover-details-title-name">{{ agent.name }}</span>
                     </router-link>
-                    <div class="other-mode-popover-class-icon">
+                    <div class="new-mode-popover-class-icon">
                       <c-image :src="class_icon(agent.class)" />
                     </div>
                   </div>
@@ -45,7 +45,7 @@
                       <el-tag
                         v-if="index === 0 && tag > 3 || index > 1"
                         :key="tag"
-                        class="other-mode-popover-tag"
+                        class="new-mode-popover-tag"
                         effect="dark"
                         size="mini"
                         type="info"
@@ -71,7 +71,7 @@
 const arrange = (arr, index = 0, group = []) => {
   const res = []
   res.push([arr[index]])
-  for (let i = 0;i < group.length;i++) {
+  for (let i = 0; i < group.length; i++) {
     res.push([...group[i], arr[index]])
   }
   group = group.concat(res)
@@ -120,12 +120,16 @@ export default {
       if (!this.data || this.tags.length === 0) return
       let res = new Map()
       const resData = this.data.filter(el => el.gkzm)
+      // 去掉不是公招的
       const filterGroups = Object.keys(this.filterGroups)
         .filter(el => el !== 'gkzm')
         .map(key => ({
           key: key,
           filters: this.filterGroups[key].filter(el => el.chosed)
         }))
+
+      console.log(filterGroups)
+
       resData.forEach(agent => {
         const hitTag = []
 
@@ -142,7 +146,7 @@ export default {
               }
             })
           else {
-            // 全是数组了，这个好像没什么用了
+            //? class | star
             const find = group.filters.find(el => el.value === agent[key])
             if (find) {
               hitTag.push(find)
@@ -151,7 +155,7 @@ export default {
         })
 
         if (hitTag.length === 0) return
-        let resArr = arrange(hitTag)
+        let resArr = arrange(hitTag).filter(el => el.length < 4)
         let i = resArr.length
         while (i-- > 0) {
           const key = sort(resArr[i].map(el => el.text), (a, b) => a > b).join('，')
@@ -204,74 +208,82 @@ export default {
 }
 </script>
 
-<style scoped>
-.other-mode-agent {
-  display: inline-block;
-  padding: 5px;
-  color: white;
-  margin: 5px;
-  border-radius: 4px;
-  min-width: 25px;
-  text-align: center;
+<style lang="stylus" scoped>
+.new-mode-agent {
+  display: inline-block
+  padding: 5px
+  color: white
+  margin: 5px
+  border-radius: 4px
+  min-width: 25px
+  text-align: center
 }
 
 .new-profile-layout-container {
-  /* width: calc(100vw - 40px); */
-  /* max-height: 70vh; */
-  max-width: 950px;
-  background-color: white;
+  max-width: 950px
+  background-color: white
 }
-.other-mode-link span {
-  /* color: white; */
-  color: black;
-  text-decoration: none;
-}
-.other-mode-link a {
-  text-decoration: none;
+
+.new-mode-link {
+  span {
+    /*color: white;*/
+    color: black
+    text-decoration: none
+  }
+
+  a {
+    text-decoration: none
+  }
 }
 
 .img-container {
-  width: 60px;
-  height: 60px;
+  width: 60px
+  height: 60px
 }
-.new-mode-group-container {
-  display: flex;
-  flex-wrap: wrap;
-}
+
 .new-mode-group {
-  min-width: 150px;
-  margin: 10px;
+  min-width: 150px
+  margin: 10px
+
+  &-container {
+    display: flex
+    flex-wrap: wrap
+  }
+
+  &-title {
+    border-bottom: 1px solid #818181
+  }
 }
 
-.other-mode-popover {
-  display: flex;
-  align-items: center;
+.new-mode-popover {
+  display: flex
+  align-items: center
 }
 
-.other-mode-popover-details {
-  margin-left: 10px;
+.new-mode-popover-details {
+  margin-left: 10px
 }
 
-.other-mode-popover-tag {
-  margin: 5px 5px 0;
+.new-mode-popover-tag {
+  margin: 5px 5px 0
 }
 
-.other-mode-popover-class-icon {
-  width: 20px;
-  height: 20px;
-  vertical-align: bottom;
-  margin-left: 4px;
+.new-mode-popover-class-icon {
+  width: 20px
+  height: 20px
+  vertical-align: bottom
+  margin-left: 4px
 }
 
-.other-mode-popover-details-title {
-  font-size: 20px;
-  line-height: 100%;
-  display: flex;
+.new-mode-popover-details-title {
+  font-size: 20px
+  line-height: 100%
+  display: flex
 }
 
-.other-mode-popover-tag.el-tag--dark.el-tag--info {
-  background-color: #313131;
-  border-color: #313131;
+.new-mode-popover-tag.el-tag--dark.el-tag--info {
+  background-color: #313131
+  border-color: #313131
 }
 </style>
 
