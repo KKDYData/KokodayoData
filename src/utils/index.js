@@ -454,6 +454,15 @@ const getScreenWidth = () => {
   }
 }
 
+const getfontSize = (str, mSize = 34, nSize = 16, baseLen = 4) => {
+  const short = store.state.short
+  const base = short ? mSize : nSize
+  const temp = Math.min(baseLen / str.length * base, base)
+  console.log(temp, str)
+  return short ? (temp / 750 * 100) + 'vw' : temp + 'px'
+}
+
+
 const sleep = time => {
   return new Promise(resolve => {
     setTimeout(() => resolve(), time)
@@ -488,4 +497,5 @@ export {
   // 设备检测
   UA,
   getScreenWidth,
+  getfontSize
 }
