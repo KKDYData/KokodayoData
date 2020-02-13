@@ -484,7 +484,10 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
+@import './styl/talent.styl'
+@import './styl/skill.styl'
+
 .details-wrapper {
   //min-width: 340px
   max-width: 1200px
@@ -496,7 +499,7 @@ export default {
 .evolvcost-list-item-one {
   width: 100px
   box-sizing: border-box
-  margin: 0
+  margin: 0 !important
 }
 
 .tttt {

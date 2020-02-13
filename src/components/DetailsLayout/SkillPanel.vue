@@ -197,8 +197,6 @@ export default {
 
 
 <style lang="stylus" scoped>
-@import './styl/skill.styl'
-
 .control-body-lv {
   padding-right: 20px
 }

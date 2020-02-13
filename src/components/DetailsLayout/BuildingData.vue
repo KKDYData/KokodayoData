@@ -74,8 +74,6 @@ export default {
 </script>
 
 <style lang="stylus" >
-@import './styl/talent.styl'
-
 .room-type {
   display: inline-block
   padding: 3px 10px

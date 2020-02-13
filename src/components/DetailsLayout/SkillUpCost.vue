@@ -81,7 +81,7 @@ export default {
     ...mapState(['short']),
     unlockCond() {
       const res = []
-      for (let i = 0;i < this.skills.length;i++) {
+      for (let i = 0; i < this.skills.length; i++) {
         res.push({
           Id: this.skills[i],
           data: [...this.allLevelCost, ...this.seven[i].levelUpCostCond]
@@ -91,7 +91,7 @@ export default {
     }
   },
   beforeMount() {
-    for (let i = 0;i < this.unlockCond.length;i++) {
+    for (let i = 0; i < this.unlockCond.length; i++) {
       this.sLevelAdd(i, 0)
     }
   },
@@ -131,8 +131,6 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import './styl/skill.styl'
-
 .skill-body-item {
   width: 100px
   margin: 0

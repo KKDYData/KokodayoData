@@ -65,6 +65,4 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
-@import './styl/talent.styl'
-</style>
+<style lang="stylus" ></style>
