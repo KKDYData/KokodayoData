@@ -36,6 +36,7 @@
 <script>
 import { changeDesc, getProfilePath } from '../../utils'
 import room from '@/utils/data/room.json'
+import './styl/talent.styl'
 
 export default {
   props: {
@@ -45,7 +46,7 @@ export default {
     },
     simple: {
       type: Boolean,
-      default: false
+      default: true
     }
   },
   data() {
@@ -129,6 +130,13 @@ export default {
     text-align: center
     border-radius: vw(8)
     color: white
+  }
+
+  .simple {
+    .talent + .talent {
+      margin-top: vw(20)
+      padding-top: vw(20)
+    }
   }
 }
 </style>

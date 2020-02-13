@@ -49,7 +49,7 @@ import { getItem } from '../../utils/fetch'
 import { itemBackground } from '../../utils/string'
 import ItemViewer from '../ItemViewer'
 import SkillContainer from './SkillContainer'
-
+import './styl/skill.styl'
 import { mapState } from 'vuex'
 
 export default {

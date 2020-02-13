@@ -485,9 +485,6 @@ export default {
 </script>
 
 <style lang="stylus">
-@import './styl/talent.styl'
-@import './styl/skill.styl'
-
 .details-wrapper {
   //min-width: 340px
   max-width: 1200px
@@ -504,6 +501,10 @@ export default {
 
 .tttt {
   padding: 0 10px 20px
+
+  &.talent-wrapper {
+    margin-bottom: 20px
+  }
 }
 
 /**/

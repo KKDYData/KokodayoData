@@ -73,7 +73,7 @@
 
 <script>
 import { changeAttackSpeed, } from '../../utils'
-
+import './styl/skill.styl'
 import Range from './Range'
 import SkillContainer from './SkillContainer'
 import SkillList from './SkillList'

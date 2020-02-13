@@ -60,9 +60,9 @@
   }
 }
 
-simple(type, ttop = 1) {
+simple(type, ttop = 'px') {
   ptop(scale = 1) {
-    if (ttop == 40) {
+    if (ttop == 'vw') {
       vw(20 * scale)
     } else if (type == 'px') {
       20px
@@ -77,8 +77,8 @@ simple(type, ttop = 1) {
 
     & + .talent {
       border: none
-      padding-top: ptop(1)
-      margin-top: ptop(1)
+      padding-top: ptop(3)
+      margin-top: ptop(3)
       border-top: size(type, 2) solid rgba(56, 56, 56, 0.15)
     }
 
@@ -145,16 +145,7 @@ tatentdesctitle(value) {
   }
 }
 
-boxShadow(type, x, y, blur, spread, c) {
-  box-shadow: size(type, x) size(type, y) size(type, blur) size(type, spread) c
-}
-
-item-shadow(type) {
-  boxShadow(type, 3, 2, 7, 1, rgba(114, 114, 114, 0.37))
-}
-
 @media screen and (max-width: 700px) {
-  //simple('px')
   .talent-wrapper {
     min-width: auto
     tatentdesctitle(auto)
@@ -162,10 +153,10 @@ item-shadow(type) {
 }
 
 @media screen and (max-width: 500px) {
-  simple('vw', 40)
+  simple('vw', 'vw')
 
   .simple {
-    simple('vw', 40)
+    simple('vw', 'vw')
 
     &.talent-wrapper {
       min-width: auto
