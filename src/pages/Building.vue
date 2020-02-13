@@ -1,7 +1,5 @@
 <template>
-  <div class="building-wrapper-outter" :class="short ? 'mobile': 'normal'">
-    <h1>building</h1>
-
+  <div class="building-wrapper-outter" :class="classMode">
     <div class="building-wrapper">
       <div v-for="(data, key) in skills" :key="key">
         <div class="building-item">
@@ -37,6 +35,9 @@ export default {
   },
   computed: {
     ...mapState(['short']),
+    classMode() {
+      return this.short ? 'mobile' : 'pc'
+    },
     simple() {
       return true
     }

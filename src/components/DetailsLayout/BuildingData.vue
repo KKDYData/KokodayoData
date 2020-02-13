@@ -82,6 +82,7 @@ export default {
   font-size: 14px
   border-radius: 4px
   color: white
+  margin-left: 10px
 }
 
 .building-title {
@@ -107,6 +108,7 @@ export default {
         white-space: nowrap
 
         .room-type {
+          margin: 0
           margin-right: 10px
         }
       }
