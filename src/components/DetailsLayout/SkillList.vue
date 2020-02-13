@@ -4,7 +4,7 @@
     <div slot="reference" class="el-circle-icon" style="position: unset; margin-left: 10px">
       <i class="el-icon-more" />
     </div>
-    <div style="max-height: 80vh; overflow-y: scroll">
+    <div style="max-height: 80vh; overflow-y: auto">
       <div v-for="(skill, index) in skills.levels" :key="index" style="margin: 20px 10px">
         <div class="skill-list-title">
           <div>
