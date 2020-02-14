@@ -296,23 +296,12 @@ export default {
       if (!data.length) {
         this.skills = this.roomSkills
         this.list = this.roomList
-        // if (this.mode === 'agent')
-        // this.filter = null
-        // this.switchData([this.filter])
         return
       }
 
-      // const target = data[0]
-      // this.filter = target
       const check = (e, target) => {
-
-        console.log('reg', target.value)
         const reg = new RegExp(target.value)
         const str = e.data.description
-        // const str = target.value + ''
-        // console.log(reg, target.value, typeof str, str, new RegExp(str), reg.test('进驻制造站时，生产力+15%'), reg.test(e.data.description), e.data.description)
-        // console.log(reg.test(str))
-        console.log('1', reg, str)
         return reg.test(str)
       }
 

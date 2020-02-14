@@ -27,7 +27,7 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 - [ ] 从服务器获取更新信息的api
 - [ ] dps图
 - [ ] 剧情回放
-- [-] 多语言
+- [] 多语言
 
 
 #### 2019/11/24
@@ -35,7 +35,7 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 - [x] 基建页面
 - [ ] 种族/阵营筛选
 - [ ] 评论功能
-- [-] 从服务器获取更新信息的api
+- [ ] 从服务器获取更新信息的api
 - [x] 整合拆包数据处理的脚本进来
 - [ ] dps图
 - [x] 地图重构
@@ -48,8 +48,8 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
    <img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
 
 ### 分离出来的组件
-   1. 地图<https://github.com/odex21/SomeMapTest>，包含1个简单的canvas渲染模块和寻路算法。
-   2. spine小人<https://github.com/odex21/ArkSpineTest>，测试小人文件的简易框架（？）
+   1. [地图](https://github.com/odex21/SomeMapTest)，包含1个简单的canvas渲染模块和寻路算法。
+   2. [spine小人](https://github.com/odex21/ArkSpineTest)，测试小人文件的简易框架（？）
 
 ### 其它
 
@@ -58,8 +58,8 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 
 ### 数据来源
 
-1. 拆包数据<https://github.com/Perfare/ArknightsGameData>
-2. 掉落统计<https://penguin-stats.io/>
+<!-- 1. [拆包数据](https://github.com/Perfare/ArknightsGameData)  -->
+2. [掉落统计](https://penguin-stats.io/) 企鹅物流
 
 ### 缓存
 
