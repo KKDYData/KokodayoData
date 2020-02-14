@@ -48,8 +48,8 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
    <img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
 
 ### 分离出来的组件
-   1. 地图[https://github.com/odex21/SomeMapTest]，包含1个简单的canvas渲染模块和寻路算法。
-   2. spine小人[https://github.com/odex21/ArkSpineTest]，测试小人文件的简易框架（？）
+   1. 地图<https://github.com/odex21/SomeMapTest>，包含1个简单的canvas渲染模块和寻路算法。
+   2. spine小人<https://github.com/odex21/ArkSpineTest>，测试小人文件的简易框架（？）
 
 ### 其它
 
