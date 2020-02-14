@@ -16,11 +16,10 @@ const debounce = (action, idle, ...args) => {
 
 const throttle = (action, delay, ...args) => {
   let last = 0
-  // 传的参数是类似requestAnimationFrame的TimeEvent
   return (event) => {
-    let curr = event.timeStamp
+    let curr = +new Date()
     if (curr - last > delay) {
-      action(...args)
+      action(...args, ...event)
       last = curr
     }
   }

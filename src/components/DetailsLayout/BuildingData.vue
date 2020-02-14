@@ -1,6 +1,6 @@
 <template>
   <div class="talent-wrapper" :class="{'simple':simple}">
-    <div v-for="(item, index) in building" :key="index" class="talent">
+    <div v-for="(item, index) in data" :key="index" class="talent">
       <div v-if="!simple" class="talent-title building-title">
         <span>{{ item[0].data.buffName }}</span>
         <span
@@ -21,7 +21,10 @@
             v-if="build.data.buffName !== item[0].data.buffName"
             class="building-info-need"
           >←{{ item[i - 1].data.buffName }}</span>
-          <span class="talent-desc-condition">精英{{ build.cond.phase }}/{{ build.cond.level }}级</span>
+          <span
+            v-if="build.cond"
+            class="talent-desc-condition"
+          >精英{{ build.cond.phase }}/{{ build.cond.level }}级</span>
         </div>
         <div class="talent-desc-content">
           <div class="talent-desc-content-item">
@@ -41,17 +44,40 @@ import './styl/talent.styl'
 export default {
   props: {
     building: {
-      type: [Object, Array],
+      type: Array,
       required: true
     },
     simple: {
       type: Boolean,
       default: true
+    },
+    filter: {
+      type: Object,
+      default: null
+    },
+    showAll: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
     return {
-      showTalentPotencailUP: [false, false, false]
+      all: false
+    }
+  },
+  computed: {
+    data() {
+      if (!this.filter || this.showAll) return this.building
+      else return this.building.filter(e => e.some(s =>
+        s.data.roomType === this.filter.value
+      ))
+    }
+  },
+  watch: {
+    filter(v) {
+      if (!v) {
+        this.all = false
+      }
     }
   },
   methods: {

@@ -19,7 +19,7 @@ buildFunc(type = 'vw', size = 1fr) {
       display: grid
       grid-template-columns: size
       grid-gap: l(20)
-      justify-items: center
+      justify-items: start
       justify-content: center
     }
 
@@ -32,11 +32,33 @@ buildFunc(type = 'vw', size = 1fr) {
       item-shadow(type)
     }
 
+    &-list {
+      display: grid
+      grid-template-columns: repeat(auto-fill, l(50))
+      grid-gap: l(10)
+      margin: l(20) 0 l(5)
+
+      &-item {
+        width: l(50)
+        height: l(50)
+      }
+    }
+
     &-title {
       display: flex
       width: 100%
       align-items: center
-      margin-bottom: size(px, 10)
+      margin-bottom: l(20)
+
+      &-control {
+        margin-left: auto
+        margin-right: l(20)
+        transition: 0.3s ease-out
+
+        &.rotate {
+          transform: rotate(180deg)
+        }
+      }
 
       &-name {
         font-size: l(20)
@@ -54,7 +76,7 @@ buildFunc(type = 'vw', size = 1fr) {
 }
 
 .pc {
-  buildFunc('px', repeat(auto-fill, 400px))
+  buildFunc('px', repeat(3, minmax(400px, 1fr)))
 }
 
 .mobile {

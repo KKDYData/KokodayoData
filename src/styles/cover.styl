@@ -1,0 +1,47 @@
+
+@media screen and (max-width: 500px) {
+  #app {
+    .el-button {
+      padding: vw(14) vw(30)
+      font-size: vw(24)
+    }
+
+    .el-button + .el-button[data-v-8949beae] {
+      margin-left: vw(10)
+    }
+
+    .el-button--mini {
+      padding: vw(14) vw(30)
+      font-size: vw(24)
+    }
+
+    .el-button + .el-button[data-v-8949beae] {
+      margin-left: vw(10)
+    }
+
+    .el-switch {
+      &.is-checked &__core:after {
+        margin-left: vw(-34)
+        left: 100%
+      }
+
+      &__label * {
+        font-size: vw(32)
+      }
+
+      &__core {
+        height: vw(40)
+        width: vw(80) !important
+        border-width: vw(2)
+        border-radius: vw(20)
+
+        &:after {
+          top: vw(2)
+          left: vw(2)
+          width: vw(32)
+          height: vw(32)
+        }
+      }
+    }
+  }
+}

@@ -5,13 +5,13 @@
         <el-button
           :size="short? 'mini' :'medium'"
           :type="allChosed ? 'info': 'danger'"
-          :class="!allChosed && !single ? 'filter-button filter-button-closeable' : 'filter-button'"
+          :class="!allChosed && closeAble ? 'filter-button filter-button-closeable' : 'filter-button'"
           :disabled="disabled"
           @click="choseAll"
         >
           {{ label }}
           <transition name="fade">
-            <span v-if="!allChosed && !single" class="filter-close-icon">
+            <span v-if="!allChosed && closeAble" class="filter-close-icon">
               <i class="el-icon-close" />
             </span>
           </transition>
@@ -33,16 +33,16 @@
 
 
 <script>
-import Vue from 'vue';
-import { Button } from 'element-ui';
-import { mapState } from 'vuex';
-Vue.use(Button);
+import Vue from 'vue'
+import { Button } from 'element-ui'
+import { mapState } from 'vuex'
+Vue.use(Button)
 
 export default {
   props: {
     filters: {
       default() {
-        return [];
+        return []
       },
       type: Array
     },
@@ -58,81 +58,88 @@ export default {
     disabled: {
       default: false,
       type: Boolean
+    },
+    singleClose: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
-    const de = this.default || '';
+    const de = this.default || ''
     return {
       lists: this.filters.map(obj => {
-        if (obj.value !== de) obj.chosed = false;
-        else obj.chosed = true;
-        return obj;
+        if (obj.value !== de) obj.chosed = false
+        else obj.chosed = true
+        return obj
       })
-    };
+    }
   },
 
   computed: {
     ...mapState(['short']),
+    closeAble() {
+      return this.singleClose || !this.single
+    },
     allChosed() {
-      if (!this.lists) return;
-      const l = this.lists.filter(key => key.chosed).length;
+      if (!this.lists) return
+      const l = this.lists.filter(key => key.chosed).length
       if (this.single) {
-        return l === 0;
+        return l === 0
       }
-      return l === this.filters.length || l === 0;
+      return l === this.filters.length || l === 0
     }
   },
   watch: {
-    filters: function(newFilter, old) {
+    filters: function (newFilter, old) {
       const res = newFilter.map(obj => {
-        if (!obj.chosed) obj.chosed = false;
-        return obj;
-      });
-      this.lists = res;
+        if (!obj.chosed) obj.chosed = false
+        return obj
+      })
+      this.lists = res
     }
   },
   methods: {
     filter(key) {
-      let fArr;
+      let fArr
       if (!this.single) {
-        this.$set(key, 'chosed', !key.chosed);
-        fArr = this.lists.filter(key => key.chosed);
+        this.$set(key, 'chosed', !key.chosed)
+        fArr = this.lists.filter(key => key.chosed)
         if (fArr.length === 0) {
-          this.$emit('filter', []);
-          return;
+          this.$emit('filter', [])
+          return
         }
         if (fArr.length === this.lists.length) {
-          this.lists.forEach(key => this.$set(key, 'chosed', false));
-          this.$emit('filter', []);
-          return;
+          this.lists.forEach(key => this.$set(key, 'chosed', false))
+          this.$emit('filter', [])
+          return
         }
-        this.$emit('filter', fArr);
+        this.$emit('filter', fArr)
       } else {
         if (this.lists.length === 1 || !key.chosed)
-          this.$set(key, 'chosed', !key.chosed);
+          this.$set(key, 'chosed', !key.chosed)
 
         this.lists.forEach(other => {
-          if (key !== other) this.$set(other, 'chosed', false);
-        });
-        fArr = this.lists.filter(key => key.chosed);
-        this.$emit('filter', fArr);
+          if (key !== other) this.$set(other, 'chosed', false)
+        })
+        fArr = this.lists.filter(key => key.chosed)
+        this.$emit('filter', fArr)
       }
     },
     choseAll() {
-      console.log('全选');
-      if (this.single) return;
+      console.log('全选')
+      if (this.single && !this.singleClose) return
 
       if (this.single && this.allChosed) {
-        this.lists.forEach(key => this.$set(key, 'chosed', true));
-        this.$emit('filter', this.lists);
+        this.lists.forEach(key => this.$set(key, 'chosed', true))
+        this.$emit('filter', this.lists)
 
-        return;
+        return
       }
-      this.lists.forEach(key => this.$set(key, 'chosed', false));
-      this.$emit('filter', []);
+      this.lists.forEach(key => this.$set(key, 'chosed', false))
+      this.$emit('filter', [])
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -80,7 +80,7 @@
           <talents-panel :talents="talents" @talentPotentailUp="e => talentPotentailUp = e" />
         </div>
         <!-- 技能面板 -->
-        <my-title title="技能" />
+        <my-title v-if="skills.length > 0" title="技能" />
         <div v-if="skills.length > 0" class="tttt">
           <skill-panel
             :status="status"
@@ -134,24 +134,23 @@
               </div>
             </div>
           </div>
-
-          <!-- 技能升级消耗 -->
-          <div v-if="skills.length > 0 && normal">
-            <my-title title="技能升级消耗" />
-            <skill-up-panel
-              :all-level-cost="data.allSkillLvlup"
-              :skills="skills"
-              :seven="data.skills"
-              class="tttt"
-            />
-          </div>
-          <!-- 基建面板 -->
-          <div v-if="normal">
-            <my-title title="基建技能" />
-            <building-data class="tttt" :building="data.buildingData" />
-            <my-title title="干员资料" />
-            <info-panel v-if="info" class="tttt" :data="info" :list="setList" :words="words" />
-          </div>
+        </div>
+        <!-- 技能升级消耗 -->
+        <div v-if="skills.length > 0 && normal">
+          <my-title title="技能升级消耗" />
+          <skill-up-panel
+            :all-level-cost="data.allSkillLvlup"
+            :skills="skills"
+            :seven="data.skills"
+            class="tttt"
+          />
+        </div>
+        <!-- 基建面板 -->
+        <div v-if="normal">
+          <my-title title="基建技能" />
+          <building-data class="tttt" :building="data.buildingData" />
+          <my-title title="干员资料" />
+          <info-panel v-if="info" class="tttt" :data="info" :list="setList" :words="words" />
         </div>
       </div>
     </transition>
@@ -189,7 +188,7 @@ import ItemViewer from '../ItemViewer'
 import charStatus from '../base/charStatus'
 import DataLoading from '../base/Loading'
 import MyTitle from '@/components/base/MyTitle'
-import MyShare from './Share'
+import MyShare from '@/components/Share'
 
 const SkillPanel = () => ({
   component: import(
@@ -767,6 +766,10 @@ export default {
     padding: 0 vw(20) vw(20)
   }
 
+  .status-switcher-title {
+    padding-right: vw(15)
+  }
+
   //属性面板
   .status-details-wrapper {
     width: 50%
@@ -779,44 +782,12 @@ export default {
   }
 
   .status-switcher {
-    .status-switcher-lf-lv {
+    &-lf-lv {
       width: 55vw
     }
 
     padding: vw(24) vw(20)
     font-size: vw(32)
-
-    .el-switch__label * {
-      font-size: vw(32)
-    }
-
-    .el-button--mini {
-      padding: vw(14) vw(30)
-      font-size: vw(24)
-    }
-
-    .el-button + .el-button[data-v-8949beae] {
-      margin-left: vw(10)
-    }
-
-    .el-switch__core {
-      height: vw(40)
-      width: vw(80) !important
-      border-width: vw(2)
-      border-radius: vw(20)
-
-      &:after {
-        top: vw(2)
-        left: vw(2)
-        width: vw(32)
-        height: vw(32)
-      }
-    }
-
-    .el-switch.is-checked .el-switch__core:after {
-      margin-left: vw(-34)
-      left: 100%
-    }
   }
 }
 </style>
