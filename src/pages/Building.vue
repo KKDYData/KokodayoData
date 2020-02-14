@@ -90,6 +90,10 @@ const modes = [
 
 const types = {
   TRADING: [
+    { text: '20%', value: '效率<@cc.vup>+20%' },
+    { text: '25%', value: '效率<@cc.vup>+25%' },
+    { text: '30%', value: '效率<@cc.vup>+30%' },
+    { text: '35%', value: '效率<@cc.vup>+35%' },
     { text: '获取效率', value: '获取效率' },
     { text: '订单上限', value: '订单上限' },
     { text: '心情', value: '心情' },
@@ -105,7 +109,14 @@ const types = {
     { text: '15%', value: '15%' },
     { text: '20%', value: '20%' },
   ],
+  // 10%
   MANUFACTURE: [
+    { text: '2%', value: '提供<@cc.vup>2%' },
+    { text: '10%', value: '生产力<@cc.vup>+10%' },
+    { text: '15%', value: '生产力<@cc.vup>+15%' },
+    { text: '25%', value: '生产力<@cc.vup>+25%' },
+    { text: '30%', value: '生产力<@cc.vup>+30%' },
+    { text: '35%', value: '生产力<@cc.vup>+35%' },
     { text: '仓库容量', value: '仓库容量' },
     { text: '通用生产力', value: '，生产力' },
     { text: '源石', value: '源石' },
@@ -113,7 +124,7 @@ const types = {
     { text: '心情', value: '心情' },
   ],
   DORMITORY: [
-    { text: '所有干员', value: '所有干员' },
+    { text: '所有干员', value: '所有干员的心情每小时恢复' },
     { text: '单人', value: '某个干员' },
     { text: '自己', value: '，自身心情' },
     { text: '目标', value: '目标是' },
@@ -143,8 +154,8 @@ const types = {
     { text: '特种', value: '特种' },
   ],
   MEETING: [
-    { text: '20%', value: '20%' },
-    { text: '25%', value: '25%' },
+    { text: '20%', value: '线索搜集速度提升<@cc.vup>20%' },
+    { text: '25%', value: '线索搜集速度提升<@cc.vup>25%' },
     { text: '莱茵生命', value: '莱茵生命' },
     { text: '企鹅物流', value: '企鹅物流' },
     { text: '黑钢国际', value: '黑钢国际' },

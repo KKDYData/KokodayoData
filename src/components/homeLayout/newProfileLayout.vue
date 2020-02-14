@@ -85,7 +85,7 @@ import {
   getClass_icon
 } from '../../utils'
 
-import { getClass_Chinese, starColor } from '../../utils/string'
+import { getClass_Chinese, agentColor } from '../../utils/string'
 
 import { mapState } from 'vuex'
 import Vue from 'vue'
@@ -195,7 +195,7 @@ export default {
       return getClass_Chinese(c)
     },
     bgColor(star) {
-      const targetColor = starColor[star]
+      const targetColor = agentColor[star]
 
       return {
         'background-color': `hsla(${targetColor[0]},${targetColor[1]}%, ${targetColor[2]}%, 1)`

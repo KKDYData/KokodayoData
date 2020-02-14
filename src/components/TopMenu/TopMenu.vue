@@ -61,10 +61,10 @@ export default {
           decs: '敌人数据 行动路线 地图掉落',
         },
         {
-          name: 'enemydata',
-          path: '/computer',
-          text: '经验计算',
-          decs: '干员养成消耗计算',
+          name: 'building',
+          path: '/building',
+          text: '基建技能',
+          decs: '各种分类查询',
         },
         {
           name: 'items',
@@ -84,17 +84,18 @@ export default {
           text: '家具图鉴',
           decs: '家具套装 散件',
         },
+
+        {
+          name: 'enemydata',
+          path: '/computer',
+          text: '经验计算',
+          decs: '干员养成消耗计算',
+        },
         {
           name: 'info',
           path: '/info',
           text: '关于',
           decs: 'Q&A 捐款 更新内容 反馈',
-        },
-        {
-          name: 'building',
-          path: '/building',
-          text: '基建技能',
-          decs: '...',
         },
       ],
     }

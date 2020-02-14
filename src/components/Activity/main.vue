@@ -1,6 +1,7 @@
 <template>
   <div>
     <div class="activity-wrapper">
+      <div class="activity-title" style="margin-bottom: 10px; color: #ff5200">新增基建技能页面</div>
       <div class="activity-img">
         <r-image :preview-src-list="[activityPic]" :src="activityPic" />
       </div>
@@ -16,9 +17,6 @@
         <div class="activity-info-need">
           <a target="_blank" href="https://penguin-stats.io/">数据来源&收集：企鹅物流</a>
         </div>
-      </div>
-      <div>
-        <span class="activity-info-need">最近在家用13寸笔记本维护，所以 测试没之前全，有些小bug没发现，望见谅。</span>
       </div>
     </div>
   </div>
