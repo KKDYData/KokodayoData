@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div :class="modeClass">
     <div v-if="!short" class="top-menu">
       <route-item :short="short" :data="home" />
       <route-item
@@ -32,6 +32,7 @@
   </div>
 </template>
 <script>
+import './styl.styl'
 import RouteItem from './RoutItem'
 import { mapState } from 'vuex'
 import HDrawer from '@/components/base/Popping'
@@ -99,7 +100,10 @@ export default {
     }
   },
   computed: {
-    ...mapState(['short'])
+    ...mapState(['short']),
+    modeClass() {
+      return this.short ? 'link-mode-short' : ''
+    }
   },
   mounted() {
     const height = this.$refs.route && this.$refs.route.$el ? this.$refs.route.$el.clientHeight : 42
@@ -114,22 +118,4 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
-.top-menu {
-  display: grid
-  grid-template-columns: 150px repeat(auto-fill, 100px)
-  background-color: #515151
-}
-
-@media screen and (max-width: 600px) {
-  .top-menu {
-    grid-template-columns: 3fr 1fr
-    align-items: center
-    color: white
-  }
-
-  .router-more {
-    text-align: center
-  }
-}
-</style>
+<style lang="stylus" scoped></style>

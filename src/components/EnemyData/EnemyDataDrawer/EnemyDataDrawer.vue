@@ -185,6 +185,8 @@ export default {
   filter: invert(100%) contrast(2) opacity(0.15)
   position: absolute
   right: 20px
+  width: 100px
+  height: 100px
 }
 
 @media screen and (max-width: 700px) {
@@ -202,15 +204,16 @@ export default {
 
   .enemy-boss-icon {
     right: 20px
+    width: vw(150)
+    height: vw(150)
   }
 }
 
-@media screen and (max-width: 400px) {
+@media screen and (max-width: 500px) {
   .enemy-img-container {
-    --imgW: calc(80px + 5vw)
-    height: var(--imgW)
-    width: var(--imgW)
-    min-width: var(--imgW)
+    len = vw(180)
+    height: len
+    width: len
   }
 }
 

@@ -6,7 +6,7 @@
       :style="compact ? 'margin: 5px 0': ''"
       class="status-details-container"
     >
-      <content-slot>
+      <content-slot long :width="100">
         <div slot="title">
           <span>{{ key }}</span>
         </div>

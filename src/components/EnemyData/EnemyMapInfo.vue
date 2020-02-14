@@ -7,8 +7,8 @@
         v-for="([k,v]) in options"
         :key="k"
         class="map-option-content"
-        :long="true"
-        :no-wrap="true"
+        :long="!short"
+        :no-wrap="!short"
         :width="slotWidth"
       >
         <template slot="title">{{ k }}</template>
@@ -21,8 +21,8 @@
       <content-slot
         v-for="([k,v]) in globalBuffs"
         :key="k"
-        :long="true"
-        :no-wrap="true"
+        :long="!short"
+        :no-wrap="!short"
         :width="150"
         style="margin-bottom: 10px"
       >
@@ -47,14 +47,14 @@
 </template>
 
 <script>
-import MyTitle from '../base/MyTitle';
-import ContentSlot from '../base/ContentSlot';
+import MyTitle from '../base/MyTitle'
+import ContentSlot from '../base/ContentSlot'
 
-import Vue from 'vue';
-import { mapState } from 'vuex';
+import Vue from 'vue'
+import { mapState } from 'vuex'
 
-import { Alert } from 'element-ui';
-Vue.use(Alert);
+import { Alert } from 'element-ui'
+Vue.use(Alert)
 
 
 export default {
@@ -64,7 +64,7 @@ export default {
   },
   filters: {
     time(v) {
-      return Math.floor(v / 60) + ' min ' + Math.round(v % 60) + ' s';
+      return Math.floor(v / 60) + ' min ' + Math.round(v % 60) + ' s'
     }
   },
   props: {
@@ -86,8 +86,8 @@ export default {
     }
   },
   data() {
-    const cW = document.body.clientWidth;
-    const slotWidth = cW < 375 ? 121 : 126;
+    const cW = document.body.clientWidth
+    const slotWidth = cW < 375 ? 121 : 126
     return {
       slotWidth,
       Keys: {
@@ -97,12 +97,12 @@ export default {
         def: '防御',
         max_hp: '生命',
       }
-    };
+    }
   },
   computed: {
     ...mapState(['short']),
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
@@ -117,41 +117,43 @@ export default {
   flex-wrap: wrap
   align-content: start
   margin-left: 10px
+  //overflow: hidden
 }
 
 .map-option-content {
   margin: 0 0 20px
-  width: calc(50% - 40px)
 }
 
 @media screen and (max-width: 1000px) {
-  .map-option-container-wrapper {
-    min-width: auto
-    max-width: inherit
-  }
+  .map-option {
+    &-container {
+      min-width: auto
 
-  .map-option-container {
-    min-width: auto
-  }
+      &-wrapper {
+        min-width: auto
+        max-width: inherit
+      }
+    }
 
-  .map-option-content {
-    margin: 0 10px 10px 0
-    width: calc(50% - 10px)
+    &-content {
+      margin: 0 10px 10px 0
+    }
   }
 }
 
 @media screen and (max-width: 800px) {
-  .map-option-container-wrapper {
-    margin: 0
-  }
+  .map-option {
+    &-container {
+      min-width: auto
 
-  .map-option-content {
-    margin: 0 0 10px 0
-    width: calc(50% - 5px)
-  }
+      &-wrapper {
+        margin: 0
+      }
+    }
 
-  .map-option-container {
-    margin-left: 0
+    &-content {
+      margin: 0 10px 10px 0
+    }
   }
 }
 </style>

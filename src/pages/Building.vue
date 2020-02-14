@@ -97,7 +97,7 @@ const types = {
   ],
   CONTROL: [
     { text: '订单效率', value: '订单效率' },
-    { text: '降低心情消耗', value: '心情消耗' },
+    { text: '心情', value: '心情' },
     { text: '加强会客室', value: '加强会客室' },
   ],
   POWER: [
