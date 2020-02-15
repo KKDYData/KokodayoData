@@ -1,6 +1,8 @@
 <template>
-  <div class="skill-pic-contianer">
-    <c-image :src="path" />
+  <div>
+    <div class="skill-pic-contianer">
+      <c-image :src="path" />
+    </div>
     <div class="skill-name-wrapper">
       <span :style="{fontSize}">{{ skill.levels[0].name }}</span>
     </div>
@@ -34,7 +36,7 @@ export default {
       return path + 'skills/pics/skill_icon_' + name + '.png'
     },
     fontSize(s) {
-      return getfontSize(this.skill.levels[0].name)
+      return getfontSize(this.skill.levels[0].name, 34, 16, this.short ? 4 : 6)
     }
   }
 }

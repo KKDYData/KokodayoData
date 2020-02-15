@@ -1,32 +1,31 @@
 <template>
   <div>
     <transition-group name="flip-list" class="profile-container">
-      <div
-        v-for="(agent, index) in data"
-        :key="agent.name"
-        class="profile-item"
-        @mouseover="hoverShowTag(true, index)"
-        @mouseleave="hoverShowTag(false, index)"
-      >
+      <div v-for="(agent, index) in data" :key="agent.name" class="profile-item" :class="dev">
         <!--  -->
-        <div class="profile-item-inner-wrapper" :class="{'show-tags': showTags || agent.showTags }">
+        <div
+          class="profile-item-inner-wrapper"
+          :class="{'show-tags': showTags || agent.showTags }"
+          @mouseover="hoverShowTag(true, index)"
+          @mouseleave="hoverShowTag(false, index)"
+        >
+          <!-- class="img-container" -->
           <c-image
-            class="img-container"
             :alt="agent.name"
             :src="profilePath(agent.No)"
             @click.native="openDetails(agent)"
           />
           <transition name="slide-fade">
-            <div v-if="showTags || agent.showTags" class="tag-wrapper-1">
+            <div v-if="showTags || agent.showTags" class="profile-item-tag">
               <div v-for="(tag, i) in agent.tags" :key="tag">
-                <div v-if="i > 1 || i === 0 && tag > 3" class="tag-container long-tag">
+                <div v-if="i > 1 || i === 0 && tag > 3" class="tag-container long">
                   <el-tag
                     :effect="tagHit(tag) ? 'dark' : 'plain'"
                     size="mini"
                   >{{ i === 0 ? tag === 5 ? '高级资深干员' : '资深干员' : tag }}</el-tag>
                 </div>
               </div>
-              <div class="tag-container long-tag double-tag-container">
+              <div class="tag-container long double">
                 <el-tag effect="plain" type="info" size="mini" style="text-align: center">
                   <span
                     class="double-tag"
@@ -40,12 +39,12 @@
               </div>
             </div>
           </transition>
-          <div class="name">
+          <div class="profile-item-name">
             <div
-              class="name-inner-ch"
+              class="profile-item-name-inner-ch"
               :style="agent.name.split('').length > 6 ? 'font-size: 14px;': '' "
             >{{ agent.name }}</div>
-            <div class="name-inner-en">{{ agent.en }}</div>
+            <div class="profile-item-name-inner-en">{{ agent.en }}</div>
           </div>
         </div>
       </div>
@@ -96,24 +95,29 @@ export default {
     }
   },
   data() {
+    const { innerWidth } = window
     return {
       fillItems: [1, 2, 3, 4, 5, 6, 7],
       fillItemWidth: { width: '100px' },
       rowPath: path,
-      path: rootPath
+      path: rootPath,
+      hoverAble: innerWidth > 1000
     }
   },
   computed: {
-    ...mapState(['short'])
+    ...mapState(['short']),
+    dev() {
+      return process.env.NODE_ENV === 'development' ? 'dev' : ''
+      // return process.env.NODE_ENV !== 'development' ? 'dev' : ''
+    }
   },
   watch: {
     showTags: function (v) {
       console.log('show? ' + v)
-      this.calFillAmount()
+      setTimeout(() => {
+        this.calFillAmount()
+      }, 1500)
     },
-    short: function (v) {
-      this.calFillAmount()
-    }
   },
   mounted() {
     // const self = this;
@@ -122,7 +126,7 @@ export default {
   },
   methods: {
     hoverShowTag(t, index) {
-      if (!this.short)
+      if (!this.short && this.hoverAble)
         this.$set(this.data[index], 'showTags', t)
     },
     async openDetails(agent) {
@@ -157,8 +161,44 @@ export default {
 }
 </script>
 <style lang="stylus" scoped>
+.tag-container {
+  display: inline-block
+  font-size: 0
+  margin-bottom: 1px
+
+  &.long {
+    .el-tag {
+      min-width: 48px
+    }
+
+    .el-tag--plain {
+      color: #909399
+    }
+  }
+
+  &.double {
+    .el-tag--mini.el-tag {
+      padding: 0
+      font-size: 0
+      overflow: hidden
+      //border-radius: 3px
+    }
+  }
+
+  .double-tag {
+    display: inline-block
+    height: 100%
+    font-size: 12px
+    padding: 0 5px
+
+    &:first-child {
+      border-right: 1px solid rgb(153, 153, 153)
+    }
+  }
+}
+
 .flip-list-move {
-  transition: transform 1s ease-in-out
+  transition: transform 0.5s ease-in-out
 }
 
 .flip-list-enter, .flip-list-leave-to {
@@ -169,132 +209,95 @@ export default {
   position: absolute
 }
 
-.profile-item {
-  transition: all 0.6s ease-in-out
-  display: inline-block
-  --imgWidth: 106px
-  box-sizing: border-box
-
-  //margin: 10px
-  &:hover {
-    filter: drop-shadow(1px 1px 1px #818181)
-  }
-}
-
-.tag-container {
-  display: inline-block
-  font-size: 0
-  margin-bottom: 1px
-}
-
-.tag-container .el-tag {
-  border-radius: 2px
-}
-
-.slide-fade-enter-active, .slide-fade-leave-active {
+.slide-fade-enter-active {
   transition: all 0.5s ease
 }
 
+.slide-fade-leave-active {
+  transition: all 1s ease
+}
+
 .slide-fade-enter, .slide-fade-leave-to {
-  transform: translateX(-30px)
+  transform: translateX(-50%)
   opacity: 1
 }
 
-.profile-container {
-  display: flex
-  flex-wrap: wrap
-  margin: 20px auto 50px
-  width: 100%
-  justify-content: space-around
-}
-
-.img-container {
-  width: var(--imgWidth)
-  height: calc(var(--imgWidth) * 1.17)
-
-  img {
+.profile {
+  &-container {
+    display: flex
+    flex-wrap: wrap
+    margin: 20px auto 50px
     width: 100%
+    justify-content: space-around
+    --imgW: 106px
   }
-}
 
-.long-tag .el-tag {
-  min-width: 48px
-}
+  &-item {
+    display: inline-block
+    box-sizing: border-box
+    padding: 10px
+    border: 1px solid transparent
 
-.long-tag .el-tag--plain {
-  color: #909399
-}
+    &.dev {
+      border: 1px solid red
 
-.double-tag {
-  display: inline-block
-  height: 100%
-  font-size: 12px
-  padding: 0 5px
-}
+      &-inner-wrapper {
+        border: 1px solid black
+      }
+    }
 
-.double-tag-container .el-tag--mini.el-tag {
-  padding: 0
-  font-size: 0
-  overflow: hidden
-  border-radius: 3px
-}
+    &:hover {
+      filter: drop-shadow(1px 1px 1px #818181)
+    }
 
-.double-tag:first-child {
-  border-right: 1px solid rgb(153, 153, 153)
-}
+    &-inner-wrapper {
+      position: relative
+      cursor: pointer
+      transition: width 0.5s ease-out
+      width: var(--imgW)
+      height: calc(var(--imgW) * 1.17)
+      box-sizing: border-box
+      border: 1px solid transparent
 
-.tag-wrapper-1 {
-  right: 7px
-  width: 65px
-  z-index: -10
-  top: 0
-  position: absolute
-}
+      &.show-tags {
+        width: 170px
+      }
+    }
 
-.name {
-  top: calc(var(--imgWidth) * 0.812)
-  padding-left: 6px
-  box-sizing: border-box
-  position: absolute
-  //overflow: hidden
-  color: white
-  font-family: 'FZYaSong-H-GBK'
-  white-space: nowrap
-  font-size: 0
-  text-overflow: ellipsis
-  text-shadow: 1px 0px 2px #818181
-  z-index: 10
-}
+    &-name {
+      top: calc(var(--imgW) * 0.812)
+      padding-left: 6px
+      box-sizing: border-box
+      position: absolute
+      color: white
+      font-family: 'FZYaSong-H-GBK'
+      white-space: nowrap
+      font-size: 0
+      text-overflow: ellipsis
+      text-shadow: 1px 0px 2px #313131
+      z-index: 10
 
-.name-inner-ch {
-  min-width: 50px
-  display: inline-block
-  font-size: calc(var(--imgWidth) * 0.16)
-  margin-top: 2px
-  margin-bottom: -2px
-}
+      &-inner-ch {
+        min-width: 50px
+        display: inline-block
+        font-size: calc(var(--imgW) * 0.16)
+        margin-top: 2px
+        margin-bottom: -4px
+      }
 
-.name-inner-en {
-  font-size: calc(var(--imgWidth) * 0.113)
-  font-family: sans-serif
-}
+      &-inner-en {
+        font-size: calc(var(--imgW) * 0.113)
+        font-family: sans-serif
+      }
+    }
 
-.name-slide-logo {
-  width: 47px
-  top: -18px
-  position: absolute
-  right: -10px
-  z-index: -1
-}
-
-//套个div包裹使得增减干员列表时有流畅的动画
-.profile-item-inner-wrapper {
-  position: relative
-  cursor: pointer
-  margin: 10px
-
-  &.show-tags {
-    width: 170px
+    &-tag {
+      right: 7px
+      width: 65px
+      z-index: -10
+      top: 0
+      position: absolute
+    }
   }
 }
 
@@ -316,64 +319,73 @@ export default {
   }
 }
 
-@media screen and (max-width: 1000px) {
-  .profile-container {
-    width: vw(720)
-  }
+padMode(size) {
+  container = 730
+  item = ((container / size))
 
-  .profile-item {
-    &-inner-wrapper {
-      margin: vw(5) vw(12)
-
-      &.show-tags {
-        width: vw(123)
-      }
+  .profile {
+    &-container {
+      width: vw(container)
     }
 
-    --imgWidth: vw(70)
+    &-item {
+      padding: calc(var(--imgW) * 0.1)
+
+      &-inner-wrapper {
+        width: vw(item)
+        height: vw(item * 1.17)
+
+        &.show-tags {
+          width: vw(item * 1.56)
+        }
+      }
+
+      &-name {
+        top: vw(item * 0.78)
+
+        &-inner-ch {
+          //min-width: vw(item * 0.56)
+          font-size: vw(item * 0.16)
+          margin-top: vw(item * 0.05)
+          margin-bottom: vw(item * -0.05)
+          text-shadow: vw(2) 0px vw(2) #313131
+        }
+
+        &-inner-en {
+          font-size: vw(item * 0.113)
+        }
+      }
+
+      &-tag {
+        right: vw(item * 0.02)
+        width: vw(item * 0.6)
+      }
+    }
   }
 }
 
-@media screen and (max-width: 900px) {
-  .profile-container {
-    width: vw(720)
-  }
+@media screen and (max-width: 1000px) {
+  padMode(7)
 
   .profile-item {
+    padding: vw(15) vw(7)
+
     &-inner-wrapper {
-      margin: vw(5) vw(12 * 1.3)
-
-      &.show-tags {
-        width: vw(90 * 1.65)
-      }
+      overflow: visible
     }
-
-    --imgWidth: vw(90)
   }
 }
 
 @media screen and (max-width: 700px) {
-  .profile-item {
-    //margin: 10px 5px
-  }
+  padMode(6)
 }
 
 @media screen and (max-width: 500px) {
-  .tag-wrapper-1 {
-    right: vw(10)
-    font-size: vw(24)
-  }
+  padMode(3.3)
 
   .profile-item {
-    &-inner-wrapper {
-      margin: vw(15) vw(12)
-
-      &.show-tags {
-        width: calc(var(--imgWidth) * 1.74)
-      }
-    }
-
-    --imgWidth: vw(180)
+    padding: vw(15) vw(7)
+    //padding-bottom: vw(5)
   }
 }
 </style>

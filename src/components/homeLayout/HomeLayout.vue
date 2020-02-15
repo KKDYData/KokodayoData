@@ -44,7 +44,7 @@
                 :type="SelectedTagGz.length > 0 ? 'danger' : 'info'"
                 :size="short? 'mini' :'medium'"
                 round
-                :style="short ? 'margin-left: 10px' : ''"
+                :style="short ? 'margin-left: 1.33vw' : ''"
                 :disabled="agentFilterDisabled"
               >标签</el-button>
               <div class="tag-selected-content-container">
@@ -357,7 +357,7 @@ export default {
             let groupFind = false
             for (let i in group) {
               let key = el
-              for (let i = 0;i < propertys.length;i++) {
+              for (let i = 0; i < propertys.length; i++) {
                 key = key[propertys[i]]
               }
 

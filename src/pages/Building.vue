@@ -22,6 +22,7 @@
       ref="tokenFilter"
       label="分类"
       :filters="nowType"
+      :disabled="nowType.length < 1"
       @filter="switchType($event)"
     />
     <div v-if="mode === 'agent'" class="building-wrapper">

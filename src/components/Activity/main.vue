@@ -14,6 +14,9 @@
         <div>
           <span class="activity-info-need">如果消耗理智非常少，注意检查样本数</span>
         </div>
+        <div>
+          <span class="activity-info-need">最近在对页面进行重构可能有布局异常的问题</span>
+        </div>
         <div class="activity-info-need">
           <a target="_blank" href="https://penguin-stats.io/">数据来源&收集：企鹅物流</a>
         </div>

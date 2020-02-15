@@ -1,22 +1,26 @@
 
 @media screen and (max-width: 500px) {
-  #app {
+  .app {
     .el-button {
       padding: vw(14) vw(30)
       font-size: vw(24)
-    }
 
-    .el-button + .el-button[data-v-8949beae] {
-      margin-left: vw(10)
-    }
+      &.is-circle {
+        padding: vw(30)
+      }
 
-    .el-button--mini {
-      padding: vw(14) vw(30)
-      font-size: vw(24)
-    }
+      & + .el-button {
+        margin-left: vw(10)
+      }
 
-    .el-button + .el-button[data-v-8949beae] {
-      margin-left: vw(10)
+      &--mini {
+        padding: vw(14) vw(30)
+        font-size: vw(24)
+
+        &.is-circle {
+          padding: vw(14)
+        }
+      }
     }
 
     .el-switch {
@@ -41,6 +45,19 @@
           width: vw(32)
           height: vw(32)
         }
+      }
+    }
+
+    .el-tag {
+      text-align: center
+
+      &--mini {
+        min-width: vw(96)
+        border-radius: vw(4)
+        height: vw(40)
+        padding: 0 vw(10)
+        line-height: vw(38)
+        font-size: vw(24)
       }
     }
   }

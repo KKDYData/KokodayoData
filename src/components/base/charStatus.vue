@@ -6,7 +6,7 @@
       :style="compact ? 'margin: 5px 0': ''"
       class="status-details-container"
     >
-      <content-slot long :width="100">
+      <content-slot :long="!short" :width="short ? 80 : 100">
         <div slot="title">
           <span>{{ key }}</span>
         </div>
@@ -22,6 +22,7 @@
 <script>
 import { statusToChChar } from '../../utils/string'
 import ContentSlot from '@/components/base/ContentSlot'
+import { mapState } from 'vuex'
 
 export default {
   components: {
@@ -42,6 +43,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['short']),
     changedStatus() {
       return Object.entries(this.status).map(([k, value]) => {
         const ch = this.statusToCh(k)
