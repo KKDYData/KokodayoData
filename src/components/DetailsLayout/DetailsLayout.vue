@@ -63,7 +63,7 @@
             </div>
           </div>
 
-          <char-status class="status-details-wrapper" :status="status" />
+          <char-status class="details-agent-status" :status="status" />
           <div v-if="rangeId" class="status-range-wrapper">
             <div class="status-range">
               <range :range-id="rangeId" />
@@ -480,7 +480,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .details-wrapper {
   //min-width: 340px
   max-width: 1200px
@@ -580,7 +580,7 @@ export default {
 }
 
 //属性面板
-.status-details-wrapper {
+.details-agent-status {
   border-right: 1px solid hsla(0, 0%, 62%, 0.4)
   box-sizing: border-box
   flex: 1
@@ -646,7 +646,7 @@ export default {
 }
 
 @media screen and (max-width: 900px) {
-  .status-details-wrapper {
+  .details-agent-status {
     flex: 1
     min-width: auto
   }
@@ -684,7 +684,7 @@ export default {
   }
 
   /*part 2*/
-  .status-details-wrapper {
+  .details-agent-status {
     width: 50%
     padding-top: 20px
     height: auto
@@ -768,7 +768,7 @@ export default {
   }
 
   //属性面板
-  .status-details-wrapper {
+  .details-agent-status {
     width: 50%
     padding-top: vw(20)
     height: auto

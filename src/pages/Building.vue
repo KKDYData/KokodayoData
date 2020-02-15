@@ -1,5 +1,10 @@
 <template>
-  <div class="building-wrapper-outter" :class="classMode">
+  <div
+    v-loading="loading"
+    class="building-wrapper-outter"
+    element-loading-background="rgba(168, 168, 168, 0.1)"
+    :class="classMode"
+  >
     <filter-group
       ref="tokenFilter"
       label="显示方式"
@@ -77,6 +82,10 @@ import { mapState } from 'vuex'
 import room from '@/utils/data/room'
 
 import './styl/Building'
+
+import Vue from 'vue'
+import { Loading } from 'element-ui'
+Vue.use(Loading)
 
 
 const changeToFilters = (data) => Object.entries(room).reduce((res, [k, v]) => {
@@ -186,7 +195,8 @@ export default {
       filter: null,
       list: null,
       rawlist: null,
-      mode: 'agent'
+      mode: 'agent',
+      loading: false
     }
   },
   computed: {
@@ -236,6 +246,7 @@ export default {
     }, {}))
     this.list = rawlist
     this.rawlist = rawlist
+    this.loading = false
   },
   methods: {
     getPic(key) {
@@ -347,5 +358,6 @@ export default {
 .building-wrapper-outter {
   margin: 20px auto
   max-width: 1500px
+  min-height: 100vh
 }
 </style>

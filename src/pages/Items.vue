@@ -12,8 +12,8 @@
 import DropList from '../components/EnemyData/DropList'
 import { getItem } from '../utils/fetch'
 import list from '../utils/items.json'
-import { Loading } from 'element-ui'
 import Vue from 'vue'
+import { Loading } from 'element-ui'
 Vue.use(Loading)
 
 export default {

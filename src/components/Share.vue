@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div v-if="visible">
+    <div v-if="visible" class="share-wrapper">
       <div :data-clipboard-text="shareLink" class="el-circle-icon share" @click="share">
         <i class="el-icon-share" />
       </div>
@@ -122,6 +122,9 @@ export default {
   bottom: 200px
   border: none
   padding: 0
-  z-index: 100
+
+  &-wrapper {
+    z-index: 999
+  }
 }
 </style>
