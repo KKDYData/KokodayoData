@@ -145,6 +145,7 @@ export default {
     display: flex
     align-items: center
     flex-basis: 80px
+    position: relative
   }
 
   &-text {
@@ -181,7 +182,7 @@ export default {
   }
 
   .skill-body-item {
-    width: vw(170)
+    width: 33%
   }
 
   .skill-body {
@@ -189,10 +190,6 @@ export default {
     border: none
     width: 100%
     padding: 0
-
-    &-item {
-      flex-basis: vw(150)
-    }
 
     &-lvUpCost-wrapper {
       flex-basis: 70px

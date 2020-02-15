@@ -29,10 +29,12 @@
       <div v-for="(data) in skills" :key="data.key">
         <div class="building-item">
           <div class="building-title">
-            <div v-if="1 || !simple" class="building-title-pic">
-              <c-image :src="getPic(data.key)" />
-            </div>
-            <div class="building-title-name">{{ data.name }}</div>
+            <router-link style="display: flex" :to="'/details/' + data.key">
+              <div class="building-title-pic">
+                <c-image :src="getPic(data.key)" />
+              </div>
+              <div class="building-title-name">{{ data.name }}</div>
+            </router-link>
             <div
               v-if="filter && data.skills.length > 1"
               class="building-title-control click"
