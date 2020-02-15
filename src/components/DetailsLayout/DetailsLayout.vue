@@ -8,7 +8,6 @@
       effect="dark"
       :closable="false"
     >获取数据失败，若多次刷新无效，请联系管理员</el-alert>
-    <my-share />
     <data-loading v-if="!loadingFail && !dataLoad" />
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
@@ -188,7 +187,6 @@ import ItemViewer from '../ItemViewer'
 import charStatus from '../base/charStatus'
 import DataLoading from '../base/Loading'
 import MyTitle from '@/components/base/MyTitle'
-import MyShare from '@/components/Share'
 
 const SkillPanel = () => ({
   component: import(
@@ -252,7 +250,6 @@ export default {
     DataLoading,
     AgentCard,
     charStatus,
-    MyShare,
     MyTitle
   },
   data() {

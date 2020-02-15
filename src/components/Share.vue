@@ -1,14 +1,11 @@
 <template>
-  <transition name="el-fade-in">
-    <div v-show="visible">
-      <button :data-clipboard-text="shareLink" class="el-circle-icon share" @click="share">
+  <transition name="fade">
+    <div v-if="visible">
+      <div :data-clipboard-text="shareLink" class="el-circle-icon share" @click="share">
         <i class="el-icon-share" />
-      </button>
+      </div>
       <div
-        :style="{
-        'right': styleRight,
-        'bottom': styleBottom
-      }"
+        :style="{ 'right': styleRight,'bottom': styleBottom}"
         class="el-circle-icon"
         @click.stop="handleClick"
       >
@@ -46,6 +43,10 @@ export default {
   },
 
   data() {
+    const hide = debounce(() => {
+      this.visible = false
+    }, 10000)
+
     return {
       el: null,
       container: null,
@@ -53,13 +54,9 @@ export default {
       throttledScrollHandler: null, // throttle(300, this.onScroll)
       orgin: window.location.origin,
       onScroll: debounce(() => {
-        // if (this.visible) return
         const scrollTop = this.el.scrollTop || window.scrollY
-        console.log(scrollTop, window.screenTop, window.scrollY)
         this.visible = scrollTop >= this.visibilityHeight
-        this.visible && setTimeout(() => {
-          this.visible = false
-        }, 10000)
+        if (this.visible) hide()
       }, 500),
     }
   },
@@ -77,6 +74,7 @@ export default {
   },
 
   mounted() {
+    console.log('load share')
     this.init()
     this.throttledScrollHandler = debounce(this.onScroll, 100)
     this.container.addEventListener('scroll', this.throttledScrollHandler)

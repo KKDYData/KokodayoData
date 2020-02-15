@@ -1,6 +1,5 @@
 <template>
   <div class="building-wrapper-outter" :class="classMode">
-    <my-share />
     <filter-group
       ref="tokenFilter"
       label="显示方式"
@@ -73,7 +72,6 @@ import BuildPanel from '@/components/DetailsLayout/BuildingData'
 import { getProfilePath, sort } from '../utils'
 import CImage from '@/components/base/CImage'
 import FilterGroup from '@/components/base/FilterButtonGroup'
-import MyShare from '@/components/Share'
 import { mapState } from 'vuex'
 
 import room from '@/utils/data/room'
@@ -177,7 +175,6 @@ export default {
     BuildPanel,
     CImage,
     FilterGroup,
-    MyShare
   },
   data() {
     return {
