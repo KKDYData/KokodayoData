@@ -57,7 +57,7 @@
             class="status-details-container"
             no-wrap
             long
-            :width="100"
+            :width="short ? 90: 100"
           >
             <template slot="title">
               <span>{{ kData[0] }}</span>
@@ -517,9 +517,9 @@ export default {
   }
 }
 
-@media screen and (max-width: 360px) {
+@media screen and (max-width: 500px) {
   .enemy-status-tip {
-    margin-left: 10px
+    margin: 0
   }
 }
 </style>

@@ -71,12 +71,16 @@ export default {
 }
 
 .long {
+  white-space: nowrap
+
   .base-content {
     &-title {
       width: auto
       padding: 2px 10px
       margin: 5px 5px 5px 0
       display: inline-block
+      white-space: nowrap
+      word-break: keep-all
     }
 
     &-value {

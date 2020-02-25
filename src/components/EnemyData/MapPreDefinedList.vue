@@ -12,41 +12,31 @@
               :src="getSrc(item.key)"
               :name="item.name + (item.alias ? '#' + item.alias.split('#')[1] : '') + (item.initialCnt ? ` x ${item.initialCnt}` : '')"
             />
-            <!-- <char-cube class="predefine-item-bg" :src="getSrc(item.key)" width="100px" /> -->
-            <!-- <div>
-              <span
-                style="color: #525252"
-              >{{ item.name + (item.alias ? '#' + item.alias.split('#')[1] : '') + (item.initialCnt ? ` x ${item.initialCnt}` : '') }}</span>
-            </div>-->
           </div>
           <div v-if="showPosition" class="predefine-position">
-            <div class="predefine-positon-inner">
-              <div class="status-details-title">位置</div>
-              <div class="predefine-position-item">
+            <content-slot v-if="showPosition" :width="short ? 60 : 100" no-wrap long>
+              <div slot="title">位置</div>
+              <div slot="content">
                 <span>x</span>
                 <span>{{ item.position.col }}</span>
                 <span style="margin-left: 10px">y</span>
                 <span>{{ item.position.row }}</span>
               </div>
-            </div>
-            <div v-if="item.direction > -1" class="predefine-positon-inner">
-              <div class="status-details-title">方向</div>
-              <div class="predefine-position-item">{{ getDirection(item.direction) }}</div>
-            </div>
+            </content-slot>
+            <content-slot v-if="item.direction > -1" :width="short ? 60 : 100" no-wrap long>
+              <div slot="title">方向</div>
+              <div slot="content">{{ getDirection(item.direction) }}</div>
+            </content-slot>
           </div>
           <char-status
             v-if="showStatus"
+            class="predefine-status"
             style="margin-top: 15px"
             :compact="true"
             :status-to-ch-fc="statusToChFc"
             :status="item.targetData"
           />
-          <skill-panel
-            :style="{'margin-top': '-20px'}"
-            :show-pic="false"
-            :skills="item.targetSkill"
-            :init-lv="item.mainSkillLvl"
-          />
+          <skill-panel :show-pic="false" :skills="item.targetSkill" :init-lv="item.mainSkillLvl" />
         </el-popover>
       </div>
     </div>
@@ -58,6 +48,7 @@ import { getDetailsProfilePath, findValue } from '../../utils'
 import charStatus from '../base/charStatus'
 import loadingC from '../base/Loading'
 import EnemyCube from './EnemyCube'
+import ContentSlot from '@/components/base/ContentSlot'
 
 const SkillPanel = () => ({
   component: import(
@@ -75,7 +66,12 @@ import { Directions } from '../../utils/string'
 Vue.use(Popover)
 
 export default {
-  components: { charStatus, SkillPanel, EnemyCube },
+  components: {
+    charStatus,
+    SkillPanel,
+    EnemyCube,
+    ContentSlot
+  },
   props: {
     list: { required: true },
     statusToChFc: {},
@@ -125,6 +121,10 @@ export default {
   grid-template-columns: repeat(auto-fill, 100px)
   justify-content: space-around
   grid-gap: 20px 0
+}
+
+.predefine-status.status-details-wrapper {
+  justify-content: space-between
 }
 
 .predefine-item {

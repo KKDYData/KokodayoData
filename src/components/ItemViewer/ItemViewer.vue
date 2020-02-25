@@ -323,7 +323,9 @@ export default {
           return getItmeDropData(el, this.stageTree, list)
         })
       } else {
-        return this.data.stageDropList
+        return this.data.stageDropList.map(el => {
+          return getItmeDropData(el, this.stageTree)
+        })
       }
     },
     showDropInfo() {

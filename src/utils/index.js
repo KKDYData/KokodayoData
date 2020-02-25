@@ -16,7 +16,7 @@ const debounce = (action, idle, ...args) => {
 
 const throttle = (action, delay, ...args) => {
   let last = 0
-  return (event) => {
+  return (...event) => {
     let curr = +new Date()
     if (curr - last > delay) {
       action(...args, ...event)

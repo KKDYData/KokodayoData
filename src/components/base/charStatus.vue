@@ -65,6 +65,7 @@ export default {
   display: flex
   flex-wrap: wrap
   justify-content: center
+  overflow: hidden
 }
 
 .status-details-container {
@@ -80,6 +81,12 @@ export default {
 
   .status-details-container {
     margin: 5px 0
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .status-details-wrapper {
+    justify-content: space-between
   }
 }
 </style>

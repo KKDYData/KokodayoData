@@ -25,7 +25,7 @@
               </div>
               <div class="intro-2-wrapper">
                 <span v-if="!descArrary" class="intro-2" v-html="desc" />
-                <span v-else-if="desc.length > 1" class="intro-2" v-html="desc[phases]" />
+                <span v-else-if="desc.length > 1" class="intro-2" v-html="desc[phases - 1]" />
                 <span v-else class="intro-2" v-html="desc[0]" />
               </div>
             </div>
