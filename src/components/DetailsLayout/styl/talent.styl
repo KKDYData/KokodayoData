@@ -60,65 +60,107 @@
   }
 }
 
-@media screen and (max-width: 700px) {
-  .talent-wrapper {
-    min-width: auto
+simple(type, ttop = 'px') {
+  ptop(scale = 1) {
+    if (ttop == 'vw') {
+      vw(20 * scale)
+    } else if (type == 'px') {
+      20px
+    } else {
+      0
+    }
   }
 
   .talent {
     width: 100%
     margin: 0
-    margin-bottom: 20px
 
-    & + & {
+    & + .talent {
       border: none
-      padding-top: 20px
-      border-top: 2px solid rgba(56, 56, 56, 0.6)
+      padding-top: ptop(3)
+      margin-top: ptop(3)
+      border-top: size(type, 2) solid rgba(56, 56, 56, 0.15)
     }
 
     &-title {
       position: relative
       width: 80%
       border-right: none
-      border-bottom: 1px solid rgba(158, 158, 158, 0.4)
+      border-bottom: size(type, 1) solid rgba(158, 158, 158, 0.4)
       justify-content: start
       box-sizing: border-box
-
-      span {
-        padding-left: 10px
-      }
     }
 
     /*天赋内容*/
     &-desc {
       width: 100%
-      margin-left: 0px
+      margin-left: size(type, 0)
       flex-wrap: wrap
-      margin-top: 10px
+      padding: 0
 
-      & + & {
-        padding-top: 20px
-        border-top: 1px solid rgba(158, 158, 158, 0.4)
+      & + .talent-desc {
+        margin-top: ptop(0.7)
+        padding-top: ptop(0.7)
+        border-top: size(type, 1) dashed rgba(158, 158, 158, 0.5)
+      }
+
+      &-content {
+        width: 100%
       }
 
       &-condition {
-        width: calc(100% - 10px)
-        padding-bottom: 10px
-        font-size: 13px
+        width: 100%
+        margin-bottom: size(type, 10)
+        font-size: size(type, 13)
         direction: rtl
-      }
-
-      &-condition span {
-        border-bottom: 2px solid rgba(247, 203, 10, 0.582)
+        border-bottom: size(type, 2) solid rgba(247, 203, 10, 0.582)
       }
 
       &-content-item {
-        padding-bottom: 10px
         position: relative
         display: inline-block
-        padding-right: 10px
-        font-size: 15px
+        padding-right: size(type, 10)
+        //padding-bottom: size(type, 10)
+        font-size: size(type, 15)
       }
+    }
+  }
+}
+
+.simple {
+  &.talent-wrapper {
+    min-width: auto
+  }
+
+  simple('px')
+}
+
+tatentdesctitle(value) {
+  .talent {
+    &-desc {
+      &-title {
+        margin-left: value
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .talent-wrapper {
+    min-width: auto
+    tatentdesctitle(auto)
+  }
+}
+
+@media screen and (max-width: 500px) {
+  simple('vw', 'vw')
+
+  .simple {
+    simple('vw', 'vw')
+
+    &.talent-wrapper {
+      min-width: auto
+      tatentdesctitle(0)
     }
   }
 }

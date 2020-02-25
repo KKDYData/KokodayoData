@@ -5,7 +5,8 @@ import {
   dataPath,
   target,
   api,
-  path
+  path,
+  buildingListVer
 } from './listVer'
 
 import store from '../store'
@@ -81,6 +82,7 @@ const fetchByKey = (keyPath) => {
 const getProfileList = () => fetchByKey('char/list')(charListVer)
 const getStageList = () => fetchByKey('lists/stage')(stageListVer) //fetchGetSliceSet('stageList');
 const getEnemyList = () => fetchByKey('lists/enemy')(enemyListVer) //fetchGetSliceSet('enemyList', 'setEnemyVer');
+const getBuildingList = () => fetchByKey('lists/buildingSkills')(buildingListVer) //fetchGetSliceSet('enemyList', 'setEnemyVer');
 
 
 // 遗留api
@@ -138,6 +140,7 @@ export {
 
   getProfileList,
   getEnemyData,
+  getBuildingList,
   getEneAppearMap,
   getDevList,
   getEnemyList,

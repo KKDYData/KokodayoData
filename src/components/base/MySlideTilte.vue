@@ -55,7 +55,7 @@ export default {
   },
   data() {
     return {
-      value: this.init,
+      value: typeof this.init === 'boolean' ? this.init : true,
       lock: false,
       short: true
     }

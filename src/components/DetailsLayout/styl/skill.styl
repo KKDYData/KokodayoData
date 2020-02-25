@@ -11,54 +11,54 @@ skill 面板用的
   display: flex
   margin: 20px 0 0 0
   align-items: stretch
-}
 
-.skill-container + .skill-container {
-  border-top: 1px solid rgb(235, 238, 245)
-  padding-top: 20px
-}
+  & + & {
+    border-top: 1px solid rgb(235, 238, 245)
+    padding-top: 20px
+  }
 
-.body {
-  padding-left: 20px
-  position: relative
-  flex: 1
-}
+  .body {
+    padding-left: 20px
+    position: relative
+    flex: 1
+  }
 
-.control {
-  border-left: 1px solid rgba(158, 158, 158, 0.4)
-  padding: 0 20px
+  .control {
+    border-left: 1px solid rgba(158, 158, 158, 0.4)
+    padding: 0 20px
+  }
 }
 
 @media screen and (max-width: 700px) {
   .skill-container {
     flex-wrap: wrap
-  }
 
-  .control {
-    display: flex
-    align-items: center
-    width: 100%
-    justify-content: flex-end
-    border: none
+    .control {
+      display: flex
+      align-items: center
+      width: 100%
+      justify-content: flex-end
+      border: none
+    }
   }
 }
 
 @media screen and (max-width: 500px) {
-  .body {
-    padding-left: vw(20)
-  }
-
-  .control {
-    padding: vw(10) vw(40) 0
-    font-size: vw(32)
-  }
-
   .skill-container {
     margin-top: vw(20)
     padding-bottom: vw(20)
-  }
 
-  .skill-container + .skill-container {
-    padding: vw(20) 0
+    & + & {
+      padding: vw(20) 0
+    }
+
+    .body {
+      padding-left: vw(15)
+    }
+
+    .control {
+      padding: vw(10) vw(40) 0
+      font-size: vw(32)
+    }
   }
 }

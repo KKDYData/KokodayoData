@@ -28,7 +28,7 @@
         v-else
         :visible-arrow="true"
         popper-class="item-popover-class"
-        placement="top"
+        :placement="placement"
         :width="width"
         :trigger="isHover"
         :open-delay="500"
@@ -93,6 +93,10 @@ export default {
       type: String,
       default: ''
     },
+    placement: {
+      type: String,
+      default: 'top'
+    }
   },
   data() {
     return {

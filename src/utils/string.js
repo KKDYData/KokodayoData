@@ -321,6 +321,16 @@ const tileInfo = {
     color: 'rgba(125, 253, 244, 0.9)',
   }
 }
+// hsla(270, 47 %, 47 %, 1)
+// 公招的颜色
+const agentColor = [
+  [0, 0, 20],
+  [0, 0, 55],
+  [0, 0, 55],
+  [270, 47, 47],
+  [40, 100, 50],
+  [25, 95, 55]
+]
 
 // css属性
 const starColor = [
@@ -535,6 +545,7 @@ const StageType = {
   act4d0: 'Act·4·战地秘闻',
   act5d0: 'Act·5·喧闹法则',
   act6d5: 'Act·6·洪炉示岁',
+  act7d5: 'Act·7·午间逸话',
   rune: '危机合约'
 }
 
@@ -593,7 +604,7 @@ export {
   charNameColor,
   charBorderColor,
   starColor,
-
+  agentColor,
   // key
   mapOptionsKey,
   roomType,

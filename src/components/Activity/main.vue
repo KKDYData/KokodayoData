@@ -1,20 +1,21 @@
 <template>
   <div>
     <div class="activity-wrapper">
-      <r-image :preview-src-list="[activityPic]" class="activity-img" :src="activityPic" />
-      <div class="activity-title">元宵刷图活动</div>
+      <div class="activity-img out-of-date">
+        <r-image :preview-src-list="[activityPic]" :src="activityPic" />
+      </div>
+      <div class="activity-title">午间逸话</div>
       <div class="activity-content">
-        <div>大部分地图会掉落【岁过华灯】,为了方便，把它单独放了出来，点击可以查看掉落详情</div>
-        <item-viewer class="activity-item" type="item" item="randomMaterial_2" />
+        <div>活动图掉落【食堂汤点券】，点击可以查看掉落详情</div>
+        <div style="height: 100px">
+          <item-viewer class="activity-item" type="item" item="act7d5_point_coupon" />
+        </div>
         <div>
           <span class="activity-info-need">如果消耗理智非常少，注意检查样本数</span>
         </div>
         <div class="activity-info-need">
           <a target="_blank" href="https://penguin-stats.io/">数据来源&收集：企鹅物流</a>
         </div>
-      </div>
-      <div>
-        <span class="activity-info-need">最近在家用13寸笔记本维护，所以 测试没之前全，有些小bug没发现，望见谅。</span>
       </div>
     </div>
   </div>
@@ -40,7 +41,6 @@ export default {
 <style lang="stylus" scoped>
 .activity-wrapper {
   padding: 0 10px
-  height: 340px
 }
 
 .activity {
@@ -49,7 +49,15 @@ export default {
   }
 
   &-content {
-    height: 200px
+    //height: 200px
+  }
+
+  &-img {
+    height: 90x
+
+    &.out-of-date {
+      filter: grayscale(1)
+    }
   }
 
   &-title {
@@ -66,7 +74,6 @@ export default {
   .activity {
     &-wrapper {
       padding: 0 vw(20)
-      height: vw(640)
     }
 
     &-img {
@@ -78,7 +85,7 @@ export default {
     }
 
     &-content {
-      height: vw(300)
+      //height: vw(300)
     }
 
     &-title {

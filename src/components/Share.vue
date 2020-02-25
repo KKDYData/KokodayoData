@@ -19,10 +19,10 @@
 </template>
 
 <script>
-import { debounce } from '../../utils';
-import { Message } from 'element-ui';
+import { debounce } from '@/utils'
+import { Message } from 'element-ui'
 
-import Clipboard from 'clipboard';
+import Clipboard from 'clipboard'
 
 
 export default {
@@ -51,75 +51,71 @@ export default {
       container: null,
       visible: false,
       throttledScrollHandler: null, // throttle(300, this.onScroll)
-      orgin: window.location.origin
-    };
+      orgin: window.location.origin,
+      onScroll: debounce(() => {
+        // if (this.visible) return
+        const scrollTop = this.el.scrollTop || window.scrollY
+        console.log(scrollTop, window.screenTop, window.scrollY)
+        this.visible = scrollTop >= this.visibilityHeight
+        this.visible && setTimeout(() => {
+          this.visible = false
+        }, 10000)
+      }, 500),
+    }
   },
 
   computed: {
     styleBottom() {
-      return `${this.bottom}px`;
+      return `${this.bottom}px`
     },
     styleRight() {
-      return `${this.right}px`;
+      return `${this.right}px`
     },
     shareLink() {
-      return this.orgin + this.$route.fullPath;
+      return this.orgin + this.$route.fullPath
     }
   },
 
   mounted() {
-    this.init();
-    this.throttledScrollHandler = debounce(this.onScroll, 100);
-    this.container.addEventListener('scroll', this.throttledScrollHandler);
+    this.init()
+    this.throttledScrollHandler = debounce(this.onScroll, 100)
+    this.container.addEventListener('scroll', this.throttledScrollHandler)
 
-    new Clipboard('.share');
+    new Clipboard('.share')
   },
   beforeDestroy() {
-    this.container.removeEventListener('scroll', this.throttledScrollHandler);
+    this.container.removeEventListener('scroll', this.throttledScrollHandler)
   },
   methods: {
     init() {
-      this.container = document;
-      this.el = document.documentElement;
+      this.container = document
+      this.el = document.documentElement
       if (this.target) {
-        this.el = document.querySelector(this.target);
+        this.el = document.querySelector(this.target)
         if (!this.el) {
-          throw new Error(`target is not existed: ${this.target}`);
+          throw new Error(`target is not existed: ${this.target}`)
         }
-        this.container = this.el;
+        this.container = this.el
       }
 
     },
     share() {
-      Message.success('已经复制链接到粘贴板');
+      Message.success('已经复制链接到粘贴板')
     },
-    onScroll() {
-      const scrollTop = this.el.scrollTop;
-      this.visible = scrollTop >= this.visibilityHeight;
-      this.visible && setTimeout(() => {
-        this.visible = false;
 
-      }, 3000);
-    },
     handleClick(e) {
-      this.scrollToTop();
-      this.$emit('click', e);
+      this.scrollToTop()
+      this.$emit('click', e)
     },
     scrollToTop() {
-      let el = this.el;
-      let step = 0;
-      let interval = setInterval(() => {
-        if (el.scrollTop <= 0) {
-          clearInterval(interval);
-          return;
-        }
-        step += 10;
-        el.scrollTop -= step;
-      }, 20);
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      })
     }
   },
 
-};
+}
 </script>
 
 <style lang="stylus" scoped>

@@ -57,7 +57,7 @@
             class="status-details-container"
             no-wrap
             long
-            :width="short ? 82: 100"
+            :width="100"
           >
             <template slot="title">
               <span>{{ kData[0] }}</span>
@@ -88,7 +88,7 @@
           <div>
             <b style="font-size: 1.2em">Extra·技能</b>
           </div>
-          <div :style="0 ? '' :'display: flex;  flex-wrap: wrap'">
+          <div class="enemy-skill">
             <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
               <div style="margin: 10px 0">
                 <span
@@ -437,133 +437,89 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="stylus" scoped>
 .enemy-status-wrapper {
-  position: relative;
+  position: relative
 }
 
 .status-details-wrapper {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: start;
+  display: flex
+  flex-wrap: wrap
+  align-content: start
 }
+
 .status-details-talents-wrapper {
-  margin-bottom: 20px;
+  margin-bottom: 20px
 }
 
 .status-details-container {
-  flex-grow: 0.5;
-  width: 50%;
+  flex-grow: 0.5
+  width: 50%
 }
 
-/* .status-details-title {
-  color: white;
-  background-color: #313131;
-  border-radius: 2px;
-  width: calc(80px + 0.5vw);
-  text-align: center;
-  display: inline-block;
-  font-size: 100%;
-  line-height: 100%;
-  padding: 2px 0;
-  box-shadow: 1px 1px 2px 1px #0000005e;
-} */
-
-/* .status-details-value {
-  display: inline-block;
-  margin-left: 5px;
-} */
 .status-phases-wrapper {
-  width: 50%;
-}
-.status-phases-wrapper .el-button--mini {
-  background-color: rgba(172, 172, 172, 0.34);
-  /* border-color: rgb(153, 153, 153); */
-  border: none;
-  border-bottom: 2px solid;
-  color: rgb(255, 255, 255);
-}
-
-.status-phases-wrapper .el-button--primary:focus {
-  color: rgb(255, 208, 75);
-  background-color: rgb(84, 92, 100);
-  border-bottom-color: rgb(255, 208, 75);
-}
-
-.status-phases-wrapper .el-button:hover,
-.status-phases-wrapper .el-button--primary {
-  color: rgb(255, 208, 75);
-  background-color: #313131;
-  border-bottom: 2px solid rgb(255, 208, 75);
+  width: 50%
 }
 
 .enemy-data-tag-container {
-  position: absolute;
-  bottom: 0px;
-  right: -20px;
+  position: absolute
+  right: 0
 }
 
 .enemy-data-tag {
-  background-color: rgb(202, 62, 71);
-  color: white;
-  box-shadow: 0px 2px 2px 0px rgba(123, 75, 77, 0.6);
-  padding: 0 10px 2px;
-  margin: 10px 0;
-  font-size: 16px;
+  background-color: rgb(202, 62, 71)
+  color: white
+  box-shadow: 0px 2px 2px 0px rgba(123, 75, 77, 0.6)
+  padding: 0 10px 2px
+  margin: 10px 0
+  font-size: 16px
 }
 
 .status-phases-text {
-  margin-right: 10px;
-}
-.enemy-skill-container {
-  flex-grow: 0.5;
-  flex-shrink: 0.5;
-  margin-top: 30px;
+  margin-right: 10px
 }
 
-.enemy-skill-container + .enemy-skill-container {
-  border-left: 1px solid rgba(158, 158, 158, 0.4);
-  margin-left: 15px;
-  padding-left: 15px;
+.enemy-skill {
+  display: grid
+  grid-template-columns: 1fr 1fr
+
+  &-container {
+    flex-grow: 0.5
+    flex-shrink: 0.5
+    margin-top: 30px
+  }
 }
 
 .enemy-status-tip {
-  margin: 0 40px 0 20px;
+  margin: 0 40px 0 20px
 }
 
-/* .status-details-title.enemy-status-talent {
-  width: auto;
-  padding: 2px 10px;
-  margin: 5px 5px 5px 0;
-  max-width: 180px;
-} */
-
 .el-button.no-map:hover {
-  border: 1px solid #ebeef5;
+  border: 1px solid #ebeef5
 }
 
 @media screen and (max-width: 700px) {
   .enemy-status-wrapper {
-    flex-wrap: wrap;
+    flex-wrap: wrap
   }
 
   .enemy-data-tag-container {
-    right: 0px;
-    bottom: auto;
-    top: -80px;
+    right: 0px
+    top: -80px
   }
+
   .enemy-data-tag {
-    margin: 10px;
+    margin: 10px
   }
 
   .status-details-talents-wrapper {
-    width: 100%;
+    width: 100%
   }
 }
 
 @media screen and (max-width: 360px) {
   .enemy-status-tip {
-    margin-left: 10px;
+    margin-left: 10px
   }
 }
 </style>

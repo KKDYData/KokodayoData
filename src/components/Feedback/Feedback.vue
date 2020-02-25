@@ -4,7 +4,7 @@
     <div class="question">
       <q-a>
         <span slot="q">游戏数据哪里来的？</span>
-        <span slot="a">从网上找到的拆包，经过简单的分割，然后由网页前端进行渲染</span>
+        <span slot="a">从网上找到的拆包，经过简单的分割，然后纯前端进行渲染</span>
       </q-a>
       <q-a>
         <span slot="q">网站有几个人在维护</span>
@@ -78,10 +78,11 @@
     </my-slide-title>
 
     <div>
-      <my-slide-title title="v1.0 准备中">
+      <my-slide-title title="v1.0 准备中， 列出来的是完成的">
         <div>
           <p>1. 增加游戏里的spine 小人展示，及相对应的改进立绘面板，以及新增单独的皮肤页面</p>
-          <p>2. 修复公招筛选的一系列bug...</p>
+          <p>2. 修复公招筛选的一系列bug...）</p>
+          <p>2. 基建技能</p>
         </div>
       </my-slide-title>
       <my-slide-title title="筛选说明">

@@ -35,7 +35,7 @@
           </el-tooltip>
         </div>
         <div v-if="num || weight" style="text-align: center">
-          <span class="item-name">{{ data.name }}</span>
+          <span :style="{fontSize}" class="item-name">{{ data.name }}</span>
           <div style="color:rgb(86, 86, 86)">
             <span v-if="num">x{{ num }}</span>
             <span v-else>{{ weight }}%</span>
@@ -135,7 +135,7 @@
 
 
 <script>
-import { findStage, UA, sort } from '../../utils'
+import { findStage, UA, sort, getfontSize } from '../../utils'
 import { path } from '../../utils/listVer'
 import formula from '../../utils/data/formula.json'
 
@@ -328,6 +328,9 @@ export default {
     },
     showDropInfo() {
       return this.dropList.filter(el => el.times)
+    },
+    fontSize() {
+      return getfontSize(this.data.name, 30, 15, 6)
     }
   },
   watch: {

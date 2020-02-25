@@ -1,9 +1,9 @@
 <template>
-  <div class="base-content" :class="{long: long}">
+  <div class="base-content" :class="{long, 'long-content': longContent}">
     <div :style="titleStyle" class="base-content-title">
       <slot name="title" />
     </div>
-    <div class="base-content-value">
+    <div :style="valueStyle" class="base-content-value">
       <slot name="content" />
     </div>
   </div>
@@ -18,7 +18,11 @@ export default {
       default: null
     },
     long: Boolean,
-    noWrap: Boolean
+    noWrap: Boolean,
+    longContent: {
+      type: Boolean,
+      default: false
+    }
   },
   computed: {
     ...mapState(['short']),
@@ -27,33 +31,42 @@ export default {
       if (this.width) {
         res.width = this.short ? `${this.width / 750 * 200}vw` : this.width + 'px'
       }
-      if (this.noWrap) {
-        res.display = 'inline-block'
-      }
+      // if (this.noWrap) {
+      //   res.display = 'inline-block'
+      // } else {
+      //   res.margin = '0 auto'
+      // }
       return res
     },
+    valueStyle() {
+      if (!this.short || this.long) return {}
+      else return this.titleStyle
+    }
   }
 }
 </script>
 
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 .base-content {
   &-title {
     color: white
     background-color: #313131
     text-align: center
-    display: inline-block
     font-size: 100%
     line-height: 100%
     border-radius: 2px
-    width: calc(80px + 0.5vw)
+    width: 80px
     padding: 2px 0
     box-shadow: 1px 1px 2px 1px #00005e
+    box-sizing: border-box
+    white-space: nowrap
+    word-break: keep-all
   }
 
   &-value {
     display: inline-block
+    padding-top: 10px
   }
 }
 
@@ -75,6 +88,16 @@ export default {
   }
 }
 
+.long-content {
+  .base-content {
+    &-value {
+      display: block
+      width: 100%
+      text-align: left
+    }
+  }
+}
+
 @media screen and (max-width: 900px) {
   .base-content {
     &-title {
@@ -82,43 +105,30 @@ export default {
     }
 
     &-value {
-      width: calc(80px + 0.5vw)
+      //width: calc(80px + 0.5vw)
       text-align: center
+      padding-top: 5px
     }
-  }
-
-  .base-content-title {
-    display: block
-  }
-
-  .base-content-value {
-    padding-top: 5px
   }
 }
 
 @media screen and (max-width: 500px) {
-  .base-content {
+  .base-content, .base-content {
     font-size: vw(30)
 
     &-title {
       display: block
       border-radius: vw(4)
       width: vw(160)
-      padding: vw(4) 0
+      padding: vw(4) 0 0
       box-shadow: vw(2) vw(2) vw(4) vw(2) #00005e
     }
 
     &-value {
-      width: vw(160)
+      //width: 100%
+      text-align: center
+      padding-top: vw(5)
     }
-  }
-
-  .base-content-title {
-    display: block
-  }
-
-  .base-content-value {
-    padding-top: vw(10)
   }
 }
 </style>

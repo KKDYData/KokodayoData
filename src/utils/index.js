@@ -16,11 +16,10 @@ const debounce = (action, idle, ...args) => {
 
 const throttle = (action, delay, ...args) => {
   let last = 0
-  // 传的参数是类似requestAnimationFrame的TimeEvent
   return (event) => {
-    let curr = event.timeStamp
+    let curr = +new Date()
     if (curr - last > delay) {
-      action(...args)
+      action(...args, ...event)
       last = curr
     }
   }
@@ -211,7 +210,7 @@ const decNoValue = (res, data, str) => {
 
 const wrapColor = (str, color) => `<i style="color:${color};font-style: normal;">${str}</i>`
 
-const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2'])
+const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2', 'skchr_cerber_2'])
 const exSkill2 = new Map([['skchr_angel_3', '据实测攻击间隔缩短效果翻倍']])
 
 const changeAttackSpeed = (skill) => {
@@ -454,6 +453,15 @@ const getScreenWidth = () => {
   }
 }
 
+const getfontSize = (str, mSize = 34, nSize = 16, baseLen = 4) => {
+  const short = store.state.short
+  const base = short ? mSize : nSize
+  const temp = Math.min(baseLen / str.length * base, base)
+  console.log(temp, str)
+  return short ? (temp / 750 * 100) + 'vw' : temp + 'px'
+}
+
+
 const sleep = time => {
   return new Promise(resolve => {
     setTimeout(() => resolve(), time)
@@ -488,4 +496,5 @@ export {
   // 设备检测
   UA,
   getScreenWidth,
+  getfontSize
 }

@@ -13,6 +13,7 @@ const CustomTheme = () => import(/* webpackChunkName: "CustomTheme" */'@/pages/C
 const Items = () => import(/* webpackChunkName: "Items" */'@/pages/Items')
 const Skins = () => import(/* webpackChunkName: "Skins" */'@/pages/Skins')
 const Info = () => import(/* webpackChunkName: "Info" */'@/pages/Info')
+const Building = () => import(/* webpackChunkName: "Info" */'@/pages/Building')
 
 
 const routes = [
@@ -25,6 +26,7 @@ const routes = [
   { path: rootPath + '/items', component: Items },
   { path: rootPath + '/skins', component: Skins },
   { path: rootPath + '/info', component: Info },
+  { path: rootPath + '/building', component: Building },
 ]
 const router = new VueRouter({
   mode: 'history',

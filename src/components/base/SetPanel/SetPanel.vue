@@ -25,23 +25,23 @@
         <div class="char-set-container-wrapper">
           <div class="char-set-info">
             <div v-if="data.displaySkin">
-              <content-slot class="char-set-info-item" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="80" long>
                 <template slot="title">名称</template>
                 <template slot="content">{{ data.displaySkin.skinName }}</template>
               </content-slot>
-              <content-slot class="char-set-info-item" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="80" long>
                 <template slot="title">系列</template>
                 <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
               </content-slot>
-              <content-slot class="char-set-info-item" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="80" long>
                 <template slot="title">获得方式</template>
                 <template slot="content">{{ data.displaySkin.obtainApproach }}</template>
               </content-slot>
-              <content-slot class="char-set-info-item" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="80" long long-conten>
                 <template slot="title">描述</template>
                 <template slot="content">{{ data.displaySkin.usage }}</template>
               </content-slot>
-              <content-slot class="char-set-info-item" :width="60" long no-wrap>
+              <content-slot class="char-set-info-item" :width="80" long long-content>
                 <template slot="title">记录</template>
                 <template slot="content">{{ data.displaySkin.content | filterColor }}</template>
               </content-slot>
