@@ -1,6 +1,10 @@
 <template>
-  <div class="building-wrapper-outter" :class="classMode">
-    <my-share />
+  <div
+    v-loading="loading"
+    class="building-wrapper-outter"
+    element-loading-background="rgba(168, 168, 168, 0.1)"
+    :class="classMode"
+  >
     <filter-group
       ref="tokenFilter"
       label="显示方式"
@@ -29,10 +33,12 @@
       <div v-for="(data) in skills" :key="data.key">
         <div class="building-item">
           <div class="building-title">
-            <div v-if="1 || !simple" class="building-title-pic">
-              <c-image :src="getPic(data.key)" />
-            </div>
-            <div class="building-title-name">{{ data.name }}</div>
+            <router-link style="display: flex" :to="'/details/' + data.key">
+              <div class="building-title-pic">
+                <c-image :src="getPic(data.key)" />
+              </div>
+              <div class="building-title-name">{{ data.name }}</div>
+            </router-link>
             <div
               v-if="filter && data.skills.length > 1"
               class="building-title-control click"
@@ -71,12 +77,15 @@ import BuildPanel from '@/components/DetailsLayout/BuildingData'
 import { getProfilePath, sort } from '../utils'
 import CImage from '@/components/base/CImage'
 import FilterGroup from '@/components/base/FilterButtonGroup'
-import MyShare from '@/components/Share'
 import { mapState } from 'vuex'
 
 import room from '@/utils/data/room'
 
 import './styl/Building'
+
+import Vue from 'vue'
+import { Loading } from 'element-ui'
+Vue.use(Loading)
 
 
 const changeToFilters = (data) => Object.entries(room).reduce((res, [k, v]) => {
@@ -175,7 +184,6 @@ export default {
     BuildPanel,
     CImage,
     FilterGroup,
-    MyShare
   },
   data() {
     return {
@@ -187,7 +195,8 @@ export default {
       filter: null,
       list: null,
       rawlist: null,
-      mode: 'agent'
+      mode: 'agent',
+      loading: false
     }
   },
   computed: {
@@ -237,6 +246,7 @@ export default {
     }, {}))
     this.list = rawlist
     this.rawlist = rawlist
+    this.loading = false
   },
   methods: {
     getPic(key) {
@@ -348,5 +358,6 @@ export default {
 .building-wrapper-outter {
   margin: 20px auto
   max-width: 1500px
+  min-height: 100vh
 }
 </style>

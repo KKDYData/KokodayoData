@@ -10,11 +10,9 @@
           @mouseleave="hoverShowTag(false, index)"
         >
           <!-- class="img-container" -->
-          <c-image
-            :alt="agent.name"
-            :src="profilePath(agent.No)"
-            @click.native="openDetails(agent)"
-          />
+          <router-link :to="'/details/' + agent.No">
+            <c-image :alt="agent.name" :src="profilePath(agent.No)" />
+          </router-link>
           <transition name="slide-fade">
             <div v-if="showTags || agent.showTags" class="profile-item-tag">
               <div v-for="(tag, i) in agent.tags" :key="tag">
@@ -128,10 +126,6 @@ export default {
     hoverShowTag(t, index) {
       if (!this.short && this.hoverAble)
         this.$set(this.data[index], 'showTags', t)
-    },
-    async openDetails(agent) {
-      if (this.short || process.env.NODE_ENV === 'development') this.$router.push(this.path + '/details/' + agent.No)
-      else window.open(this.path + '/details/' + agent.No)
     },
     calFillAmount() {
       //通过css控制填充的margin？

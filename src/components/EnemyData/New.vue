@@ -12,7 +12,7 @@
     >
       <template slot="title">
         <span>章节选择</span>
-        <el-button v-if="selMapData" type="danger" size="small" @click="$router.push(path)">取消选择</el-button>
+        <el-button v-if="selMapData" type="danger" size="small" @click="clearMapChose">取消选择</el-button>
       </template>
       <div class="chapter-wrapper">
         <el-tree
@@ -311,6 +311,10 @@ export default {
   methods: {
     ...mapActions(['linkStart', 'loadRunes']),
     ...mapMutations([SET_DATA, 'clearMap']),
+    clearMapChose() {
+      this.$refs['chapter-selecter'].closeDrawer()
+      this.$router.push(this.path)
+    },
     openMap() {
 
     },
