@@ -8,7 +8,6 @@
       effect="dark"
       :closable="false"
     >获取数据失败，若多次刷新无效，请联系管理员</el-alert>
-    <my-share />
     <data-loading v-if="!loadingFail && !dataLoad" />
     <transition name="fade" mode="out-in">
       <div v-if="dataLoad">
@@ -64,7 +63,7 @@
             </div>
           </div>
 
-          <char-status class="status-details-wrapper" :status="status" />
+          <char-status class="details-agent-status" :status="status" />
           <div v-if="rangeId" class="status-range-wrapper">
             <div class="status-range">
               <range :range-id="rangeId" />
@@ -188,7 +187,6 @@ import ItemViewer from '../ItemViewer'
 import charStatus from '../base/charStatus'
 import DataLoading from '../base/Loading'
 import MyTitle from '@/components/base/MyTitle'
-import MyShare from '@/components/Share'
 
 const SkillPanel = () => ({
   component: import(
@@ -252,7 +250,6 @@ export default {
     DataLoading,
     AgentCard,
     charStatus,
-    MyShare,
     MyTitle
   },
   data() {
@@ -483,7 +480,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .details-wrapper {
   //min-width: 340px
   max-width: 1200px
@@ -583,7 +580,7 @@ export default {
 }
 
 //属性面板
-.status-details-wrapper {
+.details-agent-status {
   border-right: 1px solid hsla(0, 0%, 62%, 0.4)
   box-sizing: border-box
   flex: 1
@@ -649,7 +646,7 @@ export default {
 }
 
 @media screen and (max-width: 900px) {
-  .status-details-wrapper {
+  .details-agent-status {
     flex: 1
     min-width: auto
   }
@@ -687,7 +684,7 @@ export default {
   }
 
   /*part 2*/
-  .status-details-wrapper {
+  .details-agent-status {
     width: 50%
     padding-top: 20px
     height: auto
@@ -771,7 +768,7 @@ export default {
   }
 
   //属性面板
-  .status-details-wrapper {
+  .details-agent-status {
     width: 50%
     padding-top: vw(20)
     height: auto

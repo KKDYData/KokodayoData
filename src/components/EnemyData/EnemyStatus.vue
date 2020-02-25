@@ -50,7 +50,7 @@
         <p v-for="(item, index) in data[0].enemyData.extra" :key="index">{{ item }}</p>
       </div>
       <div class="status-details-talents-wrapper">
-        <div class="status-details-wrapper">
+        <div class="enemy-status-wrapper">
           <content-slot
             v-for="kData in filterKeys"
             :key="kData[0]"
@@ -442,7 +442,7 @@ export default {
   position: relative
 }
 
-.status-details-wrapper {
+.enemy-status-wrapper {
   display: flex
   flex-wrap: wrap
   align-content: start

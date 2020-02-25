@@ -1,6 +1,10 @@
 <template>
-  <div class="building-wrapper-outter" :class="classMode">
-    <my-share />
+  <div
+    v-loading="loading"
+    class="building-wrapper-outter"
+    element-loading-background="rgba(168, 168, 168, 0.1)"
+    :class="classMode"
+  >
     <filter-group
       ref="tokenFilter"
       label="显示方式"
@@ -22,16 +26,19 @@
       ref="tokenFilter"
       label="分类"
       :filters="nowType"
+      :disabled="nowType.length < 1"
       @filter="switchType($event)"
     />
     <div v-if="mode === 'agent'" class="building-wrapper">
       <div v-for="(data) in skills" :key="data.key">
         <div class="building-item">
           <div class="building-title">
-            <div v-if="1 || !simple" class="building-title-pic">
-              <c-image :src="getPic(data.key)" />
-            </div>
-            <div class="building-title-name">{{ data.name }}</div>
+            <router-link style="display: flex" :to="'/details/' + data.key">
+              <div class="building-title-pic">
+                <c-image :src="getPic(data.key)" />
+              </div>
+              <div class="building-title-name">{{ data.name }}</div>
+            </router-link>
             <div
               v-if="filter && data.skills.length > 1"
               class="building-title-control click"
@@ -70,12 +77,15 @@ import BuildPanel from '@/components/DetailsLayout/BuildingData'
 import { getProfilePath, sort } from '../utils'
 import CImage from '@/components/base/CImage'
 import FilterGroup from '@/components/base/FilterButtonGroup'
-import MyShare from '@/components/Share'
 import { mapState } from 'vuex'
 
 import room from '@/utils/data/room'
 
 import './styl/Building'
+
+import Vue from 'vue'
+import { Loading } from 'element-ui'
+Vue.use(Loading)
 
 
 const changeToFilters = (data) => Object.entries(room).reduce((res, [k, v]) => {
@@ -90,18 +100,18 @@ const modes = [
 
 const types = {
   TRADING: [
-    { text: '20%', value: '效率<@cc.vup>+20%' },
-    { text: '25%', value: '效率<@cc.vup>+25%' },
-    { text: '30%', value: '效率<@cc.vup>+30%' },
-    { text: '35%', value: '效率<@cc.vup>+35%' },
+    { text: '20%', value: '效率(.+)20%' },
+    { text: '25%', value: '效率(.+)25%' },
+    { text: '30%', value: '效率(.+)30%' },
+    { text: '35%', value: '效率(.+)35%' },
     { text: '获取效率', value: '获取效率' },
     { text: '订单上限', value: '订单上限' },
-    { text: '心情', value: '心情' },
+    { text: '心情', value: '进驻贸易站时.+心情' },
     { text: '组队', value: '当与' },
   ],
   CONTROL: [
     { text: '订单效率', value: '订单效率' },
-    { text: '心情', value: '心情' },
+    { text: '心情', value: '进驻控制中枢时.+心情' },
     { text: '加强会客室', value: '加强会客室' },
   ],
   POWER: [
@@ -111,17 +121,18 @@ const types = {
   ],
   // 10%
   MANUFACTURE: [
-    { text: '2%', value: '提供<@cc.vup>2%' },
-    { text: '10%', value: '生产力<@cc.vup>+10%' },
-    { text: '15%', value: '生产力<@cc.vup>+15%' },
-    { text: '25%', value: '生产力<@cc.vup>+25%' },
-    { text: '30%', value: '生产力<@cc.vup>+30%' },
-    { text: '35%', value: '生产力<@cc.vup>+35%' },
+    { text: '2%', value: '提供(.+)2%' },
+    { text: '10%', value: '生产力(.+)10%' },
+    { text: '15%', value: '生产力(.+)15%' },
+    { text: '25%', value: '生产力(.+)25%' },
+    { text: '30%', value: '生产力(.+)30%' },
+    { text: '35%', value: '生产力(.+)35%' },
     { text: '仓库容量', value: '仓库容量' },
     { text: '通用生产力', value: '，生产力' },
     { text: '源石', value: '源石' },
     { text: '贵金属', value: '贵金属' },
-    { text: '心情', value: '心情' },
+    { text: '作战记录', value: '作战记录' },
+    { text: '心情', value: '进驻制造站时(.+)心情每小时消耗' },
   ],
   DORMITORY: [
     { text: '所有干员', value: '所有干员的心情每小时恢复' },
@@ -154,8 +165,8 @@ const types = {
     { text: '特种', value: '特种' },
   ],
   MEETING: [
-    { text: '20%', value: '线索搜集速度提升<@cc.vup>20%' },
-    { text: '25%', value: '线索搜集速度提升<@cc.vup>25%' },
+    { text: '20%', value: '线索搜集速度提升(.+)20%' },
+    { text: '25%', value: '线索搜集速度提升(.+)25%' },
     { text: '莱茵生命', value: '莱茵生命' },
     { text: '企鹅物流', value: '企鹅物流' },
     { text: '黑钢国际', value: '黑钢国际' },
@@ -173,7 +184,6 @@ export default {
     BuildPanel,
     CImage,
     FilterGroup,
-    MyShare
   },
   data() {
     return {
@@ -185,7 +195,8 @@ export default {
       filter: null,
       list: null,
       rawlist: null,
-      mode: 'agent'
+      mode: 'agent',
+      loading: false
     }
   },
   computed: {
@@ -235,6 +246,7 @@ export default {
     }, {}))
     this.list = rawlist
     this.rawlist = rawlist
+    this.loading = false
   },
   methods: {
     getPic(key) {
@@ -295,15 +307,14 @@ export default {
       if (!data.length) {
         this.skills = this.roomSkills
         this.list = this.roomList
-        // if (this.mode === 'agent')
-        // this.filter = null
-        // this.switchData([this.filter])
         return
       }
 
-      // const target = data[0]
-      // this.filter = target
-      const check = (e, target) => e.data.description.indexOf(target.value) > -1
+      const check = (e, target) => {
+        const reg = new RegExp(target.value)
+        const str = e.data.description
+        return reg.test(str)
+      }
 
       const getL = (arr) => arr[arr.length - 1]
       const getLast = arr => getL(arr)
@@ -328,6 +339,7 @@ export default {
 
       if (this.mode === 'agent') {
         const temp = filterSkill(this.roomSkills, data)
+        console.log(temp)
         this.skills = sortSkill(temp)
 
       } else {
@@ -346,5 +358,6 @@ export default {
 .building-wrapper-outter {
   margin: 20px auto
   max-width: 1500px
+  min-height: 100vh
 }
 </style>

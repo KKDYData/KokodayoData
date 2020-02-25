@@ -21,7 +21,7 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
    -[x] item
 
 #### 2020/1/14
-- [ ] 基建页面
+- [x] 基建页面
 - [ ] 种族/阵营筛选
 - [ ] 评论功能
 - [ ] 从服务器获取更新信息的api
@@ -31,8 +31,8 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 
 
 #### 2019/11/24
-- [ ] 配合新域名kokodayo，做一个新的顶栏
-- [ ] 基建页面
+- [x] 配合新域名kokodayo，做一个新的顶栏
+- [x] 基建页面
 - [ ] 种族/阵营筛选
 - [ ] 评论功能
 - [ ] 从服务器获取更新信息的api
@@ -47,6 +47,10 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
    <img src="./assets/zfb.reszie.png" width = "300" alt="图片名称" />
    <img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
 
+### 分离出来的组件
+   1. [地图](https://github.com/odex21/SomeMapTest)，包含1个简单的canvas渲染模块和寻路算法。
+   2. [spine小人](https://github.com/odex21/ArkSpineTest)，测试小人文件的简易框架（？）
+
 ### 其它
 
  因为找到工作了，所以一般周末才会有功能更新。例如危机合约，周二更新，但是周三到周五下班之后我也在肝危机合约，所以，危机合约的地图数据等到周日才更新。。。（我太菜了）
@@ -54,8 +58,8 @@ webpack 已经配置好局域网内的访问，可以用手机访问<http://局�
 
 ### 数据来源
 
-1. 拆包数据<https://github.com/Perfare/ArknightsGameData>
-2. 掉落统计<https://penguin-stats.io/>
+<!-- 1. [拆包数据](https://github.com/Perfare/ArknightsGameData)  -->
+2. [掉落统计](https://penguin-stats.io/) 企鹅物流
 
 ### 缓存
 

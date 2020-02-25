@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="app">
     <div v-if="isNeedUpdate" class="need-update">
       <p>
         <i class="el-alert__icon el-icon-warning is-big" />
@@ -14,17 +14,16 @@
       <p>如果点完上面的都不行，那就清除浏览器数据</p>
     </div>
     <top-menu />
+    <my-share />
     <transition name="fade" mode="out-in">
       <router-view v-if="ok" class="view" />
-      <div v-else>
-        <!-- <el-input v-model="key" placeholder="填点什么" /> -->
-      </div>
     </transition>
     <Footer />
   </div>
 </template>
 <script>
 import TopMenu from '@/components/TopMenu'
+import MyShare from '@/components/Share'
 import { mapState } from 'vuex'
 import { devMode } from './stats'
 // import Vue from 'vue'
@@ -40,7 +39,8 @@ Vue.use(Button)
 export default {
   components: {
     Footer,
-    TopMenu
+    TopMenu,
+    MyShare
   },
   data() {
     return {

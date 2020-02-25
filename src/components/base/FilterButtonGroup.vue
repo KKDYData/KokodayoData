@@ -185,11 +185,13 @@ export default {
 
 @media screen and (max-width: 500px) {
   .filter-button {
-    min-width: 56px
+    min-width: vw(112)
+    margin-left: vw(10)
   }
 
   .filter-button-closeable {
-    min-width: 68px
+    min-width: vw(136)
+    margin-left: vw(10)
   }
 
   .filter-button-wrapper {

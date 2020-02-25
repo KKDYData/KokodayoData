@@ -39,7 +39,7 @@ export default {
       return res
     },
     valueStyle() {
-      if (!this.short || this.long) return {}
+      if (!this.short || this.long || this.longContent) return {}
       else return this.titleStyle
     }
   }
@@ -58,7 +58,7 @@ export default {
     border-radius: 2px
     width: 80px
     padding: 2px 0
-    box-shadow: 1px 1px 2px 1px #00005e
+    box-shadow: 1px 1px 2px 1px #3a3a4f
     box-sizing: border-box
     white-space: nowrap
     word-break: keep-all
@@ -105,7 +105,6 @@ export default {
     }
 
     &-value {
-      //width: calc(80px + 0.5vw)
       text-align: center
       padding-top: 5px
     }
@@ -121,7 +120,7 @@ export default {
       border-radius: vw(4)
       width: vw(160)
       padding: vw(4) 0 0
-      box-shadow: vw(2) vw(2) vw(4) vw(2) #00005e
+      box-shadow: vw(2) vw(4) vw(4) vw(2) rgba(73, 62, 87, 0.95)
     }
 
     &-value {
