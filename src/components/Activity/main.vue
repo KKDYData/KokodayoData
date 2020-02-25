@@ -1,15 +1,14 @@
 <template>
   <div>
     <div class="activity-wrapper">
-      <div class="activity-title" style="margin-bottom: 10px; color: #ff5200">新增基建技能页面</div>
-      <div class="activity-img">
+      <div class="activity-img out-of-date">
         <r-image :preview-src-list="[activityPic]" :src="activityPic" />
       </div>
-      <div class="activity-title">元宵刷图活动</div>
+      <div class="activity-title">午间逸话</div>
       <div class="activity-content">
-        <div>大部分地图会掉落【岁过华灯】,为了方便，把它单独放了出来，点击可以查看掉落详情</div>
+        <div>活动图掉落【食堂汤点券】，点击可以查看掉落详情</div>
         <div style="height: 100px">
-          <item-viewer class="activity-item" type="item" item="randomMaterial_2" />
+          <item-viewer class="activity-item" type="item" item="act7d5_point_coupon" />
         </div>
         <div>
           <span class="activity-info-need">如果消耗理智非常少，注意检查样本数</span>
@@ -55,6 +54,10 @@ export default {
 
   &-img {
     height: 90x
+
+    &.out-of-date {
+      filter: grayscale(1)
+    }
   }
 
   &-title {

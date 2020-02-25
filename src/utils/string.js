@@ -545,6 +545,7 @@ const StageType = {
   act4d0: 'Act·4·战地秘闻',
   act5d0: 'Act·5·喧闹法则',
   act6d5: 'Act·6·洪炉示岁',
+  act7d5: 'Act·7·午间逸话',
   rune: '危机合约'
 }
 
