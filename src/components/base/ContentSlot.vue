@@ -59,7 +59,7 @@ export default {
     width: 80px
     padding: 2px 0
     box-shadow: 1px 1px 2px 1px #3a3a4f
-    box-sizing: border-box
+    //box-sizing: border-box
     white-space: nowrap
     word-break: keep-all
   }
