@@ -135,7 +135,7 @@
 
 
 <script>
-import { findStage, UA, sort, getfontSize } from '../../utils'
+import { findStage, sort, getfontSize } from '../../utils'
 import { path } from '../../utils/listVer'
 import formula from '../../utils/data/formula.json'
 
@@ -253,10 +253,8 @@ export default {
   },
   data() {
     return {
-      isHover:
-        process.env.NODE_ENV === 'development' || UA.isMobliePad || this.short
-          ? 'click'
-          : 'hover',
+      // (process.env.NODE_ENV === 'development' || UA.isMobliePad || this.short)
+      isHover: 'click',
       data: typeof this.item !== 'string' ? this.item : undefined,
       GOLD,
       show: false,

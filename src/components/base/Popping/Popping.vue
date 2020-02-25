@@ -30,7 +30,7 @@
         popper-class="item-popover-class"
         :placement="placement"
         :width="width"
-        :trigger="isHover"
+        :trigger="trigger"
         :open-delay="500"
         :title="title"
         :disabled="disabled"
@@ -65,7 +65,7 @@ export default {
       type: Number,
       default: 0
     },
-    isHover: {
+    trigger: {
       type: String,
       default: 'click',
     },

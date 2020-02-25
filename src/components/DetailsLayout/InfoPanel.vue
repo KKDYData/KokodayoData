@@ -52,7 +52,12 @@
             </div>
             <div class="info-story-content-wrapper">
               <div v-for="([k, v], i) in story.data" :key="k" class="info-story-content">
-                <content-slot long :no-wrap="true" :width="i < (index === 0 ? 7 : 5) ? 70 : null">
+                <content-slot
+                  long
+                  :no-wrap="true"
+                  :width="i < (index === 0 ? 7 : 5) ? 70 : null"
+                  :long-content="( i === 7 || (index !== 0 && i ===5) )"
+                >
                   <div slot="title">{{ k }}</div>
                   <div slot="content">{{ v }}</div>
                 </content-slot>
