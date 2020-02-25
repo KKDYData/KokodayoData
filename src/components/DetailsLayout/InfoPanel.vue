@@ -390,7 +390,7 @@ export default {
 }
 
 .info-token-desc {
-  margin: 20px 0
+  margin: 20px 0 50px
 }
 
 @media screen and (max-width: 700px) {
@@ -442,7 +442,7 @@ export default {
   }
 
   .info-token-desc {
-    margin: vw(20) 0
+    margin: vw(20) 0 vw(60)
   }
 }
 </style>

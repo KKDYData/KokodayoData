@@ -39,7 +39,7 @@ export default {
       return res
     },
     valueStyle() {
-      if (!this.short || this.long) return {}
+      if (!this.short || this.long || this.longContent) return {}
       else return this.titleStyle
     }
   }

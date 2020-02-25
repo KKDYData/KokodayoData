@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="app">
     <div v-if="isNeedUpdate" class="need-update">
       <p>
         <i class="el-alert__icon el-icon-warning is-big" />

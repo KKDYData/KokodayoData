@@ -457,7 +457,6 @@ const getfontSize = (str, mSize = 34, nSize = 16, baseLen = 4) => {
   const short = store.state.short
   const base = short ? mSize : nSize
   const temp = Math.min(baseLen / str.length * base, base)
-  console.log(temp, str)
   return short ? (temp / 750 * 100) + 'vw' : temp + 'px'
 }
 
