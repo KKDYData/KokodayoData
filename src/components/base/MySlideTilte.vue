@@ -45,7 +45,7 @@ export default {
       default: true
     },
     init: {
-      type: Boolean,
+      type: [Boolean, String],
       default: false
     },
     customBg: {

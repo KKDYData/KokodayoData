@@ -10,12 +10,9 @@
       >
         <!--  -->
         <div class="profile-item-inner-wrapper" :class="{'show-tags': showTags || agent.showTags }">
-          <c-image
-            class="img-container"
-            :alt="agent.name"
-            :src="profilePath(agent.No)"
-            @click.native="openDetails(agent)"
-          />
+          <router-link :to="path + '/details/' + agent.No">
+            <c-image class="img-container" :alt="agent.name" :src="profilePath(agent.No)" />
+          </router-link>
           <transition name="slide-fade">
             <div v-if="showTags || agent.showTags" class="tag-wrapper-1">
               <div v-for="(tag, i) in agent.tags" :key="tag">
