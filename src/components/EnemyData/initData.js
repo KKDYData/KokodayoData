@@ -85,10 +85,11 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
       routes
     )
   else {
-    instance.looping = true
+
     instance.config(container, persective, theta)
     instance.init(mapData, routes)
-    instance.loop()
+    instance.startLoop()
+
   }
 
   return instance

@@ -21,10 +21,16 @@
         <div class="activity-info-need">
           <a target="_blank" href="https://penguin-stats.io/">数据来源&收集：企鹅物流</a>
         </div>
-        <div>
+        <div style="margin-top: 20px">
           <span class="activity-info-need">
             最近在对页面进行重构可能有布局异常的问题，如果遇到了请在
             <router-link to="/info">点击这里，往下滑找到“反馈”</router-link>以反馈
+          </span>
+        </div>
+        <div style="margin-top: 20px">
+          <span class="activity-info-need">
+            修复了多次点击敌人路线时，线条移动速度变快导致卡顿的的问题，另外H6-2路线不正确的问题，会在下周修复。
+            如果还有其它路线不正确的问题，也请及时反馈。
           </span>
         </div>
       </div>
