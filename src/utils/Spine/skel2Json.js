@@ -128,10 +128,10 @@ SkeletonBinary.prototype = {
   readString: function () {
     let charCount = this.readInt(this, !![]);
     switch (charCount) {
-    case 0x0:
-      return null;
-    case 0x1:
-      return '';
+      case 0x0:
+        return null;
+      case 0x1:
+        return '';
     }
     charCount--;
     this.chars = '';
@@ -139,18 +139,18 @@ SkeletonBinary.prototype = {
     for (let i = 0x0; i < charCount;) {
       charIndex = this.readByte();
       switch (charIndex >> 0x4) {
-      case 0xc:
-      case 0xd:
-        this.chars += String.fromCharCode((charIndex & 0x1f) << 0x6 | this.readByte() & 0x3f);
-        i += 0x2;
-        break;
-      case 0xe:
-        this.chars += String.fromCharCode((charIndex & 0xf) << 0xc | (this.readByte() & 0x3f) << 0x6 | this.readByte() & 0x3f);
-        i += 0x3;
-        break;
-      default:
-        this.chars += String.fromCharCode(charIndex);
-        i++;
+        case 0xc:
+        case 0xd:
+          this.chars += String.fromCharCode((charIndex & 0x1f) << 0x6 | this.readByte() & 0x3f);
+          i += 0x2;
+          break;
+        case 0xe:
+          this.chars += String.fromCharCode((charIndex & 0xf) << 0xc | (this.readByte() & 0x3f) << 0x6 | this.readByte() & 0x3f);
+          i += 0x3;
+          break;
+        default:
+          this.chars += String.fromCharCode(charIndex);
+          i++;
       }
     }
     return this.chars;
@@ -341,124 +341,124 @@ SkeletonBinary.prototype = {
 
 
     switch (AttachmentType[this.readByte()]) {
-    case 'region':
-      path = this.readString();
-      if (path == null)
-        path = name;
-      region.type = 'region';
-      region.name = name;
-      region.path = path.trim();
-      region.rotation = this.readFloat();
-      region['x'] = this.readFloat() * scale;
-      region['y'] = this.readFloat() * scale;
-      region.scaleX = this.readFloat();
-      region.scaleY = this.readFloat();
-      region.width = this.readFloat() * scale;
-      region.height = this.readFloat() * scale;
-      region.color = this.readColor();
-      return region;
-    case 'boundingbox':
-      box.type = 'boundingbox';
-      box.name = name;
-      n = this.readInt(!![]);
-      box.vertexCount = n;
-      box.vertices = this.readVertices(n);
-      if (this.nonessential) {
-        box.color = this.readColor();
-      }
-      return box;
-    case 'mesh':
-      path = this.readString();
-      if (path == null)
-        path = name;
-      mesh.type = 'mesh';
-      mesh.name = name;
-      mesh.path = path;
-      mesh.color = this.readColor();
-      n = this.readInt(!![]);
-      mesh.uvs = this.readFloatArray(n << 0x1, 0x1);
-      mesh.triangles = this.readShortArray();
-      mesh.vertices = this.readVertices(n);
-      mesh.hull = this.readInt(!![]) << 0x1;
-      if (nonessential) {
-        mesh.edges = this.readShortArray();
-        mesh.width = this.readFloat() * scale;
-        mesh.height = this.readFloat() * scale;
-      }
-      return mesh;
-    case 'linkedmesh':
-      path = this.readString();
-      if (path == null)
-        path = name;
-      linkdeMesh.type = 'linkedmesh';
-      linkdeMesh.name = name;
-      linkdeMesh.path = path;
-      linkdeMesh.color = this.readColor();
-      linkdeMesh.skin = this.readString();
-      linkdeMesh.parent = this.readString();
-      linkdeMesh.deform = this.readBoolean();
-      if (nonessential) {
-        linkdeMesh.width = this.readFloat() * scale;
-        linkdeMesh.height = this.readFloat() * scale;
-      }
-      return linkdeMesh;
-    case 'path':
-      path = {};
-      path.type = 'path';
-      path.name = name;
-      path.closed = this.readBoolean();
-      path.constantSpeed = this.readBoolean();
-      n = this.readInt(!![]);
-      path.vertexCount = n;
-      path.vertices = this.readVertices(n);
-      array = array = new Array(n / 0x3);
-      for (let i = 0x0; i < array.length; i++) {
-        array[i] = this.readFloat() * scale;
-      }
-      path.lengths = array;
-      if (nonessential) {
-        path.color = this.readColor();
-      }
-      return path;
-    case 'point':
-      point.type = 'point';
-      point.name = name;
-      point.rotation = this.readFloat();
-      point['x'] = this.readFloat() * scale;
-      point['y'] = this.readFloat() * scale;
-      if (nonessential) {
-        path.color = this.readColor();
-      }
-      return point;
-    case 'clipping':
-      clipping.type = 'clipping';
-      clipping.name = name;
-      clipping.end = this.readInt(!![]);
-      n = this.readInt(!![]);
-      clipping.vertexCount = n;
-      clipping.vertices = this.readVertices(n);
-      if (nonessential) {
-        clipping.color = this.readColor();
-      }
-      return clipping;
+      case 'region':
+        path = this.readString();
+        if (path == null)
+          path = name;
+        region.type = 'region';
+        region.name = name;
+        region.path = path.trim();
+        region.rotation = this.readFloat();
+        region['x'] = this.readFloat() * scale;
+        region['y'] = this.readFloat() * scale;
+        region.scaleX = this.readFloat();
+        region.scaleY = this.readFloat();
+        region.width = this.readFloat() * scale;
+        region.height = this.readFloat() * scale;
+        region.color = this.readColor();
+        return region;
+      case 'boundingbox':
+        box.type = 'boundingbox';
+        box.name = name;
+        n = this.readInt(!![]);
+        box.vertexCount = n;
+        box.vertices = this.readVertices(n);
+        if (this.nonessential) {
+          box.color = this.readColor();
+        }
+        return box;
+      case 'mesh':
+        path = this.readString();
+        if (path == null)
+          path = name;
+        mesh.type = 'mesh';
+        mesh.name = name;
+        mesh.path = path;
+        mesh.color = this.readColor();
+        n = this.readInt(!![]);
+        mesh.uvs = this.readFloatArray(n << 0x1, 0x1);
+        mesh.triangles = this.readShortArray();
+        mesh.vertices = this.readVertices(n);
+        mesh.hull = this.readInt(!![]) << 0x1;
+        if (nonessential) {
+          mesh.edges = this.readShortArray();
+          mesh.width = this.readFloat() * scale;
+          mesh.height = this.readFloat() * scale;
+        }
+        return mesh;
+      case 'linkedmesh':
+        path = this.readString();
+        if (path == null)
+          path = name;
+        linkdeMesh.type = 'linkedmesh';
+        linkdeMesh.name = name;
+        linkdeMesh.path = path;
+        linkdeMesh.color = this.readColor();
+        linkdeMesh.skin = this.readString();
+        linkdeMesh.parent = this.readString();
+        linkdeMesh.deform = this.readBoolean();
+        if (nonessential) {
+          linkdeMesh.width = this.readFloat() * scale;
+          linkdeMesh.height = this.readFloat() * scale;
+        }
+        return linkdeMesh;
+      case 'path':
+        path = {};
+        path.type = 'path';
+        path.name = name;
+        path.closed = this.readBoolean();
+        path.constantSpeed = this.readBoolean();
+        n = this.readInt(!![]);
+        path.vertexCount = n;
+        path.vertices = this.readVertices(n);
+        array = array = new Array(n / 0x3);
+        for (let i = 0x0; i < array.length; i++) {
+          array[i] = this.readFloat() * scale;
+        }
+        path.lengths = array;
+        if (nonessential) {
+          path.color = this.readColor();
+        }
+        return path;
+      case 'point':
+        point.type = 'point';
+        point.name = name;
+        point.rotation = this.readFloat();
+        point['x'] = this.readFloat() * scale;
+        point['y'] = this.readFloat() * scale;
+        if (nonessential) {
+          path.color = this.readColor();
+        }
+        return point;
+      case 'clipping':
+        clipping.type = 'clipping';
+        clipping.name = name;
+        clipping.end = this.readInt(!![]);
+        n = this.readInt(!![]);
+        clipping.vertexCount = n;
+        clipping.vertices = this.readVertices(n);
+        if (nonessential) {
+          clipping.color = this.readColor();
+        }
+        return clipping;
     }
     return null;
   },
   readCurve(frameIndex, timeline) {
     let cx1, cy1, cx2, cy2;
     switch (this.readByte()) {
-    case 0x0:
-      timeline[frameIndex].curve = 'linear';
-      break;
-    case 0x1:
-      timeline[frameIndex].curve = 'stepped';
-      break;
-    case 0x2:
-      cx1 = this.readFloat();
-      cy1 = this.readFloat();
-      cx2 = this.readFloat();
-      cy2 = this.readFloat();
-      timeline[frameIndex].curve = [cx1, cy1, cx2, cy2];
+      case 0x0:
+        timeline[frameIndex].curve = 'linear';
+        break;
+      case 0x1:
+        timeline[frameIndex].curve = 'stepped';
+        break;
+      case 0x2:
+        cx1 = this.readFloat();
+        cy1 = this.readFloat();
+        cx2 = this.readFloat();
+        cy2 = this.readFloat();
+        timeline[frameIndex].curve = [cx1, cy1, cx2, cy2];
     }
   },
   readAnimation(name) {
@@ -475,50 +475,50 @@ SkeletonBinary.prototype = {
         let frameCount = this.readInt(!![]);
         let timeline;
         switch (timelineType) {
-        case 0x0:
-          timeline = new Array(frameCount);
-          for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
-            let time = this.readFloat();
-            let color = this.readString();
-            timeline[frameIndex] = {};
-            timeline[frameIndex].time = time;
-            timeline[frameIndex].name = color;
-          }
-          slotMap.attachment = timeline;
-          duration = Math.max(duration, timeline[frameCount - 0x1].time);
-          break;
-        case 0x1:
-          timeline = new Array(frameCount);
-          for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
-            const time = this.readFloat();
-            const color = this.readColor();
-            timeline[frameIndex] = {};
-            timeline[frameIndex].time = time;
-            timeline[frameIndex].color = color;
-            if (frameIndex < frameCount - 0x1) {
-              this.readCurve(frameIndex, timeline); //let curve 
+          case 0x0:
+            timeline = new Array(frameCount);
+            for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
+              let time = this.readFloat();
+              let color = this.readString();
+              timeline[frameIndex] = {};
+              timeline[frameIndex].time = time;
+              timeline[frameIndex].name = color;
             }
-          }
-          slotMap.color = timeline;
-          duration = Math.max(duration, timeline[frameCount - 0x1].time);
-          break;
-        case 0x2:
-          timeline = new Array(frameCount);
-          for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
-            const time = this.readFloat();
-            let lightColor = this.readColor();
-            let darkColor = this.readColor();
-            timeline[frameIndex] = {};
-            timeline[frameIndex].time = time;
-            timeline[frameIndex].light = lightColor;
-            timeline[frameIndex].dark = darkColor;
-            if (frameIndex < frameCount - 0x1) {
-              this.readCurve(frameIndex, timeline);// let curve
+            slotMap.attachment = timeline;
+            duration = Math.max(duration, timeline[frameCount - 0x1].time);
+            break;
+          case 0x1:
+            timeline = new Array(frameCount);
+            for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
+              const time = this.readFloat();
+              const color = this.readColor();
+              timeline[frameIndex] = {};
+              timeline[frameIndex].time = time;
+              timeline[frameIndex].color = color;
+              if (frameIndex < frameCount - 0x1) {
+                this.readCurve(frameIndex, timeline); //let curve 
+              }
             }
-          }
-          slotMap.twoColor = timeline;
-          duration = Math.max(duration, timeline[frameCount - 0x1].time);
-          break;
+            slotMap.color = timeline;
+            duration = Math.max(duration, timeline[frameCount - 0x1].time);
+            break;
+          case 0x2:
+            timeline = new Array(frameCount);
+            for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
+              const time = this.readFloat();
+              let lightColor = this.readColor();
+              let darkColor = this.readColor();
+              timeline[frameIndex] = {};
+              timeline[frameIndex].time = time;
+              timeline[frameIndex].light = lightColor;
+              timeline[frameIndex].dark = darkColor;
+              if (frameIndex < frameCount - 0x1) {
+                this.readCurve(frameIndex, timeline);// let curve
+              }
+            }
+            slotMap.twoColor = timeline;
+            duration = Math.max(duration, timeline[frameCount - 0x1].time);
+            break;
         }
       }
       slots[this.json.slots[slotIndex].name] = slotMap;
@@ -535,49 +535,49 @@ SkeletonBinary.prototype = {
         let timelineScale = 0x1;
 
         switch (timelineType) {
-        case 0x0:
-          timeline = new Array(frameCount);
-          for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
-            const time = this.readFloat();
-            const tlangle = this.readFloat();
-            timeline[frameIndex] = {};
-            timeline[frameIndex].time = time;
-            timeline[frameIndex].angle = tlangle;
-            if (frameIndex < frameCount - 0x1) {
-              this.readCurve(frameIndex, timeline);
+          case 0x0:
+            timeline = new Array(frameCount);
+            for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
+              const time = this.readFloat();
+              const tlangle = this.readFloat();
+              timeline[frameIndex] = {};
+              timeline[frameIndex].time = time;
+              timeline[frameIndex].angle = tlangle;
+              if (frameIndex < frameCount - 0x1) {
+                this.readCurve(frameIndex, timeline);
+              }
             }
-          }
-          boneMap.rotate = timeline;
-          duration = Math.max(duration, timeline[frameCount - 0x1].time);
-          break;
-        case 0x1:
-        case 0x2:
-        case 0x3:
-          timeline = new Array(frameCount);
-          if (timelineType == 0x1) {
-            timelineScale = scale;
-          }
-          for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
-            let tltime = this.readFloat();
-            let tlx = this.readFloat();
-            let tly = this.readFloat();
-            timeline[frameIndex] = {};
-            timeline[frameIndex].time = tltime;
-            timeline[frameIndex]['x'] = tlx * timelineScale;
-            timeline[frameIndex]['y'] = tly * timelineScale;
-            if (frameIndex < frameCount - 0x1) {
-              this.readCurve(frameIndex, timeline);
+            boneMap.rotate = timeline;
+            duration = Math.max(duration, timeline[frameCount - 0x1].time);
+            break;
+          case 0x1:
+          case 0x2:
+          case 0x3:
+            timeline = new Array(frameCount);
+            if (timelineType == 0x1) {
+              timelineScale = scale;
             }
-          }
-          if (timelineType == 0x1) {
-            boneMap.translate = timeline;
-          } else if (timelineType == 0x2) {
-            boneMap.scale = timeline;
-          } else {
-            boneMap.shear = timeline;
-          }
-          duration = Math.max(duration, timeline[frameCount - 0x1].time);
-          break;
+            for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
+              let tltime = this.readFloat();
+              let tlx = this.readFloat();
+              let tly = this.readFloat();
+              timeline[frameIndex] = {};
+              timeline[frameIndex].time = tltime;
+              timeline[frameIndex]['x'] = tlx * timelineScale;
+              timeline[frameIndex]['y'] = tly * timelineScale;
+              if (frameIndex < frameCount - 0x1) {
+                this.readCurve(frameIndex, timeline);
+              }
+            }
+            if (timelineType == 0x1) {
+              boneMap.translate = timeline;
+            } else if (timelineType == 0x2) {
+              boneMap.scale = timeline;
+            } else {
+              boneMap.shear = timeline;
+            }
+            duration = Math.max(duration, timeline[frameCount - 0x1].time);
+            break;
         }
       }
       bones[this.json.bones[boneIndex].name] = boneMap;
@@ -635,55 +635,55 @@ SkeletonBinary.prototype = {
         const frameCount = this.readInt(!![]);
         let timeline, time, timelineScale;
         switch (timelineType) {
-        case 0x0:
-        case 0x1:
-          timeline = new Array(frameCount);
-          timelineScale = 0x1;
-          if (timelineType == 0x1) {
-            if (pathData.spacingMode == 'length' || pathData.spacingMode == 'fixed') {
-              timelineScale = this.scale;
-            }
-          } else {
-            if (pathData.positionMode == 'fixed') {
-              timelineScale = this.scale;
-            }
-          }
-          for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
-            time = this.readFloat();
-            let _0xebc795 = this.readFloat();
-            timeline[frameIndex] = {};
-            timeline[frameIndex].time = time;
-            if (timelineType == 0x0) {
-              timeline[frameIndex].position = _0xebc795 * timelineScale;
+          case 0x0:
+          case 0x1:
+            timeline = new Array(frameCount);
+            timelineScale = 0x1;
+            if (timelineType == 0x1) {
+              if (pathData.spacingMode == 'length' || pathData.spacingMode == 'fixed') {
+                timelineScale = this.scale;
+              }
             } else {
-              timeline[frameIndex].spacing = _0xebc795 * timelineScale;
+              if (pathData.positionMode == 'fixed') {
+                timelineScale = this.scale;
+              }
             }
-            if (frameIndex < frameCount - 0x1)
-              this.readCurve(frameIndex, timeline);
-          }
-          if (timelineType == 0x0) {
-            data.position = timeline;
-          } else {
-            data.spacing = timeline;
-          }
-          duration = Math.max(duration, timeline[frameCount - 0x1].time);
-          break;
-        case 0x2:
-          timeline = new Array(frameCount);
-          for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
-            time = this.readFloat();
-            let _0x47f0f0 = this.readFloat();
-            let _0x1bb1d7 = this.readFloat();
-            timeline[frameIndex] = {};
-            timeline[frameIndex].time = time;
-            timeline[frameIndex].rotateMix = _0x47f0f0;
-            timeline[frameIndex].translateMix = _0x1bb1d7;
-            if (frameIndex < frameCount - 0x1)
-              this.readCurve(frameIndex, timeline);
-          }
-          data.mix = timeline;
-          duration = Math.max(duration, timeline[frameCount - 0x1].time);
-          break;
+            for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
+              time = this.readFloat();
+              let _0xebc795 = this.readFloat();
+              timeline[frameIndex] = {};
+              timeline[frameIndex].time = time;
+              if (timelineType == 0x0) {
+                timeline[frameIndex].position = _0xebc795 * timelineScale;
+              } else {
+                timeline[frameIndex].spacing = _0xebc795 * timelineScale;
+              }
+              if (frameIndex < frameCount - 0x1)
+                this.readCurve(frameIndex, timeline);
+            }
+            if (timelineType == 0x0) {
+              data.position = timeline;
+            } else {
+              data.spacing = timeline;
+            }
+            duration = Math.max(duration, timeline[frameCount - 0x1].time);
+            break;
+          case 0x2:
+            timeline = new Array(frameCount);
+            for (let frameIndex = 0x0; frameIndex < frameCount; frameIndex++) {
+              time = this.readFloat();
+              let _0x47f0f0 = this.readFloat();
+              let _0x1bb1d7 = this.readFloat();
+              timeline[frameIndex] = {};
+              timeline[frameIndex].time = time;
+              timeline[frameIndex].rotateMix = _0x47f0f0;
+              timeline[frameIndex].translateMix = _0x1bb1d7;
+              if (frameIndex < frameCount - 0x1)
+                this.readCurve(frameIndex, timeline);
+            }
+            data.mix = timeline;
+            duration = Math.max(duration, timeline[frameCount - 0x1].time);
+            break;
         }
       }
       path[this.json.path[pathOrder].name] = data;
@@ -788,4 +788,6 @@ const skel2Json = binary => {
   return skel_bin.json;
 };
 
-export default skel2Json;
+export {
+  skel2Json
+} 

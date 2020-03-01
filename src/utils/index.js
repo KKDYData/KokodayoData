@@ -467,10 +467,21 @@ const sleep = time => {
   })
 }
 
+const loadImg = (url) =>
+  new Promise((resolve, reject) => {
+    const img = new Image()
+    img.onload = () => resolve(img)
+    img.onerror = err => console.log(err)
+    img.onerror = reject
+    img.src = url
+  })
+
+
 export {
   TaskQueue,
   findValue,
   sleep,
+  loadImg,
 
   // 业务相关类
   debounce,

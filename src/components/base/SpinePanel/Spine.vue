@@ -6,12 +6,13 @@
           {{ modeText[mode[0]] }}
           <i class="el-icon-sort icon-switch" />
         </el-button>
+        <el-button :type="spineState.loop ? 'primary' : ''" size="mini" @click="setLoop">loop</el-button>
       </div>
       <div class="control-button">
         <el-button type="primary" size="mini" class="el-icon-back" @click="changeAnimate(false)" />
         <span
           style="display: inline-block;text-align: center; font-size: 13px"
-        >{{ animates[curAnimate] }}</span>
+        >{{ spineState.animates[spineState.curAnimateIndex] }}</span>
         <el-button type="primary" size="mini" class="el-icon-right" @click="changeAnimate(true)" />
       </div>
     </div>
@@ -21,10 +22,11 @@
 
 <script>
 import { Button, Message } from 'element-ui'
-import Spine from '../../../utils/Spine/initSpine'
+import { Spine } from '@/utils/Spine/initSpine'
 
 import Vue from 'vue'
-import { path } from '../../../utils/listVer'
+import { path } from '@/utils/listVer'
+import { fetchPic, fetchBuffer, fetchText } from './utils'
 Vue.use(Button)
 
 export default {
@@ -53,8 +55,13 @@ export default {
       mode: ['build', 'fight_f', 'fight_b'],
       modeText: {
         build: '基建',
-        fight_f: '战斗正',
-        fight_b: '战斗反'
+        fight_f: '战斗正面',
+        fight_b: '战斗反面'
+      },
+      spineState: {
+        curAnimateIndex: 0,
+        animates: [],
+        loop: false
       }
     }
   },
@@ -82,25 +89,60 @@ export default {
         })
     },
     changeAnimate(t) {
-      this.curAnimate = t ? this.curAnimate + 1 : this.curAnimate - 1
-      if (this.curAnimate >= this.animates.length) this.curAnimate = 0
-      else if (this.curAnimate < 0)
-        this.curAnimate =
-          this.animates.length !== 0 ? this.animates.length - 1 : 0
+      if (!this.spineState.animates) return
+      const { spine, id, spineState } = this
+      let { curAnimateIndex, animates } = spineState
 
-      const { state, skeleton } = this.spine.skeletons[this.id]
-      const animate = this.spine.animates[this.curAnimate]
-      const loop = /Start|Begin|End/.test(animate) ? false : true
+      curAnimateIndex = t ? curAnimateIndex + 1 : curAnimateIndex - 1
+
+
+      if (curAnimateIndex >= animates.length) curAnimateIndex = 0
+      else if (curAnimateIndex < 0)
+        curAnimateIndex = animates.length !== 0 ? animates.length - 1 : 0
+
+
+      if (!spine.skeletons) return
+      const skeletons = spine.skeletons
+
+      if (!skeletons[id]) {
+        console.log(skeletons)
+        console.log(`no this id : ${id}`)
+        return
+      }
+      const { state, skeleton } = skeletons[id]
+      const animate = spine.animates[curAnimateIndex]
+      const loop = (/Start|Begin|End/.test(animate) ? false : true)
+      spineState.loop = loop
+
+      spineState.curAnimateIndex = curAnimateIndex
+      console.log(animate, curAnimateIndex, spine.animates)
+
       state.setAnimation(0, animate, loop)
       skeleton.setToSetupPose()
     },
+
+    setLoop() {
+      const { spineState, spine, id } = this
+      const { animates, curAnimateIndex } = spineState
+      const { state, skeleton } = spine.skeletons[id]
+      state.setAnimation(0, animates[curAnimateIndex], !spineState.loop)
+      skeleton.setToSetupPose()
+      spineState.loop = !spineState.loop
+    },
+
     async init() {
       this.spine = new Spine(this.$refs.container)
-      const id = this.id,
-        pathd = this.spinePath + this.mode[0] + '/'
+      const { id, spinePath, mode } = this
 
-      this.skeleton = await this.spine.init({ id, path: pathd })
-      this.animates = this.spine.animates
+      const texture = await fetchPic(`${spinePath}${mode[0]}/${id}.png`)
+      const skelBinary = await fetchBuffer(`${spinePath}${mode[0]}/${id}.skel`)
+      const text = await fetchText(`${spinePath}${mode[0]}/${id}.atlas`)
+
+      this.spine.init({ id, texture, skelBinary, text })
+        .then(() => {
+          this.spineState.animates = this.spine.animates
+          this.spineState.load = true
+        })
     }
   }
 }

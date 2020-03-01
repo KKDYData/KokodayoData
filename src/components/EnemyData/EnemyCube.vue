@@ -54,6 +54,7 @@ export default {
   min-width: 100px
   position: relative
 
+  //background-image: linear-gradient(45deg, hsl(163, 100%, 6%), transparent)
   &:before {
     content: ''
     border: 7px solid
@@ -63,6 +64,11 @@ export default {
     position: absolute
     box-sizing: border-box
     z-index: 2
+  }
+
+  .image-inner {
+    background-color: #cedddb
+    box-shadow: inset 0px 0px 0px 5px #313131
   }
 }
 

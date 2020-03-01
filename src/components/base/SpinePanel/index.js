@@ -1,1 +1,1 @@
-export { default } from './Spine';
+export { default } from './Spine'

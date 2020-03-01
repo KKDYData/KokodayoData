@@ -98,6 +98,7 @@ export default {
       display: block
       width: 100%
       text-align: left
+      white-space: normal
     }
   }
 }

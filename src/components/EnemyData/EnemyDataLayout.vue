@@ -59,7 +59,7 @@
 
           <div class="enemy-data-layout wave">
             <div
-              v-for="({key, actionType, count, interval, preDelay: __preDelay, routeIndex}, aIndex) in actions.filter(({actionType}) => actionType === 0 || actionType === 6)"
+              v-for="({key, actionType, count, interval, preDelay: __preDelay, routeIndex}, aIndex) in dealGroup(actions)"
               :key="aIndex"
               class="wave-enemy-single"
             >
@@ -70,18 +70,13 @@
                 :src="enemyPicPath(key)"
                 @click.native="showRoute(routeIndex)"
               />
-              <enemy-cube
-                v-else-if="/trap_007_ballis/.test(key)"
-                style="background: linear-gradient(45deg, hsl(163, 100%, 6%), transparent);box-shadow: inset 0px 0px 0px 5px #313131"
-                name="弩炮"
-                :src="ballis"
-              />
+              <enemy-cube v-else-if="/trap_007_ballis/.test(key)" name="弩炮" :src="ballis" />
               <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
                 <p>{{ key.replace('trap_007_ballis', '弩炮') }}</p>
               </div>
               <div style class="enemy-cube-wave-info">
                 <div>数量:{{ count }} 间隔:{{ interval }}s</div>
-                <div>延迟: {{ __preDelay }}s</div>
+                <div>出发: {{ __preDelay+time | time }}</div>
               </div>
             </div>
           </div>
@@ -116,6 +111,7 @@ import { getEnemyData } from '@/utils/fetch'
 import { path } from '@/utils/listVer'
 
 import { createNamespacedHelpers, mapState as Root } from 'vuex'
+import { sort } from '../../utils'
 const { mapState } = createNamespacedHelpers('enemy')
 
 export default {
@@ -181,6 +177,12 @@ export default {
   mounted() {
   },
   methods: {
+    dealGroup(actions) {
+      return sort(
+        actions.filter(({ actionType }) => actionType === 0 || actionType === 6)
+        , (a, b) => a.preDelay < b.preDelay
+      )
+    },
     clearRoutes(v) {
       this.selectedStlye = {}
       this.selectedRoutes.clear()
