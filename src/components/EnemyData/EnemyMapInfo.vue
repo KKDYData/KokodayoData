@@ -38,7 +38,7 @@
       </content-slot>
       <div style="width: 100%">
         <content-slot :long="true" :no-wrap="true" :width="150">
-          <div slot="title">总时长</div>
+          <div slot="title">最后一个敌人出现</div>
           <div slot="content">{{ waveTime | time }}</div>
         </content-slot>
       </div>
@@ -64,7 +64,9 @@ export default {
   },
   filters: {
     time(v) {
-      return Math.floor(v / 60) + ' min ' + Math.round(v % 60) + ' s'
+      const sec = Math.floor((v % 60) * 10) / 10,
+        min = Math.floor(v / 60)
+      return min > 0 ? min + ' 分 ' + sec + ' 秒' : sec + ' 秒'
     }
   },
   props: {
