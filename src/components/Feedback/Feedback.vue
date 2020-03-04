@@ -21,16 +21,19 @@
           <br />以至于，本来一个月只跑130gb左右的流量，现在一周跑了130gb。月消费可能从100元左右变成400元左右，因为阿里云主要是购买资源包，所以有待观察。
         </span>
       </q-a>
-      <div style="width">
-        <r-image :preview-src-list="[cost02]" :src="cost02" />
-      </div>
       <q-a>
         <span slot="q">我想捐款</span>
         <span slot="a">我有二维码。投食的时候，最好备注信息(例如：kkdy)。</span>
       </q-a>
-      <div style="display:flex; margin-bottom: 20px">
+      <div style="display:flex;">
         <r-image :preview-src-list="[zfb]" :src="zfb" />
         <r-image :preview-src-list="[wx]" :src="wx" />
+      </div>
+      <div style="margin-bottom: 20px">
+        <a href="https://docs.qq.com/sheet/DTGFQU05VemVScHpS?c=J10A0A0" type="info">
+          Kokodayo 2020 收支一览
+          <sup>new</sup>
+        </a>，暂时还没空整理的更详细一点。
       </div>
     </div>
     <my-title title="测试版" />
@@ -135,9 +138,6 @@ export default {
   },
   computed: {
     ...mapState(['short']),
-    cost02() {
-      return require('./img/cost_202002.png')
-    },
     zfb() {
       return require('./img/zfb.png')
     },
