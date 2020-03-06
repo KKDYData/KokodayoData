@@ -29,13 +29,7 @@
         </span>
       </div>
       <div style="margin-top: 20px">
-        <span class="activity-info-need">
-          修复了多次点击敌人路线时，线条移动速度变快导致卡顿的的问题，另外H6-2路线不正确的问题，会在下周修复。
-          如果还有其它路线不正确的问题，也请及时反馈。
-        </span>
-      </div>
-      <div style="margin-top: 20px">
-        <span class="activity-info-need">因为经验不足，在公司用笔记本更新清流的时候，没有更新新版的somemap，导致上面提到的修改没了。</span>
+        <span class="activity-info-need">修复了多次点击敌人路线时，线条移动速度变快导致卡顿的的问题，另外H6-2路线不正确的问题，会在下周(3.15前)修复。</span>
       </div>
     </div>
   </div>
