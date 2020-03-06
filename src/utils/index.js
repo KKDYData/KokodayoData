@@ -210,7 +210,7 @@ const decNoValue = (res, data, str) => {
 
 const wrapColor = (str, color) => `<i style="color:${color};font-style: normal;">${str}</i>`
 
-const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2', 'skchr_cerber_2'])
+const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2', 'skchr_cerber_2', 'skchr_finlpp_2'])
 const exSkill2 = new Map([['skchr_angel_3', '据实测攻击间隔缩短效果翻倍']])
 
 const changeAttackSpeed = (skill) => {
