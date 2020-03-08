@@ -25,7 +25,7 @@
               </div>
               <div class="intro-2-wrapper">
                 <span v-if="!descArrary" class="intro-2" v-html="desc" />
-                <span v-else-if="desc.length > 1" class="intro-2" v-html="desc[phases - 1]" />
+                <span v-else-if="desc.length > 1" class="intro-2" v-html="desc[phases]" />
                 <span v-else class="intro-2" v-html="desc[0]" />
               </div>
             </div>
@@ -123,8 +123,21 @@ export default {
     desc() {
       if (!this.data.trait) return changeDesc(this.data.description)
       else if (this.data.trait.candidates) {
-        return this.data.trait.candidates.map(el => {
-          console.log(this.data)
+        const arr = this.data.trait.candidates
+        if (this.data.rarity > 3 && arr.length < 3) {
+          arr.forEach((el, index) => {
+            const phases = el.unlockCondition.phase
+            if (phases > index) {
+              const temp = arr[index - 1]
+              arr.splice(index, 0, temp)
+            } else if (phases < index) {
+              const temp = arr[index - 1]
+              arr.splice(index + 1, 0, temp)
+            }
+          })
+        }
+        console.log(arr)
+        return arr.map(el => {
           return changeAttackSpeed({
             description: el.overrideDescripton ? el.overrideDescripton : this.data.description,
             blackboard: el.blackboard,
@@ -137,7 +150,7 @@ export default {
       return Array.isArray(this.desc)
     },
     logo() {
-      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '_optimized.png' : ''
+      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '.png' : ''
     },
     team() {
       return Team[this.data.team]

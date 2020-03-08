@@ -521,6 +521,8 @@ export default {
   /*潜能*/
   &-potential {
     margin-top: 10px
+    white-space: nowrap
+    word-break: keep-all
   }
 
   &-title {
