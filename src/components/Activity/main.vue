@@ -24,7 +24,7 @@
       </div>-->
       <div style="margin-top: 20px">
         <span class="activity-info-need">
-          最近在对页面进行重构可能有布局异常的问题，如果遇到了请在
+          现在手机的分享按钮，长按可以移动了
           <router-link to="/info">点击这里，往下滑找到“反馈”</router-link>以反馈
         </span>
       </div>
