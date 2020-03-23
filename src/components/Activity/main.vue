@@ -24,7 +24,7 @@
       </div>-->
       <div style="margin-top: 20px">
         <span class="activity-info-need">
-          现在手机的分享按钮，长按可以移动了
+          今天的数据已经更新了，图片等我午休的时候再处理下
           <router-link to="/info">点击这里，往下滑找到“反馈”</router-link>以反馈
         </span>
       </div>

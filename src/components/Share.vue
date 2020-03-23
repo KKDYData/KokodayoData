@@ -165,23 +165,4 @@ export default {
   z-index: 999
   position: fixed
 }
-
-.el-circle-icon {
-  background-color: #fff
-  width: 40px
-  height: 40px
-  border-radius: 50%
-  color: #313131
-  display: flex
-  align-items: center
-  justify-content: center
-  font-size: 20px
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.12)
-  cursor: pointer
-  z-index: 5
-
-  & + & {
-    margin-top: 10px
-  }
-}
 </style>

@@ -424,8 +424,8 @@ const getSkinsData = {
     return path + 'char/set/' + encodeURIComponent(id) + '.png'
   },
   style: !UA.ok
-    ? '_optimized.png'
-    : '_optimized.png?x-oss-process=style/small-test'
+    ? '.png'
+    : '.png?x-oss-process=style/small-test'
 }
 
 const getScreenWidth = () => {
