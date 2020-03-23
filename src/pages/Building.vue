@@ -112,7 +112,7 @@ const types = {
   CONTROL: [
     { text: '订单效率', value: '订单效率' },
     { text: '心情', value: '进驻控制中枢时.+心情' },
-    { text: '加强会客室', value: '加强会客室' },
+    { text: '加强会客室', value: '所属派系的线索' },
   ],
   POWER: [
     { text: '10%', value: '10%' },
