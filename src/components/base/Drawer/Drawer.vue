@@ -192,5 +192,5 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import './drawer.css'
+@import './drawer.styl'
 </style>
