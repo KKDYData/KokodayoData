@@ -213,7 +213,6 @@ import {
   InputNumber,
   Switch,
   Button,
-  Popover,
   Tag,
   Alert,
   Slider
@@ -225,7 +224,6 @@ Vue.use(Card)
 Vue.use(InputNumber)
 Vue.use(Switch)
 Vue.use(Button)
-Vue.use(Popover)
 Vue.use(Tag)
 Vue.use(Alert)
 Vue.use(Slider)

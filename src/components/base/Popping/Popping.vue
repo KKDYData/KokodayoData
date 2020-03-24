@@ -6,7 +6,7 @@
     <div v-if="!disabled">
       <h-drawer
         v-if="short"
-        :visible.sync="drawer"
+        :show-drawer.sync="drawer"
         width="80%"
         :size="size"
         :direction="direction"
@@ -24,14 +24,13 @@
           <slot />
         </div>
       </h-drawer>
-      <el-popover
+      <h-popover
         v-else
         :visible-arrow="true"
         popper-class="item-popover-class"
         :placement="placement"
         :width="width"
         :trigger="trigger"
-        :open-delay="500"
         :title="title"
         :disabled="disabled"
         @show="openHandler"
@@ -43,22 +42,20 @@
         <div v-if="drawer">
           <slot />
         </div>
-      </el-popover>
+      </h-popover>
     </div>
   </div>
 </template>
 <script>
 import { mapState } from 'vuex'
-import { Popover } from 'element-ui'
 import HDrawer from '@/components/base/Drawer'
-import Vue from 'vue'
-Vue.use(Popover)
-
+import HPopover from '@/components/base/Popover'
 
 
 export default {
   components: {
-    HDrawer
+    HDrawer,
+    HPopover
   },
   props: {
     width: {
@@ -113,6 +110,7 @@ export default {
   },
   methods: {
     openHandler() {
+      this.openDrawer()
       this.$emit('opened')
     },
     openDrawer() {

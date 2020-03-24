@@ -1,12 +1,11 @@
-import Vue from 'vue'
 import { addClass, removeClass } from '../dom'
 
+// 点击空白的框
 let hasModal = false
 let hasInitZIndex = false
 let zIndex
 
-const getModal = function () {
-  if (Vue.prototype.$isServer) return
+const getModal = () => {
   let modalDom = PopupManager.modalDom
   if (modalDom) {
     hasModal = true
@@ -15,12 +14,12 @@ const getModal = function () {
     modalDom = document.createElement('div')
     PopupManager.modalDom = modalDom
 
-    modalDom.addEventListener('touchmove', function (event) {
+    modalDom.addEventListener('touchmove', (event) => {
       event.preventDefault()
       event.stopPropagation()
     })
 
-    modalDom.addEventListener('click', function () {
+    modalDom.addEventListener('click', () => {
       PopupManager.doOnModalClick && PopupManager.doOnModalClick()
     })
   }
@@ -32,48 +31,57 @@ const instances = {}
 
 const PopupManager = {
   modalFade: true,
+  modalStack: [],
 
-  getInstance: function (id) {
+  get zIndex() {
+    if (!hasInitZIndex) {
+      zIndex = zIndex || 2000
+      hasInitZIndex = true
+    }
+    return zIndex
+  },
+  set zIndex(value) {
+    zIndex = value
+  },
+
+  getInstance(id) {
     return instances[id]
   },
 
-  register: function (id, instance) {
+  register(id, instance) {
     if (id && instance) {
       instances[id] = instance
     }
   },
 
-  deregister: function (id) {
+  deregister(id) {
     if (id) {
       instances[id] = null
       delete instances[id]
     }
   },
 
-  nextZIndex: function () {
+  nextZIndex() {
     return PopupManager.zIndex++
   },
 
-  modalStack: [],
 
-  doOnModalClick: function () {
+  doOnModalClick() {
     const topItem = PopupManager.modalStack[PopupManager.modalStack.length - 1]
     if (!topItem) return
 
     const instance = PopupManager.getInstance(topItem.id)
+    console.log(topItem, 'item', instance)
     if (instance && instance.closeOnClickModal) {
       instance.close()
     }
   },
 
-  openModal: function (id, zIndex, dom, modalClass, modalFade) {
-    if (Vue.prototype.$isServer) return
+  openModal(id, zIndex, dom, modalClass, modalFade) {
     if (!id || zIndex === undefined) return
     this.modalFade = modalFade
-
     const modalStack = this.modalStack
-
-    for (let i = 0, j = modalStack.length;i < j;i++) {
+    for (let i = 0, j = modalStack.length; i < j; i++) {
       const item = modalStack[i]
       if (item.id === id) {
         return
@@ -109,9 +117,10 @@ const PopupManager = {
     this.modalStack.push({ id: id, zIndex: zIndex, modalClass: modalClass })
   },
 
-  closeModal: function (id) {
+  closeModal(id) {
     const modalStack = this.modalStack
     const modalDom = getModal()
+    console.log('close')
 
     if (modalStack.length > 0) {
       const topItem = modalStack[modalStack.length - 1]
@@ -126,7 +135,7 @@ const PopupManager = {
           modalDom.style.zIndex = modalStack[modalStack.length - 1].zIndex
         }
       } else {
-        for (let i = modalStack.length - 1;i >= 0;i--) {
+        for (let i = modalStack.length - 1; i >= 0; i--) {
           if (modalStack[i].id === id) {
             modalStack.splice(i, 1)
             break
@@ -151,22 +160,8 @@ const PopupManager = {
   }
 }
 
-Object.defineProperty(PopupManager, 'zIndex', {
-  configurable: true,
-  get() {
-    if (!hasInitZIndex) {
-      zIndex = zIndex || (Vue.prototype.$ELEMENT || {}).zIndex || 2000
-      hasInitZIndex = true
-    }
-    return zIndex
-  },
-  set(value) {
-    zIndex = value
-  }
-})
 
 const getTopPopup = function () {
-  if (Vue.prototype.$isServer) return
   if (PopupManager.modalStack.length > 0) {
     const topPopup = PopupManager.modalStack[PopupManager.modalStack.length - 1]
     if (!topPopup) return
@@ -176,19 +171,19 @@ const getTopPopup = function () {
   }
 }
 
-if (!Vue.prototype.$isServer) {
-  // handle `esc` key when the popup is shown
-  window.addEventListener('keydown', function (event) {
-    if (event.keyCode === 27) {
-      const topPopup = getTopPopup()
+// handle `esc` key when the popup is shown
+window.addEventListener('keydown', function (event) {
+  if (event.keyCode === 27) {
+    const topPopup = getTopPopup()
 
-      if (topPopup && topPopup.closeOnPressEscape) {
-        topPopup.handleClose
-          ? topPopup.handleClose()
-          : (topPopup.handleAction ? topPopup.handleAction('cancel') : topPopup.close())
-      }
+    if (topPopup && topPopup.closeOnPressEscape) {
+      topPopup.handleClose
+        ? topPopup.handleClose()
+        : (topPopup.handleAction ? topPopup.handleAction('cancel') : topPopup.close())
     }
-  })
-}
+  }
+})
 
-export default PopupManager
+export {
+  PopupManager
+}

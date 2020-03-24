@@ -24,7 +24,7 @@
       </div>
       <div slot="reference">
         <div>
-          <el-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
+          <h-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
             <h-item
               class="click"
               :item-pic="itemPic"
@@ -32,7 +32,7 @@
               :type="type"
               :small="small"
             />
-          </el-tooltip>
+          </h-tooltip>
         </div>
         <div v-if="num || weight" style="text-align: center">
           <span :style="{fontSize}" class="item-name">{{ data.name }}</span>
@@ -75,14 +75,14 @@
                 当前排序方式 {{ sortFunc.name }}
                 <el-button size="mini" type="primary" @click="switchSortFunc">切换</el-button>
               </span>
-              <el-tooltip placement="top">
+              <h-tooltip placement="top">
                 <el-button size="mini" type="primary">说明</el-button>
                 <div slot="content">
                   点击右边数据可以查看详细数据 |
                   <color color="hsl(193, 78%, 69%)">掉落数</color>/
                   <color color="hsl(350, 100%, 79%)">样本数 ↓</color>
                 </div>
-              </el-tooltip>
+              </h-tooltip>
             </div>
             <div class="item-stage-container">
               <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage" />
@@ -148,8 +148,7 @@ import {
 
 import { mapState } from 'vuex'
 import Vue from 'vue'
-import { Popover, Divider, Tooltip } from 'element-ui'
-Vue.use(Popover)
+import { Divider, Tooltip } from 'element-ui'
 Vue.use(Divider)
 Vue.use(Tooltip)
 
@@ -159,6 +158,7 @@ import Color from '../base/Color'
 
 import { getItem } from '../../utils/fetch'
 import HPopping from '@/components/base/Popping'
+import HTooltip from '@/components/base/Tooltip'
 import HItem from './Item'
 
 
@@ -207,7 +207,8 @@ export default {
     DropLine,
     Color,
     HPopping,
-    HItem
+    HItem,
+    HTooltip
   },
   props: {
     item: {

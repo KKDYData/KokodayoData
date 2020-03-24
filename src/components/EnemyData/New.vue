@@ -4,7 +4,7 @@
     <h-drawer
       ref="chapter-selecter"
       title="章节选择"
-      :visible.sync="drawer"
+      :show-drawer.sync="drawer"
       :size="short ? '70%' : drawerSize"
       direction="ltr"
       :props="selMapNode"
@@ -57,14 +57,12 @@
             >地图</el-button>
           </div>
           <div>
-            <el-tooltip v-if="mapCode && showMap" class="runes-mode-button">
-              <el-button type="info">地图说明</el-button>
+            <h-tooltip v-if="mapCode && showMap" placement="bottom">
+              <el-button class="runes-mode-button" type="info">地图说明</el-button>
               <div slot="content">
                 <p>点击地板砖，会有砖的基本说明，</p>
-                <p>被重写的地图模块，因为旧的实现对于点击事件的捕获有问题</p>
-                <p>也是因为这个问题，所以一直没有加摆箱子的功能</p>
               </div>
-            </el-tooltip>
+            </h-tooltip>
           </div>
           <div class="long-button">
             <el-button
@@ -112,7 +110,7 @@
                   class="clear-route-button"
                   @click="clearRoutes"
                 >清空路线</el-button>
-                <el-tooltip v-if="mapCode && !simpleShow">
+                <h-tooltip v-if="mapCode && !simpleShow">
                   <el-button type="info" size="mini">说明</el-button>
                   <div slot="content">
                     <p>路线:</p>
@@ -131,7 +129,7 @@
                     <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
                     <p>出发，相对于这一批次的出发时间，普通图只有一个批次，剿灭有多个批次，一个批次的敌人全部消灭会提前进入下一个批次。超过最大等待时间则开始下一批次，不论上次批次是否全部被消灭。</p>
                   </div>
-                </el-tooltip>
+                </h-tooltip>
               </div>
             </template>
             <enemy-data-layout
@@ -216,6 +214,7 @@ import MapPreDefined from './MapPreDefined'
 import AccordionPanel from '@/components/base/AccrordionPanel'
 import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel'
 import HDrawer from '@/components/base/Drawer'
+import HTooltip from '@/components/base/Tooltip'
 
 
 import { Tree, Drawer, Button, Loading, Slider } from 'element-ui'
@@ -265,7 +264,8 @@ export default {
     MapPreDefined,
     SlidePanel,
     AccordionPanel,
-    HDrawer
+    HDrawer,
+    HTooltip
   },
   data() {
     return {

@@ -1,6 +1,6 @@
 <template>
   <span :style="'color:' + color + ';background: #303131'">
-    <slot></slot>
+    <slot />
   </span>
 </template>
 
@@ -12,5 +12,5 @@ export default {
       required: true
     }
   }
-};
+}
 </script>

@@ -12,22 +12,22 @@
       class="item-occper"
     >{{ data.apCost ? `${data.apCost}理智` : `${data.etCost}票` }}</span>
     <span class="item-occper">{{ data.occPer? occper(data.occPer) : '概率掉落' }}</span>
-    <el-tooltip v-if="data.times" class="item-dropInfo" placement="top">
+    <h-tooltip v-if="data.times" class="item-dropInfo" placement="top">
       <div slot="content">
-        <color color="hsl(193, 78%, 69%)">{{ data.quantity }}</color>/
-        <color color="hsl(350, 100%, 79%)">{{ data.times }}</color>
-        →{{ data.rate }}%
+        <div class="item-drop-detail">
+          <color color="hsl(193, 78%, 69%)">{{ data.quantity }}</color>/
+          <color color="hsl(350, 100%, 79%)">{{ data.times }}</color>
+          →{{ data.rate }}%
+        </div>
       </div>
       <span v-if="data.dropCost">{{ data.dropCost }} 理智/个</span>
       <span v-else>{{ data.dropCnt }}个/{{ data.etCost }}票</span>
-    </el-tooltip>
+    </h-tooltip>
   </p>
 </template>
 
 <script>
-import { Tooltip } from 'element-ui'
-import Vue from 'vue'
-Vue.use(Tooltip)
+import HTooltip from '@/components/base/Tooltip'
 
 import { occPer_chinese } from '../../utils/string'
 
@@ -35,7 +35,8 @@ import Color from '../base/Color'
 
 export default {
   components: {
-    Color
+    Color,
+    HTooltip
   },
   props: {
     data: {
@@ -79,5 +80,10 @@ export default {
 .item-stage-name {
   width: 50px
   display: inline-block
+}
+
+.item-drop-detail {
+  word-break: keep-all
+  white-space: nowrap
 }
 </style>

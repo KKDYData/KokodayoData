@@ -1,0 +1,46 @@
+
+$--popup-modal-opacity = 0
+$--popup-modal-background-color = rgba(0, 0, 0, 0.5)
+
+.v-modal-enter {
+  animation: v-modal-in 0.2s 1ms ease forwards
+}
+
+.v-modal-leave {
+  animation: v-modal-out 0.2s 1ms ease forwards
+}
+
+.v-modal {
+  position: fixed
+  left: 0
+  top: 0
+  right: 0
+  bottom: 0
+  background: $--popup-modal-background-color
+  will-change: opacity
+  opacity: $--popup-modal-opacity
+}
+
+.el-popup-parent--hidden {
+  overflow: hidden
+}
+
+@keyframes v-modal-in {
+  0% {
+    opacity: 0
+  }
+
+  100% {
+    opacity: $--popup-modal-opacity
+  }
+}
+
+@keyframes v-modal-out {
+  0% {
+    opacity: $--popup-modal-opacity
+  }
+
+  100% {
+    opacity: 0
+  }
+}

@@ -19,7 +19,7 @@
           role="dialog"
           tabindex="-1"
         >
-          <header v-if="withHeader" id="el-drawer__title" class="el-drawer__header">
+          <header v-if="title || 1" id="el-drawer__title" class="el-drawer__header">
             <slot name="title">
               <span role="heading" tabindex="0" :title="title">{{ title }}</span>
             </slot>
@@ -43,16 +43,16 @@
 </template>
 
 <script>
-import Popup from '../utils/popup'
-import emitter from '../utils/emmiter'
+import { popper } from '../utils/popup'
+import './drawer.styl'
+
 
 export default {
-  name: 'ElDrawer',
-  mixins: [Popup, emitter],
+  mixins: [popper],
   props: {
     appendToBody: {
       type: Boolean,
-      default: false
+      default: true
     },
     beforeClose: {
       default: null,
@@ -97,14 +97,14 @@ export default {
       type: String,
       default: ''
     },
-    visible: {
+    showDrawer: {
       type: Boolean
     },
     wrapperClosable: {
       type: Boolean,
       default: true
     },
-    withHeader: {
+    lockScroll: {
       type: Boolean,
       default: true
     }
@@ -132,13 +132,20 @@ export default {
 
       } else {
         if (!this.closed) this.$emit('close')
+        this.$emit('update:showDrawer', false)
         this.$nextTick(() => {
           if (this.prevActiveElement) {
             this.prevActiveElement.focus()
           }
         })
       }
+    },
+    showDrawer(val) {
+      this.visible = val
     }
+  },
+  created() {
+    this.closeOnClickModal = this.wrapperClosable
   },
   mounted() {
     if (this.visible) {
@@ -161,7 +168,7 @@ export default {
     },
     hide(cancel) {
       if (cancel !== false) {
-        this.$emit('update:visible', false)
+        this.visible = false
         this.$emit('close')
         if (this.destroyOnClose === true) {
           this.rendered = false
@@ -186,11 +193,9 @@ export default {
       // pressing `ESC` will call this method, and also close the drawer.
       // This method also calls `beforeClose` if there was one.
       this.closeDrawer()
-    }
+    },
   }
 }
 </script>
 
-<style lang="stylus" scoped>
-@import './drawer.styl'
-</style>
+<style lang="stylus" scoped></style>

@@ -1,61 +1,28 @@
-import Vue from 'vue'
-import PopupManager from './popup-manager'
+import { merge } from 'ramda'
 import getScrollBarWidth from '../scrollbar-width'
+import { PopupManager } from './popup-manager'
 import { getStyle, addClass, removeClass, hasClass } from '../dom'
-
-
-function merge(target) {
-  for (let i = 1, j = arguments.length; i < j; i++) {
-    let source = arguments[i] || {}
-    for (let prop in source) {
-      if (source.hasOwnProperty(prop)) {
-        let value = source[prop]
-        if (value !== undefined) {
-          target[prop] = value
-        }
-      }
-    }
-  }
-
-  return target
-}
-
+import './popup.styl'
 
 let idSeed = 1
 
 let scrollBarWidth
 
-export default {
+const popper = {
   props: {
-    visible: {
-      type: Boolean,
-      default: false
-    },
     openDelay: {},
     closeDelay: {},
     zIndex: {},
     modal: {
       type: Boolean,
-      default: false
+      default: true
     },
     modalFade: {
       type: Boolean,
       default: true
     },
     modalClass: {},
-    modalAppendToBody: {
-      type: Boolean,
-      default: false
-    },
     lockScroll: {
-      type: Boolean,
-      default: true
-    },
-    closeOnPressEscape: {
-      type: Boolean,
-      default: false
-    },
-    closeOnClickModal: {
       type: Boolean,
       default: false
     }
@@ -69,6 +36,7 @@ export default {
   beforeDestroy() {
     PopupManager.deregister(this._popupId)
     PopupManager.closeModal(this._popupId)
+    this.doDestroy()
 
     this.restoreBodyStyle()
   },
@@ -79,6 +47,7 @@ export default {
       bodyPaddingRight: null,
       computedBodyPaddingRight: 0,
       withoutHiddenClass: true,
+      visible: false,
       rendered: false
     }
   },
@@ -86,10 +55,11 @@ export default {
   watch: {
     visible(val) {
       if (val) {
+
         if (this._opening) return
         if (!this.rendered) {
           this.rendered = true
-          Vue.nextTick(() => {
+          this.$nextTick(() => {
             this.open()
           })
         } else {
@@ -103,11 +73,12 @@ export default {
 
   methods: {
     open(options) {
+      this.$emit('show')
+
       if (!this.rendered) {
         this.rendered = true
       }
-
-      const props = merge({}, this.$props || this, options)
+      const props = merge(this.$props || this, options)
 
       if (this._closeTimer) {
         clearTimeout(this._closeTimer)
@@ -127,8 +98,7 @@ export default {
     },
 
     doOpen(props) {
-      if (this.$isServer) return
-      if (this.willOpen && !this.willOpen()) return
+      // if (this.willOpen && !this.willOpen()) return
       if (this.opened) return
 
       this._opening = true
@@ -169,6 +139,8 @@ export default {
       }
 
       dom.style.zIndex = PopupManager.nextZIndex()
+      if (this.createPopper) this.createPopper()
+
       this.opened = true
 
       this.onOpen && this.onOpen()
@@ -181,8 +153,11 @@ export default {
     },
 
     close() {
-      if (this.willClose && !this.willClose()) return
+      this.$emit('hide')
 
+      if (this.visible)
+        this.visible = false
+      if (!this.opened) return
       if (this._openTimer !== null) {
         clearTimeout(this._openTimer)
         this._openTimer = null
@@ -211,6 +186,7 @@ export default {
       }
 
       this.opened = false
+      this.visible = false
 
       this.doAfterClose()
     },
@@ -226,10 +202,16 @@ export default {
         removeClass(document.body, 'el-popup-parent--hidden')
       }
       this.withoutHiddenClass = true
+    },
+    doDestroy() {
+      if (this.popperInstance) {
+        this.popperInstance.destroy()
+        this.popperInstance = null
+      }
     }
   }
 }
 
 export {
-  PopupManager
+  popper
 }

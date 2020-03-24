@@ -1,0 +1,75 @@
+@import '../styl/share'
+
+popperBgColor = black
+popperRadius = 4px
+popperColor = #fff
+popperPadding = 4px 8px
+
+.popper-wrapper {
+  position: relative
+  display: inline-block
+}
+
+.popper-target {
+  position: relative
+  display: inline-block
+}
+
+.popper {
+  padding: popperPadding
+  border-radius: popperRadius
+}
+
+popperArrow(popperArrowSize, popperBgColor = #fff) {
+  arrowPos = (popperArrowSize / -2)
+
+  .popper {
+    &-arrow {
+      filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.03))
+    }
+
+    &-arrow, &-arrow::before {
+      position: absolute
+      width: popperArrowSize
+      height: popperArrowSize
+      z-index: -1
+    }
+
+    &-arrow::before {
+      content: ''
+      transform: rotate(45deg)
+      background: popperBgColor
+    }
+
+    &[data-popper-placement^='top'] > &-arrow {
+      left: 50%
+      bottom: arrowPos
+    }
+
+    &[data-popper-placement^='bottom'] > &-arrow {
+      left: 50%
+      top: arrowPos
+    }
+
+    &[data-popper-placement^='left'] > &-arrow {
+      top: 50%
+      right: arrowPos
+    }
+
+    &[data-popper-placement^='right'] > &-arrow {
+      top: 50%
+      left: arrowPos
+    }
+
+    &[data-popper-reference-hidden] {
+      visibility: hidden
+      pointer-events: none
+    }
+  }
+}
+
+popperArrow(8px)
+
+@media screen and (max-width: 800px) {
+  popperArrow(8px)
+}

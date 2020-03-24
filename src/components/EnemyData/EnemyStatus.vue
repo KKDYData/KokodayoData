@@ -24,7 +24,7 @@
             :type="level === index ? 'primary': ''"
             @click="level = index"
           >{{ index }}</el-button>
-          <el-tooltip
+          <h-tooltip
             popper-class="enemy-tooltip-item"
             class="enemy-status-tip"
             effect="dark"
@@ -32,7 +32,7 @@
             placement="top-start"
           >
             <i class="el-icon-info" />
-          </el-tooltip>
+          </h-tooltip>
         </div>
       </div>
     </div>
@@ -68,7 +68,7 @@
               </transition>
               <span v-if="kData[0] === '攻击间隔'">s</span>
               <span v-if="kData[0] === 'LifePoint'">
-                <el-tooltip
+                <h-tooltip
                   popper-class="enemy-tooltip-item"
                   class="enemy-status-tip"
                   effect="dark"
@@ -76,7 +76,7 @@
                   placement="top-start"
                 >
                   <i class="el-icon-info" style="margin-right:0" />
-                </el-tooltip>
+                </h-tooltip>
               </span>
             </template>
           </content-slot>
@@ -132,10 +132,12 @@
 </template>
 
 <script>
-import { Button, Tooltip } from 'element-ui'
+import { Button } from 'element-ui'
 import Vue from 'vue'
 Vue.use(Button)
-Vue.use(Tooltip)
+
+import HTooltip from '@/components/base/Tooltip'
+
 
 import { mapState } from 'vuex'
 import ContentSlot from '../base/ContentSlot'
@@ -145,7 +147,8 @@ import { statusToCh } from '../../utils/string'
 
 export default {
   components: {
-    ContentSlot
+    ContentSlot,
+    HTooltip
   },
   props: {
     data: {

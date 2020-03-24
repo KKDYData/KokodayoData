@@ -1,1 +1,1 @@
-export { default } from './Popping'
+export { default } from './Popping.vue'

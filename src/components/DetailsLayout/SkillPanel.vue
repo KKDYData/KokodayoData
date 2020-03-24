@@ -36,10 +36,10 @@
         <div class="skill-status-desc">
           <span v-html="changeSkillDesc(skill.levels[sLevel[index]-1])" />
           <div v-if="showRange && skill.levels[sLevel[index]-1].rangeId" class="skill-range-button">
-            <el-popover placement="right" width="200px" trigger="click">
+            <h-popover placement="right" width="200px" trigger="click">
               <range :range-id="skill.levels[sLevel[index]-1].rangeId" />
               <el-button slot="reference" size="mini">查看范围</el-button>
-            </el-popover>
+            </h-popover>
           </div>
         </div>
       </div>
@@ -77,6 +77,7 @@ import './styl/skill.styl'
 import Range from './Range'
 import SkillContainer from './SkillContainer'
 import SkillList from './SkillList'
+import HPopover from '@/components/base/Popover'
 
 import { mapState } from 'vuex'
 
@@ -84,7 +85,8 @@ export default {
   components: {
     Range,
     SkillContainer,
-    SkillList
+    SkillList,
+    HPopover
   },
   props: {
     skills: {

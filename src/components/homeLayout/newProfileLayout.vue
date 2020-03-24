@@ -24,7 +24,7 @@
             class="new-mode-agent"
             :style="bgColor(agent.tags[0])"
           >
-            <el-popover trigger="click">
+            <h-popover trigger="click">
               <div class="new-mode-popover">
                 <router-link :to="path + '/details/' + agent.No">
                   <div class="img-container">
@@ -57,7 +57,7 @@
               <div slot="reference" class="click">
                 <span style="cursor: pointer">{{ agent.name }}</span>
               </div>
-            </el-popover>
+            </h-popover>
           </div>
         </div>
       </el-card>
@@ -96,11 +96,13 @@ Vue.use(Tag)
 
 import { rootPath } from '../../stats'
 import CImage from '@/components/base/CImage'
+import HPopover from '@/components/base/Popover'
 
 
 export default {
   components: {
-    CImage
+    CImage,
+    HPopover
   },
   props: {
     data: Array,

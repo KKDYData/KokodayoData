@@ -2,7 +2,7 @@
   <!-- direction="ltr"1 -->
   <h-drawer
     :direction="short ? 'btt' : 'rtl'"
-    :visible="detailsOpen"
+    :show-drawer="detailsOpen"
     :append-to-body="true"
     :size="short ? '90%' : drawerSizeDouble"
     :destroy-on-close="true"

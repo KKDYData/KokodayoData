@@ -5,7 +5,7 @@
     </div>
     <div class="predefine-list">
       <div v-for="(item, index) in myList" :key="index" class="predefine-item">
-        <el-popover popper-class="fuck-outline" :width="300" :title="item.name">
+        <h-popover popper-class="fuck-outline" :width="300" :title="item.name">
           <div slot="reference" class="fuck-outline">
             <enemy-cube
               class="predefine-item-bg"
@@ -37,7 +37,7 @@
             :status="item.targetData"
           />
           <skill-panel :show-pic="false" :skills="item.targetSkill" :init-lv="item.mainSkillLvl" />
-        </el-popover>
+        </h-popover>
       </div>
     </div>
   </div>
@@ -49,6 +49,7 @@ import charStatus from '../base/charStatus'
 import loadingC from '../base/Loading'
 import EnemyCube from './EnemyCube'
 import ContentSlot from '@/components/base/ContentSlot'
+import HPopover from '@/components/base/Popover'
 
 const SkillPanel = () => ({
   component: import(
@@ -60,17 +61,15 @@ const SkillPanel = () => ({
   timeout: 5000
 })
 
-import { Popover } from 'element-ui'
-import Vue from 'vue'
 import { Directions } from '../../utils/string'
-Vue.use(Popover)
 
 export default {
   components: {
     charStatus,
     SkillPanel,
     EnemyCube,
-    ContentSlot
+    ContentSlot,
+    HPopover
   },
   props: {
     list: { required: true },

@@ -30,7 +30,7 @@
         @filter="resetFilter($event, 'gkzm')"
       />
       <div class="tags-popover-wrapper">
-        <el-popover
+        <h-popover
           popper-class="tags-popover-container click"
           placement="top"
           trigger="click"
@@ -83,7 +83,7 @@
           <div style="direction: rtl">
             <close-button />
           </div>
-        </el-popover>
+        </h-popover>
       </div>
     </div>
 
@@ -114,14 +114,15 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { Button, Popover, Tag, Tabs, TabPane } from 'element-ui'
+import { Button, Tag, Tabs, TabPane } from 'element-ui'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.use(Button)
-Vue.use(Popover)
 Vue.use(Tag)
 Vue.use(Tabs)
 Vue.use(TabPane)
+import HPopover from '@/components/base/Popover'
+
 
 import FilterButtonGroup from '../base/FilterButtonGroup'
 import loadingC from '../base/Loading'
@@ -175,6 +176,7 @@ export default {
     ProfileLayout,
     newProfileLayout,
     CloseButton,
+    HPopover
   },
   props: {
     profileList: {
