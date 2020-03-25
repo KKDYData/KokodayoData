@@ -277,7 +277,7 @@ export default {
     },
     itemPic() {
       if (this.type === 'FURN')
-        return `${path}custom/furnitures/pic/${this.data.id}_optimized.png`
+        return `${path}custom/furnitures/pic/${this.data.id}.png`
       else return `${path}item/pic/${this.data.iconId}_optimized.png`
     },
 

@@ -24,12 +24,11 @@
       </div>-->
       <div style="margin-top: 20px">
         <span class="activity-info-need">
-          今天的数据已经更新了，图片等我午休的时候再处理下
-          <router-link to="/info">点击这里，往下滑找到“反馈”</router-link>以反馈
+          <router-link to="/info">点击这里，往下滑找到“反馈”</router-link>以反馈问题。
         </span>
       </div>
       <div style="margin-top: 20px">
-        <span class="activity-info-need">修复了多次点击敌人路线时，线条移动速度变快导致卡顿的的问题，另外H6-2路线不正确的问题，会在下周(3.15前)修复。</span>
+        <span class="activity-info-need">修复手机上掉率详情看不到的问题。H6-2路线不正确的问题，会在下周(3.29前)修复。</span>
       </div>
     </div>
   </div>
