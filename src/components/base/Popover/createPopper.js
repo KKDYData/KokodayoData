@@ -21,6 +21,18 @@ const defaultOptions = {
       name: 'computeStyles'
     },
     {
+      name: 'preventOverflow',
+      options: {
+        padding: 8,
+      },
+    },
+    {
+      name: 'flip',
+      options: {
+        fallbackPlacements: ['top', 'right', 'bottom'],
+      }
+    },
+    {
       name: 'addZIndex',
       fn: ({ state }) => {
         state.styles.popper.zIndex = PopupManager.nextZIndex()
@@ -41,28 +53,6 @@ const create = (target, tooltip, options) => {
     placement,
     onFirstUpdate
   })
-
-  // const show = () => {
-  //   tooltip.setAttribute('data-show', '')
-  //   createInstance()
-  // }
-  // const hide = () => {
-  //   tooltip.removeAttribute('data-show')
-  //   destroy()
-  // }
-  // const destroy = () => {
-  //   if (popperInstance) {
-  //     popperInstance.destroy()
-  //     popperInstance = null
-  //   }
-  // }
-
-  // return {
-  //   popperInstance,
-  //   show,
-  //   hide,
-  //   destroy
-  // }
 }
 
 export {

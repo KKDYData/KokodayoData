@@ -135,10 +135,6 @@
   }
 }
 
-.el-drawer.rtl {
-  animation: rtl-drawer-out 0.3s
-}
-
 .el-drawer__open {
   .el-drawer.rtl {
     animation: rtl-drawer-in 0.3s
@@ -165,6 +161,7 @@
   left: 0
   overflow: hidden
   margin: 0
+  background-color: rgba(0, 0, 0, 0.3)
 }
 
 .el-drawer__header {
@@ -217,12 +214,4 @@
   bottom: 0
   height: 100%
   width: 100%
-}
-
-.el-drawer-fade-enter-active {
-  animation: el-drawer-fade-in 0.3s
-}
-
-.el-drawer-fade-leave-active {
-  animation: el-drawer-fade-in 0.3s reverse
 }

@@ -64,10 +64,7 @@
                       >{{ tag.text }}</el-tag>
                     </div>
                   </div>
-                  <span
-                    v-else
-                    style="margin-left: 10px; color:rgb(160, 160, 160); cursor: pointer; margin-top: 6px; display: inline-block"
-                  >点击打开标签面板</span>
+                  <span v-else class="tags-selected-container-text">点击打开标签面板</span>
                 </transition>
               </div>
             </div>
@@ -359,7 +356,7 @@ export default {
             let groupFind = false
             for (let i in group) {
               let key = el
-              for (let i = 0; i < propertys.length; i++) {
+              for (let i = 0;i < propertys.length;i++) {
                 key = key[propertys[i]]
               }
 
@@ -389,78 +386,89 @@ export default {
   }
 }
 </script>
-<style>
+<style lang="stylus">
 .home-filter-wrapper {
-  margin-bottom: 20px;
-  padding: 10px;
-  /* border-bottom: 1px solid rgba(158, 158, 158, 0.4); */
+  margin-bottom: 20px
+  padding: 10px
+  /*border-bottom: 1px solid rgba(158, 158, 158, 0.4);*/
 }
+
 .sort-group-wrapper {
-  margin-left: 10px;
-  margin-bottom: 20px;
-  display: flex;
-  justify-content: left;
+  margin-left: 10px
+  margin-bottom: 20px
+  display: flex
+  justify-content: left
 }
 
 .home-layout-wrapper {
-  padding-top: 20px;
-  max-width: 1000px;
-  min-height: 500px;
+  padding-top: 20px
+  max-width: 1000px
+  min-height: 500px
 }
 
 .tags-popover-wrapper {
-  margin-left: 10px;
+  margin-left: 10px
 }
 
-.tags-selected-container button {
-  vertical-align: top;
-  margin-top: 3px;
+.tags-selected-container {
+  display: flex
+  align-items: center
+
+  &-text {
+    color: rgb(160, 160, 160)
+    cursor: pointer
+    margin-top: 6px
+    margin-left: 10px
+  }
+
+  button {
+    vertical-align: top
+    margin-top: 3px
+    margin: 5px 0
+  }
 }
 
 .tags-selected-inner-container {
-  display: inline-block;
-  margin: 5px 5px;
+  display: inline-block
+  margin: 5px 5px
 }
 
-/* .tags-popover-wrapper .el-button--info {
+/*.tags-popover-wrapper .el-button--info {
   background-color: #313131;
   border-color: rgba(49, 49, 49, 0.54);
-} */
+}*/
 .explain-container {
-  margin-top: 15px;
-  padding: 0 10px;
+  margin-top: 15px
+  padding: 0 10px
 }
 
 .other-masking {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  z-index: -1;
+  position: absolute
+  top: 0
+  left: 0
+  height: 100vh
+  width: 100vw
+  z-index: -1
 }
 
 .control-container {
-  margin: 10px;
-  border-bottom: 1px solid #414141;
+  margin: 10px
+  border-bottom: 1px solid #414141
 }
 
 .tag-selected-content-container {
-  display: inline-block;
-  width: calc(100% - 80px);
-}
-
-.tags-selected-container button {
-  margin: 5px 0;
+  display: inline-block
+  width: calc(100% - 80px)
 }
 
 @media screen and (max-width: 495px) {
   .tag-selected-content-container {
-    display: inline-block;
-    width: calc(100% - 80px);
+    display: inline-block
+    width: calc(100% - 80px)
   }
+
   .home-filter-wrapper {
-    padding: 0px;
+    padding: 0px
   }
 }
 </style>

@@ -58,11 +58,11 @@
       </div>
     </div>
     <div v-else class="building-wrapper">
-      <div v-for="({data, list}) in list" :key="data.name">
+      <div v-for="({data, l}) in list" :key="data.name">
         <div class="building-item">
           <build-panel :filter="filter" :simple="simple" :building="[[{data}]]" />
           <div class="building-list">
-            <div v-for="({text, key}) in list" :key="key" class="building-list-item">
+            <div v-for="({text, key}) in l" :key="key" class="building-list-item">
               <c-image :src="getPic(key)" />
             </div>
           </div>

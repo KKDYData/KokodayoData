@@ -1,22 +1,20 @@
 <template>
-  <div class="popper-wrapper">
-    <div ref="target" targe aria-describedby="popover" class="popper-target">
-      <slot name="reference" />
-    </div>
+  <span class="popper-wrapper">
+    <slot name="reference" />
     <transition name="fade">
       <div
-        v-show="visible"
+        v-show="!disabled && visible"
         ref="popper"
         role="popper"
         class="popper el-popover"
         :style="{width: width + 'px'}"
       >
-        <h3 v-if="title" class="title">{{ title }}</h3>
+        <h3 v-if="title" class="popper-title">{{ title }}</h3>
         <slot />
         <div class="popper-arrow" data-popper-arrow></div>
       </div>
     </transition>
-  </div>
+  </span>
 </template>
 <script>
 import { create } from './createPopper'
@@ -64,6 +62,10 @@ export default {
     title: {
       type: String,
       default: ''
+    },
+    disabled: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -74,24 +76,28 @@ export default {
   },
   mounted() {
     const { placement, modifiers, showEvents, hideEvents, appendToBody } = this
-    const { target, popper } = this.$refs
-    this.createPopper = create(this.$refs.target, popper, {
-      placement,
-      modifiers,
-      showEvents,
-      hideEvents
-    })
-    showEvents.forEach(e => on(target, e, () => {
+    const { popper } = this.$refs
+    let reference = this.$refs.reference
+    reference = this.referenceElm = this.$slots.reference[0].elm
+    this.createPopper = () => {
+      this.popperInstance = create(reference, popper, {
+        placement,
+        modifiers,
+        showEvents,
+        hideEvents
+      })()
+    }
+    showEvents.forEach(e => on(reference, e, () => {
       this.visible = true
     }))
-    hideEvents.forEach(e => on(target, e, () => {
+    hideEvents.forEach(e => on(reference, e, () => {
       this.visible = false
 
     }))
     if (appendToBody) {
       document.body.appendChild(popper)
     }
-    target.setAttribute('tabindex', this.tabindex)
+    // reference.setAttribute('tabindex', this.tabindex)
   }
 }
 </script>
@@ -99,6 +105,10 @@ export default {
 <style lang="stylus" scoped>
 .popper {
   max-width: 100vw
+
+  &-title {
+    margin-top: -10px
+  }
 }
 </style>
 

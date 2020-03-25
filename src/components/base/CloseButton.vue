@@ -12,7 +12,9 @@ Vue.use(Button)
 export default {
   methods: {
     close() {
-      document.body.click()
+      const modal = document.body.querySelector('.v-modal')
+      if (modal) modal.click()
+      else document.body.click()
     }
   }
 }

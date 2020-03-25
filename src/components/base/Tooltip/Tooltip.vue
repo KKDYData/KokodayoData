@@ -1,8 +1,6 @@
 <template>
   <div class="popper-wrapper">
-    <div ref="target" aria-describedby="tooltip" class="popper-target">
-      <slot />
-    </div>
+    <slot />
     <transition name="fade">
       <div
         v-show="visible && !disabled"
@@ -13,6 +11,7 @@
         :style="width ? {width: width + 'px'} : ''"
       >
         <slot name="content" />
+        {{ content }}
         <div v-if="showArrow && !disabled" class="popper-arrow" data-popper-arrow></div>
       </div>
     </transition>
@@ -41,7 +40,7 @@ export default {
     },
     appendToBody: {
       type: Boolean,
-      default: true
+      default: false
     },
     showEvents: {
       type: Array,
@@ -75,6 +74,10 @@ export default {
     width: {
       type: Number,
       default: 0,
+    },
+    content: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -92,8 +95,11 @@ export default {
   },
   mounted() {
     const { placement, modifiers, showEvents, hideEvents, appendToBody } = this
-    const { target, popper } = this.$refs
-    this.createPopper = create(this.$refs.target, popper, {
+    const { popper } = this.$refs
+    let target = this.$refs
+    target = this.$slots.default[0].elm
+
+    this.createPopper = create(target, popper, {
       placement,
       modifiers,
     })
@@ -106,15 +112,10 @@ export default {
     if (appendToBody) {
       document.body.appendChild(popper)
     }
-    target.setAttribute('tabindex', this.tabindex)
   }
 }
 </script>
 
-<style lang="stylus" scoped>
-.popper {
-  max-width: 100vw
-}
-</style>
+<style lang="stylus" scoped></style>
 
 

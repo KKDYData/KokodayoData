@@ -71,7 +71,6 @@ const PopupManager = {
     if (!topItem) return
 
     const instance = PopupManager.getInstance(topItem.id)
-    console.log(topItem, 'item', instance)
     if (instance && instance.closeOnClickModal) {
       instance.close()
     }
@@ -81,7 +80,7 @@ const PopupManager = {
     if (!id || zIndex === undefined) return
     this.modalFade = modalFade
     const modalStack = this.modalStack
-    for (let i = 0, j = modalStack.length; i < j; i++) {
+    for (let i = 0, j = modalStack.length;i < j;i++) {
       const item = modalStack[i]
       if (item.id === id) {
         return
@@ -135,7 +134,7 @@ const PopupManager = {
           modalDom.style.zIndex = modalStack[modalStack.length - 1].zIndex
         }
       } else {
-        for (let i = modalStack.length - 1; i >= 0; i--) {
+        for (let i = modalStack.length - 1;i >= 0;i--) {
           if (modalStack[i].id === id) {
             modalStack.splice(i, 1)
             break

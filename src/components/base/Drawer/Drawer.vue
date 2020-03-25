@@ -1,5 +1,5 @@
 <template>
-  <transition name="el-drawer-fade" @after-enter="afterEnter" @after-leave="afterLeave">
+  <transition name="fade" @after-enter="afterEnter" @after-leave="afterLeave">
     <div v-show="visible" class="el-drawer__wrapper" tabindex="-1">
       <div
         class="el-drawer__container"
@@ -72,7 +72,7 @@ export default {
     },
     modal: {
       type: Boolean,
-      default: true
+      default: false
     },
     direction: {
       type: String,
