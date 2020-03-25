@@ -216,18 +216,20 @@ const exSkill2 = new Map([['skchr_angel_3', '据实测攻击间隔缩短效果�
 const changeAttackSpeed = (skill) => {
   const str = changeDesc(skill.description)
   let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
-    let percent = '',
-      minus = false,
-      res = ''
+    let percent = '', scale = 1
+    let minus = false
+    let res = ''
+
     if (p2.match(/:0%/)) {
       p2 = p2.slice(0, -3)
       percent = '%'
     }
-    if (p2.match(/:0.0%/)) {
+    if (p2.match(/:0\.0%/)) {
       p2 = p2.slice(0, -5)
       percent = '%'
+      scale = 2
     }
-    if (p2.match(/:0.0/)) {
+    if (p2.match(/:0\.0/)) {
       p2 = p2.slice(0, -4)
       percent = ''
     } else if (p2.match(/:0/)) {
@@ -242,7 +244,7 @@ const changeAttackSpeed = (skill) => {
     if (temp) {
       res = temp.value
       if (minus) res *= -1
-      if (percent) res = Math.floor(res * 10 * 10)
+      if (percent) res = Math.floor(res * 10 ** (scale + 1)) / 10 ** (scale - 1)
     }
     return res + percent
   })

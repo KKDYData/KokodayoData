@@ -119,7 +119,6 @@ const PopupManager = {
   closeModal(id) {
     const modalStack = this.modalStack
     const modalDom = getModal()
-    console.log('close')
 
     if (modalStack.length > 0) {
       const topItem = modalStack[modalStack.length - 1]
