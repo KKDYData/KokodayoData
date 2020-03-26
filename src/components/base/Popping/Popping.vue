@@ -33,6 +33,7 @@
         :trigger="trigger"
         :title="title"
         :disabled="disabled"
+        :arrow="arrow"
         @show="openHandler"
         @hide="closeHandler"
       >
@@ -93,6 +94,10 @@ export default {
     placement: {
       type: String,
       default: 'top'
+    },
+    arrow: {
+      type: Boolean,
+      default: true
     }
   },
   data() {

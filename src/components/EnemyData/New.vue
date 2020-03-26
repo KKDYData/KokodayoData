@@ -217,7 +217,7 @@ import HDrawer from '@/components/base/Drawer'
 import HTooltip from '@/components/base/Tooltip'
 
 
-import { Tree, Drawer, Button, Loading, Slider } from 'element-ui'
+import { Tree, Button, Loading, Slider } from 'element-ui'
 
 import Vue from 'vue'
 import { SET_DATA } from '../../store/Enemy/mutations'
@@ -228,7 +228,6 @@ const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpe
 Vue.use(Loading)
 Vue.use(Button)
 Vue.use(Tree)
-Vue.use(Drawer)
 Vue.use(Slider)
 
 

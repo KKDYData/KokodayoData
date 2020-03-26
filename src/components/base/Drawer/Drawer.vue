@@ -187,6 +187,10 @@ export default {
       } else {
         this.hide()
       }
+
+      if (this.lockScroll) {
+        setTimeout(this.restoreBodyStyle, 200)
+      }
     },
     handleClose() {
       // This method here will be called by PopupManger, when the `closeOnPressEscape` was set to true

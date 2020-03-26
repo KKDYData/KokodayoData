@@ -97,9 +97,8 @@
 </template>
 
 <script>
-import { Drawer, Button } from 'element-ui'
+import { Button } from 'element-ui'
 import Vue from 'vue'
-Vue.use(Drawer)
 Vue.use(Button)
 import MyTitle from '../base/MyTitle'
 

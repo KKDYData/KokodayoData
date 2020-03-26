@@ -11,7 +11,7 @@
       >
         <h3 v-if="title" class="popper-title">{{ title }}</h3>
         <slot />
-        <div class="popper-arrow" data-popper-arrow></div>
+        <div v-if="arrow" class="popper-arrow" data-popper-arrow></div>
       </div>
     </transition>
   </span>
@@ -66,6 +66,10 @@ export default {
     disabled: {
       type: Boolean,
       default: false
+    },
+    arrow: {
+      type: Boolean,
+      default: true
     }
   },
   data() {
@@ -79,12 +83,24 @@ export default {
     const { popper } = this.$refs
     let reference = this.$refs.reference
     reference = this.referenceElm = this.$slots.reference[0].elm
+    if (this.arrow) {
+      const arrow = this.arrow ? popper.querySelector('.popper-arrow') : null
+      modifiers.push(
+        {
+          name: 'arrow',
+          options: {
+            element: arrow,
+          },
+        }
+      )
+    }
+
     this.createPopper = () => {
       this.popperInstance = create(reference, popper, {
         placement,
         modifiers,
         showEvents,
-        hideEvents
+        hideEvents,
       })()
     }
     showEvents.forEach(e => on(reference, e, () => {

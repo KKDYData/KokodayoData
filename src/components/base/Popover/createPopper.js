@@ -24,12 +24,14 @@ const defaultOptions = {
       name: 'preventOverflow',
       options: {
         padding: 8,
+        mainAxis: true,
+        altAxis: true,
       },
     },
     {
       name: 'flip',
       options: {
-        fallbackPlacements: ['top', 'right', 'bottom'],
+        fallbackPlacements: ['top', 'right', 'bottom', 'left'],
       }
     },
     {

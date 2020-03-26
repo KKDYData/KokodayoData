@@ -136,13 +136,12 @@
 <script>
 import { UA, getSkinsData, getScreenWidth, sort } from '../../utils'
 import { path } from '../../utils/listVer'
-import { Tabs, TabPane, Button, Progress, Slider, } from 'element-ui'
+import { Tabs, TabPane, Button, Slider, } from 'element-ui'
 import Vue from 'vue'
 
 Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Button)
-Vue.use(Progress)
 Vue.use(Slider)
 
 import AudioContainer from './AudioContainer'

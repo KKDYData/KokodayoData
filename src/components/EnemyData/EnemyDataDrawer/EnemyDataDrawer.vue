@@ -75,11 +75,7 @@
 import { path } from '@/utils/listVer'
 import BaseStatusBox from './BaseStatusBox'
 import CImage from '@/components/base/CImage'
-import { Image, Drawer } from 'element-ui'
 import HDrawer from '@/components/base/Drawer'
-import Vue from 'vue'
-Vue.use(Image)
-Vue.use(Drawer)
 
 
 import { createNamespacedHelpers, mapState as Root } from 'vuex'

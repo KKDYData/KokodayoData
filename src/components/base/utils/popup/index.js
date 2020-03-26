@@ -198,7 +198,7 @@ const popper = {
     },
 
     restoreBodyStyle() {
-      if (this.modal && this.withoutHiddenClass) {
+      if (this.withoutHiddenClass) {
         document.body.style.paddingRight = this.bodyPaddingRight
         removeClass(document.body, 'el-popup-parent--hidden')
       }

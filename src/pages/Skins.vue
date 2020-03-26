@@ -4,7 +4,7 @@
       <filter-button-group :filters="groups" label="分类" @filter="switchData" />
       <div class="skin-wrapper">
         <div v-for="skin in skinsData" :key="skin.avatarId">
-          <h-popping size="90%" placement="left" :width="width" trigger="click">
+          <h-popping size="90%" placement="left" :width="width" trigger="click" :arrow="false">
             <div slot="title">{{ skin.displaySkin.skinName }}</div>
             <div @blur="showId=''">
               <set-panel v-if="skin.avatarId === showId" :id="skin.avatarId" :set-data="[skin]" />

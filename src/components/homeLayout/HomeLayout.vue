@@ -37,6 +37,7 @@
           :visible-arrow="false"
           :width="short ? 320 : 800"
           :disabled="agentFilterDisabled"
+          :append-to-body="false"
         >
           <div slot="reference" class="click">
             <div class="tags-selected-container">
