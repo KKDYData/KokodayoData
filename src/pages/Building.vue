@@ -115,9 +115,9 @@ const types = {
     { text: '加强会客室', value: '所属派系的线索' },
   ],
   POWER: [
-    { text: '10%', value: '10%' },
-    { text: '15%', value: '15%' },
-    { text: '20%', value: '20%' },
+    { text: '10%', value: '无人机(.+)10%' },
+    { text: '15%', value: '无人机(.+)15%' },
+    { text: '20%', value: '无人机(.+)20%' },
   ],
   // 10%
   MANUFACTURE: [
