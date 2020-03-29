@@ -1,8 +1,7 @@
 # Kokodayo 资料站
 
 ## 包养二维码
-   <img src="./assets/zfb.reszie.png" width = "300" alt="图片名称" />
-   <img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
+   <img src="./assets/zfb.reszie.png" width = "300" alt="图片名称" /><img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
 
 ## 安装
 
