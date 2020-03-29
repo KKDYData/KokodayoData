@@ -26,7 +26,6 @@ const throttle = (action, delay, ...args) => {
 }
 
 
-
 function sort(array, less) {
   function swap(i, j) {
     const t = array[i]
@@ -244,7 +243,7 @@ const changeAttackSpeed = (skill) => {
     if (temp) {
       res = temp.value
       if (minus) res *= -1
-      if (percent) res = Math.floor(res * 10 ** (scale + 1)) / 10 ** (scale - 1)
+      if (percent) res = Math.floor(res * 10 ** (scale + 1)) /// 10 ** (scale - 1)
     }
     return res + percent
   })
