@@ -28,20 +28,22 @@
         </span>
       </div>
       <div style="margin-top: 20px">
-        <span class="activity-info-need">修复手机上掉率详情看不到的问题。H6-2路线不正确的问题，会在下周(3.29前)修复。</span>
+        <span
+          class="activity-info-need"
+        >大概要闭关半年，期间会正常更新和修bug。预计今年下半年，会用webgl，做个3d舟游出来。相比于加新功能，还是更喜欢重构。</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import ItemViewer from '@/components/ItemViewer'
-import RImage from '@/components/base/RImage'
+// import ItemViewer from '@/components/ItemViewer'
+// import RImage from '@/components/base/RImage'
 
 export default {
   components: {
-    ItemViewer,
-    RImage
+    // ItemViewer,
+    // RImage
   },
   data() {
     return {

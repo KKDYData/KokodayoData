@@ -28,6 +28,8 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
     }
   })
 
+
+
   mapdata.tiles.forEach((e) => {
     e.events = {
       click: [
@@ -76,7 +78,8 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
 
   // todo merge predata
   console.log(theta, persective)
-  if (!instance)
+  if (!instance) {
+
     instance = new SomeMap(
       container,
       theta,
@@ -84,13 +87,20 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
       mapData,
       routes
     )
-  else {
+
+    console.log(window.location.pathname)
+    if (/hard_06-02/.test(window.location.pathname)) {
+      instance.traps = [{ x: 4, y: 4 }]
+    }
+  } else {
 
     instance.config(container, persective, theta)
     instance.init(mapData, routes)
     instance.startLoop()
 
   }
+
+
 
   return instance
 }
