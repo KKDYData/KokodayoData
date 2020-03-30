@@ -7,7 +7,6 @@ script
 GameData
 
 stats.json
-yarn.lock
 yarn-error.log
 package-lock.json
 

@@ -1,64 +1,40 @@
-# ArkinightsData
+# Kokodayo 资料站
+
+## 包养二维码
+   <img src="./assets/zfb.reszie.png" width = "300" alt="图片名称" /><img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
 
 ## 安装
 
-1. yarn / npm i
+1. yarn 
 2. 解压theme.zip。考虑到国内安装Sass困难，但是整个theme文件夹放上来又不是很好，所以提供了压缩包。
+   - 可能很快就不需要弄这个了。
+3. 记得在```utils/listVer.js```里改改列表索引。
 
-### 运行
-
-yarn start / npm start
-打开 <http://localhost:8080>
-webpack 已经配置好局域网内的访问，可以用手机访问<http://局域网地址:8080>
 
 ### Todo
 
-1. 适配新地图模块
-   1. 分离出地图组件
-2. 禁用缩放
-3. 去掉默认focus css
-4. 移动端全部使用vw
-   -[x] item
-
-#### 2020/1/14
-- [x] 基建页面
+#### 2020/3/30
 - [ ] 种族/阵营筛选
 - [ ] 评论功能
 - [ ] 从服务器获取更新信息的api
 - [ ] dps图
 - [ ] 剧情回放
-- [ ] 多语言
-
-
-#### 2019/11/24
-- [x] 配合新域名kokodayo，做一个新的顶栏
-- [x] 基建页面
-- [ ] 种族/阵营筛选
-- [ ] 评论功能
-- [ ] 从服务器获取更新信息的api
-- [x] 整合拆包数据处理的脚本进来
-- [ ] dps图
-- [x] 地图重构
-- [x] spine小人
-- [x] 皮肤页面
-
-### 包养二维码
-
-   <img src="./assets/zfb.reszie.png" width = "300" alt="图片名称" />
-   <img src="./assets/wx.reszie.png" width = "300" alt="图片名称" />
+- [ ] 地图改用webgl重新实现
 
 ### 分离出来的组件
    1. [地图](https://github.com/odex21/SomeMapTest)，包含1个简单的canvas渲染模块和寻路算法。
    2. [spine小人](https://github.com/odex21/ArkSpineTest)，测试小人文件的简易框架（？）
 
-### 其它
-
- 因为找到工作了，所以一般周末才会有功能更新。例如危机合约，周二更新，但是周三到周五下班之后我也在肝危机合约，所以，危机合约的地图数据等到周日才更新。。。（我太菜了）
+### 更新频率
+   最近有点忙，还要学习数据库。预计不会有大改动了。估计大改要等 vue3 出来再考虑一下。
+   到时候应该主要是用重新用webgl 实现地图。已经用 vue3 的新写法来 弄一下剧情回放之类的功能。
+   另外，等我数据库学完出山，应该就能开始弄评论系统了。
+   element 4个月没更新了。迫不得已自己实现了部分组件。
 
 
 ### 数据来源
 
-<!-- 1. [拆包数据](https://github.com/Perfare/ArknightsGameData)  -->
+1. [拆包数据] github 或者 朋友拆
 2. [掉落统计](https://penguin-stats.io/) 企鹅物流
 
 ### 缓存

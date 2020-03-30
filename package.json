@@ -28,7 +28,7 @@
     "echarts": "^4.2.1",
     "element-theme-chalk": "^2.13.0",
     "element-ui": "^2.12.0",
-    "kkdy-somemap": "*",
+    "kkdy-somemap": "^0.3.13",
     "localforage": "^1.7.3",
     "pathfinding": "^0.4.18",
     "phy-touch": "^0.1.0",
