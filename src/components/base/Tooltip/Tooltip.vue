@@ -1,5 +1,5 @@
 <template>
-  <div class="popper-wrapper">
+  <span class="popper-wrapper">
     <slot />
     <transition name="fade">
       <div
@@ -15,7 +15,7 @@
         <div v-if="showArrow && !disabled" class="popper-arrow" data-popper-arrow></div>
       </div>
     </transition>
-  </div>
+  </span>
 </template>
 <script>
 import { create } from '../Popover/createPopper'

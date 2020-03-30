@@ -105,7 +105,7 @@ export default {
   right: 0px
   left: 10px
   top: 36px
-  z-index: 2
+  z-index: 3
   width: calc(100% - 30px)
 }
 

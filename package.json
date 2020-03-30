@@ -19,7 +19,6 @@
     "@babel/runtime-corejs2": "^7.3.4",
     "@popperjs/core": "^2.1.1",
     "@qcharts/core": "^0.1.27",
-    "@types/ramda": "^0.27.0",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
     "@vue/babel-preset-jsx": "^1.1.2",
     "babel-eslint": "^10.0.1",
@@ -43,7 +42,7 @@
     "vue-router": "^3.0.6",
     "vuex": "^3.1.1",
     "workbox-range-requests": "^4.3.1",
-    "workbox-window": "^4.3.1"
+    "workbox-window": "^5.1.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -55,6 +54,7 @@
     "@babel/plugin-transform-async-to-generator": "^7.3.4",
     "@babel/preset-env": "^7.3.1",
     "@babel/preset-stage-3": "^7.0.0",
+    "@types/ramda": "^0.27.0",
     "ali-oss": "^6.2.1",
     "babel-plugin-component": "^1.1.1",
     "babel-plugin-inline-package-json": "^2.0.0",
