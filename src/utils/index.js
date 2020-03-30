@@ -243,7 +243,7 @@ const changeAttackSpeed = (skill) => {
     if (temp) {
       res = temp.value
       if (minus) res *= -1
-      if (percent) res = Math.round(res * 10 ** (scale + 1)) /// 10 ** (scale - 1)
+      if (percent) res = Math.round(res * 10 ** (scale + 1)) / 10 ** (scale - 1)
     }
     return res + percent
   })
