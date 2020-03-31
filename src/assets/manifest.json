@@ -27,8 +27,8 @@
   "display": "standalone",
   "start_url": "/",
   "description": "一个平平无奇的明日方舟资料站",
-  "background_color": "#525252",
-  "theme_color": "#525252",
+  "background_color": "#ff7e00",
+  "theme_color": "#ff7e00",
   "navigationPreload": true,
   "prefer_related_applications": false
 }

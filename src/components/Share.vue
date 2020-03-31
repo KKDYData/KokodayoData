@@ -8,7 +8,7 @@
       @touchmove="handleTouchMove"
       @touchend="handleTouchEnd"
     >
-      <div :data-clipboard-text="shareLink" class="el-circle-icon" @click="share">
+      <div :data-clipboard-text="shareLink" class="el-circle-icon share-link" @click="share">
         <i class="el-icon-share" />
       </div>
       <div class="el-circle-icon" @click.stop="handleClick">
@@ -97,7 +97,7 @@ export default {
     this.throttledScrollHandler = debounce(this.onScroll, 100)
     this.container.addEventListener('scroll', this.throttledScrollHandler)
 
-    new Clipboard('.share')
+    new Clipboard('.share-link')
   },
   beforeDestroy() {
     this.container.removeEventListener('scroll', this.throttledScrollHandler)
