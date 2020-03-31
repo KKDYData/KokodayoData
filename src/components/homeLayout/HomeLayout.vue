@@ -159,12 +159,12 @@ if (typeof Array.prototype.flat !== 'function') {
 export default {
   metaInfo() {
     return {
-      titleTemplate: 'Kokodayo | ArknightsData | kkdy 一个平平无奇的明日方舟数据库 0.99 Wiki|维基|数据',
+      titleTemplate: 'Kokodayo | ArknightsData | kkdy 一个平平无奇的明日方舟数据库 1.0 Wiki|维基|数据',
       meta: [
         {
           vmid: 'description',
           name: 'Description',
-          content: '干员数据、语音、立绘、敌人图鉴、地图数据、计算器，公开招募，由Dr.阿凡提提供'
+          content: '干员数据、基建技能、语音、立绘、敌人图鉴、地图数据、计算器，公开招募，由Dr.阿凡提提供'
         }
       ]
     }

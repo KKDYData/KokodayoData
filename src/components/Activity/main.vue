@@ -23,14 +23,16 @@
         </div>
       </div>-->
       <div style="margin-top: 20px">
-        <span class="activity-info-need">
-          <router-link to="/info">点击这里，往下滑找到“反馈”</router-link>以反馈问题。
-        </span>
+        <span class="activity-info-need">版本变更为1.0版本。下次重构/新功能预计在今年下半年。</span>
       </div>
       <div style="margin-top: 20px">
-        <span
-          class="activity-info-need"
-        >大概要闭关半年，期间会正常更新和修bug。预计今年下半年，会用webgl，做个3d舟游出来。相比于加新功能，还是更喜欢重构。</span>
+        <span class="activity-info-need">
+          <router-link to="/info">点击这里</router-link>，往下滑找到“反馈”以反馈问题。
+        </span>
+      </div>
+
+      <div style="margin-top: 20px">
+        <span class="activity-info-need light">企鹅物流的掉落数据，同步时间为10分钟/次。</span>
       </div>
     </div>
   </div>
@@ -78,6 +80,10 @@ export default {
 
   &-info-need {
     font-size: 14px
+
+    &.light {
+      opacity: 0.5
+    }
   }
 
   &-item {
