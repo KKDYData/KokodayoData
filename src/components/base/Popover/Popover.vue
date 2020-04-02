@@ -23,7 +23,6 @@ import { popper } from '../utils/popup'
 import { on } from '../utils/dom'
 
 
-
 export default {
   mixins: [popper],
   props: {
@@ -70,6 +69,10 @@ export default {
     arrow: {
       type: Boolean,
       default: true
+    },
+    openDelay: {
+      type: Number,
+      default: 0
     }
   },
   data() {

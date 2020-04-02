@@ -29,57 +29,57 @@
         :disabled="agentFilterDisabled"
         @filter="resetFilter($event, 'gkzm')"
       />
-      <div class="tags-popover-wrapper">
+      <div class="tags-popover-wrapper" style="position: relative">
         <h-popover
           popper-class="tags-popover-container click"
-          placement="top"
+          placement="bottom"
           trigger="click"
           :visible-arrow="false"
           :width="short ? 320 : 800"
           :disabled="agentFilterDisabled"
           :append-to-body="false"
         >
-          <div slot="reference" class="click">
-            <div class="tags-selected-container">
-              <el-button
-                :type="SelectedTagGz.length > 0 ? 'danger' : 'info'"
-                :size="short? 'mini' :'medium'"
-                round
-                :style="short ? 'margin-left: 1.33vw' : ''"
-                :disabled="agentFilterDisabled"
-              >标签</el-button>
-              <div class="tag-selected-content-container">
-                <transition name="fade" mode="out-in">
-                  <div v-if="SelectedTagGz.length !== 0 ">
-                    <div
-                      v-for="tag in SelectedTagGz"
-                      :key="tag.value"
-                      class="tags-selected-inner-container"
-                    >
-                      <el-tag
-                        :size="short? 'medium' :'normal'"
-                        :closable="!agentFilterDisabled"
-                        effect="dark"
-                        :type="agentFilterDisabled ? 'info': ''"
-                        @close="handleClose(tag)"
-                      >{{ tag.text }}</el-tag>
-                    </div>
-                  </div>
-                  <span v-else class="tags-selected-container-text">点击打开标签面板</span>
-                </transition>
+          <div slot="reference" class="tags-selected-container click">
+            <el-button
+              :type="SelectedTagGz.length > 0 ? 'danger' : 'info'"
+              :size="short? 'mini' :'medium'"
+              round
+              :style="short ? 'margin-left: 1.33vw' : ''"
+              :disabled="agentFilterDisabled"
+            >标签</el-button>
+            <div class="tag-selected-content-container">
+              <div v-show="SelectedTagGz.length !== 0 ">
+                <div
+                  v-for="tag in SelectedTagGz"
+                  :key="tag.value"
+                  class="tags-selected-inner-container"
+                >
+                  <el-tag
+                    :size="short? 'medium' :'normal'"
+                    :closable="!agentFilterDisabled"
+                    effect="dark"
+                    :type="agentFilterDisabled ? 'info': ''"
+                    @close="handleClose(tag)"
+                  >{{ tag.text }}</el-tag>
+                </div>
               </div>
+              <span
+                v-show="SelectedTagGz.length === 0 "
+                class="tags-selected-container-text"
+              >点击打开标签面板</span>
             </div>
           </div>
 
-          <filter-group
-            ref="tagFilter"
-            label="Tags"
-            :filters="filterGroups.tags"
-            @filter="resetFilter($event, 'tags')"
-          />
-          <div style="display:flex" />
-          <div style="direction: rtl">
-            <close-button />
+          <div>
+            <filter-group
+              ref="tagFilter"
+              label="Tags"
+              :filters="filterGroups.tags"
+              @filter="resetFilter($event, 'tags')"
+            />
+            <div style="direction: rtl">
+              <close-button />
+            </div>
           </div>
         </h-popover>
       </div>
