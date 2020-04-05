@@ -55,7 +55,6 @@ const popper = {
   watch: {
     visible(val) {
       if (val) {
-
         if (this._opening) return
         if (!this.rendered) {
           this.rendered = true
@@ -140,7 +139,6 @@ const popper = {
       }
 
       dom.style.zIndex = PopupManager.nextZIndex()
-      if (this.createPopper) this.createPopper()
 
       this.opened = true
 

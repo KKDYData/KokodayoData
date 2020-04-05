@@ -1,6 +1,6 @@
 <template>
   <span class="popper-wrapper">
-    <slot name="reference" />
+    <slot class="ref" name="reference" />
     <transition name="fade">
       <div
         v-show="!disabled && visible"
@@ -19,13 +19,12 @@
 <script>
 import { create } from './createPopper'
 import './popover.styl'
-import { popper } from '../utils/popup'
-import { on } from '../utils/dom'
+import { on, setStyle } from '../utils/dom'
+import { sleep } from '../../../utils'
 
 
 
 export default {
-  mixins: [popper],
   props: {
     placement: {
       type: String,
@@ -41,7 +40,7 @@ export default {
     },
     hideEvents: {
       type: Array,
-      default: () => ([])
+      default: () => (['blur'])
     },
     tabindex: {
       type: Number,
@@ -53,7 +52,7 @@ export default {
     },
     appendToBody: {
       type: Boolean,
-      default: true
+      default: false
     },
     width: {
       type: Number,
@@ -75,7 +74,8 @@ export default {
   data() {
     return {
       popperInstance: null,
-      modalAppendToBody: this.appendToBody
+      modalAppendToBody: this.appendToBody,
+      visible: false
     }
   },
   mounted() {
@@ -95,7 +95,20 @@ export default {
       )
     }
 
-    this.createPopper = () => {
+    const close = () => {
+      this.visible = false
+      this.$emit('hide')
+      document.body.removeEventListener('click', clickOutSide)
+    }
+
+    const clickOutSide = (e) => {
+      const isContain = popper.contains(e.target)
+      if (!isContain) {
+        close()
+      }
+    }
+
+    const createPopper = () => {
       this.popperInstance = create(reference, popper, {
         placement,
         modifiers,
@@ -103,16 +116,21 @@ export default {
         hideEvents,
       })()
     }
-    showEvents.forEach(e => on(reference, e, () => {
+    showEvents.forEach(e => on(reference, e, async () => {
+      this.$emit('show')
       this.visible = true
+      createPopper()
+      await sleep(500)
+      document.body.addEventListener('click', clickOutSide)
     }))
     hideEvents.forEach(e => on(reference, e, () => {
-      this.visible = false
-
+      close()
     }))
+
     if (appendToBody) {
       document.body.appendChild(popper)
     }
+    // setStyle(reference, 'outline', 'none')
     // reference.setAttribute('tabindex', this.tabindex)
   }
 }
@@ -121,6 +139,11 @@ export default {
 <style lang="stylus" scoped>
 .popper {
   max-width: 100vw
+
+  &-wrapper {
+    width: 100%
+    display: inline-block
+  }
 
   &-title {
     margin-top: -10px

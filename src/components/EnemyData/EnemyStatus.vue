@@ -31,7 +31,7 @@
             :content="'敌人的Level可以理解为敌人的版本，一个地图只会出现一种版本，突袭模式会有地图加成，不是更换版本'"
             placement="top-start"
           >
-            <i class="el-icon-info" />
+            <i class="toolel-icon-info" />
           </h-tooltip>
         </div>
       </div>
@@ -73,9 +73,9 @@
                   class="enemy-status-tip"
                   effect="dark"
                   :content="'对基地造成的伤害，例如普通图基地生命有3点，这个敌人进去之后就会扣掉'+ kData[1] + '点生命.'"
-                  placement="top-start"
+                  placement="bottom"
                 >
-                  <i class="el-icon-info" style="margin-right:0" />
+                  <i class="el-icon-info" />
                 </h-tooltip>
               </span>
             </template>
