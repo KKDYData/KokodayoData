@@ -59,7 +59,13 @@
                   :long-content="( i === 7 || (index !== 0 && i ===5) )"
                 >
                   <div slot="title">{{ k }}</div>
-                  <div slot="content">{{ v }}</div>
+                  <div
+                    v-if="!short || ( i === 7 || (index !== 0 && i ===5) ) || v.length < 6"
+                    slot="content"
+                  >{{ v }}</div>
+                  <h-tooltip v-else slot="content" placement="top" :content="v">
+                    <div>{{ v.slice(0, 3) }}...</div>
+                  </h-tooltip>
                 </content-slot>
               </div>
             </div>
@@ -68,7 +74,7 @@
         <div class="info-token-desc">
           <content-slot long-content :width="145">
             <div slot="title">信物描述</div>
-            <div slot="content">{{ data.tokenDesc }}</div>
+            <div slot="content">{{ data.tokenDesc ? data.tokenDesc : '无' }}</div>
           </content-slot>
         </div>
         <div class="info-story-wrapper">
@@ -146,6 +152,7 @@ Vue.use(Slider)
 
 import AudioContainer from './AudioContainer'
 import HPopping from '@/components/base/Popping'
+import HTooltip from '@/components/base/Tooltip'
 import SetPanel from '../base/SetPanel'
 import ContentSlot from '../base/ContentSlot'
 
@@ -156,7 +163,8 @@ export default {
     AudioContainer,
     SetPanel,
     ContentSlot,
-    HPopping
+    HPopping,
+    HTooltip
   },
   filters: {
     unlockStr(v) {
@@ -407,8 +415,8 @@ export default {
 
   .info-painter-cv {
     padding-left: 5vw
-    min-width: 50%
     box-sizing: border-box
+    flex: 1
   }
 
   .info-word-audio-control {
@@ -418,7 +426,8 @@ export default {
   }
 
   .info-base-container {
-    max-width: vw(335)
+    max-width: 50%
+    flex: 0.5
   }
 
   .char-base-info-container {

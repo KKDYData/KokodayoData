@@ -10,7 +10,7 @@
               <set-panel v-if="skin.avatarId === showId" :id="skin.avatarId" :set-data="[skin]" />
             </div>
             <div slot="reference" class="char-half-container" @click="showId = skin.avatarId">
-              <c-image class :src="skin.halfPic" fit="contain" />
+              <c-image :src="skin.halfPic" fit="contain" />
             </div>
           </h-popping>
           <div

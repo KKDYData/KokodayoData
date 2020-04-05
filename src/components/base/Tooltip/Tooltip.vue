@@ -96,15 +96,15 @@ export default {
   mounted() {
     const { placement, modifiers, showEvents, hideEvents, appendToBody } = this
     const { popper } = this.$refs
-    let target = this.$refs
-    target = this.$slots.default[0].elm
+    let target = this.$slots.default[0].elm
 
-    this.createPopper = create(target, popper, {
+    const createPopper = create(target, popper, {
       placement,
       modifiers,
     })
     showEvents.forEach(e => on(target, e, () => {
       this.visible = true
+      createPopper()
     }))
     hideEvents.forEach(e => on(target, e, () => {
       this.close()

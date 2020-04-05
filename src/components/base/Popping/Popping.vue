@@ -17,9 +17,7 @@
         @close="closeHandler"
         @opened="openHandler"
       >
-        <div slot="title">
-          <slot name="title" />
-        </div>
+        <slot slot="title" name="title" />
         <div style="padding: 0 20px 20px">
           <slot />
         </div>
@@ -37,12 +35,8 @@
         @show="openHandler"
         @hide="closeHandler"
       >
-        <div slot="reference" class="click" @click="openDrawer">
-          <slot name="reference" />
-        </div>
-        <div v-if="drawer">
-          <slot />
-        </div>
+        <slot slot="reference" class="click" name="reference" @click="openDrawer" />
+        <slot v-if="drawer" />
       </h-popover>
     </div>
   </div>
