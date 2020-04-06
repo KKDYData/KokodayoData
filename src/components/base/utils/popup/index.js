@@ -119,6 +119,7 @@ const popper = {
         PopupManager.openModal(this._popupId, PopupManager.nextZIndex(), this.modalAppendToBody ? undefined : dom, props.modalClass, props.modalFade)
       }
       if (props.lockScroll) {
+
         this.withoutHiddenClass = !hasClass(document.body, 'el-popup-parent--hidden')
         if (this.withoutHiddenClass) {
           this.bodyPaddingRight = document.body.style.paddingRight
@@ -138,7 +139,9 @@ const popper = {
         dom.style.position = 'absolute'
       }
 
-      dom.style.zIndex = PopupManager.nextZIndex()
+      if (!this.noDomZIndex) {
+        dom.style.zIndex = PopupManager.nextZIndex()
+      }
 
       this.opened = true
 

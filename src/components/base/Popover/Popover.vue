@@ -19,9 +19,9 @@
 <script>
 import { create } from './createPopper'
 import './popover.styl'
-import { on, setStyle } from '../utils/dom'
+import { on } from '../utils/dom'
 import { sleep } from '../../../utils'
-
+import { clickOutSideRow } from '@/utils/dom'
 
 
 export default {
@@ -98,15 +98,10 @@ export default {
     const close = () => {
       this.visible = false
       this.$emit('hide')
-      document.body.removeEventListener('click', clickOutSide)
+      document.body.removeEventListener('click', ccc)
     }
 
-    const clickOutSide = (e) => {
-      const isContain = popper.contains(e.target)
-      if (!isContain) {
-        close()
-      }
-    }
+    const ccc = clickOutSideRow(popper, close)
 
     const createPopper = () => {
       this.popperInstance = create(reference, popper, {
@@ -116,12 +111,14 @@ export default {
         hideEvents,
       })()
     }
+
     showEvents.forEach(e => on(reference, e, async () => {
+      if (this.visible) return
       this.$emit('show')
       this.visible = true
       createPopper()
       await sleep(500)
-      document.body.addEventListener('click', clickOutSide)
+      document.body.addEventListener('click', ccc)
     }))
     hideEvents.forEach(e => on(reference, e, () => {
       close()
@@ -130,8 +127,6 @@ export default {
     if (appendToBody) {
       document.body.appendChild(popper)
     }
-    // setStyle(reference, 'outline', 'none')
-    // reference.setAttribute('tabindex', this.tabindex)
   }
 }
 </script>

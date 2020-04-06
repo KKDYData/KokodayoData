@@ -1,6 +1,6 @@
 <template>
   <div class="talent-wrapper">
-    <div v-for="(item, index) in talents" :key="item.name" class="talent">
+    <div v-for="(item) in talents" :key="item.name" class="talent">
       <div class="talent-title">
         <span
           :style="!short && item.name && item.name.length > 5 ? 'font-size: 13px': ''"
@@ -9,11 +9,12 @@
           <el-button
             v-if="item.condidate[0].potentailUP"
             size="mini"
-            :type="!showTalentPotentailUP[index] ? 'info' : 'warning'"
-            @click="openTalentPotentailUP(index)"
+            :type="item.condidate[0].potentailUP.requiredPotentialRank > curPotentailLv + 1? 'info' : 'warning'"
           >
-            潜能提升
-            <i :class="!showTalentPotentailUP[index] ? 'el-icon-star-off' : 'el-icon-star-on'" />
+            潜能{{ item.condidate[0].potentailUP.requiredPotentialRank + 1 }}级提升
+            <i
+              :class="item.condidate[0].potentailUP.requiredPotentialRank > curPotentailLv + 1 ? 'el-icon-star-off' : 'el-icon-star-on'"
+            />
           </el-button>
         </div>
       </div>
@@ -25,12 +26,14 @@
         </div>
 
         <div class="talent-desc-content">
-          <div v-if="!showTalentPotentailUP[index]" class="talent-desc-content-item">
-            <span v-html="talent.description" />
+          <div
+            v-if="talent.potentailUP && curPotentailLv + 2 > talent.potentailUP.requiredPotentialRank "
+            class="talent-desc-content-item"
+          >
+            <span v-html="talent.potentailUP.description" />
           </div>
           <div v-else class="talent-desc-content-item">
-            <span v-html="talent.potentailUP.description" />
-            <span>(需要潜能{{ talent.potentailUP.requiredPotentialRank + 1 }}级)</span>
+            <span v-html="talent.description" />
           </div>
         </div>
       </div>
@@ -47,6 +50,10 @@ export default {
       type: [Object, Array],
       required: true
     },
+    curPotentailLv: {
+      type: Number,
+      required: true
+    }
   },
   data() {
     return {

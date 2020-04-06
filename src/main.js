@@ -1,7 +1,8 @@
 import '@/styles/index.styl'
 import '@/styles/animation.styl'
 import '@/styles/cover.styl'
-// import '../theme/index.css'
+import 'swiper/css/swiper.min.css'
+
 
 import Vue from 'vue'
 import VueRouter from 'vue-router'

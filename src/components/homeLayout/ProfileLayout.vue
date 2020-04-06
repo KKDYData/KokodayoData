@@ -372,6 +372,11 @@ padMode(size) {
 
 @media screen and (max-width: 700px) {
   padMode(6)
+
+  //配合swiper
+  .profile-container {
+    margin: 0
+  }
 }
 
 @media screen and (max-width: 500px) {

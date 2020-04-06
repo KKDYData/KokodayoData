@@ -100,7 +100,6 @@ module.exports = {
     extensions: ['.js', '.styl', '.vue', '.json'],
     alias: {
       '@': path.resolve(__dirname, '../src'),
-      // 'element-ui': path.resolve(__dirname, '../src/element')
     }
   },
   externals: {

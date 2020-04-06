@@ -22,6 +22,7 @@ import { create } from '../Popover/createPopper'
 import './tooltip.styl'
 import { on } from '../utils/dom'
 import { sleep } from '../../../utils'
+import { clickOutSideRow } from '../../../utils/dom'
 
 export default {
   props: {
@@ -107,24 +108,20 @@ export default {
     const close = () => {
       this.visible = false
       this.$emit('hide')
-      document.body.removeEventListener('click', clickOutSide)
+      document.body.removeEventListener('click', ccc)
     }
 
-    const clickOutSide = (e) => {
-      const isContain = popper.contains(e.target)
-      if (!isContain) {
-        close()
-      }
-    }
+    const ccc = clickOutSideRow(popper, close)
 
     showEvents.forEach(e => on(target, e, async () => {
       this.$emit('show')
       this.visible = true
       createPopper()
       await sleep(500)
-      document.body.addEventListener('click', clickOutSide)
+      document.body.addEventListener('click', ccc)
 
     }))
+
     hideEvents.forEach(e => on(target, e, () => {
       this.$emit('hide')
       close()

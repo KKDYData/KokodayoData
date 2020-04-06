@@ -85,26 +85,32 @@
       </div>
     </div>
 
-    <el-tabs style="padding: 0px" :value="currentMode" @tab-click="switchToNormal">
-      <el-tab-pane label="一般模式" name="profile-layout">
+    <h-tab
+      :value="currentMode"
+      :tab-data="[{label: '一般模式', id:'profile-layout'},{label: '公开招募', id: 'new-profile-layout'}]"
+      @slideChange="switchToNormal"
+    >
+      <div style="padding:0" class="swiper-slide" label="一般模式" name="profile-layout">
         <profile-layout
-          v-if="currentMode === 'profile-layout'"
+          v-show="currentMode === 'profile-layout'"
           ref="profile-layout"
           :show-tags="showTag"
           :tags="SelectedTag"
           :filter-groups="filterGroups"
           :data="data"
         />
-      </el-tab-pane>
-      <el-tab-pane name="new-profile-layout" label="公开招募" lazy>
-        <new-profile-layout
-          v-if="currentMode === 'new-profile-layout'"
-          :tags="SelectedTag"
-          :filter-groups="filterGroups"
-          :data="data"
-        />
-      </el-tab-pane>
-    </el-tabs>
+      </div>
+      <div style="padding:0" class="swiper-slide" name="new-profile-layout" label="公开招募" lazy>
+        <transition name="fade">
+          <new-profile-layout
+            v-show="currentMode === 'new-profile-layout'"
+            :tags="SelectedTag"
+            :filter-groups="filterGroups"
+            :data="data"
+          />
+        </transition>
+      </div>
+    </h-tab>
   </div>
 </template>
 
@@ -112,14 +118,13 @@
 import Vue from 'vue'
 import { mapState } from 'vuex'
 
-import { Button, Tag, Tabs, TabPane } from 'element-ui'
+import { Button, Tag } from 'element-ui'
 import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.use(Button)
 Vue.use(Tag)
-Vue.use(Tabs)
-Vue.use(TabPane)
 import HPopover from '@/components/base/Popover'
+import HTab from '@/components/base/Tab'
 
 
 import FilterButtonGroup from '../base/FilterButtonGroup'
@@ -174,7 +179,8 @@ export default {
     ProfileLayout,
     newProfileLayout,
     CloseButton,
-    HPopover
+    HPopover,
+    HTab
   },
   props: {
     profileList: {
@@ -261,8 +267,8 @@ export default {
       return this.$el.clientWidth - 50
     },
     switchToNormal(tab) {
-      this.currentMode = tab.name
-      if (tab.name === 'profile-layout')
+      this.currentMode = tab.id
+      if (tab.id === 'profile-layout')
         this.$nextTick().then(() => {
           this.$refs['profile-layout'] &&
             this.$refs['profile-layout'].calFillAmount()
