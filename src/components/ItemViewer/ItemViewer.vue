@@ -8,7 +8,6 @@
     placement="right"
     :width="!short? 350 : 250"
     :trigger="isHover"
-    :open-delay="500"
     :title="data.name"
     :disabled="noPopover"
     :size="drawerSize + '%'"

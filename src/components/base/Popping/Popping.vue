@@ -32,11 +32,15 @@
         :title="title"
         :disabled="disabled"
         :arrow="arrow"
+        :append-to-body="appendToBody"
         @show="openHandler"
         @hide="closeHandler"
       >
         <slot slot="reference" class="click" name="reference" @click="openDrawer" />
-        <slot v-if="drawer" />
+        <!-- 不套个div popper会异常 -->
+        <div>
+          <slot v-if="drawer" />
+        </div>
       </h-popover>
     </div>
   </div>
@@ -92,6 +96,10 @@ export default {
     arrow: {
       type: Boolean,
       default: true
+    },
+    appendToBody: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
