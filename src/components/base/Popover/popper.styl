@@ -7,6 +7,7 @@ popperPadding = 4px 8px
 
 .popper-wrapper {
   position: relative
+  display: inline-block
 }
 
 .popper-target {
@@ -21,6 +22,7 @@ popperPadding = 4px 8px
 
 popperArrow(popperArrowSize, popperBgColor = #fff) {
   arrowPos = (popperArrowSize / -2)
+  arrowPosR = (popperArrowSize / 2)
 
   .popper {
     &-arrow {
@@ -42,7 +44,7 @@ popperArrow(popperArrowSize, popperBgColor = #fff) {
 
     &[data-popper-placement^='top'] > &-arrow {
       left: 50%
-      bottom: arrowPos
+      bottom: unit(-1 * arrowPos, 'px')
     }
 
     &[data-popper-placement^='bottom'] > &-arrow {
@@ -52,7 +54,7 @@ popperArrow(popperArrowSize, popperBgColor = #fff) {
 
     &[data-popper-placement^='left'] > &-arrow {
       top: 50%
-      right: arrowPos
+      right: arrowPosR
     }
 
     &[data-popper-placement^='right'] > &-arrow {

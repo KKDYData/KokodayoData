@@ -75,7 +75,7 @@
                 当前排序方式 {{ sortFunc.name }}
                 <el-button size="mini" type="primary" @click="switchSortFunc">切换</el-button>
               </span>
-              <h-tooltip placement="top">
+              <h-tooltip placement="left">
                 <el-button size="mini" type="primary">说明</el-button>
                 <div slot="content">
                   点击右边数据可以查看详细数据 |
