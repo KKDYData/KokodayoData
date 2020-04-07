@@ -15,7 +15,6 @@
         class="new-mode-group"
         style="margin-bottom: 20px"
       >
-        <!-- <div>{{item[0]}}</div> -->
         <div class="new-mode-group-title">{{ item[0] }}</div>
         <div>
           <div
@@ -71,7 +70,7 @@
 const arrange = (arr, index = 0, group = []) => {
   const res = []
   res.push([arr[index]])
-  for (let i = 0; i < group.length; i++) {
+  for (let i = 0;i < group.length;i++) {
     res.push([...group[i], arr[index]])
   }
   group = group.concat(res)

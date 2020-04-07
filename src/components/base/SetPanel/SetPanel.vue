@@ -1,105 +1,105 @@
 <template>
-  <el-carousel
-    id="wrapper"
-    class="char-set-panel"
-    :height="height"
+  <div
+    ref="swiper-container"
+    class="char-set-panel swiper-container"
     :autoplay="false"
     indicator-position="outside"
     :loop="false"
+    :style="{height: wrapperHeight}"
     @change="$event => curIndex = $event"
   >
     <!-- 默认立绘小人 pc -->
-    <spine-panel v-if="!short && !ex" :id="id" :canvas-width="spineWidth" />
-
-    <div v-for="(data, index) in setData" :key="index" :data="data" :short="short">
-      <!-- pc 皮肤小人 -->
-      <spine-panel
-        v-if="!short && curIndex === index && setData && ex"
-        :id="data.avatarId"
-        class="spin-panel"
-        :canvas-width="spineWidth"
-      />
-
-      <!-- 立绘 -->
-      <el-carousel-item :id="`char-set-container-${index}`" :key="index" style="font-size:13px">
-        <div class="char-set-container-wrapper">
-          <div class="char-set-info">
-            <div v-if="data.displaySkin">
-              <content-slot class="char-set-info-item" :width="80" long>
-                <template slot="title">名称</template>
-                <template slot="content">{{ data.displaySkin.skinName }}</template>
-              </content-slot>
-              <content-slot class="char-set-info-item" :width="80" long>
-                <template slot="title">系列</template>
-                <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
-              </content-slot>
-              <content-slot class="char-set-info-item" :width="80" long>
-                <template slot="title">获得方式</template>
-                <template slot="content">{{ data.displaySkin.obtainApproach }}</template>
-              </content-slot>
-              <content-slot class="char-set-info-item" :width="80" long long-conten>
-                <template slot="title">描述</template>
-                <template slot="content">{{ data.displaySkin.usage }}</template>
-              </content-slot>
-              <content-slot class="char-set-info-item" :width="80" long long-content>
-                <template slot="title">记录</template>
-                <template slot="content">{{ data.displaySkin.content | filterColor }}</template>
-              </content-slot>
-            </div>
-          </div>
-
-          <div
-            v-loading="setLoad"
-            element-loading-background="rgba(168, 168, 168, 0.1)"
-            :style="!short ? {width: height}: {height: '320px'}"
-            class="char-set-container"
-          >
-            <r-image
-              :preview-src-list="short ? [data.charSet] : []"
-              :src="data.charSet"
-              @load="setLoad = false"
-            />
-          </div>
-          <div v-if="!short" class="set-right-panel">
-            <div class="char-profile-container">
-              <c-image :src="data.profile" />
-            </div>
-            <div class="char-half-container">
-              <c-image :src="data.halfPic" />
-              <!-- <div class="image-inner cbg" :style="{backgroundImage: `url('${data.halfPic}'`}" /> -->
-            </div>
-          </div>
-
-          <!-- 默认立绘小人 移动 -->
-          <!-- <el-carousel-item> -->
+    <div class="swiper-wrapper">
+      <div v-for="(data, index) in setData" :key="index" class="swiper-slide">
+        <div style="width: 100vw">
+          <spine-panel v-if="!short && !ex" :id="id" :canvas-width="spineWidth" />
+          <!-- pc 皮肤小人 -->
           <spine-panel
-            v-if="short && setData && !ex"
-            :id="id"
-            class="spin-panel mobile"
-            :canvas-width="spineWidth"
-          />
-          <!-- </el-carousel-item> -->
-          <!-- 皮肤立绘小人 移动 -->
-          <spine-panel
-            v-if="short && setData && ex"
+            v-if="!short && curIndex === index && setData && ex"
             :id="data.avatarId"
-            class="spin-panel mobile"
+            class="spin-panel"
             :canvas-width="spineWidth"
           />
+
+          <!-- 立绘 -->
+          <div :id="`char-set-container-${index}`" :key="index" style="font-size:13px">
+            <div class="char-set-container-wrapper">
+              <div class="char-set-info">
+                <div v-if="data.displaySkin">
+                  <content-slot class="char-set-info-item" :width="80" long>
+                    <template slot="title">名称</template>
+                    <template slot="content">{{ data.displaySkin.skinName }}</template>
+                  </content-slot>
+                  <content-slot class="char-set-info-item" :width="80" long>
+                    <template slot="title">系列</template>
+                    <template slot="content">{{ data.displaySkin.skinGroupName }}</template>
+                  </content-slot>
+                  <content-slot class="char-set-info-item" :width="80" long>
+                    <template slot="title">获得方式</template>
+                    <template slot="content">{{ data.displaySkin.obtainApproach }}</template>
+                  </content-slot>
+                  <content-slot class="char-set-info-item" :width="80" long long-conten>
+                    <template slot="title">描述</template>
+                    <template slot="content">{{ data.displaySkin.usage }}</template>
+                  </content-slot>
+                  <content-slot class="char-set-info-item" :width="80" long long-content>
+                    <template slot="title">记录</template>
+                    <template slot="content">{{ data.displaySkin.content | filterColor }}</template>
+                  </content-slot>
+                </div>
+              </div>
+
+              <div
+                v-loading="setLoad"
+                element-loading-background="rgba(168, 168, 168, 0.1)"
+                :style="!short ? {width: height}: {height: '320px'}"
+                class="char-set-container"
+              >
+                <r-image
+                  :preview-src-list="short ? [data.charSet] : []"
+                  :src="data.charSet"
+                  @load="setLoad = false"
+                />
+              </div>
+              <div v-if="!short" class="set-right-panel">
+                <div class="char-profile-container">
+                  <c-image :src="data.profile" />
+                </div>
+                <div class="char-half-container">
+                  <c-image :src="data.halfPic" />
+                </div>
+              </div>
+
+              <!-- 默认立绘小人 移动 -->
+              <!-- <div> -->
+              <spine-panel
+                v-if="short && setData && !ex"
+                :id="id"
+                class="spin-panel mobile"
+                :canvas-width="spineWidth"
+              />
+              <!-- </div> -->
+              <!-- 皮肤立绘小人 移动 -->
+              <spine-panel
+                v-if="short && setData && ex"
+                :id="data.avatarId"
+                class="spin-panel mobile"
+                :canvas-width="spineWidth"
+              />
+            </div>
+          </div>
         </div>
-      </el-carousel-item>
+      </div>
     </div>
-  </el-carousel>
+    <div v-if="setData.length > 1" class="swiper-button-prev"></div>
+    <div v-if="setData.length > 1" class="swiper-button-next"></div>
+    <div v-if="!short && setData.length > 1" class="swiper-pagination"></div>
+  </div>
 </template>
 
 <script>
-// import phyTouch from 'phy-touch'
-// import Transfrom from 'phy-touch/transformjs'
-
-import { Carousel, CarouselItem, Loading } from 'element-ui'
+import { Loading } from 'element-ui'
 import Vue from 'vue'
-Vue.use(Carousel)
-Vue.use(CarouselItem)
 Vue.use(Loading)
 
 
@@ -109,6 +109,10 @@ import RImage from '@/components/base/RImage'
 
 import { mapState } from 'vuex'
 import { getScreenWidth } from '../../../utils'
+import { Swiper, Pagination, Navigation } from 'swiper/js/swiper.esm'
+Swiper.use(Pagination)
+Swiper.use(Navigation)
+
 const SpinePanel = () =>
   import(/* webpackChunkName: "SpinePanel" */ '../SpinePanel')
 
@@ -155,40 +159,26 @@ export default {
     },
   },
   async mounted() {
-    // const radio = this.ex ? 2.6 : 2.3
-    // for (let i = 0;i < this.setData.length;i++) {
-    //   const target = document.body.querySelector(`#char-set-container-${i}`).querySelector('.char-set-container-wrapper')
-    //   // const { height } = target.getBoundingClientRect();
-    //   const opt = {
-    //     touch: '#wrapper',//反馈触摸的dom
-    //     vertical: true,//不必需，默认是true代表监听竖直方向touch
-    //     target: target, //运动的对象
-    //     property: 'translateY',  //被运动的属性
-    //     min: -window.innerWidth * radio + window.innerHeight,
-    //     max: 0,
-    //     sensitivity: 0.5,//不必需,触摸区域的灵敏度，默认值为1，可以为负数
-    //     factor: 1,//不必需,表示触摸位移运动位移与被运动属性映射关系，默认值是1
-    //     moveFactor: 1,//不必需,表示touchmove位移与被运动属性映射关系，默认值是1
-    //     step: 45,//用于校正到step的整数倍
-    //     bindSelf: false,
-    //     maxSpeed: 2, //不必需，触摸反馈的最大速度限制 
-    //     value: 0,
-    //     change: function (value) { },
-    //     touchStart: function (evt, value) { },
-    //     touchMove: function (evt, value) { },
-    //     touchEnd: function (evt, value) { },
-    //     tap: function (evt, value) { },
-    //     pressMove: function (evt, value) { },
-    //     animationEnd: function (value) { } //运动结束
-    //   }
-    //   Transfrom(target)
-    //   new phyTouch(opt)
-    // }
-
+    const container = this.$refs['swiper-container']
+    // 会被扔进body，所以等一下
+    await this.$nextTick()
+    new Swiper(container, {
+      resistanceRatio: 0.3,
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+      pagination: {
+        el: '.swiper-pagination',
+        type: 'bullets',
+        clickable: true
+      },
+    })
   },
   beforeMount() {
     const { width, height } = getScreenWidth()
-    this.height = (height * 0.8 - 42) + 'px'
+    this.height = this.short ? height + 'px' : (height * 0.8 - 42) + 'px'
+    this.wrapperHeight = this.short ? height + 'px' : (height * 0.81) + 'px'
     if (!this.short) {
       this.spineWidth = (width / 1159) * 300
     }
@@ -203,10 +193,19 @@ export default {
 @import '../../../styles/char.styl'
 
 .char-set-panel {
-  &>>> .el-carousel__item {
-    display: flex
-    justify-content: center
-    align-items: center
+  --swiper-theme-color: #000
+  background: #fff
+  overflow-y: auto
+  width: 100%
+
+  & >>> .swiper-pagination-bullet {
+    width: 60px
+    height: 5px
+    border-radius: 4px
+  }
+
+  .swiper-slide {
+    //width: 100vw !important
   }
 }
 
@@ -215,6 +214,8 @@ export default {
   justify-content: space-between
   height: 100%
   width: 100%
+  padding: 20px
+  box-sizing: border-box
 }
 
 .char-set-container {
@@ -253,8 +254,8 @@ export default {
 
 .spine-panel {
   position: absolute
-  bottom: 0
-  left: 0
+  bottom: 30px
+  left: 2%
 }
 
 .spin-panel.mobile {
@@ -274,7 +275,10 @@ export default {
   }
 
   .char-set-panel {
-    &>>> .el-carousel__item {
+    width: 100vw
+    padding: 0
+
+    &>>> .div__item {
       display: block
       overflow: scroll
     }
@@ -289,6 +293,11 @@ export default {
 
   .char-set-info {
     width: 100%
+  }
+
+  .spine-panel {
+    left: auto
+    bottom: auto
   }
 }
 </style>

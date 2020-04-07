@@ -76,20 +76,38 @@
         <!-- 天赋面板 -->
         <my-title title="天赋" />
         <div v-if="talents.length > 0" class="tttt">
-          <talents-panel :talents="talents" @talentPotentailUp="e => talentPotentailUp = e" />
+          <talents-panel
+            :cur-potentail-lv="potentialRanks"
+            :talents="talents"
+            @talentPotentailUp="e => talentPotentailUp = e"
+          />
         </div>
         <!-- 技能面板 -->
         <my-title v-if="skills.length > 0" title="技能" />
-        <div v-if="skills.length > 0" class="tttt">
-          <skill-panel
-            :status="status"
+        <h-tab
+          v-if="skills.length > 0 && normal"
+          class="skill-panel"
+          :tab-data="[{label: '技能效果'}, {label: '升级消耗'}]"
+        >
+          <!-- 技能升级消耗 -->
+          <div class="swiper-slide">
+            <skill-panel
+              :status="status"
+              :skills="skills"
+              :talents="talents"
+              :profession="data.profession"
+              :talent-potentail-up="talentPotentailUp"
+              :description="data.description"
+            />
+          </div>
+          <skill-up-panel
+            :all-level-cost="data.allSkillLvlup"
             :skills="skills"
-            :talents="talents"
-            :profession="data.profession"
-            :talent-potentail-up="talentPotentailUp"
-            :description="data.description"
+            :seven="data.skills"
+            class="swiper-slide"
           />
-        </div>
+        </h-tab>
+
         <!-- 潜能面板 -->
         <my-title title="潜能" />
         <div v-if="normal" class="tttt potency-container">
@@ -134,22 +152,13 @@
             </div>
           </div>
         </div>
-        <!-- 技能升级消耗 -->
-        <div v-if="skills.length > 0 && normal">
-          <my-title title="技能升级消耗" />
-          <skill-up-panel
-            :all-level-cost="data.allSkillLvlup"
-            :skills="skills"
-            :seven="data.skills"
-            class="tttt"
-          />
-        </div>
+
         <!-- 基建面板 -->
         <div v-if="normal">
           <my-title title="基建技能" />
           <building-data class="tttt" :building="data.buildingData" />
           <my-title title="干员资料" />
-          <info-panel v-if="info" class="tttt" :data="info" :list="setList" :words="words" />
+          <info-panel v-if="info" :data="info" :list="setList" :words="words" />
         </div>
       </div>
     </transition>
@@ -187,6 +196,7 @@ import ItemViewer from '../ItemViewer'
 import charStatus from '../base/charStatus'
 import DataLoading from '../base/Loading'
 import MyTitle from '@/components/base/MyTitle'
+import HTab from '@/components/base/Tab'
 
 const SkillPanel = () => ({
   component: import(
@@ -248,7 +258,8 @@ export default {
     DataLoading,
     AgentCard,
     charStatus,
-    MyTitle
+    MyTitle,
+    HTab
   },
   data() {
     return {
@@ -358,7 +369,10 @@ export default {
       const res = []
       this.data.potentialRanks.forEach((el, index) => {
         let haveValue = false
-        if (!el.buff) return
+        if (!el.buff) {
+          res.push(index)
+          return
+        }
         el.buff.attributes.attributeModifiers.forEach(el => {
           if (el.attributeType) haveValue = true
         })
@@ -464,7 +478,7 @@ export default {
     getEvolveCost() {
       if (!this.data || !this.normal) return
       const data = [...this.data.phases]
-      for (let i = 0; i < data.length - 1; i++) {
+      for (let i = 0;i < data.length - 1;i++) {
         Promise.all(data[i + 1].evolveCost.map(p => getItem(p.id).then(item => ({ cost: p.count, item }))))
           .then(items => {
             this.$set(this.evolveCost, i, { money: evolveGoldCost[this.data.rarity][i], items })
@@ -499,6 +513,10 @@ export default {
   &.talent-wrapper {
     margin-bottom: 20px
   }
+}
+
+.skill-panel {
+  margin-bottom: 50px
 }
 
 /**/
@@ -721,6 +739,10 @@ export default {
     padding: 10px vw(20)
   }
 
+  .skill-panel {
+    margin-bottom: vw(50)
+  }
+
   /**/
   .evolvcost-list {
     padding: 0 0 20px
@@ -760,7 +782,8 @@ export default {
 
 @media screen and (max-width: 500px) {
   .tttt {
-    padding: 0 vw(20) vw(20)
+    padding: 0 vw(20) 0
+    margin-bottom: vw(50)
   }
 
   .status-switcher-title {

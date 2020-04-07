@@ -4,12 +4,12 @@
       <el-progress :show-text="false" :percentage="voicePercentage" color="rgb(82, 82, 82)"></el-progress>
     </div>
     <audio
+      id="word"
+      ref="word"
       :autoplay="false"
       preload="none"
       class="info-word-audio-control"
       :src="src"
-      ref="word"
-      id="word"
       @timeupdate="timeUpDate($event)"
       @durationchange="durationUpdate($event)"
     >
@@ -22,7 +22,10 @@
 </template>
 
 <script>
-import { Message } from 'element-ui';
+import { Message, Progress } from 'element-ui'
+import Vue from 'vue'
+Vue.use(Progress)
+
 export default {
   props: {
     src: {
@@ -37,41 +40,41 @@ export default {
     return {
       voicePercentage: 0,
       duration: 30,
-    };
-  },
-  mounted() {
-    this.$refs.word.volume = this.volume / 100;
+    }
   },
   watch: {
     volume(e) {
-      this.$refs.word.volume = e / 100;
+      this.$refs.word.volume = e / 100
     }
+  },
+  mounted() {
+    this.$refs.word.volume = this.volume / 100
   },
   methods: {
     durationUpdate(e) {
       if (e.target.duration !== Infinity) {
         // Message.success('get the change ' + e.target.duration);
-        this.duration = e.target.duration;
+        this.duration = e.target.duration
       }
     },
     timeUpDate(e) {
       try {
-        this.voicePercentage = Math.min(e.target.currentTime / this.duration * 100, 100);
+        this.voicePercentage = Math.min(e.target.currentTime / this.duration * 100, 100)
         // Message(this.voicePercentage + ' | ' + e.target.currentTime + ' | ' + this.duration);
       } catch (error) {
-        Message(JSON.stringify(error));
+        Message(JSON.stringify(error))
       }
     },
     play() {
       this.$refs.word.play().catch(err => {
-        console.log(err);
-        Message.error('语音数据可能还没压缩上传，过一会再来听吧' + ' | err : ' + JSON.stringify(err));
-      });
+        console.log(err)
+        Message.error('语音数据可能还没压缩上传，过一会再来听吧' + ' | err : ' + JSON.stringify(err))
+      })
     },
     pause() {
-      this.$refs.word.pause();
+      this.$refs.word.pause()
     }
   }
-};
+}
 </script>
 

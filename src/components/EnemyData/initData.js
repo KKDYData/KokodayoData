@@ -5,7 +5,7 @@ import { Directions } from '@/utils/string'
 
 let instance
 
-const blackboardToStr = (data) => data.map(e => e.key + ' : ' + e.value).join(';')
+const blackboardToStr = (data) => data.map(e => e.key + ': ' + e.value).join(';  ')
 
 const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI * 2, persective = 3000) => {
 

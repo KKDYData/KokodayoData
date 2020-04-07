@@ -20,11 +20,11 @@
 <script>
 import { create } from '../Popover/createPopper'
 import './tooltip.styl'
-import { popper } from '../utils/popup'
 import { on } from '../utils/dom'
+import { sleep } from '../../../utils'
+import { clickOutSideRow } from '../../../utils/dom'
 
 export default {
-  mixins: [popper],
   props: {
     placement: {
       type: String,
@@ -83,7 +83,8 @@ export default {
   data() {
     return {
       instance: null,
-      modalAppendToBody: this.appendToBody
+      modalAppendToBody: this.appendToBody,
+      visible: false
     }
   },
   computed: {
@@ -96,18 +97,34 @@ export default {
   mounted() {
     const { placement, modifiers, showEvents, hideEvents, appendToBody } = this
     const { popper } = this.$refs
-    let target = this.$refs
-    target = this.$slots.default[0].elm
+    let target = this.$slots.default[0].elm
 
-    this.createPopper = create(target, popper, {
+    const createPopper = create(target, popper, {
       placement,
       modifiers,
     })
-    showEvents.forEach(e => on(target, e, () => {
+
+
+    const close = () => {
+      this.visible = false
+      this.$emit('hide')
+      document.body.removeEventListener('click', ccc)
+    }
+
+    const ccc = clickOutSideRow(popper, close)
+
+    showEvents.forEach(e => on(target, e, async () => {
+      this.$emit('show')
       this.visible = true
+      createPopper()
+      await sleep(500)
+      document.body.addEventListener('click', ccc)
+
     }))
+
     hideEvents.forEach(e => on(target, e, () => {
-      this.close()
+      this.$emit('hide')
+      close()
     }))
     if (appendToBody) {
       document.body.appendChild(popper)
@@ -116,6 +133,11 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped></style>
+<style lang="stylus" scoped>
+.popper-wrapper {
+  display: inline-block
+  cursor: pointer
+}
+</style>
 
 

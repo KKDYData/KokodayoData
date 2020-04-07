@@ -19,7 +19,7 @@
     <template v-if="preview">
       <image-viewer
         v-show="showViewer"
-        :z-index="zIndex"
+        :z-index="tZIndex"
         :initial-index="imageIndex"
         :on-close="closeViewer"
         :url-list="previewSrcList"
@@ -34,6 +34,7 @@ import Locale from 'element-ui/src/mixins/locale'
 import { on, off, getScrollContainer, isInContainer } from 'element-ui/src/utils/dom'
 import { isString, isHtmlElement } from 'element-ui/src/utils/types'
 import throttle from 'throttle-debounce/throttle'
+import { PopupManager } from '../utils/popup/popup-manager'
 
 const isSupportObjectFit = () => document.documentElement.style.objectFit !== undefined
 
@@ -79,7 +80,8 @@ export default {
       show: !this.lazy,
       imageWidth: 0,
       imageHeight: 0,
-      showViewer: false
+      showViewer: false,
+      tZIndex: this.zIndex
     }
   },
 
@@ -111,6 +113,12 @@ export default {
     },
     show(val) {
       val && this.loadImage()
+    },
+    showViewer(v) {
+      if (v) {
+        const a = PopupManager.nextZIndex()
+        this.tZIndex = Math.max(a, this.zIndex)
+      }
     }
   },
 

@@ -144,6 +144,8 @@ export default {
 
     &-base {
       margin: vw(20) vw(10)
+      //不给width swiper 的宽算不对
+      max-width: vw(750 - 20)
     }
 
     &-activity {

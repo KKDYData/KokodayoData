@@ -1,153 +1,150 @@
 <template>
-  <div class="info-panel-container">
-    <el-tabs :value="activeName">
-      <el-tab-pane label="人员档案" name="first">
-        <div class="char-base-info-container">
-          <div class="char-set-cv">
-            <div class="char-half-container">
-              <div class="image-inner" :style="{backgroundImage: `url('${setData[0].halfPic}')`}" />
-            </div>
+  <h-tab class="info-panel-container" :tab-data="tabIndex">
+    <div class="swiper-slide">
+      <div class="char-base-info-container">
+        <div class="char-set-cv">
+          <div class="char-half-container">
+            <div class="image-inner" :style="{backgroundImage: `url('${setData[0].halfPic}')`}" />
           </div>
-          <div class="info-painter-cv">
-            <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
-              <div slot="title">画师</div>
-              <div slot="content">{{ data.drawName }}</div>
-            </content-slot>
-            <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
-              <div slot="title">CV</div>
-              <div slot="content">{{ data.infoName }}</div>
-            </content-slot>
-            <div class="info-char-set-wrapper">
-              <h-popping no-title placement="top-start" :width="width" size="90%" trigger="click">
-                <el-tabs :value="activeSetPane" style="padding-top: 5px">
-                  <el-tab-pane label="一般" name="default">
-                    <set-panel v-if="showSet" :id="data.charID" :set-data="setData" />
-                  </el-tab-pane>
-                  <el-tab-pane v-if="skins && skins.length" label="皮肤" name="skins">
-                    <set-panel v-if="showSet" :set-data="skins" />
-                  </el-tab-pane>
-                </el-tabs>
-                <el-button
-                  slot="reference"
-                  style="background: rgba(255, 255, 255, 0.85); margin-top: 10px"
-                  size="mini"
-                  @click="showSet=true"
-                >
-                  立绘/皮肤
-                  <i class="el-icon-search" />
-                </el-button>
-              </h-popping>
-            </div>
+        </div>
+        <div class="info-painter-cv">
+          <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
+            <div slot="title">画师</div>
+            <div slot="content" class="swiper-no-swiping">{{ data.drawName }}</div>
+          </content-slot>
+          <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
+            <div slot="title">CV</div>
+            <div slot="content" class="swiper-no-swiping">{{ data.infoName }}</div>
+          </content-slot>
+          <div class="info-char-set-wrapper">
+            <f-s no-title placement="top-start" :width="width" size="90%" trigger="click">
+              <set-panel v-if="showSet" :id="data.charID" :set-data="[...setData, ...skins]" />
+              <!-- <set-panel v-if="showSet" :set-data="skins" /> -->
+              <el-button
+                slot="reference"
+                style="background: rgba(255, 255, 255, 0.85); margin-top: 10px"
+                size="mini"
+                @click="showSet=true"
+              >
+                立绘/皮肤
+                <i class="el-icon-search" />
+              </el-button>
+            </f-s>
           </div>
+        </div>
 
-          <div
-            v-for="(story, index) in baseInfo"
-            :key="story.storyTitle"
-            class="info-base-container"
-          >
-            <div class="info-story-title">
-              <span>
-                <b>{{ story.storyTitle }}</b>
-              </span>
-            </div>
-            <div class="info-story-content-wrapper">
-              <div v-for="([k, v], i) in story.data" :key="k" class="info-story-content">
-                <content-slot
-                  long
-                  :no-wrap="true"
-                  :width="i < (index === 0 ? 7 : 5) ? 70 : null"
-                  :long-content="( i === 7 || (index !== 0 && i ===5) )"
-                >
-                  <div slot="title">{{ k }}</div>
-                  <div slot="content">{{ v }}</div>
-                </content-slot>
-              </div>
+        <div v-for="(story, index) in baseInfo" :key="story.storyTitle" class="info-base-container">
+          <div class="info-story-title">
+            <span>
+              <b>{{ story.storyTitle }}</b>
+            </span>
+          </div>
+          <div class="info-story-content-wrapper">
+            <div v-for="([k, v], i) in story.data" :key="k" class="info-story-content">
+              <content-slot
+                long
+                :no-wrap="true"
+                :width="i < (index === 0 ? 7 : 5) ? 70 : null"
+                :long-content="( i === 7 || (index !== 0 && i ===5) )"
+              >
+                <div slot="title">{{ k }}</div>
+                <div
+                  v-if="!short || ( i === 7 || (index !== 0 && i ===5) ) || v.length < 6"
+                  slot="content"
+                  class="swiper-no-swiping"
+                >{{ v }}</div>
+                <h-tooltip v-else slot="content" placement="top" :content="v">
+                  <div>{{ v.slice(0, 3) }}...</div>
+                </h-tooltip>
+              </content-slot>
             </div>
           </div>
         </div>
-        <div class="info-token-desc">
-          <content-slot long-content :width="145">
-            <div slot="title">信物描述</div>
-            <div slot="content">{{ data.tokenDesc }}</div>
+      </div>
+      <div class="info-token-desc">
+        <content-slot long-content :width="145">
+          <div slot="title">信物描述</div>
+          <div slot="content">{{ data.tokenDesc ? data.tokenDesc : '无' }}</div>
+        </content-slot>
+      </div>
+      <div class="info-story-wrapper">
+        <div v-for="story in data.storyTextAudio.slice(2)" :key="story.storyTitle">
+          <content-slot :width="145" long-content>
+            <div slot="title">
+              <span>{{ story.storyTitle }}</span>
+            </div>
+            <div slot="content">
+              <div v-for="(p, index) in story.stories" :key="index" class="info-story-content">
+                <div v-if="p.unLockParam !== ''" class="info-story-content-unlock">
+                  <span>解锁需要好感：</span>
+                  <span>{{ p.unLockParam | unlockStr }}</span>
+                </div>
+                <p class="swiper-no-swiping" v-html="changeText(p.storyText)" />
+              </div>
+            </div>
           </content-slot>
         </div>
-        <div class="info-story-wrapper">
-          <div v-for="story in data.storyTextAudio.slice(2)" :key="story.storyTitle">
-            <content-slot :width="145" long-content>
-              <div slot="title">
-                <span>{{ story.storyTitle }}</span>
-              </div>
-              <div slot="content">
-                <div v-for="(p, index) in story.stories" :key="index" class="info-story-content">
-                  <div v-if="p.unLockParam !== ''" class="info-story-content-unlock">
-                    <span>解锁需要好感：</span>
-                    <span>{{ p.unLockParam | unlockStr }}</span>
-                  </div>
-                  <p v-html="changeText(p.storyText)" />
-                </div>
-              </div>
-            </content-slot>
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <div class="info-word-wrapper">
+        <div v-if="!short && !isMobliePad" style="display: flex; align-items: center">
+          <div style="padding-right: 10px">
+            <span>volume:</span>
+          </div>
+          <div style="display:inline-block;width: 100px">
+            <el-slider
+              v-model="voiceVolume"
+              color="#ca3e47"
+              :show-text="false"
+              @change="e => voiceVolume = e"
+            />
           </div>
         </div>
-      </el-tab-pane>
-      <el-tab-pane label="语音记录" name="second">
-        <div class="info-word-wrapper">
-          <div v-if="!short && !isMobliePad" style="display: flex; align-items: center">
-            <div style="padding-right: 10px">
-              <span>volume:</span>
+        <div v-for="(word, index) in words" :key="word.charWordId" class="info-word">
+          <div class="info-word-audio">
+            <div class="info-word-audio-title">
+              <b>{{ word.voiceTitle }}</b>
             </div>
-            <div style="display:inline-block;width: 100px">
-              <el-slider
-                v-model="voiceVolume"
-                color="#ca3e47"
-                :show-text="false"
-                @change="e => voiceVolume = e"
+            <template v-if="data.infoName !== '--'">
+              <div class="info-word-audio-buttonn" @click="playVoice(index)">
+                <i class="el-icon-video-play" />
+              </div>
+              <div class="info-word-audio-buttonn" @click="pausePlayVoice(index)">
+                <i class="el-icon-video-pause" />
+              </div>
+              <audio-container
+                v-if="currentVoice === index"
+                ref="word"
+                :volume="voiceVolume"
+                :src="audioPath(word)"
               />
-            </div>
+            </template>
           </div>
-          <div v-for="(word, index) in words" :key="word.charWordId" class="info-word">
-            <div class="info-word-audio">
-              <div class="info-word-audio-title">
-                <b>{{ word.voiceTitle }}</b>
-              </div>
-              <template v-if="data.infoName !== '--'">
-                <div class="info-word-audio-buttonn" @click="playVoice(index)">
-                  <i class="el-icon-video-play" />
-                </div>
-                <div class="info-word-audio-buttonn" @click="pausePlayVoice(index)">
-                  <i class="el-icon-video-pause" />
-                </div>
-                <audio-container
-                  v-if="currentVoice === index"
-                  ref="word"
-                  :volume="voiceVolume"
-                  :src="audioPath(word)"
-                />
-              </template>
-            </div>
-            <p v-html="changeVoice(word.voiceText)">{{ word.voiceText }}</p>
-          </div>
+          <p class="swiper-no-swiping" v-html="changeVoice(word.voiceText)">{{ word.voiceText }}</p>
         </div>
-      </el-tab-pane>
-    </el-tabs>
-  </div>
+      </div>
+    </div>
+  </h-tab>
 </template>
 
 <script>
 import { UA, getSkinsData, getScreenWidth, sort } from '../../utils'
 import { path } from '../../utils/listVer'
-import { Tabs, TabPane, Button, Slider, } from 'element-ui'
+import { Button, Slider, } from 'element-ui'
 import Vue from 'vue'
+import { Swiper, Scrollbar } from 'swiper/js/swiper.esm'
+Swiper.use(Scrollbar)
 
-Vue.use(Tabs)
-Vue.use(TabPane)
 Vue.use(Button)
 Vue.use(Slider)
 
 import AudioContainer from './AudioContainer'
-import HPopping from '@/components/base/Popping'
+import FS from '@/components/base/FullScreen'
+import HTooltip from '@/components/base/Tooltip'
 import SetPanel from '../base/SetPanel'
 import ContentSlot from '../base/ContentSlot'
+import HTab from '@/components/base/Tab'
 
 import { mapActions, mapState } from 'vuex'
 
@@ -156,7 +153,9 @@ export default {
     AudioContainer,
     SetPanel,
     ContentSlot,
-    HPopping
+    HTooltip,
+    FS,
+    HTab
   },
   filters: {
     unlockStr(v) {
@@ -202,10 +201,20 @@ export default {
           '阿米娅最常穿着的服装，过大的尺寸仿佛述说着这件衣服曾不属于她的事实。即便如此，她也仔细地打理着这件衣服，让它看起来就像新的一样。',
           '衣服需要修补，\n伤痛需要弥合。'
         ]
+
+    const tabIndex = [
+      {
+        label: '人员档案'
+      },
+      {
+        label: '语音记录'
+      }
+    ]
+
     return {
       phases: 1,
       showSet: false,
-      activeName: 'first',
+      activeName: '人员档案',
       currentVoice: null,
       voicePercentage: 0,
       voiceVolume: 100,
@@ -213,7 +222,9 @@ export default {
       activeSetPane: 'default',
       path,
       isMobliePad: UA.isMobliePad,
-      width: getScreenWidth().width
+      width: getScreenWidth().width,
+      tabIndex,
+      sInstance: null
     }
   },
 
@@ -229,7 +240,7 @@ export default {
         return this.extraSkins
           .filter(el => el.charId === this.data.charID)
           .map(data => getSkinsData.skins(data))
-      } else return null
+      } else return []
     },
     setData() {
       if (this.data.charID) {
@@ -335,10 +346,6 @@ export default {
   right: 1px
 }
 
-.info-story-wrapper {
-  //padding: 0 10px
-}
-
 .info-word {
   & + & {
     border-top: 1px solid #e4e7ed
@@ -407,8 +414,8 @@ export default {
 
   .info-painter-cv {
     padding-left: 5vw
-    min-width: 50%
     box-sizing: border-box
+    flex: 1
   }
 
   .info-word-audio-control {
@@ -418,7 +425,8 @@ export default {
   }
 
   .info-base-container {
-    max-width: vw(335)
+    max-width: 50%
+    flex: 0.5
   }
 
   .char-base-info-container {

@@ -4,15 +4,17 @@
       <filter-button-group :filters="groups" label="分类" @filter="switchData" />
       <div class="skin-wrapper">
         <div v-for="skin in skinsData" :key="skin.avatarId">
-          <h-popping size="90%" placement="left" :width="width" trigger="click" :arrow="false">
-            <div slot="title">{{ skin.displaySkin.skinName }}</div>
-            <div @blur="showId=''">
-              <set-panel v-if="skin.avatarId === showId" :id="skin.avatarId" :set-data="[skin]" />
-            </div>
+          <f-s size="90%" placement="left" :width="width" trigger="click" :arrow="false">
+            <set-panel
+              v-if="skin.avatarId === showId"
+              :id="skin.avatarId"
+              :set-data="[skin]"
+              @blur="showId=''"
+            />
             <div slot="reference" class="char-half-container" @click="showId = skin.avatarId">
-              <c-image class :src="skin.halfPic" fit="contain" />
+              <c-image :src="skin.halfPic" fit="contain" />
             </div>
-          </h-popping>
+          </f-s>
           <div
             v-if="!short"
             style="text-align: center; margin-bottom: 20px"
@@ -36,7 +38,7 @@ import Loading from '../components/base/Loading'
 import { getSkinsData, getScreenWidth } from '../utils'
 import SetPanel from '../components/base/SetPanel'
 import CImage from '@/components/base/CImage'
-import HPopping from '@/components/base/Popping'
+import FS from '@/components/base/FullScreen'
 
 store.dispatch('setExtraSkins')
 
@@ -46,7 +48,7 @@ export default {
     Loading,
     SetPanel,
     CImage,
-    HPopping
+    FS
   },
   data() {
     return {

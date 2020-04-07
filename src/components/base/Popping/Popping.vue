@@ -17,9 +17,7 @@
         @close="closeHandler"
         @opened="openHandler"
       >
-        <div slot="title">
-          <slot name="title" />
-        </div>
+        <slot slot="title" name="title" />
         <div style="padding: 0 20px 20px">
           <slot />
         </div>
@@ -34,14 +32,14 @@
         :title="title"
         :disabled="disabled"
         :arrow="arrow"
+        :append-to-body="appendToBody"
         @show="openHandler"
         @hide="closeHandler"
       >
-        <div slot="reference" class="click" @click="openDrawer">
-          <slot name="reference" />
-        </div>
-        <div v-if="drawer">
-          <slot />
+        <slot slot="reference" class="click" name="reference" @click="openDrawer" />
+        <!-- 不套个div popper会异常 -->
+        <div>
+          <slot v-if="drawer" />
         </div>
       </h-popover>
     </div>
@@ -98,6 +96,10 @@ export default {
     arrow: {
       type: Boolean,
       default: true
+    },
+    appendToBody: {
+      type: Boolean,
+      default: false
     }
   },
   data() {

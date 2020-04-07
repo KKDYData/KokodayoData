@@ -1,136 +1,136 @@
 <template>
-  <div class="item-viewer-container" :class="{small: small}">
-    <h-popping
-      v-if="data"
-      popper-class="item-popover-class"
-      placement="top"
-      :width="!short? 350 : 250"
-      :trigger="isHover"
-      :open-delay="500"
-      :title="data.name"
-      :disabled="noPopover"
-      :size="drawerSize + '%'"
-    >
-      <div slot="title">
-        <div style="display: flex; align-items: center;margin-bottom: -30px">
+  <h-popping
+    v-if="data"
+    class="item-viewer-container"
+    :class="{small}"
+    :style="{zIndex}"
+    popper-class="item-popover-class"
+    placement="right"
+    :width="!short? 350 : 250"
+    :trigger="isHover"
+    :title="data.name"
+    :disabled="noPopover"
+    :size="drawerSize + '%'"
+    @opened="zIndex = 10"
+    @closed="zIndex = 0"
+  >
+    <div slot="title">
+      <div style="display: flex; align-items: center;margin-bottom: -30px">
+        <h-item
+          class="title-item"
+          :item-pic="itemPic"
+          :item-background="itemBackground"
+          :type="type"
+        />
+        {{ data.name }}
+      </div>
+    </div>
+    <div slot="reference" style="text-align: center">
+      <div>
+        <h-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
           <h-item
-            class="title-item"
+            class="click"
             :item-pic="itemPic"
             :item-background="itemBackground"
             :type="type"
+            :small="small"
           />
-          {{ data.name }}
+        </h-tooltip>
+      </div>
+      <div v-if="num || weight" style="text-align: center">
+        <span :style="{fontSize}" class="item-name">{{ data.name }}</span>
+        <div style="color:rgb(86, 86, 86)">
+          <span v-if="num">x{{ num }}</span>
+          <span v-else>{{ weight }}%</span>
         </div>
       </div>
-      <div slot="reference">
-        <div>
-          <h-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
-            <h-item
-              class="click"
-              :item-pic="itemPic"
-              :item-background="itemBackground"
-              :type="type"
-              :small="small"
-            />
-          </h-tooltip>
-        </div>
-        <div v-if="num || weight" style="text-align: center">
-          <span :style="{fontSize}" class="item-name">{{ data.name }}</span>
-          <div style="color:rgb(86, 86, 86)">
-            <span v-if="num">x{{ num }}</span>
-            <span v-else>{{ weight }}%</span>
-          </div>
+    </div>
+    <div v-if="!noPopover">
+      <p v-if="type === 'FURN'" style="color: #828282">氛围 {{ data.comfort }}</p>
+      <p v-if="type === 'FURN'" style="color: #828282">{{ data.obtainApproach }}</p>
+      <p>{{ data.usage }}</p>
+      <p>{{ data.description }}</p>
+      <div v-if="targetStageDrop">
+        <el-divider content-position="left">
+          <span>当前关卡</span>
+          <span
+            v-if="showDropInfo"
+            :style="short ? 'right: -144px' : ''"
+            class="item-divider-extra"
+          >统计次数</span>
+        </el-divider>
+        <div class="item-stage-container">
+          <drop-line :data="targetStageDrop" />
         </div>
       </div>
-      <div v-if="!noPopover">
-        <p v-if="type === 'FURN'" style="color: #828282">氛围 {{ data.comfort }}</p>
-        <p v-if="type === 'FURN'" style="color: #828282">{{ data.obtainApproach }}</p>
-        <p>{{ data.usage }}</p>
-        <p>{{ data.description }}</p>
-        <div v-if="targetStageDrop">
+      <div v-if="type !== 'FURN'" class="item-popover">
+        <div v-if="dropList.length > 0">
           <el-divider content-position="left">
-            <span>当前关卡</span>
+            <span>主要掉落</span>
             <span
               v-if="showDropInfo"
-              :style="short ? 'right: -144px' : ''"
+              :style="short ? 'top: 10px; right: -165px' : ''"
               class="item-divider-extra"
             >统计次数</span>
           </el-divider>
+          <div class="item-drop-info">
+            <span v-if="dropList.length > 20">
+              当前排序方式 {{ sortFunc.name }}
+              <el-button size="mini" type="primary" @click="switchSortFunc">切换</el-button>
+            </span>
+            <h-tooltip placement="top">
+              <el-button size="mini" type="primary">说明</el-button>
+              <div slot="content">
+                点击右边数据可以查看详细数据 |
+                <color color="hsl(193, 78%, 69%)">掉落数</color>/
+                <color color="hsl(350, 100%, 79%)">样本数 ↓</color>
+              </div>
+            </h-tooltip>
+          </div>
           <div class="item-stage-container">
-            <drop-line :data="targetStageDrop" />
+            <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage" />
           </div>
         </div>
-        <div v-if="type !== 'FURN'" class="item-popover">
-          <div v-if="dropList.length > 0">
-            <el-divider content-position="left">
-              <span>主要掉落</span>
-              <span
-                v-if="showDropInfo"
-                :style="short ? 'top: 10px; right: -165px' : ''"
-                class="item-divider-extra"
-              >统计次数</span>
-            </el-divider>
-            <div class="item-drop-info">
-              <span v-if="dropList.length > 20">
-                当前排序方式 {{ sortFunc.name }}
-                <el-button size="mini" type="primary" @click="switchSortFunc">切换</el-button>
-              </span>
-              <h-tooltip placement="left">
-                <el-button size="mini" type="primary">说明</el-button>
-                <div slot="content">
-                  点击右边数据可以查看详细数据 |
-                  <color color="hsl(193, 78%, 69%)">掉落数</color>/
-                  <color color="hsl(350, 100%, 79%)">样本数 ↓</color>
-                </div>
-              </h-tooltip>
+        <div v-if="data.buildingProductList.length > 0 && formula.length > 0">
+          <el-divider content-position="left">
+            <span>合成配方</span>
+          </el-divider>
+          <div v-for="{costs, formulaId, goldCost, extraOutcomeGroup} in formula" :key="formulaId">
+            <div class="item-formula-container">
+              <just-viewer
+                v-if="goldCost > 0"
+                :item="GOLD"
+                :num="goldCost"
+                class="item-formula-item"
+                :no-popover="true"
+                small
+              />
+              <just-viewer
+                v-for="d in costs"
+                :key="d.id"
+                class="item-formula-item"
+                :drawer-size="drawerSize - 5"
+                :no-popover="false"
+                :item="d.id"
+                :num="d.count"
+                small
+              />
             </div>
-            <div class="item-stage-container">
-              <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage" />
-            </div>
-          </div>
-          <div v-if="data.buildingProductList.length > 0 && formula.length > 0">
-            <el-divider content-position="left">
-              <span>合成配方</span>
-            </el-divider>
-            <div
-              v-for="{costs, formulaId, goldCost, extraOutcomeGroup} in formula"
-              :key="formulaId"
-            >
+            <div v-if="listMode" style="z-index: 0; position: relative">
+              <el-divider content-position="left">
+                <span>合成随机产物</span>
+              </el-divider>
               <div class="item-formula-container">
-                <just-viewer
-                  v-if="goldCost > 0"
-                  :item="GOLD"
-                  :num="goldCost"
-                  class="item-formula-item"
-                  :no-popover="true"
-                  small
-                />
-                <div v-for="d in costs" :key="d.id" class="item-formula-item">
-                  <just-viewer
-                    :drawer-size="drawerSize - 5"
-                    :no-popover="false"
-                    :item="d.id"
-                    :num="d.count"
-                    small
-                  />
-                </div>
-              </div>
-              <div v-if="listMode">
-                <el-divider content-position="left">
-                  <span>合成随机产物</span>
-                </el-divider>
-                <div class="item-formula-container">
-                  <div v-for="rd in extraOutcomeGroup" :key="rd.id">
-                    <just-viewer :tool-tip="true" :no-popover="true" :item="rd.itemId" small />
-                  </div>
+                <div v-for="rd in extraOutcomeGroup" :key="rd.id">
+                  <just-viewer :tool-tip="true" :no-popover="true" :item="rd.itemId" small />
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </h-popping>
-  </div>
+    </div>
+  </h-popping>
 </template>
 
 
@@ -259,7 +259,8 @@ export default {
       data: typeof this.item !== 'string' ? this.item : undefined,
       GOLD,
       show: false,
-      sortFunc: sortFuncArr[1]
+      sortFunc: sortFuncArr[1],
+      zIndex: 0
     }
   },
 
@@ -414,7 +415,6 @@ export default {
    }
 
    .item-formula-item {
-     padding: 5px
      margin: 0
      width: 80px
    }

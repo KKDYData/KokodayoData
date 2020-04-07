@@ -60,7 +60,7 @@
             <h-tooltip v-if="mapCode && showMap" placement="bottom">
               <el-button class="runes-mode-button" type="info">地图说明</el-button>
               <div slot="content">
-                <p>点击地板砖，会有砖的基本说明，</p>
+                <p>点击地板砖，会有砖的基本说明。</p>
               </div>
             </h-tooltip>
           </div>
