@@ -91,8 +91,8 @@
       @slideChange="switchToNormal"
     >
       <div style="padding:0" class="swiper-slide" label="一般模式" name="profile-layout">
+        <!-- v-show="currentMode === 'profile-layout'" -->
         <profile-layout
-          v-show="currentMode === 'profile-layout'"
           ref="profile-layout"
           :show-tags="showTag"
           :tags="SelectedTag"
@@ -101,13 +101,9 @@
         />
       </div>
       <div style="padding:0" class="swiper-slide" name="new-profile-layout" label="公开招募" lazy>
+        <!-- v-show="currentMode === 'new-profile-layout'" -->
         <transition name="fade">
-          <new-profile-layout
-            v-show="currentMode === 'new-profile-layout'"
-            :tags="SelectedTag"
-            :filter-groups="filterGroups"
-            :data="data"
-          />
+          <new-profile-layout :tags="SelectedTag" :filter-groups="filterGroups" :data="data" />
         </transition>
       </div>
     </h-tab>
@@ -397,7 +393,6 @@ export default {
 .home-filter-wrapper {
   margin-bottom: 20px
   padding: 10px
-  /*border-bottom: 1px solid rgba(158, 158, 158, 0.4);*/
 }
 
 .sort-group-wrapper {
@@ -410,7 +405,7 @@ export default {
 .home-layout-wrapper {
   padding-top: 20px
   max-width: 1000px
-  min-height: 500px
+  min-height: 900px
 }
 
 .tags-popover-wrapper {
@@ -440,10 +435,6 @@ export default {
   margin: 5px 5px
 }
 
-/*.tags-popover-wrapper .el-button--info {
-  background-color: #313131;
-  border-color: rgba(49, 49, 49, 0.54);
-}*/
 .explain-container {
   margin-top: 15px
   padding: 0 10px
@@ -466,6 +457,12 @@ export default {
 .tag-selected-content-container {
   display: inline-block
   width: calc(100% - 80px)
+}
+
+@media screen and (max-width: 1350px) {
+  .home-base {
+    max-width: calc(100vw - 380px)
+  }
 }
 
 @media screen and (max-width: 495px) {

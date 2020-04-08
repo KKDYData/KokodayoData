@@ -122,7 +122,7 @@ export default {
 
 .home {
   &-base {
-    margin: 20px 10px 0
+    margin: 20px 0 0
   }
 
   &-activity {

@@ -106,19 +106,23 @@ export default {
 
     const ccc = clickOutSideRow(popper, close)
 
-    const createPopper = () => {
-      this.popperInstance = create(reference, popper, {
+    const createPopper = async () => {
+      const t = this.popperInstance = create(reference, popper, {
         placement,
         modifiers,
         showEvents,
         hideEvents,
       })()
+      await this.$nextTick()
+      await t.update()
     }
 
     showEvents.forEach(e => on(reference, e, async () => {
       if (this.visible) return
       this.$emit('show')
       this.visible = true
+      await this.$nextTick()
+      this.$nextTick()
       createPopper()
       await sleep(500)
       document.body.addEventListener('click', ccc)

@@ -31,7 +31,7 @@ const defaultOptions = {
     {
       name: 'flip',
       options: {
-        fallbackPlacements: ['top', 'right', 'bottom', 'left'],
+        fallbackPlacements: ['right', 'bottom', 'left', 'top',],
       }
     },
     {

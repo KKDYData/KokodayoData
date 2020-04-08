@@ -23,7 +23,7 @@
             class="new-mode-agent"
             :style="bgColor(agent.tags[0])"
           >
-            <h-popover trigger="click">
+            <h-popover trigger="click" append-to-body>
               <div class="new-mode-popover">
                 <router-link :to="path + '/details/' + agent.No">
                   <div class="img-container">
