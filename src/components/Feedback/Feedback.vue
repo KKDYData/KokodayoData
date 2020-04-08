@@ -114,6 +114,24 @@ import RImage from '@/components/base/RImage'
 import { submitFeedback } from '@/utils/fetch'
 import { mapState } from 'vuex'
 import { localStore } from '../../localStore'
+import { pipe } from 'ramda'
+
+
+const wenming = [
+  '文明在我心，公德伴我行。',
+  '爱岗敬业，诚实守信，办事公道，服务学生，奉献社会。',
+  '我们都想坐下，但有些人更需要帮助',
+  '相逢有缘，相让有礼',
+  '多一份耐心，少一份急燥；多一点包容，少一些争吵。',
+  '我文明，我礼让，我奉献，我快乐',
+  '品行不好的人容易犯罪，犯罪的都是品行不好的人。',
+  '讲文明、树新风，改陋习、促和谐。',
+  '说文明话、办文明事、做文明人，行文明礼。',
+  '关爱他人，文明自己。',
+  '学道德建设纲要，扬文明行为新风。'
+]
+
+
 
 export default {
   components: {
@@ -210,15 +228,28 @@ export default {
     submit() {
       const data = { title: this.title, id: this.id, content: this.feedback + ' \n 邮箱：' + this.email }
       return submitFeedback(data)
+        .then(res => {
+          this.store.setItem('tempFeedback', '')
+          this.feedback = ''
+          if (res.ok) {
+            MessageBox.confirm('反馈成功，感谢你的支持')
+          } else {
+            const l = wenming.length - 1
+            const select = () => pipe(t => t * Math.random(), Math.max, Math.round)(l, 0)
+            MessageBox.confirm(`${wenming[select()]}`)
+              .then(e => {
+                Message.success(wenming[select()])
+              })
+              .catch(e => {
+                Message.error(wenming[select()])
+              })
+          }
+        })
         .catch(err => {
           console.error(err)
+          Message.warning('服务器错误，可以再试一下看看')
         })
-        .then(res => {
-          MessageBox.confirm('反馈成功，感谢你的支持',
-            '如果没留邮箱建议进群哦～')
-          this.feedback = ''
-          this.store.setItem('tempFeedback', '')
-        })
+
     }
   }
 }
