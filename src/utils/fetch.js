@@ -36,8 +36,6 @@ process.env.NODE_ENV === 'production' && checkWebVer().then(({ res }) => {
 
 const submitFeedback = content => {
   return fetchPut('/api/arknights/feedback', content)
-    .catch(err => console.error(err))
-    .then(res => Promise.resolve(res))
 }
 
 //包装fetch，使用get
