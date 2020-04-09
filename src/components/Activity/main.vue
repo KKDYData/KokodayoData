@@ -23,7 +23,7 @@
         </div>
       </div>-->
       <div style="margin-top: 20px">
-        <span class="activity-info-need">版本变更为1.0版本。下次重构/新功能预计在今年下半年。</span>
+        <span class="activity-info-need">版本变更为1.0版本。部分组件改为了左右滑动切换（技能详情和消耗、首页、资料和语音）</span>
       </div>
       <div style="margin-top: 20px">
         <span class="activity-info-need">
