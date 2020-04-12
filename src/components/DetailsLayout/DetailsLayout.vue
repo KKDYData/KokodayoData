@@ -83,7 +83,7 @@
           />
         </div>
         <!-- 技能面板 -->
-        <my-title v-if="skills.length > 0" title="技能" />
+        <my-title v-if="skills.length > 0" title="技能详情及升级消耗" />
         <h-tab
           v-if="skills.length > 0 && normal"
           class="skill-panel"
@@ -225,7 +225,8 @@ import {
   Button,
   Tag,
   Alert,
-  Slider
+  Slider,
+  MessageBox
 } from 'element-ui'
 
 import { mapState } from 'vuex'
@@ -445,6 +446,18 @@ export default {
         console.log(err)
         this.loadingFail = true
       })
+  },
+  async mounted() {
+    const skillChangeLogTimes = await localStorage.getItem('skillChangeLogTimes') || 0
+    console.log(skillChangeLogTimes)
+    if (skillChangeLogTimes < 3) {
+      await MessageBox({
+        title: 'UI更新',
+        message: '技能详情和技能升级消耗合并了，点击标题，或者左右滑动可以切换。（怕你大家忘记了，会提醒3次）',
+        confirmButtonText: '我知道了',
+      })
+      await localStorage.setItem('skillChangeLogTimes', +skillChangeLogTimes + 1)
+    }
   },
   methods: {
     evolvCost(t) {

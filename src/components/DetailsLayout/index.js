@@ -1,1 +1,1 @@
-export { default } from './DetailsLayout.vue';
+export { default } from './DetailsLayout.vue'
