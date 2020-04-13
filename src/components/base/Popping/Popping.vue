@@ -110,11 +110,6 @@ export default {
   computed: {
     ...mapState(['short']),
   },
-  watch: {
-    short(v) {
-      console.log('short change', v)
-    }
-  },
   methods: {
     openHandler() {
       this.openDrawer()

@@ -76,11 +76,7 @@
         <!-- 天赋面板 -->
         <my-title title="天赋" />
         <div v-if="talents.length > 0" class="tttt">
-          <talents-panel
-            :cur-potentail-lv="potentialRanks"
-            :talents="talents"
-            @talentPotentailUp="e => talentPotentailUp = e"
-          />
+          <talents-panel :cur-potentail-lv.sync="potentialRanks" :talents="talents" />
         </div>
         <!-- 技能面板 -->
         <my-title v-if="skills.length > 0" title="技能详情及升级消耗" />
@@ -507,7 +503,7 @@ export default {
 
 <style lang="stylus" scoped>
 .details-wrapper {
-  //min-width: 340px
+  // min-width: 340px
   max-width: 1200px
   background-color: white
   margin: 0 auto
@@ -532,12 +528,12 @@ export default {
   margin-bottom: 50px
 }
 
-/**/
-/*part 2*/
+/*  */
+/* part 2 */
 .status-container {
   position: relative
   display: flex
-  //justify-content: space-between
+  // justify-content: space-between
   align-items: center
   flex-wrap: wrap
   padding-bottom: 20px
@@ -547,7 +543,7 @@ export default {
   padding: 12px 0 12px 10px
   min-width: 335px
 
-  /*潜能*/
+  /* 潜能 */
   &-potential {
     margin-top: 10px
     white-space: nowrap
@@ -587,7 +583,7 @@ export default {
     }
   }
 
-  /*改button颜色*/
+  /* 改button颜色 */
   .el-button--mini {
     background-color: rgba(172, 172, 172, 0.34)
     border: none
@@ -610,7 +606,7 @@ export default {
   }
 }
 
-//属性面板
+// 属性面板
 .details-agent-status {
   border-right: 1px solid hsla(0, 0%, 62%, 0.4)
   box-sizing: border-box
@@ -635,14 +631,14 @@ export default {
   }
 }
 
-/**/
+/*  */
 .evolvcost-wrapper {
   display: flex
   flex-wrap: wrap
   justify-content: space-between
 }
 
-/**/
+/*  */
 .evolvcost-list {
   position: relative
   margin: 30px 0
@@ -667,7 +663,7 @@ export default {
   }
 }
 
-/**/
+/*  */
 .potency-container {
   padding-left: 10px
 
@@ -714,7 +710,7 @@ export default {
     display: flex
   }
 
-  /*part 2*/
+  /* part 2 */
   .details-agent-status {
     width: 50%
     padding-top: 20px
@@ -739,7 +735,7 @@ export default {
     display: inline
   }
 
-  /**/
+  /*  */
   .status-range-wrapper {
     width: 50%
     margin: 0
@@ -756,7 +752,7 @@ export default {
     margin-bottom: vw(50)
   }
 
-  /**/
+  /*  */
   .evolvcost-list {
     padding: 0 0 20px
     margin: 0
@@ -803,7 +799,7 @@ export default {
     padding-right: vw(15)
   }
 
-  //属性面板
+  // 属性面板
   .details-agent-status {
     width: 50%
     padding-top: vw(20)

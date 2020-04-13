@@ -52,6 +52,11 @@ export default {
     setStyle(reference, 'cursor', 'pointer')
 
   },
+  beforeDestroy() {
+    if (this.$refs.wrapper && this.$refs.wrapper.parentNode) {
+      this.$refs.wrapper.parentNode.removeChild(this.$refs.wrapper)
+    }
+  },
   methods: {
     ccc() {
       this.visible = false

@@ -10,6 +10,7 @@
             v-if="item.condidate[0].potentailUP"
             size="mini"
             :type="item.condidate[0].potentailUP.requiredPotentialRank > curPotentailLv + 1? 'info' : 'warning'"
+            @click="changeCurPotentailLv(item.condidate[0].potentailUP.requiredPotentialRank)"
           >
             潜能{{ item.condidate[0].potentailUP.requiredPotentialRank + 1 }}级提升
             <i
@@ -64,9 +65,8 @@ export default {
     ...mapState(['short']),
   },
   methods: {
-    openTalentPotentailUP(t) {
-      this.$set(this.showTalentPotentailUP, t, !this.showTalentPotentailUP[t])
-      this.$emit('talentPotentailUp', this.showTalentPotentailUP)
+    changeCurPotentailLv(v) {
+      this.$emit('update:curPotentailLv', v)
     }
   }
 }
