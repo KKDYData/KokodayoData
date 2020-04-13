@@ -79,7 +79,21 @@
           <talents-panel :cur-potentail-lv.sync="potentialRanks" :talents="talents" />
         </div>
         <!-- 技能面板 -->
-        <my-title v-if="skills.length > 0" title="技能详情及升级消耗" />
+        <my-title v-if="skills.length > 0" title="技能详情及升级消耗">
+          <h-tooltip
+            v-if="skillChangeLogTimes < 15"
+            effect="white"
+            placement="bottom"
+            :show-immediately="skillChangeLogTimes < 10"
+          >
+            <span>技能详情及升级消耗</span>
+            <template v-slot:content>
+              <div
+                style="font-size: 15px; width: 300px; white-space: normal;"
+              >技能详情和技能升级消耗合并了，点击标题，或者左右滑动可以切换。</div>
+            </template>
+          </h-tooltip>
+        </my-title>
         <h-tab
           v-if="skills.length > 0 && normal"
           class="skill-panel"
@@ -193,6 +207,7 @@ import charStatus from '../base/charStatus'
 import DataLoading from '../base/Loading'
 import MyTitle from '@/components/base/MyTitle'
 import HTab from '@/components/base/Tab'
+import HTooltip from '@/components/base/Tooltip'
 
 const SkillPanel = () => ({
   component: import(
@@ -222,7 +237,6 @@ import {
   Tag,
   Alert,
   Slider,
-  MessageBox
 } from 'element-ui'
 
 import { mapState } from 'vuex'
@@ -256,7 +270,8 @@ export default {
     AgentCard,
     charStatus,
     MyTitle,
-    HTab
+    HTab,
+    HTooltip
   },
   data() {
     return {
@@ -276,7 +291,8 @@ export default {
       words: [],
       GOLD: GOLD,
       level: 1,
-      talentPotentailUp: [false, false, false]
+      talentPotentailUp: [false, false, false],
+      skillChangeLogTimes: 0
     }
   },
   computed: {
@@ -444,14 +460,8 @@ export default {
       })
   },
   async mounted() {
-    const skillChangeLogTimes = await localStorage.getItem('skillChangeLogTimes') || 0
-    console.log(skillChangeLogTimes)
-    if (skillChangeLogTimes < 3) {
-      await MessageBox({
-        title: 'UI更新',
-        message: '技能详情和技能升级消耗合并了，点击标题，或者左右滑动可以切换。（怕你大家忘记了，会提醒3次）',
-        confirmButtonText: '我知道了',
-      })
+    const skillChangeLogTimes = this.skillChangeLogTimes = await localStorage.getItem('skillChangeLogTimes') || 0
+    if (skillChangeLogTimes < 15) {
       await localStorage.setItem('skillChangeLogTimes', +skillChangeLogTimes + 1)
     }
   },

@@ -17,7 +17,7 @@
         @close="closeHandler"
         @opened="openHandler"
       >
-        <slot slot="title" name="title" />
+        <slot slot="title" name="title">{{ title }}</slot>
         <div style="padding: 0 20px 20px">
           <slot />
         </div>

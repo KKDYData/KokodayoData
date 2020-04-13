@@ -3,15 +3,17 @@
     <div class="swiper-active-title">
       <div v-for="({label}, index) in tabData" :key="index" @click="slideTo(index)">{{ label }}</div>
     </div>
-    <div class="swiper-scrollbar"></div>
     <div class="swiper-wrapper">
       <slot />
     </div>
+    <div class="swiper-pagination"></div>
+    <div class="swiper-scrollbar"></div>
   </div>
 </template>
 
 <script>
 import { Swiper, Scrollbar } from 'swiper/js/swiper.esm'
+import { sleep } from '../../utils'
 Swiper.use(Scrollbar)
 
 export default {
@@ -26,19 +28,25 @@ export default {
       swiperInstance: null
     }
   },
-  mounted() {
+  async mounted() {
+    await this.$nextTick()
     const sInstance = this.swiperInstance = new Swiper(this.$refs['swiper-container'], {
       scrollbar: {
         el: '.swiper-scrollbar',
         draggable: true,
-        dragSize: 80
-      }
+        dragSize: 90
+      },
+      autoHeight: true
     })
     sInstance.on(
       'slideChange', () => {
         this.activeName = this.tabData[sInstance.realIndex].label
         this.$emit('slideChange', this.tabData[sInstance.realIndex])
       })
+    await this.$nextTick()
+    await sleep(200)
+    sInstance.updateAutoHeight()
+
   },
   methods: {
     slideTo(index) {
@@ -49,13 +57,20 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
 .swiper-container {
   padding-top: 70px
   position: relative
+  --swiper-theme-color: #F49800
+  --scrollBarWidth: 90px * 2
 
   .swiper-scrollbar {
     top: 30px
+    width: var(--scrollBarWidth)
+
+    &-drag {
+      background: var(--swiper-theme-color)
+    }
   }
 
   .swiper-slide {
@@ -66,21 +81,35 @@ export default {
 
 .swiper-active-title {
   display: flex
-  justify-content: space-between
   position: absolute
   top: 5px
   left: 1%
   width: 98%
 
+  &:after {
+    content: ''
+    display: block
+    height: 7px
+    position: absolute
+    background-color: rgba(0, 0, 0, 0.1)
+    bottom: -8px
+    border-radius: 2px
+    left: 0
+    z-index: -1
+    width: 100%
+  }
+
   div {
     cursor: pointer
+    width: 80px
+    margin-right: 20px
   }
 }
 
 @media screen and (max-width: 700px) {
   .swiper-container {
     .swiper-slide {
-      padding: 0 vw(20)
+      padding: 0 vw(10)
     }
   }
 }

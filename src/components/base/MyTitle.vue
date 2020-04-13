@@ -3,7 +3,9 @@
     <div v-if="!right && control" :class="{active: state, 'control-button': true}" @click="click">
       <div class="control-border" />
     </div>
-    <div class="title">{{ title }}</div>
+    <div class="title">
+      <slot>{{ title }}</slot>
+    </div>
     <div
       v-if="right && control"
       :class="{active: state, 'control-button': true, right: true}"
@@ -23,8 +25,8 @@ export default {
       default: false
     },
     title: {
-      required: true,
-      type: String
+      type: String,
+      default: ''
     },
     control: {
       type: Boolean,
@@ -41,7 +43,7 @@ export default {
   },
   computed: {
     background() {
-      return this.customBg;
+      return this.customBg
     }
   },
   methods: {
@@ -50,14 +52,14 @@ export default {
       /**
        * @property {boolean} value - 控制器状态
        */
-      this.$emit('click', this.state);
+      this.$emit('click', this.state)
     }
   }
-};
+}
 </script>
 
 <style lang="stylus" scoped>
-//test stylint
+// test stylint
 .title-container {
   font-weight: bold
   color: white

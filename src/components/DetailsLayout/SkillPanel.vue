@@ -33,10 +33,17 @@
             :style="changeSkillType(skill.levels[0].skillType).style"
           >{{ changeSkillType(skill.levels[0].skillType).value }}</span>
         </div>
-        <div class="skill-status-desc swiper-no-swiping">
+        <div :class="{swiperNoSwiping: !short}" class="skill-status-desc">
           <span v-html="changeSkillDesc(skill.levels[sLevel[index]-1])" />
           <div v-if="showRange && skill.levels[sLevel[index]-1].rangeId" class="skill-range-button">
-            <h-popover placement="right-start" :width="200" trigger="click" append-to-body>
+            <h-popover
+              placement="right-start"
+              :width="200"
+              trigger="click"
+              append-to-body
+              :show-events="['mouseenter', 'click', 'focus']"
+              :hide-events="['blur', 'mouseleave']"
+            >
               <range :range-id="skill.levels[sLevel[index]-1].rangeId" />
               <el-button slot="reference" size="mini">查看范围</el-button>
             </h-popover>

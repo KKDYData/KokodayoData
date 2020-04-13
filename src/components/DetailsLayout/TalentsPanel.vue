@@ -10,7 +10,7 @@
             v-if="item.condidate[0].potentailUP"
             size="mini"
             :type="item.condidate[0].potentailUP.requiredPotentialRank > curPotentailLv + 1? 'info' : 'warning'"
-            @click="changeCurPotentailLv(item.condidate[0].potentailUP.requiredPotentialRank)"
+            @click="changeCurPotentailLv(item.condidate[0].potentailUP.requiredPotentialRank - 1)"
           >
             潜能{{ item.condidate[0].potentailUP.requiredPotentialRank + 1 }}级提升
             <i

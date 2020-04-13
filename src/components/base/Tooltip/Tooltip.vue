@@ -61,7 +61,7 @@ export default {
     effect: {
       type: String,
       default: 'dark',
-      validator: e => ['dark'].indexOf(e) > -1
+      validator: e => ['dark', 'white'].indexOf(e) > -1
     },
     showArrow: {
       type: Boolean,
@@ -78,6 +78,10 @@ export default {
     content: {
       type: String,
       default: ''
+    },
+    showImmediately: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -99,11 +103,15 @@ export default {
     const { popper } = this.$refs
     let target = this.$slots.default[0].elm
 
-    const createPopper = create(target, popper, {
-      placement,
-      modifiers,
-    })
-
+    const createPopper = async () => {
+      const instance = create(target, popper, {
+        placement,
+        modifiers,
+      })()
+      await sleep(500)
+      document.body.addEventListener('click', ccc)
+      return instance
+    }
 
     const close = () => {
       this.visible = false
@@ -117,9 +125,6 @@ export default {
       this.$emit('show')
       this.visible = true
       createPopper()
-      await sleep(500)
-      document.body.addEventListener('click', ccc)
-
     }))
 
     hideEvents.forEach(e => on(target, e, () => {
@@ -128,6 +133,12 @@ export default {
     }))
     if (appendToBody) {
       document.body.appendChild(popper)
+    }
+
+    if (this.showImmediately) {
+      this.$emit('show')
+      this.visible = true
+      createPopper()
     }
   }
 }
