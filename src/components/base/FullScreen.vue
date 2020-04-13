@@ -78,6 +78,10 @@ export default {
   z-index: 3000
 }
 
+.el-image-viewer__btn {
+  mix-blend-mode: difference
+}
+
 @media screen and (max-width: 700px) {
   .el-image-viewer__btn {
     color: black
