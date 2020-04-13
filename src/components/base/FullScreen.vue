@@ -84,7 +84,6 @@ export default {
 
 @media screen and (max-width: 700px) {
   .el-image-viewer__btn {
-    color: black
     z-index: 999
   }
 }
