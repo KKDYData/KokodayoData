@@ -367,7 +367,7 @@ export default {
 </script>
 
  <style lang="stylus" scoped>
- //?popping slot 里的类
+ // ?popping slot 里的类
  .item-formula-container {
    display: flex
    flex-wrap: wrap
@@ -424,7 +424,7 @@ export default {
      white-space: nowrap
    }
 
-   .short-force { //强制缩小
+   .short-force { // 强制缩小
      .evolvcost-item-contianer {
        width: 45px
        height: 45px

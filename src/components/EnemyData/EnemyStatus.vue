@@ -7,8 +7,8 @@
           <b>能力·Blackboard</b>
         </div>
         <content-slot v-for="(t) in filterTalents" :key="t.key" long no-wrap>
-          <div slot="title">{{ t.key }}</div>
-          <div slot="content">{{ t.value }}</div>
+          <template v-slot:title>{{ t.key }}</template>
+          <template v-slot:content>{{ t.value }}</template>
         </content-slot>
       </div>
     </div>
@@ -44,8 +44,8 @@
       </div>
       <div v-if="data[0] && data[0].enemyData.extra">
         <content-slot long no-wrap>
-          <div slot="title">额外记录</div>
-          <div slot="content">—</div>
+          <template v-slot:title>额外记录</template>
+          <template v-slot:content>—</template>
         </content-slot>
         <p v-for="(item, index) in data[0].enemyData.extra" :key="index">{{ item }}</p>
       </div>
@@ -59,10 +59,10 @@
             long
             :width="short ? 90: 100"
           >
-            <template slot="title">
+            <template v-slot:title>
               <span>{{ kData[0] }}</span>
             </template>
-            <template slot="content">
+            <template v-slot:content>
               <transition name="fade">
                 <span>{{ kData[1] }}</span>
               </transition>
@@ -118,8 +118,8 @@
                     long
                     no-wrap
                   >
-                    <div slot="title">{{ changeBlackboardToCh(bData.key) }}</div>
-                    <div slot="content">{{ addUnit(bData.value, bData.key) }}</div>
+                    <template v-slot:title>{{ changeBlackboardToCh(bData.key) }}</template>
+                    <template v-slot:content>{{ addUnit(bData.value, bData.key) }}</template>
                   </content-slot>
                 </div>
               </div>

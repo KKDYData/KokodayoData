@@ -36,7 +36,9 @@
         @show="openHandler"
         @hide="closeHandler"
       >
-        <slot slot="reference" class="click" name="reference" @click="openDrawer" />
+        <template v-slot:reference>
+          <slot class="click" name="reference" @click="openDrawer"></slot>
+        </template>
         <!-- 不套个div popper会异常 -->
         <div>
           <slot v-if="drawer" />

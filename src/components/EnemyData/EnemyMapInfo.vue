@@ -11,8 +11,8 @@
         :no-wrap="!short"
         :width="slotWidth"
       >
-        <template slot="title">{{ k }}</template>
-        <template slot="content">
+        <template v-slot:title>{{ k }}</template>
+        <template v-slot:content>
           <span :style="v > 100 ? 'font-size: 14px': ''">{{ v > 999 ? '0' : v }}</span>
         </template>
       </content-slot>
@@ -26,20 +26,20 @@
         :width="150"
         style="margin-bottom: 10px"
       >
-        <div slot="title">{{ k }}</div>
-        <div v-if="k !== '属性增益'" slot="content">
+        <template v-slot:title>{{ k }}</template>
+        <template v-if="k !== '属性增益'" v-slot:content>
           <span
             v-for="{key, value} in v"
             :key="key"
             :style="value > 100 ? 'font-size: 14px;': ''"
           >{{ value == '999999' ? '0' : value }} {{ Keys[key] }}</span>
-        </div>
-        <div v-else slot="content">属性已进行合并计算，在下面显示</div>
+        </template>
+        <template v-else v-slot:content>属性已进行合并计算，在下面显示</template>
       </content-slot>
       <div style="width: 100%">
         <content-slot :long="true" :no-wrap="true" :width="150">
-          <div slot="title">最后一个敌人出现</div>
-          <div slot="content">{{ waveTime | time }}</div>
+          <template v-slot:title>最后一个敌人出现</template>
+          <template v-slot:content>{{ waveTime | time }}</template>
         </content-slot>
       </div>
     </div>
@@ -119,7 +119,7 @@ export default {
   flex-wrap: wrap
   align-content: start
   margin-left: 10px
-  //overflow: hidden
+  // overflow: hidden
 }
 
 .map-option-content {

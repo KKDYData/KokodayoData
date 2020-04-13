@@ -17,13 +17,13 @@
         <span v-if="data.dropCost">{{ data.dropCost }} 理智/个</span>
         <span v-else>{{ data.dropCnt }}个/{{ data.etCost }}票</span>
       </div>
-      <div slot="content">
+      <template v-slot:content>
         <div class="item-drop-detail">
           <color color="hsl(193, 78%, 69%)">{{ data.quantity }}</color>/
           <color color="hsl(350, 100%, 79%)">{{ data.times }}</color>
           →{{ data.rate }}%
         </div>
-      </div>
+      </template>
     </h-tooltip>
   </p>
 </template>

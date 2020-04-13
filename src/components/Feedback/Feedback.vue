@@ -3,24 +3,24 @@
     <my-title title="Q&A" />
     <div class="question">
       <q-a>
-        <span slot="q">游戏数据哪里来的？</span>
-        <span slot="a">从网上找到的拆包，经过简单的分割，然后纯前端进行渲染</span>
+        <template v-slot:q>游戏数据哪里来的？</template>
+        <template v-slot:a>从网上找到的拆包，经过简单的分割，然后纯前端进行渲染</template>
       </q-a>
       <q-a>
-        <span slot="q">网站有几个人在维护</span>
-        <span slot="a">1个开发，我；1个下班后可以切图的工具人；1个爸爸工具人；1个反馈工具群。网页图标是我朋友画的。</span>
+        <template v-slot:q>网站有几个人在维护</template>
+        <template v-slot:a>1个开发，我；1个下班后可以切图的工具人；1个爸爸工具人；1个反馈工具群。网页图标是我朋友画的。</template>
       </q-a>
       <q-a>
-        <span slot="q">网站的运作方式</span>
-        <span slot="a">游戏数据更新之后，我会在1个小时内（通常半小时）把文本数据更新好；图片、语音通常在当天晚上补全；小人这种可能第二天。</span>
+        <template v-slot:q>网站的运作方式</template>
+        <template v-slot:a>游戏数据更新之后，我会在1个小时内（通常半小时）把文本数据更新好；图片、语音通常在当天晚上补全；小人这种可能第二天。</template>
       </q-a>
       <q-a>
-        <span slot="q">会有资金问题吗？</span>
-        <span slot="a">目前一个月支出在 600-800 元左右，欢迎投食。</span>
+        <template v-slot:q>会有资金问题吗？</template>
+        <template v-slot:a>目前一个月支出在 600-800 元左右，欢迎投食。</template>
       </q-a>
       <q-a>
-        <span slot="q">我想捐款</span>
-        <span slot="a">我有二维码。投食的时候，最好备注信息(例如：kkdy)。</span>
+        <template v-slot:q>我想捐款</template>
+        <template v-slot:a>我有二维码。投食的时候，最好备注信息(例如：kkdy)。</template>
       </q-a>
       <div style="display:flex;">
         <r-image :preview-src-list="[zfb]" :src="zfb" />

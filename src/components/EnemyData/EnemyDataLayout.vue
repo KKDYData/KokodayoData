@@ -6,7 +6,7 @@
       :current-enemy="currEnemy"
       :pic-path="enemyPicPath(showKey)"
     >
-      <template slot="enemy-status">
+      <template v-slot:enemy-status>
         <enemy-status
           v-if="currEnemy"
           v-loading="!currentData"
@@ -247,7 +247,7 @@ export default {
 
 <style lang="stylus" scoped>
 .enemy-data-layout-body {
-  //todo maybe have something better code
+  // todo maybe have something better code
   max-height: 60vh
   overflow-y: scroll
   overflow-x: hidden

@@ -227,7 +227,7 @@ export default {
 
 .new-mode-link {
   span {
-    /*color: white;*/
+    /* color: white; */
     color: black
     text-decoration: none
   }

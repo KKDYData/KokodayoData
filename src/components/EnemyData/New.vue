@@ -10,7 +10,7 @@
       :props="selMapNode"
       :show-close="false"
     >
-      <template slot="title">
+      <template v-slot:title>
         <span>章节选择</span>
         <el-button v-if="selMapData" type="danger" size="small" @click="clearMapChose">取消选择</el-button>
       </template>
@@ -59,9 +59,9 @@
           <div>
             <h-tooltip v-if="mapCode && showMap" placement="bottom">
               <el-button class="runes-mode-button" type="info">地图说明</el-button>
-              <div slot="content">
+              <template v-slot:content>
                 <p>点击地板砖，会有砖的基本说明。</p>
-              </div>
+              </template>
             </h-tooltip>
           </div>
           <div class="long-button">
@@ -112,7 +112,7 @@
                 >清空路线</el-button>
                 <h-tooltip v-if="mapCode && !simpleShow">
                   <el-button type="info" size="mini">说明</el-button>
-                  <div slot="content">
+                  <template v-slot:content>
                     <p>路线:</p>
                     <p>在上面地图方块中出现X秒的意思是</p>
                     <p>会在这个标出时间的方块上停留X秒</p>
@@ -128,7 +128,7 @@
                     <p>数量2，间隔30秒</p>
                     <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
                     <p>出发，相对于这一批次的出发时间，普通图只有一个批次，剿灭有多个批次，一个批次的敌人全部消灭会提前进入下一个批次。超过最大等待时间则开始下一批次，不论上次批次是否全部被消灭。</p>
-                  </div>
+                  </template>
                 </h-tooltip>
               </div>
             </template>
@@ -405,7 +405,7 @@ export default {
     display: flex
     align-items: center
     flex-wrap: wrap
-    //background-color: rgba(144, 25, 230, 0.3)
+    // background-color: rgba(144, 25, 230, 0.3)
   }
 
   .map-title-part-2 {
@@ -459,7 +459,7 @@ export default {
   width: 100%
 }
 
-//todo use postcss?
+// todo use postcss?
 filter() {
   -moz-filter: arguments
   -webkit-filter: arguments
@@ -507,7 +507,7 @@ filter() {
     grid-gap: 20px 2%
     padding: 1%
 
-    //? 小屏下的方块的尺寸
+    // ? 小屏下的方块的尺寸
     &>>> .enemy-img-container {
       width: 80px
       height: 80px

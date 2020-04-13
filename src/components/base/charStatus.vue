@@ -7,13 +7,13 @@
       class="status-details-container"
     >
       <content-slot :long="!short" :width="short ? 80 : 100">
-        <div slot="title">
+        <template v-slot:title>
           <span>{{ key }}</span>
-        </div>
-        <div slot="content">
+        </template>
+        <template v-slot:content>
           <span v-html="value" />
           <span v-if="key === '攻击间隔' || key === '再部署'">s</span>
-        </div>
+        </template>
       </content-slot>
     </div>
   </div>

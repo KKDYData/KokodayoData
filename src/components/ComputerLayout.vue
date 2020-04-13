@@ -105,9 +105,9 @@
             label="已有经验/千"
             class="my-form-item-wrapper"
           >
-            <div slot="label">
+            <template v-slot:label>
               <item-viewer class="exp-card" :item="card" />
-            </div>
+            </template>
             <el-input-number
               v-model.number="char.base.exp_cards[key]"
               :size="short ? 'medium' : ''"
@@ -280,18 +280,18 @@ export default {
 
 <style lang="stylus" scoped>
 .my-form-item {
-  /*width: 30%;*/
+  /* width: 30%; */
   max-width: 120px
 }
 
 .my-form-item-wrapper {
-  /*margin: 0px 10px 40px;*/
+  /* margin: 0px 10px 40px; */
   --wrapperH: 5vh
   margin: 0
   display: flex
   align-items: center
   flex-wrap: wrap
-  /*width: 220px;*/
+  /* width: 220px; */
 }
 
 .my-form-item-fill {
@@ -368,7 +368,7 @@ export default {
 
 @media screen and (max-width: 700px) {
   .exp-card >>> .evolvcost-item-contianer {
-    /*padding: 5px 10px;*/
+    /* padding: 5px 10px; */
     width: calc(40px + 1vw)
     height: calc(40px + 1vw)
   }
@@ -377,7 +377,7 @@ export default {
 @media screen and (max-width: 600px) {
   .extra-exp .my-form-item-wrapper {
     width: calc(50vw - 23px)
-    /*padding: 0;*/
+    /* padding: 0; */
     margin: 15px 0
   }
 }

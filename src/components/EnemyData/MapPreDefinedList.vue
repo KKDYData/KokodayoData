@@ -132,7 +132,7 @@ export default {
 
 .predefine-item-bg >>> .enemy-img-container {
   background: linear-gradient(45deg, #000a1d, transparent)
-  //border: 5px solid #280332
+  // border: 5px solid #280332
   box-sizing: border-box
 }
 
