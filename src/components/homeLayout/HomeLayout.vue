@@ -86,6 +86,7 @@
     </div>
 
     <h-tab
+      ref="tab"
       :value="currentMode"
       :tab-data="[{label: '一般模式', id:'profile-layout'},{label: '公开招募', id: 'new-profile-layout'}]"
       @slideChange="switchToNormal"
@@ -385,6 +386,11 @@ export default {
         })
       }
       this.sortData(targetData)
+
+      // 动画大概500ms结束了
+      setTimeout(() => {
+        this.$refs.tab.swiperInstance.updateAutoHeight()
+      }, 500)
     }
   }
 }
