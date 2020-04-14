@@ -6,8 +6,8 @@
     <div class="swiper-wrapper">
       <slot />
     </div>
-    <div class="swiper-pagination"></div>
     <div class="swiper-scrollbar"></div>
+    <div class="swiper-scrollbar--outer"></div>
   </div>
 </template>
 
@@ -43,9 +43,12 @@ export default {
         this.activeName = this.tabData[sInstance.realIndex].label
         this.$emit('slideChange', this.tabData[sInstance.realIndex])
       })
-    await this.$nextTick()
-    await sleep(200)
-    sInstance.updateAutoHeight()
+
+    // 防止渲染过慢导致高度不对
+    for (let i = 0;i < 3;i++) {
+      await sleep(200)
+      sInstance.updateAutoHeight()
+    }
 
   },
   methods: {
@@ -73,6 +76,17 @@ export default {
     }
   }
 
+  .swiper-scrollbar--outer {
+    position: absolute
+    top: 29px
+    left: 0
+    width: 100%
+    background-color: rgba(0, 0, 0, 0.1)
+    border-radius: 2px
+    height: 7px
+    z-index: 0
+  }
+
   .swiper-slide {
     padding: 0 20px
     box-sizing: border-box
@@ -85,19 +99,6 @@ export default {
   top: 5px
   left: 1%
   width: 98%
-
-  &:after {
-    content: ''
-    display: block
-    height: 7px
-    position: absolute
-    background-color: rgba(0, 0, 0, 0.1)
-    bottom: -8px
-    border-radius: 2px
-    left: 0
-    z-index: -1
-    width: 100%
-  }
 
   div {
     cursor: pointer

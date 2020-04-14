@@ -241,6 +241,7 @@ import {
 
 import { mapState } from 'vuex'
 import Vue from 'vue'
+import { localStore } from '../../localStore'
 Vue.use(Card)
 Vue.use(InputNumber)
 Vue.use(Switch)
@@ -460,9 +461,10 @@ export default {
       })
   },
   async mounted() {
-    const skillChangeLogTimes = this.skillChangeLogTimes = await localStorage.getItem('skillChangeLogTimes') || 0
+    const store = localStore()
+    const skillChangeLogTimes = this.skillChangeLogTimes = await store.getItem('skillChangeLogTimes') || 0
     if (skillChangeLogTimes < 15) {
-      await localStorage.setItem('skillChangeLogTimes', +skillChangeLogTimes + 1)
+      await store.setItem('skillChangeLogTimes', +skillChangeLogTimes + 1)
     }
   },
   methods: {

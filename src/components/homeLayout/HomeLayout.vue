@@ -134,7 +134,7 @@ import { TagsArr, class_chinese, StarArr } from '@/utils/string'
 
 
 // ?筛选数组逻辑更换的日期
-const version = 200117
+const version = 200414
 const newProfileLayout = () => ({
   component: import(
     /* webpackChunkName: "newProfileLayout" */ './newProfileLayout'

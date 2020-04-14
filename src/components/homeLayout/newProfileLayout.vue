@@ -223,6 +223,7 @@ export default {
 .new-profile-layout-container {
   max-width: 950px
   background-color: white
+  min-height: 350px
 }
 
 .new-mode-link {
