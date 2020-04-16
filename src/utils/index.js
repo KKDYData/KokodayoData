@@ -95,38 +95,129 @@ class TaskQueue {
 
 const changeDesc = (desc) => {
   const reg1 = /(<\/>)/g,
-    reg2 = /\\n/g,
-    ccVup = /(<@cc\.vup>)/g,
-    ccVdown = /(<@cc\.(vdown|talpu|pn)>)/g,
-    baPn = /(<@ba\.pn>)/g,
-    baVdown = /(<@ba\.vdown>)/g,
-    ccRem = /(<@cc\.rem>)/g,
-    ccKw = /(<@cc\.kw>)/g,
-    baVup = /(<@ba\.vup>)/g,
-    baRem = /(<@ba\.rem>)/g,
-    baKw = /(<@ba\.kw>)/g,
-    baTalpu = /(<@ba\.talpu>)/g,
-    lvItem = /<@lv\.(item|rem|fs)>/g,
-    timeLimit = /<@act\.timeLimit>/g
+    reg2 = /\\n/g
 
 
+  const d = {
+    ccVup: 'cc\\.vup',
+    ccVdown: 'cc\\.vdown|talpu|pn',
+    baPn: 'ba\\.pn',
+    baDown: 'ba\\.vdown',
+    ccRem: 'cc\\.rem',
+    ccKw: 'cc\\.kw',
+    baVup: 'ba\\.vup',
+    baRem: 'ba\\.rem',
+    baKw: 'ba\\.kw',
+    baTalpu: 'ba\\.talpu',
+    lvItem: 'lv\\.itme|rem|fs',
+    timeLimit: 'act\\.timeLimit'
+  }
+
+  const colorTemp = [
+    ['FF6237', ['baDown', 'ccVdown', 'baPn']],
+    ['0098DC', ['ccVup', 'baVup']],
+    ['F49800', ['ccRem', 'baRem', 'baTalpu']],
+    ['00B0FF', ['ccKw', 'baKw']],
+    ['049cb8', ['lvItem']],
+    ['ff5500', ['timeLimit']]
+  ]
+
+  const findColor = (k) => {
+    const [color] = colorTemp.find(([color, list]) => !!list.find(e => {
+      const reg = new RegExp(d[e] || '')
+      return reg.test(k)
+    }
+    )) || ['FF6237']
+    return '#' + color
+  }
   if (!reg1.test(desc) && !reg2.test(desc)) return desc
-  desc = desc
-    .replace(reg1, '</i>')
-    .replace(reg2, '<br/>')
-    .replace(ccVup, '<i style="color:#0098DC;font-style: normal;">')
-    .replace(ccVdown, '<i style="color:#FF6237;font-style: normal;">')
-    .replace(baPn, '<i style="color:#FF6237;">')
-    .replace(baVdown, '<i style="color:#FF6237;font-style: normal;">')
-    .replace(ccRem, '<i style="color:#F49800;font-style: normal;">')
-    .replace(ccKw, '<i style="color:#00B0FF;font-style: normal;">')
-    .replace(baVup, '<i style="color:#F49800;font-style: normal;">')
-    .replace(baRem, '<i style="color:#F49800;font-style: normal;">')
-    .replace(baKw, '<i style="color:#00B0FF;font-style: normal;">')
-    .replace(baTalpu, '<i style="color:#F49800;font-style: normal;">')
-    .replace(lvItem, '<i style="color:#049cb8;font-style: normal;">')
-    .replace(timeLimit, '<i style="color:hsl(20, 100%, 50%);font-style: normal;">')
 
+  if (/下一次的攻击力/.test(desc)) {
+    console.log('hit')
+  }
+  let matchBeigin, matchAt, matchType, matchValueBegin, matchValue, matchEndBegin
+  desc = desc.split('').reduce((res, cur) => {
+
+    if (cur === '<') {
+      matchValueBegin = false
+
+      if (!matchBeigin) {
+        matchBeigin = true
+        return res
+      }
+
+      if (matchValue) {
+        matchEndBegin = true
+        return res
+      }
+
+    }
+
+    if (cur === '>') {
+      if (matchBeigin && !matchEndBegin) {
+        matchAt = false
+        matchValueBegin = true
+        matchValue = ''
+        return res
+      }
+
+      if (matchEndBegin) {
+        res += `<i style="color:${findColor(matchType) || '#0098DC'};font-style: normal;">${matchValue}</i>`
+
+        matchBeigin = false
+        matchAt = false
+        matchType = ''
+        matchValue = ''
+        matchEndBegin = ''
+
+        return res
+      }
+    }
+
+    if (matchValueBegin) {
+      matchValue += cur
+      return res
+    }
+
+
+    if (matchEndBegin) {
+      return res
+    }
+
+    if (matchBeigin) {
+      if (cur === '@') {
+        matchAt = true
+        matchType = ''
+        return res
+      }
+      if (matchAt) {
+        matchType += cur
+      } else {
+        matchBeigin = false
+      }
+      return res
+    }
+
+
+
+    res += cur
+    return res
+  }, '')
+
+  // desc = Object.entries(d).reduce((res, [k, v]) => {
+  //   const reg = new RegExp(`<@${v}>([{}0-9:%a-z+-_\u4e00-\u9fa5]+(?=<))</>`)
+  //   let match
+  //   while ((match = reg.exec(res)) !== null) {
+  //     const before = res.slice(0, match.index)
+  //     const aIndex = match.index + match[0].length
+  //     const after = res.slice(aIndex)
+  //     res = before
+  //       + `<i style="color:${findColor(k) || '#0098DC'};font-style: normal;">${match[1]}</i>`
+  //       + after
+  //   }
+  //   return res
+  // }, desc)
+  desc = desc.replace(reg2, '<br />')
 
   return desc
 }
@@ -169,13 +260,10 @@ const getProfilePath = (name, row) => {
   if (row) return getDetailsProfilePath(name)
   return UA.ok ? `${path}char/portrait/${name}.png?x-oss-process=style/webp`
     : `${path}char/portrait/${name}.png`
-
 }
 
 const getDetailsProfilePath = name => {
   return `${path}char/profile/${name}.png`
-  // return UA.ok ? `${path}char/profile/${name}.png?x-oss-process=style/profile-test`
-  //   : `${path}char/profile/${name}.png`
 }
 
 const changeKey = key => {
@@ -259,12 +347,19 @@ const changeAttackSpeed = (skill) => {
       unit = '%'
     }
     // 只有白雪 !text
-    const inject = text ? `(${value}${unit})` : wrapColor(`(${value}${unit})`, '#F49800')// `<i style="color:#F49800;font-style: normal;">(${value}${unit})</i>`
-    const tempIndex = text ? 4 + text[0].length : (res.match('略微增大') ? 4 : 0) + 4
+    if (text) {
 
-    const temp = res.split('')
-    temp.splice(AtkBasetimeIndex + tempIndex, 0, inject)
-    res = temp.join('')
+      const inject = `(${value}${unit})`
+      const testText = text[0].replace(text[2], text[2] + inject)
+
+      const insertIndex = res.match(text[0]).index
+      const before = res.slice(0, insertIndex)
+      const after = res.slice(insertIndex + text[0].length)
+      res = before + testText + after
+    } else {
+      const inject = wrapColor(`(${value}${unit})`, '#F49800')
+      res = res.replace('增大', '增大' + inject)
+    }
   }
 
   // 其实只有白金需要

@@ -10,11 +10,11 @@
         <div class="info-painter-cv">
           <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
             <div slot="title">画师</div>
-            <div slot="content" :class="{swiperNoSwiping: !short}">{{ data.drawName }}</div>
+            <div slot="content" :class="{'swiper-no-swiping': !short}">{{ data.drawName }}</div>
           </content-slot>
           <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
             <div slot="title">CV</div>
-            <div slot="content" :class="{swiperNoSwiping: !short}">{{ data.infoName }}</div>
+            <div slot="content" :class="{'swiper-no-swiping': !short}">{{ data.infoName }}</div>
           </content-slot>
           <div class="info-char-set-wrapper">
             <f-s no-title placement="top-start" :width="width" size="90%" trigger="click">
@@ -51,7 +51,7 @@
                 <div
                   v-if="!short || ( i === 7 || (index !== 0 && i ===5) ) || v.length < 6"
                   slot="content"
-                  :class="{swiperNoSwiping: !short}"
+                  :class="{'swiper-no-swiping': !short}"
                 >{{ v }}</div>
                 <h-tooltip v-else slot="content" placement="top" :content="v">
                   <div>{{ v.slice(0, 3) }}...</div>
@@ -79,7 +79,7 @@
                   <span>解锁需要好感：</span>
                   <span>{{ p.unLockParam | unlockStr }}</span>
                 </div>
-                <p :class="{swiperNoSwiping: !short}" v-html="changeText(p.storyText)" />
+                <p :class="{'swiper-no-swiping': !short}" v-html="changeText(p.storyText)" />
               </div>
             </div>
           </content-slot>
@@ -122,7 +122,7 @@
             </template>
           </div>
           <p
-            :class="{swiperNoSwiping: !short}"
+            :class="{'swiper-no-swiping': !short}"
             v-html="changeVoice(word.voiceText)"
           >{{ word.voiceText }}</p>
         </div>
