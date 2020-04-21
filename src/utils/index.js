@@ -132,9 +132,6 @@ const changeDesc = (desc) => {
   }
   if (!reg1.test(desc) && !reg2.test(desc)) return desc
 
-  if (/下一次的攻击力/.test(desc)) {
-    console.log('hit')
-  }
   let matchType = '', matchValueBegin, matchValue = '', matchTagBegin, matchTagStartBegin, matchTagEndBegin
   const matchTypeGroup = []
   const matchValueGroup = []
