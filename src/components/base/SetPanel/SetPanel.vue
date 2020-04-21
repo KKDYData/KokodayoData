@@ -6,16 +6,15 @@
     indicator-position="outside"
     :loop="false"
     :style="{height: wrapperHeight}"
-    @change="$event => curIndex = $event"
   >
     <!-- 默认立绘小人 pc -->
     <div class="swiper-wrapper">
       <div v-for="(data, index) in setData" :key="index" class="swiper-slide">
         <div style="width: 100vw">
-          <spine-panel v-if="!short && !ex" :id="id" :canvas-width="spineWidth" />
+          <spine-panel v-if="!short && !data.displaySkin" :id="id" :canvas-width="spineWidth" />
           <!-- pc 皮肤小人 -->
           <spine-panel
-            v-if="!short && curIndex === index && setData && ex"
+            v-if="!short && curIndex === index && data.displaySkin"
             :id="data.avatarId"
             class="spin-panel"
             :canvas-width="spineWidth"
@@ -162,7 +161,8 @@ export default {
     const container = this.$refs['swiper-container']
     // 会被扔进body，所以等一下
     await this.$nextTick()
-    new Swiper(container, {
+    // @change="$event => curIndex = $event"
+    const instance = new Swiper(container, {
       resistanceRatio: 0.3,
       navigation: {
         nextEl: '.swiper-button-next',
@@ -173,6 +173,11 @@ export default {
         type: 'bullets',
         clickable: true
       },
+      on: {
+        slideChange: () => {
+          this.curIndex = instance.realIndex
+        }
+      }
     })
   },
   beforeMount() {

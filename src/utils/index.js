@@ -135,88 +135,91 @@ const changeDesc = (desc) => {
   if (/下一次的攻击力/.test(desc)) {
     console.log('hit')
   }
-  let matchBeigin, matchAt, matchType, matchValueBegin, matchValue, matchEndBegin
+  let matchType = '', matchValueBegin, matchValue = '', matchTagBegin, matchTagStartBegin, matchTagEndBegin
+  const matchTypeGroup = []
+  const matchValueGroup = []
+
   desc = desc.split('').reduce((res, cur) => {
 
+    // tag 标签开始
     if (cur === '<') {
-      matchValueBegin = false
-
-      if (!matchBeigin) {
-        matchBeigin = true
-        return res
-      }
-
       if (matchValue) {
-        matchEndBegin = true
-        return res
+        matchValueGroup.push(matchValue + '')
+        matchValue = ''
       }
 
+      matchTagBegin = true
+      return res
     }
 
-    if (cur === '>') {
-      if (matchBeigin && !matchEndBegin) {
-        matchAt = false
+    if (matchTagBegin) {
+
+      matchValueBegin = false
+      if (cur === '@') {
+        matchTagStartBegin = true
+      } else if (cur === '/') {
+        matchTagEndBegin = true
+      } else {
         matchValueBegin = true
-        matchValue = ''
-        return res
+        matchValue += '<' + cur
       }
 
-      if (matchEndBegin) {
-        res += `<i style="color:${findColor(matchType) || '#0098DC'};font-style: normal;">${matchValue}</i>`
-
-        matchBeigin = false
-        matchAt = false
-        matchType = ''
-        matchValue = ''
-        matchEndBegin = ''
-
-        return res
-      }
+      matchTagBegin = false
+      return res
     }
 
+
+
+    // 标签结束
+    if (cur === '>') {
+      if (matchTagStartBegin) {
+        matchTagStartBegin = false
+        matchTypeGroup.push(matchType)
+        matchType = ''
+      } else if (matchTagEndBegin) {
+        matchTagEndBegin = false
+
+        let temp = `<i style="color:${findColor(matchTypeGroup.pop()) || '#0098DC'};font-style: normal;">${matchValueGroup.pop()}</i>`
+        if (matchValueGroup.length) {
+          matchValue = matchValueGroup.pop() + temp
+        } else {
+          res += temp
+          matchValue = ''
+        }
+      } else {
+        matchValue += '>'
+      }
+
+      if (matchTypeGroup.length) {
+        matchValueBegin = true
+      } else {
+        matchValueBegin = false
+      }
+      return res
+    }
+
+    // 标签头内容
+    if (matchTagStartBegin) {
+      matchType += cur
+      return res
+    }
+    // 标签尾内容
+    if (matchTagEndBegin) {
+      // 正常应该是进不来的
+      return res
+    }
+
+    // 标签内的内容
     if (matchValueBegin) {
       matchValue += cur
       return res
     }
 
-
-    if (matchEndBegin) {
-      return res
-    }
-
-    if (matchBeigin) {
-      if (cur === '@') {
-        matchAt = true
-        matchType = ''
-        return res
-      }
-      if (matchAt) {
-        matchType += cur
-      } else {
-        matchBeigin = false
-      }
-      return res
-    }
-
-
-
+    // 标签外的内容
     res += cur
     return res
   }, '')
 
-  // desc = Object.entries(d).reduce((res, [k, v]) => {
-  //   const reg = new RegExp(`<@${v}>([{}0-9:%a-z+-_\u4e00-\u9fa5]+(?=<))</>`)
-  //   let match
-  //   while ((match = reg.exec(res)) !== null) {
-  //     const before = res.slice(0, match.index)
-  //     const aIndex = match.index + match[0].length
-  //     const after = res.slice(aIndex)
-  //     res = before
-  //       + `<i style="color:${findColor(k) || '#0098DC'};font-style: normal;">${match[1]}</i>`
-  //       + after
-  //   }
-  //   return res
-  // }, desc)
   desc = desc.replace(reg2, '<br />')
 
   return desc
