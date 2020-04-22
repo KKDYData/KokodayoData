@@ -353,7 +353,7 @@ export default {
       if (/(duration|freeze)/.test(key)) {
         v = v + 's'
       }
-      if (/((reborn|up|down|scale)\.atk)|\.hp_ratio|healaura|speed/.test(key)) {
+      if (/((reborn|up|down|scale)\.atk)|\.hp_ratio|healaura/.test(key)) {
         v = v * 100 + '%'
       } else if (/defdown\.def/.test(key)) {
         if (Math.abs(v) < 1) {
