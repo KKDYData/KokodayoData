@@ -11,6 +11,7 @@
     :title="data.name"
     :disabled="noPopover"
     :size="drawerSize + '%'"
+    append-to-body
     @opened="zIndex = 10"
     @closed="zIndex = 0"
   >
