@@ -580,7 +580,7 @@ const blockKeys = getKey(keys)
 
 const class_chinese = {
   MEDIC: { isTag: false, text: '医疗', value: 'MEDIC' },
-  CASTER: { isTag: false, text: '术士', value: 'CASTER' },
+  CASTER: { isTag: false, text: '术师', value: 'CASTER' },
   SNIPER: { isTag: false, text: '狙击', value: 'SNIPER' },
   WARRIOR: { isTag: false, text: '近卫', value: 'WARRIOR' },
   PIONEER: { isTag: false, text: '先锋', value: 'PIONEER' },
