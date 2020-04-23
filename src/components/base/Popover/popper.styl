@@ -44,7 +44,7 @@ popperArrow(popperArrowSize, popperBgColor = #fff) {
 
     &[data-popper-placement^='top'] > &-arrow {
       left: 50%
-      bottom: unit(-1 * arrowPos, 'px')
+      bottom: arrowPosR
     }
 
     &[data-popper-placement^='bottom'] > &-arrow {
@@ -54,7 +54,7 @@ popperArrow(popperArrowSize, popperBgColor = #fff) {
 
     &[data-popper-placement^='left'] > &-arrow {
       top: 50%
-      right: arrowPosR
+      right: arrowPos
     }
 
     &[data-popper-placement^='right'] > &-arrow {
