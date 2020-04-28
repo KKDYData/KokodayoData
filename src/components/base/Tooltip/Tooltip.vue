@@ -108,6 +108,8 @@ export default {
         placement,
         modifiers,
       })()
+      await this.$nextTick()
+      await instance.update()
       await sleep(500)
       document.body.addEventListener('click', ccc)
       return instance

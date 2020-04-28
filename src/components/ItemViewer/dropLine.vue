@@ -12,7 +12,7 @@
       class="item-occper"
     >{{ data.apCost ? `${data.apCost}理智` : `${data.etCost}票` }}</span>
     <span class="item-occper">{{ data.occPer? occper(data.occPer) : '概率掉落' }}</span>
-    <h-tooltip v-if="data.times" class="item-dropInfo" placement="top">
+    <h-tooltip v-if="data.times" class="item-dropInfo" placement="left">
       <div>
         <span v-if="data.dropCost">{{ data.dropCost }} 理智/个</span>
         <span v-else>{{ data.dropCnt }}个/{{ data.etCost }}票</span>
