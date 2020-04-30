@@ -22,7 +22,6 @@ popperPadding = 4px 8px
 
 popperArrow(popperArrowSize, popperBgColor = #fff) {
   arrowPos = (popperArrowSize / -2)
-  arrowPosR = (popperArrowSize / 2)
 
   .popper {
     &-arrow {
@@ -44,7 +43,7 @@ popperArrow(popperArrowSize, popperBgColor = #fff) {
 
     &[data-popper-placement^='top'] > &-arrow {
       left: 50%
-      bottom: arrowPosR
+      bottom: arrowPos
     }
 
     &[data-popper-placement^='bottom'] > &-arrow {
