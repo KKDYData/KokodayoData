@@ -91,9 +91,7 @@
           <div class="enemy-skill">
             <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
               <div style="margin: 10px 0">
-                <span
-                  style="font-size: 1.1em"
-                >{{ skill.prefabKey === 'SummonBallis' ? '召唤弩炮': skill.prefabKey.toUpperCase() }}</span>
+                <span style="font-size: 1.1em">{{ skill.prefabKey | skillName }}</span>
               </div>
               <div :style="short? 'margin-left: 10px' : ''">
                 <span>初始冷却</span>
@@ -144,11 +142,19 @@ import ContentSlot from '../base/ContentSlot'
 
 import { changeKey } from '../../utils'
 import { statusToCh } from '../../utils/string'
+import { enemySkillNameKey, key2str } from '../../utils/esn'
 
 export default {
   components: {
     ContentSlot,
     HTooltip
+  },
+  filters: {
+    skillName(v) {
+      const upper = v.toUpperCase()
+      const t = enemySkillNameKey[upper]
+      return t ? t : upper
+    }
   },
   props: {
     data: {
@@ -293,6 +299,7 @@ export default {
       })
     },
   },
+
   watch: {
     currentMap(v) {
       if (v === '') this.skillRangeRadius = 1
@@ -332,7 +339,6 @@ export default {
           findDefinedValue('rangeRadius', i),
           'rangeScale'
         ])
-        // console.log(findDefinedValue('rangeRadius', i) + '|range');
         res.push(['LifePoint', findDefinedValue('lifePointReduce', i)])
 
         return res
@@ -353,85 +359,36 @@ export default {
       if (/(duration|freeze)/.test(key)) {
         v = v + 's'
       }
-      if (/((reborn|up|down|scale)\.atk)|\.hp_ratio|healaura/.test(key)) {
+      if (/((reborn|up|down|scale|boom)?\.(atk|move_speed))|\.hp_ratio|healaura/.test(key)) {
         v = v * 100 + '%'
       } else if (/defdown\.def/.test(key)) {
         if (Math.abs(v) < 1) {
           v = v * 100 + '%'
         }
+      } else if (/shield\.(def|magic_resistance)/.test(key)) {
+        v = v * 100 + '%'
       }
       return v
     },
     changeBlackboardToCh(key) {
-      const Key = {
-        atk_scale: '倍率',
-        max_cnt: '最大数量',
-        attack_speed: '攻速',
-        duration: '持续时间',
-        range_radius: '范围/格',
-        move_speed: '移动速度',
-        dist: '消失',
-        branch_id: '地图装置ID',
-        stun: '眩晕',
-        freeze: '冻结'
-      }
-      return Key[key] || key
+      // const Key = {
+      //   atk_scale: '倍率',
+      //   max_cnt: '最大数量',
+      //   attack_speed: '攻速',
+      //   duration: '持续时间',
+      //   range_radius: '范围/格',
+      //   move_speed: '移动速度',
+      //   dist: '消失',
+      //   branch_id: '地图装置ID',
+      //   stun: '眩晕',
+      //   freeze: '冻结'
+      // }
+      return key2str[key] || key
     },
     changeTalentsBlackBordtoCh(key) {
       const temp = key.split('.')
       if (temp.length < 2) return key
 
-      const key2str = {
-        hp_ratio: '触发血线',
-
-        attack: '攻击力',
-        atk: '攻击力',
-        atkup: '攻击力↑',
-
-        def: '防御',
-        defup: '防御力↑',
-        defdown: '防御力↓',
-
-        attack_speed: '攻速',
-        atkSpeedDown: '攻速↓',
-
-        speedup: '移速提升',
-        move_speed: '移动速度',
-
-        MagicResistance: '法抗↑',
-        magic_resistance: '法抗',
-
-        reborn: '复活',
-        freeze: '冻结',
-
-        enrage: '暴怒',
-
-        shield: '护盾',
-        dynamic: 'HP',
-
-        invincible: '隐身',
-
-        ReduceBlockCnt: '减少阻挡数',
-        block_cnt: '阻挡数量',
-
-        healaura: '治愈光环',
-
-        damage: '伤害',
-        'attack@damage': '伤害',
-        rangedamage: '范围伤害',
-        range_radius: '范围',
-        duration: '持续时间',
-        interval: '间隔',
-
-
-        damage_scale: '倍率',
-        atk_scale: '倍率',
-        hp_recovery_per_sec: '倍率',
-
-        reborn_invincible: '复活隐身',
-        attackfreeze: '攻击冻结',
-        periodic_damage: '周期伤害'
-      }
       const changeKey = key => key2str[key] || key.toUpperCase()
 
       return changeKey(temp[0]) + '·' + changeKey(temp[1])
@@ -485,6 +442,7 @@ export default {
 .enemy-skill {
   display: grid
   grid-template-columns: 1fr 1fr
+  grid-column-gap: 2em
 
   &-container {
     flex-grow: 0.5
