@@ -88,7 +88,11 @@
     </div>
     <div class="swiper-slide">
       <div class="info-word-wrapper">
-        <div v-if="!short && !isMobliePad" style="display: flex; align-items: center">
+        <div
+          v-if="!short && !isMobliePad"
+          class="swiper-no-swiping"
+          style="display: flex; align-items: center"
+        >
           <div style="padding-right: 10px">
             <span>volume:</span>
           </div>

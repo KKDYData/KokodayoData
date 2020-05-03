@@ -232,7 +232,7 @@ export default {
   &-desc {
     font-size: 16px
     color: #606266
-    padding: 20px 10px
+    padding: 20px 10px 18px
     display: flex
     align-items: center
     position: relative
@@ -261,7 +261,7 @@ export default {
   .skill-status {
     font-size: calc(12px + 0.5vw)
 
-    &s-desc {
+    &-desc {
       font-size: calc(13px + 0.5vw)
     }
   }
