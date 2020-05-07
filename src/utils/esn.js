@@ -25,7 +25,7 @@ const enemySkillNameKey = {
   'IMMO_TRIGGER[REBORNING]': '献祭[复活中]'
 }
 
-const key2str = {
+const ENEMY_TALENT_NAME = {
   hp_ratio: '触发血线',
 
   attack: '攻击力',
@@ -81,10 +81,15 @@ const key2str = {
   'immo_trigger[rage]': '毁灭姿态',
   'patrt_t_state_2[reborn_invincible]': '爱国者状态3[复活隐身]',
   taunt: '嘲讽',
-  taunt_level: '嘲讽等级'
+  taunt_level: '嘲讽等级',
+
+  rush: '冲刺·',
+  'dlancer_t[trigger]': '参数·',
+  trig_cnt: '最大计数',
+  firstattack: '冲刺'
 }
 
 export {
   enemySkillNameKey,
-  key2str
+  ENEMY_TALENT_NAME
 }

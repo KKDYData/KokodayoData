@@ -6,7 +6,7 @@
         <div>
           <b>能力·Blackboard</b>
         </div>
-        <content-slot v-for="(t) in filterTalents" :key="t.key" long no-wrap>
+        <content-slot v-for="(t, index) in filterTalents" :key="index" long no-wrap>
           <template v-slot:title>{{ t.key }}</template>
           <template v-slot:content>{{ t.value }}</template>
         </content-slot>
@@ -83,43 +83,41 @@
         </div>
       </div>
 
-      <div>
-        <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
-          <div>
-            <b style="font-size: 1.2em">Extra·技能</b>
-          </div>
-          <div class="enemy-skill">
-            <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
-              <div style="margin: 10px 0">
-                <span style="font-size: 1.1em">{{ skill.prefabKey | skillName }}</span>
+      <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
+        <div>
+          <b style="font-size: 1.2em">Extra·技能</b>
+        </div>
+        <div class="enemy-skill">
+          <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
+            <div style="margin: 10px 0">
+              <span style="font-size: 1.1em">{{ skill.prefabKey | skillName }}</span>
+            </div>
+            <div :style="short? 'margin-left: 10px' : ''">
+              <span>初始冷却</span>
+              <span>{{ skill.initCooldown }}</span>
+              <span>s</span>
+            </div>
+            <div v-if="skill.spCost > 0" :style="short? 'width: 100%; margin-left: 10px' : ''">
+              <span>SP消耗</span>
+              <span>{{ skill.spCost }}</span>
+            </div>
+            <div>
+              <div style="margin: 20px 0 10px">
+                <span>
+                  <b style="opacity: 0.5">效果</b>
+                </span>
               </div>
-              <div :style="short? 'margin-left: 10px' : ''">
-                <span>初始冷却</span>
-                <span>{{ skill.initCooldown }}</span>
-                <span>s</span>
-              </div>
-              <div v-if="skill.spCost > 0" :style="short? 'width: 100%; margin-left: 10px' : ''">
-                <span>SP消耗</span>
-                <span>{{ skill.spCost }}</span>
-              </div>
-              <div>
-                <div style="margin: 20px 0 10px">
-                  <span>
-                    <b style="opacity: 0.5">效果</b>
-                  </span>
-                </div>
-                <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
-                  <content-slot
-                    v-for="bData in skill.blackboard"
-                    :key="bData.key"
-                    :style="short? 'margin-left: 10px' : ''"
-                    long
-                    no-wrap
-                  >
-                    <template v-slot:title>{{ changeBlackboardToCh(bData.key) }}</template>
-                    <template v-slot:content>{{ addUnit(bData.value, bData.key) }}</template>
-                  </content-slot>
-                </div>
+              <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
+                <content-slot
+                  v-for="bData in skill.blackboard"
+                  :key="bData.key"
+                  :style="short? 'margin-left: 10px' : ''"
+                  long
+                  no-wrap
+                >
+                  <template v-slot:title>{{ changeBlackboardToCh(bData.key) }}</template>
+                  <template v-slot:content>{{ addUnit(bData.value, bData.key) }}</template>
+                </content-slot>
               </div>
             </div>
           </div>
@@ -142,7 +140,7 @@ import ContentSlot from '../base/ContentSlot'
 
 import { changeKey } from '../../utils'
 import { statusToCh } from '../../utils/string'
-import { enemySkillNameKey, key2str } from '../../utils/esn'
+import { enemySkillNameKey, ENEMY_TALENT_NAME } from '../../utils/esn'
 
 export default {
   components: {
@@ -371,27 +369,15 @@ export default {
       return v
     },
     changeBlackboardToCh(key) {
-      // const Key = {
-      //   atk_scale: '倍率',
-      //   max_cnt: '最大数量',
-      //   attack_speed: '攻速',
-      //   duration: '持续时间',
-      //   range_radius: '范围/格',
-      //   move_speed: '移动速度',
-      //   dist: '消失',
-      //   branch_id: '地图装置ID',
-      //   stun: '眩晕',
-      //   freeze: '冻结'
-      // }
-      return key2str[key] || key
+      return ENEMY_TALENT_NAME[key] || key
     },
     changeTalentsBlackBordtoCh(key) {
       const temp = key.split('.')
       if (temp.length < 2) return key
 
-      const changeKey = key => key2str[key] || key.toUpperCase()
-
-      return changeKey(temp[0]) + '·' + changeKey(temp[1])
+      const changeKey = key => ENEMY_TALENT_NAME[key] || key.toUpperCase()
+      // console.log(key, 'temp', temp)
+      return temp.map(el => changeKey(el)).join('')
     }
   }
 }

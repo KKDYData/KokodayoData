@@ -235,6 +235,8 @@ export default {
           }, target.enemyData)
         }
 
+      } else {
+        this.currentData = []
       }
     },
     cancelOpen() {
