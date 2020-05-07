@@ -4,14 +4,14 @@
     <div class="question">
       <q-a>
         <template v-slot:q>游戏数据哪里来的？</template>
-        <template v-slot:a>从网上找到的拆包，经过简单的分割，然后纯前端进行渲染</template>
+        <template v-slot:a>从网上找到的拆包，经过简单的分割，然后纯前端进行渲染。如果试用的素材侵犯了您的版权，请联系我进行去处理。</template>
       </q-a>
       <q-a>
-        <template v-slot:q>网站有几个人在维护</template>
-        <template v-slot:a>1个开发，我；1个下班后可以切图的工具人；1个爸爸工具人；1个反馈工具群。网页图标是我朋友画的。</template>
+        <template v-slot:q>网站有几个人在维护？</template>
+        <template v-slot:a>1个开发，我；几个帮忙处理素材的群友。</template>
       </q-a>
       <q-a>
-        <template v-slot:q>网站的运作方式</template>
+        <template v-slot:q>网站的运作方式？</template>
         <template v-slot:a>游戏数据更新之后，我会在1个小时内（通常半小时）把文本数据更新好；图片、语音通常在当天晚上补全；小人这种可能第二天。</template>
       </q-a>
       <q-a>
@@ -19,8 +19,16 @@
         <template v-slot:a>目前一个月支出在 600-800 元左右，欢迎投食。</template>
       </q-a>
       <q-a>
-        <template v-slot:q>我想捐款</template>
+        <template v-slot:q>我想捐款？</template>
         <template v-slot:a>我有二维码。投食的时候，最好备注信息(例如：kkdy)。</template>
+      </q-a>
+      <q-a>
+        <template v-slot:q>项目的Github 地址怎么不见了？</template>
+        <template v-slot:a>
+          某次更新的时候漏了。。。。。。
+          <a href="http://github.com/odex21/ArknightsData" target="_blank">地址</a>。
+          作为用 vue 写的第一个项目，代码写的并没有多好，但是会慢慢的重构往最佳实践努力。
+        </template>
       </q-a>
       <div style="display:flex;">
         <r-image :preview-src-list="[zfb]" :src="zfb" />
