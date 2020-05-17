@@ -148,7 +148,7 @@ export default {
     HTooltip
   },
   filters: {
-    skillName(v) {
+    skillName(v = '') {
       const upper = v.toUpperCase()
       const t = enemySkillNameKey[upper]
       return t ? t : upper
@@ -283,11 +283,21 @@ export default {
     },
     filterTalents() {
       const findTalent = key => {
-        if (key < 0) throw Error('天赋查询失败')
-        if (this.talents[key]) return this.talents[key]
+        if (key < 0) throw Error(`天赋查询失败${key}`)
+        if (this.talents[key]) {
+          if (this.talents[key]?.length < this.talents[0]?.length) {
+            this.talents[0].forEach(talent => {
+              const t = this.talents[key].find(t => t.key === talent.key)
+              if (!t) {
+                this.talents[key].push(talent)
+              }
+            })
+          }
+          return this.talents[key]
+        }
         else return findTalent(key - 1)
       }
-      const row = findTalent(this.level)
+      const row = findTalent(this.mapLevel > 0 ? this.mapLevel : this.level)
       return row.map(el => {
         let v = this.addUnit(el.value, el.key)
         return {
@@ -330,8 +340,9 @@ export default {
           }
         })
 
-        if (list.enemyData.talentBlackboard)
+        if (list.enemyData.talentBlackboard) {
           this.talents.push(list.enemyData.talentBlackboard)
+        }
         res.push([
           '攻击范围/格',
           findDefinedValue('rangeRadius', i),
@@ -350,6 +361,25 @@ export default {
           this.skills.push(this.skills[0])
         }
       }
+
+      let skill0 = this.skills && this.skills[0]
+      if (skill0) {
+        this.skills.forEach((skillX, index) => {
+          if (index) {
+            if (skillX.length < skill0.length) {
+              skill0.forEach(e => {
+                const skill = skillX.find(el => e.prefabKey === el.prefabKey)
+                if (skill) {
+                  return
+                } else {
+                  skillX.push(e)
+                }
+              })
+            }
+          }
+        })
+      }
+
     }
   },
   methods: {
@@ -377,7 +407,7 @@ export default {
 
       const changeKey = key => ENEMY_TALENT_NAME[key] || key.toUpperCase()
       // console.log(key, 'temp', temp)
-      return temp.map(el => changeKey(el)).join('')
+      return temp.map(el => changeKey(el)).join('·')
     }
   }
 }

@@ -37,7 +37,10 @@
         <p class="activity-info-need">3. 如果有兴趣帮忙做下测试完善敌人/干员图鉴的内容，也十分欢迎。</p>
       </div>
       <div style="margin-top: 20px">
-        <span class="activity-info-need">版本变更为1.0版本。部分组件改为了左右滑动切换（技能详情和消耗、首页、资料和语音）</span>
+        <span
+          class="activity-info-need"
+          style="color: red"
+        >临时修复一下H7图的敌人数据不正确的问题（爱国者），如果页面异常请及时反馈以修改，谢谢。</span>
       </div>
       <div style="margin-top: 20px">
         <span class="activity-info-need">

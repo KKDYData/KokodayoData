@@ -212,27 +212,61 @@ export default {
       this.showKey = key
       this.detailsOpen = true
       this.currEnemy = v
+      let d
       if (key !== 'enemy_1503_talula') {
-        this.currentData = await getEnemyData(key)
+        this.currentData = d = await getEnemyData(key)
         if (v.overwrittenData) {
           const index = this.currentData.findIndex(el => el.level === v.level)
           const target = this.currentData[index]
-          this.currentData[index].enemyData = Object.keys(target.enemyData).reduce((res, key) => {
-            if (v.overwrittenData[key]) {
-              if (v.overwrittenData[key].m_defined) {
-                res[key] = v.overwrittenData[key].m_value
-              } else if (key === 'attributes') {
-                res.attributes = Object.keys(res.attributes).reduce((res, key) => {
-                  if (v.overwrittenData.attributes[key].m_defined) {
-                    res[key].m_defined = true
-                    res[key].m_value = v.overwrittenData.attributes[key].m_value
+          this.currentData[index].enemyData = //mergeDeepWithKey(mergeSkill, target.enemyData, v.overwrittenData)
+            Object.keys(target.enemyData).reduce((res, key) => {
+              if (v.overwrittenData[key]) {
+                if (v.overwrittenData[key].m_defined) {
+                  res[key] = v.overwrittenData[key].m_value
+                } else if (key === 'attributes') {
+                  res.attributes = Object.keys(res.attributes).reduce((res, key) => {
+                    if (v.overwrittenData.attributes[key].m_defined) {
+                      res[key].m_defined = true
+                      res[key].m_value = v.overwrittenData.attributes[key].m_value
+                    }
+                    return res
+                  }, res.attributes)
+                } else if (key === 'skills' && v.overwrittenData.skills) {
+                  if (!res.skills) {
+                    console.log('???? no skil')
                   }
-                  return res
-                }, res.attributes)
+
+                  v.overwrittenData.skills.forEach(e => {
+                    const skill = res.skills.find(el => e.prefabKey === el.prefabKey)
+                    if (skill) {
+                      Object.keys(skill).forEach(key => {
+                        skill[key] = e[key]
+                      })
+                    } else {
+                      res.skills.push(e)
+                    }
+                  })
+                }
+                else if (key === 'talentBlackboard' && v.overwrittenData.talentBlackboard) {
+                  console.log('?????')
+                  if (!res.talentBlackboard) {
+                    res.talentBlackboard = v.overwrittenData.talentBlackboard
+                  } else {
+
+                    v.overwrittenData.talentBlackboard.forEach(e => {
+                      const skill = res.talentBlackboard?.find(el => e.key === el.key)
+                      if (skill) {
+                        Object.keys(skill).forEach(key => {
+                          skill[key] = e[key]
+                        })
+                      }
+                    })
+                  }
+                }
               }
-            }
-            return res
-          }, target.enemyData)
+              return res
+            }, target.enemyData)
+          console.log(this.currentData[index])
         }
 
       } else {

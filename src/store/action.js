@@ -2,7 +2,7 @@ import {
   fetchGet, getStageList, fetchByKey,
 } from '@/utils/fetch'
 import { getStageType } from '@/utils/string'
-const url = 'https://penguin-stats.io/PenguinStats/api/result/matrix'
+const url = 'https://penguin-stats.io/PenguinStats/api/v2/result/matrix'
 
 const change = (list) => {
   return Object.entries(list).map(([key, value]) => {

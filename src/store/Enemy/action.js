@@ -73,7 +73,9 @@ const actions = {
       // ! to watch
       // ! if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
 
+
       const enemyData = Object.entries(state.rawData).reduce((res, [k, v]) => {
+
         const target = mapData.enemyDbRefs.find(el => el.id === k)
         if (target) {
           res[k] = Object.assign({}, v, target)
