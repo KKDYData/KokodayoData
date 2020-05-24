@@ -84,7 +84,7 @@ import './styl/skill.styl'
 import Range from './Range'
 import SkillContainer from './SkillContainer'
 import SkillList from './SkillList'
-import HPopover from '@/components/base/Popover'
+import HPopover from '@/components/Base/Popover'
 
 import { mapState } from 'vuex'
 

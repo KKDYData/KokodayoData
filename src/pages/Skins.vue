@@ -33,12 +33,12 @@
 <script>
 import store from '../store'
 import { mapState } from 'vuex'
-import FilterButtonGroup from '../components/base/FilterButtonGroup'
-import Loading from '../components/base/Loading'
+import FilterButtonGroup from '../components/Base/FilterButtonGroup'
+import Loading from '../components/Base/Loading'
 import { getSkinsData, getScreenWidth } from '../utils'
-import SetPanel from '../components/base/SetPanel'
-import CImage from '@/components/base/CImage'
-import FS from '@/components/base/FullScreen'
+import SetPanel from '../components/Base/SetPanel'
+import CImage from '@/components/Base/CImage'
+import FS from '@/components/Base/FullScreen'
 
 store.dispatch('setExtraSkins')
 

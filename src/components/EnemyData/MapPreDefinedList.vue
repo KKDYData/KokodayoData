@@ -45,11 +45,11 @@
 
 <script>
 import { getDetailsProfilePath, findValue } from '../../utils'
-import charStatus from '../base/charStatus'
-import loadingC from '../base/Loading'
+import charStatus from '../Base/charStatus'
+import loadingC from '../Base/Loading'
 import EnemyCube from './EnemyCube'
-import ContentSlot from '@/components/base/ContentSlot'
-import HPopover from '@/components/base/Popover'
+import ContentSlot from '@/components/Base/ContentSlot'
+import HPopover from '@/components/Base/Popover'
 
 const SkillPanel = () => ({
   component: import(

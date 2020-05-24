@@ -132,11 +132,11 @@ import { Button } from 'element-ui'
 import Vue from 'vue'
 Vue.use(Button)
 
-import HTooltip from '@/components/base/Tooltip'
+import HTooltip from '@/components/Base/Tooltip'
 
 
 import { mapState } from 'vuex'
-import ContentSlot from '../base/ContentSlot'
+import ContentSlot from '../Base/ContentSlot'
 
 import { changeKey } from '../../utils'
 import { statusToCh } from '../../utils/string'

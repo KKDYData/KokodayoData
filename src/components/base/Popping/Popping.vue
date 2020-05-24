@@ -49,8 +49,8 @@
 </template>
 <script>
 import { mapState } from 'vuex'
-import HDrawer from '@/components/base/Drawer'
-import HPopover from '@/components/base/Popover'
+import HDrawer from '@/components/Base/Drawer'
+import HPopover from '@/components/Base/Popover'
 
 
 export default {

@@ -47,8 +47,8 @@
 </template>
 
 <script>
-import MyTitle from '../base/MyTitle'
-import ContentSlot from '../base/ContentSlot'
+import MyTitle from '../Base/MyTitle'
+import ContentSlot from '../Base/ContentSlot'
 
 import Vue from 'vue'
 import { mapState } from 'vuex'

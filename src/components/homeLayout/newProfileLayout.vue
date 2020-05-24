@@ -94,8 +94,8 @@ Vue.use(Card)
 Vue.use(Tag)
 
 import { rootPath } from '../../stats'
-import CImage from '@/components/base/CImage'
-import HPopover from '@/components/base/Popover'
+import CImage from '@/components/Base/CImage'
+import HPopover from '@/components/Base/Popover'
 
 
 export default {

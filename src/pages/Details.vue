@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import loadingC from '../components/base/Loading'
+import loadingC from '../components/Base/Loading'
 
 const DetailsLayout = () => ({
   component: import(/* webpackChunkName: "DetailsLayout" */ '../components/DetailsLayout'),

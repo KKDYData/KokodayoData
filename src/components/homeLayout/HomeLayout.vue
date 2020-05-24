@@ -120,14 +120,14 @@ import CollapseTransition from 'element-ui/lib/transitions/collapse-transition'
 Vue.component(CollapseTransition.name, CollapseTransition)
 Vue.use(Button)
 Vue.use(Tag)
-import HPopover from '@/components/base/Popover'
-import HTab from '@/components/base/Tab'
+import HPopover from '@/components/Base/Popover'
+import HTab from '@/components/Base/Tab'
 
 
-import FilterButtonGroup from '../base/FilterButtonGroup'
-import loadingC from '../base/Loading'
+import FilterButtonGroup from '../Base/FilterButtonGroup'
+import loadingC from '../Base/Loading'
 import ProfileLayout from './ProfileLayout'
-import CloseButton from '../base/CloseButton'
+import CloseButton from '../Base/CloseButton'
 
 import { sort } from '@/utils'
 import { localStore } from '@/localStore'

@@ -21,7 +21,7 @@
 
 <script>
 import { statusToChChar } from '../../utils/string'
-import ContentSlot from '@/components/base/ContentSlot'
+import ContentSlot from '@/components/Base/ContentSlot'
 import { mapState } from 'vuex'
 
 export default {

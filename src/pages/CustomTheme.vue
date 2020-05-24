@@ -65,8 +65,8 @@
 </template>
 
 <script>
-import MySlideTitle from '../components/base/MySlideTilte'
-import FurniList from '../components/base/FurniLIst'
+import MySlideTitle from '../components/Base/MySlideTilte'
+import FurniList from '../components/Base/FurniLIst'
 import { bsr } from '../utils'
 import { getThemeList, getFurn } from '../utils/fetch'
 import { path } from '../utils/listVer'
@@ -75,7 +75,7 @@ import { Loading } from 'element-ui'
 import Vue from 'vue'
 Vue.use(Loading)
 
-import RImage from '@/components/base/RImage'
+import RImage from '@/components/Base/RImage'
 
 const ease = t => bsr(t, 0.38, 0.93, 0.78, 1.02)
 

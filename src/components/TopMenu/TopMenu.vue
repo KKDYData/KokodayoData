@@ -35,7 +35,7 @@
 import './styl.styl'
 import RouteItem from './RoutItem'
 import { mapState } from 'vuex'
-import HDrawer from '@/components/base/Popping'
+import HDrawer from '@/components/Base/Popping'
 
 
 export default {

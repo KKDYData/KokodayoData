@@ -207,14 +207,14 @@
   </div>
 </template>
 <script>
-import loadingC from '../base/Loading'
+import loadingC from '../Base/Loading'
 import MapDropList from './MapDropList'
 import EnemyMapInfo from './EnemyMapInfo'
 import MapPreDefined from './MapPreDefined'
-import AccordionPanel from '@/components/base/AccrordionPanel'
-import SlidePanel from '@/components/base/AccrordionPanel/SlidePanel'
-import HDrawer from '@/components/base/Drawer'
-import HTooltip from '@/components/base/Tooltip'
+import AccordionPanel from '@/components/Base/AccrordionPanel'
+import SlidePanel from '@/components/Base/AccrordionPanel/SlidePanel'
+import HDrawer from '@/components/Base/Drawer'
+import HTooltip from '@/components/Base/Tooltip'
 
 
 import { Tree, Button, Loading, Slider } from 'element-ui'

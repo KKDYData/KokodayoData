@@ -4,7 +4,7 @@
   </div>
 </template>
 <script>
-import CImage from '@/components/base/CImage'
+import CImage from '@/components/Base/CImage'
 
 
 export default {

@@ -10,7 +10,7 @@ import Vue from 'vue'
 import { Alert } from 'element-ui'
 Vue.use(Alert)
 
-import loadingC from '../components/base/Loading'
+import loadingC from '../components/Base/Loading'
 
 const ComputerLayout = () => ({
   component: import(/* webpackChunkName: "ComputerLayout" */ '../components/ComputerLayout'),

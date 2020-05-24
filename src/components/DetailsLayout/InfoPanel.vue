@@ -147,11 +147,11 @@ Vue.use(Button)
 Vue.use(Slider)
 
 import AudioContainer from './AudioContainer'
-import FS from '@/components/base/FullScreen'
-import HTooltip from '@/components/base/Tooltip'
-import SetPanel from '../base/SetPanel'
-import ContentSlot from '../base/ContentSlot'
-import HTab from '@/components/base/Tab'
+import FS from '@/components/Base/FullScreen'
+import HTooltip from '@/components/Base/Tooltip'
+import SetPanel from '../Base/SetPanel'
+import ContentSlot from '../Base/ContentSlot'
+import HTab from '@/components/Base/Tab'
 
 import { mapActions, mapState } from 'vuex'
 

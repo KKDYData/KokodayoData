@@ -11,16 +11,16 @@ const setVer = (name, ver) => {
   store.commit(name, new Date(ver).toLocaleString())
 }
 
-const fetchPut = (url, data) => {
-  return fetch(url, {
-    method: 'PUT',
-    body: JSON.stringify(data),
-    headers: new Headers({
-      'Content-Type': 'application/json'
-    })
-  }).then(res => res.json())
-    .catch(err => Promise.reject(err))
-}
+// const fetchPut = (url, data) => {
+//   return fetch(url, {
+//     method: 'PUT',
+//     body: JSON.stringify(data),
+//     headers: new Headers({
+//       'Content-Type': 'application/json'
+//     })
+//   }).then(res => res.json())
+//     .catch(err => Promise.reject(err))
+// }
 
 // const checkWebVer = () => fetchPut('/api/arknights/check', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 3 })
 // process.env.NODE_ENV === 'production' && checkWebVer().then(({ res }) => {
@@ -30,9 +30,9 @@ const fetchPut = (url, data) => {
 //   console.error(`err: ${err}`)
 // })
 
-const submitFeedback = content => {
-  return fetchPut('/api/arknights/feedback', content)
-}
+// const submitFeedback = content => {
+//   return fetchPut('/api/arknights/feedback', content)
+// }
 
 //包装fetch，使用get
 const fetchGet = (url) => {
@@ -128,7 +128,6 @@ export {
   getEnemyData,
   getEneAppearMap,
   getDevList,
-  submitFeedback,
   getThemeList,
   importSpriteJs,
   importEcharts,

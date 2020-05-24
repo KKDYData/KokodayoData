@@ -57,7 +57,7 @@
 
 <script>
 // import ItemViewer from '@/components/ItemViewer'
-import RImage from '@/components/base/RImage'
+import RImage from '@/components/Base/RImage'
 
 export default {
   components: {

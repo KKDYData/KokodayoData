@@ -115,14 +115,14 @@ Vue.use(Button)
 Vue.use(Alert)
 import InputWrapper from './InputWrapper'
 import QA from './QA'
-import MyTitle from '@/components/base/MyTitle'
-import MySlideTitle from '@/components/base/MySlideTilte'
-import RImage from '@/components/base/RImage'
+import MyTitle from '@/components/Base/MyTitle'
+import MySlideTitle from '@/components/Base/MySlideTilte'
+import RImage from '@/components/Base/RImage'
 
-import { submitFeedback } from '@/utils/fetch'
 import { mapState } from 'vuex'
 import { localStore } from '../../localStore'
 import { pipe } from 'ramda'
+import { Api } from '../../Api'
 
 
 const wenming = [
@@ -190,38 +190,38 @@ export default {
   },
   methods: {
     async submitFb() {
-      if (!this.id) {
-        Message.warning('必须填昵称')
-        return
-      }
-      if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(this.id)) {
-        Message.warning('昵称不能包含特殊符号')
-        return
-      }
-      if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.email)) {
-        Message.warning('邮箱格式不对（xxx@xxx.xxx）')
-        return
-      }
-      if (!this.feedback) {
-        Message.warning('反馈内容不能为空')
-        return
-      }
-      const lastId = await this.store.getItem('feedbackID')
-      if (!lastId) {
-        await this.store.setItem('feedbackID', this.id)
-      }
-      if (lastId && lastId !== this.id) {
-        await MessageBox.confirm(
-          `这次的昵称(${this.id})和上次不一样，需要换成上次(${lastId})的吗？`,
-          '昵称不一致'
-        )
-          .then(el => {
-            this.id = lastId
-          })
-          .catch(el => {
-            this.store.setItem('feedbackID', this.id)
-          })
-      }
+      // if (!this.id) {
+      //   Message.warning('必须填昵称')
+      //   return
+      // }
+      // if (!/^[\u4e00-\u9fa5_a-zA-Z0-9]+$/.test(this.id)) {
+      //   Message.warning('昵称不能包含特殊符号')
+      //   return
+      // }
+      // if (!/^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.email)) {
+      //   Message.warning('邮箱格式不对（xxx@xxx.xxx）')
+      //   return
+      // }
+      // if (!this.feedback) {
+      //   Message.warning('反馈内容不能为空')
+      //   return
+      // }
+      // const lastId = await this.store.getItem('feedbackID')
+      // if (!lastId) {
+      //   await this.store.setItem('feedbackID', this.id)
+      // }
+      // if (lastId && lastId !== this.id) {
+      //   await MessageBox.confirm(
+      //     `这次的昵称(${this.id})和上次不一样，需要换成上次(${lastId})的吗？`,
+      //     '昵称不一致'
+      //   )
+      //     .then(el => {
+      //       this.id = lastId
+      //     })
+      //     .catch(el => {
+      //       this.store.setItem('feedbackID', this.id)
+      //     })
+      // }
       MessageBox.confirm(
         `内容: ${this.feedback}`,
         `确认提交内容, ID: ${this.id}, 邮箱：${this.email}`
@@ -235,7 +235,7 @@ export default {
     },
     submit() {
       const data = { title: this.title, id: this.id, content: this.feedback + ' \n 邮箱：' + this.email }
-      return submitFeedback(data)
+      return Api.postFeedback(data)
         .then(res => {
           this.store.setItem('tempFeedback', '')
           this.feedback = ''

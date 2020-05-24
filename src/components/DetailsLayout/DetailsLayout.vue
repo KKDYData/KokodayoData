@@ -203,11 +203,11 @@ import TalentsPanel from './TalentsPanel'
 import SkillUpPanel from './SkillUpCost'
 import BuildingData from './BuildingData'
 import ItemViewer from '../ItemViewer'
-import charStatus from '../base/charStatus'
-import DataLoading from '../base/Loading'
-import MyTitle from '@/components/base/MyTitle'
-import HTab from '@/components/base/Tab'
-import HTooltip from '@/components/base/Tooltip'
+import charStatus from '../Base/charStatus'
+import DataLoading from '../Base/Loading'
+import MyTitle from '@/components/Base/MyTitle'
+import HTab from '@/components/Base/Tab'
+import HTooltip from '@/components/Base/Tooltip'
 
 const SkillPanel = () => ({
   component: import(

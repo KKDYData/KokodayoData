@@ -58,7 +58,7 @@ import { mapState } from 'vuex'
 
 import { Tag } from 'element-ui'
 Vue.use(Tag)
-import CImage from '@/components/base/CImage'
+import CImage from '@/components/Base/CImage'
 
 import { getProfilePath } from '../../utils'
 import { path } from '../../utils/listVer'
@@ -175,7 +175,7 @@ export default {
       padding: 0
       font-size: 0
       overflow: hidden
-      //border-radius: 3px
+      // border-radius: 3px
     }
   }
 
@@ -338,7 +338,7 @@ padMode(size) {
         top: vw(item * 0.78)
 
         &-inner-ch {
-          //min-width: vw(item * 0.56)
+          // min-width: vw(item * 0.56)
           font-size: vw(item * 0.16)
           margin-top: vw(item * 0.05)
           margin-bottom: vw(item * -0.05)
@@ -373,7 +373,7 @@ padMode(size) {
 @media screen and (max-width: 700px) {
   padMode(6)
 
-  //配合swiper
+  // 配合swiper
   .profile-container {
     margin: 0
   }
@@ -384,7 +384,7 @@ padMode(size) {
 
   .profile-item {
     padding: vw(15) vw(7)
-    //padding-bottom: vw(5)
+    // padding-bottom: vw(5)
   }
 }
 </style>

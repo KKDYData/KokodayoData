@@ -154,12 +154,12 @@ Vue.use(Divider)
 Vue.use(Tooltip)
 
 import DropLine from './DropLine'
-import Color from '../base/Color'
+import Color from '../Base/Color'
 
 
 import { getItem } from '../../utils/fetch'
-import HPopping from '@/components/base/Popping'
-import HTooltip from '@/components/base/Tooltip'
+import HPopping from '@/components/Base/Popping'
+import HTooltip from '@/components/Base/Tooltip'
 import HItem from './Item'
 
 

@@ -45,7 +45,7 @@
 
 <script>
 import { changeAttackSpeed } from '../../utils'
-import HPopping from '@/components/base/Popping'
+import HPopping from '@/components/Base/Popping'
 
 export default {
   components: {

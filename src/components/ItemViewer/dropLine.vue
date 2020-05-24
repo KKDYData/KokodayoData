@@ -29,11 +29,11 @@
 </template>
 
 <script>
-import HTooltip from '@/components/base/Tooltip'
+import HTooltip from '@/components/Base/Tooltip'
 
 import { occPer_chinese } from '../../utils/string'
 
-import Color from '../base/Color'
+import Color from '../Base/Color'
 
 export default {
   components: {

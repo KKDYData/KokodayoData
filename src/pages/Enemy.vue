@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import loadingC from '../components/base/Loading'
+import loadingC from '../components/Base/Loading'
 
 const EnemyData = () => ({
   component: import(/* webpackChunkName: "EnemyData" */ '../components/EnemyData'),

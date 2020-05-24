@@ -102,9 +102,9 @@ import Vue from 'vue'
 Vue.use(Loading)
 
 
-import CImage from '@/components/base/CImage'
-import ContentSlot from '@/components/base/ContentSlot'
-import RImage from '@/components/base/RImage'
+import CImage from '@/components/Base/CImage'
+import ContentSlot from '@/components/Base/ContentSlot'
+import RImage from '@/components/Base/RImage'
 
 import { mapState } from 'vuex'
 import { getScreenWidth } from '../../../utils'

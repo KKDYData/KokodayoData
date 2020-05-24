@@ -26,10 +26,10 @@ import Vue from 'vue'
 Vue.use(link)
 Vue.use(Alert)
 
-import loadingC from '../components/base/Loading'
+import loadingC from '../components/Base/Loading'
 import { devMode } from '../stats'
-import MyTitle from '@/components/base/MyTitle'
-import SlideTitle from '@/components/base/MySlideTilte'
+import MyTitle from '@/components/Base/MyTitle'
+import SlideTitle from '@/components/Base/MySlideTilte'
 import { localStore } from '@/localStore'
 import { mapState } from 'vuex'
 import { Assets } from '../Api'

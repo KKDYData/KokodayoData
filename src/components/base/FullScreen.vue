@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import '@/components/base/RImage/image.css'
+import '@/components/Base/RImage/image.css'
 import { popper } from './utils/popup'
 import { PopupManager } from './utils/popup/popup-manager'
 import { setStyle } from './utils/dom'

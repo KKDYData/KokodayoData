@@ -11,7 +11,7 @@
 </template>
 <script>
 import { path } from '@/utils/listVer'
-import CImage from '@/components/base/CImage'
+import CImage from '@/components/Base/CImage'
 
 export default {
   components: {

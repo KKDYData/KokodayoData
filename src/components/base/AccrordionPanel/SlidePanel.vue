@@ -1,5 +1,5 @@
 <script>
-import MySildeTitle from '@/components/base/MySlideTilte'
+import MySildeTitle from '@/components/Base/MySlideTilte'
 import Emitter from '../utils/emmiter'
 
 export default {

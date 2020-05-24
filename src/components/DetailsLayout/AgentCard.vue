@@ -83,7 +83,7 @@ import {
 import { getClass_Chinese } from '../../utils/string'
 import { path } from '../../utils/listVer'
 
-import charCube from '../base/charCube'
+import charCube from '../Base/charCube'
 
 export default {
 
@@ -350,7 +350,7 @@ export default {
     padding-bottom: 30px
   }
 
-  //??
+  // ??
   .agent-card-title-class, .agent-card-title-name {
     font-size: 20px
   }

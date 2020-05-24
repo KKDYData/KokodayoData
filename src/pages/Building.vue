@@ -74,8 +74,8 @@
 <script>
 import BuildPanel from '@/components/DetailsLayout/BuildingData'
 import { getProfilePath, sort } from '../utils'
-import CImage from '@/components/base/CImage'
-import FilterGroup from '@/components/base/FilterButtonGroup'
+import CImage from '@/components/Base/CImage'
+import FilterGroup from '@/components/Base/FilterButtonGroup'
 import { mapState } from 'vuex'
 
 import room from '@/utils/data/room'

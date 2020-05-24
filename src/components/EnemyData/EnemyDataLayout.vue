@@ -100,7 +100,7 @@
 import { Button } from 'element-ui'
 import Vue from 'vue'
 Vue.use(Button)
-import MyTitle from '../base/MyTitle'
+import MyTitle from '../Base/MyTitle'
 
 import EnemyStatus from './EnemyStatus'
 import EnemyDataDrawer from './EnemyDataDrawer'

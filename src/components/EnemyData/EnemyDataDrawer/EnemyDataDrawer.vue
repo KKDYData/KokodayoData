@@ -74,8 +74,8 @@
 <script>
 import { path } from '@/utils/listVer'
 import BaseStatusBox from './BaseStatusBox'
-import CImage from '@/components/base/CImage'
-import HDrawer from '@/components/base/Drawer'
+import CImage from '@/components/Base/CImage'
+import HDrawer from '@/components/Base/Drawer'
 
 
 import { createNamespacedHelpers, mapState as Root } from 'vuex'
