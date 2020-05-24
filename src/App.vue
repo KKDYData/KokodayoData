@@ -23,13 +23,16 @@
 </template>
 <script>
 import TopMenu from '@/components/TopMenu'
-import MyShare from '@/components/Share'
+
+
 import { mapState } from 'vuex'
 import { devMode } from './stats'
 // import Vue from 'vue'
 // import { Input } from 'element-ui'
 // Vue.use(Input)
-const Footer = () => import(/* webpackChunkName: "EnemyData" */'./components/Footer')
+const Footer = () => import(/* webpackChunkName: "Footer" */'./components/Footer')
+const MyShare = () => import(/* webpackChunkName: "MyShare" */'@/components/Share')
+
 const forceUnregister = 200116
 import localforage from 'localforage'
 import { Button } from 'element-ui'

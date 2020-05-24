@@ -21,7 +21,6 @@
   </div>
 </template>
 <script>
-import { getProfileList } from '../utils/fetch'
 import { Alert, link } from 'element-ui'
 import Vue from 'vue'
 Vue.use(link)
@@ -33,6 +32,7 @@ import MyTitle from '@/components/base/MyTitle'
 import SlideTitle from '@/components/base/MySlideTilte'
 import { localStore } from '@/localStore'
 import { mapState } from 'vuex'
+import { Assets } from '../Api'
 
 
 const HomeLayout = () => ({
@@ -70,34 +70,44 @@ export default {
     }
   },
   computed: {
-    ...mapState(['short'])
+    ...mapState(['short']),
+    ...mapState({
+      info: state => state.Base.info
+    })
+  },
+  watch: {
+    info(v) {
+      this.linkStart()
+
+    }
   },
   created() {
+    this.linkStart()
   },
   mounted() {
-    this.linkStart()
     this.store.getItem('home-activity-state').then((state) => {
       this.activityState = state === null ? true : state
       console.log('act ', state)
     })
-
   },
   methods: {
     linkStart() {
-      this.getData().then(data => {
-        const agent = [],
-          token = []
-        data.forEach(el => {
-          if (el.class !== 'TOKEN') agent.push(el)
-          else token.push(el)
+      if (this.info?.agent?.char) {
+        this.getData(this.info.agent.char.key).then(data => {
+          const agent = [],
+            token = []
+          data.forEach(el => {
+            if (el.class !== 'TOKEN') agent.push(el)
+            else token.push(el)
+          })
+          this.data = agent
+          this.token = token
+          this.load = true
         })
-        this.data = agent
-        this.token = token
-        this.load = true
-      })
+      }
     },
-    getData() {
-      return getProfileList().then(source => {
+    getData(key) {
+      return Assets.getProfileList(key).then(source => {
         source.forEach((el, index, arr) => {
           el.index = index
           el.tagHit = 0
@@ -144,7 +154,7 @@ export default {
 
     &-base {
       margin: vw(20) vw(10)
-      //不给width swiper 的宽算不对
+      // 不给width swiper 的宽算不对
       max-width: vw(750 - 20)
     }
 

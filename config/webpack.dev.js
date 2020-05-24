@@ -16,7 +16,7 @@ module.exports = merge(common, {
     contentBase: './dist',
     hot: true,
     proxy: {
-      '/api': 'http://127.0.0.1:8444',
+      '/api': 'http://127.0.0.1:3001',
     },
     port: 8899,
     host: '0.0.0.0',

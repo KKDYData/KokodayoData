@@ -32,4 +32,5 @@ new Vue({
 
 
 store.dispatch('setDropList')
-store.dispatch('setStageTree')
+store.dispatch('Base/getInfo', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 3 })
+

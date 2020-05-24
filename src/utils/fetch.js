@@ -1,12 +1,8 @@
 import {
-  charListVer,
-  stageListVer,
-  enemyListVer,
   dataPath,
   target,
   api,
   path,
-  buildingListVer
 } from './listVer'
 
 import store from '../store'
@@ -26,13 +22,13 @@ const fetchPut = (url, data) => {
     .catch(err => Promise.reject(err))
 }
 
-const checkWebVer = () => fetchPut('/api/arknights/check', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 3 })
-process.env.NODE_ENV === 'production' && checkWebVer().then(({ res }) => {
-  store.commit('setisNeedUpdate', res)
-  console.log(res)
-}).catch(err => {
-  console.error(`err: ${err}`)
-})
+// const checkWebVer = () => fetchPut('/api/arknights/check', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 3 })
+// process.env.NODE_ENV === 'production' && checkWebVer().then(({ res }) => {
+//   store.commit('setisNeedUpdate', res)
+//   console.log(res)
+// }).catch(err => {
+//   console.error(`err: ${err}`)
+// })
 
 const submitFeedback = content => {
   return fetchPut('/api/arknights/feedback', content)
@@ -74,13 +70,6 @@ const fetchByKey = (keyPath) => {
     })
 }
 
-
-
-
-const getProfileList = () => fetchByKey('char/list')(charListVer)
-const getStageList = () => fetchByKey('lists/stage')(stageListVer) //fetchGetSliceSet('stageList');
-const getEnemyList = () => fetchByKey('lists/enemy')(enemyListVer) //fetchGetSliceSet('enemyList', 'setEnemyVer');
-const getBuildingList = () => fetchByKey('lists/buildingSkills')(buildingListVer) //fetchGetSliceSet('enemyList', 'setEnemyVer');
 
 
 // 遗留api
@@ -136,12 +125,9 @@ export {
   fetchByKey,
 
 
-  getProfileList,
   getEnemyData,
-  getBuildingList,
   getEneAppearMap,
   getDevList,
-  getEnemyList,
   submitFeedback,
   getThemeList,
   importSpriteJs,
@@ -156,7 +142,6 @@ export {
   getItem,
   getRange,
   getMapDataListVer,
-  getStageList,
   getFurn,
   getCharItem,
 }

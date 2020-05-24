@@ -1,15 +1,18 @@
-import Vuex from 'vuex';
-import Vue from 'vue';
-import actions from './action';
-import { UA } from '../utils';
-import { charListVer } from '../utils/listVer';
-import { EnemyPanel } from './Enemy';
+import Vuex from 'vuex'
+import Vue from 'vue'
+import actions from './action'
+import { UA } from '../utils'
+import { charListVer } from '../utils/listVer'
+import { EnemyPanel } from './Enemy'
+import { mutations } from './Enemy/mutations'
+import * as Base from './base.m'
 
-Vue.use(Vuex);
+Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
-    enemy: EnemyPanel
+    enemy: EnemyPanel,
+    Base
   },
   state: {
     listVer: new Date(+charListVer.toString().split('').reverse().join('')).toLocaleString(),
@@ -27,41 +30,39 @@ export default new Vuex.Store({
   getters: {
     itemDropList: (state) => id => {
       if (state.dropList) {
-        return state.dropList[id];
+        return state.dropList[id]
       }
     }
   },
   mutations: {
+    ...mutations,
     setShort: (state, v) => {
-      state.short = v;
+      state.short = v
     },
     setScreenWidth: (state, v) => {
-      state.screenWidth = v;
+      state.screenWidth = v
     },
     setListVer: (state, ver) => {
-      state.listVer = ver;
+      state.listVer = ver
     },
     setPageVer: (state, ver) => {
-      state.pageVer = ver;
+      state.pageVer = ver
     },
     setEnemyVer: (state, ver) => {
-      state.enemyVer = ver;
+      state.enemyVer = ver
     },
     setApperMapVer: (state, ver) => {
-      state.apperMapVer = ver;
+      state.apperMapVer = ver
     },
     setDropList: (state, list) => {
-      state.dropList = list;
+      state.dropList = list
     },
     setStageTree: (state, tree) => {
-      state.stageTree = tree;
+      state.stageTree = tree
     },
     setExtraSkins: (state, list) => {
-      state.extraSkins = list;
+      state.extraSkins = list
     },
-    setisNeedUpdate(state, v) {
-      state.isNeedUpdate = v;
-    }
   },
   ...actions
-});
+})

@@ -159,6 +159,9 @@ export default {
   computed: {
     ...Root(['screenWidth']),
     ...mapState(['short', 'map']),
+    ...mapState({
+      info: state => state.Base.info
+    }),
     appearMap() {
       // 之后改成从vuex拿
       return {}
@@ -212,9 +215,8 @@ export default {
       this.showKey = key
       this.detailsOpen = true
       this.currEnemy = v
-      let d
       if (key !== 'enemy_1503_talula') {
-        this.currentData = d = await getEnemyData(key)
+        this.currentData = await getEnemyData(key)
         if (v.overwrittenData) {
           const index = this.currentData.findIndex(el => el.level === v.level)
           const target = this.currentData[index]

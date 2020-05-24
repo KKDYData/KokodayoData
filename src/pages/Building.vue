@@ -72,7 +72,6 @@
   </div>
 </template>
 <script>
-import { getBuildingList } from '../utils/fetch'
 import BuildPanel from '@/components/DetailsLayout/BuildingData'
 import { getProfilePath, sort } from '../utils'
 import CImage from '@/components/base/CImage'
@@ -85,6 +84,7 @@ import './styl/Building'
 
 import Vue from 'vue'
 import { Loading } from 'element-ui'
+import { Assets } from '../Api'
 Vue.use(Loading)
 
 
@@ -201,6 +201,9 @@ export default {
   },
   computed: {
     ...mapState(['short']),
+    ...mapState({
+      info: state => state.Base.info
+    }),
     classMode() {
       return this.short ? 'mobile' : 'pc'
     },
@@ -220,35 +223,44 @@ export default {
       return this.filter ? types[this.filter.value] : []
     }
   },
+  watch: {
+    info() {
+      this.init()
+    }
+  },
   async created() {
-    const data = await getBuildingList().then((data => {
-      const res = data.map(e => {
-        e.all = false
-        return e
-      })
-      return res
-    }))
-    this.rawSkills = data
-    this.skills = data
-    const rawlist = Object.values(data.reduce((res, cur) => {
-      const { name, key, skills } = cur
-      skills.forEach(skillGroup => {
-        skillGroup.forEach(skill => {
-          const { id, data } = skill
-          if (!res[id]) {
-            res[id] = { data, list: [{ name, key }] }
-          } else {
-            res[id].list.push({ name, key })
-          }
-        })
-      })
-      return res
-    }, {}))
-    this.list = rawlist
-    this.rawlist = rawlist
-    this.loading = false
+    this.init()
   },
   methods: {
+    async init() {
+      if (!this.info.agent.building.key) return
+      const data = await Assets.getBuildingList(this.info.agent.building.key).then((data => {
+        const res = data.map(e => {
+          e.all = false
+          return e
+        })
+        return res
+      }))
+      this.rawSkills = data
+      this.skills = data
+      const rawlist = Object.values(data.reduce((res, cur) => {
+        const { name, key, skills } = cur
+        skills.forEach(skillGroup => {
+          skillGroup.forEach(skill => {
+            const { id, data } = skill
+            if (!res[id]) {
+              res[id] = { data, list: [{ name, key }] }
+            } else {
+              res[id].list.push({ name, key })
+            }
+          })
+        })
+        return res
+      }, {}))
+      this.list = rawlist
+      this.rawlist = rawlist
+      this.loading = false
+    },
     getPic(key) {
       return getProfilePath(key, true)
     },

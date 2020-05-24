@@ -4,6 +4,7 @@ const webpack = require('webpack')
 const VueLoaderPlugin = require('vue-loader/lib/plugin')
 const WorkboxPlugin = require('workbox-webpack-plugin')
 const ImageminPlugin = require('imagemin-webpack')
+const { time } = require('./time')
 
 const swPlugins = [
   new WorkboxPlugin.InjectManifest({
@@ -24,7 +25,7 @@ module.exports = {
     new webpack.NamedModulesPlugin(),
     new VueLoaderPlugin(),
     new webpack.DefinePlugin({
-      'process.env.VERSION': JSON.stringify(new Date()),
+      'process.env.VERSION': JSON.stringify(time),
     }),
     new ImageminPlugin({
       bail: false, // Ignore errors on corrupted images

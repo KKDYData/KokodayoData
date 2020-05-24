@@ -1,5 +1,4 @@
 import {
-  getEnemyList,
   getMapData,
   getMapDataListVer,
   getCharItem,
@@ -10,9 +9,8 @@ import { Message } from 'element-ui'
 import { initSomeMap } from '@/components/EnemyData/initData'
 import { SET_DATA } from './mutations'
 import { router } from '@/router'
-import { findStage, preDefineGet } from '@/utils'
-
-
+import { findStage, preDefineGet, sleep } from '@/utils'
+import { Assets } from '@/Api'
 //! this.preData = null;
 //! const data = this.selMapData.predefines;
 //! this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
@@ -33,13 +31,17 @@ const getItemList = (list) => {
 }
 
 const actions = {
-  linkStart({ dispatch, commit, getters, rootState }) {
-    return getEnemyList().then(data => {
-      // console.log('enemy data', data)
-      commit(SET_DATA, { key: 'rawData', value: data })
-      if (rootState.stageTree) dispatch('loadMap')
-      else commit(SET_DATA, { key: 'watchTree', value: true })
-    })
+  async linkStart({ dispatch, commit, getters, rootState }) {
+    let key
+    while (!(key = rootState.Base.info?.level?.enemy?.key)) {
+      console.log('await')
+      await sleep(50)
+    }
+    console.log('await')
+    const data = await Assets.getEnemyList(key)
+    commit(SET_DATA, { key: 'rawData', value: data })
+    if (rootState.stageTree) dispatch('loadMap')
+    else commit(SET_DATA, { key: 'watchTree', value: true })
   },
   async loadMap({ commit, dispatch, rootState }, map) {
     const parent = map || router.currentRoute.params.map
