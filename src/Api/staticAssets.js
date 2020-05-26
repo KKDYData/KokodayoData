@@ -2,7 +2,7 @@ import { dataPath, target } from '@/utils/listVer'
 import { fetchGet } from './fetch'
 
 const fetchByKey = (keyPath) => {
-  return key => fetchGet(`${dataPath}/${target}/${keyPath}/${key}.json`, false)
+  return key => fetchGet(`${dataPath}/${target}/${keyPath}/${key}.json`, { isApi: false })
 }
 
 

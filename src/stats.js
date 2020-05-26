@@ -1,6 +1,5 @@
-const devMode = process.env.PRODUCTION //eslint-disable-line no-undef
+const devMode = process.env.PRODUCTION
 const rootPath = ''
-
 export {
   devMode,
   rootPath

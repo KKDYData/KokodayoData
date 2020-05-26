@@ -15,9 +15,7 @@
     </div>
     <top-menu />
     <my-share />
-    <transition name="fade" mode="out-in">
-      <router-view v-if="ok" class="view" />
-    </transition>
+    <router-view class="view" />
     <Footer />
   </div>
 </template>
@@ -39,6 +37,8 @@ import { Button } from 'element-ui'
 import Vue from 'vue'
 Vue.use(Button)
 
+console.log(process.env.VERSION)
+
 export default {
   components: {
     Footer,
@@ -49,20 +49,18 @@ export default {
     return {
       isOrientation: false,
       loading: true,
-      ok: 1 || devMode !== 'beta' || process.env.NODE_ENV === 'development',
-      key: '',
+      dev: devMode === 'beta' || process.env.NODE_ENV === 'development',
       status: '',
       unregistHit: 0
     }
   },
   computed: {
-    ...mapState(['isNeedUpdate'])
-  },
-  watch: {
-    key(v) {
-      if (v === 'kokodayo test') {
-        this.ok = true
-      }
+    ...mapState({
+      info: state => state.Base.info
+    }),
+    isNeedUpdate() {
+      if (!this.info) return false
+      return this.info.base?.web.key > process.env.VERSION && !this.dev
     }
   },
   mounted() {

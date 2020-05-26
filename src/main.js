@@ -18,19 +18,16 @@ Vue.config.productionTip = false
 
 const isDev = process.env.NODE_ENV === 'development'
 
+
+
 new Vue({
   el: '#app',
   router,
   store,
   render: h => h(App)
 })
-
-
 !isDev && import(/* webpackChunkName: "loadSw" */ './loadSw').then(res => {
   res.default()
 })
-
-
 store.dispatch('setDropList')
 store.dispatch('Base/getInfo', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 3 })
-

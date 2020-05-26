@@ -2,10 +2,14 @@ import { isCrossOrigin } from './utils'
 import { memoizeWith, identity } from 'ramda'
 import { ApiError } from './error'
 
+const isDev = process.env.NODE_ENV === 'development'
+
 const getMode = url => isCrossOrigin(url) ? 'cors' : 'same-origin'
 const getModeC = memoizeWith(identity, getMode)
 
-export const fetchGet = (url, isApi = true) => {
+export const fetchGet = (url, { isApi = true, template }) => {
+  if (isDev && template) return Promise.resolve(template)
+
   return fetch(url, {
     method: 'GET',
     mode: getModeC(url)

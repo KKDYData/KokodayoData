@@ -25,7 +25,6 @@ export default new Vuex.Store({
     extraSkins: null,
     short: UA.isMoblie || window.innerWidth < 600 ? true : false,
     screenWidth: document.body.clientWidth,
-    isNeedUpdate: false,
   },
   getters: {
     itemDropList: (state) => id => {
