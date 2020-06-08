@@ -76,8 +76,8 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
 
   })
 
-  // todo merge predata
-  console.log(theta, persective)
+  // console.log(theta, persective)
+
   if (!instance) {
 
     instance = new SomeMap(
@@ -97,6 +97,7 @@ const initSomeMap = (testData, container, predata, theta = (140 / 360) * Math.PI
     instance.config(container, persective, theta)
     instance.init(mapData, routes)
     instance.startLoop()
+
 
   }
 

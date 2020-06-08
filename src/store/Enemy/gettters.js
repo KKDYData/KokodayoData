@@ -18,21 +18,22 @@ const getters = {
           wRes +
           cur.preDelay +
           cur.postDelay +
-          cur.fragments.reduce((fRes, cur) => {
-            let fTemp = fRes + cur.preDelay
-            cur.time = fTemp
+          cur.fragments.reduce((fRes, fCur) => {
+            fRes += fCur.preDelay
+            fCur.time = fRes
 
-            enemyNum = cur.enemyNum = cur.actions.reduce((res, el) => {
+            enemyNum = fCur.enemyNum = fCur.actions.reduce((res, el) => {
               if (el.actionType === 0) return res + el.count
               else return res
             }, enemyNum)
 
-            fTemp += cur.actions.reduce((res, cur) => {
-              const curTime = cur.preDelay + cur.interval * cur.count
+            fRes += fCur.actions.reduce((res, cur) => {
+              const curTime = cur.preDelay + cur.interval * (cur.count - 1)
               // 找出每波最长的
               return Math.max(res, curTime)
             }, 0)
-            return fTemp
+
+            return fRes
           }, 0),
         0
       ) : 0

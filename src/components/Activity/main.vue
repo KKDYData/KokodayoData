@@ -23,9 +23,7 @@
         </div>
       </div>-->
       <div style="margin-top: 20px">
-        <span
-          class="activity-info-need"
-        >不知不觉就一周年了，而kkdy到5月底的时候也一运营一年了。在这里简单重申下，这是我个人的前/后端学习，非盈利性质的，实验性（不支持ios10.3、安卓5、ie11及以下）项目，大家的反馈，以及我不断学了新技术之后想找地方写demo，是我更新的最大动力。</span>
+        <span class="activity-info-need">和PRTS.Map 联调了一下出怪的时间，现在出怪时间应该是准确的了，如果还是有问题的话，请务必反馈！</span>
       </div>
       <div style="margin-top: 20px">
         <p class="activity-info-need">
@@ -37,17 +35,10 @@
         <p class="activity-info-need">3. 如果有兴趣帮忙做下测试完善敌人/干员图鉴的内容，也十分欢迎。</p>
       </div>
       <div style="margin-top: 20px">
-        <span
-          class="activity-info-need"
-          style="color: red"
-        >临时修复一下H7图的敌人数据不正确的问题（爱国者），如果页面异常请及时反馈以修改，谢谢。</span>
-      </div>
-      <div style="margin-top: 20px">
         <span class="activity-info-need">
           <router-link to="/info">点击这里</router-link>，往下滑找到“反馈”以反馈问题。
         </span>
       </div>
-
       <div style="margin-top: 20px">
         <span class="activity-info-need light">企鹅物流的掉落数据，同步时间为10分钟/次。</span>
       </div>
