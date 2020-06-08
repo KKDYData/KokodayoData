@@ -8,7 +8,7 @@
         <div class="image-inner" :style="{backgroundImage: `url('${src}')`}" />
       </div>
     </div>
-    <div :class="(name.length > 6 ? 'small' : '') + ' normal'">{{ name }}</div>
+    <div :class="(name.length > 5 ? 'small' : '') + ' normal'">{{ name }}</div>
   </div>
 </template>
 
@@ -54,7 +54,7 @@ export default {
   min-width: 100px
   position: relative
 
-  //background-image: linear-gradient(45deg, hsl(163, 100%, 6%), transparent)
+  // background-image: linear-gradient(45deg, hsl(163, 100%, 6%), transparent)
   &:before {
     content: ''
     border: 7px solid

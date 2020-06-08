@@ -236,6 +236,7 @@ export default {
                 } else if (key === 'skills' && v.overwrittenData.skills) {
                   if (!res.skills) {
                     console.log('???? no skil')
+                    return res
                   }
 
                   v.overwrittenData.skills.forEach(e => {

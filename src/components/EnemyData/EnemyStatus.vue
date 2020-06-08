@@ -320,11 +320,12 @@ export default {
       this.status = this.data.map((list, i) => {
         const res = []
 
-        const findDefinedValue = (key, curI) => {
+        const findDefinedValue = (key, curI, isLifePoint) => {
           if (curI < 0) return 0
           const target =
             this.data[curI].enemyData[key] ||
             this.data[curI].enemyData.attributes[key]
+          if (isLifePoint) return typeof target === 'number' ? target : target.m_value
           if (target.m_defined) return target.m_value
           else return findDefinedValue(key, curI - 1)
         }
@@ -333,7 +334,7 @@ export default {
           const name = statusToCh(key)
           if (name) {
             res.push([name, findDefinedValue(key, i), key])
-          } else if (i === 0) {
+          } else {
             if (tagKey[key]) {
               this.Tag[key].value = findDefinedValue(key, i)
             }
@@ -348,7 +349,7 @@ export default {
           findDefinedValue('rangeRadius', i),
           'rangeScale'
         ])
-        res.push(['LifePoint', findDefinedValue('lifePointReduce', i)])
+        res.push(['LifePoint', findDefinedValue('lifePointReduce', i, true)])
 
         return res
       })

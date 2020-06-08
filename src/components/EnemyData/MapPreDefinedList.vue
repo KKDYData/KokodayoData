@@ -5,7 +5,12 @@
     </div>
     <div class="predefine-list">
       <div v-for="(item, index) in myList" :key="index" class="predefine-item">
-        <h-popover popper-class="fuck-outline" :width="300" :title="item.name">
+        <h-popover
+          :append-to-body="true"
+          popper-class="fuck-outline"
+          :width="300"
+          :title="item.name"
+        >
           <div slot="reference" class="fuck-outline">
             <enemy-cube
               class="predefine-item-bg"
@@ -50,6 +55,8 @@ import loadingC from '../Base/Loading'
 import EnemyCube from './EnemyCube'
 import ContentSlot from '@/components/Base/ContentSlot'
 import HPopover from '@/components/Base/Popover'
+import { Directions } from '../../utils/string'
+import { mapState } from 'vuex'
 
 const SkillPanel = () => ({
   component: import(
@@ -61,7 +68,6 @@ const SkillPanel = () => ({
   timeout: 5000
 })
 
-import { Directions } from '../../utils/string'
 
 export default {
   components: {
@@ -80,6 +86,7 @@ export default {
     runesData: { default: null }
   },
   computed: {
+    ...mapState(['short']),
     myList() {
       if (this.runesData) {
         // 仅检测箱子数量，测试一下

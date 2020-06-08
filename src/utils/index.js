@@ -7,9 +7,9 @@ import UaParser from 'ua-parser-js'
 
 const debounce = (action, idle, ...args) => {
   let last
-  return (e) => {
+  return (...event) => {
     clearTimeout(last)
-    last = setTimeout(action, idle, ...args)
+    last = setTimeout(action, idle, ...args, ...event)
   }
 }
 
