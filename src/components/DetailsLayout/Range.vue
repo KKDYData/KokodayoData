@@ -2,7 +2,7 @@
   <div v-if="girdTable" class="gird-container" :style="containerWidth">
     <div v-for="row in rows" :key="row" class="gird-row">
       <div v-for="col in cols" :key="col" :style="style" :class="rangeHit(row, col)">
-        <!-- <div :class>{{row}} : {{col}} {{}} |</div> -->
+        <div>{{ row }} : {{ col }} |</div>
       </div>
     </div>
   </div>
@@ -14,9 +14,9 @@ import { sort } from '../../utils'
 import { mapState } from 'vuex'
 
 export default {
-  props: ['rangeId', 'data'],
+  props: [ 'rangeId', 'data' ],
 
-  data() {
+  data () {
     return {
       isRotate: false,
       rangeData: null,
@@ -24,68 +24,71 @@ export default {
     }
   },
   computed: {
-    ...mapState(['short']),
-    containerWidth() {
+    ...mapState([ 'short' ]),
+    containerWidth () {
       const width =
         this.cols.length > 2 ? 'auto' : 50 * this.cols.length + 'px'
       return {
         width: width
       }
     },
-    rows() {
+    rows () {
       return this.girdTable.rows
     },
-    cols() {
+    cols () {
       return this.girdTable.cols
     },
-    girdTable() {
+    girdTable () {
       const data = this.data ? this.data : this.rangeData
       if (!data) return
-      const rowsArr = sort([...data.grids], (a, b) => a.row > b.row),
-        colsArr = sort([...data.grids], (a, b) => a.col > b.col),
-        rows = [],
-        cols = []
-      for (
-        let i = rowsArr[rowsArr.length - 1].row;
-        i < rowsArr[0].row + 1;
-        i++
-      ) {
+      const rowsArr = sort([ ...data.grids ], (a, b) => a.row > b.row),
+        colsArr = sort([ ...data.grids ], (a, b) => a.col > b.col)
+      const rows = []
+      const cols = []
+
+      for (let i = rowsArr[ rowsArr.length - 1 ].row; i < rowsArr[ 0 ].row + 1; i++) {
         rows.push(i)
       }
-      for (
-        let i = colsArr[colsArr.length - 1].col;
-        i < colsArr[0].col + 1;
-        i++
-      ) {
+
+      for (let i = colsArr[ colsArr.length - 1 ].col; i < colsArr[ 0 ].col + 1; i++) {
         cols.push(i)
       }
+
+      //! 临时处理
+      if (colsArr[ colsArr.length - 1 ].col > 0) {
+        let i = colsArr[ colsArr.length - 1 ].col
+        while (i > 0) {
+          cols.unshift(--i)
+        }
+      }
+
       return {
         rows: rows,
         cols: cols
       }
     },
-    style() {
+    style () {
       const width = this.isRotate ? 1 / Math.min(this.girdTable.rows.length, this.girdTable.cols.length)
         : 1 / Math.max(this.girdTable.rows.length, this.girdTable.cols.length)
       return {
-        width: this.short ? `${50 * (width * 0.8)}vw` : `${width * 80}% `,
-        borderWidth: this.short ? `${50 * 0.05 * width}vw` : `${width * 12} px`,
-        margin: this.short ? `${50 * 0.05 * width}vw` : `${width * 8} px`
+        width: this.short ? `${ 50 * (width * 0.8) }vw` : `${ width * 80 }% `,
+        borderWidth: this.short ? `${ 50 * 0.05 * width }vw` : `${ width * 12 } px`,
+        margin: this.short ? `${ 50 * 0.05 * width }vw` : `${ width * 8 } px`
       }
     },
   },
   watch: {
-    async rangeId(v) {
+    async rangeId (v) {
       this.rangeData = await getRange(this.rangeId)
     }
   },
-  async mounted() {
+  async mounted () {
     if (this.rangeId) {
       this.rangeData = await getRange(this.rangeId)
     }
   },
   methods: {
-    rangeHit(r, c) {
+    rangeHit (r, c) {
       const data = this.data ? this.data : this.rangeData
 
       if (this.isRotate) {

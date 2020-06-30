@@ -5919,10 +5919,10 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.npm.taobao.org/kind-of/download/kind-of-6.0.3.tgz#07c05034a6c349fa06e24fa35aa76db4580ce4dd"
   integrity sha1-B8BQNKbDSfoG4k+jWqdttFgM5N0=
 
-kkdy-somemap@^0.3.13:
-  version "0.3.13"
-  resolved "https://registry.npm.taobao.org/kkdy-somemap/download/kkdy-somemap-0.3.13.tgz#b1b3586947d084f67a6f2efe660b586e9de892a0"
-  integrity sha1-sbNYaUfQhPZ6by7+ZgtYbp3okqA=
+kkdy-somemap@^0.3.13-beta.1:
+  version "0.3.13-beta.1"
+  resolved "https://registry.npmjs.org/kkdy-somemap/-/kkdy-somemap-0.3.13-beta.1.tgz#f7f7079d80576f978fcc84eba917e236ece5be38"
+  integrity sha512-OmCU/n+Yf9+dn5bHcs29oOSb00XQ2yTpeqV1eNCZzKZDxTev1mTgLtfUuDmvEyC7k3DH0rdeNl67MaMYk750XA==
   dependencies:
     pathfinding "^0.4.18"
     serialize-javascript "^2.1.2"
@@ -8544,8 +8544,8 @@ send@0.17.1:
 
 serialize-javascript@^2.1.2:
   version "2.1.2"
-  resolved "https://registry.npm.taobao.org/serialize-javascript/download/serialize-javascript-2.1.2.tgz?cache=0&sync_timestamp=1581860621656&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fserialize-javascript%2Fdownload%2Fserialize-javascript-2.1.2.tgz#ecec53b0e0317bdc95ef76ab7074b7384785fa61"
-  integrity sha1-7OxTsOAxe9yV73arcHS3OEeF+mE=
+  resolved "https://registry.npmjs.org/serialize-javascript/-/serialize-javascript-2.1.2.tgz#ecec53b0e0317bdc95ef76ab7074b7384785fa61"
+  integrity sha512-rs9OggEUF0V4jUSecXazOYsLfu7OGK2qIn3c7IPBiffz32XniEp/TX9Xmc9LQfK2nQ2QKHvZ2oygKUGU0lG4jQ==
 
 serve-index@^1.9.1:
   version "1.9.1"
