@@ -12,6 +12,7 @@ module.exports = merge(common, {
 
   ],
   devtool: 'inline-source-map',
+  // @ts-ignore
   devServer: {
     contentBase: './dist',
     hot: true,
@@ -33,8 +34,8 @@ module.exports = merge(common, {
           }
         },
         {
-          from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|rune|a00|(act\dd)).*$/, to: context => {
-            return '/' + context.parsedUrl.path.slice(11)
+          from: /^\/enemydata\/(?!main_|sub_|hard|camp|wk_|pro|rune|a00|(act\d{1, 2}d)).*$/, to: context => {
+            return '/index.html'
           }
         },
         {

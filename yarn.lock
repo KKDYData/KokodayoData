@@ -5920,9 +5920,9 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   integrity sha1-B8BQNKbDSfoG4k+jWqdttFgM5N0=
 
 kkdy-somemap@^0.3.13-beta.1:
-  version "0.3.13-beta.1"
-  resolved "https://registry.npmjs.org/kkdy-somemap/-/kkdy-somemap-0.3.13-beta.1.tgz#f7f7079d80576f978fcc84eba917e236ece5be38"
-  integrity sha512-OmCU/n+Yf9+dn5bHcs29oOSb00XQ2yTpeqV1eNCZzKZDxTev1mTgLtfUuDmvEyC7k3DH0rdeNl67MaMYk750XA==
+  version "0.3.14"
+  resolved "https://registry.npmjs.org/kkdy-somemap/-/kkdy-somemap-0.3.14.tgz#d89f6859da269505726e997c6cbccc4d03a8effc"
+  integrity sha512-N2Y6muv8cVNQaWSgwFnEuI9jLtiecd6Spc/Pc2lulpTCon1g1OES99ZkaqEgehA12//0YZrJFNkad6wH2MgY1A==
   dependencies:
     pathfinding "^0.4.18"
     serialize-javascript "^2.1.2"

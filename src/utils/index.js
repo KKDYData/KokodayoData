@@ -190,6 +190,7 @@ const changeDesc = (desc) => {
       if (matchTypeGroup.length) {
         matchValueBegin = true
       } else {
+        res += matchValue
         matchValueBegin = false
       }
       return res
