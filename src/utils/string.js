@@ -1,15 +1,15 @@
-const getKey = (keys) => key => keys[key] ? keys[key] : key
-const getKeyWithNull = (keys) => key => keys[key] ? keys[key] : null
+const getKey = (keys) => key => keys[ key ] ? keys[ key ] : key
+const getKeyWithNull = (keys) => key => keys[ key ] ? keys[ key ] : null
 
 
 // 拆包数据
 const evolveGoldCost = [
-  [-1, -1],
-  [-1, -1],
-  [10000, -1],
-  [15000, 60000],
-  [20000, 120000],
-  [30000, 180000]
+  [ -1, -1 ],
+  [ -1, -1 ],
+  [ 10000, -1 ],
+  [ 15000, 60000 ],
+  [ 20000, 120000 ],
+  [ 30000, 180000 ]
 ]
 
 const exp_cards = {
@@ -186,50 +186,50 @@ const GOLD = {
 // hsla(270, 47 %, 47 %, 1)
 // 公招的颜色
 const agentColor = [
-  [0, 0, 20],
-  [0, 0, 55],
-  [0, 0, 55],
-  [270, 47, 47],
-  [40, 100, 50],
-  [25, 95, 55]
+  [ 0, 0, 20 ],
+  [ 0, 0, 55 ],
+  [ 0, 0, 55 ],
+  [ 270, 47, 47 ],
+  [ 40, 100, 50 ],
+  [ 25, 95, 55 ]
 ]
 
 // css属性
 const starColor = [
-  [0, 0, 20],
-  [0, 0, 20],
-  [213, 53, 20],
-  [282, 35, 15],
-  [40, 100, 50],
-  [25, 95, 55]
+  [ 0, 0, 20 ],
+  [ 0, 0, 20 ],
+  [ 213, 53, 20 ],
+  [ 282, 35, 15 ],
+  [ 40, 100, 50 ],
+  [ 25, 95, 55 ]
 ]
 
 const charBorderColor = {
   0: {
-    background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2]}%, 1), hsla(0, 0%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[ 0 ][ 0 ]}, ${starColor[ 0 ][ 1 ]}%, ${starColor[ 0 ][ 2 ]}%, 1), hsla(0, 0%, 95%, 1))`,
   },
   1: {
-    background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2]}%, 1), hsla(0, 0%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[ 1 ][ 0 ]}, ${starColor[ 1 ][ 1 ]}%, ${starColor[ 1 ][ 2 ]}%, 1), hsla(0, 0%, 95%, 1))`,
   },
   2: {
-    background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1]}%, ${starColor[2][2]}%, 1), hsla(213, 53%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[ 2 ][ 0 ]}, ${starColor[ 2 ][ 1 ]}%, ${starColor[ 2 ][ 2 ]}%, 1), hsla(213, 53%, 95%, 1))`,
   },
   3: {
-    background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2]}%, 1), hsla(282, 35%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[ 3 ][ 0 ]}, ${starColor[ 3 ][ 1 ]}%, ${starColor[ 3 ][ 2 ]}%, 1), hsla(282, 35%, 95%, 1))`,
   },
   4: {
-    background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), hsla(40, 100%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[ 4 ][ 0 ]}, ${starColor[ 4 ][ 1 ]}%, ${starColor[ 4 ][ 2 ]}%, 1), hsla(40, 100%, 95%, 1))`,
   },
   5: {},
 }
 
 const charNameColor = {
-  0: { background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2] + 13}%, 1), transparent)`, },
-  1: { background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2] + 13}%, 1), transparent)` },
-  2: { background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1] - 27}%, ${starColor[2][2] + 15}%, 1), transparent)` },
-  3: { background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2] + 17}%, 1),transparent)` },
-  4: { background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), transparent)`, },
-  5: { background: `linear-gradient(16deg, hsla(${starColor[5][0]}, ${starColor[5][1]}%, ${starColor[5][2]}%, 1), transparent)`, },
+  0: { background: `linear-gradient(16deg, hsla(${starColor[ 0 ][ 0 ]}, ${starColor[ 0 ][ 1 ]}%, ${starColor[ 0 ][ 2 ] + 13}%, 1), transparent)`, },
+  1: { background: `linear-gradient(16deg, hsla(${starColor[ 1 ][ 0 ]}, ${starColor[ 1 ][ 1 ]}%, ${starColor[ 1 ][ 2 ] + 13}%, 1), transparent)` },
+  2: { background: `linear-gradient(16deg, hsla(${starColor[ 2 ][ 0 ]}, ${starColor[ 2 ][ 1 ] - 27}%, ${starColor[ 2 ][ 2 ] + 15}%, 1), transparent)` },
+  3: { background: `linear-gradient(16deg, hsla(${starColor[ 3 ][ 0 ]}, ${starColor[ 3 ][ 1 ]}%, ${starColor[ 3 ][ 2 ] + 17}%, 1),transparent)` },
+  4: { background: `linear-gradient(16deg, hsla(${starColor[ 4 ][ 0 ]}, ${starColor[ 4 ][ 1 ]}%, ${starColor[ 4 ][ 2 ]}%, 1), transparent)`, },
+  5: { background: `linear-gradient(16deg, hsla(${starColor[ 5 ][ 0 ]}, ${starColor[ 5 ][ 1 ]}%, ${starColor[ 5 ][ 2 ]}%, 1), transparent)`, },
 }
 
 const itemBackground = {
@@ -410,6 +410,7 @@ const StageType = {
   act7d5: 'Act·7·午间逸话',
   act9d0: 'Act·9·生于黑夜',
   act10d5: 'Act·10·乌萨斯的孩子们',
+  act11d0: 'Act·11·沃伦姆德的薄暮',
   rune: '危机合约'
 }
 
@@ -455,7 +456,7 @@ const class_chinese = {
 
 const getClass_Chinese = en => {
   if (en === 'TOKEN') return '召唤物'
-  return class_chinese[en].text
+  return class_chinese[ en ].text
 }
 
 
