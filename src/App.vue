@@ -26,8 +26,7 @@ import TopMenu from '@/components/TopMenu'
 import { mapState } from 'vuex'
 import { devMode } from './stats'
 // import Vue from 'vue'
-// import { Input } from 'element-ui'
-// Vue.use(Input)
+
 const Footer = () => import(/* webpackChunkName: "Footer" */'./components/Footer')
 const MyShare = () => import(/* webpackChunkName: "MyShare" */'@/components/Share')
 
@@ -70,7 +69,7 @@ export default {
     })
     store.getItem('forceUnregister').then(date => {
       if (!date || date < forceUnregister) {
-        console.log(`强制注销serverWorker, 当前记录：${date}, 目标记录${forceUnregister}`)
+        console.log(`强制注销serverWorker, 当前记录：${ date }, 目标记录${ forceUnregister }`)
         navigator.serviceWorker.getRegistrations()
           .then((registrations) => {
             registrations.forEach(el => el.unregister())

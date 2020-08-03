@@ -2,11 +2,11 @@
   <h-popping
     v-if="data"
     class="item-viewer-container"
-    :class="{small}"
-    :style="{zIndex}"
+    :class="{ small }"
+    :style="{ zIndex }"
     popper-class="item-popover-class"
     placement="right"
-    :width="!short? 350 : 250"
+    :width="!short ? 350 : 250"
     :trigger="isHover"
     :title="data.name"
     :disabled="noPopover"
@@ -39,7 +39,7 @@
         </h-tooltip>
       </div>
       <div v-if="num || weight" style="text-align: center">
-        <span :style="{fontSize}" class="item-name">{{ data.name }}</span>
+        <span :style="{ fontSize }" class="item-name">{{ data.name }}</span>
         <div style="color:rgb(86, 86, 86)">
           <span v-if="num">x{{ num }}</span>
           <span v-else>{{ weight }}%</span>
@@ -96,7 +96,10 @@
           <el-divider content-position="left">
             <span>合成配方</span>
           </el-divider>
-          <div v-for="{costs, formulaId, goldCost, extraOutcomeGroup} in formula" :key="formulaId">
+          <div
+            v-for="{ costs, formulaId, goldCost, extraOutcomeGroup } in formula"
+            :key="formulaId"
+          >
             <div class="item-formula-container">
               <just-viewer
                 v-if="goldCost > 0"
@@ -149,9 +152,8 @@ import {
 
 import { mapState } from 'vuex'
 import Vue from 'vue'
-import { Divider, Tooltip } from 'element-ui'
+import { Divider } from 'element-ui'
 Vue.use(Divider)
-Vue.use(Tooltip)
 
 import DropLine from './DropLine'
 import Color from '../Base/Color'
@@ -168,7 +170,7 @@ const getItmeDropData = (el, stageTree, list) => {
   const stageData = findStage(el.stageId, stageTree)
   if (stageData) {
     const temp = stageData.label.split(' ')
-    res.stageCode = temp[0]
+    res.stageCode = temp[ 0 ]
     if (list) {
       const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId)
       if (dropInfo) {
@@ -214,7 +216,7 @@ export default {
   props: {
     item: {
       required: true,
-      type: [String, Object]
+      type: [ String, Object ]
     },
     num: {
       type: Number,
@@ -260,27 +262,27 @@ export default {
       data: typeof this.item !== 'string' ? this.item : undefined,
       GOLD,
       show: false,
-      sortFunc: sortFuncArr[1],
+      sortFunc: sortFuncArr[ 1 ],
       zIndex: 0
     }
   },
 
   computed: {
-    ...mapState(['stageTree', 'short']),
+    ...mapState([ 'stageTree', 'short' ]),
     formula() {
       if (!this.data) return []
       return this.data.buildingProductList
         .filter(el => el.roomType === 'WORKSHOP')
-        .map(el => formula[el.formulaId])
+        .map(el => formula[ el.formulaId ])
         .filter(e => e)
     },
     itemBackground() {
-      return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {}
+      return this.type !== 'FURN' ? itemBackground[ this.data.rarity ] : {}
     },
     itemPic() {
       if (this.type === 'FURN')
-        return `${path}custom/furnitures/pic/${this.data.id}.png`
-      else return `${path}item/pic/${this.data.iconId}_optimized.png`
+        return `${ path }custom/furnitures/pic/${ this.data.id }.png`
+      else return `${ path }item/pic/${ this.data.iconId }_optimized.png`
     },
 
     dropListRow() {
@@ -294,7 +296,7 @@ export default {
         )
         if (tempRes > -1) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          const temp = this.dropList.splice(tempRes, 1)[0]
+          const temp = this.dropList.splice(tempRes, 1)[ 0 ]
           return temp
         }
         // ?这是随机掉落，上面是主掉落,主掉落需要从所有掉落里分割出当前地图的掉落。
@@ -307,7 +309,7 @@ export default {
         const res = Object.assign({}, target)
         const stageData = findStage(target.stageId, this.stageTree)
         const temp = stageData.label.split(' ')
-        res.stageCode = temp[0]
+        res.stageCode = temp[ 0 ]
         res.rate = Math.round((target.quantity / target.times) * 100)
         res.dropCost = Math.round(
           (target.times / target.quantity) * stageData.apCost
@@ -354,14 +356,14 @@ export default {
   },
   methods: {
     occper(occ) {
-      return occPer_chinese[occ]
+      return occPer_chinese[ occ ]
     },
     roomName(id) {
-      return roomType[id]
+      return roomType[ id ]
     },
     switchSortFunc() {
-      if (this.sortFunc.key === 0) this.sortFunc = sortFuncArr[1]
-      else this.sortFunc = sortFuncArr[0]
+      if (this.sortFunc.key === 0) this.sortFunc = sortFuncArr[ 1 ]
+      else this.sortFunc = sortFuncArr[ 0 ]
     }
   }
 }

@@ -21,9 +21,8 @@
   </div>
 </template>
 <script>
-import { Alert, link } from 'element-ui'
+import { Alert } from 'element-ui'
 import Vue from 'vue'
-Vue.use(link)
 Vue.use(Alert)
 
 import loadingC from '../components/Base/Loading'
@@ -58,7 +57,7 @@ export default {
     Activity,
     SlideTitle
   },
-  data() {
+  data () {
     return {
       data: [],
       token: [],
@@ -70,28 +69,28 @@ export default {
     }
   },
   computed: {
-    ...mapState(['short']),
+    ...mapState([ 'short' ]),
     ...mapState({
       info: state => state.Base.info
     })
   },
   watch: {
-    info(v) {
+    info (v) {
       this.linkStart()
 
     }
   },
-  created() {
+  created () {
     this.linkStart()
   },
-  mounted() {
+  mounted () {
     this.store.getItem('home-activity-state').then((state) => {
       this.activityState = state === null ? true : state
       console.log('act ', state)
     })
   },
   methods: {
-    linkStart() {
+    linkStart () {
       if (this.info?.agent?.char) {
         this.getData(this.info.agent.char.key).then(data => {
           const agent = [],
@@ -106,7 +105,7 @@ export default {
         })
       }
     },
-    getData(key) {
+    getData (key) {
       return Assets.getProfileList(key).then(source => {
         source.forEach((el, index, arr) => {
           el.index = index
@@ -116,7 +115,7 @@ export default {
         return source.reverse()
       })
     },
-    handleActivity(el) {
+    handleActivity (el) {
       console.log(el, el.value)
       this.store.setItem('home-activity-state', el.value)
     }
