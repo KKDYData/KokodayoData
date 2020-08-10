@@ -10,6 +10,7 @@ const state = {
 const actions = {
   async getInfo({ state, commit }) {
     state.info = await Api.getInfo()
+    commit('setListVer', new Date(state.info.agent.char.update_time).toLocaleString(), { root: true })
 
     if (state.info?.level?.stage) {
       const data = await Assets.getStageList(state.info.level.stage.key)

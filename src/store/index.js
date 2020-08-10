@@ -2,7 +2,7 @@ import Vuex from 'vuex'
 import Vue from 'vue'
 import actions from './action'
 import { UA } from '../utils'
-import { charListVer } from '../utils/listVer'
+// import { charListVer } from '../utils/listVer'
 import { EnemyPanel } from './Enemy'
 import { mutations } from './Enemy/mutations'
 import * as Base from './base.m'
@@ -15,7 +15,7 @@ export default new Vuex.Store({
     Base
   },
   state: {
-    listVer: new Date(+charListVer.toString().split('').reverse().join('')).toLocaleString(),
+    listVer: new Date(),//(+charListVer.toString().split('').reverse().join('')).toLocaleString(),
     pageVer: '',
     enemyVer: '',
     apperMapVer: '',
