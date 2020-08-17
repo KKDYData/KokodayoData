@@ -233,7 +233,7 @@ export default {
   },
   methods: {
     async init() {
-      if (!this.info.agent.building.key) return
+      if (!this.info.agent?.building.key) return
       const data = await Assets.getBuildingList(this.info.agent.building.key).then((data => {
         const res = data.map(e => {
           e.all = false
