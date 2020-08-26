@@ -57,53 +57,50 @@ const actions = {
     }
   },
   async choseMap({ commit, state, dispatch }, data) {
-    console.log('map code', state.mapCode)
-    const [mapData, exData] = await Promise.all([
-      getMapData('level_' + data.path.replace('kc', 'killcost')),
-      getMapDataListVer(state.mapCode)
-    ]).catch(err => {
+    const exData = await getMapDataListVer(state.mapCode)
+    const mapData = await getMapData(exData.levelId.split('/').pop())
+
+    if (!mapData) {
       Message.error('获取数据失败')
-      return []
-    })
-
-    if (mapData) {
-      exData.stageDropInfo &&
-        getItemList(exData.stageDropInfo.displayDetailRewards).then(
-          value => commit(SET_DATA, { key: 'detailsDropList', value })
-        )
-
-      // ! to watch
-      // ! if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
-
-
-      const enemyData = Object.entries(state.rawData).reduce((res, [k, v]) => {
-
-        const target = mapData.enemyDbRefs.find(el => el.id === k)
-        if (target) {
-          res[k] = Object.assign({}, v, target)
-          return res
-        } else return res
-      }, {})
-      commit(SET_DATA, { key: 'data', value: enemyData })
-      commit(SET_DATA, { key: 'selectedMap', value: data.label })
-      commit(SET_DATA, { key: 'selMapData', value: mapData })
-      commit(SET_DATA, { key: 'selMapDataEx', value: exData })
-
-      await dispatch('getPreData')
-
-
-      // 去掉地图的loading遮罩
-      commit(SET_DATA, { key: 'mapPicLoad', value: false })
-      // todo need change
-      const canvas = document.getElementById('map-canvas-container')
-      commit(SET_DATA, {
-        key: 'map', value: initSomeMap(
-          mapData,
-          canvas,
-          state.preData
-        )
-      })
+      return
     }
+
+    exData.stageDropInfo &&
+      getItemList(exData.stageDropInfo.displayDetailRewards).then(
+        value => commit(SET_DATA, { key: 'detailsDropList', value })
+      )
+
+    // ! to watch
+    // ! if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
+
+
+    const enemyData = Object.entries(state.rawData).reduce((res, [k, v]) => {
+
+      const target = mapData.enemyDbRefs.find(el => el.id === k)
+      if (target) {
+        res[k] = Object.assign({}, v, target)
+        return res
+      } else return res
+    }, {})
+    commit(SET_DATA, { key: 'data', value: enemyData })
+    commit(SET_DATA, { key: 'selectedMap', value: data.label })
+    commit(SET_DATA, { key: 'selMapData', value: mapData })
+    commit(SET_DATA, { key: 'selMapDataEx', value: exData })
+
+    await dispatch('getPreData')
+
+
+    // 去掉地图的loading遮罩
+    commit(SET_DATA, { key: 'mapPicLoad', value: false })
+    // todo need change
+    const canvas = document.getElementById('map-canvas-container')
+    commit(SET_DATA, {
+      key: 'map', value: initSomeMap(
+        mapData,
+        canvas,
+        state.preData
+      )
+    })
   },
   async getPreData({ state, commit }) {
     commit(SET_DATA, { key: 'preData', value: null })
