@@ -1,9 +1,9 @@
 <template>
   <div>
     <div class="activity-wrapper">
-      <div class="activity-img">
+      <!-- <div class="activity-img">
         <r-image :preview-src-list="[activityPic]" :src="activityPic" />
-      </div>
+      </div>-->
       <!-- <div class="activity-title">午间逸话</div> -->
       <!-- <div class="activity-content">
         <div class="activity-info-need">SA-1 → 6 主要掉落如下</div>
@@ -22,6 +22,11 @@
           <a target="_blank" href="https://penguin-stats.io/">数据来源&收集：企鹅物流</a>
         </div>
       </div>-->
+      <div style="margin-top: 20px">
+        <span
+          class="activity-info-need"
+        >ro图更新了，图看索引id，分为easy和normal，也就是突袭模式吧。但是没处理重复的索引。也就是说，要看普通的图就点下突袭。图好像是有30张，有的图有普通难度，也就变成了53张。听起来有点绕，总之就先将就下。也还没检查数据有没有问题。</span>
+      </div>
       <div style="margin-top: 20px">
         <span class="activity-info-need">和PRTS.Map 联调了一下出怪的时间，现在出怪时间应该是准确的了，如果还是有问题的话，请务必反馈！</span>
       </div>
