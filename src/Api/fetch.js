@@ -8,7 +8,7 @@ const getMode = url => isCrossOrigin(url) ? 'cors' : 'same-origin'
 const getModeC = memoizeWith(identity, getMode)
 
 export const fetchGet = (url, { isApi = true, template }) => {
-  if (isDev && template) return Promise.resolve(template)
+  // if (isDev && template) return Promise.resolve(template)
 
   return fetch(url, {
     method: 'GET',

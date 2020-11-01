@@ -62,7 +62,7 @@ function sort(array, less) {
 }
 
 class TaskQueue {
-  constructor(concurrency, finalTask = () => { }, queue = []) {
+  constructor (concurrency, finalTask = () => { }, queue = []) {
     this.concurrency = concurrency
     this.running = 0
     this.queue = queue
@@ -390,9 +390,9 @@ const changeAttackSpeed = (skill) => {
   }
 
   // 阿
-  if (res.match(/生命.+减少/)) {
+  if (res.match(/生命(.{1,9})减少/)) {
     const hp_ratio = findValue(skill, 'blackboard', 'hp_ratio')
-    res += wrapColor(`(每秒减少${hp_ratio.value * 100}%)`, '#F49800')
+    res += wrapColor(`(每秒减少${(hp_ratio)?.value * 100}%)`, '#F49800')
   }
 
   if (exSkill2.has(skill.prefabId)) {

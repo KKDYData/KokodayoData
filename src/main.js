@@ -30,4 +30,4 @@ new Vue({
   res.default()
 })
 store.dispatch('setDropList')
-store.dispatch('Base/getInfo', { stamp: +new Date(process.env.VERSION) + 1000 * 60 * 3 })
+store.dispatch('Base/getInfo', { stamp: +new Date(process.env.VERSION) })

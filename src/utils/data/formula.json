@@ -393,6 +393,115 @@
     ],
     "requireStages": []
   },
+  "57": {
+    "sortId": 2000,
+    "formulaId": "57",
+    "rarity": 0,
+    "itemId": "30145",
+    "count": 1,
+    "goldCost": 400,
+    "apCost": 2880000,
+    "formulaType": "F_EVOLVE",
+    "buffType": "W_EVOLVE",
+    "extraOutcomeRate": 0.1,
+    "extraOutcomeGroup": [
+      {
+        "weight": 84,
+        "itemId": "30014",
+        "itemCount": 1
+      },
+      {
+        "weight": 63,
+        "itemId": "30024",
+        "itemCount": 1
+      },
+      {
+        "weight": 63,
+        "itemId": "30034",
+        "itemCount": 1
+      },
+      {
+        "weight": 56,
+        "itemId": "30044",
+        "itemCount": 1
+      },
+      {
+        "weight": 56,
+        "itemId": "30054",
+        "itemCount": 1
+      },
+      {
+        "weight": 42,
+        "itemId": "30064",
+        "itemCount": 1
+      },
+      {
+        "weight": 72,
+        "itemId": "30074",
+        "itemCount": 1
+      },
+      {
+        "weight": 63,
+        "itemId": "30084",
+        "itemCount": 1
+      },
+      {
+        "weight": 63,
+        "itemId": "30094",
+        "itemCount": 1
+      },
+      {
+        "weight": 56,
+        "itemId": "30104",
+        "itemCount": 1
+      },
+      {
+        "weight": 72,
+        "itemId": "31014",
+        "itemCount": 1
+      },
+      {
+        "weight": 63,
+        "itemId": "31024",
+        "itemCount": 1
+      },
+      {
+        "weight": 56,
+        "itemId": "31034",
+        "itemCount": 1
+      }
+    ],
+    "costs": [
+      {
+        "id": "31034",
+        "count": 1,
+        "type": "MATERIAL"
+      },
+      {
+        "id": "31014",
+        "count": 2,
+        "type": "MATERIAL"
+      },
+      {
+        "id": "31024",
+        "count": 1,
+        "type": "MATERIAL"
+      }
+    ],
+    "requireRooms": [
+      {
+        "roomId": "WORKSHOP",
+        "roomLevel": 3,
+        "roomCount": 1
+      }
+    ],
+    "requireStages": [
+      {
+        "stageId": "sub_05-4-3",
+        "rank": 2
+      }
+    ]
+  },
   "12": {
     "sortId": 2001,
     "formulaId": "12",
@@ -463,6 +572,11 @@
       {
         "weight": 63,
         "itemId": "31024",
+        "itemCount": 1
+      },
+      {
+        "weight": 56,
+        "itemId": "31034",
         "itemCount": 1
       }
     ],
@@ -563,6 +677,11 @@
         "weight": 63,
         "itemId": "31024",
         "itemCount": 1
+      },
+      {
+        "weight": 56,
+        "itemId": "31034",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -657,6 +776,11 @@
         "weight": 63,
         "itemId": "31024",
         "itemCount": 1
+      },
+      {
+        "weight": 56,
+        "itemId": "31034",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -684,6 +808,115 @@
       }
     ],
     "requireStages": []
+  },
+  "58": {
+    "sortId": 2100,
+    "formulaId": "58",
+    "rarity": 0,
+    "itemId": "31034",
+    "count": 1,
+    "goldCost": 300,
+    "apCost": 1440000,
+    "formulaType": "F_EVOLVE",
+    "buffType": "W_EVOLVE",
+    "extraOutcomeRate": 0.1,
+    "extraOutcomeGroup": [
+      {
+        "weight": 60,
+        "itemId": "30013",
+        "itemCount": 1
+      },
+      {
+        "weight": 50,
+        "itemId": "30023",
+        "itemCount": 1
+      },
+      {
+        "weight": 50,
+        "itemId": "30033",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "30043",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "30053",
+        "itemCount": 1
+      },
+      {
+        "weight": 30,
+        "itemId": "30063",
+        "itemCount": 1
+      },
+      {
+        "weight": 45,
+        "itemId": "30073",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "30083",
+        "itemCount": 1
+      },
+      {
+        "weight": 36,
+        "itemId": "30093",
+        "itemCount": 1
+      },
+      {
+        "weight": 30,
+        "itemId": "30103",
+        "itemCount": 1
+      },
+      {
+        "weight": 36,
+        "itemId": "31013",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31023",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
+        "itemCount": 1
+      }
+    ],
+    "costs": [
+      {
+        "id": "31033",
+        "count": 2,
+        "type": "MATERIAL"
+      },
+      {
+        "id": "31013",
+        "count": 1,
+        "type": "MATERIAL"
+      },
+      {
+        "id": "31023",
+        "count": 1,
+        "type": "MATERIAL"
+      }
+    ],
+    "requireRooms": [
+      {
+        "roomId": "WORKSHOP",
+        "roomLevel": 3,
+        "roomCount": 1
+      }
+    ],
+    "requireStages": [
+      {
+        "stageId": "sub_03-3-2",
+        "rank": 2
+      }
+    ]
   },
   "55": {
     "sortId": 2101,
@@ -755,6 +988,11 @@
       {
         "weight": 40,
         "itemId": "31023",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
         "itemCount": 1
       }
     ],
@@ -860,6 +1098,11 @@
         "weight": 40,
         "itemId": "31023",
         "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -964,6 +1207,11 @@
         "weight": 40,
         "itemId": "31023",
         "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -1062,6 +1310,11 @@
       {
         "weight": 40,
         "itemId": "31023",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
         "itemCount": 1
       }
     ],
@@ -1162,6 +1415,11 @@
         "weight": 40,
         "itemId": "31023",
         "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -1260,6 +1518,11 @@
       {
         "weight": 40,
         "itemId": "31023",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
         "itemCount": 1
       }
     ],
@@ -1478,6 +1741,11 @@
         "weight": 40,
         "itemId": "31023",
         "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -1694,6 +1962,11 @@
       {
         "weight": 40,
         "itemId": "31023",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
         "itemCount": 1
       }
     ],
@@ -1912,6 +2185,11 @@
         "weight": 40,
         "itemId": "31023",
         "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -2128,6 +2406,11 @@
       {
         "weight": 40,
         "itemId": "31023",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
         "itemCount": 1
       }
     ],
@@ -2346,6 +2629,11 @@
         "weight": 40,
         "itemId": "31023",
         "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
+        "itemCount": 1
       }
     ],
     "costs": [
@@ -2562,6 +2850,11 @@
       {
         "weight": 40,
         "itemId": "31023",
+        "itemCount": 1
+      },
+      {
+        "weight": 40,
+        "itemId": "31033",
         "itemCount": 1
       }
     ],
