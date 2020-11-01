@@ -29,37 +29,67 @@
     <div
       v-if="!simpleShow && waveData && data"
       class="enemy-data-layout-body"
-      :style="short? {'max-height': '400px'} : {}"
+      :style="short ? { 'max-height': '400px' } : {}"
     >
       <div
-        v-for="({fragments, name, postDelay, preDelay, maxTimeWaitingForNextWave}, wIndex) in waveData"
+        v-for="({
+          fragments,
+          name,
+          postDelay,
+          preDelay,
+          maxTimeWaitingForNextWave,
+        },
+        wIndex) in waveData"
         :key="wIndex"
       >
-        <my-title v-if="name" style="margin-top: 10px" :title="name || '一波'" />
+        <my-title
+          v-if="name"
+          style="margin-top: 10px"
+          :title="name || '一波'"
+        />
         <p
-          v-if="waveData.length > 1 && (postDelay || preDelay || maxTimeWaitingForNextWave)"
-        >最大等待时间：{{ maxTimeWaitingForNextWave }}s | 延迟：{{ preDelay }}s</p>
+          v-if="
+            waveData.length > 1 &&
+            (postDelay || preDelay || maxTimeWaitingForNextWave)
+          "
+        >
+          最大等待时间：{{ maxTimeWaitingForNextWave }}s | 延迟：{{ preDelay }}s
+        </p>
         <div
-          v-for="({actions, _name, preDelay:_preDelay, time, enemyNum}, fIndex) in fragments"
+          v-for="({ actions, _name, preDelay: _preDelay, time, enemyNum },
+          fIndex) in fragments"
           :key="fIndex"
           class="wave-enemy-container"
         >
           <p class="wave-info">
-            第{{ fIndex+1 }}波
+            第{{ fIndex + 1 }}波
             <span style="color: hsl(218, 58%, 14%)">{{ _name }}</span>
             <span>
               <i class="el-icon-position" />
               {{ time | time }}
               <span
-                style="margin-left: 10px"
-              >{{ enemyNum }}/{{ fragments[fragments.length - 1].enemyNum }}</span>
-              <span v-if="_preDelay" style="margin-left: 10px">距离上一波{{ _preDelay }}s</span>
+style="margin-left: 10px"
+>{{ enemyNum }}/{{
+                  fragments[fragments.length - 1].enemyNum
+                }}</span>
+              <span
+v-if="_preDelay"
+style="margin-left: 10px"
+>距离上一波{{ _preDelay }}s</span>
             </span>
           </p>
 
           <div class="enemy-data-layout wave">
             <div
-              v-for="({key, actionType, count, interval, preDelay: __preDelay, routeIndex}, aIndex) in dealGroup(actions)"
+              v-for="({
+                key,
+                actionType,
+                count,
+                interval,
+                preDelay: __preDelay,
+                routeIndex,
+              },
+              aIndex) in dealGroup(actions)"
               :key="aIndex"
               class="wave-enemy-single"
             >
@@ -70,13 +100,21 @@
                 :src="enemyPicPath(key)"
                 @click.native="showRoute(routeIndex)"
               />
-              <enemy-cube v-else-if="/trap_007_ballis/.test(key)" name="弩炮" :src="ballis" />
-              <div v-else class="wave-enemy-single" style="height: 100px; margin: 30px 0">
-                <p>{{ key.replace('trap_007_ballis', '弩炮') }}</p>
+              <enemy-cube
+                v-else-if="/trap_007_ballis/.test(key)"
+                name="弩炮"
+                :src="ballis"
+              />
+              <div
+                v-else
+                class="wave-enemy-single"
+                style="height: 100px; margin: 30px 0"
+              >
+                <p>{{ key.replace("trap_007_ballis", "弩炮") }}</p>
               </div>
               <div style class="enemy-cube-wave-info">
                 <div>数量:{{ count }} 间隔:{{ interval }}s</div>
-                <div>出发: {{ __preDelay+time | time }}</div>
+                <div>出发: {{ (__preDelay + time) | time }}</div>
               </div>
             </div>
           </div>
@@ -120,29 +158,31 @@ export default {
       const sec = Math.floor((v % 60) * 10) / 10,
         min = Math.floor(v / 60)
       return min > 0 ? min + ' 分 ' + sec + ' 秒' : sec + ' 秒'
-    }
+    },
   },
   props: {
     data: {
       type: [Array, Object],
-      required: true
+      required: true,
     },
     mapData: {
       type: Object,
-      default: null
+      default: null,
     },
     runesMode: {
       type: Boolean,
-      default: false
+      default: false,
     },
     simpleShow: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data() {
     return {
-      ballis: path + 'char/profile/trap_007_ballis_optimized.png?x-oss-process=style/small-test',
+      ballis:
+        path +
+        'char/profile/trap_007_ballis_optimized.png?x-oss-process=style/small-test',
       path: path + 'enemy/pic/',
       showKey: '',
       currentData: [],
@@ -152,7 +192,7 @@ export default {
       currEnemy: null,
       debounceOpen: null,
       selectedRoutes: new Set(),
-      selectedStlye: {}
+      selectedStlye: {},
     }
   },
 
@@ -160,7 +200,7 @@ export default {
     ...Root(['screenWidth']),
     ...mapState(['short', 'map']),
     ...mapState({
-      info: state => state.Base.info
+      info: (state) => state.Base.info,
     }),
     appearMap() {
       // 之后改成从vuex拿
@@ -169,20 +209,21 @@ export default {
     waveData() {
       if (!this.mapData) return
       return this.mapData.waves
-    }
+    },
   },
   watch: {
     screenWidth(v) {
       console.log('screenWidth change', v)
     },
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     dealGroup(actions) {
       return sort(
-        actions.filter(({ actionType }) => actionType === 0 || actionType === 6)
-        , (a, b) => a.preDelay < b.preDelay
+        actions.filter(
+          ({ actionType }) => actionType === 0 || actionType === 6
+        ),
+        (a, b) => a.preDelay < b.preDelay
       )
     },
     clearRoutes(v) {
@@ -206,7 +247,6 @@ export default {
         this.$emit('showRoute', index, color)
       }
       this.map.loopRoute(index, color)
-
     },
     enemyPicPath(key) {
       return this.path + key + '.png?x-oss-process=style/jpg-test'
@@ -215,72 +255,77 @@ export default {
       this.showKey = key
       this.detailsOpen = true
       this.currEnemy = v
-      if (key !== 'enemy_1503_talula') {
-        this.currentData = await getEnemyData(key)
-        if (v.overwrittenData) {
-          const index = this.currentData.findIndex(el => el.level === v.level)
-          const target = this.currentData[index]
-          this.currentData[index].enemyData = //mergeDeepWithKey(mergeSkill, target.enemyData, v.overwrittenData)
-            Object.keys(target.enemyData).reduce((res, key) => {
-              if (v.overwrittenData[key]) {
-                if (v.overwrittenData[key].m_defined) {
-                  res[key] = v.overwrittenData[key].m_value
-                } else if (key === 'attributes') {
-                  res.attributes = Object.keys(res.attributes).reduce((res, key) => {
-                    if (v.overwrittenData.attributes[key].m_defined) {
-                      res[key].m_defined = true
-                      res[key].m_value = v.overwrittenData.attributes[key].m_value
-                    }
-                    return res
-                  }, res.attributes)
-                } else if (key === 'skills' && v.overwrittenData.skills) {
-                  if (!res.skills) {
-                    console.log('???? no skil')
-                    return res
+      this.currentData = await getEnemyData(key)
+      if (v.overwrittenData) {
+        const index = this.currentData.findIndex((el) => el.level === v.level)
+        const target = this.currentData[index]
+        this.currentData[index].enemyData = Object.keys(
+          //mergeDeepWithKey(mergeSkill, target.enemyData, v.overwrittenData)
+          target.enemyData
+        ).reduce((res, key) => {
+          if (v.overwrittenData[key]) {
+            if (v.overwrittenData[key].m_defined) {
+              res[key] = v.overwrittenData[key].m_value
+            } else if (key === 'attributes') {
+              res.attributes = Object.keys(res.attributes).reduce(
+                (res, key) => {
+                  if (v.overwrittenData.attributes[key].m_defined) {
+                    res[key].m_defined = true
+                    res[key].m_value =
+                      v.overwrittenData.attributes[key].m_value
                   }
+                  return res
+                },
+                res.attributes
+              )
+            } else if (key === 'skills' && v.overwrittenData.skills) {
+              if (!res.skills) {
+                console.log('???? no skil')
+                return res
+              }
 
-                  v.overwrittenData.skills.forEach(e => {
-                    const skill = res.skills.find(el => e.prefabKey === el.prefabKey)
-                    if (skill) {
-                      Object.keys(skill).forEach(key => {
-                        skill[key] = e[key]
-                      })
-                    } else {
-                      res.skills.push(e)
-                    }
+              v.overwrittenData.skills.forEach((e) => {
+                const skill = res.skills.find(
+                  (el) => e.prefabKey === el.prefabKey
+                )
+                if (skill) {
+                  Object.keys(skill).forEach((key) => {
+                    skill[key] = e[key]
                   })
+                } else {
+                  res.skills.push(e)
                 }
-                else if (key === 'talentBlackboard' && v.overwrittenData.talentBlackboard) {
-                  console.log('?????')
-                  if (!res.talentBlackboard) {
-                    res.talentBlackboard = v.overwrittenData.talentBlackboard
-                  } else {
-
-                    v.overwrittenData.talentBlackboard.forEach(e => {
-                      const skill = res.talentBlackboard?.find(el => e.key === el.key)
-                      if (skill) {
-                        Object.keys(skill).forEach(key => {
-                          skill[key] = e[key]
-                        })
-                      }
+              })
+            } else if (
+              key === 'talentBlackboard' &&
+              v.overwrittenData.talentBlackboard
+            ) {
+              console.log('?????')
+              if (!res.talentBlackboard) {
+                res.talentBlackboard = v.overwrittenData.talentBlackboard
+              } else {
+                v.overwrittenData.talentBlackboard.forEach((e) => {
+                  const skill = res.talentBlackboard?.find(
+                    (el) => e.key === el.key
+                  )
+                  if (skill) {
+                    Object.keys(skill).forEach((key) => {
+                      skill[key] = e[key]
                     })
                   }
-                }
+                })
               }
-              return res
-            }, target.enemyData)
-          console.log(this.currentData[index])
-        }
-
-      } else {
-        this.currentData = []
+            }
+          }
+          return res
+        }, target.enemyData)
+        console.log(this.currentData[index])
       }
     },
     cancelOpen() {
       clearTimeout(this.debounceOpen)
     },
-
-  }
+  },
 }
 </script>
 

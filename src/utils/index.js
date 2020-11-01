@@ -298,10 +298,10 @@ const decNoValue = (res, data, str) => {
 
 const wrapColor = (str, color) => `<i style="color:${color};font-style: normal;">${str}</i>`
 
-const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2', 'skchr_cerber_2', 'skchr_finlpp_2', 'skchr_weedy_2', 'skchr_broca_2', 'skchr_brownb_2'])
+const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2', 'skchr_cerber_2', 'skchr_finlpp_2', 'skchr_weedy_2', 'skchr_broca_2', 'skchr_brownb_2', 'skchr_rosmon_3'])
 const exSkill2 = new Map([
   ['skchr_angel_3', '据实测攻击间隔缩短效果翻倍'],
-  ['skchr_weedy_2', '是220%，之前忘记自己4潜能了']
+  ['skchr_rosmon_3', '听说攻击间隔是减一半，如果不对，走反馈或者进群找我改一下'],
 ])
 
 const changeAttackSpeed = (skill) => {
