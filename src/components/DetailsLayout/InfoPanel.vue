@@ -4,27 +4,44 @@
       <div class="char-base-info-container">
         <div class="char-set-cv">
           <div class="char-half-container">
-            <div class="image-inner" :style="{backgroundImage: `url('${setData[0].halfPic}')`}" />
+            <div
+              class="image-inner"
+              :style="{ backgroundImage: `url('${setData[0].halfPic}')` }"
+            />
           </div>
         </div>
         <div class="info-painter-cv">
           <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
             <div slot="title">画师</div>
-            <div slot="content" :class="{'swiper-no-swiping': !short}">{{ data.drawName }}</div>
+            <div slot="content" :class="{ 'swiper-no-swiping': !short }">
+              {{ data.drawName }}
+            </div>
           </content-slot>
           <content-slot class="info-painter-cv-item" :width="60" long no-wrap>
             <div slot="title">CV</div>
-            <div slot="content" :class="{'swiper-no-swiping': !short}">{{ data.infoName }}</div>
+            <div slot="content" :class="{ 'swiper-no-swiping': !short }">
+              {{ data.infoName }}
+            </div>
           </content-slot>
           <div class="info-char-set-wrapper">
-            <f-s no-title placement="top-start" :width="width" size="90%" trigger="click">
-              <set-panel v-if="showSet" :id="data.charID" :set-data="[...setData, ...skins]" />
+            <f-s
+              no-title
+              placement="top-start"
+              :width="width"
+              size="90%"
+              trigger="click"
+            >
+              <set-panel
+                v-if="showSet"
+                :id="data.charID"
+                :set-data="[...setData, ...skins]"
+              />
               <!-- <set-panel v-if="showSet" :set-data="skins" /> -->
               <el-button
                 slot="reference"
                 style="background: rgba(255, 255, 255, 0.85); margin-top: 10px"
                 size="mini"
-                @click="showSet=true"
+                @click="showSet = true"
               >
                 立绘/皮肤
                 <i class="el-icon-search" />
@@ -33,26 +50,41 @@
           </div>
         </div>
 
-        <div v-for="(story, index) in baseInfo" :key="story.storyTitle" class="info-base-container">
+        <div
+          v-for="(story, index) in baseInfo"
+          :key="story.storyTitle"
+          class="info-base-container"
+        >
           <div class="info-story-title">
             <span>
               <b>{{ story.storyTitle }}</b>
             </span>
           </div>
           <div class="info-story-content-wrapper">
-            <div v-for="([k, v], i) in story.data" :key="k" class="info-story-content">
+            <div
+              v-for="([k, v], i) in story.data"
+              :key="k"
+              class="info-story-content"
+            >
               <content-slot
                 long
                 :no-wrap="true"
                 :width="i < (index === 0 ? 7 : 5) ? 70 : null"
-                :long-content="( i === 7 || (index !== 0 && i ===5) )"
+                :long-content="i === 7 || (index !== 0 && i === 5)"
               >
                 <div slot="title">{{ k }}</div>
                 <div
-                  v-if="!short || ( i === 7 || (index !== 0 && i ===5) ) || v.length < 6"
+                  v-if="
+                    !short ||
+                    i === 7 ||
+                    (index !== 0 && i === 5) ||
+                    v.length < 6
+                  "
                   slot="content"
-                  :class="{'swiper-no-swiping': !short}"
-                >{{ v }}</div>
+                  :class="{ 'swiper-no-swiping': !short }"
+                >
+                  {{ v }}
+                </div>
                 <h-tooltip v-else slot="content" placement="top" :content="v">
                   <div>{{ v.slice(0, 3) }}...</div>
                 </h-tooltip>
@@ -64,22 +96,35 @@
       <div class="info-token-desc">
         <content-slot long-content :width="145">
           <div slot="title">信物描述</div>
-          <div slot="content">{{ data.tokenDesc ? data.tokenDesc : '无' }}</div>
+          <div slot="content">{{ data.tokenDesc ? data.tokenDesc : "无" }}</div>
         </content-slot>
       </div>
       <div class="info-story-wrapper">
-        <div v-for="story in data.storyTextAudio.slice(2)" :key="story.storyTitle">
+        <div
+          v-for="story in data.storyTextAudio.slice(2)"
+          :key="story.storyTitle"
+        >
           <content-slot :width="145" long-content>
             <div slot="title">
               <span>{{ story.storyTitle }}</span>
             </div>
             <div slot="content">
-              <div v-for="(p, index) in story.stories" :key="index" class="info-story-content">
-                <div v-if="p.unLockParam !== ''" class="info-story-content-unlock">
+              <div
+                v-for="(p, index) in story.stories"
+                :key="index"
+                class="info-story-content"
+              >
+                <div
+                  v-if="p.unLockParam !== ''"
+                  class="info-story-content-unlock"
+                >
                   <span>解锁需要好感：</span>
                   <span>{{ p.unLockParam | unlockStr }}</span>
                 </div>
-                <p :class="{'swiper-no-swiping': !short}" v-html="changeText(p.storyText)" />
+                <p
+                  :class="{ 'swiper-no-swiping': !short }"
+                  v-html="changeText(p.storyText)"
+                />
               </div>
             </div>
           </content-slot>
@@ -93,19 +138,30 @@
           class="swiper-no-swiping"
           style="display: flex; align-items: center"
         >
+          <div v-if="isMudrok" class="exchange-voice">
+            <el-switch
+              v-model="isMudrokFlag"
+              active-color="#313131"
+              active-text="切换语音"
+            />
+          </div>
           <div style="padding-right: 10px">
             <span>volume:</span>
           </div>
-          <div style="display:inline-block;width: 100px">
+          <div style="display: inline-block; width: 100px">
             <el-slider
               v-model="voiceVolume"
               color="#ca3e47"
               :show-text="false"
-              @change="e => voiceVolume = e"
+              @change="(e) => (voiceVolume = e)"
             />
           </div>
         </div>
-        <div v-for="(word, index) in words" :key="word.charWordId" class="info-word">
+        <div
+          v-for="(word, index) in words"
+          :key="word.charWordId"
+          class="info-word"
+        >
           <div class="info-word-audio">
             <div class="info-word-audio-title">
               <b>{{ word.voiceTitle }}</b>
@@ -114,7 +170,10 @@
               <div class="info-word-audio-buttonn" @click="playVoice(index)">
                 <i class="el-icon-video-play" />
               </div>
-              <div class="info-word-audio-buttonn" @click="pausePlayVoice(index)">
+              <div
+                class="info-word-audio-buttonn"
+                @click="pausePlayVoice(index)"
+              >
                 <i class="el-icon-video-pause" />
               </div>
               <audio-container
@@ -126,9 +185,11 @@
             </template>
           </div>
           <p
-            :class="{'swiper-no-swiping': !short}"
+            :class="{ 'swiper-no-swiping': !short }"
             v-html="changeVoice(word.voiceText)"
-          >{{ word.voiceText }}</p>
+          >
+            {{ word.voiceText }}
+          </p>
         </div>
       </div>
     </div>
@@ -138,7 +199,7 @@
 <script>
 import { UA, getSkinsData, getScreenWidth, sort } from '../../utils'
 import { path } from '../../utils/listVer'
-import { Button, Slider, } from 'element-ui'
+import { Button, Slider } from 'element-ui'
 import Vue from 'vue'
 import { Swiper, Scrollbar } from 'swiper/js/swiper.esm'
 Swiper.use(Scrollbar)
@@ -162,7 +223,7 @@ export default {
     ContentSlot,
     HTooltip,
     FS,
-    HTab
+    HTab,
   },
   filters: {
     unlockStr(v) {
@@ -177,7 +238,7 @@ export default {
       const reg = /<color (name=(.{7}))?>/g
       const regL = /<\/color>/g
       return v.replace(reg, '').replace(regL, '')
-    }
+    },
   },
   props: {
     data: {
@@ -185,37 +246,37 @@ export default {
         return {}
       },
       type: Object,
-      required: true
+      required: true,
     },
     list: {
       required: true,
-      type: Array
+      type: Array,
     },
     words: {
       type: Array,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     const normalSetWords =
       this.data.charID !== 'char_002_amiya'
         ? [
           '干员平时最常穿着的服装。虽然不一定比制服更实用，但是一定是干员最舒适的搭配之一',
-          '晋升后，经过调整的服装。根据干员的经验，对服装细节进行改进，针对一些作战环境进行了特化处理。在满足战斗需求的同时，最大程度还原各位干员熟悉的舒适穿着体验。'
+          '晋升后，经过调整的服装。根据干员的经验，对服装细节进行改进，针对一些作战环境进行了特化处理。在满足战斗需求的同时，最大程度还原各位干员熟悉的舒适穿着体验。',
         ]
         : [
           '阿米娅最常穿着的服装，过大的尺寸似乎暗示了这件衣服曾不属于她\n不少细节部分都经过手工改造，而时间的痕迹也多有残留。',
           '阿米娅最常穿着的服装，过大的尺寸仿佛述说着这件衣服曾不属于她的事实。即便如此，她也仔细地打理着这件衣服，让它看起来就像新的一样。',
-          '衣服需要修补，\n伤痛需要弥合。'
+          '衣服需要修补，\n伤痛需要弥合。',
         ]
 
     const tabIndex = [
       {
-        label: '人员档案'
+        label: '人员档案',
       },
       {
-        label: '语音记录'
-      }
+        label: '语音记录',
+      },
     ]
 
     return {
@@ -231,32 +292,46 @@ export default {
       isMobliePad: UA.isMobliePad,
       width: getScreenWidth().width,
       tabIndex,
-      sInstance: null
+      sInstance: null,
+      isMudrokFlag: false,
     }
   },
 
   computed: {
     ...mapState(['extraSkins', 'short']),
+    isMudrok() {
+      return this.data.charID === 'char_311_mudrok'
+    },
     style() {
-      return !UA.ok
-        ? '.png'
-        : '.png?x-oss-process=style/small-test'
+      return !UA.ok ? '.png' : '.png?x-oss-process=style/small-test'
     },
     skins() {
       if (this.extraSkins) {
         return this.extraSkins
-          .filter(el => el.charId === this.data.charID)
-          .map(data => getSkinsData.skins(data))
+          .filter((el) => el.charId === this.data.charID)
+          .map((data) => getSkinsData.skins(data))
       } else return []
     },
     setData() {
       if (this.data.charID) {
-        return this.list.map(index => {
+        return this.list.map((index) => {
           return {
-            charSet: path + 'char/set/' + this.data.charID + '_' + index + '.png',
-            profile: path + 'char/profile/' + this.data.charID + (index - 1 ? '_' + index : '') + this.style,
-            halfPic: path + 'char/halfPic/' + this.data.charID + '_' + index + this.style,
-            words: this.setWords[index - 1]
+            charSet:
+              path + 'char/set/' + this.data.charID + '_' + index + '.png',
+            profile:
+              path +
+              'char/profile/' +
+              this.data.charID +
+              (index - 1 ? '_' + index : '') +
+              this.style,
+            halfPic:
+              path +
+              'char/halfPic/' +
+              this.data.charID +
+              '_' +
+              index +
+              this.style,
+            words: this.setWords[index - 1],
           }
         })
       }
@@ -269,7 +344,7 @@ export default {
         .map(({ stories, storyTitle }, i, arr) => {
           const base = stories
             .map(({ storyText }) => storyText)
-            .map(str => {
+            .map((str) => {
               const reg = new RegExp('【(.+)】(.+)\\n', 'g')
               let matches
               let res = []
@@ -281,13 +356,13 @@ export default {
               if (last) res.push(last.slice(1, 3))
               return res
             })[0]
-          const data = sort(base, ((pre, cur) => pre[0].length < cur[0].length))
+          const data = sort(base, (pre, cur) => pre[0].length < cur[0].length)
           return {
             data,
-            storyTitle
+            storyTitle,
           }
         })
-    }
+    },
   },
   mounted() {
     this.setExtraSkins()
@@ -321,8 +396,15 @@ export default {
       if (a[0]) a[0].pause()
     },
     audioPath(data) {
+      const flag = this.isMudrokFlag ? '#1' : ''
       return (
-        path + 'char/voice/' + this.data.charID + '/' + data.voiceId + '.mp3'
+        path +
+        'char/voice/' +
+        this.data.charID +
+        encodeURIComponent(flag) +
+        '/' +
+        data.voiceId +
+        '.mp3'
       )
     },
     changeText(str) {
@@ -333,13 +415,17 @@ export default {
       else if (index === 2) return 2
       else return 1
     },
-  }
+  },
 }
 </script>
 
 
 <style lang="stylus" scoped>
 @import '../../styles/char.styl'
+
+.exchange-voice {
+  margin-right: 20px
+}
 
 .char-base-info-container {
   display: flex

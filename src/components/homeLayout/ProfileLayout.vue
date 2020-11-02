@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition-group name="flip-list" class="profile-container">
-      <div v-for="(agent, index) in data" :key="agent.name" class="profile-item" :class="dev">
+      <div v-for="(agent, index) in data" :key="agent.No" class="profile-item" :class="dev">
         <!--  -->
         <div
           class="profile-item-inner-wrapper"

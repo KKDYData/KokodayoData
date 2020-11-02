@@ -282,14 +282,14 @@ export default {
     itemPic() {
       if (this.type === 'FURN')
         return `${ path }custom/furnitures/pic/${ this.data.id }.png`
-      else return `${ path }item/pic/${ this.data.iconId }_optimized.png`
+      else return `${ path }item/pic/${ this.data.iconId }.png`
     },
 
     dropListRow() {
       return this.$store.getters.itemDropList(this.data.itemId)
     },
     targetStageDrop() {
-      if (!this.targetStage || !this.dropListRow) return
+      if (!this.targetStage || !this.dropListRow || !this.stageTree) return
       else {
         const tempRes = this.dropList.find(
           el => el.stageId === this.targetStage
@@ -319,6 +319,9 @@ export default {
     },
     dropList() {
       const list = this.dropListRow
+      if(!this.stageTree) {
+        return []
+      }
       if (this.stageTree && list) {
         if (this.data.itemId === 'randomMaterial_2') {
           return sort(list.map((el => getItmeDropData(el, this.stageTree, list))).filter(el => el.dropCost !== '∞'), this.sortFunc.func)

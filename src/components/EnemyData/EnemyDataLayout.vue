@@ -67,15 +67,10 @@
             <span>
               <i class="el-icon-position" />
               {{ time | time }}
-              <span
-style="margin-left: 10px"
->{{ enemyNum }}/{{
+              <span style="margin-left: 10px">{{ enemyNum }}/{{
                   fragments[fragments.length - 1].enemyNum
                 }}</span>
-              <span
-v-if="_preDelay"
-style="margin-left: 10px"
->距离上一波{{ _preDelay }}s</span>
+              <span v-if="_preDelay" style="margin-left: 10px">距离上一波{{ _preDelay }}s</span>
             </span>
           </p>
 
@@ -83,7 +78,6 @@ style="margin-left: 10px"
             <div
               v-for="({
                 key,
-                actionType,
                 count,
                 interval,
                 preDelay: __preDelay,

@@ -25,19 +25,18 @@
       <div style="margin-top: 20px">
         <span
           class="activity-info-need"
-        >ro图更新了，图看索引id，分为easy和normal，也就是突袭模式吧。但是没处理重复的索引。也就是说，要看普通的图就点下突袭。图好像是有30张，有的图有普通难度，也就变成了53张。听起来有点绕，总之就先将就下。也还没检查数据有没有问题。</span>
+        >第八章内容更新完成， 泥岩可以听两套语音</span>
       </div>
       <div style="margin-top: 20px">
         <span class="activity-info-need">和PRTS.Map 联调了一下出怪的时间，现在出怪时间应该是准确的了，如果还是有问题的话，请务必反馈！</span>
       </div>
       <div style="margin-top: 20px">
         <p class="activity-info-need">
-          <span>近期计划</span>
+          <span>11/2 近期计划:开始改版 </span>
         </p>
-        <p class="activity-info-need">1. 小程序开发。（看中了小程序云开发送的免费资源，但是跨平台难度也有点大，不会太快搞出来）</p>
+        <p class="activity-info-need">1. 小程序开发中...</p>
         <p class="activity-info-need">2. 地图更换渲染引擎以获取更好的展现效果和性能</p>
-        <p class="activity-info-need">3. 希望继续优化网页的UI，以及支持暗色主题，如果有设计师小伙伴感兴趣，欢迎来联系我。</p>
-        <p class="activity-info-need">3. 如果有兴趣帮忙做下测试完善敌人/干员图鉴的内容，也十分欢迎。</p>
+        <p class="activity-info-need">3. 如果有兴趣帮忙做下测试完善敌人/干员图鉴的内容.</p>
       </div>
       <div style="margin-top: 20px">
         <span class="activity-info-need">
@@ -58,7 +57,7 @@ import RImage from '@/components/Base/RImage'
 export default {
   components: {
     // ItemViewer,
-    RImage
+    // RImage
   },
   data() {
     return {
