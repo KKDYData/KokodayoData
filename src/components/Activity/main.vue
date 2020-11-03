@@ -25,7 +25,7 @@
       <div style="margin-top: 20px">
         <span
           class="activity-info-need"
-        >第八章内容更新完成， 泥岩可以听两套语音</span>
+        >第八章内容更新完成， 泥岩可以听两套语音, 临时适配阿米娅升变后的信息显示</span>
       </div>
       <div style="margin-top: 20px">
         <span class="activity-info-need">和PRTS.Map 联调了一下出怪的时间，现在出怪时间应该是准确的了，如果还是有问题的话，请务必反馈！</span>

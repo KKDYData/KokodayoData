@@ -52,7 +52,6 @@ export default {
       width: this.canvasWidth + 'px',
       curSkeleton: null,
       spinePath: path + 'char/spine/',
-      mode: ['build', 'fight_f', 'fight_b'],
       modeText: {
         build: '基建',
         fight_f: '战斗正面',
@@ -68,7 +67,11 @@ export default {
   computed: {
     borderWidth() {
       return (this.canvasWidth / 300) * 25
-    }
+    },
+    mode() {
+      if(this.id === 'char_1001_amiya2') return [ 'fight_f', 'fight_b']
+      return ['build', 'fight_f', 'fight_b']
+    } 
   },
   mounted() {
     this.init()

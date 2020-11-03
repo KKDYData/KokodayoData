@@ -33,7 +33,7 @@
             >
               <set-panel
                 v-if="showSet"
-                :id="data.charID"
+                :id="id"
                 :set-data="[...setData, ...skins]"
               />
               <!-- <set-panel v-if="showSet" :set-data="skins" /> -->
@@ -256,10 +256,14 @@ export default {
       type: Array,
       required: true,
     },
+    id: {
+      type: String,
+      required: true
+    }
   },
   data() {
     const normalSetWords =
-      this.data.charID !== 'char_002_amiya'
+      this.id !== 'char_002_amiya'
         ? [
           '干员平时最常穿着的服装。虽然不一定比制服更实用，但是一定是干员最舒适的搭配之一',
           '晋升后，经过调整的服装。根据干员的经验，对服装细节进行改进，针对一些作战环境进行了特化处理。在满足战斗需求的同时，最大程度还原各位干员熟悉的舒适穿着体验。',
@@ -300,7 +304,7 @@ export default {
   computed: {
     ...mapState(['extraSkins', 'short']),
     isMudrok() {
-      return this.data.charID === 'char_311_mudrok'
+      return this.id === 'char_311_mudrok'
     },
     style() {
       return !UA.ok ? '.png' : '.png?x-oss-process=style/small-test'
@@ -308,26 +312,26 @@ export default {
     skins() {
       if (this.extraSkins) {
         return this.extraSkins
-          .filter((el) => el.charId === this.data.charID)
+          .filter((el) => el.charId === this.id)
           .map((data) => getSkinsData.skins(data))
       } else return []
     },
     setData() {
-      if (this.data.charID) {
+      if (this.id) {
         return this.list.map((index) => {
           return {
             charSet:
-              path + 'char/set/' + this.data.charID + '_' + index + '.png',
+              path + 'char/set/' + this.id + '_' + index + '.png',
             profile:
               path +
               'char/profile/' +
-              this.data.charID +
+              this.id +
               (index - 1 ? '_' + index : '') +
               this.style,
             halfPic:
               path +
               'char/halfPic/' +
-              this.data.charID +
+              this.id +
               '_' +
               index +
               this.style,
@@ -400,7 +404,7 @@ export default {
       return (
         path +
         'char/voice/' +
-        this.data.charID +
+        this.id +
         encodeURIComponent(flag) +
         '/' +
         data.voiceId +

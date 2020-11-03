@@ -166,9 +166,9 @@
         <!-- 基建面板 -->
         <div v-if="normal">
           <my-title title="基建技能" />
-          <building-data class="tttt" :building="data.buildingData" />
+          <building-data v-if="data.buildingData" class="tttt" :building="data.buildingData" />
           <my-title title="干员资料" />
-          <info-panel v-if="info" :data="info" :list="setList" :words="words" />
+          <info-panel v-if="info" :id="name" :data="info" :list="setList" :words="words" />
         </div>
       </div>
     </transition>
@@ -322,6 +322,7 @@ export default {
     setList() {
       if (!this.data) return []
       if (this.name === 'char_002_amiya') return [1, '1%2B', 2]
+      if(this.name === 'char_1001_amiya2') return [2]
       return this.data.rarity > 2 ? [1, 2] : [1]
     },
     evoCostArr() {
@@ -478,14 +479,16 @@ export default {
       return path + 'item/pic/' + id + '.png'
     },
     getInfo() {
-      getCharInfo(this.name).then(res => {
+      const name = this.name === 'char_1001_amiya2' ? 'char_002_amiya' : this.name
+      getCharInfo(name).then(res => {
         console.log(this.data)
         const { tokenDesc } = this.data
         this.info = Object.assign(res, { tokenDesc })
       })
     },
     getWords() {
-      getCharWords(this.name).then(res => this.words = res)
+      const name = this.name === 'char_1001_amiya2' ? 'char_002_amiya' : this.name
+      getCharWords(name).then(res => this.words = res)
     },
     getSkills() {
       if (!this.data) return
