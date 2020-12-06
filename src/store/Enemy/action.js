@@ -60,7 +60,12 @@ const actions = {
   },
   async choseMap({ commit, state, dispatch }, data) {
     const exData = await getMapDataListVer(state.mapCode)
-    const mapData = await getMapData(`level_${exData.stageId.replace('wk', 'weekly').replace('kc', 'killcost')}`).catch(
+    /**
+     * 匹配常驻图id
+     * 当初应该用levelId当索引才对的，万万没想到，StageId会对不上
+     */
+    const id = exData.stageId.replace('wk', 'weekly').replace('kc', 'killcost').replace('pro', 'promote')
+    const mapData = await getMapData(`level_${id}`).catch(
       err => null
     )
 
