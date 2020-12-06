@@ -3,7 +3,7 @@ import {
   getMapDataListVer,
   getCharItem,
   getItem,
-  getFurn,
+  getFurn
 } from '@/utils/fetch'
 import { Message } from 'element-ui'
 import { initSomeMap } from '@/components/EnemyData/initData'
@@ -15,7 +15,7 @@ import { Assets } from '@/Api'
 //! const data = this.selMapData.predefines;
 //! this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
 
-const getItemList = (list) => {
+const getItemList = list => {
   if (!list) return Promise.resolve([])
   return Promise.all(
     list.map(async el => ({
@@ -48,17 +48,21 @@ const actions = {
     if (!parent || !rootState.stageTree) return
     const target = findStage(parent, rootState.stageTree)
     if (target) {
-      const value = target.path.replace('weekly', 'wk')
+      const value = target.path
+        // .replace('weekly', 'wk')
         .replace('promote', 'pro')
+        // .level
       commit(SET_DATA, { key: 'mapCode', value })
       dispatch('choseMap', target)
-    } else {
+    } else {  
       console.log('没有这个地图，路由失败')
     }
   },
   async choseMap({ commit, state, dispatch }, data) {
     const exData = await getMapDataListVer(state.mapCode)
-    const mapData = await getMapData(exData.levelId.split('/').pop())
+    const mapData = await getMapData(`level_${exData.stageId.replace('wk', 'weekly').replace('kc', 'killcost')}`).catch(
+      err => null
+    )
 
     if (!mapData) {
       Message.error('获取数据失败')
@@ -66,16 +70,14 @@ const actions = {
     }
 
     exData.stageDropInfo &&
-      getItemList(exData.stageDropInfo.displayDetailRewards).then(
-        value => commit(SET_DATA, { key: 'detailsDropList', value })
+      getItemList(exData.stageDropInfo.displayDetailRewards).then(value =>
+        commit(SET_DATA, { key: 'detailsDropList', value })
       )
 
     // ! to watch
     // ! if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
 
-
     const enemyData = Object.entries(state.rawData).reduce((res, [k, v]) => {
-
       const target = mapData.enemyDbRefs.find(el => el.id === k)
       if (target) {
         res[k] = Object.assign({}, v, target)
@@ -89,17 +91,13 @@ const actions = {
 
     await dispatch('getPreData')
 
-
     // 去掉地图的loading遮罩
     commit(SET_DATA, { key: 'mapPicLoad', value: false })
     // todo need change
     const canvas = document.getElementById('map-canvas-container')
     commit(SET_DATA, {
-      key: 'map', value: initSomeMap(
-        mapData,
-        canvas,
-        state.preData
-      )
+      key: 'map',
+      value: initSomeMap(mapData, canvas, state.preData)
     })
   },
   async getPreData({ state, commit }) {
@@ -121,14 +119,16 @@ const actions = {
       characterCards
     ] = await Promise.all(tasks)
     commit(SET_DATA, {
-      key: 'preData', value:
-        { tokenInsts, tokenCards, characterInsts, characterCards }
+      key: 'preData',
+      value: { tokenInsts, tokenCards, characterInsts, characterCards }
     })
   },
   async loadRunes({ state, dispatch, commit, getters }) {
     // todo
     if (!state.runesMode) {
-      const runesData = await getMapDataListVer(state.mapCode + '%23f%23').catch(err => {
+      const runesData = await getMapDataListVer(
+        state.mapCode + '%23f%23'
+      ).catch(err => {
         console.log('可能没索引，但就是有突袭数据')
         return {}
       })
@@ -140,8 +140,6 @@ const actions = {
       commit(SET_DATA, { key: 'selMapDataEx', value: data })
       commit(SET_DATA, { key: 'runesMode', value: false })
     }
-  },
+  }
 }
-export {
-  actions
-}
+export { actions }
