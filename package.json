@@ -46,7 +46,7 @@
     "url-parse": "^1.4.7",
     "vue": "^2.6.10",
     "vue-meta": "^2.2.0",
-    "vue-router": "^3.0.6",
+    "vue-router": "^3.4.9",
     "vuex": "^3.1.1",
     "workbox-range-requests": "^4.3.1",
     "workbox-window": "^5.1.3"
