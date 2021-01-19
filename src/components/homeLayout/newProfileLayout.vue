@@ -121,6 +121,7 @@ export default {
       if (!this.data || this.tags.length === 0) return
       let res = new Map()
       const resData = this.data.filter(el => el.gkzm)
+      console.log('res', resData)
       // 去掉不是公招的
       const filterGroups = Object.keys(this.filterGroups)
         .filter(el => el !== 'gkzm')

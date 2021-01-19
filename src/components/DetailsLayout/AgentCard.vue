@@ -150,7 +150,7 @@ export default {
       return Array.isArray(this.desc)
     },
     logo() {
-      return this.data.displayLogo ? path + 'logo/' + this.data.displayLogo + '.png' : ''
+      return this.data.nationId ? path + 'logo/logo_' + this.data.nationId + '.png' : ''
     },
     team() {
       return Team[this.data.team]
@@ -241,6 +241,9 @@ export default {
   justify-content: flex-end
 }
 
+.char-camp-pic {
+  mix-blend-mode: difference
+}
 .char-camp-pic::before {
   content: ''
   position: absolute

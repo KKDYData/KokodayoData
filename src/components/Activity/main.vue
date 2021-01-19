@@ -25,14 +25,11 @@
       <div style="margin-top: 20px">
         <span
           class="activity-info-need"
-        >第八章内容更新完成， 泥岩可以听两套语音, 临时适配阿米娅升变后的信息显示</span>
-      </div>
-      <div style="margin-top: 20px">
-        <span class="activity-info-need">和PRTS.Map 联调了一下出怪的时间，现在出怪时间应该是准确的了，如果还是有问题的话，请务必反馈！</span>
+        >Logo换新</span>
       </div>
       <div style="margin-top: 20px">
         <p class="activity-info-need">
-          <span>11/2 近期计划:开始改版 </span>
+          <span>2021 1/20 近期计划:<del>开始改版 </del> 预计有两个新功能, 准备建文件夹了！</span>
         </p>
         <p class="activity-info-need">1. 小程序开发中...</p>
         <p class="activity-info-need">2. 地图更换渲染引擎以获取更好的展现效果和性能</p>
@@ -52,7 +49,7 @@
 
 <script>
 // import ItemViewer from '@/components/ItemViewer'
-import RImage from '@/components/Base/RImage'
+// import RImage from '@/components/Base/RImage'
 
 export default {
   components: {
