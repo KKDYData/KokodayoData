@@ -1,21 +1,32 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "noEmit": true,
-    "baseUrl": "./",
-    "sourceMap": true,
+    "baseUrl": ".",
+    "module": "ESNext",
+    "target": "es2016",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "strict": true,
+    "esModuleInterop": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "strictNullChecks": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "vite/client"
+    ],
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "src": [
+      "/~/*": [
         "src/*"
       ]
-    },
+    }
   },
   "exclude": [
-    "build",
-    "config",
-    "dist"
+    "dist",
+    "node_modules"
   ]
 }

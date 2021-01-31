@@ -2,18 +2,12 @@
   "name": "arknights_wiki",
   "version": "1.0.0",
   "main": "main.js",
+  "workspaces": [
+    "pacakages/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build-analyze": "webpack --config config/webpack.stable.js --profile --json > stats.json ",
-    "build": "webpack --config config/webpack.prod.js",
-    "build-stable": "webpack --config config/webpack.stable.js",
-    "build-beta": "webpack --config config/webpack.beta.js",
-    "start": "webpack-dev-server --config config/webpack.dev.js",
-    "dev": "webpack --config config/webpack.dev.js --profile --json > stats.json",
-    "pub-b": "yarn build-beta && node script/publish.js test",
-    "pub-s": "yarn build-stable && node script/publish.js stable",
-    "snyk-protect": "snyk protect",
-    "prepare": "yarn run snyk-protect"
+    "build": "lerna run --stream --sort build",
+    "dev:h5": ""
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.7.4",
@@ -79,6 +73,7 @@
     "imagemin-pngquant": "^8.0.0",
     "imagemin-svgo": "^7.0.0",
     "imagemin-webpack": "^5.1.1",
+    "lerna": "^3.22.1",
     "mini-css-extract-plugin": "^0.7.0",
     "node-fetch": "^2.6.1",
     "optimize-css-assets-webpack-plugin": "^5.0.3",
