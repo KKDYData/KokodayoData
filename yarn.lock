@@ -791,10 +791,10 @@
   resolved "https://registry.npm.taobao.org/@babel/preset-stage-3/download/@babel/preset-stage-3-7.8.3.tgz#cc270af0fdccd427c03dba175ffa53babe60488e"
   integrity sha1-zCcK8P3M1CfAPboXX/pTur5gSI4=
 
-"@babel/runtime-corejs2@^7.3.4":
-  version "7.9.2"
-  resolved "https://registry.npm.taobao.org/@babel/runtime-corejs2/download/@babel/runtime-corejs2-7.9.2.tgz?cache=0&sync_timestamp=1584800075262&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime-corejs2%2Fdownload%2F%40babel%2Fruntime-corejs2-7.9.2.tgz#f11d074ff99b9b4319b5ecf0501f12202bf2bf4d"
-  integrity sha1-8R0HT/mbm0MZtezwUB8SICvyv00=
+"@babel/runtime-corejs2@^7.12.5":
+  version "7.12.5"
+  resolved "https://registry.yarnpkg.com/@babel/runtime-corejs2/-/runtime-corejs2-7.12.5.tgz#382ec38f0826365e96118e28b81249c1c61bace3"
+  integrity sha512-kt5YpZ7F5A05LOgQuaMXXmcxakK/qttf5C/E1BJPA3Kf5PanbjPzDoXN+PIslUnjUxpuKblCsXyP0QfMiqyKqA==
   dependencies:
     core-js "^2.6.5"
     regenerator-runtime "^0.13.4"
