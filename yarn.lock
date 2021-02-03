@@ -938,12 +938,12 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.6.0.tgz#f022195afdfc942e088ee2101285a1d31c7d727f"
   integrity sha512-cPqjjzuFWNK3BSKLm0abspP0sp/IGOli4p5I5fKFAzdS8fvjdOwDCfZqAaIiXd9lPkOWi3SUUfZof3hEb7J/uw==
 
-"@qcharts/core@^0.1.27":
-  version "0.1.40"
-  resolved "https://registry.npm.taobao.org/@qcharts/core/download/@qcharts/core-0.1.40.tgz#15d4bcd02548cdda17ab1ba951b26161cf0f45fe"
-  integrity sha1-FdS80CVIzdoXqxupUbJhYc8PRf4=
+"@qcharts/core@^0.2.33":
+  version "0.2.33"
+  resolved "https://registry.yarnpkg.com/@qcharts/core/-/core-0.2.33.tgz#325a9df3a4f875e328c2ea172a4fae17015afab2"
+  integrity sha512-7Q3qJa4bsvunNJjADgtk6CxibC84K2lULAfRYuksgQTUGqliVNJxWmN0mR07z7ef5xnl6Mxrljchlv3NKk+I6A==
   dependencies:
-    "@spritejs/shapes" "^1.1.5"
+    "@spritejs/shapes" "^1.1.7"
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -1165,10 +1165,10 @@
     sprite-math "^1.0.5"
     svg-path-to-canvas "^1.11.3"
 
-"@spritejs/shapes@^1.1.5":
+"@spritejs/shapes@^1.1.7":
   version "1.1.7"
-  resolved "https://registry.npm.taobao.org/@spritejs/shapes/download/@spritejs/shapes-1.1.7.tgz#6c9f837cb5a6a2b1bf52be076099466cedd53a67"
-  integrity sha1-bJ+DfLWmorG/Ur4HYJlGbO3VOmc=
+  resolved "https://registry.yarnpkg.com/@spritejs/shapes/-/shapes-1.1.7.tgz#6c9f837cb5a6a2b1bf52be076099466cedd53a67"
+  integrity sha512-A5BOZU12DxZHCJp+XlkH3D5V1Bdxgg70spfTqIqZ9CfO8FOLWTGmtyFBHProdMIkWA4eS2QqdSR3reB9FhTYjw==
   dependencies:
     "@babel/runtime" "^7.2.0"
     sprite-draggable "0.1.15"
