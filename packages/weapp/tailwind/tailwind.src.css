@@ -1,0 +1,6 @@
+/**
+* Tailwind build which works with Taro
+*/
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
