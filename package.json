@@ -39,7 +39,7 @@
     "ramda": "^0.27.0",
     "snyk": "^1.437.3",
     "spritejs": "^2.29.5",
-    "swiper": "^5.3.7",
+    "swiper": "^5.4.5",
     "ts-loader": "^6.2.1",
     "typescript": "^3.9.7",
     "ua-parser-js": "^0.7.23",
