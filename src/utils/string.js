@@ -425,8 +425,8 @@ const StageType = {
   a003: 'Act·3·火蓝之心',
   act4d0: 'Act·4·战地秘闻',
   act5d0: 'Act·5·喧闹法则',
-  act6d5: 'Act·6·洪炉示岁',
-  act7d5: 'Act·7·午间逸话',
+  act6d5: 'Act·6.5·洪炉示岁',
+  act7d5: 'Act·7.5·午间逸话',
   act9d0: 'Act·9·生于黑夜',
   act10d5: 'Act·10·乌萨斯的孩子们',
   act11d0: 'Act·11·沃伦姆德的薄暮',
@@ -435,8 +435,8 @@ const StageType = {
   act13d5: 'Act·13.5·孤岛风云',
   act15d0: 'Act·15·玛莉娅·临光',
   act15d5: 'Act·15.5·此地之外',
-  act16d5: 'Act·16·画中人',
-  ro: 'Act·12·ro_刻俄柏的灰蕈迷境',
+  act16d5: 'Act·16.5·画中人',
+  ro: 'Ro_刻俄柏的灰蕈迷境',
   rune: '危机合约'
 }
 
