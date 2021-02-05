@@ -20,7 +20,7 @@ export const change = (list) => {
               }) //change(el.data)
             }
           } else {
-            const keys = el.split(' ')
+            const keys = el.split(' ').filter(e => e)
             return {
               label: keys.slice(0, 2).join(' '),
               path: keys[2],

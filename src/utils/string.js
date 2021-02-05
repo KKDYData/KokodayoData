@@ -1,6 +1,5 @@
-const getKey = (keys) => key => keys[key] ? keys[key] : key
-const getKeyWithNull = (keys) => key => keys[key] ? keys[key] : null
-
+const getKey = keys => key => (keys[key] ? keys[key] : key)
+const getKeyWithNull = keys => key => (keys[key] ? keys[key] : null)
 
 // 拆包数据
 const evolveGoldCost = [
@@ -17,7 +16,8 @@ const exp_cards = {
     exp: 200,
     itemId: '2001',
     name: '基础作战记录',
-    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了数场战斗的录像。',
+    description:
+      '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了数场战斗的录像。',
     rarity: 1,
     iconId: 'sprite_exp_card_t1',
     overrideBkg: null,
@@ -51,7 +51,8 @@ const exp_cards = {
     exp: 400,
     itemId: '2002',
     name: '初级作战记录',
-    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了多场战斗的录像与详细数据分析资料。附送了三小时的花絮与访谈。',
+    description:
+      '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了多场战斗的录像与详细数据分析资料。附送了三小时的花絮与访谈。',
     rarity: 2,
     iconId: 'sprite_exp_card_t2',
     overrideBkg: null,
@@ -85,7 +86,8 @@ const exp_cards = {
     exp: 1000,
     itemId: '2003',
     name: '中级作战记录',
-    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了多个录像集锦，夹带了一张录像人的签名版。',
+    description:
+      '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n存储了多个录像集锦，夹带了一张录像人的签名版。',
     rarity: 3,
     iconId: 'sprite_exp_card_t3',
     overrideBkg: null,
@@ -119,7 +121,8 @@ const exp_cards = {
     exp: 2000,
     itemId: '2004',
     name: '高级作战记录',
-    description: '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n追加了总集篇。附带高清版、高清重制版、威力加强版、导演剪辑版、年度黄金版……',
+    description:
+      '在恶劣环境下的每次行动都可能有人会丢掉性命。如果做好了充足的准备，或许也能多拯救一些生命。\\n追加了总集篇。附带高清版、高清重制版、威力加强版、导演剪辑版、年度黄金版……',
     rarity: 4,
     iconId: 'sprite_exp_card_t4',
     overrideBkg: null,
@@ -135,13 +138,14 @@ const exp_cards = {
       }
     ],
     buildingProductList: []
-  },
+  }
 }
 
 const GOLD = {
   itemId: '4001',
   name: '龙门币',
-  description: '经济危机发生后，经济的衰退与政权之间的对立让贸易参与者们举步维艰。龙门币的流通使商业复兴成为可能。',
+  description:
+    '经济危机发生后，经济的衰退与政权之间的对立让贸易参与者们举步维艰。龙门币的流通使商业复兴成为可能。',
   rarity: 3,
   iconId: 'GOLD',
   overrideBkg: null,
@@ -206,30 +210,50 @@ const starColor = [
 
 const charBorderColor = {
   0: {
-    background: `linear-gradient(16deg, hsla(${ starColor[0][0] }, ${ starColor[0][1] }%, ${ starColor[0][2] }%, 1), hsla(0, 0%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${starColor[0][1]}%, ${starColor[0][2]}%, 1), hsla(0, 0%, 95%, 1))`
   },
   1: {
-    background: `linear-gradient(16deg, hsla(${ starColor[1][0] }, ${ starColor[1][1] }%, ${ starColor[1][2] }%, 1), hsla(0, 0%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${starColor[1][1]}%, ${starColor[1][2]}%, 1), hsla(0, 0%, 95%, 1))`
   },
   2: {
-    background: `linear-gradient(16deg, hsla(${ starColor[2][0] }, ${ starColor[2][1] }%, ${ starColor[2][2] }%, 1), hsla(213, 53%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[2][0]}, ${starColor[2][1]}%, ${starColor[2][2]}%, 1), hsla(213, 53%, 95%, 1))`
   },
   3: {
-    background: `linear-gradient(16deg, hsla(${ starColor[3][0] }, ${ starColor[3][1] }%, ${ starColor[3][2] }%, 1), hsla(282, 35%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${starColor[3][1]}%, ${starColor[3][2]}%, 1), hsla(282, 35%, 95%, 1))`
   },
   4: {
-    background: `linear-gradient(16deg, hsla(${ starColor[4][0] }, ${ starColor[4][1] }%, ${ starColor[4][2] }%, 1), hsla(40, 100%, 95%, 1))`,
+    background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), hsla(40, 100%, 95%, 1))`
   },
-  5: {},
+  5: {}
 }
 
 const charNameColor = {
-  0: { background: `linear-gradient(16deg, hsla(${ starColor[0][0] }, ${ starColor[0][1] }%, ${ starColor[0][2] + 13 }%, 1), transparent)`, },
-  1: { background: `linear-gradient(16deg, hsla(${ starColor[1][0] }, ${ starColor[1][1] }%, ${ starColor[1][2] + 13 }%, 1), transparent)` },
-  2: { background: `linear-gradient(16deg, hsla(${ starColor[2][0] }, ${ starColor[2][1] - 27 }%, ${ starColor[2][2] + 15 }%, 1), transparent)` },
-  3: { background: `linear-gradient(16deg, hsla(${ starColor[3][0] }, ${ starColor[3][1] }%, ${ starColor[3][2] + 17 }%, 1),transparent)` },
-  4: { background: `linear-gradient(16deg, hsla(${ starColor[4][0] }, ${ starColor[4][1] }%, ${ starColor[4][2] }%, 1), transparent)`, },
-  5: { background: `linear-gradient(16deg, hsla(${ starColor[5][0] }, ${ starColor[5][1] }%, ${ starColor[5][2] }%, 1), transparent)`, },
+  0: {
+    background: `linear-gradient(16deg, hsla(${starColor[0][0]}, ${
+      starColor[0][1]
+    }%, ${starColor[0][2] + 13}%, 1), transparent)`
+  },
+  1: {
+    background: `linear-gradient(16deg, hsla(${starColor[1][0]}, ${
+      starColor[1][1]
+    }%, ${starColor[1][2] + 13}%, 1), transparent)`
+  },
+  2: {
+    background: `linear-gradient(16deg, hsla(${
+      starColor[2][0]
+    }, ${starColor[2][1] - 27}%, ${starColor[2][2] + 15}%, 1), transparent)`
+  },
+  3: {
+    background: `linear-gradient(16deg, hsla(${starColor[3][0]}, ${
+      starColor[3][1]
+    }%, ${starColor[3][2] + 17}%, 1),transparent)`
+  },
+  4: {
+    background: `linear-gradient(16deg, hsla(${starColor[4][0]}, ${starColor[4][1]}%, ${starColor[4][2]}%, 1), transparent)`
+  },
+  5: {
+    background: `linear-gradient(16deg, hsla(${starColor[5][0]}, ${starColor[5][1]}%, ${starColor[5][2]}%, 1), transparent)`
+  }
 }
 
 const itemBackground = {
@@ -274,11 +298,8 @@ const itemBackground = {
     'box-shadow': `rgb(75, 41, 23) 0px 0px 0px 2px inset, 
                   rgb(250, 215, 138) 0 0 5px 4px inset,
                   0 0 1px 0px rgba(128, 128, 128, 0.37)`
-  },
+  }
 }
-
-
-
 
 const TagsArr = [
   { isTag: true, text: '快速复活', value: '快速复活' },
@@ -300,7 +321,7 @@ const TagsArr = [
   { isTag: true, text: '近战位', value: 'MELEE' },
   { isTag: true, text: '支援机械', value: '支援机械' },
   { isTag: true, text: '资深干员', value: 4 },
-  { isTag: true, text: '高级资深干员', value: 5 },
+  { isTag: true, text: '高级资深干员', value: 5 }
 ]
 
 const StarArr = [
@@ -309,7 +330,7 @@ const StarArr = [
   { isTag: false, text: 3, value: 2, short: 3 },
   { isTag: false, text: 4, value: 3, short: 4 },
   { isTag: false, text: 5, value: 4, short: 5 },
-  { isTag: false, text: 6, value: 5, short: 6 },
+  { isTag: false, text: 6, value: 5, short: 6 }
 ]
 
 const potentialToStatus = {
@@ -335,11 +356,10 @@ const mapOptionsKey = {
   completeFavor: '干员好感增加',
   // difficulty: '难度',
   expGain: '经验获得',
-  goldGain: '龙门币获得',
+  goldGain: '龙门币获得'
   // isTrainingLevel: '训练？',
   // functionDisableMask: 'mask？'
 }
-
 
 const occPer_chinese = {
   ALWAYS: '固定掉落',
@@ -353,7 +373,6 @@ const roomType = {
   WORKSHOP: '加工站',
   MANUFACTURE: '制造站'
 }
-
 
 const campToCode = {
   切尔诺伯格: '01',
@@ -390,7 +409,7 @@ const statusToCh_M2 = {
 }
 
 const statusToCh_M3 = {
-  atk: '攻击',
+  atk: '攻击'
 }
 
 const StageType = {
@@ -412,6 +431,11 @@ const StageType = {
   act10d5: 'Act·10·乌萨斯的孩子们',
   act11d0: 'Act·11·沃伦姆德的薄暮',
   act12d0: 'Act·12·密林悍将归来',
+  act13d0: 'Act·13·踏寻往昔之风',
+  act13d5: 'Act·13.5·孤岛风云',
+  act15d0: 'Act·15·玛莉娅·临光',
+  act15d5: 'Act·15.5·此地之外',
+  act16d5: 'Act·16·画中人',
   ro: 'Act·12·ro_刻俄柏的灰蕈迷境',
   rune: '危机合约'
 }
@@ -433,9 +457,6 @@ const keys = {
   HP_RECOVERY_PER_SEC_BY_MAX_HP_RATIO: '每秒HP回复百分比'
 }
 
-
-
-
 // 展示的面板属性，返回空值则不显示
 const statusToCh = getKeyWithNull(statusToCh_M1)
 const statusToChChar = getKeyWithNull(statusToCh_M2)
@@ -453,14 +474,13 @@ const class_chinese = {
   PIONEER: { isTag: false, text: '先锋', value: 'PIONEER' },
   TANK: { isTag: false, text: '重装', value: 'TANK' },
   SPECIAL: { isTag: false, text: '特种', value: 'SPECIAL' },
-  SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT' },
+  SUPPORT: { isTag: false, text: '辅助', value: 'SUPPORT' }
 }
 
 const getClass_Chinese = en => {
   if (en === 'TOKEN') return '召唤物'
   return class_chinese[en].text
 }
-
 
 export {
   // 筛选数据
@@ -483,14 +503,12 @@ export {
   statusToChToken,
   class_chinese,
   getClass_Chinese,
-
   // 拆包数据
   evolveGoldCost,
   exp_cards,
   occPer_chinese,
   GOLD,
-
   // map生成
   Directions,
-  blockKeys,
+  blockKeys
 }
