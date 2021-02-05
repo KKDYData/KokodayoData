@@ -3825,10 +3825,10 @@ electron-to-chromium@^1.3.380:
   resolved "https://registry.npm.taobao.org/electron-to-chromium/download/electron-to-chromium-1.3.390.tgz?cache=0&sync_timestamp=1585382576375&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron-to-chromium%2Fdownload%2Felectron-to-chromium-1.3.390.tgz#a49e67dea22e52ea8027c475dd5447b1c00b1d4e"
   integrity sha1-pJ5n3qIuUuqAJ8R13VRHscALHU4=
 
-element-theme-chalk@^2.13.0:
-  version "2.13.0"
-  resolved "https://registry.npm.taobao.org/element-theme-chalk/download/element-theme-chalk-2.13.0.tgz#2ee1aea38c31a37df55886001021a054b076b356"
-  integrity sha1-LuGuo4wxo331WIYAECGgVLB2s1Y=
+element-theme-chalk@^2.14.1:
+  version "2.15.0"
+  resolved "https://registry.yarnpkg.com/element-theme-chalk/-/element-theme-chalk-2.15.0.tgz#4e3008b1151eb0764de89ae0b03034617660f260"
+  integrity sha512-AtzwMNYD0vK6dleNEnNDfPMWt/kr8V8wR03bmv9HC0mWtdvCy35z23ONU6qhU1fl9Ay1EvV5xX79Yedwg+LrBw==
 
 element-ui@^2.12.0:
   version "2.13.0"
