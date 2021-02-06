@@ -11,7 +11,6 @@
       </p>
     </div>
     <div class="new-mode-group-container">
-      data{{ sortData }}
       <el-card
         v-for="item in sortData"
         :key="item.name"
