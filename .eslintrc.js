@@ -1,57 +1,35 @@
 module.exports = {
-    root: true,
-    env: {
-        browser: true,
-        es6: true,
-        node: true
-    },
-    extends: [
-        "eslint:recommended",
-        'plugin:vue/recommended'
-    ],
-    globals: {
-        Atomics: "readonly",
-        SharedArrayBuffer: "readonly"
-    },
-    parserOptions: {
-        ecmaVersion: 2018,
-        sourceType: "module",
-        parser: "babel-eslint",
-    },
-    plugins: [
-        "vue"
-    ],
-    rules: {
-        "no-console": "off",
-        indent: [
-            "error",
-            2,
-            { "SwitchCase": 1 }
-        ],
-        "linebreak-style": [
-            "error",
-            "windows"
-        ],
-        quotes: [
-            "error",
-            "single"
-        ],
-        semi: [
-            "error",
-            "never"
-        ],
-        "no-unused-vars": ["error", { "args": "none" }],
-        "vue/max-attributes-per-line": ["error", {
-            "singleline": 6,
-            "multiline": {
-                "max": 1,
-                "allowFirstLine": false
-            }
-        }],
-        "vue/html-indent": 0,
-        "vue/multiline-html-element-content-newline": 0,
-        "vue/no-v-html": 0,
-        "vue/singleline-html-element-content-newline": 0,
-        "vue/html-self-closing": 0
-    }
+  env: {
+    browser: true,
+    es2021: true,
+    node: true,
+    jest: true,
+    serviceworker: true
+  },
+  parser: 'vue-eslint-parser',
+  extends: [
+    'plugin:@typescript-eslint/recommended',
+    'plugin:vue/vue3-recommended',
+    'plugin:prettier/recommended',
+    'prettier/@typescript-eslint'
+  ],
+  parserOptions: {
+    ecmaVersion: 12,
+    parser: '@typescript-eslint/parser',
+    sourceType: 'module'
+  },
+  plugins: ['vue', '@typescript-eslint', 'prettier'],
+  rules: {
+    'vue/max-attributes-per-line': 0,
+    'vue/html-closing-bracket-newline': 0,
+    'vue/html-closing-bracket-spacing': 0,
+    'vue/html-indent': 0,
+    quotes: ['error', 'single'],
+    semi: ['error', 'never'],
+    'no-unused-labels': 0,
+    '@typescript-eslint/no-unused-vars': 0,
+    'vue/singleline-html-element-content-newline': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 0
+  },
+  ignorePatterns: ['script']
 }

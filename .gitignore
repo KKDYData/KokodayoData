@@ -1,15 +1,27 @@
-dist
-build
-theme
-log.md
-GameData
-script
-GameData
-
 stats.json
 yarn-error.log
-package-lock.json
 
+
+# h5
 node_modules
+.DS_Store
+dist
+dist-ssr
+*.local
 
-element
+# server
+logs/
+npm-debug.log
+yarn-error.log
+node_modules/
+package-lock.json
+yarn.lock
+coverage/
+dist/
+.idea/
+run/
+.DS_Store
+*.sw*
+*.un~
+.tsbuildinfo
+.tsbuildinfo.*

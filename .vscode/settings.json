@@ -27,5 +27,6 @@
   "stylusSupremacy.alwaysUseNoneOverZero": false,
   "stylusSupremacy.alwaysUseZeroWithoutUnit": false,
   "stylusSupremacy.reduceMarginAndPaddingValues": false,
-  "stylusSupremacy.ignoreFiles": []
+  "stylusSupremacy.ignoreFiles": [],
+  "typescript.tsdk": "node_modules\\typescript\\lib"
 }
