@@ -2,11 +2,19 @@
   <div>
     <div>
       <slot />
-      <div v-if="talents.length > 0" :style="short ? 'margin: 30px 0' : 'margin-bottom: 20px'">
+      <div
+        v-if="talents.length > 0"
+        :style="short ? 'margin: 30px 0' : 'margin-bottom: 20px'"
+      >
         <div>
           <b>能力·Blackboard</b>
         </div>
-        <content-slot v-for="(t, index) in filterTalents" :key="index" long no-wrap>
+        <content-slot
+          v-for="(t, index) in filterTalents"
+          :key="index"
+          long
+          no-wrap
+        >
           <template v-slot:title>{{ t.key }}</template>
           <template v-slot:content>{{ t.value }}</template>
         </content-slot>
@@ -14,21 +22,24 @@
     </div>
     <div style="display: flex; align-items: center; margin: 10px 0">
       <!-- 根据有没有mapLevel区分有没有选地图 -->
-      <div v-if="mapLevel < 0" class :style="short ? 'width: auto': ''">
+      <div v-if="mapLevel < 0" class :style="short ? 'width: auto' : ''">
         <div style="margin-bottom: 15px">
           <span class="status-phases-text">Level</span>
           <el-button
             v-for="(item, index) in status"
             :key="index"
             size="mini"
-            :type="level === index ? 'primary': ''"
+            :type="level === index ? 'primary' : ''"
             @click="level = index"
-          >{{ index }}</el-button>
+            >{{ index }}</el-button
+          >
           <h-tooltip
             popper-class="enemy-tooltip-item"
             class="enemy-status-tip"
             effect="dark"
-            :content="'敌人的Level可以理解为敌人的版本，一个地图只会出现一种版本，突袭模式会有地图加成，不是更换版本'"
+            :content="
+              '敌人的Level可以理解为敌人的版本，一个地图只会出现一种版本，突袭模式会有地图加成，不是更换版本'
+            "
             placement="top-start"
           >
             <i class="toolel-icon-info" />
@@ -39,15 +50,21 @@
 
     <div class="enemy-status-wrapper" style="padding-bottom: 20px">
       <div class="enemy-data-tag-container">
-        <div v-if="Tag.stunImmune.value" class="enemy-data-tag">{{ Tag.stunImmune.text }}</div>
-        <div v-if="Tag.silenceImmune.value" class="enemy-data-tag">{{ Tag.silenceImmune.text }}</div>
+        <div v-if="Tag.stunImmune.value" class="enemy-data-tag">
+          {{ Tag.stunImmune.text }}
+        </div>
+        <div v-if="Tag.silenceImmune.value" class="enemy-data-tag">
+          {{ Tag.silenceImmune.text }}
+        </div>
       </div>
       <div v-if="data[0] && data[0].enemyData.extra">
         <content-slot long no-wrap>
           <template v-slot:title>额外记录</template>
           <template v-slot:content>—</template>
         </content-slot>
-        <p v-for="(item, index) in data[0].enemyData.extra" :key="index">{{ item }}</p>
+        <p v-for="(item, index) in data[0].enemyData.extra" :key="index">
+          {{ item }}
+        </p>
       </div>
       <div class="status-details-talents-wrapper">
         <div class="enemy-status-wrapper">
@@ -57,7 +74,7 @@
             class="status-details-container"
             no-wrap
             long
-            :width="short ? 90: 100"
+            :width="short ? 90 : 100"
           >
             <template v-slot:title>
               <span>{{ kData[0] }}</span>
@@ -72,7 +89,11 @@
                   popper-class="enemy-tooltip-item"
                   class="enemy-status-tip"
                   effect="dark"
-                  :content="'对基地造成的伤害，例如普通图基地生命有3点，这个敌人进去之后就会扣掉'+ kData[1] + '点生命.'"
+                  :content="
+                    '对基地造成的伤害，例如普通图基地生命有3点，这个敌人进去之后就会扣掉' +
+                      kData[1] +
+                      '点生命.'
+                  "
                   placement="bottom"
                 >
                   <i class="el-icon-info" />
@@ -83,21 +104,30 @@
         </div>
       </div>
 
-      <div v-if="skills.length > 0" :style="short? 'margin-top: 20px' : ''">
+      <div v-if="skills.length > 0" :style="short ? 'margin-top: 20px' : ''">
         <div>
           <b style="font-size: 1.2em">Extra·技能</b>
         </div>
         <div class="enemy-skill">
-          <div v-for="(skill, index) in targetSkill" :key="index" class="enemy-skill-container">
+          <div
+            v-for="(skill, index) in targetSkill"
+            :key="index"
+            class="enemy-skill-container"
+          >
             <div style="margin: 10px 0">
-              <span style="font-size: 1.1em">{{ skill.prefabKey | skillName }}</span>
+              <span style="font-size: 1.1em">{{
+                skill.prefabKey | skillName
+              }}</span>
             </div>
-            <div :style="short? 'margin-left: 10px' : ''">
+            <div :style="short ? 'margin-left: 10px' : ''">
               <span>初始冷却</span>
               <span>{{ skill.initCooldown }}</span>
               <span>s</span>
             </div>
-            <div v-if="skill.spCost > 0" :style="short? 'width: 100%; margin-left: 10px' : ''">
+            <div
+              v-if="skill.spCost > 0"
+              :style="short ? 'width: 100%; margin-left: 10px' : ''"
+            >
               <span>SP消耗</span>
               <span>{{ skill.spCost }}</span>
             </div>
@@ -107,16 +137,20 @@
                   <b style="opacity: 0.5">效果</b>
                 </span>
               </div>
-              <div :style="short? 'display: flex; flex-wrap: wrap' : ''">
+              <div :style="short ? 'display: flex; flex-wrap: wrap' : ''">
                 <content-slot
                   v-for="bData in skill.blackboard"
                   :key="bData.key"
-                  :style="short? 'margin-left: 10px' : ''"
+                  :style="short ? 'margin-left: 10px' : ''"
                   long
                   no-wrap
                 >
-                  <template v-slot:title>{{ changeBlackboardToCh(bData.key) }}</template>
-                  <template v-slot:content>{{ addUnit(bData.value, bData.key) }}</template>
+                  <template v-slot:title>{{
+                    changeBlackboardToCh(bData.key)
+                  }}</template>
+                  <template v-slot:content>{{
+                    addUnit(bData.value, bData.key)
+                  }}</template>
                 </content-slot>
               </div>
             </div>
@@ -134,11 +168,10 @@ Vue.use(Button)
 
 import HTooltip from '@/components/Base/Tooltip'
 
-
 import { mapState } from 'vuex'
 import ContentSlot from '../Base/ContentSlot'
 
-import { changeKey } from '../../utils'
+import { changeKey, toPercent } from '../../utils'
 import { statusToCh } from '../../utils/string'
 import { enemySkillNameKey, ENEMY_TALENT_NAME } from '../../utils/esn'
 
@@ -157,7 +190,7 @@ export default {
   props: {
     data: {
       type: Array,
-      default: function () {
+      default: function() {
         return { message: 'hello' }
       }
     },
@@ -237,7 +270,6 @@ export default {
         return this.status[this.mapLevel]
       }
 
-
       const lv = this.mapLevel
 
       // 防止数据没加载好，不是很安全，有空改一下
@@ -273,7 +305,8 @@ export default {
       })
 
       return this.status[lv].map(el => {
-        if (res.attackSpeed && el[2] === 'baseAttackTime') return [el[0], Math.floor(el[1] / res.attackSpeed * 10) / 10]
+        if (res.attackSpeed && el[2] === 'baseAttackTime')
+          return [el[0], Math.floor((el[1] / res.attackSpeed) * 10) / 10]
         if (res[el[2]]) {
           return [el[0], Math.floor(el[1] * res[el[2]] * 10) / 10]
         } else {
@@ -294,8 +327,7 @@ export default {
             })
           }
           return this.talents[key]
-        }
-        else return findTalent(key - 1)
+        } else return findTalent(key - 1)
       }
       const row = findTalent(this.mapLevel > 0 ? this.mapLevel : this.level)
       return row.map(el => {
@@ -305,7 +337,7 @@ export default {
           value: v
         }
       })
-    },
+    }
   },
 
   watch: {
@@ -325,7 +357,8 @@ export default {
           const target =
             this.data[curI].enemyData[key] ||
             this.data[curI].enemyData.attributes[key]
-          if (isLifePoint) return typeof target === 'number' ? target : target.m_value
+          if (isLifePoint)
+            return typeof target === 'number' ? target : target.m_value
           if (target.m_defined) return target.m_value
           else return findDefinedValue(key, curI - 1)
         }
@@ -380,22 +413,30 @@ export default {
           }
         })
       }
-
     }
   },
   methods: {
     addUnit(v, key) {
-      if (/(duration|freeze)/.test(key)) {
+      console.log('key', key, v)
+      if (/(duration|freeze|addOnDuration)/.test(key)) {
         v = v + 's'
+        return v
       }
-      if (/((reborn|up|down|scale|boom)?\.(atk|move_speed))|\.hp_ratio|healaura/.test(key)) {
-        v = v * 100 + '%'
+      if (
+        /((reborn|up|down|scale|boom)?\.(atk|move_speed))|\.hp_ratio|healaura/.test(
+          key
+        )
+      ) {
+        v = toPercent(v)
       } else if (/defdown\.def/.test(key)) {
         if (Math.abs(v) < 1) {
-          v = v * 100 + '%'
+          v = toPercent(v)
         }
-      } else if (/shield\.(def|magic_resistance)/.test(key)) {
-        v = v * 100 + '%'
+      } else if (
+        /shield\.(def|magic_resistance)/.test(key) ||
+        /max_hp|damage_resistance/.test(key)
+      ) {
+        v = toPercent(v)
       }
       return v
     },
@@ -405,9 +446,7 @@ export default {
     changeTalentsBlackBordtoCh(key) {
       const temp = key.split('.')
       if (temp.length < 2) return key
-
       const changeKey = key => ENEMY_TALENT_NAME[key] || key.toUpperCase()
-      // console.log(key, 'temp', temp)
       return temp.map(el => changeKey(el)).join('·')
     }
   }
@@ -501,5 +540,3 @@ export default {
   }
 }
 </style>
-
-
