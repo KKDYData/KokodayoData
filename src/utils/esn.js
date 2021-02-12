@@ -1,4 +1,3 @@
-
 const enemySkillNameKey = {
   //这是注释，原英文名：中文名，标点符号都是英文的。
   SUMMONBALLIS: '召唤弩炮台',
@@ -69,7 +68,6 @@ const ENEMY_TALENT_NAME = {
   duration: '持续时间',
   interval: '间隔',
 
-
   damage_scale: '倍率',
   atk_scale: '倍率',
   hp_recovery_per_sec: '倍率',
@@ -86,10 +84,22 @@ const ENEMY_TALENT_NAME = {
   rush: '冲刺·',
   'dlancer_t[trigger]': '参数·',
   trig_cnt: '最大计数',
-  firstattack: '冲刺'
+  firstattack: '冲刺',
+
+  fire: '灼息',
+  'attack@dragon_fire': '烈焚灼息',
+  baseDamage: '初始伤害',
+  addOnDamage: '最大递增伤害',
+  addOnDuration: '递增持续时间',
+  damage_resistance: '伤害降低',
+  'bsnake_t[protect]': '黑蛇保护',
+
+  yinyang: '阴阳',
+  'buff_yinyang[same]': '同属性',
+  'buff_yinyang[diff]': '异属性',
+  atk_scale_2: '倍率2',
+  boomtodiff: 'BOOM异属性',
+  boomtosame: 'BOOM同属性'
 }
 
-export {
-  enemySkillNameKey,
-  ENEMY_TALENT_NAME
-}
+export { enemySkillNameKey, ENEMY_TALENT_NAME }

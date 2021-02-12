@@ -4,7 +4,6 @@ import { path } from './listVer'
 import { getHeroData, getSkill } from './fetch'
 import UaParser from 'ua-parser-js'
 
-
 const debounce = (action, idle, ...args) => {
   let last
   return (...event) => {
@@ -12,7 +11,6 @@ const debounce = (action, idle, ...args) => {
     last = setTimeout(action, idle, ...args, ...event)
   }
 }
-
 
 const throttle = (action, delay, ...args) => {
   let last = 0
@@ -25,7 +23,6 @@ const throttle = (action, delay, ...args) => {
   }
 }
 
-
 function sort(array, less) {
   function swap(i, j) {
     const t = array[i]
@@ -35,8 +32,7 @@ function sort(array, less) {
   function quicksort(left, right) {
     if (left < right) {
       const pivot = array[left + Math.floor((right - left) / 2)]
-      let
-        left_new = left,
+      let left_new = left,
         right_new = right
 
       do {
@@ -62,7 +58,7 @@ function sort(array, less) {
 }
 
 class TaskQueue {
-  constructor (concurrency, finalTask = () => { }, queue = []) {
+  constructor(concurrency, finalTask = () => {}, queue = []) {
     this.concurrency = concurrency
     this.running = 0
     this.queue = queue
@@ -92,11 +88,9 @@ class TaskQueue {
   }
 }
 
-
-const changeDesc = (desc) => {
+const changeDesc = desc => {
   const reg1 = /(<\/>)/g,
     reg2 = /\\n/g
-
 
   const d = {
     ccVup: 'cc\\.vup',
@@ -122,22 +116,28 @@ const changeDesc = (desc) => {
     ['ff5500', ['timeLimit']]
   ]
 
-  const findColor = (k) => {
-    const [color] = colorTemp.find(([color, list]) => !!list.find(e => {
-      const reg = new RegExp(d[e] || '')
-      return reg.test(k)
-    }
-    )) || ['FF6237']
+  const findColor = k => {
+    const [color] = colorTemp.find(
+      ([color, list]) =>
+        !!list.find(e => {
+          const reg = new RegExp(d[e] || '')
+          return reg.test(k)
+        })
+    ) || ['FF6237']
     return '#' + color
   }
   if (!reg1.test(desc) && !reg2.test(desc)) return desc
 
-  let matchType = '', matchValueBegin, matchValue = '', matchTagBegin, matchTagStartBegin, matchTagEndBegin
+  let matchType = '',
+    matchValueBegin,
+    matchValue = '',
+    matchTagBegin,
+    matchTagStartBegin,
+    matchTagEndBegin
   const matchTypeGroup = []
   const matchValueGroup = []
 
   desc = desc.split('').reduce((res, cur) => {
-
     // tag 标签开始
     if (cur === '<') {
       if (matchValue) {
@@ -150,7 +150,6 @@ const changeDesc = (desc) => {
     }
 
     if (matchTagBegin) {
-
       matchValueBegin = false
       if (cur === '@') {
         matchTagStartBegin = true
@@ -165,8 +164,6 @@ const changeDesc = (desc) => {
       return res
     }
 
-
-
     // 标签结束
     if (cur === '>') {
       if (matchTagStartBegin) {
@@ -176,7 +173,8 @@ const changeDesc = (desc) => {
       } else if (matchTagEndBegin) {
         matchTagEndBegin = false
 
-        let temp = `<i style="color:${findColor(matchTypeGroup.pop()) || '#0098DC'};font-style: normal;">${matchValueGroup.pop()}</i>`
+        let temp = `<i style="color:${findColor(matchTypeGroup.pop()) ||
+          '#0098DC'};font-style: normal;">${matchValueGroup.pop()}</i>`
         if (matchValueGroup.length) {
           matchValue = matchValueGroup.pop() + temp
         } else {
@@ -223,12 +221,9 @@ const changeDesc = (desc) => {
   return desc
 }
 
-
-const getClass_icon = (c) => {
+const getClass_icon = c => {
   return path + 'others/icon_profession_' + c.toLowerCase() + '.png'
 }
-
-
 
 const getUA = () => {
   const ua = new UaParser()
@@ -236,30 +231,36 @@ const getUA = () => {
   const Browser = ua.getBrowser()
   const width = document.body.clientWidth
   const isMoblie = ua.getDevice().type === 'mobile'
-  const isMobliePad = isMoblie || OS.name === 'iOS' || (OS.name === 'Mac OS' && width < 1300)
+  const isMobliePad =
+    isMoblie || OS.name === 'iOS' || (OS.name === 'Mac OS' && width < 1300)
 
   return {
     isMoblie,
     Browser,
-    ok: !(OS.name == 'iOS' ||
+    ok: !(
+      OS.name == 'iOS' ||
       (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
-      (Browser.name === 'Edge' && Browser.version < '18')),
+      (Browser.name === 'Edge' && Browser.version < '18')
+    ),
     isMobliePad
   }
 }
 
 const UA = getUA()
 
-window.addEventListener('resize', throttle(() => {
-  const w = document.body.clientWidth
-  store.commit('setShort', w < 600 ? true : false)
-  store.commit('setScreenWidth', w)
-}, 500))
-
+window.addEventListener(
+  'resize',
+  throttle(() => {
+    const w = document.body.clientWidth
+    store.commit('setShort', w < 600 ? true : false)
+    store.commit('setScreenWidth', w)
+  }, 500)
+)
 
 const getProfilePath = (name, row) => {
   if (row) return getDetailsProfilePath(name)
-  return UA.ok ? `${path}char/portrait/${name}.png?x-oss-process=style/webp`
+  return UA.ok
+    ? `${path}char/portrait/${name}.png?x-oss-process=style/webp`
     : `${path}char/portrait/${name}.png`
 }
 
@@ -288,26 +289,40 @@ const findValue = (data, attr, key) => {
   }
 }
 
-const getValueDesc = (res, index, offset) => res.slice(index + offset).match(/(<.*?>)(.*?)(<\/.*?>)/)
+const getValueDesc = (res, index, offset) =>
+  res.slice(index + offset).match(/(<.*?>)(.*?)(<\/.*?>)/)
 const decNoValue = (res, data, str) => {
   if (!data || !data.value) return -1
   const temp = res.match(new RegExp(str))
-  if (temp && !new RegExp(`/${str}(.{2,}${Math.abs(data.value)})/`).test(res)) return temp.index
+  if (temp && !new RegExp(`/${str}(.{2,}${Math.abs(data.value)})/`).test(res))
+    return temp.index
   else return -1
 }
 
-const wrapColor = (str, color) => `<i style="color:${color};font-style: normal;">${str}</i>`
+const wrapColor = (str, color) =>
+  `<i style="color:${color};font-style: normal;">${str}</i>`
 
-const exSkill1 = new Set(['skchr_skfire_2', 'skchr_aglina_2', 'skchr_liskam_2', 'skchr_cerber_2', 'skchr_finlpp_2', 'skchr_weedy_2', 'skchr_broca_2', 'skchr_brownb_2', 'skchr_rosmon_3'])
+const exSkill1 = new Set([
+  'skchr_skfire_2',
+  'skchr_aglina_2',
+  'skchr_liskam_2',
+  'skchr_cerber_2',
+  'skchr_finlpp_2',
+  'skchr_weedy_2',
+  'skchr_broca_2',
+  'skchr_brownb_2',
+  'skchr_rosmon_3'
+])
 const exSkill2 = new Map([
   ['skchr_angel_3', '据实测攻击间隔缩短效果翻倍'],
-  ['skchr_rosmon_3', '听说攻击间隔是减一半，如果不对，走反馈或者进群找我改一下'],
+  ['skchr_rosmon_3', '听说攻击间隔是减一半，如果不对，走反馈或者进群找我改一下']
 ])
 
-const changeAttackSpeed = (skill) => {
+const changeAttackSpeed = skill => {
   const str = changeDesc(skill.description)
   let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
-    let percent = '', scale = 1
+    let percent = '',
+      scale = 1
     let minus = false
     let res = ''
 
@@ -352,7 +367,6 @@ const changeAttackSpeed = (skill) => {
     }
     // 只有白雪 !text
     if (text) {
-
       const inject = `(${value}${unit})`
       const testText = text[0].replace(text[2], text[2] + inject)
 
@@ -372,7 +386,7 @@ const changeAttackSpeed = (skill) => {
   const text = getValueDesc(res, atkSpeedIndex, 4)
   if (atkSpeedIndex > -1 && text) {
     const value = attack_speed.value
-    const inject = text ? `(${value})` : wrapColor(`(${value})`, '#F49800')//`<i style="color:#F49800;font-style: normal;">(${value})</i>`
+    const inject = text ? `(${value})` : wrapColor(`(${value})`, '#F49800') //`<i style="color:#F49800;font-style: normal;">(${value})</i>`
     const tempIndex = (text ? text[0].length : 4) + (res.match(/略微/) ? 2 : 0)
 
     const temp = res.split('')
@@ -385,14 +399,14 @@ const changeAttackSpeed = (skill) => {
   if (spUp) {
     const temp = res.split('')
     const value = findValue(skill, 'blackboard', 'sp_recovery_per_sec').value
-    temp.splice(spUp.index + 6, 0, wrapColor(`(${value * 100}%)`, '#F49800'))//`<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`)
+    temp.splice(spUp.index + 6, 0, wrapColor(`(${value * 100}%)`, '#F49800')) //`<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`)
     res = temp.join('')
   }
 
   // 阿
   if (res.match(/生命(.{1,9})减少/)) {
     const hp_ratio = findValue(skill, 'blackboard', 'hp_ratio')
-    res += wrapColor(`(每秒减少${(hp_ratio)?.value * 100}%)`, '#F49800')
+    res += wrapColor(`(每秒减少${hp_ratio?.value * 100}%)`, '#F49800')
   }
 
   if (exSkill2.has(skill.prefabId)) {
@@ -407,20 +421,27 @@ const calStatus = (lv, data) => {
     const diff = max.level - zero.level
     const res = Object.entries(max.data).reduce((res, cur) => {
       const [k, v] = cur
-      res[k] = Math.round((v - zero.data[k]) / diff * (lv - 1)) + zero.data[k]
+      res[k] = Math.round(((v - zero.data[k]) / diff) * (lv - 1)) + zero.data[k]
       return res
     }, {})
     return res
   })
 }
 
-const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP) => {
+const calStatusEnd = (
+  baseData,
+  level,
+  targetPhasese,
+  isFavor,
+  potentailStatusUP
+) => {
   const data = calStatus(level, targetPhasese)
   return Object.entries(data).reduce((res, cur) => {
     // 判定是否显示属性，没有就是我看不懂，或者觉得没意义的
     const [key, value] = cur
     if (!statusToChChar(key)) return res
-    let nV = value, addV = 0
+    let nV = value,
+      addV = 0
     // 判定是是否满好感
     if (isFavor && baseData.favorKeyFrames) {
       const v = baseData.favorKeyFrames[1].data[key]
@@ -444,7 +465,13 @@ const calStatusEnd = (baseData, level, targetPhasese, isFavor, potentailStatusUP
       })
     })
     const upOrMinus = addV > 0 ? '+' : ''
-    if (addV) nV = nV + '<i style="color: #F49800;font-style: normal;">(' + upOrMinus + addV + ')</i>'
+    if (addV)
+      nV =
+        nV +
+        '<i style="color: #F49800;font-style: normal;">(' +
+        upOrMinus +
+        addV +
+        ')</i>'
     res[key] = nV
     return res
   }, {})
@@ -457,16 +484,24 @@ const preDefineCompute = (asyncData, baseData) => {
 
     if (!target) return
     const { data, targetSkill } = target
-    const targetData = calStatus(el.inst.level, data.phases[el.inst.phase].attributesKeyFrames)
+    const targetData = calStatus(
+      el.inst.level,
+      data.phases[el.inst.phase].attributesKeyFrames
+    )
     return { key, targetData, targetSkill, ...data, ...el }
   })
   return res.filter(el => el)
 }
 
 const preDefineGet = async (key, baseData) => {
-  const temp = baseData[key].reduce((res, cur) => res.add(cur.inst.characterKey), new Set())
+  const temp = baseData[key].reduce(
+    (res, cur) => res.add(cur.inst.characterKey),
+    new Set()
+  )
   if (temp.length === 0) return []
-  const res = await Promise.all([...temp].map(key => getHeroData(key).then(data => ({ key, data }))))
+  const res = await Promise.all(
+    [...temp].map(key => getHeroData(key).then(data => ({ key, data })))
+  )
   for (const char of res) {
     const base = baseData[key].find(el => el.inst.characterKey === char.key)
     const targetSkill = char.data.skills[base.skillIndex]
@@ -478,7 +513,11 @@ const preDefineGet = async (key, baseData) => {
   return preDefineCompute(res, baseData[key])
 }
 
-const bsr = (t, a1, a2, a3, a4) => a1 * (1 - t) * (1 - t) * (1 - t) + 3 * a2 * t * (1 - t) * (1 - t) + 3 * a3 * t * t * (1 - t) + a4 * t * t * t
+const bsr = (t, a1, a2, a3, a4) =>
+  a1 * (1 - t) * (1 - t) * (1 - t) +
+  3 * a2 * t * (1 - t) * (1 - t) +
+  3 * a3 * t * t * (1 - t) +
+  a4 * t * t * t
 
 const findStage = (map, tree) => {
   const splitTemp = map.split('_')
@@ -495,7 +534,9 @@ const findStage = (map, tree) => {
     } else {
       //支线
       const temp = group.children[+chapter[0]]
-      target = temp.children[temp.children.length - 1].children.find(el => el.path === map)
+      target = temp.children[temp.children.length - 1].children.find(
+        el => el.path === map
+      )
     }
   } else {
     map = map.replace('wk', 'weekly').replace('pro', 'promote')
@@ -523,9 +564,7 @@ const getSkinsData = {
   getSkinSet(id) {
     return path + 'char/set/' + encodeURIComponent(id) + '.png'
   },
-  style: !UA.ok
-    ? '.png'
-    : '.png?x-oss-process=style/small-test'
+  style: !UA.ok ? '.png' : '.png?x-oss-process=style/small-test'
 }
 
 const getScreenWidth = () => {
@@ -556,10 +595,9 @@ const getScreenWidth = () => {
 const getfontSize = (str, mSize = 34, nSize = 16, baseLen = 4) => {
   const short = store.state.short
   const base = short ? mSize : nSize
-  const temp = Math.min(baseLen / str.length * base, base)
-  return short ? (temp / 750 * 100) + 'vw' : temp + 'px'
+  const temp = Math.min((baseLen / str.length) * base, base)
+  return short ? (temp / 750) * 100 + 'vw' : temp + 'px'
 }
-
 
 const sleep = time => {
   return new Promise(resolve => {
@@ -567,7 +605,7 @@ const sleep = time => {
   })
 }
 
-const loadImg = (url) =>
+const loadImg = url =>
   new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => resolve(img)
@@ -576,17 +614,19 @@ const loadImg = (url) =>
     img.src = url
   })
 
+const toPercent = v => {
+  return (v * 100).toFixed(0) + '%'
+}
 
 export {
   TaskQueue,
   findValue,
   sleep,
   loadImg,
-
   // 业务相关类
   debounce,
   throttle,
-  bsr,//三阶贝塞尔
+  bsr, //三阶贝塞尔
   sort,
   changeDesc,
   findStage,
@@ -597,14 +637,14 @@ export {
   preDefineGet,
   changeKey,
   getSkinsData,
-
   // 转换路径类，可能需要转义到string
   getProfilePath,
   getDetailsProfilePath,
   getClass_icon,
-
   // 设备检测
   UA,
   getScreenWidth,
-  getfontSize
+  getfontSize,
+  // number
+  toPercent
 }
