@@ -1,4 +1,8 @@
-export interface Data {
+// This file is created by quicktype-core
+// Do not modify this file!!!!!!!!!
+// 使用quicktype 生成的类型，不要乱改！
+
+export interface IData {
     name:                       string;
     description:                string;
     canUseGeneralPotentialItem: boolean;
@@ -50,10 +54,10 @@ export interface UnlockCond {
 
 export interface KeyFrame {
     level: number;
-    data:  DataClass;
+    data:  Data;
 }
 
-export interface DataClass {
+export interface Data {
     maxHp:            number;
     atk:              number;
     def:              number;

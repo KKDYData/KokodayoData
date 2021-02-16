@@ -8,26 +8,6 @@ const {
 
 const fs = require('fs')
 
-async function quicktypeJSON(targetLanguage, typeName, jsonString) {
-  const jsonInput = jsonInputForTargetLanguage(targetLanguage)
-
-  // We could add multiple samples for the same desired
-  // type, or many sources for other types. Here we're
-  // just making one type from one piece of sample JSON.
-  await jsonInput.addSource({
-    name: typeName,
-    samples: [jsonString]
-  })
-
-  const inputData = new InputData()
-  inputData.addInput(jsonInput)
-
-  return await quicktype({
-    inputData,
-    lang: targetLanguage
-  })
-}
-
 async function quicktypeJSONSchema(targetLanguage, typeName, jsonSchemaString) {
   const inputData = new InputData()
 
@@ -45,6 +25,11 @@ async function quicktypeJSONSchema(targetLanguage, typeName, jsonSchemaString) {
     lang: targetLanguage,
     checkProvenance: true,
     combineClasses: true,
+    leadingComments: [
+      'This file is created by quicktype-core',
+      'Do not modify this file!!!!!!!!!',
+      '使用quicktype 生成的类型，不要乱改！'
+    ],
 
     rendererOptions: {
       // converters: 'all-objects',
@@ -60,7 +45,7 @@ async function quicktypeJSONSchema(targetLanguage, typeName, jsonSchemaString) {
 const OUTPUT_DIR = './src/'
 
 const transplie = (typeName, jsonSchemaString, fileName) =>
-  quicktypeJSONSchema('ts', typeName, jsonSchemaString).then(res => {
+  quicktypeJSONSchema('ts', 'I' + typeName, jsonSchemaString).then(res => {
     fs.writeFileSync(OUTPUT_DIR + fileName, res.lines.join('\n'))
   })
 

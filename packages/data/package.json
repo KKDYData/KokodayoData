@@ -10,6 +10,7 @@
   "license": "GPL-3.0-or-later",
   "dependencies": {
     "execa": "^5.0.0",
+    "minimist": "^1.2.5",
     "quicktype-core": "^6.0.69",
     "ramda": "^0.27.1"
   }
