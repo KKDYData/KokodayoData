@@ -10,12 +10,18 @@
           <b>能力·Blackboard</b>
         </div>
         <content-slot
-          v-for="(t, index) in filterTalents"
-          :key="index"
           long
           no-wrap
+          v-for="(t, index) in filterTalents"
+          :key="index"
         >
-          <template v-slot:title>{{ t.key }}</template>
+          <template v-slot:title>
+            <el-tooltip :content="t.text" effect="light" placement="top-start">
+              <span>
+                {{ t.key }}
+              </span>
+            </el-tooltip>
+          </template>
           <template v-slot:content>{{ t.value }}</template>
         </content-slot>
       </div>
@@ -104,7 +110,10 @@
         </div>
       </div>
 
-      <div v-if="skills.length > 0" :style="short ? 'margin-top: 20px' : ''">
+      <div
+        v-if="skills.length > 0"
+        :style="short ? 'margin-top: 20px; width: 100%' : 'width: 100%'"
+      >
         <div>
           <b style="font-size: 1.2em">Extra·技能</b>
         </div>
@@ -115,9 +124,12 @@
             class="enemy-skill-container"
           >
             <div style="margin: 10px 0">
-              <span style="font-size: 1.1em">{{
-                skill.prefabKey | skillName
-              }}</span>
+              <span style="font-size: 1.1em">
+                {{ skill.prefabKey | skillName }}
+              </span>
+              <p style="font-size: 0.75em">
+                {{ skill.prefabKey }}
+              </p>
             </div>
             <div :style="short ? 'margin-left: 10px' : ''">
               <span>初始冷却</span>
@@ -137,7 +149,7 @@
                   <b style="opacity: 0.5">效果</b>
                 </span>
               </div>
-              <div :style="short ? 'display: flex; flex-wrap: wrap' : ''">
+              <div>
                 <content-slot
                   v-for="bData in skill.blackboard"
                   :key="bData.key"
@@ -145,12 +157,19 @@
                   long
                   no-wrap
                 >
-                  <template v-slot:title>{{
-                    changeBlackboardToCh(bData.key)
-                  }}</template>
-                  <template v-slot:content>{{
-                    addUnit(bData.value, bData.key)
-                  }}</template>
+                  <template v-slot:title>
+                    <el-tooltip
+                      effect="light"
+                      :content="`key: ${bData.key}, value: ${bData.value}`"
+                    >
+                      <span>
+                        {{ changeBlackboardToCh(bData.key) }}
+                      </span>
+                    </el-tooltip>
+                  </template>
+                  <template v-slot:content>
+                    {{ addUnit(bData.value, bData.key) }}
+                  </template>
                 </content-slot>
               </div>
             </div>
@@ -162,9 +181,10 @@
 </template>
 
 <script>
-import { Button } from 'element-ui'
+import { Button, Tooltip } from 'element-ui'
 import Vue from 'vue'
 Vue.use(Button)
+Vue.use(Tooltip)
 
 import HTooltip from '@/components/Base/Tooltip'
 
@@ -334,7 +354,8 @@ export default {
         let v = this.addUnit(el.value, el.key)
         return {
           key: this.changeTalentsBlackBordtoCh(el.key),
-          value: v
+          value: v,
+          text: `key: ${el.key}, value: ${v}`
         }
       })
     }
@@ -357,8 +378,8 @@ export default {
           const target =
             this.data[curI].enemyData[key] ||
             this.data[curI].enemyData.attributes[key]
-          if (isLifePoint)
-            return typeof target === 'number' ? target : target.m_value
+          // if (isLifePoint)
+          //   return typeof target === 'number' ? target : target.m_value
           if (target.m_defined) return target.m_value
           else return findDefinedValue(key, curI - 1)
         }
@@ -417,7 +438,6 @@ export default {
   },
   methods: {
     addUnit(v, key) {
-      console.log('key', key, v)
       if (/(duration|freeze|addOnDuration)/.test(key)) {
         v = v + 's'
         return v
@@ -428,20 +448,30 @@ export default {
         )
       ) {
         v = toPercent(v)
-      } else if (/defdown\.def/.test(key)) {
-        if (Math.abs(v) < 1) {
+      } else if (
+        /(defdown|cchmpn_t_buff_blocker|cchmpn_t_buff_self|halfhp)\.(def|magic_resistance)/.test(
+          key
+        ) ||
+        ['def', 'atk', 'atk_scale'].includes(key)
+      ) {
+        if (Math.abs(v) < 10) {
           v = toPercent(v)
         }
       } else if (
-        /shield\.(def|magic_resistance)/.test(key) ||
+        /shield\.(magic_resistance|def)/.test(key) ||
         /max_hp|damage_resistance/.test(key)
       ) {
-        v = toPercent(v)
+        if (Math.abs(v) < 10) v = toPercent(v)
       }
       return v
     },
     changeBlackboardToCh(key) {
-      return ENEMY_TALENT_NAME[key] || key
+      return ENEMY_TALENT_NAME[key] ?? key.split('.').length > 1
+        ? key
+            .split('.')
+            .map(k => ENEMY_TALENT_NAME[k] || k.toUpperCase())
+            .join('·')
+        : key
     },
     changeTalentsBlackBordtoCh(key) {
       const temp = key.split('.')
@@ -496,8 +526,8 @@ export default {
 }
 
 .enemy-skill {
-  display: grid
-  grid-template-columns: 1fr 1fr
+  display: flex
+  flex-wrap: wrap;
   grid-column-gap: 2em
 
   &-container {
