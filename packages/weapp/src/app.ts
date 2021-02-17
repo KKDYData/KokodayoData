@@ -1,11 +1,17 @@
-import { createApp } from "vue"
-import store from "./store"
+import { createApp } from 'vue'
+import store from './store'
+import Taro from '@tarojs/taro'
 
-import "./app.styl"
-import "./tailwind.css"
+Taro.cloud.init({
+  env: 'kkdy-cloud-tu6xc',
+  traceUser: true
+})
+
+import './app.styl'
+import './tailwind.css'
 
 const App = createApp({
-  onShow(options) {},
+  onShow(options) {}
   // 入口组件不需要实现 render 方法，即使实现了也会被 taro 所覆盖
 })
 

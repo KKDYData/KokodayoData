@@ -1,6 +1,6 @@
 // This file is created by quicktype-core
 // Do not modify this file!!!!!!!!!
-// 使用quicktype 生成的类型，不要乱改！
+// 使用 quicktype 生成的类型，不要乱改！
 
 export interface IData {
     "level_main_00-01.json":      LevelA001Ex01JSONClass;

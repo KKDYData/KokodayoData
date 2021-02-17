@@ -24,7 +24,7 @@ export default (appInfo: EggAppInfo) => {
     password: '123456',
     database: 'kkdy',
     synchronize: true,
-    logging: true,
+    logging: false,
   }
 
   return config

@@ -1,16 +1,8 @@
 // This file is created by quicktype-core
 // Do not modify this file!!!!!!!!!
-// 使用quicktype 生成的类型，不要乱改！
+// 使用 quicktype 生成的类型，不要乱改！
 
 export interface IInfo {
-    handbookDict:                 { [key: string]: HandbookDict };
-    npcDict:                      { [key: string]: NpcDict };
-    teamMissionList:              { [key: string]: TeamMissionList };
-    handbookDisplayConditionList: { [key: string]: HandbookDisplayConditionList };
-    handbookStageData:            { [key: string]: HandbookStageDatum };
-}
-
-export interface HandbookDict {
     charID:          string;
     drawName:        string;
     infoName:        string;
@@ -47,16 +39,16 @@ export interface UnlockParam {
 }
 
 export interface StoryTextAudio {
-    stories:     Allexist[];
+    stories:     Story[];
     storyTitle:  StoryTitle;
     unLockorNot: boolean;
 }
 
-export interface Allexist {
-    storyText?:   string;
+export interface Story {
+    storyText:    string;
     unLockType:   number;
     unLockParam:  string;
-    unLockString: UnLockString | null;
+    unLockString: UnLockString;
 }
 
 export enum UnLockString {
@@ -80,70 +72,4 @@ export enum StoryTitle {
     源石技艺评定 = "源石技艺评定",
     综合体检测试 = "综合体检测试",
     综合性能检测结果 = "综合性能检测结果",
-}
-
-export interface HandbookDisplayConditionList {
-    charId:          string;
-    conditionCharId: string;
-    type:            string;
-}
-
-export interface HandbookStageDatum {
-    charId:           string;
-    stageId:          string;
-    levelId:          string;
-    zoneId:           ZoneID;
-    code:             string;
-    name:             string;
-    loadingPicId:     string;
-    description:      string;
-    unlockParam:      UnlockParam[];
-    rewardItem:       Item[];
-    stageNameForShow: string;
-    zoneNameForShow:  string;
-    picId:            string;
-    stageGetTime:     number;
-}
-
-export interface Item {
-    id:    string;
-    count: number;
-    type:  Type;
-}
-
-export enum Type {
-    DiamondShd = "DIAMOND_SHD",
-    Furn = "FURN",
-}
-
-export enum ZoneID {
-    StoryMission = "storyMission",
-}
-
-export interface NpcDict {
-    npcId:         string;
-    name:          string;
-    appellation:   string;
-    profession:    string;
-    illust:        string;
-    cv:            string;
-    displayNumber: string;
-    nationId:      string;
-    groupId:       null | string;
-    teamId:        null;
-    unlockDict:    UnlockDict;
-}
-
-export interface UnlockDict {
-    OUTLINE:  Allexist;
-    ALLEXIST: Allexist;
-}
-
-export interface TeamMissionList {
-    id:         string;
-    sort:       number;
-    powerId:    string;
-    powerName:  string;
-    item:       Item;
-    favorPoint: number;
 }

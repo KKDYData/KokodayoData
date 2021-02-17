@@ -34,4 +34,9 @@ export class APIController {
 
     return { success: true, data: { list } }
   }
+
+  @Get('/')
+  async home() {
+    return 'api'
+  }
 }

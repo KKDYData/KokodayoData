@@ -67,7 +67,7 @@ const skill_table = require('./ArknightsGameData/zh_CN/gamedata/excel/skill_tabl
 build('Skill', skill_table, 'Skill')
 
 const handbook_info_table = require('./ArknightsGameData/zh_CN/gamedata/excel/handbook_info_table.json')
-build('Info', handbook_info_table, 'CharInfo')
+build('Info', handbook_info_table.handbookDict, 'CharInfo')
 
 const handbook_team_table = require('./ArknightsGameData/zh_CN/gamedata/excel/handbook_team_table.json')
 build('Info', handbook_team_table, 'TeamInfo')

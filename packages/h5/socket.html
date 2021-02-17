@@ -1,0 +1,34 @@
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.min.js"></script>
+  </head>
+  <body>
+    <button id="btn">click</button>
+
+    <script>
+      const socket = io('http://127.0.0.1:7001/qr')
+      // const socket = io('http://127.0.0.1:3000/qr')
+
+      socket.on('connect', () => {
+        console.log('connect', socket.id) // undefined
+      })
+      socket.on('disconnect', () => {
+        console.log('disconnect', socket.id) // undefined
+      })
+
+      socket.on('ok', () => {
+        console.log('ok', socket.id) // undefined
+      })
+
+      socket.on('drawing', data => {
+        console.log('respone', data)
+      })
+
+      socket.connect()
+      document.body.querySelector('#btn').addEventListener('click', () => {
+        console.log('send data', socket)
+        socket.emit('my', { data: 'haha' })
+      })
+    </script>
+  </body>
+</html>

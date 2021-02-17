@@ -1,0 +1,15 @@
+{
+  "name": "openapi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/wx-server-sdk": "^0.8.0",
+    "wx-server-sdk": "~2.0.3"
+  }
+}
