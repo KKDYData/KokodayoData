@@ -7776,10 +7776,10 @@ pend@~1.2.0:
   resolved "https://registry.yarnpkg.com/pend/-/pend-1.2.0.tgz#7a57eb550a6783f9115331fcf4663d5c8e007a50"
   integrity sha1-elfrVQpng/kRUzH89GY9XI4AelA=
 
-phy-touch@^0.1.0:
-  version "0.1.0"
-  resolved "https://registry.npm.taobao.org/phy-touch/download/phy-touch-0.1.0.tgz#297ee65b39f2c655c46ba97aaf2b86deb423fbf2"
-  integrity sha1-KX7mWznyxlXEa6l6ryuG3rQj+/I=
+phy-touch@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/phy-touch/-/phy-touch-0.1.1.tgz#fe3b50089c139ed58a082e40f0d36f748d3bb36e"
+  integrity sha512-1HtZN7qC+G0qEMzOsGMiUFwRckHserZEbMHrfc8wPdypsRNyyyXu8IPneSIgJFKOLmSVwJlHCL7HThSdJpnlgQ==
 
 picomatch@^2.0.5, picomatch@^2.2.1:
   version "2.2.2"
