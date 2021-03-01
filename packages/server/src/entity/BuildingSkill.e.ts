@@ -2,6 +2,7 @@ import { EntityModel } from '@midwayjs/orm'
 import { BaseEntity } from './base.e'
 import { Column, Index, ManyToMany, JoinTable, ManyToOne } from 'typeorm'
 import { BuildingBuff } from './BuildingBuff.e'
+import { IBuilding } from '@kkdy/data'
 
 @EntityModel()
 export class BuildingSkill extends BaseEntity {
@@ -13,7 +14,7 @@ export class BuildingSkill extends BaseEntity {
   @Column({
     type: 'json',
   })
-  data: string
+  data: IBuilding.ISkill
 
   @ManyToMany(() => BuildingBuff)
   @JoinTable()

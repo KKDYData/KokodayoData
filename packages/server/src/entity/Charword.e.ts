@@ -1,3 +1,4 @@
+import { ICharWord } from '@kkdy/data'
 import { EntityModel } from '@midwayjs/orm'
 import { Column, ManyToOne, Index } from 'typeorm'
 import { BaseEntity } from './base.e'
@@ -24,5 +25,5 @@ export class Charword extends BaseEntity {
     type: 'json',
     comment: '干员台词数据，对应character_table',
   })
-  data: string
+  data: ICharWord.IWord
 }

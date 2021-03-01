@@ -12,6 +12,11 @@
     "typeRoots": [
       "./typings"
     ],
+    "paths": {
+      "/~/*": [
+        "src/*"
+      ],
+    }
   },
   "exclude": [
     "dist",

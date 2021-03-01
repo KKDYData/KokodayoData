@@ -1,3 +1,4 @@
+import { ICharInfo } from '@kkdy/data'
 import { EntityModel } from '@midwayjs/orm'
 import { Column } from 'typeorm'
 import { BaseEntity } from './base.e'
@@ -13,5 +14,5 @@ export class CharInfo extends BaseEntity {
     type: 'json',
     comment: '干员基础数据，对应character_table',
   })
-  data: string
+  data: ICharInfo.IInfo
 }

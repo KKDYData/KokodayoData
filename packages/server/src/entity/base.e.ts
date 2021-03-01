@@ -23,5 +23,5 @@ export abstract class BaseEntity {
     type: 'json',
     comment: '',
   })
-  data: string
+  data: any
 }

@@ -1,3 +1,4 @@
+import { IChar, IPatchInfo } from '@kkdy/data'
 import { EntityModel } from '@midwayjs/orm'
 import {
   Column,
@@ -6,12 +7,14 @@ import {
   ManyToMany,
   JoinTable,
   OneToMany,
+  ManyToOne,
 } from 'typeorm'
 import { BaseEntity } from './base.e'
 import { BuildingSkill } from './BuildingSkill.e'
 import { CharInfo } from './CharInfo.e'
 import { Charword } from './Charword.e'
 import { Skill } from './Skill.e'
+import { TeamInfo } from './TeamInfo.e'
 
 @EntityModel()
 export class CharacterData extends BaseEntity {
@@ -21,17 +24,17 @@ export class CharacterData extends BaseEntity {
   charId: string
 
   @Column({
-    unique: true,
-    comment: '升变id，阿米娅专属',
+    comment: '升变信息',
     nullable: true,
+    type: 'json',
   })
-  patchId: string
+  patchInfo?: IPatchInfo.IInfo
 
   @Column({
     type: 'json',
     comment: '干员基础数据，对应character_table',
   })
-  data: string
+  data: IChar.IData
 
   @OneToMany(
     () => Charword,
@@ -41,12 +44,22 @@ export class CharacterData extends BaseEntity {
   words: Charword[]
 
   @OneToOne(() => CharInfo)
+  @JoinColumn()
   info: CharInfo
 
   @OneToOne(() => BuildingSkill)
+  @JoinColumn()
   buildingSkill: BuildingSkill
 
-  @ManyToMany(() => Skill)
-  @JoinTable()
+  @ManyToMany(
+    () => Skill,
+    skill => skill.chars
+  )
   skills: Skill[]
+
+  @ManyToMany(
+    () => TeamInfo,
+    info => info.chars
+  )
+  teamInfo: TeamInfo[]
 }

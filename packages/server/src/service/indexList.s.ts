@@ -9,7 +9,6 @@ export class IndexListService {
   indexListModel: Repository<IndexList>
 
   async getList() {
-    console.log('??', this.indexListModel)
     const list = await this.indexListModel.find()
 
     return list

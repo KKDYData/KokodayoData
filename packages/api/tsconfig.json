@@ -13,9 +13,11 @@
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "node"
+    ],
     "typeRoots": [
-      "./typings"
+      "./typings",
     ],
     "outDir": "dist"
   },

@@ -36,7 +36,8 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent } from 'vue'
+import { ref, defineComponent, useContext, inject } from 'vue'
+import { useRequest } from './useAxios'
 
 export default defineComponent({
   name: 'HelloWorld',
@@ -48,6 +49,9 @@ export default defineComponent({
   },
   setup: () => {
     const count = ref(0)
+
+    const { data, finished } =  useRequest('/hello')
+
     return { count }
   }
 })

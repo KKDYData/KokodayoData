@@ -1,17 +1,22 @@
-import { Char, Skill } from '@kkdy/data'
+import { IChar, IPatchInfo } from '@kkdy/data'
+import { IWord } from '@kkdy/data/lib/CharWord'
 import { Inject, Logger } from '@midwayjs/decorator/dist'
 import { Provide } from '@midwayjs/decorator/dist'
 import { ILogger } from '@midwayjs/logger'
 import { InjectEntityModel } from '@midwayjs/orm'
+import { IMidwayWebContext } from '@midwayjs/web'
 import { Repository } from 'typeorm'
 import { CharacterData } from '../entity/Character.e'
+import { Skill } from '../entity/Skill.e'
+import { getOrCreateModel } from '../utils/entity'
+import { BuildingSkillService } from './buildingSkill.s'
+import { CharInfoService } from './charInfo.s'
 import { CharwordService } from './charword.s'
+import { OssService } from './oss.s'
 import { SkillService } from './skill.s'
+
 @Provide()
 export class CharService {
-  @Logger()
-  coreLogger: ILogger
-
   @InjectEntityModel(CharacterData)
   model: Repository<CharacterData>
 
@@ -21,57 +26,93 @@ export class CharService {
   @Inject()
   skillService: SkillService
 
-  // @Inject()
-  // infoService:Info
+  @Inject()
+  buildingSkillService: BuildingSkillService
 
-  async createOrUpdate(id: string, data: Char.IData) {
-    const char =
-      (await this.model.findOne({ where: { charId: id } })) ??
-      new CharacterData()
+  @Inject()
+  infoService: CharInfoService
+
+  @Inject()
+  ctx: IMidwayWebContext
+
+  @Inject()
+  oss: OssService
+
+  async createOrUpdate(id: string, data: IChar.IData) {
+    const char = await getOrCreateModel(this.model, { where: { charId: id } })
 
     char.charId = id
-    char.data = JSON.stringify(data)
+    char.data = data
     char.words = await this.charwordService.getWordsByCharId(char.charId)
     char.skills = await Promise.all(
-      Array.from(new Set(data.skills.map(s => s.skillId)).values())
-        .map(s =>
-          this.skillService.getSkillById(s).catch(err => {
-            this.coreLogger.warn('c ', data.name, ' ', id)
-            this.coreLogger.error(err)
-            return false
-          })
-        )
-        .filter(e => e) as any[]
+      Array.from(new Set(data.skills.map(s => s.skillId)).values()).map(s =>
+        this.skillService.getSkillById(s)
+      )
     )
+
+    char.buildingSkill = await this.buildingSkillService.getBuildingSkillByCharId(
+      id
+    )
+
+    char.info = await this.infoService.getCharInfoByCharId(id)
 
     try {
       await this.model.save(char)
-      this.coreLogger.info('save char ', data.name + ' , ' + id)
+      this.ctx.logger.info('save char ' + data.name + ' , ' + id)
     } catch (err) {
-      this.coreLogger.warn('c ', data.name, ' ', id)
-      this.coreLogger.error(err)
+      this.ctx.logger.warn('c ' + data.name + ' ' + id)
+      this.ctx.logger.error(err)
     }
   }
 
   async getCharByCharId(charId: string) {
     return this.model.findOne({
       where: { charId },
-      relations: ['words', 'skills'],
+      relations: [
+        'words',
+        'skills',
+        'buildingSkill',
+        'buildingSkill.buffs',
+        'info',
+        'teamInfo',
+      ],
     })
   }
 
-  async saveCharData(charId: string) {
-    const data = await this.model.findOne({
-      where: {
-        charId,
-      },
-    })
-    if (!data) throw new Error('no char')
-    const baseData = JSON.parse(data.data) as Char.IData
-    const skills = data.skills.map(s => JSON.parse(s.data)) as Skill.ISkill[]
-    const buildings = JSON.parse(data.buildingSkill.data)
+  async updatePatchData(charId: string, patchInfo: IPatchInfo.IInfo) {
+    const data = await this.getCharByCharId(charId)
+    if (!data) throw new Error('no this char ' + charId)
+    data.patchInfo = patchInfo
+    await this.model.save(data)
+
+    this.ctx.logger.info('save patch data of ' + charId)
+  }
+
+  async buildCharData(charId: string) {
+    const modelData = await this.getCharByCharId(charId)
+    if (!modelData) throw new Error('no char')
+
+    const {
+      buildingSkill,
+      patchInfo,
+      info,
+      skills,
+      words,
+      data,
+      teamInfo,
+    } = modelData
+
     const res = {
-      ...baseData,
+      ...data,
+      patchInfo,
+      skills: skills.map(s => s.data),
+      buildings: buildingSkill.data,
+      buildingBuffs: buildingSkill.buffs.map(b => b.data),
+      info: info.data,
+      words: words.map(w => w.data),
+      teamInfo,
     }
+
+    return res
   }
 }

@@ -23,7 +23,7 @@ export class APIController {
   indexListService: IndexListService
 
   @Post('/get_user')
-  async getUser(@Query() uid) {
+  async getUser(@Query() uid: any) {
     const user = await this.userService.getUser({ uid })
     return { success: true, message: 'OK', data: user }
   }

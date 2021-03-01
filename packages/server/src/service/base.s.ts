@@ -1,9 +1,10 @@
-import { Inject, Logger } from '@midwayjs/decorator'
-import { ILogger } from '@midwayjs/logger'
-import { Repository } from 'typeorm'
-import { BaseEntity } from '../entity/base.e'
+import { App, Inject, Logger } from '@midwayjs/decorator'
+import { ILogger, IMidwayLogger } from '@midwayjs/logger'
+import { IMidwayWebApplication, IMidwayWebContext } from '@midwayjs/web'
 
 export class BaseService {
-  @Logger()
-  coreLogger: ILogger
+  @Inject()
+  ctx: IMidwayWebContext & {
+    logger: IMidwayLogger
+  }
 }

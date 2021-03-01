@@ -3,7 +3,8 @@ import { ILogger } from '@midwayjs/logger'
 import { InjectEntityModel } from '@midwayjs/orm'
 import { Skill } from '../entity/Skill.e'
 import { Repository } from 'typeorm'
-import { Skill as ISkill } from '@kkdy/data'
+import { ISkill } from '@kkdy/data'
+import { getOrCreateModel } from '../utils/entity'
 
 @Provide()
 export class SkillService {
@@ -14,12 +15,12 @@ export class SkillService {
   model: Repository<Skill>
 
   async createOrUpdate(data: ISkill.ISkill) {
-    const skill =
-      (await this.model.findOne({ where: { skillId: data.skillId } })) ??
-      new Skill()
+    const skill = await getOrCreateModel(this.model, {
+      where: { skillId: data.skillId },
+    })
 
     skill.skillId = data.skillId
-    skill.data = JSON.stringify(data)
+    skill.data = data
 
     await this.model.save(skill)
 
@@ -28,5 +29,9 @@ export class SkillService {
 
   async getSkillById(skillId: string) {
     return this.model.findOne({ where: { skillId } })
+  }
+
+  async getSkillByIdWithChars(skillId: string) {
+    return this.model.findOne({ where: { skillId }, relations: ['chars'] })
   }
 }

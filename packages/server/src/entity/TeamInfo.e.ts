@@ -1,25 +1,25 @@
-import { ISkill } from '@kkdy/data'
 import { EntityModel } from '@midwayjs/orm'
-import { Column, Index, ManyToMany, JoinTable } from 'typeorm'
 import { BaseEntity } from './base.e'
+import { Column, ManyToOne, ManyToMany, JoinTable } from 'typeorm'
+import { ITeamInfo } from '@kkdy/data'
 import { CharacterData } from './Character.e'
 
 @EntityModel()
-export class Skill extends BaseEntity {
+export class TeamInfo extends BaseEntity {
   @Column({
     unique: true,
   })
-  skillId: string
+  powerId: string
 
   @Column({
     type: 'json',
-    comment: '技能数据，对应skill_table',
+    comment: 'teamInfo',
   })
-  data: ISkill.ISkill
+  data: ITeamInfo.IInfo
 
   @ManyToMany(
     () => CharacterData,
-    char => char.skills
+    char => char.teamInfo
   )
   @JoinTable()
   chars: CharacterData[]
