@@ -6,17 +6,58 @@ const ins = Axios.create({
 
 ;(async () => {
   const { data } = await ins.get('/')
-  await updateChar()
-  return
+  // await updateBuildingBuff()
+  // await updateBuildingSkill()
+  // await updateCharInfo()
+  // await updateCharword()
+  // await updateSkill()
+  // await updateChars()
+  // await updatePatchInfo()
+
+  // await updateTeamInfo()
+  // const { data }
+  // return
   const { data: char } = await getChar('char_010_chen')
-  console.log('data', data)
-  console.log(char)
-  await updateCharInfo()
-
-  await updateSkill()
-
-  await updateCharword()
+  const { data: skills } = await getSkill('skcom_atk_up[1]')
+  console.log('data', char.teamInfo)
+  console.log('skill', skills)
 })()
+
+function updateBuildingBuff() {
+  return new Promise(resolve => {
+    const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
+      .buffs
+
+    const list = Object.values(hook_book)
+
+    const queue = new TaskQueue(144, resolve)
+    list.forEach((e, i) => {
+      queue.pushTask(() =>
+        ins.post('/update/buildingBuff', e).then(() => {
+          console.log('buildingBuff', queue.total, queue.done)
+        })
+      )
+    })
+  })
+}
+
+function updateBuildingSkill() {
+  return new Promise(resolve => {
+    const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
+      .chars
+
+    const list = Object.values(hook_book)
+
+    const queue = new TaskQueue(144, resolve)
+    list.forEach((e, i) => {
+      queue.pushTask(() =>
+        ins.post('/update/buildingSkill', e).then(() => {
+          console.log('buildingSkill', queue.total, queue.done)
+        })
+      )
+    })
+  })
+}
 
 function updateCharInfo() {
   return new Promise(resolve => {
@@ -57,7 +98,7 @@ function updateCharword() {
     const charword_table = require('./ArknightsGameData/zh_CN/gamedata/excel/charword_table.json')
     const list = Object.values(charword_table)
 
-    const queue = new TaskQueue(144, resolve)
+    const queue = new TaskQueue(512, resolve)
     list.forEach(e => {
       queue.pushTask(() =>
         ins.post('/update/charword', e).then(() => {
@@ -68,24 +109,67 @@ function updateCharword() {
   })
 }
 
-function updateChar() {
+function updateTeamInfo() {
   return new Promise(resolve => {
-    const character_table = require('./ArknightsGameData/zh_CN/gamedata/excel/character_table.json')
-    const list = Object.entries(character_table)
+    const team_table = require('./ArknightsGameData/zh_CN/gamedata/excel/handbook_team_table.json')
+    const list = Object.values(team_table)
 
     const queue = new TaskQueue(144, resolve)
-    list.forEach(([id, data]) =>
+    list.forEach(e => {
+      queue.pushTask(() =>
+        ins.post('/update/teamInfo', e).then(() => {
+          console.log('teamInfo', queue.total, queue.done)
+        })
+      )
+    })
+  })
+}
+
+function updateChars() {
+  return new Promise(resolve => {
+    const character_table = require('./ArknightsGameData/zh_CN/gamedata/excel/character_table.json')
+    const patchChars = require('./ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
+      .patchChars
+    const list = [
+      ...Object.entries(character_table),
+      ...Object.entries(patchChars)
+    ]
+
+    const queue = new TaskQueue(256, resolve)
+    list.forEach(([id, data], i) => {
+      // if (i > 0) return
       queue.pushTask(() =>
         ins.post('/update/char', { id, data }).then(() => {
           console.log('char', queue.total, queue.done)
         })
       )
-    )
+    })
   })
 }
 
-function getChar(id) {
-  return ins.get('/update/char', { params: { id } })
+function getCharRaw(charId) {
+  return ins.get('/update/char', { params: { id: charId } })
+}
+
+function getChar(charId) {
+  return ins.post('/update/saveChar', { charId })
+}
+
+function updatePatchInfo() {
+  return new Promise(resolve => {
+    const patchInfos = require('./ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
+      .patchDetailInfoList
+    const list = Object.entries(patchInfos)
+
+    const queue = new TaskQueue(144, resolve)
+    list.forEach(([charId, data], i) => {
+      queue.pushTask(() => ins.post('/update/patchInfo', { charId, data }))
+    })
+  })
+}
+
+function getSkill(skillId) {
+  return ins.get('/s/skill', { params: { skillId } })
 }
 
 class TaskQueue {

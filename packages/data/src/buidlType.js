@@ -25,6 +25,7 @@ async function quicktypeJSONSchema(targetLanguage, typeName, jsonSchemaString) {
     lang: targetLanguage,
     checkProvenance: true,
     combineClasses: true,
+    inferEnums: true,
     leadingComments: [
       'This file is created by quicktype-core',
       'Do not modify this file!!!!!!!!!',
@@ -39,7 +40,7 @@ async function quicktypeJSONSchema(targetLanguage, typeName, jsonSchemaString) {
   return res
 }
 
-const OUTPUT_DIR = './src/'
+const OUTPUT_DIR = './lib/'
 
 const transplie = (typeName, jsonSchemaString, fileName) =>
   quicktypeJSONSchema('ts', 'I' + typeName, jsonSchemaString).then(res => {
