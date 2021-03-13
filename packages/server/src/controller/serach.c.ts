@@ -6,7 +6,7 @@ import {
   Provide,
   Query,
 } from '@midwayjs/decorator'
-import { SkillService } from '../service/skill.s'
+import { SkillService } from '../service/data/skill.s'
 
 @Provide()
 @Controller('/s')
@@ -15,7 +15,7 @@ export class SerachController {
   skillService: SkillService
 
   @Get('/skill')
-  async getSkillById(@Query(ALL) query: { skillId: string }) {
+  async getSkillById (@Query(ALL) query: { skillId: string }) {
     const raw = await this.skillService.getSkillByIdWithChars(query.skillId)
     const { skillId, data, chars } = raw
 

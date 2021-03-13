@@ -1,4 +1,5 @@
 const { default: Axios } = require('axios')
+const { Queue } = require('@kkdy/queue')
 
 const ins = Axios.create({
   baseURL: 'http://127.0.0.1:7001'
@@ -23,40 +24,40 @@ const ins = Axios.create({
   console.log('skill', skills)
 })()
 
-function updateBuildingBuff() {
-  return new Promise(resolve => {
-    const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
-      .buffs
+async function updateBuildingBuff() {
+  const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
+    .buffs
 
-    const list = Object.values(hook_book)
+  const list = Object.values(hook_book)
 
-    const queue = new TaskQueue(144, resolve)
-    list.forEach((e, i) => {
-      queue.pushTask(() =>
-        ins.post('/update/buildingBuff', e).then(() => {
-          console.log('buildingBuff', queue.total, queue.done)
-        })
-      )
-    })
+  const queue = Queue.of(144)
+  list.forEach((e, i) => {
+    queue.pushTask(() =>
+      ins.post('/update/buildingBuff', e).then(() => {
+        console.log('buildingBuff', queue.total, queue.done)
+      })
+    )
   })
+
+  await queue.allDone()
 }
 
-function updateBuildingSkill() {
-  return new Promise(resolve => {
-    const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
-      .chars
+async function updateBuildingSkill() {
+  const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
+    .chars
 
-    const list = Object.values(hook_book)
+  const list = Object.values(hook_book)
 
-    const queue = new TaskQueue(144, resolve)
-    list.forEach((e, i) => {
-      queue.pushTask(() =>
-        ins.post('/update/buildingSkill', e).then(() => {
-          console.log('buildingSkill', queue.total, queue.done)
-        })
-      )
-    })
+  const queue = Queue.of(144)
+  list.forEach((e, i) => {
+    queue.pushTask(() =>
+      ins.post('/update/buildingSkill', e).then(() => {
+        console.log('buildingSkill', queue.total, queue.done)
+      })
+    )
   })
+
+  await queue.allDone()
 }
 
 function updateCharInfo() {
@@ -114,7 +115,7 @@ function updateTeamInfo() {
     const team_table = require('./ArknightsGameData/zh_CN/gamedata/excel/handbook_team_table.json')
     const list = Object.values(team_table)
 
-    const queue = new TaskQueue(144, resolve)
+    const queue = Queue // (144, resolve)
     list.forEach(e => {
       queue.pushTask(() =>
         ins.post('/update/teamInfo', e).then(() => {
@@ -170,55 +171,4 @@ function updatePatchInfo() {
 
 function getSkill(skillId) {
   return ins.get('/s/skill', { params: { skillId } })
-}
-
-class TaskQueue {
-  running = 0
-  queue
-  concurrency
-  finalTask
-  total = 0
-  done = 0
-  constructor(concurrency, finalTask = () => {}, queue = []) {
-    this.concurrency = concurrency
-    this.queue = queue
-    this.finalTask = finalTask
-    this.total += this.queue.length
-
-    return this
-  }
-
-  /**
-   * @param concurrency {number}
-   * @param finalTask {() => void}
-   * @param queue {(() => Promise<void>)[]}
-   */
-  static of(concurrency = 1, finalTask = () => {}, queue = []) {
-    return new TaskQueue(concurrency, finalTask, queue)
-  }
-
-  pushTask(task) {
-    this.total++
-    this.queue.push(task)
-    this.next()
-  }
-
-  next() {
-    while (this.running < this.concurrency && this.queue.length) {
-      const task = this.queue.shift()
-      task()
-        .then(() => {
-          this.running--
-          this.done++
-          this.next()
-          // console.log('next', this.running, this.queue.length);
-          if (this.running === 0 && this.queue.length === 0) {
-            // console.log('Task is over');
-            this.finalTask()
-          }
-        })
-        .catch(err => console.error(err))
-      this.running++
-    }
-  }
 }

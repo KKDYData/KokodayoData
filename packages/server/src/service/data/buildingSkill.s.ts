@@ -1,12 +1,12 @@
 import { Inject, Logger, Provide } from '@midwayjs/decorator'
 import { InjectEntityModel } from '@midwayjs/orm'
 import { Repository } from 'typeorm'
-import { BuildingSkill } from '../entity/BuildingSkill.e'
-import { BaseService } from './base.s'
+import { BuildingSkill } from '../../entity/BuildingSkill.e'
+import { BaseService } from '../base.s'
 import { IBuilding } from '@kkdy/data'
 import { BuildingBuffService } from './buildingBuff.s'
 import { ILogger } from '@midwayjs/logger'
-import { getOrCreateModel } from '../utils/entity'
+import { getOrCreateModel } from '../../utils/entity'
 
 @Provide()
 export class BuildingSkillService extends BaseService {
@@ -19,7 +19,7 @@ export class BuildingSkillService extends BaseService {
   @Inject()
   buildingBuffService: BuildingBuffService
 
-  async createOrUpdate(data: IBuilding.ISkill) {
+  async createOrUpdate (data: IBuilding.ISkill) {
     const skill = await getOrCreateModel(this.model, {
       where: { charId: data.charId },
     })
@@ -38,7 +38,7 @@ export class BuildingSkillService extends BaseService {
     this.coreLogger.info('save skill ' + data.charId)
   }
 
-  async getBuildingSkillByCharId(charId: string) {
-    return this.model.findOne({ where: { charId }, relations: ['buffs'] })
+  async getBuildingSkillByCharId (charId: string) {
+    return this.model.findOne({ where: { charId }, relations: [ 'buffs' ] })
   }
 }

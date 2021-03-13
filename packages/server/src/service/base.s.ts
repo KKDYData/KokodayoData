@@ -7,4 +7,7 @@ export class BaseService {
   ctx: IMidwayWebContext & {
     logger: IMidwayLogger
   }
+
+  @Logger()
+  coreLogger: ILogger
 }

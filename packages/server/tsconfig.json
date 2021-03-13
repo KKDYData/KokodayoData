@@ -17,7 +17,16 @@
     "typeRoots": [
       "./typings"
     ],
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": "./",
+    "paths": {
+      "@kkdy/api": [
+        "../api/src/api/index.ts"
+      ],
+      "x": [
+        "../api/src/api/index.ts"
+      ]
+    }
   },
   "exclude": [
     "dist",

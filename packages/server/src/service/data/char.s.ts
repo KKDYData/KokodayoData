@@ -6,13 +6,13 @@ import { ILogger } from '@midwayjs/logger'
 import { InjectEntityModel } from '@midwayjs/orm'
 import { IMidwayWebContext } from '@midwayjs/web'
 import { Repository } from 'typeorm'
-import { CharacterData } from '../entity/Character.e'
-import { Skill } from '../entity/Skill.e'
-import { getOrCreateModel } from '../utils/entity'
+import { CharacterData } from '../../entity/Character.e'
+import { Skill } from '../../entity/Skill.e'
+import { getOrCreateModel } from '../../utils/entity'
 import { BuildingSkillService } from './buildingSkill.s'
 import { CharInfoService } from './charInfo.s'
 import { CharwordService } from './charword.s'
-import { OssService } from './oss.s'
+import { OssService } from '../oss.s'
 import { SkillService } from './skill.s'
 
 @Provide()
@@ -38,7 +38,7 @@ export class CharService {
   @Inject()
   oss: OssService
 
-  async createOrUpdate(id: string, data: IChar.IData) {
+  async createOrUpdate (id: string, data: IChar.IData) {
     const char = await getOrCreateModel(this.model, { where: { charId: id } })
 
     char.charId = id
@@ -65,7 +65,7 @@ export class CharService {
     }
   }
 
-  async getCharByCharId(charId: string) {
+  async getCharByCharId (charId: string) {
     return this.model.findOne({
       where: { charId },
       relations: [
@@ -79,7 +79,7 @@ export class CharService {
     })
   }
 
-  async updatePatchData(charId: string, patchInfo: IPatchInfo.IInfo) {
+  async updatePatchData (charId: string, patchInfo: IPatchInfo.IInfo) {
     const data = await this.getCharByCharId(charId)
     if (!data) throw new Error('no this char ' + charId)
     data.patchInfo = patchInfo
@@ -88,7 +88,7 @@ export class CharService {
     this.ctx.logger.info('save patch data of ' + charId)
   }
 
-  async buildCharData(charId: string) {
+  async buildCharData (charId: string) {
     const modelData = await this.getCharByCharId(charId)
     if (!modelData) throw new Error('no char')
 

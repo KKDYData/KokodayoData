@@ -1,12 +1,12 @@
 import { ITeamInfo } from '@kkdy/data'
 import { Inject, Provide } from '@midwayjs/decorator'
 import { InjectEntityModel } from '@midwayjs/orm'
-import { TeamInfo } from '../entity/TeamInfo.e'
-import { BaseService } from './base.s'
+import { TeamInfo } from '../../entity/TeamInfo.e'
+import { BaseService } from '../base.s'
 import { Repository, Raw } from 'typeorm'
-import { getOrCreateModel } from '../utils/entity'
+import { getOrCreateModel } from '../../utils/entity'
 import { CharService } from './char.s'
-import { CharacterData } from '../entity/Character.e'
+import { CharacterData } from '../../entity/Character.e'
 
 const PowerLevelMap = {
   0: 'nationId',
@@ -22,7 +22,7 @@ export class TeamInfoService extends BaseService {
   @InjectEntityModel(CharacterData)
   charModel: Repository<CharacterData>
 
-  async createOrUpdate(data: ITeamInfo.IInfo) {
+  async createOrUpdate (data: ITeamInfo.IInfo) {
     const info = await getOrCreateModel(this.model, {
       where: { powerId: data.powerId },
     })
@@ -34,8 +34,7 @@ export class TeamInfoService extends BaseService {
       where: {
         data: Raw(
           columnAlias =>
-            `json_extract(json_unquote(${columnAlias}), '$.${
-              PowerLevelMap[data.powerLevel]
+            `json_extract(json_unquote(${columnAlias}), '$.${PowerLevelMap[ data.powerLevel ]
             }') = :value`,
           { value: data.powerId }
         ),
