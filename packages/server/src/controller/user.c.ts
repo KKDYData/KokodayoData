@@ -1,6 +1,6 @@
 import { ALL, Body, Controller, Get, Inject, Post, Provide, Query } from '@midwayjs/decorator'
 import { UserService } from '../service/user'
-import { ApiUser } from '@kkdy/api'
+import { ApiUser } from '../interface'
 
 @Provide()
 @Controller('/user')

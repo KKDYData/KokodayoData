@@ -2,7 +2,9 @@
   "name": "@kkdy/data",
   "version": "1.0.0",
   "description": "",
-  "main": "lib/index.ts",
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.esm.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "node  src/init"
@@ -17,5 +19,8 @@
     "minimist": "^1.2.5",
     "quicktype-core": "^6.0.69",
     "ramda": "^0.27.1"
+  },
+  "devDependencies": {
+    "rollup-plugin-typescript2": "^0.30.0"
   }
 }

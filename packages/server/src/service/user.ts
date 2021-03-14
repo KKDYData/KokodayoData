@@ -1,5 +1,4 @@
 import { Inject, Provide } from '@midwayjs/decorator'
-import { IUserOptions } from '../interface'
 import { BaseService } from './base.s'
 import { v1 as uuid } from 'uuid'
 import { RedisService } from './redis.s'
@@ -13,7 +12,7 @@ export class UserService extends BaseService {
   @Inject()
   redisService: RedisService
 
-  async getUser (options: IUserOptions) {
+  async getUser (options: any) {
     this.coreLogger.info('?')
 
     return {

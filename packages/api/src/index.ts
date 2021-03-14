@@ -5,7 +5,7 @@ import _ from 'lodash'
 import rimraf from 'rimraf'
 
 const outDir = path.resolve(__dirname, '../lib')
-const sourceDir = path.resolve(__dirname, './api')
+const sourceDir = path.resolve(__dirname, '../../server/src/interface')
 
 const dirs = fs.readdirSync(sourceDir, { withFileTypes: true })
 const exportList: string[] = []
@@ -40,7 +40,7 @@ rimraf(outDir, () => {
 
   const responseType = 'response.ts'
   const request = 'instance.ts'
-  fs.copyFileSync(path.join(sourceDir, '../', responseType), path.join(outDir, responseType))
-  fs.copyFileSync(path.join(sourceDir, '../', request), path.join(outDir, request))
+  fs.copyFileSync(path.join(__dirname, './', responseType), path.join(outDir, responseType))
+  fs.copyFileSync(path.join(__dirname, './', request), path.join(outDir, request))
 
 })
