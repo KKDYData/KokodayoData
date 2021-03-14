@@ -1,10 +1,11 @@
 {
-  "name": "vite-electron-builder",
+  "name": "admin",
   "private": true,
   "engines": {
     "node": ">=v14.16.0",
     "npm": ">=7.6.3"
   },
+  "version": "1.0.0",
   "main": "dist/source/main/index.cjs.js",
   "scripts": {
     "buildEnvTypes": "node ./bin/buildEnvTypes.js",
@@ -42,9 +43,12 @@
     "spectron": "^14.0.0",
     "typescript": "^4.2.3",
     "vite": "^2.0.5",
-    "vite-plugin-windicss": "^0.8.2"
+    "vite-plugin-windicss": "^0.8.2",
+    "windicss": "^2.4.3"
   },
   "dependencies": {
+    "@kkdy/api": "1.0.0",
+    "@kkdy/data": "1.0.0",
     "electron-updater": "^4.3.8",
     "element-plus": "1.0.2-beta.33",
     "vue": "^3.0.7",
