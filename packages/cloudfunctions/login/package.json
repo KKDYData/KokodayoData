@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "wx-server-sdk": "~2.0.3"
+  },
+  "devDependencies": {
+    "@types/wx-server-sdk": "^0.8.0"
   }
 }

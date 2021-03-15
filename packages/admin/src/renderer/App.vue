@@ -4,16 +4,27 @@
   <router-view />
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script lang="ts" setup>
 import AppNavigation from '/@/components/AppNavigation.vue'
+import { ApiUser } from '@kkdy/api'
+import { onMounted } from '@vue/runtime-core';
+import axios from 'axios'
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    AppNavigation,
-  },
+
+onMounted(async () => {
+  console.log('api', import.meta.env.VITE_API_URL);
+  const ins = axios.create({
+    baseURL: import.meta.env.VITE_API_URL,
+    withCredentials: true,
+  })
+  const { data } = await ins.get('')
+  console.log('data', data);
+
+  // if (data.ok) {
+  //   alert(data.result)
+  // }
 })
+
 </script>
 
 <style>

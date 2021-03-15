@@ -2,16 +2,16 @@
  *  TODO: Refactor this file
  */
 
-import {app, BrowserWindow} from 'electron';
-import {join} from 'path';
-import {URL} from 'url';
+import { app, BrowserWindow } from 'electron'
+import { join } from 'path'
+import { URL } from 'url'
 
 
 
-const gotTheLock = app.requestSingleInstanceLock();
+const gotTheLock = app.requestSingleInstanceLock()
 
 if (!gotTheLock) {
-  app.quit();
+  app.quit()
 } else {
 
 
@@ -19,32 +19,34 @@ if (!gotTheLock) {
    * Workaround for TypeScript bug
    * @see https://github.com/microsoft/TypeScript/issues/41468#issuecomment-727543400
    */
-  const env = import.meta.env;
+  const env = import.meta.env
 
 
   // Install "Vue.js devtools BETA"
   if (env.MODE === 'development') {
     app.whenReady()
       .then(() => import('electron-devtools-installer'))
-      .then(({default: installExtension}) => {
+      .then(({ default: installExtension }) => {
         /** @see https://chrome.google.com/webstore/detail/vuejs-devtools/ljjemllljcmogpfapbkkighbhhppjdbg */
-        const VUE_DEVTOOLS_BETA = 'ljjemllljcmogpfapbkkighbhhppjdbg';
-        return installExtension(VUE_DEVTOOLS_BETA);
+        const VUE_DEVTOOLS_BETA = 'ljjemllljcmogpfapbkkighbhhppjdbg'
+        return installExtension(VUE_DEVTOOLS_BETA)
       })
-      .catch(e => console.error('Failed install extension:', e));
+      .catch(e => console.error('Failed install extension:', e))
   }
 
-  let mainWindow: BrowserWindow | null = null;
+  let mainWindow: BrowserWindow | null = null
 
-  async function createWindow() {
+  async function createWindow () {
+
     mainWindow = new BrowserWindow({
       show: false,
       webPreferences: {
         preload: join(__dirname, '../preload/index.cjs.js'),
         contextIsolation: env.MODE !== 'test',   // Spectron tests can't work with contextIsolation: true
         enableRemoteModule: env.MODE === 'test', // Spectron tests can't work with enableRemoteModule: false
+        webSecurity: false // set it true when devlopment
       },
-    });
+    })
 
     /**
      * URL for main window.
@@ -53,14 +55,14 @@ if (!gotTheLock) {
      */
     const pageUrl = env.MODE === 'development'
       ? env.VITE_DEV_SERVER_URL
-      : new URL('renderer/index.html', 'file://' + __dirname).toString();
+      : new URL('renderer/index.html', 'file://' + __dirname).toString()
 
-    await mainWindow.loadURL(pageUrl);
-    mainWindow.maximize();
-    mainWindow.show();
+    await mainWindow.loadURL(pageUrl)
+    mainWindow.maximize()
+    mainWindow.show()
 
     if (env.MODE === 'development') {
-      mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools()
     }
   }
 
@@ -68,29 +70,29 @@ if (!gotTheLock) {
   app.on('second-instance', () => {
     // Someone tried to run a second instance, we should focus our window.
     if (mainWindow) {
-      if (mainWindow.isMinimized()) mainWindow.restore();
-      mainWindow.focus();
+      if (mainWindow.isMinimized()) mainWindow.restore()
+      mainWindow.focus()
     }
-  });
+  })
 
 
   app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') {
-      app.quit();
+      app.quit()
     }
-  });
+  })
 
 
   app.whenReady()
     .then(createWindow)
-    .catch((e) => console.error('Failed create window:', e));
+    .catch((e) => console.error('Failed create window:', e))
 
 
   // Auto-updates
   if (env.PROD) {
     app.whenReady()
       .then(() => import('electron-updater'))
-      .then(({autoUpdater}) => autoUpdater.checkForUpdatesAndNotify())
-      .catch((e) => console.error('Failed check updates:', e));
+      .then(({ autoUpdater }) => autoUpdater.checkForUpdatesAndNotify())
+      .catch((e) => console.error('Failed check updates:', e))
   }
 }

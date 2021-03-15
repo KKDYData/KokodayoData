@@ -3,7 +3,7 @@
   "compileOnSave": true,
   "compilerOptions": {
     "target": "ES2020",
-    "module": "commonjs",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
@@ -13,12 +13,6 @@
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "types": [
-      "node"
-    ],
-    "typeRoots": [
-      "./typings",
-    ],
     "outDir": "dist"
   },
   "exclude": [

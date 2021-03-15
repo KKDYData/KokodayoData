@@ -12,4 +12,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module',
   },
-};
+  rules: {
+    '@typescript-eslint/no-unused-vars': 0,
+  },
+}
