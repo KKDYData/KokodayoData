@@ -7,6 +7,10 @@
     <router-link to="/about">
       About
     </router-link>
+    <span> | </span>
+    <router-link to="/qrcode">
+      Qrcode
+    </router-link>
   </nav>
 </template>
 
