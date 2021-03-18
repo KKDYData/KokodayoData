@@ -1,6 +1,6 @@
 <template>
   <div class="text-center">
-    <img alt="Vue logo" class="inline-block" src="../assets/logo.png" />
+    <ElImage alt="Vue logo" class="inline-block" src="assets/logo.png" />
   </div>
   <app-navigation />
   <router-view />
@@ -9,11 +9,13 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import AppNavigation from '/@/components/AppNavigation.vue'
+import { ElImage } from 'element-plus'
 export default defineComponent({
   name: 'App',
   components: {
-    AppNavigation
-  }
+    AppNavigation,
+    ElImage,
+  },
 })
 </script>
 

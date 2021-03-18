@@ -18,14 +18,14 @@ ref: wxId = ''
 ref: qrcode = useQRCode($token)
 
 ApiUser.GetQrcodeToken()
-  .then(res => {
+  .then((res) => {
     const resData = res.data
     if (resData.ok) {
       token = resData.result
       startGetWxIdInterval()
     }
   })
-  .catch(error => {
+  .catch((error) => {
     console.log(error)
   })
 

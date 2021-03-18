@@ -12,10 +12,18 @@ export default defineConfig({
   root: __dirname,
   resolve: {
     alias: {
-      '/@/': join(__dirname, 'src') + '/'
-    }
+      '/@/': join(__dirname, 'src') + '/',
+      qrcode: 'qrcode/build/qrcode.js',
+    },
   },
-  plugins: [vue(), WindiCSS()],
+  plugins: [
+    vue(),
+    WindiCSS({
+      scan: {
+        exclude: ['element-plus'],
+      },
+    }),
+  ],
   base: '',
   build: {
     sourcemap: 'inline',
@@ -24,8 +32,8 @@ export default defineConfig({
     outDir: 'dist',
     assetsDir: '.',
     rollupOptions: {
-      external: externalPackages
+      external: externalPackages,
     },
-    emptyOutDir: true
-  }
+    emptyOutDir: true,
+  },
 })
