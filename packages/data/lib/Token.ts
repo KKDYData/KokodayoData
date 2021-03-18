@@ -112,7 +112,7 @@ export interface LevelUpCostCond {
 }
 
 export interface Talent {
-    candidates: Candidate[];
+    candidates: Candidate[] | null;
 }
 
 export interface Candidate {
