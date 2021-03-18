@@ -5,98 +5,55 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent, ref, getCurrentInstance } from 'vue'
+<script lang="ts" setup>
 import { useQRCode } from '@vueuse/integrations'
 import { ApiUser } from '@kkdy/api'
 
-export default defineComponent({
-  name: 'Qrcode',
-  data () {
-    return {
-      timer: 0,
-      reqcount: 0,
-      token: '',
-      wxId: '',
-      qrcode: ''
+let timer = null as NodeJS.Timeout
+
+ref: reqcount = 0
+ref: token = ''
+ref: wxId = ''
+ref: qrcode = useQRCode($token)
+
+ApiUser.GetQrcodeToken()
+  .then((res) => {
+    const resData = res.data
+    if (resData.ok) {
+      token = resData.result
+      startGetWxIdInterval()
     }
-  },
-  setup() {
-    console.log("=== setup ===")
+  })
+  .catch((error) => {
+    console.log(error)
+  })
 
-    return {}
-  },
-  created() {
-    console.log("=== created ===")
+function startGetWxIdInterval() {
+  timer = setInterval(async () => {
+    if (reqcount < 60) { // 一分钟
+      reqcount++
+      const { data } = await ApiUser.GetQrcodeWxId({ token })
+      console.log(data)
 
-    ApiUser.GetQrcodeToken()
-      .then(res => {
-        console.log(res)
+      if (!data.ok) {
+        // TODO add error code
+        console.error(data.code)
+        return
+      }
 
-        if (res.status === 200) {
-          console.log(res.data)
-          const resData = res.data
-          if (resData.ok) {
-            this.token = resData.result
-            this.qrcode = useQRCode(this.token)
-
-            this.startGetWxIdInterval()
-          }
-        }
-      })
-      .catch(error => {
-        console.log(error)
-      })
-  },
-  methods: {
-    startGetWxIdInterval () {
-      this.timer = setInterval(() => {
-        if (this.reqcount < 10) {
-          this.reqcount++
-          ApiUser.GetQrcodeWxId(this.token)
-            .then(res => {
-              if (res.status === 200) {
-                console.log(res.data)
-                const resData = res.data
-                if (resData.ok) {
-                  if (resData.result !== null || this.wxId === resData.result) {
-                    clearInterval(this.timer)
-                    console.log('match wxId success:', resData.result)
-                  } else {
-                    // clearInterval(this.timer)
-                    console.log('match wxId failed:', resData.result)
-                  }
-                }
-              }
-            })
-            .catch(error => {
-              console.log(error)
-            })
-        } else {
-          clearInterval(this.timer)
-          console.log('error: request wxId failed')
-          // TODO 弹框提示登录失败，请重试
-          console.log('登录失败，请重试')
-        }
-      }, 1000)
+      if (data.result !== 'null') {
+        clearInterval(timer)
+        wxId = data.result
+        console.log('match wxId success:', data.result)
+      } else {
+        console.log('match wxId failed:', data.result)
+      }
+    } else {
+      clearInterval(timer)
+      console.log('error: request wxId failed')
+      // TODO 弹框提示登录失败，等个vf-modal的demo
+      console.log('登录失败，请重试')
     }
-  },
-});
-</script>
-
-<style lang="scss" scoped>
-.qrcode-container {
-  div {
-    margin: 15px 0;
-    text-align: center;
-    display: grid;
-    justify-content: center;
-  }
-
-  img.qrcode-img {
-    width: 160px;
-    height: 160px;
-    margin: 5px auto;
-  }
+  }, 1000)
 }
-</style>
+</script>
