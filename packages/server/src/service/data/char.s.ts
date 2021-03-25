@@ -14,6 +14,7 @@ import { CharInfoService } from './charInfo.s'
 import { CharwordService } from './charword.s'
 import { OssService } from '../oss.s'
 import { SkillService } from './skill.s'
+import { omit } from 'ramda'
 
 @Provide()
 export class CharService {
@@ -38,11 +39,12 @@ export class CharService {
   @Inject()
   oss: OssService
 
-  async createOrUpdate (id: string, data: IChar.IData) {
+  async createOrUpdate(id: string, data: IChar.IData) {
     const char = await getOrCreateModel(this.model, { where: { charId: id } })
 
     char.charId = id
     char.data = data
+    char.name = data.name
     char.words = await this.charwordService.getWordsByCharId(char.charId)
     char.skills = await Promise.all(
       Array.from(new Set(data.skills.map(s => s.skillId)).values()).map(s =>
@@ -65,7 +67,7 @@ export class CharService {
     }
   }
 
-  async getCharByCharId (charId: string) {
+  async getCharByCharId(charId: string) {
     return this.model.findOne({
       where: { charId },
       relations: [
@@ -79,7 +81,7 @@ export class CharService {
     })
   }
 
-  async updatePatchData (charId: string, patchInfo: IPatchInfo.IInfo) {
+  async updatePatchData(charId: string, patchInfo: IPatchInfo.IInfo) {
     const data = await this.getCharByCharId(charId)
     if (!data) throw new Error('no this char ' + charId)
     data.patchInfo = patchInfo
@@ -88,7 +90,7 @@ export class CharService {
     this.ctx.logger.info('save patch data of ' + charId)
   }
 
-  async buildCharData (charId: string) {
+  async buildCharData(charId: string) {
     const modelData = await this.getCharByCharId(charId)
     if (!modelData) throw new Error('no char')
 
@@ -114,5 +116,19 @@ export class CharService {
     }
 
     return res
+  }
+
+  async listCharacters() {
+    const list = await this.model.find({
+      select: ['charId', 'updatedDate', 'version', 'installId', 'name', 'data'],
+      relations: ['teamInfo'],
+    })
+
+    return list.map(char => ({
+      ...omit(['data', 'teamInfo'], char),
+      rarity: char.data.rarity,
+      profession: char.data.profession,
+      teamInfo: char.teamInfo.map(info => info.data),
+    }))
   }
 }

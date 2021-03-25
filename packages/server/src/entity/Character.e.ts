@@ -8,6 +8,7 @@ import {
   JoinTable,
   OneToMany,
   ManyToOne,
+  Index,
 } from 'typeorm'
 import { BaseEntity } from './base.e'
 import { BuildingSkill } from './BuildingSkill.e'
@@ -23,6 +24,10 @@ export class CharacterData extends BaseEntity {
   })
   charId: string
 
+  @Index()
+  @Column({})
+  name: string
+
   @Column({
     comment: '升变信息',
     nullable: true,
@@ -31,15 +36,25 @@ export class CharacterData extends BaseEntity {
   patchInfo?: IPatchInfo.IInfo
 
   @Column({
+    comment: '关联角色列表',
+    nullable: true,
+    type: 'json',
+  })
+  relativeCharList: { id: string; type: string; comment: string }[]
+
+  @Column({
+    comment: '实装活动id',
+    default: '',
+  })
+  installId: string
+
+  @Column({
     type: 'json',
     comment: '干员基础数据，对应character_table',
   })
   data: IChar.IData
 
-  @OneToMany(
-    () => Charword,
-    word => word.character
-  )
+  @OneToMany(() => Charword, word => word.character)
   @JoinColumn()
   words: Charword[]
 
@@ -51,15 +66,9 @@ export class CharacterData extends BaseEntity {
   @JoinColumn()
   buildingSkill: BuildingSkill
 
-  @ManyToMany(
-    () => Skill,
-    skill => skill.chars
-  )
+  @ManyToMany(() => Skill, skill => skill.chars)
   skills: Skill[]
 
-  @ManyToMany(
-    () => TeamInfo,
-    info => info.chars
-  )
+  @ManyToMany(() => TeamInfo, info => info.chars)
   teamInfo: TeamInfo[]
 }
