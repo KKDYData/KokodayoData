@@ -27,3 +27,6 @@ run/
 .tsbuildinfo
 .tsbuildinfo.*
 ArknightsGameData 
+
+*.production*
+*.local*
