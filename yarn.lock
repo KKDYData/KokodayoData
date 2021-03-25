@@ -2326,79 +2326,81 @@
   resolved "https://registry.npm.taobao.org/@midwayjs/bootstrap/download/@midwayjs/bootstrap-2.8.13.tgz#892c6fb9d2c3af67f667d3550b8ff4f2f6720292"
   integrity sha1-iSxvudLDr2f2Z9NVC4/08vZyApI=
 
-"@midwayjs/cli-plugin-add@^1.2.51":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-add/download/@midwayjs/cli-plugin-add-1.2.51.tgz#649f6afee54698992c3536414a7b56bae357270f"
-  integrity sha1-ZJ9q/uVGmJksNTZBSntWuuNXJw8=
+"@midwayjs/bootstrap@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.npm.taobao.org/@midwayjs/bootstrap/download/@midwayjs/bootstrap-2.9.1.tgz?cache=0&sync_timestamp=1616586376702&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40midwayjs%2Fbootstrap%2Fdownload%2F%40midwayjs%2Fbootstrap-2.9.1.tgz#c01125bdec1032ff9bbfe5cb9af712b242a3fe44"
+  integrity sha1-wBElvewQMv+bv+XLmvcSskKj/kQ=
+
+"@midwayjs/cli-plugin-add@^1.2.54":
+  version "1.2.54"
+  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-add/download/@midwayjs/cli-plugin-add-1.2.54.tgz#85531b69910453e48d05930db2a5c00e88e527e4"
+  integrity sha1-hVMbaZEEU+SNBZMNsqXADojlJ+Q=
   dependencies:
     "@midwayjs/boilerplate-list" "^1.0.0"
-    "@midwayjs/command-core" "^1.2.51"
+    "@midwayjs/command-core" "^1.2.54"
     chalk "^4.1.0"
     enquirer "^2.3.6"
     fs-extra "^9.0.1"
     light-generator "^1.6.1"
     light-spinner "^1.0.1"
 
-"@midwayjs/cli-plugin-build@^1.2.51":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-build/download/@midwayjs/cli-plugin-build-1.2.51.tgz#2a0534f8074312a736f7c9ba61a6bd014e14f94b"
-  integrity sha1-KgU0+AdDEqc298m6Yaa9AU4U+Us=
+"@midwayjs/cli-plugin-build@^1.2.55":
+  version "1.2.55"
+  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-build/download/@midwayjs/cli-plugin-build-1.2.55.tgz#6b63710069040bde9323d262b2ff5e8f8cfd6efb"
+  integrity sha1-a2NxAGkEC96TI9Jisv9ej4z9bvs=
   dependencies:
-    "@midwayjs/command-core" "^1.2.51"
-    "@midwayjs/faas-code-analysis" "^1.2.51"
+    "@midwayjs/command-core" "^1.2.54"
+    "@midwayjs/faas-code-analysis" "^1.2.54"
     "@midwayjs/mwcc" "^0.5.x"
     fs-extra "^8.1.0"
-    typescript "^4.1.0"
 
-"@midwayjs/cli-plugin-clean@^1.2.51":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-clean/download/@midwayjs/cli-plugin-clean-1.2.51.tgz#a409d4ae34394979096e68a5a969567ccff6f97b"
-  integrity sha1-pAnUrjQ5SXkJbmilqWlWfM/2+Xs=
+"@midwayjs/cli-plugin-clean@^1.2.54":
+  version "1.2.54"
+  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-clean/download/@midwayjs/cli-plugin-clean-1.2.54.tgz#c9e46f46a512cbaa15b61cc8d7fd41017cbf2596"
+  integrity sha1-yeRvRqUSy6oVthzI1/1BAXy/JZY=
   dependencies:
-    "@midwayjs/command-core" "^1.2.51"
-    "@midwayjs/serverless-spec-builder" "^1.2.51"
+    "@midwayjs/command-core" "^1.2.54"
+    "@midwayjs/serverless-spec-builder" "^1.2.54"
     fs-extra "^8.1.0"
 
-"@midwayjs/cli-plugin-dev@^1.2.51":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-dev/download/@midwayjs/cli-plugin-dev-1.2.51.tgz#9df3d7014c810944e887c68e51f59a816dde4f48"
-  integrity sha1-nfPXAUyBCUToh8aOUfWagW3eT0g=
+"@midwayjs/cli-plugin-dev@^1.2.54":
+  version "1.2.54"
+  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-dev/download/@midwayjs/cli-plugin-dev-1.2.54.tgz#48603d5a6da807eb044bda66ca505179d5e22e28"
+  integrity sha1-SGA9Wm2oB+sES9pmylBRedXiLig=
   dependencies:
     "@koa/router" "^10.0.0"
-    "@midwayjs/command-core" "^1.2.51"
+    "@midwayjs/command-core" "^1.2.54"
     "@midwayjs/debugger" "^1.0.x"
     "@midwayjs/mock" "^2.8.0"
     "@midwayjs/serverless-app" "^2.8.2"
     chalk "^4.1.0"
     chokidar "^3.4.2"
     detect-port "^1.3.0"
-    esbuild "^0.8.47"
-    esbuild-register "^2.0.0"
     koa "^2.11.0"
     light-spinner "^1.0.1"
 
-"@midwayjs/cli-plugin-test@^1.2.51":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-test/download/@midwayjs/cli-plugin-test-1.2.51.tgz#1147010fdf4420b77b482deed65d09ba33c36151"
-  integrity sha1-EUcBD99EILd7SC3u1l0JujPDYVE=
+"@midwayjs/cli-plugin-test@^1.2.54":
+  version "1.2.54"
+  resolved "https://registry.npm.taobao.org/@midwayjs/cli-plugin-test/download/@midwayjs/cli-plugin-test-1.2.54.tgz#bfe3a09f356567b72867601fc83f478ce0e0b9d7"
+  integrity sha1-v+OgnzVlZ7coZ2AfyD9HjODgudc=
   dependencies:
-    "@midwayjs/command-core" "^1.2.51"
+    "@midwayjs/command-core" "^1.2.54"
     globby "^10.0.1"
     jest "^26.4.2"
     ts-jest "^26.0.0"
     ts-node "^9.0.0"
 
-"@midwayjs/cli@^1.2.42":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/cli/download/@midwayjs/cli-1.2.51.tgz#c4093ecb454e9243550b88a3e9ab2001c50bdb26"
-  integrity sha1-xAk+y0VOkkNVC4ij6asgAcUL2yY=
+"@midwayjs/cli@^1.2.55":
+  version "1.2.55"
+  resolved "https://registry.npm.taobao.org/@midwayjs/cli/download/@midwayjs/cli-1.2.55.tgz#0b7940afa23e5b9568c6d47bb01a91a5ef1ad6f0"
+  integrity sha1-C3lAr6I+W5VoxtR7sBqRpe8a1vA=
   dependencies:
-    "@midwayjs/cli-plugin-add" "^1.2.51"
-    "@midwayjs/cli-plugin-build" "^1.2.51"
-    "@midwayjs/cli-plugin-clean" "^1.2.51"
-    "@midwayjs/cli-plugin-dev" "^1.2.51"
-    "@midwayjs/cli-plugin-test" "^1.2.51"
-    "@midwayjs/command-core" "^1.2.51"
+    "@midwayjs/cli-plugin-add" "^1.2.54"
+    "@midwayjs/cli-plugin-build" "^1.2.55"
+    "@midwayjs/cli-plugin-clean" "^1.2.54"
+    "@midwayjs/cli-plugin-dev" "^1.2.54"
+    "@midwayjs/cli-plugin-test" "^1.2.54"
+    "@midwayjs/command-core" "^1.2.54"
     "@midwayjs/debugger" "^1.0.x"
     enquirer "^2.3.4"
     jest-environment-node "^24.9.0"
@@ -2406,10 +2408,10 @@
     source-map-support "^0.5.19"
     ts-node "^9.0.0"
 
-"@midwayjs/command-core@^1.2.51":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/command-core/download/@midwayjs/command-core-1.2.51.tgz#ddc346c00ece12a4a37be773361ab6bbf44aeb82"
-  integrity sha1-3cNGwA7OEqSje+dzNhq2u/RK64I=
+"@midwayjs/command-core@^1.2.54":
+  version "1.2.54"
+  resolved "https://registry.npm.taobao.org/@midwayjs/command-core/download/@midwayjs/command-core-1.2.54.tgz#a97268011d3b44ae7b1c2aa975cfc44c37418258"
+  integrity sha1-qXJoAR07RK57HCqpdc/ETDdBglg=
   dependencies:
     light-spinner "^1.0.0"
     minimist "^1.2.5"
@@ -2420,6 +2422,25 @@
   integrity sha1-XComkunP1arP7ck0m3RDATD+5Iw=
   dependencies:
     "@midwayjs/decorator" "^2.8.11"
+    "@midwayjs/glob" "^1.0.2"
+    "@midwayjs/logger" "^2.8.13"
+    class-transformer "^0.3.1"
+    extend2 "^1.0.0"
+    lodash.assign "^4.2.0"
+    lodash.clonedeep "^4.5.0"
+    lodash.defaultsdeep "^4.6.0"
+    lodash.get "^4.4.2"
+    lodash.set "^4.3.2"
+    lodash.template "^4.4.0"
+    picomatch "^2.2.2"
+    reflect-metadata "^0.1.13"
+
+"@midwayjs/core@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.npm.taobao.org/@midwayjs/core/download/@midwayjs/core-2.9.1.tgz?cache=0&sync_timestamp=1616586377105&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40midwayjs%2Fcore%2Fdownload%2F%40midwayjs%2Fcore-2.9.1.tgz#1789a5a27ff8f98755ba0f50529c0655d086fa01"
+  integrity sha1-F4mlon/4+YdVug9QUpwGVdCG+gE=
+  dependencies:
+    "@midwayjs/decorator" "^2.9.1"
     "@midwayjs/glob" "^1.0.2"
     "@midwayjs/logger" "^2.8.13"
     class-transformer "^0.3.1"
@@ -2454,6 +2475,18 @@
     joi "^17.2.1"
     reflect-metadata "^0.1.13"
 
+"@midwayjs/decorator@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.npm.taobao.org/@midwayjs/decorator/download/@midwayjs/decorator-2.9.1.tgz?cache=0&sync_timestamp=1616586376412&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40midwayjs%2Fdecorator%2Fdownload%2F%40midwayjs%2Fdecorator-2.9.1.tgz#ceaa97c36c6d6fd73225127bea1dd97d874a417a"
+  integrity sha1-zqqXw2xtb9cyJRJ76h3ZfYdKQXo=
+  dependencies:
+    "@types/express" "^4.17.8"
+    "@types/koa" "^2.11.4"
+    camelcase "^6.2.0"
+    class-transformer "^0.3.1"
+    joi "^17.2.1"
+    reflect-metadata "^0.1.13"
+
 "@midwayjs/egg-ts-helper@^1.0.1":
   version "1.0.5"
   resolved "https://registry.npm.taobao.org/@midwayjs/egg-ts-helper/download/@midwayjs/egg-ts-helper-1.0.5.tgz#15d76c018ee1bd93b54eb67820271a92ea449b50"
@@ -2461,10 +2494,10 @@
   dependencies:
     egg-ts-helper "^1.25.8"
 
-"@midwayjs/faas-code-analysis@^1.2.51":
-  version "1.2.51"
-  resolved "https://registry.npm.taobao.org/@midwayjs/faas-code-analysis/download/@midwayjs/faas-code-analysis-1.2.51.tgz?cache=0&sync_timestamp=1615521479668&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40midwayjs%2Ffaas-code-analysis%2Fdownload%2F%40midwayjs%2Ffaas-code-analysis-1.2.51.tgz#d16888f2da20c03bda5f1ec063694def7b87e0fd"
-  integrity sha1-0WiI8togwDvaXx7AY2lN73uH4P0=
+"@midwayjs/faas-code-analysis@^1.2.54":
+  version "1.2.54"
+  resolved "https://registry.npm.taobao.org/@midwayjs/faas-code-analysis/download/@midwayjs/faas-code-analysis-1.2.54.tgz#38a6a8989a739d1fab97f5150301a9d0d3ac10af"
+  integrity sha1-OKaomJpznR+rl/UVAwGp0NOsEK8=
   dependencies:
     "@midwayjs/mwcc" "^0.5.x"
     fs-extra "^8.1.0"
@@ -2487,18 +2520,18 @@
   dependencies:
     picomatch "^2.2.2"
 
-"@midwayjs/koa@^2.8.13":
-  version "2.8.13"
-  resolved "https://registry.npm.taobao.org/@midwayjs/koa/download/@midwayjs/koa-2.8.13.tgz#5f2713d76e17116a65040a6ea6768fd207b9c714"
-  integrity sha1-XycT124XEWplBApupnaP0ge5xxQ=
+"@midwayjs/koa@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.npm.taobao.org/@midwayjs/koa/download/@midwayjs/koa-2.9.1.tgz#b8181280202bfdc6384d60cc38a01efb00fb33b2"
+  integrity sha1-uBgSgCAr/cY4TWDMOKAe+wD7M7I=
   dependencies:
     "@koa/router" "^10.0.0"
-    "@midwayjs/core" "^2.8.13"
-    "@midwayjs/decorator" "^2.8.11"
+    "@midwayjs/core" "^2.9.1"
+    "@midwayjs/decorator" "^2.9.1"
     "@midwayjs/logger" "^2.8.13"
     koa "^2.13.0"
 
-"@midwayjs/logger@^2.8.11", "@midwayjs/logger@^2.8.13":
+"@midwayjs/logger@^2.8.13":
   version "2.8.13"
   resolved "https://registry.npm.taobao.org/@midwayjs/logger/download/@midwayjs/logger-2.8.13.tgz#13294aeaad3e4b13413e5d91d3d2122f508e9f2b"
   integrity sha1-EylK6q0+SxNBPl2R09ISL1COnys=
@@ -2547,10 +2580,10 @@
   resolved "https://registry.npm.taobao.org/@midwayjs/ncc/download/@midwayjs/ncc-0.22.2-1.tgz#e36becf9254a1cbf4436f5d7c37924ba9d53e61e"
   integrity sha1-42vs+SVKHL9ENvXXw3kkup1T5h4=
 
-"@midwayjs/orm@^1.3.0":
-  version "1.3.0"
-  resolved "https://registry.npm.taobao.org/@midwayjs/orm/download/@midwayjs/orm-1.3.0.tgz#c13cf3ca0820b8e67403f7f85afed3c70fd84368"
-  integrity sha1-wTzzyggguOZ0A/f4Wv7Txw/YQ2g=
+"@midwayjs/orm@^1.3.1":
+  version "1.3.1"
+  resolved "https://registry.npm.taobao.org/@midwayjs/orm/download/@midwayjs/orm-1.3.1.tgz#257a2219f164d1ca72b3cc73996ebb384d993191"
+  integrity sha1-JXoiGfFk0cpys8xzmW67OE2ZMZE=
   dependencies:
     typeorm "^0.2.25"
 
@@ -2576,16 +2609,26 @@
     json-cycle "^1.3.0"
     mkdirp "^0.5.1"
 
-"@midwayjs/web@^2.8.11":
-  version "2.8.13"
-  resolved "https://registry.npm.taobao.org/@midwayjs/web/download/@midwayjs/web-2.8.13.tgz#1a2a729fd5e818707710a64e017808b1c3538c1c"
-  integrity sha1-Gipyn9XoGHB3EKZOAXgIscNTjBw=
+"@midwayjs/serverless-spec-builder@^1.2.54":
+  version "1.2.54"
+  resolved "https://registry.npm.taobao.org/@midwayjs/serverless-spec-builder/download/@midwayjs/serverless-spec-builder-1.2.54.tgz#2a9cf02a53675de258be932803e625f3f56f4869"
+  integrity sha1-KpzwKlNnXeJYvpMoA+Yl8/VvSGk=
+  dependencies:
+    ejs "^3.1.3"
+    js-yaml "^3.13.0"
+    json-cycle "^1.3.0"
+    mkdirp "^0.5.1"
+
+"@midwayjs/web@^2.9.1":
+  version "2.9.1"
+  resolved "https://registry.npm.taobao.org/@midwayjs/web/download/@midwayjs/web-2.9.1.tgz#69e8121abae59c5bb9db129cd5259d9fc6619593"
+  integrity sha1-aegSGrrlnFu52xKc1SWdn8ZhlZM=
   dependencies:
     "@eggjs/router" "^2.0.0"
-    "@midwayjs/bootstrap" "^2.8.13"
-    "@midwayjs/core" "^2.8.13"
-    "@midwayjs/decorator" "^2.8.11"
-    "@midwayjs/koa" "^2.8.13"
+    "@midwayjs/bootstrap" "^2.9.1"
+    "@midwayjs/core" "^2.9.1"
+    "@midwayjs/decorator" "^2.9.1"
+    "@midwayjs/koa" "^2.9.1"
     "@midwayjs/logger" "^2.8.13"
     debug "^4.1.1"
     egg "^2.28.0"
@@ -2593,7 +2636,7 @@
     egg-path-matching "^1.0.1"
     extend2 "^1.0.0"
     find-up "^5.0.0"
-    midway-schedule "^2.8.13"
+    midway-schedule "^2.9.1"
     mkdirp "^1.0.4"
 
 "@mrmlnc/readdir-enhanced@^2.2.1":
@@ -9786,20 +9829,7 @@ es6-symbol@^3.1.1, es6-symbol@~3.1.3:
     d "^1.0.1"
     ext "^1.1.2"
 
-esbuild-register@^2.0.0:
-  version "2.3.0"
-  resolved "https://registry.npm.taobao.org/esbuild-register/download/esbuild-register-2.3.0.tgz#c7c6e2cabdce0e7aa5f30be774302d3fc1ebd02e"
-  integrity sha1-x8biyr3ODnql8wvndDAtP8Hr0C4=
-  dependencies:
-    esbuild "^0.9.2"
-    jsonc-parser "^3.0.0"
-
-esbuild@^0.8.47:
-  version "0.8.57"
-  resolved "https://registry.npm.taobao.org/esbuild/download/esbuild-0.8.57.tgz#a42d02bc2b57c70bcd0ef897fe244766bb6dd926"
-  integrity sha1-pC0CvCtXxwvNDviX/iRHZrtt2SY=
-
-esbuild@^0.9.2, esbuild@^0.9.3:
+esbuild@^0.9.3:
   version "0.9.3"
   resolved "https://registry.npm.taobao.org/esbuild/download/esbuild-0.9.3.tgz#09293a0b824159c6aa2488d1c6c22f57d8448f74"
   integrity sha1-CSk6C4JBWcaqJIjRxsIvV9hEj3Q=
@@ -14319,11 +14349,6 @@ json5@^1.0.1:
   dependencies:
     minimist "^1.2.0"
 
-jsonc-parser@^3.0.0:
-  version "3.0.0"
-  resolved "https://registry.npm.taobao.org/jsonc-parser/download/jsonc-parser-3.0.0.tgz?cache=0&sync_timestamp=1605281904422&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fjsonc-parser%2Fdownload%2Fjsonc-parser-3.0.0.tgz#abdd785701c7e7eaca8a9ec8cf070ca51a745a22"
-  integrity sha1-q914VwHH5+rKip7IzwcMpRp0WiI=
-
 jsonfile@^4.0.0:
   version "4.0.0"
   resolved "https://registry.npm.taobao.org/jsonfile/download/jsonfile-4.0.0.tgz?cache=0&sync_timestamp=1604161797011&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fjsonfile%2Fdownload%2Fjsonfile-4.0.0.tgz#8771aae0799b64076b76640fca058f9c10e33ecb"
@@ -15723,12 +15748,12 @@ micromatch@^4.0.2:
     braces "^3.0.1"
     picomatch "^2.0.5"
 
-midway-schedule@^2.8.13:
-  version "2.8.13"
-  resolved "https://registry.npm.taobao.org/midway-schedule/download/midway-schedule-2.8.13.tgz#1a3441405f696ad89eb08709509ad2a5968cb726"
-  integrity sha1-GjRBQF9patiesIcJUJrSpZaMtyY=
+midway-schedule@^2.9.1:
+  version "2.9.1"
+  resolved "https://registry.npm.taobao.org/midway-schedule/download/midway-schedule-2.9.1.tgz#48a660983df45868bd6569b8857d501d715bdfc9"
+  integrity sha1-SKZgmD30WGi9ZWm4hX1QHXFb38k=
   dependencies:
-    "@midwayjs/decorator" "^2.8.11"
+    "@midwayjs/decorator" "^2.9.1"
     is-type-of "^1.2.1"
 
 miller-rabin@^4.0.0:
@@ -23220,8 +23245,10 @@ watchpack@^1.7.4:
   resolved "https://registry.npm.taobao.org/watchpack/download/watchpack-1.7.5.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwatchpack%2Fdownload%2Fwatchpack-1.7.5.tgz#1267e6c55e0b9b5be44c2023aed5437a2c26c453"
   integrity sha1-EmfmxV4Lm1vkTCAjrtVDeiwmxFM=
   dependencies:
+    chokidar "^3.4.1"
     graceful-fs "^4.1.2"
     neo-async "^2.5.0"
+    watchpack-chokidar2 "^2.0.1"
   optionalDependencies:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
