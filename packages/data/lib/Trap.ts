@@ -98,7 +98,7 @@ export interface Candidate {
     requiredPotentialRank: number;
     prefabKey:             string;
     name:                  null;
-    description:           null | string;
+    description:           Description | null;
     rangeId:               null | string;
     blackboard:            Blackboard[];
 }
@@ -106,4 +106,10 @@ export interface Candidate {
 export interface Blackboard {
     key:   string;
     value: number;
+}
+
+export enum Description {
+    Empty = "-",
+    摧毁时扣除1点关卡生命值 = "摧毁时扣除1点关卡生命值",
+    每4秒回复友方单位3点技力 = "每4秒回复友方单位3点技力",
 }

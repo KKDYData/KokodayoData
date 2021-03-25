@@ -2,20 +2,14 @@ module.exports = {
   env: {
     browser: true,
     es2021: true,
-    node: true,
-    jest: true,
-    serviceworker: true,
+    node: false
   },
   parser: 'vue-eslint-parser',
-  extends: [
-    'plugin:@typescript-eslint/recommended',
-    'plugin:vue/vue3-recommended',
-    'plugin:prettier/recommended',
-  ],
+  extends: ['plugin:vue/vue3-recommended', 'plugin:prettier/recommended'],
   parserOptions: {
     ecmaVersion: 12,
     parser: '@typescript-eslint/parser',
-    sourceType: 'module',
+    sourceType: 'module'
   },
   plugins: ['vue', '@typescript-eslint', 'prettier'],
   rules: {
@@ -28,7 +22,19 @@ module.exports = {
     'no-unused-labels': 0,
     '@typescript-eslint/no-unused-vars': 0,
     'vue/singleline-html-element-content-newline': 0,
-    '@typescript-eslint/explicit-module-boundary-types': 0,
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
+    'vue/html-self-closing': [
+      'error',
+      {
+        html: {
+          void: 'always',
+          normal: 'always',
+          component: 'always'
+        },
+        svg: 'always',
+        math: 'always'
+      }
+    ]
   },
-  ignorePatterns: ['script'],
+  ignorePatterns: ['script']
 }

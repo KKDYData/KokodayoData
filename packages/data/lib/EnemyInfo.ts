@@ -25,6 +25,7 @@ export enum Attack {
     A = "A",
     AttackA = "A+",
     AttackB = "B+",
+    AttackC = "C+",
     AttackD = "D+",
     AttackS = "S+",
     B = "B",

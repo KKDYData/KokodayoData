@@ -22,16 +22,23 @@ export interface IData {
     environmentSe?:        EnvironmentSE | null;
     hardPredefines?:       Predefines | null;
     operaConfig?:          null | string;
+    extraRoutes?:          Route[];
 }
 
 export interface Branches {
-    faust_ballis?:  BsnakeFlame;
-    frstar_frosts?: BsnakeFlame;
-    bsnake_flame?:  BsnakeFlame;
-    frosts?:        BsnakeFlame;
+    faust_ballis?:     Branch1;
+    frstar_frosts?:    Branch1;
+    bsnake_flame?:     Branch1;
+    frosts?:           Branch1;
+    branch_1?:         Branch1;
+    branch_2?:         Branch1;
+    branch_3?:         Branch1;
+    default?:          Branch1;
+    factory_summon_1?: Branch1;
+    factory_summon_2?: Branch1;
 }
 
-export interface BsnakeFlame {
+export interface Branch1 {
     phases: Phase[];
 }
 
@@ -54,8 +61,8 @@ export interface Action {
     hiddenGroup?:                      null | string;
     randomSpawnGroupKey?:              RandomSpawnGroupKey | null;
     weight?:                           number;
-    weightValue?:                      number;
     dontBlockWave?:                    boolean;
+    weightValue?:                      number;
 }
 
 export enum RandomSpawnGroupKey {
@@ -149,6 +156,37 @@ export enum EnvironmentSE {
     Magma = "magma",
 }
 
+export interface Route {
+    motionMode:           number;
+    startPosition:        Position;
+    endPosition:          Position;
+    spawnRandomRange:     SpawnOffset;
+    spawnOffset:          SpawnOffset;
+    checkpoints:          Checkpoint[];
+    allowDiagonalMove:    boolean;
+    visitEveryTileCenter: boolean;
+    visitEveryNodeCenter: boolean;
+}
+
+export interface Checkpoint {
+    type:                 number;
+    time:                 number;
+    position:             Position;
+    reachOffset:          SpawnOffset;
+    randomizeReachOffset: boolean;
+    reachDistance:        number;
+}
+
+export interface Position {
+    row: number;
+    col: number;
+}
+
+export interface SpawnOffset {
+    x: number;
+    y: number;
+}
+
 export interface GlobalBuff {
     prefabKey:            string;
     blackboard:           Blackboard[];
@@ -170,10 +208,10 @@ export interface CharacterCard {
     mainSkillLvl:             number;
     skinId:                   null;
     tmplId?:                  null;
+    overrideSkillBlackboard?: Blackboard[] | null;
     position?:                Position;
     direction?:               number;
     initialCnt?:              number;
-    overrideSkillBlackboard?: null;
 }
 
 export interface Inst {
@@ -184,19 +222,15 @@ export interface Inst {
     potentialRank: number;
 }
 
-export interface Position {
-    row: number;
-    col: number;
-}
-
 export interface MapData {
-    map:        Array<number[]>;
-    tiles:      Tile[];
-    blockEdges: null;
-    effects:    null;
-    width:      number;
-    height:     number;
-    tags?:      Tag[] | null;
+    map:         Array<number[]>;
+    tiles:       Tile[];
+    blockEdges:  null;
+    effects:     null;
+    width:       number;
+    height:      number;
+    tags?:       Tag[] | null;
+    layerRects?: string[] | null;
 }
 
 export enum Tag {
@@ -204,12 +238,13 @@ export enum Tag {
 }
 
 export interface Tile {
-    tileKey:       TileKey;
-    heightType:    number;
-    buildableType: number;
-    passableMask:  number;
-    blackboard:    Blackboard[] | null;
-    effects:       Effect[] | null;
+    tileKey:         TileKey;
+    heightType:      number;
+    buildableType:   number;
+    passableMask:    number;
+    blackboard:      Blackboard[] | null;
+    effects:         Effect[] | null;
+    playerSideMask?: number;
 }
 
 export interface Effect {
@@ -241,6 +276,7 @@ export enum TileKey {
     TileHealing = "tile_healing",
     TileHole = "tile_hole",
     TileInfection = "tile_infection",
+    TilePoison = "tile_poison",
     TileRcmCrate = "tile_rcm_crate",
     TileRcmOperator = "tile_rcm_operator",
     TileRoad = "tile_road",
@@ -267,32 +303,6 @@ export interface Options {
     isTrainingLevel:      boolean;
     functionDisableMask:  number;
     isHardTrainingLevel?: boolean;
-}
-
-export interface Route {
-    motionMode:           number;
-    startPosition:        Position;
-    endPosition:          Position;
-    spawnRandomRange:     SpawnOffset;
-    spawnOffset:          SpawnOffset;
-    checkpoints:          Checkpoint[];
-    allowDiagonalMove:    boolean;
-    visitEveryTileCenter: boolean;
-    visitEveryNodeCenter: boolean;
-}
-
-export interface Checkpoint {
-    type:                 number;
-    time:                 number;
-    position:             Position;
-    reachOffset:          SpawnOffset;
-    randomizeReachOffset: boolean;
-    reachDistance:        number;
-}
-
-export interface SpawnOffset {
-    x: number;
-    y: number;
 }
 
 export interface Rune {

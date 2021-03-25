@@ -9,12 +9,14 @@
   "scripts": {
     "build": "lerna run --stream --sort build",
     "dev:h5": "",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "prepare": "husky install"
   },
   "devDependencies": {
-    "husky": "^5.0.9",
-    "lerna": "^3.22.1",
-    "lint-staged": "^10.5.4"
+    "husky": "^5.1.3",
+    "lerna": "^4.0.0",
+    "lint-staged": "^10.5.4",
+    "prettier": "^2.2.1"
   },
   "author": "odex_2100@outlook.com",
   "license": "ISC",
@@ -25,16 +27,5 @@
     ""
   ],
   "bugs": {},
-  "description": "",
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "**/*.js": [
-      "eslint --fix",
-      "git add"
-    ]
-  }
+  "description": ""
 }

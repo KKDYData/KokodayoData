@@ -9,4 +9,6 @@ export interface IInfo {
     powerName:  string;
     powerCode:  string;
     color:      string;
+    isLimited:  boolean;
+    isRaw:      boolean;
 }
