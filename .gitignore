@@ -29,4 +29,5 @@ run/
 ArknightsGameData 
 
 *.production*
+*.prod*
 *.local*
