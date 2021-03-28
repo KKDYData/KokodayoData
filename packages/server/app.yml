@@ -1,0 +1,15 @@
+apps:
+  - name: kkdy2
+    script: bootstrap.js
+    source_map_support: true
+    wait_ready: true
+    kill_timeout: 5000
+    listen_timeout: 3000
+    merge_logs: true
+    log_date_format: 'MM-DD HH:mm:ss'
+    # instances: max
+    #     # exec_mode: cluster
+    env:
+      NODE_ENV: production
+      ENABLE_NODE_LOG: YES
+      PORT: 7001

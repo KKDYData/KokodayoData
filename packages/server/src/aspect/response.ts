@@ -14,6 +14,7 @@ export class ResponseJson implements IMethodAspect {
         result,
       }
     } catch (err) {
+      console.error(err)
       return {
         ok: false,
         message: err.message || err.toString(),
