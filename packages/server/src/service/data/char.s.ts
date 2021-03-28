@@ -87,6 +87,7 @@ export class CharService {
         'buildingSkill.buffs',
         'info',
         'teamInfo',
+        'relativeChars',
       ],
     })
   }
@@ -112,17 +113,23 @@ export class CharService {
       words,
       data,
       teamInfo,
+      relativeChars,
+      skillComment,
+      charComment,
     } = modelData
 
     const res = {
       ...data,
       patchInfo,
       skills: skills.map(s => s.data),
-      buildings: buildingSkill.data,
-      buildingBuffs: buildingSkill.buffs.map(b => b.data),
-      info: info.data,
+      buildings: buildingSkill?.data,
+      buildingBuffs: buildingSkill?.buffs.map(b => b.data),
+      info: info?.data,
       words: words.map(w => w.data),
       teamInfo,
+      relativeChars: relativeChars?.map(c => c.charId),
+      skillComment,
+      charComment,
     }
 
     return res
@@ -140,5 +147,40 @@ export class CharService {
       profession: char.data.profession,
       teamInfo: char.teamInfo.map(info => info.data),
     }))
+  }
+
+  async updateRelativeChar(id: string, relativeId: string) {
+    const target = await this.model.findOne({
+      where: { charId: id },
+      relations: ['relativeChars'],
+    })
+    const relativieTarget = await this.model.findOne({
+      where: { charId: relativeId },
+      relations: ['relativeChars'],
+    })
+
+    // 双绑
+    if (!target.relativeChars.find(char => char.charId === relativeId)) {
+      target.relativeChars.push(relativieTarget)
+    }
+
+    if (!relativieTarget.relativeChars.find(char => char.charId === id)) {
+      relativieTarget.relativeChars.push(target)
+    }
+
+    await this.model.save(target)
+    await this.model.save(relativieTarget)
+  }
+
+  async updateCharComment(id: string, comment: string) {
+    const target = await this.model.findOne({ where: { charId: id } })
+    target.charComment = comment
+    await this.model.save(target)
+  }
+
+  async updateSkillComment(id: string, comment: string) {
+    const target = await this.model.findOne({ where: { charId: id } })
+    target.skillComment = comment
+    await this.model.save(target)
   }
 }

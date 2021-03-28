@@ -23,7 +23,7 @@ if (skipPull) {
       {
         execPath: __dirname,
         shell: 'powershell',
-        stdout: 'inherit'
+        stdout: 'inherit',
       }
     )
   } else {
@@ -32,7 +32,7 @@ if (skipPull) {
     execa.commandSync('git pull', {
       execPath: __dirname,
       shell: 'powershell',
-      stdout: 'inherit'
+      stdout: 'inherit',
     })
   }
   console.log('Update ArknightsGameData successfully!')
@@ -106,9 +106,9 @@ build('Data', enemy_database.enemies, 'EnemyData')
 
 const stageMap = []
 
-const readStage = p => {
+const readStage = (p) => {
   fs.readdirSync(path.resolve(__dirname, p), { withFileTypes: true }).forEach(
-    k => {
+    (k) => {
       if (k.isDirectory()) {
         readStage(p + '/' + k.name)
       } else {
@@ -123,9 +123,12 @@ readStage('../ArknightsGameData/zh_CN/gamedata/levels/activities')
 
 build('Data', stageMap, 'StageData')
 
+const activityTable = require('../ArknightsGameData/zh_CN/gamedata/excel/activity_table.json')
+build('Info', activityTable.basicInfo, 'ActivityInfo')
+
 fs.writeFileSync(
   path.resolve(__dirname, '../lib/index.ts'),
-  exportList.map(name => `export * as I${name} from './${name}'`).join('\n')
+  exportList.map((name) => `export * as I${name} from './${name}'`).join('\n')
 )
 
 function build(name, data, namespace) {

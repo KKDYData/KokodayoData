@@ -1,4 +1,4 @@
-import { ITeamInfo } from '@kkdy/data'
+import { IActivityInfo, ITeamInfo } from '@kkdy/data'
 
 export interface GetCharacterList {
   path: '/data/list'
@@ -13,4 +13,47 @@ export interface GetCharacterList {
     rarity: number
     profession: string
   }[]
+}
+
+export interface GetActivityList {
+  path: '/data/acts'
+  method: 'get'
+
+  response: IActivityInfo.IInfo[]
+}
+
+export interface UpdateRelativeChar {
+  path: '/data/char/relative'
+  method: 'post'
+
+  data: {
+    targetId: string
+    relativeId: string
+  }
+
+  response: true
+}
+
+export interface UpdateCharSkillComment {
+  path: '/data/char/skillComment'
+  method: 'post'
+
+  data: {
+    comment: string
+    id: string
+  }
+
+  response: true
+}
+
+export interface UpdateCharCharComment {
+  path: '/data/char/charComment'
+  method: 'post'
+
+  data: {
+    comment: string
+    id: string
+  }
+
+  response: true
 }

@@ -36,23 +36,32 @@ export class CharacterData extends BaseEntity {
   patchInfo?: IPatchInfo.IInfo
 
   @Column({
-    comment: '关联角色列表',
-    nullable: true,
-    type: 'json',
-  })
-  relativeCharList: { id: string; type: string; comment: string }[]
-
-  @Column({
     comment: '实装活动id',
     default: '',
   })
   installId: string
 
   @Column({
+    comment: '技能备注',
+    default: '',
+  })
+  skillComment: string
+
+  @Column({
+    comment: '角色备注',
+    default: '',
+  })
+  charComment: string
+
+  @Column({
     type: 'json',
     comment: '干员基础数据，对应character_table',
   })
   data: IChar.IData
+
+  @ManyToMany(() => CharacterData, char => char.relativeChars)
+  @JoinTable()
+  relativeChars: CharacterData[]
 
   @OneToMany(() => Charword, word => word.character)
   @JoinColumn()

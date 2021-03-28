@@ -28,5 +28,20 @@
   "stylusSupremacy.alwaysUseZeroWithoutUnit": false,
   "stylusSupremacy.reduceMarginAndPaddingValues": false,
   "stylusSupremacy.ignoreFiles": [],
-  "typescript.tsdk": "node_modules\\typescript\\lib"
+  "typescript.tsdk": "node_modules\\typescript\\lib",
+  "sqltools.connections": [
+    {
+      "mysqlOptions": {
+        "authProtocol": "default"
+      },
+      "previewLimit": 50,
+      "server": "localhost",
+      "port": 3306,
+      "driver": "MySQL",
+      "name": "mysql",
+      "database": "kkdy",
+      "username": "root",
+      "password": "123456"
+    }
+  ]
 }

@@ -10,8 +10,8 @@ const sourceDir = path.resolve(__dirname, '../../server/src/interface')
 const dirs = fs.readdirSync(sourceDir, { withFileTypes: true })
 const exportList: string[] = []
 
-const convert = (d: fs.Dirent[], parent: string,) => {
-  d.forEach(p => {
+const convert = (d: fs.Dirent[], parent: string) => {
+  d.forEach((p) => {
     if (p.isFile()) {
       const result = extract(path.join(parent, p.name))
       fs.writeFileSync(path.join(outDir, p.name), result)
@@ -23,24 +23,24 @@ const convert = (d: fs.Dirent[], parent: string,) => {
   })
 }
 
-
 rimraf(outDir, () => {
   fs.mkdirSync(outDir)
   convert(dirs, sourceDir)
   fs.writeFileSync(
     path.resolve(__dirname, '../lib/index.ts'),
-    exportList.map(name => `export * as Api${_.upperFirst(name)} from './${name}'`).join('\n')
-  )
-
-
-  fs.writeFileSync(
-    path.resolve(__dirname, './api/index.ts'),
-    exportList.map(name => `export * as Api${_.upperFirst(name)} from './${name}'`).join('\n')
+    exportList
+      .map((name) => `export * as Api${_.upperFirst(name)} from './${name}'`)
+      .join('\n')
   )
 
   const responseType = 'response.ts'
   const request = 'instance.ts'
-  fs.copyFileSync(path.join(__dirname, './', responseType), path.join(outDir, responseType))
-  fs.copyFileSync(path.join(__dirname, './', request), path.join(outDir, request))
-
+  fs.copyFileSync(
+    path.join(__dirname, './', responseType),
+    path.join(outDir, responseType)
+  )
+  fs.copyFileSync(
+    path.join(__dirname, './', request),
+    path.join(outDir, request)
+  )
 })
