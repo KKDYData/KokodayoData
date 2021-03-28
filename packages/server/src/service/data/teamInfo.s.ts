@@ -22,7 +22,7 @@ export class TeamInfoService extends BaseService {
   @InjectEntityModel(CharacterData)
   charModel: Repository<CharacterData>
 
-  async createOrUpdate (data: ITeamInfo.IInfo) {
+  async createOrUpdate(data: ITeamInfo.IInfo) {
     const info = await getOrCreateModel(this.model, {
       where: { powerId: data.powerId },
     })
@@ -34,7 +34,8 @@ export class TeamInfoService extends BaseService {
       where: {
         data: Raw(
           columnAlias =>
-            `json_extract(json_unquote(${columnAlias}), '$.${PowerLevelMap[ data.powerLevel ]
+            `json_extract(json_unquote(${columnAlias}), '$.${
+              PowerLevelMap[data.powerLevel]
             }') = :value`,
           { value: data.powerId }
         ),
@@ -51,5 +52,9 @@ export class TeamInfoService extends BaseService {
       data.powerName,
       info.chars.length
     )
+  }
+
+  getTeamInfoById(id: string) {
+    return this.model.findOne({ where: { powerId: id } })
   }
 }

@@ -15,6 +15,7 @@ import { CharwordService } from './charword.s'
 import { OssService } from '../oss.s'
 import { SkillService } from './skill.s'
 import { omit } from 'ramda'
+import { TeamInfoService } from './teamInfo.s'
 
 @Provide()
 export class CharService {
@@ -32,6 +33,9 @@ export class CharService {
 
   @Inject()
   infoService: CharInfoService
+
+  @Inject()
+  teamInfoService: TeamInfoService
 
   @Inject()
   ctx: IMidwayWebContext
@@ -57,6 +61,12 @@ export class CharService {
     )
 
     char.info = await this.infoService.getCharInfoByCharId(id)
+
+    char.teamInfo = await Promise.all(
+      [data.teamId, data.groupId, data.nationId].map(id =>
+        this.teamInfoService.getTeamInfoById(id)
+      )
+    )
 
     try {
       await this.model.save(char)
