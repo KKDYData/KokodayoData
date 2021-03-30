@@ -1,18 +1,25 @@
 <template>
-  <div class="text-center">
-    <ElImage alt="Vue logo" class="inline-block" src="assets/logo.png" />
+  <div class="flex flex-row max-h-screen">
+    <side-menu class="flex-grow-0 w-auto" />
+    <div class="flex-grow">
+      <div class="text-center">
+        <ElImage alt="Vue logo" class="inline-block" src="assets/logo.png" />
+      </div>
+      <app-navigation />
+      <router-view />
+    </div>
   </div>
-  <app-navigation />
-  <router-view />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import SideMenu from '/@/components/SideMenu.vue'
 import AppNavigation from '/@/components/AppNavigation.vue'
 import { ElImage } from 'element-plus'
 export default defineComponent({
   name: 'App',
   components: {
+    SideMenu,
     AppNavigation,
     ElImage,
   },
@@ -26,6 +33,6 @@ export default defineComponent({
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  /* margin-top: 60px; */
 }
 </style>
