@@ -88,7 +88,7 @@ class TaskQueue {
   }
 }
 
-const changeDesc = desc => {
+const changeDesc = (desc) => {
   const reg1 = /(<\/>)/g,
     reg2 = /\\n/g
 
@@ -104,7 +104,7 @@ const changeDesc = desc => {
     baKw: 'ba\\.kw',
     baTalpu: 'ba\\.talpu',
     lvItem: 'lv\\.itme|rem|fs',
-    timeLimit: 'act\\.timeLimit'
+    timeLimit: 'act\\.timeLimit',
   }
 
   const colorTemp = [
@@ -113,13 +113,13 @@ const changeDesc = desc => {
     ['F49800', ['ccRem', 'baRem', 'baTalpu']],
     ['00B0FF', ['ccKw', 'baKw']],
     ['049cb8', ['lvItem']],
-    ['ff5500', ['timeLimit']]
+    ['ff5500', ['timeLimit']],
   ]
 
-  const findColor = k => {
+  const findColor = (k) => {
     const [color] = colorTemp.find(
       ([color, list]) =>
-        !!list.find(e => {
+        !!list.find((e) => {
           const reg = new RegExp(d[e] || '')
           return reg.test(k)
         })
@@ -221,7 +221,7 @@ const changeDesc = desc => {
   return desc
 }
 
-const getClass_icon = c => {
+const getClass_icon = (c) => {
   return path + 'others/icon_profession_' + c.toLowerCase() + '.png'
 }
 
@@ -242,7 +242,7 @@ const getUA = () => {
       (OS.name === 'Mac OS' && Browser.name === 'Safari') ||
       (Browser.name === 'Edge' && Browser.version < '18')
     ),
-    isMobliePad
+    isMobliePad,
   }
 }
 
@@ -264,11 +264,11 @@ const getProfilePath = (name, row) => {
     : `${path}char/portrait/${name}.png`
 }
 
-const getDetailsProfilePath = name => {
+const getDetailsProfilePath = (name) => {
   return `${path}char/profile/${name}.png`
 }
 
-const changeKey = key => {
+const changeKey = (key) => {
   const test = /_/.exec(key)
   if (test) {
     const temp = key.split('')
@@ -282,7 +282,7 @@ const changeKey = key => {
 
 const findValue = (data, attr, key) => {
   if (data && data[attr]) {
-    return data[attr].find(el => el.key === key)
+    return data[attr].find((el) => el.key === key)
   } else {
     console.error(`There is no Attr ${attr} in `, data)
     return 0
@@ -311,14 +311,17 @@ const exSkill1 = new Set([
   'skchr_weedy_2',
   'skchr_broca_2',
   'skchr_brownb_2',
-  'skchr_rosmon_3'
+  'skchr_rosmon_3',
 ])
 const exSkill2 = new Map([
   ['skchr_angel_3', '据实测攻击间隔缩短效果翻倍'],
-  ['skchr_rosmon_3', '听说攻击间隔是减一半，如果不对，走反馈或者进群找我改一下']
+  [
+    'skchr_rosmon_3',
+    '听说攻击间隔是减一半，如果不对，走反馈或者进群找我改一下',
+  ],
 ])
 
-const changeAttackSpeed = skill => {
+const changeAttackSpeed = (skill) => {
   const str = changeDesc(skill.description)
   let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
     let percent = '',
@@ -451,8 +454,8 @@ const calStatusEnd = (
       }
     }
     // 判定潜能提升
-    potentailStatusUP.forEach(el => {
-      el.forEach(el => {
+    potentailStatusUP.forEach((el) => {
+      el.forEach((el) => {
         if (el.type === key) {
           if (key === 'baseAttackTime') {
             addV += el.value
@@ -478,9 +481,9 @@ const calStatusEnd = (
 }
 
 const preDefineCompute = (asyncData, baseData) => {
-  const res = baseData.map(el => {
+  const res = baseData.map((el) => {
     const key = el.inst.characterKey
-    const target = asyncData.find(item => key === item.key)
+    const target = asyncData.find((item) => key === item.key)
 
     if (!target) return
     const { data, targetSkill } = target
@@ -490,7 +493,7 @@ const preDefineCompute = (asyncData, baseData) => {
     )
     return { key, targetData, targetSkill, ...data, ...el }
   })
-  return res.filter(el => el)
+  return res.filter((el) => el)
 }
 
 const preDefineGet = async (key, baseData) => {
@@ -500,10 +503,10 @@ const preDefineGet = async (key, baseData) => {
   )
   if (temp.length === 0) return []
   const res = await Promise.all(
-    [...temp].map(key => getHeroData(key).then(data => ({ key, data })))
+    [...temp].map((key) => getHeroData(key).then((data) => ({ key, data })))
   )
   for (const char of res) {
-    const base = baseData[key].find(el => el.inst.characterKey === char.key)
+    const base = baseData[key].find((el) => el.inst.characterKey === char.key)
     const targetSkill = char.data.skills[base.skillIndex]
     if (targetSkill) {
       const skillKey = targetSkill.skillId
@@ -524,23 +527,25 @@ const findStage = (map, tree) => {
   let groupName = splitTemp[0]
   if (groupName === 'sub') groupName = 'main'
   const type = getStageType(groupName)
-  const group = tree.find(el => el.label === type)
+  const group = tree.find((el) => el.label === type)
   let target
   if (!group) return ''
   if (group.label === '主线') {
     const chapter = splitTemp[1].split('-')
     if (splitTemp[0] === 'main') {
-      target = group.children[+chapter[0]].children.find(el => el.path === map)
+      target = group.children[+chapter[0]].children.find(
+        (el) => el.path === map
+      )
     } else {
       //支线
       const temp = group.children[+chapter[0]]
       target = temp.children[temp.children.length - 1].children.find(
-        el => el.path === map
+        (el) => el.path === map
       )
     }
   } else {
     map = map.replace('wk', 'weekly').replace('pro', 'promote')
-    target = group.children.find(el => el.path === map)
+    target = group.children.find((el) => el.path === map)
   }
   return target
 }
@@ -552,7 +557,7 @@ const getSkinsData = {
       profile: this.getSkinProile(avatarId),
       halfPic: this.getSkinhalfPic(avatarId),
       avatarId: encodeURIComponent(avatarId),
-      displaySkin
+      displaySkin,
     }
   },
   getSkinProile(id) {
@@ -564,7 +569,7 @@ const getSkinsData = {
   getSkinSet(id) {
     return path + 'char/set/' + encodeURIComponent(id) + '.png'
   },
-  style: !UA.ok ? '.png' : '.png?x-oss-process=style/small-test'
+  style: !UA.ok ? '.png' : '.png?x-oss-process=style/small-test',
 }
 
 const getScreenWidth = () => {
@@ -577,17 +582,17 @@ const getScreenWidth = () => {
     if (h * radio > w) {
       return {
         width: w,
-        height: w / radio
+        height: w / radio,
       }
     }
     return {
       width: h * radio,
-      height: h
+      height: h,
     }
   } else {
     return {
       width: w,
-      height: short ? h * 0.95 : w * 0.8
+      height: short ? h * 0.95 : w * 0.8,
     }
   }
 }
@@ -599,23 +604,23 @@ const getfontSize = (str, mSize = 34, nSize = 16, baseLen = 4) => {
   return short ? (temp / 750) * 100 + 'vw' : temp + 'px'
 }
 
-const sleep = time => {
-  return new Promise(resolve => {
+const sleep = (time) => {
+  return new Promise((resolve) => {
     setTimeout(() => resolve(), time)
   })
 }
 
-const loadImg = url =>
+const loadImg = (url) =>
   new Promise((resolve, reject) => {
     const img = new Image()
     img.onload = () => resolve(img)
-    img.onerror = err => console.log(err)
+    img.onerror = (err) => console.log(err)
     img.onerror = reject
     img.src = url
   })
 
-const toPercent = v => {
-  return (v * 100).toFixed(0) + '%'
+const toPercent = (v) => {
+  return (v * 100).toFixed(1) + '%'
 }
 
 export {
@@ -646,5 +651,5 @@ export {
   getScreenWidth,
   getfontSize,
   // number
-  toPercent
+  toPercent,
 }

@@ -436,6 +436,8 @@ const StageType = {
   act15d0: 'Act·15·孤岛风云',
   act15d5: 'Act·15.5·此地之外',
   act16d5: 'Act·16.5·画中人',
+  act17d0: 'Act·17·源石尘行动',
+  act17d1: 'Act·17.5·罗德岛防御协议',
   ro: 'Ro_刻俄柏的灰蕈迷境',
   rune: '危机合约',
 }
