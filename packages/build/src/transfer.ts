@@ -7,7 +7,7 @@ import { AxiosDeclartion, ResponseDEclartion } from './decration'
 enum ParamName {
   params = 'params',
   data = 'data',
-  none = ''
+  none = '',
 }
 
 /**
@@ -16,21 +16,23 @@ enum ParamName {
  * @param file a path to a file
  * @param identifiers top level identifiers available
  */
-export function extract (file: string): string {
+export function extractApi(file: string): string {
   // Create a Program to represent the project, then pull out the
   // source file to parse its AST.
-  let program = ts.createProgram([ file ], { allowJs: true })
+  let program = ts.createProgram([file], { allowJs: true })
   const sourceFile = program.getSourceFile(file)
 
   // To print the AST, we'll use TypeScript's printer
   const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed })
 
-
-  const importNodeList: ts.ImportDeclaration[] = [ AxiosDeclartion, ResponseDEclartion ]
+  const importNodeList: ts.ImportDeclaration[] = [
+    AxiosDeclartion,
+    ResponseDEclartion,
+  ]
   const fnList: ts.FunctionDeclaration[] = []
 
   // Loop through the root AST nodes of the file
-  ts.forEachChild(sourceFile, node => {
+  ts.forEachChild(sourceFile, (node) => {
     let name = ''
 
     if (ts.isImportDeclaration(node)) {
@@ -46,12 +48,14 @@ export function extract (file: string): string {
       const request = factory.createIdentifier('request')
       let method: ts.Identifier
       let pathValue: ts.StringLiteral
-      let returnStatement: [ ts.TypeNode ] = [ factory.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword) ]
+      let returnStatement: [ts.TypeNode] = [
+        factory.createKeywordTypeNode(ts.SyntaxKind.NeverKeyword),
+      ]
       let paramType: ts.TypeNode
       let isParam = true
       let paramName = ParamName.none as ParamName
 
-      node.forEachChild(node => {
+      node.forEachChild((node) => {
         if (ts.isPropertySignature(node)) {
           if (checkPropName(node, 'method') && checkString(node)) {
             method = factory.createIdentifier(node.type.literal.text)
@@ -61,19 +65,17 @@ export function extract (file: string): string {
           } else if (checkPropName(node, ParamName.params)) {
             paramName = ParamName.params
             paramType = node.type
-          }
-          else if (checkPropName(node, ParamName.data)) {
+          } else if (checkPropName(node, ParamName.data)) {
             isParam = false
             paramName = ParamName.data
             paramType = node.type
-          }
-          else if (checkPropName(node, 'response')) {
+          } else if (checkPropName(node, 'response')) {
             console.log('response')
 
             if (ts.isTypeLiteralNode(node.type)) {
-              returnStatement = [ node.type ]
+              returnStatement = [node.type]
             } else if (ts.isTypeNode(node.type)) {
-              returnStatement = [ node.type ]
+              returnStatement = [node.type]
             }
           }
         }
@@ -81,7 +83,7 @@ export function extract (file: string): string {
 
       const fn = factory.createFunctionDeclaration(
         undefined,
-        [ factory.createModifier(ts.SyntaxKind.ExportKeyword) ],
+        [factory.createModifier(ts.SyntaxKind.ExportKeyword)],
         undefined,
         apiName,
         undefined,
@@ -94,7 +96,7 @@ export function extract (file: string): string {
             undefined,
             paramType,
             undefined
-          )
+          ),
         ],
         undefined,
 
@@ -102,26 +104,35 @@ export function extract (file: string): string {
           factory.createReturnStatement(
             factory.createCallExpression(
               factory.createPropertyAccessExpression(request, method),
-              [ factory.createTypeReferenceNode(factory.createIdentifier('JsonResponse'), returnStatement) ],
+              [
+                factory.createTypeReferenceNode(
+                  factory.createIdentifier('JsonResponse'),
+                  returnStatement
+                ),
+              ],
               [
                 pathValue,
 
-                paramName ?
-                  isParam
+                paramName
+                  ? isParam
                     ? factory.createObjectLiteralExpression(
-                      [ factory.createShorthandPropertyAssignment(param, undefined) ],
-                      false
-                    )
+                        [
+                          factory.createShorthandPropertyAssignment(
+                            param,
+                            undefined
+                          ),
+                        ],
+                        false
+                      )
                     : data
-                  : undefined
-              ].filter(s => s)
+                  : undefined,
+              ].filter((s) => s)
             )
-          )
+          ),
         ])
       )
       fnList.push(fn)
     }
-
   })
 
   const resultFile = ts.createSourceFile(
@@ -131,8 +142,11 @@ export function extract (file: string): string {
     /*setParentNodes*/ false,
     ts.ScriptKind.TS
   )
-  const result = [ ...importNodeList, '\n\n', ...fnList ].reduce((res, cur) => {
-    const parsered = typeof cur === 'string' ? cur : printer.printNode(ts.EmitHint.Unspecified, cur, resultFile)
+  const result = [...importNodeList, '\n\n', ...fnList].reduce((res, cur) => {
+    const parsered =
+      typeof cur === 'string'
+        ? cur
+        : printer.printNode(ts.EmitHint.Unspecified, cur, resultFile)
     return res + parsered
   }, '') as string
 
@@ -147,16 +161,14 @@ export function extract (file: string): string {
   return formatedCode
 }
 
-
-
-function checkPropName (
+function checkPropName(
   node: ts.PropertySignature,
   name: string
 ): node is ts.PropertySignature & { name: ts.Identifier } {
   return ts.isIdentifier(node.name) && node.name.text === name
 }
 
-function checkString (
+function checkString(
   node: ts.PropertySignature
 ): node is ts.PropertySignature & {
   type: ts.LiteralTypeNode & { literal: ts.StringLiteral }

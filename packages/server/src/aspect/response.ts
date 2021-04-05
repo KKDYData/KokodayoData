@@ -1,4 +1,11 @@
-import { Provide, Aspect, IMethodAspect, JoinPoint } from '@midwayjs/decorator'
+import {
+  Provide,
+  Aspect,
+  IMethodAspect,
+  JoinPoint,
+  Logger,
+} from '@midwayjs/decorator'
+import { ILogger } from '@midwayjs/logger'
 import { DataController } from '../controller/data.c'
 import { UpdateController } from '../controller/update.c'
 import { UserController } from '../controller/user.c'
@@ -6,6 +13,9 @@ import { UserController } from '../controller/user.c'
 @Provide()
 @Aspect([UserController, UpdateController, DataController])
 export class ResponseJson implements IMethodAspect {
+  @Logger()
+  coreLogger: ILogger
+
   async around(point: JoinPoint) {
     try {
       const result = await point.proceed(...point.args)
@@ -14,7 +24,7 @@ export class ResponseJson implements IMethodAspect {
         result,
       }
     } catch (err) {
-      console.error(err)
+      this.coreLogger.error(err)
       return {
         ok: false,
         message: err.message || err.toString(),

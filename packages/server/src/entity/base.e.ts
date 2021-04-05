@@ -18,10 +18,4 @@ export abstract class BaseEntity {
 
   @VersionColumn()
   version: number
-
-  @Column({
-    type: 'json',
-    comment: '',
-  })
-  data: any
 }

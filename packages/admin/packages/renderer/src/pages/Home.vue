@@ -19,15 +19,27 @@
   </p>
 
   <hr />
-  <button @click="count++">count is: {{ count }}</button>
-  <p>
-    Edit
-    <code>renderer/components/Home.vue</code> to test hot module replacement.
-  </p>
+  <ElButton @click="getUserInfo">get UserInfo</ElButton>
+  <p>{{ data }}</p>
 </template>
 
 <script lang="ts" setup>
+import { ApiUser } from '@kkdy/api'
+import { ElButton } from 'element-plus'
+
 ref: count = 0
+
+ref: data = null as any
+
+const getUserInfo = async () => {
+  const { data: res } = await ApiUser.GetUserInfo()
+  if (!res.ok) {
+    alert(res.msg)
+  } else {
+    data = res.result
+  }
+}
+ApiUser
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

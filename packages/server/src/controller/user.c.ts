@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Inject,
+  Param,
   Post,
   Provide,
   Query,
@@ -11,8 +12,17 @@ import {
 } from '@midwayjs/decorator'
 import { UserService } from '../service/user'
 import { ApiUser } from '../interface'
-import { UserGetWxIdDTO, UserSendQrcodeWxIdDTO } from '../dto/user'
+import {
+  UserDecodeQrcodeDTO,
+  UserGetLoginTokenDTO,
+  UserCrossLoginDTO,
+} from '../dto/user'
 import { GetResType } from '../dto/utils'
+import { BaseError } from '../utils/error'
+import { ErrorMap } from '../utils/ErrorMap'
+import { LoginCtx } from '../ctx'
+import { omit, pick } from 'ramda'
+import { CrossLogin, DecodeQrcode, GetLoginToken } from '../interface/user'
 
 @Provide()
 @Controller('/user')
@@ -20,29 +30,51 @@ export class UserController {
   @Inject()
   userService: UserService
 
-  @Get('/test')
-  async test() {
-    const data = this.userService.getUser({ uid: 1 })
-    return data
-  }
-
-  @Get('/qrcode/token')
+  @Get('/qrcode/key')
   async qrcodeToken(): Promise<GetResType<ApiUser.GetQrcodeToken>> {
-    const token = await this.userService.getQrCodeLoginToken()
-
-    return token
+    return this.userService.getQrCodeKey()
   }
 
-  @Get('/qrcode/wxId')
+  @Get('/qrcode/loginToken')
   @Validate()
-  async validateQrcodeToken(@Query(ALL) params: UserGetWxIdDTO) {
-    const wxid = await this.userService.getWxIdByToken(params.token)
-
-    return wxid
+  async getLoginToken(
+    @Query(ALL) params: UserGetLoginTokenDTO
+  ): Promise<GetResType<GetLoginToken>> {
+    return this.userService.getQrcodeLoginToken(params.qrcodeKey, params.token)
   }
 
-  @Post('/qrcode/sendWxId')
-  async sendWxId(@Body(ALL) data: UserSendQrcodeWxIdDTO) {
-    await this.userService.setWxIdByToken(data.token, data.wxId)
+  @Post('/qrcode/decode')
+  @Validate()
+  async decodeQrcode(
+    @Body(ALL) data: UserDecodeQrcodeDTO
+  ): Promise<GetResType<DecodeQrcode>> {
+    const json = await this.userService.decodeQrcode(data.qrcodeKey)
+
+    if (json === null) {
+      throw BaseError.create(ErrorMap['-1001'])
+    }
+    return pick(['token', 'type'], json)
+  }
+
+  @Post('/qrcode/crossLogin')
+  @Validate()
+  async crossLogin(
+    @Body(ALL) data: UserCrossLoginDTO
+  ): Promise<GetResType<CrossLogin>> {
+    // todo 用微信id 鉴权
+
+    await this.userService.crossLoginByWxId(
+      data.qrcodeKey,
+      data.token,
+      data.wxId
+    )
+
+    return true
+  }
+
+  @Get('/info', { middleware: ['loginMiddleware'] })
+  async getUserInfoS(ctx: LoginCtx) {
+    const data = await this.userService.getUser(ctx.loginToken)
+    return pick(['wxId', 'nickname'], data)
   }
 }

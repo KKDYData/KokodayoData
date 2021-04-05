@@ -10,7 +10,7 @@ import {
 } from '@midwayjs/decorator'
 import { GetResType } from '../dto/utils'
 import { ApiData } from '../interface'
-import { ActivityService } from '../service/data/activity.s'
+import { GameActivityService } from '../service/data/activity.s'
 import { CharService } from '../service/data/char.s'
 import {
   DataUpdateRelativeDTO,
@@ -25,7 +25,7 @@ export class DataController {
   charService: CharService
 
   @Inject()
-  activityService: ActivityService
+  activityService: GameActivityService
 
   @Get('/list')
   async listCharacters(): Promise<GetResType<ApiData.GetCharacterList>> {
@@ -34,7 +34,7 @@ export class DataController {
 
   @Get('/acts')
   async listActivity(): Promise<GetResType<ApiData.GetActivityList>> {
-    return this.activityService.listActivity()
+    return this.activityService.listGameActivity()
   }
 
   @Post('/char/relative')

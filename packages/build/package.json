@@ -1,5 +1,5 @@
 {
-  "name": "@kkdy/api",
+  "name": "@kkdy/build",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.cjs.js",
@@ -10,15 +10,15 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ts-node src/index.ts && rollup -c"
+    "build": "rollup -c"
   },
   "author": "odex",
   "dependencies": {
-    "@kkdy/build": "1",
     "@kkdy/data": "1.0",
     "axios": "^0.21.1"
   },
   "devDependencies": {
+    "@tarojs/taro": "^3.2.0",
     "@types/lodash": "^4.14.168",
     "@types/prettier": "^2.2.2",
     "@types/rimraf": "^3.0.0",
@@ -28,6 +28,7 @@
     "rollup": "^2.40.0",
     "rollup-plugin-clear": "^2.0.7",
     "rollup-plugin-typescript2": "^0.30.0",
+    "taro-axios": "^1.1.1",
     "ts-transformer-keys": "^0.4.3",
     "typescript-json-schema": "^0.49.0"
   }
