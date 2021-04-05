@@ -19,7 +19,7 @@ import { CharwordService } from '../service/data/charword.s'
 import { SkillService } from '../service/data/skill.s'
 import { OssService } from '../service/oss.s'
 import { TeamInfoService } from '../service/data/teamInfo.s'
-import { ActivityService } from '../service/data/activity.s'
+import { GameActivityService } from '../service/data/activity.s'
 
 @Provide()
 @Controller('/update')
@@ -46,7 +46,7 @@ export class UpdateController {
   teamInfoService: TeamInfoService
 
   @Inject()
-  activityService: ActivityService
+  activityService: GameActivityService
 
   @Inject()
   ossService: OssService

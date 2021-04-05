@@ -18,6 +18,8 @@
     "js-yaml": "^4.0.0",
     "mysql2": "^2.2.5",
     "ramda": "^0.27.1",
+    "redis-json": "^5.0.0",
+    "redis-modules-sdk": "^0.4.4",
     "socket.io": "^3.1.1",
     "uuid": "^8.3.2"
   },
@@ -26,6 +28,8 @@
     "@midwayjs/egg-ts-helper": "^1.0.1",
     "@midwayjs/luckyeye": "^1.0.2",
     "@midwayjs/mock": "^2.8.11",
+    "@types/ali-oss": "^6.0.7",
+    "@types/ioredis": "^4.22.0",
     "@types/jest": "^26.0.10",
     "@types/node": "14",
     "@types/ramda": "^0.27.39",

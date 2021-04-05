@@ -22,12 +22,6 @@ export class APIController {
   @Inject()
   indexListService: IndexListService
 
-  @Post('/get_user')
-  async getUser(@Query() uid: any) {
-    const user = await this.userService.getUser({ uid })
-    return { success: true, message: 'OK', data: user }
-  }
-
   @Get('/index_list')
   async getIndexList() {
     const list = await this.indexListService.getList()
