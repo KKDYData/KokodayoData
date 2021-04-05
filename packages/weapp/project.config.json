@@ -1,9 +1,9 @@
 {
   "miniprogramRoot": "dist/",
-  "projectname": "kkdy-taro-2",
+  "projectname": "kkdy%20weapp",
   "description": "kkdy",
   "appid": "wx2ad0202cc185be51",
-  "cloudfunctionRoot": "../cloudfunctions/",
+  "cloudfunctionRoot": "cloudfunctions/",
   "setting": {
     "urlCheck": true,
     "es6": false,
@@ -22,17 +22,20 @@
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
-    "useMultiFrameRuntime": false,
+    "useMultiFrameRuntime": true,
     "useApiHook": true,
+    "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
       "disablePlugins": [],
       "outputPath": ""
     },
     "enableEngineNative": false,
+    "bundle": false,
     "useIsolateContext": true,
     "useCompilerModule": true,
     "userConfirmedUseCompilerModuleSwitch": false,
+    "userConfirmedBundleSwitch": false,
     "packNpmManually": false,
     "packNpmRelationList": [],
     "minifyWXSS": true
