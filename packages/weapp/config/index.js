@@ -1,3 +1,4 @@
+const windicss = require('windicss-webpack-plugin')
 const config = {
   projectName: 'kkdy-weapp',
   date: '2021-2-3',
@@ -35,6 +36,15 @@ const config = {
           generateScopedName: '[name]__[local]___[hash:base64:5]',
         },
       },
+    },
+    webpackChain(chain, webpack) {
+      chain.merge({
+        plugin: {
+          windicss: {
+            plugin: new windicss.default(),
+          },
+        },
+      })
     },
   },
   h5: {

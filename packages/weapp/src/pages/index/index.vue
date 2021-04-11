@@ -1,6 +1,6 @@
 <template>
   <view class="index">
-    <view class="text-gray-900 text-2xl">hello KOKODAYO</view>
+    <view class="border rounded mx-10 text-xl w-80px">hello KOKODAYO</view>
     <NumberDisplay />
     <NumberSubmit />
     <view class="mt-10">

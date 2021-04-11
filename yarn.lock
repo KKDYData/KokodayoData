@@ -5062,6 +5062,19 @@
     "@webassemblyjs/wast-parser" "1.9.0"
     "@xtuc/long" "4.2.2"
 
+"@windicss/plugin-utils@0.12.5":
+  version "0.12.5"
+  resolved "https://registry.npm.taobao.org/@windicss/plugin-utils/download/@windicss/plugin-utils-0.12.5.tgz#d03517d1ae7a48b5b459e3d670e873d38b63e4a1"
+  integrity sha1-0DUX0a56SLW0WePWcOhz04tj5KE=
+  dependencies:
+    debug "^4.3.2"
+    fast-glob "^3.2.5"
+    magic-string "^0.25.7"
+    micromatch "^4.0.2"
+    pirates "^4.0.1"
+    sucrase "^3.17.1"
+    windicss "^2.5.11"
+
 "@windicss/plugin-utils@0.8.4":
   version "0.8.4"
   resolved "https://registry.npm.taobao.org/@windicss/plugin-utils/download/@windicss/plugin-utils-0.8.4.tgz#6613bad52cea86a260a040c37069234baac377ae"
@@ -25351,6 +25364,11 @@ webpack-sources@^1.0.1, webpack-sources@^1.1.0, webpack-sources@^1.4.0, webpack-
     source-list-map "^2.0.0"
     source-map "~0.6.1"
 
+webpack-virtual-modules@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.npm.taobao.org/webpack-virtual-modules/download/webpack-virtual-modules-0.4.2.tgz#68ce4479df7334a491b7a3f3bead47fe382947d9"
+  integrity sha1-aM5Eed9zNKSRt6Pzvq1H/jgpR9k=
+
 webpack@4.46.0:
   version "4.46.0"
   resolved "https://registry.npm.taobao.org/webpack/download/webpack-4.46.0.tgz?cache=0&sync_timestamp=1617302893020&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwebpack%2Fdownload%2Fwebpack-4.46.0.tgz#bf9b4404ea20a073605e0a011d188d77cb6ad542"
@@ -25524,10 +25542,28 @@ win-release@^1.0.0:
   dependencies:
     semver "^5.0.1"
 
+windicss-webpack-plugin@^0.3.3:
+  version "0.3.3"
+  resolved "https://registry.npm.taobao.org/windicss-webpack-plugin/download/windicss-webpack-plugin-0.3.3.tgz#74addc441b3c9e20bb727598bcacb6c8903d67d8"
+  integrity sha1-dK3cRBs8niC7cnWYvKy2yJA9Z9g=
+  dependencies:
+    "@windicss/plugin-utils" "0.12.5"
+    debug "^4.3.1"
+    loader-utils "^2.0.0"
+    magic-string "^0.25.7"
+    upath "^2.0.1"
+    webpack-virtual-modules "^0.4.2"
+    windicss "^2.5.12"
+
 windicss@^2.4.3, windicss@^2.4.5:
   version "2.5.10"
   resolved "https://registry.npm.taobao.org/windicss/download/windicss-2.5.10.tgz#21d86ab66eef350899222a49825a1b77ba27eaa2"
   integrity sha1-Idhqtm7vNQiZIipJglobd7on6qI=
+
+windicss@^2.5.11, windicss@^2.5.12:
+  version "2.5.14"
+  resolved "https://registry.npm.taobao.org/windicss/download/windicss-2.5.14.tgz#41236ccc2517c0947e1adb69e0d5e8aa9bed9c1e"
+  integrity sha1-QSNszCUXwJR+Gttp4NXoqpvtnB4=
 
 winston-daily-rotate-file@^4.5.0:
   version "4.5.1"
