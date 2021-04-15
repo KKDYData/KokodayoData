@@ -31,3 +31,8 @@ export class DataUpdateCharCharComment
   @Rule(RuleType.string().required())
   id: string
 }
+
+export class SimpleIdDTO {
+  @Rule(RuleType.string().required())
+  id: string
+}

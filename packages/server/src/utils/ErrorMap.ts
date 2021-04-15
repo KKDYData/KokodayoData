@@ -11,4 +11,8 @@ export const ErrorMap = {
     code: -400,
     msg: '没登录',
   },
+  NO_DATA: {
+    code: -404,
+    msg: '找不到数据',
+  },
 } as const

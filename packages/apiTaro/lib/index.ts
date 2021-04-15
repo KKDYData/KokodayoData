@@ -1,4 +1,5 @@
-export * as ApiData from './data'
-export * as ApiHome from './home'
-export * as ApiUser from './user'
+export * as Data from './data'
+export * as Home from './home'
+export * as Update from './update'
+export * as User from './user'
 export * from './instance'

@@ -8,8 +8,10 @@ import {
   IPatchInfo,
   ITeamInfo,
   IActivityInfo,
+  IStageInfo,
+  IStageData,
 } from '@kkdy/data'
-import { ALL, Get, Query } from '@midwayjs/decorator'
+import { ALL, Get, Query, Validate } from '@midwayjs/decorator'
 import { Body, Controller, Inject, Post, Provide } from '@midwayjs/decorator'
 import { BuildingSkillService } from '../service/data/buildingSkill.s'
 import { BuildingBuffService } from '../service/data/buildingBuff.s'
@@ -20,6 +22,10 @@ import { SkillService } from '../service/data/skill.s'
 import { OssService } from '../service/oss.s'
 import { TeamInfoService } from '../service/data/teamInfo.s'
 import { GameActivityService } from '../service/data/activity.s'
+import { ApiUpdate } from '../interface'
+import { GetResType } from '../dto/utils'
+import { SimpleIdDTO } from '../dto/data'
+import { MapService } from '../service/data/map.s'
 
 @Provide()
 @Controller('/update')
@@ -51,6 +57,9 @@ export class UpdateController {
   @Inject()
   ossService: OssService
 
+  @Inject()
+  mapServide: MapService
+
   @Post('/charword')
   async updateCharword(@Body(ALL) data: ICharWord.IWord) {
     await this.charwordService.createOrUpdate(data)
@@ -66,7 +75,10 @@ export class UpdateController {
   }
 
   @Get('/char')
-  async getChar(@Query(ALL) q: { id: string }) {
+  @Validate()
+  async getChar(
+    @Query(ALL) q: SimpleIdDTO
+  ): Promise<GetResType<ApiUpdate.GetChar>> {
     const data = await this.charService.getCharByCharId(q.id)
 
     return data
@@ -127,5 +139,26 @@ export class UpdateController {
   async updateActivity(@Body(ALL) data: IActivityInfo.IInfo) {
     await this.activityService.createOrUpdate(data.id, data)
     return true
+  }
+
+  @Post('/map')
+  async updateMap(
+    @Body(ALL) data: { levelId: string; data: IStageData.IData }
+  ) {
+    await this.mapServide.couData(data.levelId, data.data)
+    return true
+  }
+
+  @Post('/map/info')
+  async updateMapInfo(
+    @Body(ALL) data: { levelId: string; info: IStageInfo.IStage }
+  ) {
+    await this.mapServide.couStageInfo(data.levelId, data.info)
+    return true
+  }
+
+  @Get('/map')
+  async getMapById(@Query(ALL) query: { levelId: string }) {
+    return await this.mapServide.getMapByLevelId(query.levelId)
   }
 }

@@ -17,18 +17,34 @@ const ins = Axios.create({
   // await updatePatchInfo()
   // await updateTeamInfo()
   // await updateChars()
-  await updateAct()
+  // await updateAct()
   // const { data }
+  const stages = require('./ArknightsGameData/zh_CN/gamedata/excel/stage_table.json')
+    .stages
+  const map = require('./ArknightsGameData/zh_CN/gamedata/levels/obt/main/level_main_00-01.json')
+
   // return
-  const res = await ins.get('/data/acts', {
-    id: 'char_1001_amiya2',
-    // relativeId: 'char_1001_amiya2',
-    comment: 'nb',
+  const res = await ins.post('/update/map', {
+    // id: 'char_1001_amiya2',
+    levelId: 'level_main_00-01',
+    data: map,
   })
+
   console.log(res.data)
-  const { data } = await getChar('char_1001_amiya2')
+
+  const infoRes = await ins.post('/update/map/info', {
+    levelId: 'level_main_00-01',
+    info: stages['main_00-01'],
+  })
+  console.log('res.info', infoRes.data)
+
+  // const res
+  const { data: mapData } = await ins.get('/update/map', {
+    params: { levelId: 'level_main_00-01' },
+  })
+  // const { data } = await getChar('char_1001_amiya2')
   // const { data: skills } = await getSkill('skcom_atk_up[1]')
-  console.log('data', data)
+  console.log('data', mapData)
   // console.log('skill', skills)
 })()
 

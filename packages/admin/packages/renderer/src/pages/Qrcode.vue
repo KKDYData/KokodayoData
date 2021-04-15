@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 import { useQRCode } from '@vueuse/integrations'
-import { ApiUser, setXToken } from '@kkdy/api'
+import { User, setXToken } from '@kkdy/api'
 import { ElImage } from 'element-plus'
 import { useRouter } from 'vue-router'
 
@@ -22,7 +22,7 @@ ref: isLogin = false
 
 const router = useRouter()
 
-ApiUser.GetQrcodeToken()
+User.GetQrcodeToken()
   .then(res => {
     const resData = res.data
     if (resData.ok) {
@@ -40,7 +40,7 @@ function startGetWxIdInterval() {
     if (reqcount < 60 * 5) {
       // 一分钟
       reqcount++
-      const { data } = await ApiUser.GetLoginToken({ qrcodeKey, token })
+      const { data } = await User.GetLoginToken({ qrcodeKey, token })
       console.log(data)
 
       if (!data.ok) {
