@@ -36,9 +36,14 @@ ref: routerList = [
     title: '测试页',
   },
   {
-    url: '/',
+    url: '/charlist',
     icon: 'el-icon-user-solid',
     title: '干员一览',
+  },
+  {
+    url: '/chardetail/p_char_010_chen',
+    icon: 'el-icon-user-solid',
+    title: '干员详情',
   },
   {
     url: '/',
