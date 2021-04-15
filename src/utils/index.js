@@ -136,6 +136,11 @@ const changeDesc = (desc) => {
     matchTagEndBegin
   const matchTypeGroup = []
   const matchValueGroup = []
+  const matchTagGroup = []
+  const tagMap = {
+    '@': 'span',
+    $: 'u',
+  }
 
   desc = desc.split('').reduce((res, cur) => {
     // tag 标签开始
@@ -151,7 +156,8 @@ const changeDesc = (desc) => {
 
     if (matchTagBegin) {
       matchValueBegin = false
-      if (cur === '@') {
+      if (cur === '@' || cur === '$') {
+        matchTagGroup.push(cur)
         matchTagStartBegin = true
       } else if (cur === '/') {
         matchTagEndBegin = true
@@ -173,8 +179,11 @@ const changeDesc = (desc) => {
       } else if (matchTagEndBegin) {
         matchTagEndBegin = false
 
-        let temp = `<i style="color:${findColor(matchTypeGroup.pop()) ||
-          '#0098DC'};font-style: normal;">${matchValueGroup.pop()}</i>`
+        const tag = tagMap[matchTagGroup.pop()]
+
+        let temp = `<${tag} style="color:${findColor(
+          matchTypeGroup.pop()
+        )};font-style: normal;">${matchValueGroup.pop()}</${tag}>`
         if (matchValueGroup.length) {
           matchValue = matchValueGroup.pop() + temp
         } else {
