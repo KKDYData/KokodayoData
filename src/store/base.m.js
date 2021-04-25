@@ -9,7 +9,7 @@ const state = {
 
 // fixed version, originated from https://github.com/Bill4Time/javascript-natural-sort/blob/master/naturalSort.js
 const naturalSort = (a, b) => {
-  var re = /([+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?|^0x[0-9a-f]+$|\d+)/gi,
+  const re = /([+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?|^0x[0-9a-f]+$|\d+)/gi,
     sre = /(^[ ]*|[ ]*$)/g,
     hre = /^0x[0-9a-f]+$/i,
     dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
