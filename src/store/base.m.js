@@ -30,7 +30,7 @@ const naturalSort = (a, b) => {
     else if ( xD > yD ) { return 1; }
   }
   // natural sorting through split numeric strings and default strings
-  for(var cLoc=0, numS=Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
+  for(let cLoc=0, numS=Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
     // find floats not starting with '0', string or 0 if not defined (Clint Priest)
     oFxNcL = !(xN[cLoc] || '').match(/^0/) && parseFloat(xN[cLoc]) || xN[cLoc] || 0;
     oFyNcL = !(yN[cLoc] || '').match(/^0/) && parseFloat(yN[cLoc]) || yN[cLoc] || 0;
