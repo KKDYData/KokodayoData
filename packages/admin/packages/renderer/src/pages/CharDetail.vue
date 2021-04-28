@@ -1,12 +1,12 @@
 <template>
   <div class="char-detail-container px-20">
     <!-- 干员评价 -->
-    <info-subtitle class="char-detail-subtitle" :title="subtitle[0]" />
+    <InfoSubtitle class="char-detail-subtitle" :title="subtitle[0]" />
     <div class="input-wrapper">
       <div class="w-full text-left">
         请输入对干员 {{ testInfo.name }} 的评价：
       </div>
-      <el-input
+      <ElInput
         v-model="charComment"
         type="textarea"
         :autosize="{ minRows: 2, maxRows: 4 }"
@@ -15,71 +15,63 @@
     </div>
 
     <!-- 技能备注 -->
-    <info-subtitle class="char-detail-subtitle" :title="subtitle[1]" />
+    <InfoSubtitle class="char-detail-subtitle" :title="subtitle[1]" />
     <div class="input-wrapper">
       <div class="w-full text-left">
         请输入对技能 {{ skillOption[chsSkill] }} 的评价：
       </div>
-      <el-input
+      <ElInput
         v-model="skillComment"
         class="input-with-select"
         :placeholder="`请输入对技能 ${skillOption[chsSkill]} 的评价`"
       >
         <template #prepend>
-          <el-select v-model="chsSkill" placeholder="请选择">
-            <el-option
+          <ElSelect v-model="chsSkill" placeholder="请选择">
+            <ElOption
               v-for="(skill, skillIdx) in skillOption"
               :key="skillIdx + '_' + skill"
               :label="skillIdx + 1 + '技能：' + skill"
               :value="skillIdx"
             />
-          </el-select>
+          </ElSelect>
         </template>
-      </el-input>
+      </ElInput>
     </div>
 
     <!-- 关联活动 -->
-    <info-subtitle class="char-detail-subtitle" :title="subtitle[2]" />
+    <InfoSubtitle class="char-detail-subtitle" :title="subtitle[2]" />
+    <div class="text-left ml-6">PS：点击下拉框后可输入关键字搜索</div>
     <div class="input-wrapper">
-      <el-select
-        v-model="chsAct"
+      <RelateActivitySelect
         class="act-select"
-        filterable
-        clearable
-        placeholder="请选择关联活动"
-      >
-        <el-option
-          v-for="(act, actIdx) in actList"
-          :key="actIdx + '_' + act.id"
-          :label="act.name"
-          :value="act.id"
-        >
-          <span style="float: left">{{ act.name }}</span>
-          <span style="float: right"
-            >活动时间：{{
-              new Date(act.startTime * 1000).toLocaleDateString() +
-              ' ~ ' +
-              new Date(act.endTime * 1000).toLocaleDateString()
-            }}</span
-          >
-        </el-option>
-      </el-select>
+        :select-value="chsAct"
+        :option-list="actList"
+      />
     </div>
 
-    <el-button class="submit-btn" type="primary" @click="submitAll"
+    <!-- 关联卡池 -->
+    <!-- <InfoSubtitle class="char-detail-subtitle" :title="subtitle[3]" />
+    <div class="text-left ml-6">PS：点击下拉框后可输入关键字搜索</div>
+    <div class="input-wrapper">
+      <RelateGachaSelect class="act-select" :selectValue="chsGacha" :optionList="gachaList"></RelateGachaSelect>
+    </div> -->
+
+    <ElButton class="submit-btn" type="primary" @click="submitAll"
       >提交<i class="el-icon-upload el-icon--right"
-    /></el-button>
+    /></ElButton>
   </div>
 </template>
 
 <script lang="ts" setup>
 // import { reactive, provide } from 'vue'
 import InfoSubtitle from '../components/InfoSubtitle.vue'
+import RelateActivitySelect from '../components/RelateActivitySelect.vue'
+// import RelateGachaSelect from '../components/RelateGachaSelect.vue'
 import { ElInput, ElSelect, ElOption, ElButton } from 'element-plus'
-import { isEmptyStr } from '../../public/utils/utils'
+import { isEmptyStr } from '../utils/utils'
 import { ApiData } from '@kkdy/api'
 
-const subtitle = ['干员评价', '技能备注', '关联活动']
+const subtitle = ['干员评价', '技能备注', '关联活动', '关联卡池']
 
 // ref: loading = false
 // ref: charInfo = reactive(testInfo) // testInfo 是陈的测试数据
@@ -92,6 +84,8 @@ ref: skillOption = testInfo.skills.map((val) => {
 })
 ref: actList = []
 ref: chsAct = ''
+// ref: gachaList = Array()
+// ref: chsGacha = ''
 
 ApiData.GetActivityList()
   .then((res) => {
@@ -183,8 +177,7 @@ function submitAll() {
   @apply ml-6 py-1 flex flex-col;
 }
 .el-input,
-.el-textarea,
-.act-select {
+.el-textarea {
   @apply mt-1;
 }
 

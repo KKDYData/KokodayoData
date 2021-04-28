@@ -1,5 +1,5 @@
 <template>
-  <el-menu
+  <ElMenu
     default-active="/"
     class="w-36 h-screen"
     background-color="#545c64"
@@ -10,15 +10,15 @@
     <div class="menu-title h-16 text-center">
       <span class="leading-16 text-yellow-400">Kokodayo</span>
     </div>
-    <el-menu-item
+    <ElMenuItem
       v-for="(route, index) in routerList"
       :key="index"
       :index="route.url"
     >
       <!-- <i :class="route.icon"></i> -->
       <template #title>{{ route.title }}</template>
-    </el-menu-item>
-  </el-menu>
+    </ElMenuItem>
+  </ElMenu>
 </template>
 
 <script lang="ts" setup>
