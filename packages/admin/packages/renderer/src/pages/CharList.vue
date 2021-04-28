@@ -1,9 +1,36 @@
 <template>
   <div class="char-list-container">
     <!-- 条件筛选 -->
-    <div />
+    <div class="w-full flex flex-col">
+      <FilterButtonGroup
+        condtype="token"
+        grouptitle="切换"
+        :taglist="allCond.token"
+        @switch-token="switchType"
+      />
+      <FilterButtonGroup
+        condtype="profs"
+        grouptitle="职业"
+        :taglist="allCond.profs"
+        :tokenflag="tokenflag"
+        @change-one="changeOne"
+        @cancel-all="cancelAll"
+      />
+      <FilterButtonGroup
+        condtype="stars"
+        grouptitle="星级"
+        :taglist="allCond.stars"
+        :tokenflag="tokenflag"
+        @change-one="changeOne"
+        @cancel-all="cancelAll"
+      />
+    </div>
     <!-- 干员列表 -->
-    <div v-for="agent in charList" :key="agent.charId" class="char-list-column">
+    <div
+      v-for="agent in filteredList"
+      :key="agent.charId"
+      class="char-list-column"
+    >
       <div class="char-list-column-item">
         <router-link :to="'/chardetail/' + agent.charId">
           <div class="w-28 h-28 bg-gray-300" :alt="agent.name" />
@@ -24,24 +51,135 @@
 </template>
 
 <script lang="ts" setup>
+import { reactive } from 'vue'
+import FilterButtonGroup from '../components/FilterButtonGroup.vue'
+import { tokenSwitch, professionList, rarityList } from '../utils/constants'
+// import { testlist } from '../utils/charlist'
 import { ApiData } from '@kkdy/api'
+
+// 所有可选过滤条件组
+const allCond = reactive({
+  token: tokenSwitch.map((tag) => {
+    return {
+      value: tag.value,
+      text: tag.text,
+      checked: tag.value === 'CHAR',
+    }
+  }), // 干员召唤物切换
+  stars: rarityList, // 星级标签组
+  profs: professionList, // 职业标签组
+})
 
 // ref: loading = false
 ref: charList = []
+ref: filteredList = []
+ref: tokenflag = false
 
 // loading = true
-ApiData.GetCharacterList()
-  .then((res) => {
-    const resData = res.data
-    if (resData.ok) {
-      console.log('char list res', resData.result)
-      charList = resData.result
-      // loading = false
+// ApiData.GetCharacterList()
+//   .then((res) => {
+//     const resData = res.data
+//     if (resData.ok) {
+//       console.log('char list res', resData.result)
+//       charList = resData.result
+//       filteredList = resData.result
+//       // loading = false
+//     }
+//   })
+//   .catch((error) => {
+//     console.log(error)
+//   })
+
+// 本地测试数据
+// charList = testlist
+// filteredList = testlist
+
+refilterList()
+
+function switchType() {
+  allCond.token.forEach((tag) => (tag.checked = !tag.checked))
+  const switchflag = allCond.token
+    .filter((el) => el.checked === true)
+    .map((tag) => tag.value)
+  tokenflag = switchflag[0] === 'TOKEN'
+  console.log('tokenflag', tokenflag)
+
+  refilterList(switchflag[0])
+}
+
+function changeOne(tag: { type: string; index: number }) {
+  let condArr = [] as { value: string; text: string; checked: boolean }[]
+
+  switch (tag.type) {
+    case 'profs':
+      condArr = allCond.profs
+      break
+    case 'stars':
+      condArr = allCond.stars
+      break
+  }
+
+  if (condArr.length > 0) {
+    let choice = condArr[tag.index]
+    choice.checked = !choice.checked
+
+    refilterList()
+  }
+}
+
+function cancelAll(tag: { type: string }) {
+  switch (tag.type) {
+    case 'profs':
+      allCond.profs.forEach((cond) => {
+        cond.checked = false
+      })
+      break
+    case 'stars':
+      allCond.stars.forEach((cond) => {
+        cond.checked = false
+      })
+      break
+  }
+
+  refilterList()
+}
+
+function refilterList(switchflag = 'CHAR') {
+  filteredList = charList
+
+  let filterChar = switchflag === 'CHAR'
+
+  if (filterChar) {
+    const filters = Object.keys(allCond)
+      .filter((cond) => cond !== 'token')
+      .map((el) => [
+        el,
+        allCond[el]
+          .filter((tag) => tag.checked === true)
+          .map((tag) => tag.value),
+      ])
+
+    for (let data of filters) {
+      const group = data[1]
+
+      if (group.length < 1) {
+        continue
+      } else {
+        filteredList = filteredList.filter((char) => {
+          return (
+            !(char.profession === 'TOKEN' || char.profession === 'TRAP') && // 召唤物的 profession 为 TOKEN 或 TRAP
+            (group.includes(char.profession) ||
+              group.includes(char.rarity + 1 + ''))
+          )
+        })
+      }
     }
-  })
-  .catch((error) => {
-    console.log(error)
-  })
+  } else {
+    filteredList = filteredList.filter(
+      (char) => char.profession === 'TOKEN' || char.profession === 'TRAP'
+    )
+  }
+}
 </script>
 
 <style lang="css" scoped>
