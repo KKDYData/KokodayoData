@@ -9,22 +9,29 @@ export function convert(text, index = 0, tagName) {
     const cur = text[i]
     if (cur === '<') {
       matchingTag.push(cur)
-    } else if (cur === '>') {
+    } else if (cur === '>' && matchingTag.length) {
       const curTagName = matchingTag.slice(1).join('')
       if (curTagName !== '/') {
-        // 准备转移到子节点处理
-        if (normalText) {
-          content.push(normalText)
-          normalText = ''
+        // 判断是否是tag
+        if (['@', '$'].includes(curTagName[0])) {
+          // 准备转移到子节点处理
+          if (normalText) {
+            content.push(normalText)
+            normalText = ''
+          }
+
+          // 创建子节点
+          const node = convert(text, i + 1, curTagName)
+          content.push(node)
+          matchingTag = []
+
+          // 从子节点结束的位置继续
+          i = node.length
+        } else {
+          // <文本>
+          content.push('<' + curTagName + '>')
+          matchingTag = []
         }
-
-        // 创建子节点
-        const node = convert(text, i + 1, curTagName)
-        content.push(node)
-        matchingTag = []
-
-        // 从子节点结束的位置继续
-        i = node.length
       } else {
         isEndTag = true
         // 结束节点
@@ -50,6 +57,7 @@ const typeMap = {
   '@': 'rich-color',
   $: 'rich-style',
 }
+
 class RichTextNode {
   /**
    * @type {string}

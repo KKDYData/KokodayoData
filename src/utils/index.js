@@ -90,9 +90,7 @@ class TaskQueue {
 }
 
 const changeDesc = (desc) => {
-  console.log('desc', desc)
   const nodeTree = convert(desc)
-  console.log('tree', nodeTree)
 
   return nodeTree.toHtml()
 }
