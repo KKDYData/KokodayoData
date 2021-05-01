@@ -3,6 +3,7 @@ import { getStageType, statusToChChar } from './string'
 import { path } from './listVer'
 import { getHeroData, getSkill } from './fetch'
 import UaParser from 'ua-parser-js'
+import { convert } from './RichText'
 
 const debounce = (action, idle, ...args) => {
   let last
@@ -89,145 +90,11 @@ class TaskQueue {
 }
 
 const changeDesc = (desc) => {
-  const reg1 = /(<\/>)/g,
-    reg2 = /\\n/g
+  console.log('desc', desc)
+  const nodeTree = convert(desc)
+  console.log('tree', nodeTree)
 
-  const d = {
-    ccVup: 'cc\\.vup',
-    ccVdown: 'cc\\.vdown|talpu|pn',
-    baPn: 'ba\\.pn',
-    baDown: 'ba\\.vdown',
-    ccRem: 'cc\\.rem',
-    ccKw: 'cc\\.kw',
-    baVup: 'ba\\.vup',
-    baRem: 'ba\\.rem',
-    baKw: 'ba\\.kw',
-    baTalpu: 'ba\\.talpu',
-    lvItem: 'lv\\.itme|rem|fs',
-    timeLimit: 'act\\.timeLimit',
-  }
-
-  const colorTemp = [
-    ['FF6237', ['baDown', 'ccVdown', 'baPn']],
-    ['0098DC', ['ccVup', 'baVup']],
-    ['F49800', ['ccRem', 'baRem', 'baTalpu']],
-    ['00B0FF', ['ccKw', 'baKw']],
-    ['049cb8', ['lvItem']],
-    ['ff5500', ['timeLimit']],
-  ]
-
-  const findColor = (k) => {
-    const [color] = colorTemp.find(
-      ([color, list]) =>
-        !!list.find((e) => {
-          const reg = new RegExp(d[e] || '')
-          return reg.test(k)
-        })
-    ) || ['FF6237']
-    return '#' + color
-  }
-  if (!reg1.test(desc) && !reg2.test(desc)) return desc
-
-  let matchType = '',
-    matchValueBegin,
-    matchValue = '',
-    matchTagBegin,
-    matchTagStartBegin,
-    matchTagEndBegin
-  const matchTypeGroup = []
-  const matchValueGroup = []
-  const matchTagGroup = []
-  const tagMap = {
-    '@': 'span',
-    $: 'u',
-  }
-
-  desc = desc.split('').reduce((res, cur) => {
-    // tag 标签开始
-    if (cur === '<') {
-      if (matchValue) {
-        matchValueGroup.push(matchValue + '')
-        matchValue = ''
-      }
-
-      matchTagBegin = true
-      return res
-    }
-
-    if (matchTagBegin) {
-      matchValueBegin = false
-      if (cur === '@' || cur === '$') {
-        matchTagGroup.push(cur)
-        matchTagStartBegin = true
-      } else if (cur === '/') {
-        matchTagEndBegin = true
-      } else {
-        matchValueBegin = true
-        matchValue += '<' + cur
-      }
-
-      matchTagBegin = false
-      return res
-    }
-
-    // 标签结束
-    if (cur === '>') {
-      if (matchTagStartBegin) {
-        matchTagStartBegin = false
-        matchTypeGroup.push(matchType)
-        matchType = ''
-      } else if (matchTagEndBegin) {
-        matchTagEndBegin = false
-
-        const tag = tagMap[matchTagGroup.pop()]
-
-        let temp = `<${tag} style="color:${findColor(
-          matchTypeGroup.pop()
-        )};font-style: normal;">${matchValueGroup.pop()}</${tag}>`
-        if (matchValueGroup.length) {
-          matchValue = matchValueGroup.pop() + temp
-        } else {
-          res += temp
-          matchValue = ''
-        }
-      } else {
-        matchValue += '>'
-      }
-
-      if (matchTypeGroup.length) {
-        matchValueBegin = true
-      } else {
-        res += matchValue
-        matchValueBegin = false
-      }
-      return res
-    }
-
-    // 标签头内容
-    if (matchTagStartBegin) {
-      matchType += cur
-      return res
-    }
-    // 标签尾内容
-    if (matchTagEndBegin) {
-      // 正常应该是进不来的
-      return res
-    }
-
-    // 标签内的内容
-    if (matchValueBegin) {
-      matchValue += cur
-      return res
-    }
-
-    // 标签外的内容
-    res += cur
-    return res
-  }, '')
-
-  desc = desc.replace(reg2, '<br />')
-
-  return desc
+  return nodeTree.toHtml()
 }
 
 const getClass_icon = (c) => {
@@ -321,6 +188,7 @@ const exSkill1 = new Set([
   'skchr_broca_2',
   'skchr_brownb_2',
   'skchr_rosmon_3',
+  'skchr_pasngr_2',
 ])
 const exSkill2 = new Map([
   ['skchr_angel_3', '据实测攻击间隔缩短效果翻倍'],

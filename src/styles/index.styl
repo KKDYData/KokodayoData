@@ -18,7 +18,7 @@ body {
   width: 100vw
   overflow-x: hidden
   position: relative
-  //针对ipad的点击放大禁用
+  // 针对ipad的点击放大禁用
   touch-action: manipulation
 }
 
@@ -34,7 +34,7 @@ body {
 
 #app {
   display: flex
-  min-height: calc(100vh + 70px) //防止#footer闪现
+  min-height: calc(100vh + 70px) // 防止#footer闪现
   flex-direction: column
 }
 
@@ -53,7 +53,7 @@ body {
   }
 }
 
-//! maybe delete
+// ! maybe delete
 .image-inner {
   width: 100%
   height: 100%
@@ -109,7 +109,7 @@ textarea {
   left: 175px !important
 }
 
-//echart
+// echart
 .chart-body div:first-of-type {
   z-index: 0
 }
@@ -126,13 +126,13 @@ textarea {
   padding: 0 10px
 }
 
-//? EnemyStatus el-tooltip
+// ? EnemyStatus el-tooltip
 .enemy-tooltip-item {
   width: 200px
 }
 
 .el-drawer__wrapper {
-  //? 让它能滚动
+  // ? 让它能滚动
   .el-drawer__body {
     overflow-y: scroll
     overflow-x: hidden
@@ -143,7 +143,7 @@ textarea {
   .el-drawer__header {
     outline: none
 
-    //? 好好的focus你个大头鬼？
+    // ? 好好的focus你个大头鬼？
     &>:first-child {
       &:focus {
         outline: none
@@ -177,5 +177,40 @@ textarea {
 
   .el-message-box {
     width: 360px !important
+  }
+}
+
+.rich-style {
+  &[class*=ba] {
+    text-decoration: underline
+    text-decoration-color: red
+    text-underline-position: under
+    color: #ff5500
+  }
+}
+
+.rich-color {
+  &[class*=down], &[class*=pn], &[class*=talpu] {
+    color: #FF6237
+  }
+
+  &[class*=vup] {
+    color: #0098DC
+  }
+
+  &[class*=rem] {
+    color: #F49800
+  }
+
+  &[class*=kw] {
+    color: #00B0FF
+  }
+
+  &[class*=lv] {
+    color: #049cb8
+  }
+
+  &[class*=act] {
+    color: #ff5500
   }
 }
