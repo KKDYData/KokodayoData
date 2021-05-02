@@ -10,10 +10,15 @@ const swPlugins = [
   new WorkboxPlugin.InjectManifest({
     swSrc: './src/sw.js',
     swDest: 'sw.js',
-    importWorkboxFrom: 'local'
-  })
+    exclude: [
+      /\.map$/,
+      /manifest$/,
+      /\.htaccess$/,
+      /service-worker\.js$/,
+      /sw\.js$/,
+    ],
+  }),
 ]
-
 
 module.exports = {
   entry: './src/main.js',
@@ -39,21 +44,20 @@ module.exports = {
             {
               plugins: [
                 {
-                  removeViewBox: false
-                }
-              ]
-            }
-          ]
-        ]
-      }
+                  removeViewBox: false,
+                },
+              ],
+            },
+          ],
+        ],
+      },
     }),
-    ...swPlugins
+    ...swPlugins,
   ],
   output: {
     path: path.resolve('build/dist'),
     filename: 'assets/js/[name].js',
     publicPath: '/',
-
   },
   module: {
     rules: [
@@ -65,43 +69,39 @@ module.exports = {
             options: {
               name: 'assets/images/[name].[ext]',
             },
-          }
-        ]
+          },
+        ],
       },
       {
         test: /\.m?js$/,
         use: {
           loader: 'babel-loader',
           options: {
-            cacheDirectory: true
+            cacheDirectory: true,
           },
         },
-        include: [
-          path.resolve(__dirname, '../src'),
-          /kkdy-somemap/
-        ]
+        include: [path.resolve(__dirname, '../src'), /kkdy-somemap/],
       },
       {
         test: /\.vue$/,
         loader: 'vue-loader',
         options: {
           loaders: {
-            js: 'babel-loader'
-          }
-        }
-
+            js: 'babel-loader',
+          },
+        },
       },
       {
         test: /\.tsx?$/,
-        loader: ['babel-loader', 'ts-loader']
-      }
-    ]
+        loader: ['babel-loader', 'ts-loader'],
+      },
+    ],
   },
   resolve: {
     extensions: ['.js', '.styl', '.vue', '.json'],
     alias: {
       '@': path.resolve(__dirname, '../src'),
-    }
+    },
   },
   externals: {
     spritejs: 'spritejs',

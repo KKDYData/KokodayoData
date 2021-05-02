@@ -2,30 +2,50 @@
   <div class="agent-card-container-wrapper">
     <el-card style=" margin-bottom: 20px; position: relative;">
       <div class="agent-card-container">
-        <char-cube class="agent-card-pic" :style="`--logo-link: url(${logo})`" :src="profile" />
+        <char-cube
+          class="agent-card-pic"
+          :style="`--logo-link: url(${logo})`"
+          :src="profile"
+        />
         <div class="agent-card-title-wrapper">
           <div class="title-first">
             <div>
               <span class="agent-card-title-name">
-                <span style="color: rgb(49, 49, 49);font-family:FZYaSong-H-GBK;">{{ data.name }}</span>
+                <span
+                  style="color: rgb(49, 49, 49);font-family:FZYaSong-H-GBK;"
+                  >{{ data.name }}</span
+                >
                 <span
                   style="font-size: 0.7em; color: rgb(150, 150, 150);font-weight: normal"
-                >{{ data.appellation }}</span>
+                  >{{ data.appellation }}</span
+                >
               </span>
             </div>
             <div>
               <div class="agent-card-title-class">
                 <div v-if="professionPic" class="agent-card-pro-pic">
-                  <div class="image-inner" :style="{backgroundImage: `url('${professionPic}')`}" />
+                  <div
+                    class="image-inner"
+                    :style="{ backgroundImage: `url('${professionPic}')` }"
+                  />
                 </div>
-                <span style="font-family:FZYaSong-H-GBK; margin-left: 3px">{{ profession }}</span>
+                <span style="font-family:FZYaSong-H-GBK; margin-left: 3px">{{
+                  profession
+                }}</span>
                 <div class="agent-card-star-pic">
-                  <div class="image-inner" :style="{backgroundImage: `url('${rarityPath}')`}" />
+                  <div
+                    class="image-inner"
+                    :style="{ backgroundImage: `url('${rarityPath}')` }"
+                  />
                 </div>
               </div>
               <div class="intro-2-wrapper">
                 <span v-if="!descArrary" class="intro-2" v-html="desc" />
-                <span v-else-if="desc.length > 1" class="intro-2" v-html="desc[phases]" />
+                <span
+                  v-else-if="desc.length > 1"
+                  class="intro-2"
+                  v-html="desc[phases]"
+                />
                 <span v-else class="intro-2" v-html="desc[0]" />
               </div>
             </div>
@@ -44,10 +64,18 @@
             <div class="agent-card-camp-en">
               <span>{{ team.teamKey.toUpperCase() }}</span>
             </div>
-            <div class="agent-card-camp-chinese" :style="`background-color: #${team.color}`">
+            <div
+              class="agent-card-camp-chinese"
+              :style="`background-color: #${team.color}`"
+            >
               <span
-                :style="`padding: 0 5px;color: ${team.color !== 'ffffff' ? '#fff' : 'rgb(136,136,136)'}`"
-              >{{ team.teamName }}</span>
+                :style="
+                  `padding: 0 5px;color: ${
+                    team.color !== 'ffffff' ? '#fff' : 'rgb(136,136,136)'
+                  }`
+                "
+                >{{ team.teamName }}</span
+              >
             </div>
           </div>
         </div>
@@ -56,15 +84,15 @@
         <el-tag
           v-for="tag in data.tagList"
           :key="tag"
-          :size="short ? 'mini' :'medium'"
+          :size="short ? 'mini' : 'medium'"
           effect="dark"
           type="info"
-        >{{ tag }}</el-tag>
+          >{{ tag }}</el-tag
+        >
       </div>
     </el-card>
   </div>
 </template>
-
 
 <script>
 import { Card, Tag } from 'element-ui'
@@ -77,7 +105,7 @@ import Team from './handbook_team_table.json'
 import {
   changeDesc,
   getDetailsProfilePath,
-  changeAttackSpeed
+  changeAttackSpeed,
 } from '../../utils'
 
 import { getClass_Chinese } from '../../utils/string'
@@ -86,19 +114,18 @@ import { path } from '../../utils/listVer'
 import charCube from '../Base/charCube'
 
 export default {
-
   components: {
-    charCube
+    charCube,
   },
   props: {
     data: {
       type: Object,
-      required: true
+      required: true,
     },
     phases: {
       type: Number,
-      required: true
-    }
+      required: true,
+    },
   },
   computed: {
     ...mapState(['short']),
@@ -137,11 +164,13 @@ export default {
           })
         }
         console.log(arr)
-        return arr.map(el => {
+        return arr.map((el) => {
           return changeAttackSpeed({
-            description: el.overrideDescripton ? el.overrideDescripton : this.data.description,
+            description: el.overrideDescripton
+              ? el.overrideDescripton
+              : this.data.description,
             blackboard: el.blackboard,
-            type: this.data.name
+            type: this.data.name,
           })
         })
       } else return ''
@@ -150,12 +179,15 @@ export default {
       return Array.isArray(this.desc)
     },
     logo() {
-      return this.data.nationId ? path + 'logo/logo_' + this.data.nationId + '.png' : ''
+      const { teamId, groupId, nationId } = this.data
+      const logo = teamId || groupId || nationId
+      console.log('logo', logo)
+      return logo ? path + 'logo/logo_' + logo + '.png' : ''
     },
     team() {
       return Team[this.data.team]
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -405,4 +437,3 @@ export default {
   }
 }
 </style>
-

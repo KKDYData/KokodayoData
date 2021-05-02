@@ -11,7 +11,7 @@
     "start": "webpack-dev-server --config config/webpack.dev.js",
     "dev": "webpack --config config/webpack.dev.js --profile --json > stats.json",
     "pub-b": "yarn build-beta && node script/publish.js test",
-    "pub-s": "yarn build-stable && node script/publish.js stable",
+    "pub-s": "yarn build-stable && node script/publish.js prod",
     "snyk-protect": "snyk protect",
     "prepare": "yarn run snyk-protect"
   },
@@ -19,8 +19,8 @@
     "@babel/plugin-transform-runtime": "^7.12.10",
     "@babel/runtime": "^7.12.5",
     "@babel/runtime-corejs2": "^7.12.5",
-    "@qcharts/core": "^0.2.33",
     "@popperjs/core": "^2.6.0",
+    "@qcharts/core": "^0.2.33",
     "@types/node-fetch": "^2.5.8",
     "@types/swiper": "^5.4.1",
     "@vue/babel-helper-vue-jsx-merge-props": "^1.2.1",
@@ -48,8 +48,8 @@
     "vue-meta": "^2.4.0",
     "vue-router": "^3.5.1",
     "vuex": "^3.6.0",
-    "workbox-range-requests": "^4.3.1",
-    "workbox-window": "^5.1.4"
+    "workbox-range-requests": "^6.1.5",
+    "workbox-window": "^6.1.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
@@ -93,7 +93,10 @@
     "webpack-cli": "^3.2.3",
     "webpack-dev-server": "^3.2.0",
     "webpack-merge": "^4.2.1",
-    "workbox-webpack-plugin": "^4.3.1"
+    "workbox-broadcast-update": "^6.1.5",
+    "workbox-cacheable-response": "^6.1.5",
+    "workbox-expiration": "^6.1.5",
+    "workbox-webpack-plugin": "^6.1.5"
   },
   "author": "odex_2100@outlook.com",
   "license": "ISC",

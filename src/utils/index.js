@@ -131,8 +131,9 @@ window.addEventListener(
   }, 500)
 )
 
-const getProfilePath = (name, row) => {
-  if (row) return getDetailsProfilePath(name)
+const getProfilePath = (name, raw) => {
+  if (raw) return getDetailsProfilePath(name)
+  // return `${path}char/portrait/${name}.png`
   return UA.ok
     ? `${path}char/portrait/${name}.png?x-oss-process=style/webp`
     : `${path}char/portrait/${name}.png`
