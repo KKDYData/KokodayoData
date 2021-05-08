@@ -4,7 +4,6 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "@kkdy/api": "1.0.0",
     "@kkdy/data": "^1.0.0",
     "@midwayjs/decorator": "^2.10.2",
     "@midwayjs/logger": "^2.8.13",
