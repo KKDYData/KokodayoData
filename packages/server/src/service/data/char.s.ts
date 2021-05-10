@@ -63,9 +63,9 @@ export class CharService {
     char.info = await this.infoService.getCharInfoByCharId(id)
 
     char.teamInfo = await Promise.all(
-      [data.teamId, data.groupId, data.nationId].map(id =>
-        this.teamInfoService.getTeamInfoById(id)
-      )
+      [data.teamId, data.groupId, data.nationId]
+        .filter(e => e)
+        .map(id => this.teamInfoService.getTeamInfoById(id))
     )
 
     try {

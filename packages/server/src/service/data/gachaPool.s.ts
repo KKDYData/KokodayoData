@@ -101,7 +101,19 @@ export class GachaPoolService {
   }
 
   async getByIds(ids: number[]) {
-    return this.model.findByIds(ids, { relations: ['relativeChars'] })
+    return this.model
+      .createQueryBuilder('pool')
+      .whereInIds(ids)
+      .innerJoin(
+        'pool.relativeChars',
+        'characterData',
+        'pool.id IN (:...ids)',
+        {
+          ids,
+        }
+      )
+      .select(['pool', 'characterData.name', 'characterData.charId'])
+      .getMany()
   }
 }
 
