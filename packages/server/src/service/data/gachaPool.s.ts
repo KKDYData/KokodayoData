@@ -100,7 +100,7 @@ export class GachaPoolService {
     await this.model.save(pool)
   }
 
-  async getByIds(ids: string[]) {
+  async getByIds(ids: number[]) {
     return this.model.findByIds(ids, { relations: ['relativeChars'] })
   }
 }

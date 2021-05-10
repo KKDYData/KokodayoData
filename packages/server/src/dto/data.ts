@@ -40,6 +40,6 @@ export class SimpleIdDTO {
 
 export class DataGetGachaPoolsByIdsDTO
   implements BodyType<GetGachaPoolListByIds> {
-  @Rule(RuleType.array().items(RuleType.string()).required())
-  ids: string[]
+  @Rule(RuleType.array().items(RuleType.number()).required())
+  ids: number[]
 }

@@ -35,7 +35,7 @@ export interface GetGachaPoolListByIds {
   method: 'post'
 
   data: {
-    ids: string[]
+    ids: number[]
   }
 
   response: (BaseEntityType<IGachaPoolInfo.IInfo> & {
