@@ -10,6 +10,7 @@ import {
   IActivityInfo,
   IStageInfo,
   IStageData,
+  IGachaPoolInfo,
 } from '@kkdy/data'
 import { ALL, Get, Query, Validate } from '@midwayjs/decorator'
 import { Body, Controller, Inject, Post, Provide } from '@midwayjs/decorator'
@@ -26,6 +27,11 @@ import { ApiUpdate } from '../interface'
 import { GetResType } from '../dto/utils'
 import { SimpleIdDTO } from '../dto/data'
 import { MapService } from '../service/data/map.s'
+import { GachaPoolService } from '../service/data/gachaPool.s'
+import {
+  UpdateGachaPoolByDateRangeDTO,
+  UpdateGachaPoolByNameDTO,
+} from '../dto/update'
 
 @Provide()
 @Controller('/update')
@@ -59,6 +65,9 @@ export class UpdateController {
 
   @Inject()
   mapServide: MapService
+
+  @Inject()
+  gachaPoolService: GachaPoolService
 
   @Post('/charword')
   async updateCharword(@Body(ALL) data: ICharWord.IWord) {
@@ -139,6 +148,35 @@ export class UpdateController {
   async updateActivity(@Body(ALL) data: IActivityInfo.IInfo) {
     await this.activityService.createOrUpdate(data.id, data)
     return true
+  }
+
+  @Post('/gachaPool')
+  async updateGachaPool(@Body(ALL) data: IGachaPoolInfo.IInfo) {
+    await this.gachaPoolService.createOrUpdate(data.gachaIndex, data)
+  }
+
+  @Post('/gachaPool/name')
+  @Validate()
+  async updateGachaPoolByName(@Body(ALL) data: UpdateGachaPoolByNameDTO) {
+    return this.gachaPoolService.updateByGachaPoolName(
+      data.name,
+      data.chars,
+      data.link
+    )
+  }
+
+  @Post('/gachaPool/dateRange')
+  @Validate()
+  async updateGachaPoolByDateRange(
+    @Body(ALL)
+    data: UpdateGachaPoolByDateRangeDTO
+  ) {
+    return this.gachaPoolService.updateByDateRange(
+      data.startDate,
+      data.endDate,
+      data.chars,
+      data.link
+    )
   }
 
   @Post('/map')

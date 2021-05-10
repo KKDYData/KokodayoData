@@ -1,4 +1,5 @@
-import { IActivityInfo, ITeamInfo } from '@kkdy/data'
+import { IActivityInfo, IChar, IGachaPoolInfo, ITeamInfo } from '@kkdy/data'
+import { BaseEntityType } from './utilsType'
 
 export interface GetCharacterList {
   path: '/data/list'
@@ -20,6 +21,26 @@ export interface GetActivityList {
   method: 'get'
 
   response: IActivityInfo.IInfo[]
+}
+
+export interface GetGachaPoolList {
+  path: '/data/gachaPools'
+  method: 'get'
+
+  response: IGachaPoolInfo.IInfo[]
+}
+
+export interface GetGachaPoolListByIds {
+  path: '/data/gachaPools/ids'
+  method: 'post'
+
+  data: {
+    ids: string[]
+  }
+
+  response: (BaseEntityType<IGachaPoolInfo.IInfo> & {
+    relativeChars: BaseEntityType<any>[] | null
+  })[]
 }
 
 export interface UpdateRelativeChar {

@@ -37,3 +37,30 @@ export interface GetChar {
     relativeChars: BaseEntityType<any>[] | null
   }
 }
+
+export interface UpdateGachaPoolByName {
+  path: '/gachaPool/name'
+  method: 'post'
+
+  data: {
+    name: string
+    chars?: string[]
+    link?: string
+  }
+
+  response: true
+}
+
+export interface UpdateGachaPoolByDateRange {
+  path: '/gachaPool/name'
+  method: 'post'
+
+  data: {
+    startDate: Date
+    endDate: Date
+    chars?: string[]
+    link?: string
+  }
+
+  response: true
+}

@@ -1,6 +1,7 @@
 import { request } from './instance'
 import { JsonResponse } from './response'
-import { IActivityInfo, ITeamInfo } from '@kkdy/data'
+import { IActivityInfo, IChar, IGachaPoolInfo, ITeamInfo } from '@kkdy/data'
+import { BaseEntityType } from './utilsType'
 
 export function GetCharacterList() {
   return request.get<
@@ -19,6 +20,18 @@ export function GetCharacterList() {
 }
 export function GetActivityList() {
   return request.get<JsonResponse<IActivityInfo.IInfo[]>>('/data/acts')
+}
+export function GetGachaPoolList() {
+  return request.get<JsonResponse<IGachaPoolInfo.IInfo[]>>('/data/gachaPools')
+}
+export function GetGachaPoolListByIds(data: { ids: string[] }) {
+  return request.post<
+    JsonResponse<
+      (BaseEntityType<IGachaPoolInfo.IInfo> & {
+        relativeChars: BaseEntityType<any>[] | null
+      })[]
+    >
+  >('/data/gachaPools/ids', data)
 }
 export function UpdateRelativeChar(data: {
   targetId: string

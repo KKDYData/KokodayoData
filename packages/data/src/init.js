@@ -22,7 +22,6 @@ if (skipPull) {
       'git clone https://github.com/Kengxxiao/ArknightsGameData.git',
       {
         execPath: __dirname,
-        shell: 'powershell',
         stdout: 'inherit',
       }
     )
@@ -31,7 +30,6 @@ if (skipPull) {
 
     execa.commandSync('git pull', {
       execPath: __dirname,
-      shell: 'powershell',
       stdout: 'inherit',
     })
   }
@@ -125,6 +123,9 @@ build('Data', stageMap, 'StageData')
 
 const activityTable = require('../ArknightsGameData/zh_CN/gamedata/excel/activity_table.json')
 build('Info', activityTable.basicInfo, 'ActivityInfo')
+
+const gachaTable = require('../ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
+build('Info', gachaTable.gachaPoolClient, 'GachaPoolInfo')
 
 fs.writeFileSync(
   path.resolve(__dirname, '../lib/index.ts'),

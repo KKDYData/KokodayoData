@@ -14,6 +14,7 @@ import { BaseEntity } from './base.e'
 import { BuildingSkill } from './BuildingSkill.e'
 import { CharInfo } from './CharInfo.e'
 import { Charword } from './Charword.e'
+import { GachaPool } from './GachaPool.e'
 import { Skill } from './Skill.e'
 import { TeamInfo } from './TeamInfo.e'
 
@@ -80,4 +81,7 @@ export class CharacterData extends BaseEntity {
 
   @ManyToMany(() => TeamInfo, info => info.chars)
   teamInfo: TeamInfo[]
+
+  @ManyToMany(() => GachaPool, pool => pool.relativeChars)
+  relativeGachPools: GachaPool[]
 }

@@ -7,6 +7,7 @@ import {
   Provide,
   Validate,
   ALL,
+  Query,
 } from '@midwayjs/decorator'
 import { GetResType } from '../dto/utils'
 import { ApiData } from '../interface'
@@ -16,7 +17,9 @@ import {
   DataUpdateRelativeDTO,
   DataUpdateCharCharComment,
   DataUpdateCharSkillComment,
+  DataGetGachaPoolsByIdsDTO,
 } from '../dto/data'
+import { GachaPoolService } from '../service/data/gachaPool.s'
 
 @Provide()
 @Controller('/data')
@@ -27,6 +30,9 @@ export class DataController {
   @Inject()
   activityService: GameActivityService
 
+  @Inject()
+  gachaPoolService: GachaPoolService
+
   @Get('/list')
   async listCharacters(): Promise<GetResType<ApiData.GetCharacterList>> {
     return this.charService.listCharacters()
@@ -35,6 +41,19 @@ export class DataController {
   @Get('/acts')
   async listActivity(): Promise<GetResType<ApiData.GetActivityList>> {
     return this.activityService.listGameActivity()
+  }
+
+  @Get('/gachaPools')
+  async listGachaPool(): Promise<GetResType<ApiData.GetGachaPoolList>> {
+    return this.gachaPoolService.listGachaPool()
+  }
+
+  @Post('/gachaPools/ids')
+  @Validate()
+  async getGachaPool(
+    @Body(ALL) data: DataGetGachaPoolsByIdsDTO
+  ): Promise<GetResType<ApiData.GetGachaPoolListByIds>> {
+    return this.gachaPoolService.getByIds(data.ids)
   }
 
   @Post('/char/relative')

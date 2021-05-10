@@ -18,33 +18,44 @@ const ins = Axios.create({
   // await updateTeamInfo()
   // await updateChars()
   // await updateAct()
+  // await updateGachaPool()
+  const res = await ins.post('/update/gachaPool/dateRange', {
+    startDate: new Date('2021/02/05 16:00:00'),
+    endDate: new Date('2021/02/19 03:59:59'),
+    chars: ['夕', '乌有'],
+  })
+  const list = await ins.post('/data/gachaPools/ids', {
+    ids: [32, 90, 91],
+  })
+  console.log(list.data)
   // const { data }
-  const stages = require('./ArknightsGameData/zh_CN/gamedata/excel/stage_table.json')
-    .stages
-  const map = require('./ArknightsGameData/zh_CN/gamedata/levels/obt/main/level_main_00-01.json')
+  return
+  // const stages = require('./ArknightsGameData/zh_CN/gamedata/excel/stage_table.json')
+  //   .stages
+  // const map = require('./ArknightsGameData/zh_CN/gamedata/levels/obt/main/level_main_00-01.json')
 
-  // return
-  const res = await ins.post('/update/map', {
-    // id: 'char_1001_amiya2',
-    levelId: 'level_main_00-01',
-    data: map,
-  })
+  // // return
+  // const res = await ins.post('/update/map', {
+  //   // id: 'char_1001_amiya2',
+  //   levelId: 'level_main_00-01',
+  //   data: map,
+  // })
 
-  console.log(res.data)
+  // console.log(res.data)
 
-  const infoRes = await ins.post('/update/map/info', {
-    levelId: 'level_main_00-01',
-    info: stages['main_00-01'],
-  })
-  console.log('res.info', infoRes.data)
+  // const infoRes = await ins.post('/update/map/info', {
+  //   levelId: 'level_main_00-01',
+  //   info: stages['main_00-01'],
+  // })
+  // console.log('res.info', infoRes.data)
 
-  // const res
-  const { data: mapData } = await ins.get('/update/map', {
-    params: { levelId: 'level_main_00-01' },
-  })
-  // const { data } = await getChar('char_1001_amiya2')
-  // const { data: skills } = await getSkill('skcom_atk_up[1]')
-  console.log('data', mapData)
+  // // const res
+  // const { data: mapData } = await ins.get('/update/map', {
+  //   params: { levelId: 'level_main_00-01' },
+  // })
+  // // const { data } = await getChar('char_1001_amiya2')
+  // // const { data: skills } = await getSkill('skcom_atk_up[1]')
+  // console.log('data', mapData)
   // console.log('skill', skills)
 })()
 
@@ -222,6 +233,16 @@ async function updateAct() {
   const q = Queue.of(12)
   Object.values(acts).forEach((data) => {
     q.pushTask(() => ins.post('/update/activity', data))
+  })
+  await q.allDone()
+}
+
+async function updateGachaPool() {
+  const acts = require('./ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
+    .gachaPoolClient
+  const q = Queue.of(12)
+  Object.values(acts).forEach((data) => {
+    q.pushTask(() => ins.post('/update/gachaPool', data))
   })
   await q.allDone()
 }

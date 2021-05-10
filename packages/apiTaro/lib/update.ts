@@ -34,3 +34,18 @@ export function GetChar(params: { id: string }) {
     }>
   >('/update/char', { params })
 }
+export function UpdateGachaPoolByName(data: {
+  name: string
+  chars?: string[]
+  link?: string
+}) {
+  return request.post<JsonResponse<true>>('/gachaPool/name', data)
+}
+export function UpdateGachaPoolByDateRange(data: {
+  startDate: Date
+  endDate: Date
+  chars?: string[]
+  link?: string
+}) {
+  return request.post<JsonResponse<true>>('/gachaPool/name', data)
+}

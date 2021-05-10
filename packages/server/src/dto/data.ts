@@ -1,5 +1,6 @@
 import { Rule, RuleType } from '@midwayjs/decorator'
 import {
+  GetGachaPoolListByIds,
   UpdateCharCharComment,
   UpdateCharSkillComment,
   UpdateRelativeChar,
@@ -35,4 +36,10 @@ export class DataUpdateCharCharComment
 export class SimpleIdDTO {
   @Rule(RuleType.string().required())
   id: string
+}
+
+export class DataGetGachaPoolsByIdsDTO
+  implements BodyType<GetGachaPoolListByIds> {
+  @Rule(RuleType.array().items(RuleType.string()).required())
+  ids: string[]
 }
