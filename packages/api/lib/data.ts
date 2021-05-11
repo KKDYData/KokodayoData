@@ -24,7 +24,7 @@ export function GetActivityList() {
 export function GetGachaPoolList() {
   return request.get<JsonResponse<IGachaPoolInfo.IInfo[]>>('/data/gachaPools')
 }
-export function GetGachaPoolListByIds(data: { ids: string[] }) {
+export function GetGachaPoolListByIds(data: { ids: number[] }) {
   return request.post<
     JsonResponse<
       (BaseEntityType<IGachaPoolInfo.IInfo> & {

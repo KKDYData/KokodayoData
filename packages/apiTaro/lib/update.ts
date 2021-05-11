@@ -39,7 +39,7 @@ export function UpdateGachaPoolByName(data: {
   chars?: string[]
   link?: string
 }) {
-  return request.post<JsonResponse<true>>('/gachaPool/name', data)
+  return request.post<JsonResponse<true>>('/update/gachaPool/name', data)
 }
 export function UpdateGachaPoolByDateRange(data: {
   startDate: Date
@@ -47,5 +47,5 @@ export function UpdateGachaPoolByDateRange(data: {
   chars?: string[]
   link?: string
 }) {
-  return request.post<JsonResponse<true>>('/gachaPool/name', data)
+  return request.post<JsonResponse<true>>('/update/gachaPool/name', data)
 }

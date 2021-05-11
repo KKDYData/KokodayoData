@@ -39,7 +39,7 @@ export interface GetChar {
 }
 
 export interface UpdateGachaPoolByName {
-  path: '/gachaPool/name'
+  path: '/update/gachaPool/name'
   method: 'post'
 
   data: {
@@ -52,7 +52,7 @@ export interface UpdateGachaPoolByName {
 }
 
 export interface UpdateGachaPoolByDateRange {
-  path: '/gachaPool/name'
+  path: '/update/gachaPool/name'
   method: 'post'
 
   data: {
