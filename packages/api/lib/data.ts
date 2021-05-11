@@ -1,6 +1,13 @@
 import { request } from './instance'
 import { JsonResponse } from './response'
-import { IActivityInfo, IChar, IGachaPoolInfo, ITeamInfo } from '@kkdy/data'
+import {
+  IActivityInfo,
+  IChar,
+  IEnemyData,
+  IEnemyInfo,
+  IGachaPoolInfo,
+  ITeamInfo,
+} from '@kkdy/data'
 import { BaseEntityType } from './utilsType'
 
 export function GetCharacterList() {
@@ -57,4 +64,15 @@ export function UpdateCharCharComment(data: { comment: string; id: string }) {
 }
 export function UpdateEnemyComments(data: { comments: string[]; id: string }) {
   return request.post<JsonResponse<true>>('/data/enemy/comments', data)
+}
+export function ListEnemies() {
+  return request.get<
+    JsonResponse<
+      (BaseEntityType<IEnemyData.IData> & {
+        info: IEnemyInfo.IInfo
+        enemyId: string
+        comments: null | string[]
+      })[]
+    >
+  >('/data/enemy/list')
 }

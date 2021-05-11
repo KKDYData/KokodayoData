@@ -1,4 +1,11 @@
-import { IActivityInfo, IChar, IGachaPoolInfo, ITeamInfo } from '@kkdy/data'
+import {
+  IActivityInfo,
+  IChar,
+  IEnemyData,
+  IEnemyInfo,
+  IGachaPoolInfo,
+  ITeamInfo,
+} from '@kkdy/data'
 import { BaseEntityType } from './utilsType'
 
 export interface GetCharacterList {
@@ -89,4 +96,15 @@ export interface UpdateEnemyComments {
   }
 
   response: true
+}
+
+export interface ListEnemies {
+  path: '/data/enemy/list'
+  method: 'get'
+
+  response: (BaseEntityType<IEnemyData.IData> & {
+    info: IEnemyInfo.IInfo
+    enemyId: string
+    comments: null | string[]
+  })[]
 }

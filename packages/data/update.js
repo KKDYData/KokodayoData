@@ -1,6 +1,7 @@
 const { default: Axios } = require('axios')
 const { Queue } = require('@kkdy/queue')
 const fs = require('fs')
+const path = require('path')
 
 const ins = Axios.create({
   timeout: 1000000,
@@ -27,14 +28,18 @@ const ins = Axios.create({
   //   chars: ['夕', '乌有'],
   // })
   // await updateEnemies()
-  await updateMap()
-  const res = await ins.get('/data/enemy', {
+  // await updateMap()
+  // await updateActMap()
+  const res = await ins.get('/data/enemy/list', {
     // id: 'char_1001_amiya2',
     params: {
-      id: 'enemy_1000_gopro',
+      id: 'enemy_1058_traink',
     },
   })
-  console.log(res.data, res.data.result.stageEnemies)
+  console.log(
+    res.data
+    // res.data.result.stageEnemies.map((e) => e.stageLevelId)
+  )
 
   // const { data }
   return
@@ -296,6 +301,30 @@ async function updateMap() {
           data: map,
         })
         .then((e) => console.log('push', levelId))
+    })
+  })
+  await q.allDone()
+}
+
+async function updateActMap() {
+  const root = './ArknightsGameData/zh_CN/gamedata/levels/activities/'
+  const lvs = fs.readdirSync(root)
+  const q = Queue.of(12)
+  lvs.forEach((subp) => {
+    const son = fs.readdirSync(path.join(root, subp))
+    son.forEach((p) => {
+      const levelId = p.slice(0, -5)
+      q.pushTask(() => {
+        const map = JSON.parse(
+          fs.readFileSync(path.join(root, subp, `/${levelId}.json`))
+        )
+        return ins
+          .post('/update/map', {
+            levelId,
+            data: map,
+          })
+          .then((e) => console.log('push', levelId))
+      })
     })
   })
   await q.allDone()

@@ -43,4 +43,8 @@ export class EnemyService extends BaseService {
     target.comments = comments
     await this.model.save(target)
   }
+
+  async listEnemies() {
+    return this.model.find()
+  }
 }

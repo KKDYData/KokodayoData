@@ -90,6 +90,11 @@ export class DataController {
     return this.enemyService.getByEnemyId(query.id)
   }
 
+  @Get('/enemy/list')
+  async listEnemies(): Promise<GetResType<ApiData.ListEnemies>> {
+    return this.enemyService.listEnemies()
+  }
+
   @Post('/enemy/comments')
   @Validate()
   async updateEnemyComments(@Body(ALL) data: DataUpdateEnemyCommentsDTO) {
