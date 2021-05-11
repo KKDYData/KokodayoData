@@ -15,4 +15,8 @@ export const ErrorMap = {
     code: -404,
     msg: '找不到数据',
   },
+  ERROR_ID: {
+    code: -405,
+    msg: 'ID 错误',
+  },
 } as const

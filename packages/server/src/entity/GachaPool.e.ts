@@ -8,11 +8,6 @@ import { CharacterData } from './Character.e'
 @EntityModel()
 export class GachaPool extends BaseEntity {
   @Column({
-    comment: '卡池序号，可以重复，例如1',
-  })
-  gachaIndex: number
-
-  @Column({
     comment: '卡池 id',
     unique: true,
   })

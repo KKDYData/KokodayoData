@@ -43,12 +43,6 @@ export class CharacterData extends BaseEntity {
   installId: string
 
   @Column({
-    comment: '技能备注',
-    default: '',
-  })
-  skillComment: string
-
-  @Column({
     comment: '角色备注',
     default: '',
   })

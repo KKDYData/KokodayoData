@@ -1,7 +1,9 @@
 import { BaseEntity } from './base.e'
-import { Column, OneToOne, Index, JoinColumn } from 'typeorm'
+import { Column, Index, JoinTable, OneToMany } from 'typeorm'
 import { EntityModel } from '@midwayjs/orm'
-import { IEnemyData } from '@kkdy/data'
+import { IEnemyData, IEnemyInfo } from '@kkdy/data'
+import { StageData } from './StageData.e'
+import { StageEnemy } from './StageEnemy.e'
 
 @EntityModel()
 export class Enemy extends BaseEntity {
@@ -16,4 +18,20 @@ export class Enemy extends BaseEntity {
     type: 'json',
   })
   data: IEnemyData.IData
+
+  @Column({
+    comment: 'info',
+    nullable: true,
+    type: 'json',
+  })
+  info: IEnemyInfo.IInfo
+
+  @OneToMany(() => StageEnemy, stage => stage.enemy)
+  stageEnemies: StageData[]
+
+  @Column({
+    comment: '评论、注释',
+    type: 'json',
+  })
+  comments: string[]
 }

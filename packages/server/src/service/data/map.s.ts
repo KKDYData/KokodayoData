@@ -1,4 +1,4 @@
-import { Provide } from '@midwayjs/decorator'
+import { Inject, Provide } from '@midwayjs/decorator'
 import { InjectEntityModel } from '@midwayjs/orm'
 import { StageInfo } from '../../entity/StageInfo.e'
 import { BaseService } from '../base.s'
@@ -8,6 +8,8 @@ import { IStageData, IStageInfo } from '@kkdy/data'
 import { getOrCreateModel } from '../../utils/entity'
 import { BaseError } from '../../utils/error'
 import { ErrorMap } from '../../utils/ErrorMap'
+import { EnemyService } from './enemy.s'
+import { StageEnemyService } from './stageEnemy.s'
 
 @Provide()
 export class MapService extends BaseService {
@@ -16,6 +18,12 @@ export class MapService extends BaseService {
 
   @InjectEntityModel(StageData)
   dataModel: Repository<StageData>
+
+  @Inject()
+  enemyService: EnemyService
+
+  @Inject()
+  stageEnemyService: StageEnemyService
 
   async couData(levelId: string, data: IStageData.IData) {
     const dataModel = await getOrCreateModel(this.dataModel, {
@@ -27,6 +35,28 @@ export class MapService extends BaseService {
     dataModel.levelId = levelId
     dataModel.data = data
     await this.dataModel.save(dataModel)
+
+    // dataModel.stageEnemies
+    await Promise.all(
+      data.enemyDbRefs
+        .filter(e => e.useDb)
+        .map(async e => {
+          const enemyModel = await this.enemyService.getByEnemyId(e.id)
+          if (!enemyModel)
+            throw BaseError.create({ code: -405, msg: `找不到${e.id}这个敌人` })
+          const stageEnemy = await this.stageEnemyService.getOrCreate(
+            data.levelId,
+            enemyModel.enemyId
+          )
+          stageEnemy.enemy = enemyModel
+          stageEnemy.stage = dataModel
+          stageEnemy.level = e.level
+          stageEnemy.data = e.overwrittenData
+          stageEnemy.stageLevelId = levelId
+          stageEnemy.enemyRawId = e.id
+          return this.stageEnemyService.save(stageEnemy)
+        })
+    )
 
     this.coreLogger.info('save map ' + levelId)
   }

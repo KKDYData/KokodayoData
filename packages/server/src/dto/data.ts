@@ -15,10 +15,10 @@ export class DataUpdateRelativeDTO implements BodyType<UpdateRelativeChar> {
   targetId: string
 }
 
-export class DataUpdateCharSkillComment
+export class DataUpdateCharSkillCommentsDTO
   implements BodyType<UpdateCharSkillComment> {
-  @Rule(RuleType.string().required())
-  comment: string
+  @Rule(RuleType.array().items(RuleType.string()).required())
+  comments: string[]
 
   @Rule(RuleType.string().required())
   id: string
@@ -42,4 +42,13 @@ export class DataGetGachaPoolsByIdsDTO
   implements BodyType<GetGachaPoolListByIds> {
   @Rule(RuleType.array().items(RuleType.number()).required())
   ids: number[]
+}
+
+export class DataUpdateEnemyCommentsDTO
+  implements BodyType<UpdateCharSkillComment> {
+  @Rule(RuleType.array().items(RuleType.string()).required())
+  comments: string[]
+
+  @Rule(RuleType.string().required())
+  id: string
 }

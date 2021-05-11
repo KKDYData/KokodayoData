@@ -11,6 +11,8 @@ import {
   IStageInfo,
   IStageData,
   IGachaPoolInfo,
+  IEnemyInfo,
+  IEnemyData,
 } from '@kkdy/data'
 import { ALL, Get, Query, Validate } from '@midwayjs/decorator'
 import { Body, Controller, Inject, Post, Provide } from '@midwayjs/decorator'
@@ -32,6 +34,7 @@ import {
   UpdateGachaPoolByDateRangeDTO,
   UpdateGachaPoolByNameDTO,
 } from '../dto/update'
+import { EnemyService } from '../service/data/enemy.s'
 
 @Provide()
 @Controller('/update')
@@ -65,6 +68,9 @@ export class UpdateController {
 
   @Inject()
   mapServide: MapService
+
+  @Inject()
+  enemyService: EnemyService
 
   @Inject()
   gachaPoolService: GachaPoolService
@@ -152,7 +158,7 @@ export class UpdateController {
 
   @Post('/gachaPool')
   async updateGachaPool(@Body(ALL) data: IGachaPoolInfo.IInfo) {
-    await this.gachaPoolService.createOrUpdate(data.gachaIndex, data)
+    await this.gachaPoolService.createOrUpdate(data.gachaPoolId, data)
   }
 
   @Post('/gachaPool/name')
@@ -198,5 +204,12 @@ export class UpdateController {
   @Get('/map')
   async getMapById(@Query(ALL) query: { levelId: string }) {
     return await this.mapServide.getMapByLevelId(query.levelId)
+  }
+
+  @Post('/enemy')
+  async updateEnemy(
+    @Body(ALL) data: { data: IEnemyData.IData; info: IEnemyInfo.IInfo }
+  ) {
+    return await this.enemyService.createOrUpdate(data.data, data.info)
   }
 }

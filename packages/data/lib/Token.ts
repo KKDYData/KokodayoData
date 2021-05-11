@@ -23,7 +23,7 @@ export interface IData {
     maxPotentialLevel:          number;
     rarity:                     number;
     profession:                 Profession;
-    trait:                      null;
+    trait:                      Trait | null;
     phases:                     Phase[];
     skills:                     Skill[];
     talents:                    Talent[] | null;
@@ -112,10 +112,10 @@ export interface LevelUpCostCond {
 }
 
 export interface Talent {
-    candidates: Candidate[] | null;
+    candidates: TalentCandidate[] | null;
 }
 
-export interface Candidate {
+export interface TalentCandidate {
     unlockCondition:       UnlockCond;
     requiredPotentialRank: number;
     prefabKey:             string;
@@ -128,4 +128,17 @@ export interface Candidate {
 export interface Blackboard {
     key:   string;
     value: number;
+}
+
+export interface Trait {
+    candidates: TraitCandidate[];
+}
+
+export interface TraitCandidate {
+    unlockCondition:       UnlockCond;
+    requiredPotentialRank: number;
+    blackboard:            Blackboard[];
+    overrideDescripton:    string;
+    prefabKey:             string;
+    rangeId:               null;
 }

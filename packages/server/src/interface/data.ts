@@ -27,7 +27,7 @@ export interface GetGachaPoolList {
   path: '/data/gachaPools'
   method: 'get'
 
-  response: IGachaPoolInfo.IInfo[]
+  response: { data: IGachaPoolInfo.IInfo; id: number }[]
 }
 
 export interface GetGachaPoolListByIds {
@@ -60,7 +60,7 @@ export interface UpdateCharSkillComment {
   method: 'post'
 
   data: {
-    comment: string
+    comments: string[]
     id: string
   }
 
@@ -73,6 +73,18 @@ export interface UpdateCharCharComment {
 
   data: {
     comment: string
+    id: string
+  }
+
+  response: true
+}
+
+export interface UpdateEnemyComments {
+  path: '/data/enemy/comments'
+  method: 'post'
+
+  data: {
+    comments: string[]
     id: string
   }
 

@@ -2,7 +2,7 @@
 // Do not modify this file!!!!!!!!!
 // 使用 quicktype 生成的类型，不要乱改！
 
-export interface IData {
+export interface IInfo {
     enemyId:              string;
     enemyIndex:           string;
     enemyTags:            EnemyTag[] | null;
@@ -55,6 +55,7 @@ export enum EnemyRace {
     宿主 = "宿主",
     感染生物 = "感染生物",
     无人机 = "无人机",
+    海怪 = "海怪",
     萨卡兹 = "萨卡兹",
 }
 
@@ -63,7 +64,9 @@ export enum EnemyTag {
     Infection = "infection",
     Mutant = "mutant",
     Sarkaz = "sarkaz",
+    Seamonster = "seamonster",
 }
 
 export interface OverrideKillCntInfos {
+    camp_r_03?: number;
 }

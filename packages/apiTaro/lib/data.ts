@@ -22,7 +22,14 @@ export function GetActivityList() {
   return request.get<JsonResponse<IActivityInfo.IInfo[]>>('/data/acts')
 }
 export function GetGachaPoolList() {
-  return request.get<JsonResponse<IGachaPoolInfo.IInfo[]>>('/data/gachaPools')
+  return request.get<
+    JsonResponse<
+      {
+        data: IGachaPoolInfo.IInfo
+        id: number
+      }[]
+    >
+  >('/data/gachaPools')
 }
 export function GetGachaPoolListByIds(data: { ids: number[] }) {
   return request.post<
@@ -39,9 +46,15 @@ export function UpdateRelativeChar(data: {
 }) {
   return request.post<JsonResponse<true>>('/data/char/relative', data)
 }
-export function UpdateCharSkillComment(data: { comment: string; id: string }) {
+export function UpdateCharSkillComment(data: {
+  comments: string[]
+  id: string
+}) {
   return request.post<JsonResponse<true>>('/data/char/skillComment', data)
 }
 export function UpdateCharCharComment(data: { comment: string; id: string }) {
   return request.post<JsonResponse<true>>('/data/char/charComment', data)
+}
+export function UpdateEnemyComments(data: { comments: string[]; id: string }) {
+  return request.post<JsonResponse<true>>('/data/enemy/comments', data)
 }

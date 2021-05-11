@@ -7,7 +7,7 @@ import { GachaPool } from '../../entity/GachaPool.e'
 import { BaseError } from '../../utils/error'
 import { ErrorMap } from '../../utils/ErrorMap'
 import { CharacterData } from '../../entity/Character.e'
-import { dissoc } from 'ramda'
+import { dissoc, pick } from 'ramda'
 
 @Provide()
 export class GachaPoolService {
@@ -17,22 +17,21 @@ export class GachaPoolService {
   @InjectEntityModel(CharacterData)
   charModel: Repository<CharacterData>
 
-  async createOrUpdate(index: number, data: IGachaPoolInfo.IInfo) {
+  async createOrUpdate(gachaPoolId: string, data: IGachaPoolInfo.IInfo) {
     const info = await getOrCreateModel(this.model, {
-      where: { gachaIndex: index },
+      where: { gachaPoolId },
     })
 
-    info.gachaIndex = index
+    info.gachaPoolId = gachaPoolId
     info.gachaRuleType = data.gachaRuleType
     info.data = data
-    info.gachaPoolId = data.gachaPoolId
 
     return this.model.save(info)
   }
 
   async listGachaPool() {
     const acts = await this.model.find()
-    return acts.map(a => a.data)
+    return acts.map(a => pick(['id', 'data'], a))
   }
 
   async updateByGachaPoolName(
@@ -40,7 +39,7 @@ export class GachaPoolService {
     relativeChars: string[] = [],
     link?: string
   ) {
-    const pool = await this.model.findOne({
+    const pools = await this.model.find({
       where: {
         data: Raw(
           columnAlias =>
@@ -50,9 +49,11 @@ export class GachaPoolService {
       },
     })
 
-    if (!pool) throw BaseError.create(ErrorMap['NO_DATA'])
+    if (!pools.length) throw BaseError.create(ErrorMap['NO_DATA'])
 
-    await this.updateCharsAndLink(pool, relativeChars, link)
+    await Promise.all(
+      pools.map(p => this.updateCharsAndLink(p, relativeChars, link))
+    )
   }
 
   async updateByDateRange(
@@ -103,7 +104,6 @@ export class GachaPoolService {
   async getByIds(ids: number[]) {
     return this.model
       .createQueryBuilder('pool')
-      .whereInIds(ids)
       .innerJoin(
         'pool.relativeChars',
         'characterData',

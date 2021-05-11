@@ -22,7 +22,6 @@ export function GetChar(params: { id: string }) {
       name: string
       patchInfo?: IPatchInfo.IInfo | null
       installId: string
-      skillComment: string
       charComment: string
       data: IChar.IData
       words: BaseEntityType<ICharWord.IWord>[] | null

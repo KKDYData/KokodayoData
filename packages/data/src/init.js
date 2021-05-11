@@ -79,11 +79,11 @@ build('Info', Object.values(patchDetailInfoList), 'PatchInfo')
 
 const enemy_handbook_table = require('../ArknightsGameData/zh_CN/gamedata/excel/enemy_handbook_table.json')
 const EXTRA_ENEMY_KEYS = ['enemy_3001_upeopl']
-const extraEnemy = enemy_handbook_table.enemy_3001_upeopl
-const normalEnemy = omit(EXTRA_ENEMY_KEYS, enemy_handbook_table)
+// const extraEnemy = enemy_handbook_table.enemy_3001_upeopl
+const normalEnemy = Object.values(enemy_handbook_table) //omit(EXTRA_ENEMY_KEYS, enemy_handbook_table)
 
-build('Data', normalEnemy, 'EnemyInfo')
-build('Data', extraEnemy, 'ExEnemyInfo')
+build('Info', normalEnemy, 'EnemyInfo')
+// build('Data', extraEnemy, 'ExEnemyInfo')
 
 const range_table = require('../ArknightsGameData/zh_CN/gamedata/excel/range_table.json')
 build('Data', range_table, 'Range')
