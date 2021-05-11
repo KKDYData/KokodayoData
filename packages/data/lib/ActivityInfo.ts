@@ -16,4 +16,11 @@ export interface IInfo {
     templateShopId: null | string;
     medalGroupId:   null | string;
     isReplicate:    boolean;
+    displayType?:   DisplayType;
+}
+
+export enum DisplayType {
+    Branchline = "BRANCHLINE",
+    Ministory = "MINISTORY",
+    Sidestory = "SIDESTORY",
 }

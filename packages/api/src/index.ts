@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { extractApi } from '@kkdy/build'
+import { extractApi, copyFile } from '@kkdy/build'
 import _ from 'lodash'
 import rimraf from 'rimraf'
 
@@ -10,9 +10,11 @@ const sourceDir = path.resolve(__dirname, '../../server/src/interface')
 const dirs = fs.readdirSync(sourceDir, { withFileTypes: true })
 const exportList: string[] = []
 
+const UtilsTypeRegex = /Type\.ts$/
+
 const convert = (d: fs.Dirent[], parent: string) => {
   d.forEach((p) => {
-    if (p.isFile()) {
+    if (p.isFile() && !UtilsTypeRegex.test(p.name)) {
       const result = extractApi(path.join(parent, p.name))
       fs.writeFileSync(path.join(outDir, p.name), result)
 
@@ -29,12 +31,14 @@ rimraf(outDir, () => {
   fs.writeFileSync(
     path.resolve(__dirname, '../lib/index.ts'),
     exportList
-      .map((name) => `export * as Api${_.upperFirst(name)} from './${name}'`)
+      .map((name) => `export * as ${_.upperFirst(name)} from './${name}'`)
       .join('\n') + `\nexport * from './instance'`
   )
 
   const responseType = 'response.ts'
   const request = 'instance.ts'
+  const utils = 'utils.ts'
+
   fs.copyFileSync(
     path.join(__dirname, './', responseType),
     path.join(outDir, responseType)
@@ -43,4 +47,6 @@ rimraf(outDir, () => {
     path.join(__dirname, './', request),
     path.join(outDir, request)
   )
+
+  copyFile(path.join(sourceDir), outDir, UtilsTypeRegex)
 })

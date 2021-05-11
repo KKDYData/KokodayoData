@@ -17,10 +17,14 @@ export class Skill extends BaseEntity {
   })
   data: ISkill.ISkill
 
-  @ManyToMany(
-    () => CharacterData,
-    char => char.skills
-  )
+  @ManyToMany(() => CharacterData, char => char.skills)
   @JoinTable()
   chars: CharacterData[]
+
+  @Column({
+    comment: '技能备注',
+    type: 'json',
+    nullable: true,
+  })
+  comments: string[]
 }

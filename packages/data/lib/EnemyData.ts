@@ -40,6 +40,7 @@ export interface Attributes {
     maxDeployCount:   LifePointReduce;
     massLevel:        LifePointReduce;
     baseForceLevel:   LifePointReduce;
+    tauntLevel:       LifePointReduce;
     stunImmune:       Immune;
     silenceImmune:    Immune;
     sleepImmune:      Immune;
