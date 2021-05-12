@@ -1,11 +1,11 @@
 <template>
-  <div class="flex flex-row max-h-screen">
+  <div class="flex flex-row h-screen">
     <side-menu class="flex-grow-0 w-auto" />
-    <div class="flex-grow">
-      <div class="text-center">
+    <div class="page-content">
+      <!-- <div class="text-center">
         <ElImage alt="Vue logo" class="inline-block" src="assets/logo.png" />
-      </div>
-      <app-navigation />
+      </div> -->
+      <!-- <app-navigation /> -->
       <router-view />
     </div>
   </div>
@@ -14,14 +14,14 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
 import SideMenu from '/@/components/SideMenu.vue'
-import AppNavigation from '/@/components/AppNavigation.vue'
-import { ElImage } from 'element-plus'
+// import AppNavigation from '/@/components/AppNavigation.vue'
+// import { ElImage } from 'element-plus'
 export default defineComponent({
   name: 'App',
   components: {
     SideMenu,
-    AppNavigation,
-    ElImage,
+    // AppNavigation,
+    // ElImage,
   },
 })
 </script>
@@ -34,5 +34,14 @@ export default defineComponent({
   text-align: center;
   color: #2c3e50;
   /* margin-top: 60px; */
+}
+
+.page-content {
+  @apply flex-grow overflow-auto whitespace-nowrap;
+  max-width: calc(100% - 9rem);
+}
+
+.page-content::-webkit-scrollbar {
+  display: none;
 }
 </style>
