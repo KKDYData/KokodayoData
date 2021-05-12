@@ -28,9 +28,8 @@ const { instance: ins } = require('./instance')
   //   chars: ['夕', '乌有'],
   // })
   // await updateEnemies()
-  // await updateMap()
-  // await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/activities/')
-  // await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/obt/')
+  await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/activities/')
+  await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/obt/')
   await updateStageInfo()
   // return
   const res = await ins.get('/data/map/list', {

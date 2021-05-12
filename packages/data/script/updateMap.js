@@ -39,14 +39,18 @@ async function updateStageInfo() {
     .filter((e) => e.levelId)
     .forEach((info) => {
       const levelId = info.levelId.split('/').pop()
-      q.pushTask(() =>
-        instance
-          .post('/update/map/info', {
-            levelId,
-            info,
-          })
-          .then(() => console.log('done ', levelId))
-          .catch((err) => console.log('err', levelId, err))
+      q.pushTask(
+        () =>
+          instance
+            .post('/update/map/info', {
+              levelId,
+              info,
+            })
+            .then((res) => {
+              if (res.data.code) console.error(res.data)
+              else console.log('done ', levelId)
+            })
+        // .catch((err) => console.error('err', levelId, err))
       )
     })
 

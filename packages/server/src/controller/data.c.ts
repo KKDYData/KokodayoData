@@ -106,7 +106,7 @@ export class DataController {
   }
 
   @Get('/map/list')
-  async listMap() {
+  async listMap(): Promise<GetResType<ApiData.ListMap>> {
     return this.mapService.listMap()
   }
 }

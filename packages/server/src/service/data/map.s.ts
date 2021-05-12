@@ -10,6 +10,9 @@ import { BaseError } from '../../utils/error'
 import { ErrorMap } from '../../utils/ErrorMap'
 import { EnemyService } from './enemy.s'
 import { StageEnemyService } from './stageEnemy.s'
+import { RedisService } from '../redis.s'
+
+const MAP_LIST = 'MAP_LIST'
 
 @Provide()
 export class MapService extends BaseService {
@@ -24,6 +27,9 @@ export class MapService extends BaseService {
 
   @Inject()
   stageEnemyService: StageEnemyService
+
+  @Inject()
+  redisService: RedisService
 
   async couData(levelId: string, data: IStageData.IData) {
     const dataModel = await getOrCreateModel(this.dataModel, {
@@ -85,6 +91,7 @@ export class MapService extends BaseService {
     dataModel.stageInfos.push(res)
 
     await this.dataModel.save(dataModel)
+    console.log('link ', levelId)
   }
 
   async getMapByLevelId(levelId: string) {
@@ -97,13 +104,41 @@ export class MapService extends BaseService {
   }
 
   async listMap() {
+    let list: {
+      levelId: string
+      label: string
+      stageType: IStageInfo.StageType
+      hardStagedId: string
+    }[] = JSON.parse(await this.redisService.getJson(MAP_LIST, '.')) ?? []
+
+    if (list.length) {
+      return list
+    }
+
     const stages = await this.dataModel.find({ relations: ['stageInfos'] })
-    return stages.map(stage => {
+    list = stages.map(stage => {
       const { levelId, stageInfos, data } = stage
+      let label = ''
+      let stageType: IStageInfo.StageType
+      let hardStagedId = ''
+
+      if (stageInfos.length) {
+        const info = stageInfos[0]
+        label = info.data.code
+        stageType = info.data.stageType
+        hardStagedId = info.data.hardStagedId
+      }
+
       return {
         levelId,
-        stageInfos,
+        label,
+        stageType,
+        hardStagedId,
       }
     })
+
+    this.redisService.setJson(MAP_LIST, '.', list, 60 * 5)
+
+    return list
   }
 }
