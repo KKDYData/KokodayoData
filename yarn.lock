@@ -19540,9 +19540,9 @@ postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.2, postcss@^7.0.21
     supports-color "^6.1.0"
 
 postcss@^8.1.10, postcss@^8.1.6, postcss@^8.2.1, postcss@^8.2.4:
-  version "8.2.9"
-  resolved "https://registry.npm.taobao.org/postcss/download/postcss-8.2.9.tgz?cache=0&sync_timestamp=1617137095020&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fpostcss%2Fdownload%2Fpostcss-8.2.9.tgz#fd95ff37b5cee55c409b3fdd237296ab4096fba3"
-  integrity sha1-/ZX/N7XO5VxAmz/dI3KWq0CW+6M=
+  version "8.2.10"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-8.2.10.tgz#ca7a042aa8aff494b334d0ff3e9e77079f6f702b"
+  integrity sha512-b/h7CPV7QEdrqIxtAf2j31U5ef05uBDuvoXv6L51Q4rcS1jdlXAVKJv+atCFdUXYl9dyTHGyoMzIepwowRJjFw==
   dependencies:
     colorette "^1.2.2"
     nanoid "^3.1.22"
