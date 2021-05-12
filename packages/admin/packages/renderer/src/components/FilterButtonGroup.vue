@@ -1,5 +1,6 @@
 <template>
   <div class="filter-row">
+    <!-- 左侧标签组名称按钮（切换清空显示） -->
     <ElButton
       :class="
         condtype === 'token'
@@ -22,6 +23,8 @@
       </transition>
       {{ grouptitle }}
     </ElButton>
+
+    <!-- 右侧按钮组 -->
     <ElButton
       v-for="(tag, index) in taglist"
       :key="tag.value"
@@ -50,16 +53,19 @@ if (instance.props.condtype === 'token') {
   instance.props.tokenflag = false
 }
 
-ref: haschoose =
-  instance.props.condtype === 'token'
-    ? true
-    : (instance.props.taglist.some((tag) => {
-        return tag.checked === true
-      }) as boolean)
+ref: haschoose = false
+if (instance.props.condtype === 'token') {
+  haschoose = true
+} else {
+  let taglist = instance.props.taglist as []
+  haschoose = taglist.some((tag: { checked: boolean }) => {
+    return tag.checked === true
+  })
+}
 
 function titleClick() {
   instance.emit('cancel-all', {
-    type: instance.props.condtype,
+    type: instance.props.condtype as string,
   })
 }
 
@@ -68,7 +74,7 @@ function tagClick(index: number) {
     instance.emit('switch-token')
   } else {
     instance.emit('change-one', {
-      type: instance.props.condtype,
+      type: instance.props.condtype as string,
       index: index,
     })
   }
@@ -88,7 +94,7 @@ watch(
 )
 </script>
 
-<style lang="css" scoped>
+<style lang="postcss" scoped>
 /* fade动画 */
 .fade-enter-active,
 .fade-leave-active {

@@ -1,7 +1,7 @@
 <template>
   <div class="char-list-container">
     <!-- 条件筛选 -->
-    <div class="w-full flex flex-col">
+    <div class="char-list-filter w-full flex flex-col">
       <FilterButtonGroup
         condtype="token"
         grouptitle="切换"
@@ -24,25 +24,36 @@
         @change-one="changeOne"
         @cancel-all="cancelAll"
       />
+      <FilterSelect
+        condtype="actvs"
+        grouptitle="关联活动"
+        :select-value="chsActv"
+        :option-list="allCond.actvs"
+        :tokenflag="tokenflag"
+        @change-select="changeSelect"
+        @clear-select="clearSelect"
+      />
     </div>
     <!-- 干员列表 -->
-    <div
-      v-for="agent in filteredList"
-      :key="agent.charId"
-      class="char-list-column"
-    >
-      <div class="char-list-column-item">
-        <router-link :to="'/chardetail/' + agent.charId">
-          <div class="w-28 h-28 bg-gray-300" :alt="agent.name" />
-        </router-link>
-        <div
-          class="char-name box-border absolute pl-2.5 text-white whitespace-nowrap overflow-ellipsis z-10"
-        >
+    <div class="char-list-content">
+      <div
+        v-for="agent in filteredList"
+        :key="agent.charId"
+        class="char-list-column"
+      >
+        <div class="char-list-column-item">
+          <router-link :to="'/chardetail/' + agent.charId">
+            <div class="w-28 h-28 bg-gray-300" :alt="agent.name" />
+          </router-link>
           <div
-            class="char-name-zh"
-            :style="agent.name.split('').length > 6 ? 'font-size: 14px;' : ''"
+            class="char-name box-border absolute pl-2.5 text-white whitespace-nowrap overflow-ellipsis z-10"
           >
-            {{ agent.name }}
+            <div
+              class="char-name-zh"
+              :style="agent.name.split('').length > 6 ? 'font-size: 14px;' : ''"
+            >
+              {{ agent.name }}
+            </div>
           </div>
         </div>
       </div>
@@ -53,9 +64,13 @@
 <script lang="ts" setup>
 import { reactive } from 'vue'
 import FilterButtonGroup from '../components/FilterButtonGroup.vue'
+import FilterSelect from '../components/FilterSelect.vue'
 import { tokenSwitch, professionList, rarityList } from '../utils/constants'
-// import { testlist } from '../utils/charlist'
-import { ApiData } from '@kkdy/api'
+// import { ApiData } from '@kkdy/api'
+
+// 测试数据
+import { testCharList } from '../utils/charlist'
+import { testActList } from '../utils/actlist'
 
 // 所有可选过滤条件组
 const allCond = reactive({
@@ -68,12 +83,24 @@ const allCond = reactive({
   }), // 干员召唤物切换
   stars: rarityList, // 星级标签组
   profs: professionList, // 职业标签组
+  actvs: testActList.map((act) => {
+    // 活动列表
+    let newVal: { [k: string]: any } = act
+    newVal.chsed = false
+    return newVal
+  }),
 })
 
+// allCond获取字段属性专用方法
+function getCond<T extends keyof typeof allCond>(key: T) {
+  return allCond[key]
+}
+
 // ref: loading = false
-ref: charList = []
-ref: filteredList = []
-ref: tokenflag = false
+ref: charList = [] as { [k: string]: any }[] // 干员列表
+ref: filteredList = [] as { [k: string]: any }[] // 筛选后的干员列表
+ref: tokenflag = false // 是否选择“召唤物”类别
+ref: chsActv = '' // 选择的活动
 
 // loading = true
 // ApiData.GetCharacterList()
@@ -91,8 +118,7 @@ ref: tokenflag = false
 //   })
 
 // 本地测试数据
-// charList = testlist
-// filteredList = testlist
+charList = testCharList
 
 refilterList()
 
@@ -102,7 +128,6 @@ function switchType() {
     .filter((el) => el.checked === true)
     .map((tag) => tag.value)
   tokenflag = switchflag[0] === 'TOKEN'
-  console.log('tokenflag', tokenflag)
 
   refilterList(switchflag[0])
 }
@@ -144,19 +169,50 @@ function cancelAll(tag: { type: string }) {
   refilterList()
 }
 
+function changeSelect(tag: { type: string; id: string }) {
+  switch (tag.type) {
+    case 'actvs':
+      let index = allCond.actvs.findIndex((actv) => {
+        return actv.id === tag.id
+      })
+      if (index >= 0) {
+        allCond.actvs[index].chsed = true
+        chsActv = allCond.actvs[index].name
+      }
+      break
+  }
+
+  refilterList()
+}
+
+function clearSelect(tag: { type: string }) {
+  switch (tag.type) {
+    case 'actvs':
+      let index = allCond.actvs.findIndex((actv) => {
+        return actv.chsed === true
+      })
+      allCond.actvs[index].chsed = false
+      chsActv = ''
+      break
+  }
+
+  refilterList()
+}
+
 function refilterList(switchflag = 'CHAR') {
   filteredList = charList
 
   let filterChar = switchflag === 'CHAR'
 
   if (filterChar) {
+    // 切换为 干员 -> CHAR
     const filters = Object.keys(allCond)
-      .filter((cond) => cond !== 'token')
-      .map((el) => [
-        el,
-        allCond[el]
-          .filter((tag) => tag.checked === true)
-          .map((tag) => tag.value),
+      .filter((type) => type !== 'token')
+      .map((type) => [
+        type,
+        getCond(type as 'stars' | 'profs' | 'actvs')
+          .filter((cond) => cond.checked === true || cond.chsed === true)
+          .map((cond) => cond.value || cond.id),
       ])
 
     for (let data of filters) {
@@ -170,11 +226,13 @@ function refilterList(switchflag = 'CHAR') {
             !(char.profession === 'TOKEN' || char.profession === 'TRAP') && // 召唤物的 profession 为 TOKEN 或 TRAP
             (group.includes(char.profession) ||
               group.includes(char.rarity + 1 + ''))
+            /* || group.includes(char.) 补充关联卡池id字段*/
           )
         })
       }
     }
   } else {
+    // 切换为 召唤物 -> TOKEN | TRAP
     filteredList = filteredList.filter(
       (char) => char.profession === 'TOKEN' || char.profession === 'TRAP'
     )
@@ -189,6 +247,10 @@ function refilterList(switchflag = 'CHAR') {
   margin: 20px auto 50px;
   width: 100%;
   justify-content: space-around;
+}
+
+.char-list-content {
+  @apply w-full h-auto p-1 flex flex-wrap;
 }
 
 .char-list-column {
