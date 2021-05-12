@@ -4,13 +4,13 @@
     <InfoSubtitle class="char-detail-subtitle" :title="subtitle[0]" />
     <div class="input-wrapper">
       <div class="w-full text-left">
-        请输入对干员 {{ testInfo.name }} 的评价：
+        请输入对干员 {{ testCharInfo.name }} 的评价：
       </div>
       <ElInput
         v-model="charComment"
         type="textarea"
         :autosize="{ minRows: 2, maxRows: 4 }"
-        :placeholder="`请输入对干员 ${testInfo.name} 的评价`"
+        :placeholder="`请输入对干员 ${testCharInfo.name} 的评价`"
       />
     </div>
 
@@ -63,41 +63,44 @@
 </template>
 
 <script lang="ts" setup>
-// import { reactive, provide } from 'vue'
 import InfoSubtitle from '../components/InfoSubtitle.vue'
 import RelateActivitySelect from '../components/RelateActivitySelect.vue'
 // import RelateGachaSelect from '../components/RelateGachaSelect.vue'
 import { ElInput, ElSelect, ElOption, ElButton } from 'element-plus'
 import { isEmptyStr } from '../utils/utils'
 import { ApiData } from '@kkdy/api'
+import { IActivityInfo } from '@kkdy/data'
+
+// 测试数据
+import { testCharInfo } from '../utils/charinfo'
+import { testActList } from '../utils/actlist'
 
 const subtitle = ['干员评价', '技能备注', '关联活动', '关联卡池']
 
 // ref: loading = false
-// ref: charInfo = reactive(testInfo) // testInfo 是陈的测试数据
-// provide('charInfo', charInfo) // 向子组件传递干员数据
-ref: charComment = '' as string
-ref: skillComment = '' as string
+ref: charComment = ''
+ref: skillComment = ''
 ref: chsSkill = 0
-ref: skillOption = testInfo.skills.map((val) => {
+const skillOption = testCharInfo.skills.map((val) => {
   return val.levels[0].name
 })
-ref: actList = []
+ref: actList = [] as IActivityInfo.IInfo[]
 ref: chsAct = ''
-// ref: gachaList = Array()
+// ref: gachaList = [] as []
 // ref: chsGacha = ''
 
-ApiData.GetActivityList()
-  .then((res) => {
-    const resData = res.data
-    console.log(resData)
-    if (resData.ok) {
-      actList = resData.result
-    }
-  })
-  .catch((error) => {
-    console.log(error)
-  })
+// ApiData.GetActivityList()
+//   .then((res) => {
+//     const resData = res.data
+//     console.log(resData)
+//     if (resData.ok) {
+//       actList = resData.result
+//     }
+//   })
+//   .catch((error) => {
+//     console.log(error)
+//   })
+actList = testActList
 
 function submitAll() {
   let submitArr = []
@@ -107,7 +110,7 @@ function submitAll() {
       new Promise(function (resolve, reject) {
         let para = {
           comment: charComment,
-          id: testInfo.potentialItemId,
+          id: testCharInfo.potentialItemId,
         }
         console.log('charComment para', para)
         ApiData.UpdateCharCharComment(para)
@@ -126,7 +129,7 @@ function submitAll() {
       new Promise(function (resolve, reject) {
         let para = {
           comment: skillComment,
-          id: testInfo.skills[chsSkill].skillId,
+          id: testCharInfo.skills[chsSkill].skillId,
         }
         console.log('skillComment para', para)
         ApiData.UpdateCharSkillComment(para)
@@ -144,7 +147,7 @@ function submitAll() {
     submitArr.push(
       new Promise(function (resolve, reject) {
         let para = {
-          targetId: testInfo.potentialItemId,
+          targetId: testCharInfo.potentialItemId,
           relativeId: chsAct,
         }
         console.log('RelativeAct para', para)

@@ -26,17 +26,11 @@
 <script lang="ts" setup>
 import { defineProps } from 'vue'
 import { ElSelect, ElOption } from 'element-plus'
-
-interface Activity {
-  id: number
-  name: string
-  startTime: number
-  endTime: number
-}
+import { IActivityInfo } from '@kkdy/data'
 
 defineProps<{
   selectValue: string
-  optionList: Activity[]
+  optionList: Array<IActivityInfo.IInfo>
 }>()
 </script>
 
