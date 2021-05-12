@@ -23,6 +23,7 @@ import {
 import { GachaPoolService } from '../service/data/gachaPool.s'
 import { EnemyService } from '../service/data/enemy.s'
 import { SkillService } from '../service/data/skill.s'
+import { MapService } from '../service/data/map.s'
 
 @Provide()
 @Controller('/data')
@@ -41,6 +42,9 @@ export class DataController {
 
   @Inject()
   skillService: SkillService
+
+  @Inject()
+  mapService: MapService
 
   @Get('/list')
   async listCharacters(): Promise<GetResType<ApiData.GetCharacterList>> {
@@ -99,5 +103,10 @@ export class DataController {
   @Validate()
   async updateEnemyComments(@Body(ALL) data: DataUpdateEnemyCommentsDTO) {
     return this.enemyService.updateEnemyComments(data.id, data.comments)
+  }
+
+  @Get('/map/list')
+  async listMap() {
+    return this.mapService.listMap()
   }
 }

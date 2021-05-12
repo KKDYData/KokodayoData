@@ -73,6 +73,13 @@ export class MapService extends BaseService {
     infoModel.data = info
     const res = await this.infoModel.save(infoModel)
 
+    if (!dataModel) {
+      throw BaseError.create({
+        code: -406,
+        msg: `找不到地图，请确认levelId:${levelId}`,
+      })
+    }
+
     // 放置数据
     if (!dataModel.stageInfos) dataModel.stageInfos = []
     dataModel.stageInfos.push(res)
@@ -87,5 +94,16 @@ export class MapService extends BaseService {
     })
     if (!data) throw BaseError.create(ErrorMap['NO_DATA'])
     return data
+  }
+
+  async listMap() {
+    const stages = await this.dataModel.find({ relations: ['stageInfos'] })
+    return stages.map(stage => {
+      const { levelId, stageInfos, data } = stage
+      return {
+        levelId,
+        stageInfos,
+      }
+    })
   }
 }

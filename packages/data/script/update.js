@@ -1,13 +1,13 @@
+//@ts-check
+
 const { default: Axios } = require('axios')
 const { Queue } = require('@kkdy/queue')
 const fs = require('fs')
 const path = require('path')
+const { updateEnemies } = require('./updateEnemies')
+const { updateActMap, updateStageInfo } = require('./updateMap')
 
-const ins = Axios.create({
-  timeout: 1000000,
-  // baseURL: 'https://test.api.kokodayo.fun',
-  baseURL: 'http://127.0.0.1:7001',
-})
+const { instance: ins } = require('./instance')
 
 ;(async () => {
   // const { data } = await ins.get('/')
@@ -29,17 +29,20 @@ const ins = Axios.create({
   // })
   // await updateEnemies()
   // await updateMap()
-  // await updateActMap()
-  const res = await ins.get('/data/enemy/list', {
+  // await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/activities/')
+  // await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/obt/')
+  await updateStageInfo()
+  // return
+  const res = await ins.get('/data/map/list', {
     // id: 'char_1001_amiya2',
     params: {
       id: 'enemy_1058_traink',
     },
   })
-  console.log(
-    res.data
-    // res.data.result.stageEnemies.map((e) => e.stageLevelId)
-  )
+  res.data.result.map((s) => console.log(s.levelId, s.stageInfos.length))
+  // console.log(
+  //   // res.data.result.stageEnemies.map((e) => e.stageLevelId)
+  // )
 
   // const { data }
   return
@@ -71,7 +74,7 @@ const ins = Axios.create({
 })()
 
 async function updateBuildingBuff() {
-  const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
+  const hook_book = require('../ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
     .buffs
 
   const list = Object.values(hook_book)
@@ -89,7 +92,7 @@ async function updateBuildingBuff() {
 }
 
 async function updateBuildingSkill() {
-  const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
+  const hook_book = require('../ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
     .chars
 
   const list = Object.values(hook_book)
@@ -107,7 +110,7 @@ async function updateBuildingSkill() {
 }
 
 function updateCharInfo() {
-  const hook_book = require('./ArknightsGameData/zh_CN/gamedata/excel/handbook_info_table.json')
+  const hook_book = require('../ArknightsGameData/zh_CN/gamedata/excel/handbook_info_table.json')
     .handbookDict
 
   const list = Object.values(hook_book)
@@ -125,7 +128,7 @@ function updateCharInfo() {
 }
 
 function updateSkill() {
-  const skill_table = require('./ArknightsGameData/zh_CN/gamedata/excel/skill_table.json')
+  const skill_table = require('../ArknightsGameData/zh_CN/gamedata/excel/skill_table.json')
   const list = Object.values(skill_table)
 
   const queue = Queue.of(144)
@@ -140,7 +143,7 @@ function updateSkill() {
 }
 
 function updateCharword() {
-  const charword_table = require('./ArknightsGameData/zh_CN/gamedata/excel/charword_table.json')
+  const charword_table = require('../ArknightsGameData/zh_CN/gamedata/excel/charword_table.json')
   const list = Object.values(charword_table)
 
   const queue = Queue.of(144)
@@ -170,7 +173,7 @@ function updateCharword() {
 }
 
 function updateTeamInfo() {
-  const team_table = require('./ArknightsGameData/zh_CN/gamedata/excel/handbook_team_table.json')
+  const team_table = require('../ArknightsGameData/zh_CN/gamedata/excel/handbook_team_table.json')
   const list = Object.values(team_table)
 
   const queue = Queue.of(512)
@@ -185,8 +188,8 @@ function updateTeamInfo() {
 }
 
 function updateChars() {
-  const character_table = require('./ArknightsGameData/zh_CN/gamedata/excel/character_table.json')
-  const patchChars = require('./ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
+  const character_table = require('../ArknightsGameData/zh_CN/gamedata/excel/character_table.json')
+  const patchChars = require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
     .patchChars
   const list = [
     ...Object.entries(character_table),
@@ -222,15 +225,17 @@ function getChar(charId) {
 }
 
 function updatePatchInfo() {
-  return new Promise((resolve) => {
-    const patchInfos = require('./ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
+  return new Promise(async (resolve) => {
+    const patchInfos = require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
       .patchDetailInfoList
     const list = Object.entries(patchInfos)
 
-    const queue = Queue.of(512, { finalTask: resolve })
+    const queue = Queue.of(512)
     list.forEach(([charId, data], i) => {
       queue.pushTask(() => ins.post('/update/patchInfo', { charId, data }))
     })
+
+    await queue.allDone()
   })
 }
 
@@ -239,7 +244,7 @@ function getSkill(skillId) {
 }
 
 async function updateAct() {
-  const acts = require('./ArknightsGameData/zh_CN/gamedata/excel/activity_table.json')
+  const acts = require('../ArknightsGameData/zh_CN/gamedata/excel/activity_table.json')
     .basicInfo
   const q = Queue.of(12)
   Object.values(acts).forEach((data) => {
@@ -249,7 +254,7 @@ async function updateAct() {
 }
 
 async function updateGachaPool() {
-  const acts = require('./ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
+  const acts = require('../ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
     .gachaPoolClient
   const q = Queue.of(12)
   Object.values(acts).forEach((data) => {
@@ -258,74 +263,6 @@ async function updateGachaPool() {
         .post('/update/gachaPool', data)
         .then((e) => console.log('push', data.gachaIndex))
     )
-  })
-  await q.allDone()
-}
-
-async function updateEnemies() {
-  const enemyInfo = require('./ArknightsGameData/zh_CN/gamedata/excel/enemy_handbook_table.json')
-  const enemies = require('./ArknightsGameData/zh_CN/gamedata/levels/enemydata/enemy_database.json')
-    .enemies
-  const q = Queue.of(12)
-  Object.values(enemies).forEach((data) => {
-    q.pushTask(() => {
-      const info = enemyInfo[data.Key]
-      if (!info) {
-        console.error('key', data.Key)
-        return Promise.resolve()
-      }
-      return ins
-        .post('/update/enemy', { data, info })
-        .then((e) => console.log('push', info.name))
-    })
-  })
-  await q.allDone()
-}
-
-async function updateMap() {
-  const lvs = fs.readdirSync(
-    './ArknightsGameData/zh_CN/gamedata/levels/obt/main/'
-  )
-  const q = Queue.of(12)
-  lvs.forEach((p) => {
-    const levelId = p.slice(0, -5)
-    q.pushTask(() => {
-      const map = JSON.parse(
-        fs.readFileSync(
-          `./ArknightsGameData/zh_CN/gamedata/levels/obt/main/${levelId}.json`
-        )
-      )
-      return ins
-        .post('/update/map', {
-          levelId,
-          data: map,
-        })
-        .then((e) => console.log('push', levelId))
-    })
-  })
-  await q.allDone()
-}
-
-async function updateActMap() {
-  const root = './ArknightsGameData/zh_CN/gamedata/levels/activities/'
-  const lvs = fs.readdirSync(root)
-  const q = Queue.of(12)
-  lvs.forEach((subp) => {
-    const son = fs.readdirSync(path.join(root, subp))
-    son.forEach((p) => {
-      const levelId = p.slice(0, -5)
-      q.pushTask(() => {
-        const map = JSON.parse(
-          fs.readFileSync(path.join(root, subp, `/${levelId}.json`))
-        )
-        return ins
-          .post('/update/map', {
-            levelId,
-            data: map,
-          })
-          .then((e) => console.log('push', levelId))
-      })
-    })
   })
   await q.allDone()
 }
