@@ -1,5 +1,6 @@
 import { Api, Assets } from '@/Api'
 import { change } from './utils'
+import { Data } from '@kkdy/api'
 
 const namespaced = true
 
@@ -87,8 +88,11 @@ const actions = {
     )
 
     if (state.info?.level?.stage) {
-      const data = await Assets.getStageList(state.info.level.stage.key)
-      const arr = change(data).sort(naturalSort)
+      // const data = await Assets.getStageList(state.info.level.stage.key)
+      const { data } = await Data.ListMap()
+      if (!data.ok) return
+      commit('setMapList', data.result, { root: true })
+      const arr = change(data.result).sort(naturalSort)
       commit('setStageTree', arr, { root: true })
     }
   },

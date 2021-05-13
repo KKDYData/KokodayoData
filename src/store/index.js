@@ -12,10 +12,10 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   modules: {
     enemy: EnemyPanel,
-    Base
+    Base,
   },
   state: {
-    listVer: new Date(),//(+charListVer.toString().split('').reverse().join('')).toLocaleString(),
+    listVer: new Date(), //(+charListVer.toString().split('').reverse().join('')).toLocaleString(),
     pageVer: '',
     enemyVer: '',
     apperMapVer: '',
@@ -25,13 +25,14 @@ export default new Vuex.Store({
     extraSkins: null,
     short: UA.isMoblie || window.innerWidth < 600 ? true : false,
     screenWidth: document.body.clientWidth,
+    mapList: '',
   },
   getters: {
-    itemDropList: (state) => id => {
+    itemDropList: (state) => (id) => {
       if (state.dropList) {
         return state.dropList[id]
       }
-    }
+    },
   },
   mutations: {
     ...mutations,
@@ -59,9 +60,12 @@ export default new Vuex.Store({
     setStageTree: (state, tree) => {
       state.stageTree = tree
     },
+    setMapList: (state, tree) => {
+      state.mapList = tree
+    },
     setExtraSkins: (state, list) => {
       state.extraSkins = list
     },
   },
-  ...actions
+  ...actions,
 })

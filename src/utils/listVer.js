@@ -6,12 +6,18 @@
 // const stageListVer = stage //6076469254751
 // const enemyListVer = enemy //1574138107584
 // const buildingListVer = building
+
+console.log('xx', process.env.PRODUCTION, import.meta.env.VITE_API_URL)
 const api = '/api/arknights/'
-const dataPath = process.env.PRODUCTION === 'beta' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'
-  : 'https://andata.somedata.top'
+const dataPath =
+  process.env.PRODUCTION === 'beta'
+    ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com'
+    : 'https://andata.somedata.top'
 const target = 'data-2020'
-const path = process.env.NODE_ENV === 'development' ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'
-  : 'https://andata.somedata.top/dataX/'
+const path =
+  process.env.NODE_ENV === 'development'
+    ? 'https://arknights-data.oss-cn-beijing.aliyuncs.com/dataX/'
+    : 'https://andata.somedata.top/dataX/'
 
 export {
   // charListVer,
@@ -21,5 +27,5 @@ export {
   dataPath,
   api,
   path,
-  target
+  target,
 }
