@@ -22,7 +22,6 @@ if (skipPull) {
       'git clone https://github.com/Kengxxiao/ArknightsGameData.git',
       {
         execPath: __dirname,
-        shell: 'powershell',
         stdout: 'inherit',
       }
     )
@@ -31,7 +30,6 @@ if (skipPull) {
 
     execa.commandSync('git pull', {
       execPath: __dirname,
-      shell: 'powershell',
       stdout: 'inherit',
     })
   }
@@ -81,11 +79,11 @@ build('Info', Object.values(patchDetailInfoList), 'PatchInfo')
 
 const enemy_handbook_table = require('../ArknightsGameData/zh_CN/gamedata/excel/enemy_handbook_table.json')
 const EXTRA_ENEMY_KEYS = ['enemy_3001_upeopl']
-const extraEnemy = enemy_handbook_table.enemy_3001_upeopl
-const normalEnemy = omit(EXTRA_ENEMY_KEYS, enemy_handbook_table)
+// const extraEnemy = enemy_handbook_table.enemy_3001_upeopl
+const normalEnemy = Object.values(enemy_handbook_table) //omit(EXTRA_ENEMY_KEYS, enemy_handbook_table)
 
-build('Data', normalEnemy, 'EnemyInfo')
-build('Data', extraEnemy, 'ExEnemyInfo')
+build('Info', normalEnemy, 'EnemyInfo')
+// build('Data', extraEnemy, 'ExEnemyInfo')
 
 const range_table = require('../ArknightsGameData/zh_CN/gamedata/excel/range_table.json')
 build('Data', range_table, 'Range')
@@ -125,6 +123,9 @@ build('Data', stageMap, 'StageData')
 
 const activityTable = require('../ArknightsGameData/zh_CN/gamedata/excel/activity_table.json')
 build('Info', activityTable.basicInfo, 'ActivityInfo')
+
+const gachaTable = require('../ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
+build('Info', gachaTable.gachaPoolClient, 'GachaPoolInfo')
 
 fs.writeFileSync(
   path.resolve(__dirname, '../lib/index.ts'),

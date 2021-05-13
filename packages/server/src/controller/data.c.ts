@@ -7,16 +7,22 @@ import {
   Provide,
   Validate,
   ALL,
+  Query,
 } from '@midwayjs/decorator'
 import { GetResType } from '../dto/utils'
 import { ApiData } from '../interface'
-import { ActivityService } from '../service/data/activity.s'
+import { GameActivityService } from '../service/data/activity.s'
 import { CharService } from '../service/data/char.s'
 import {
   DataUpdateRelativeDTO,
   DataUpdateCharCharComment,
-  DataUpdateCharSkillComment,
+  DataUpdateCharSkillCommentsDTO,
+  DataGetGachaPoolsByIdsDTO,
+  DataUpdateEnemyCommentsDTO,
 } from '../dto/data'
+import { GachaPoolService } from '../service/data/gachaPool.s'
+import { EnemyService } from '../service/data/enemy.s'
+import { SkillService } from '../service/data/skill.s'
 
 @Provide()
 @Controller('/data')
@@ -25,7 +31,16 @@ export class DataController {
   charService: CharService
 
   @Inject()
-  activityService: ActivityService
+  activityService: GameActivityService
+
+  @Inject()
+  gachaPoolService: GachaPoolService
+
+  @Inject()
+  enemyService: EnemyService
+
+  @Inject()
+  skillService: SkillService
 
   @Get('/list')
   async listCharacters(): Promise<GetResType<ApiData.GetCharacterList>> {
@@ -34,7 +49,20 @@ export class DataController {
 
   @Get('/acts')
   async listActivity(): Promise<GetResType<ApiData.GetActivityList>> {
-    return this.activityService.listActivity()
+    return this.activityService.listGameActivity()
+  }
+
+  @Get('/gachaPools')
+  async listGachaPool(): Promise<GetResType<ApiData.GetGachaPoolList>> {
+    return this.gachaPoolService.listGachaPool()
+  }
+
+  @Post('/gachaPools/ids')
+  @Validate()
+  async getGachaPool(
+    @Body(ALL) data: DataGetGachaPoolsByIdsDTO
+  ): Promise<GetResType<ApiData.GetGachaPoolListByIds>> {
+    return this.gachaPoolService.getByIds(data.ids)
   }
 
   @Post('/char/relative')
@@ -51,7 +79,25 @@ export class DataController {
 
   @Post('/char/skillComment')
   @Validate()
-  async updateCharSkillComment(@Body(ALL) body: DataUpdateCharSkillComment) {
-    await this.charService.updateSkillComment(body.id, body.comment)
+  async updateCharSkillComment(
+    @Body(ALL) body: DataUpdateCharSkillCommentsDTO
+  ) {
+    await this.skillService.updateSkillComment(body.id, body.comments)
+  }
+
+  @Get('/enemy')
+  async getEnemyById(@Query(ALL) query: { id: string }) {
+    return this.enemyService.getByEnemyId(query.id)
+  }
+
+  @Get('/enemy/list')
+  async listEnemies(): Promise<GetResType<ApiData.ListEnemies>> {
+    return this.enemyService.listEnemies()
+  }
+
+  @Post('/enemy/comments')
+  @Validate()
+  async updateEnemyComments(@Body(ALL) data: DataUpdateEnemyCommentsDTO) {
+    return this.enemyService.updateEnemyComments(data.id, data.comments)
   }
 }

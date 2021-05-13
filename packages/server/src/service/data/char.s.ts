@@ -14,7 +14,7 @@ import { CharInfoService } from './charInfo.s'
 import { CharwordService } from './charword.s'
 import { OssService } from '../oss.s'
 import { SkillService } from './skill.s'
-import { omit } from 'ramda'
+import { omit, pick } from 'ramda'
 import { TeamInfoService } from './teamInfo.s'
 
 @Provide()
@@ -63,9 +63,9 @@ export class CharService {
     char.info = await this.infoService.getCharInfoByCharId(id)
 
     char.teamInfo = await Promise.all(
-      [data.teamId, data.groupId, data.nationId].map(id =>
-        this.teamInfoService.getTeamInfoById(id)
-      )
+      [data.teamId, data.groupId, data.nationId]
+        .filter(e => e)
+        .map(id => this.teamInfoService.getTeamInfoById(id))
     )
 
     try {
@@ -114,21 +114,19 @@ export class CharService {
       data,
       teamInfo,
       relativeChars,
-      skillComment,
       charComment,
     } = modelData
 
     const res = {
       ...data,
       patchInfo,
-      skills: skills.map(s => s.data),
+      skills: skills.map(s => pick(['comments', 'data'], s)),
       buildings: buildingSkill?.data,
       buildingBuffs: buildingSkill?.buffs.map(b => b.data),
       info: info?.data,
       words: words.map(w => w.data),
       teamInfo,
       relativeChars: relativeChars?.map(c => c.charId),
-      skillComment,
       charComment,
     }
 
@@ -175,12 +173,6 @@ export class CharService {
   async updateCharComment(id: string, comment: string) {
     const target = await this.model.findOne({ where: { charId: id } })
     target.charComment = comment
-    await this.model.save(target)
-  }
-
-  async updateSkillComment(id: string, comment: string) {
-    const target = await this.model.findOne({ where: { charId: id } })
-    target.skillComment = comment
     await this.model.save(target)
   }
 }

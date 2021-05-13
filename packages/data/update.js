@@ -1,9 +1,11 @@
 const { default: Axios } = require('axios')
 const { Queue } = require('@kkdy/queue')
+const fs = require('fs')
+const path = require('path')
 
 const ins = Axios.create({
-  // baseURL: 'https://test.api.kokodayo.fun',
   timeout: 1000000,
+  // baseURL: 'https://test.api.kokodayo.fun',
   baseURL: 'http://127.0.0.1:7001',
 })
 
@@ -17,18 +19,54 @@ const ins = Axios.create({
   // await updatePatchInfo()
   // await updateTeamInfo()
   // await updateChars()
-  await updateAct()
-  // const { data }
-  // return
-  const res = await ins.get('/data/acts', {
-    id: 'char_1001_amiya2',
-    // relativeId: 'char_1001_amiya2',
-    comment: 'nb',
+  // await updateAct()
+  // await updateGachaPool()
+  // const res = await ins.post('/update/gachaPool/name', {
+  //   // startDate: new Date('2021/02/05 16:00:00'),
+  //   // endDate: new Date('2021/02/19 03:59:59'),
+  //   name: '地生五金',
+  //   chars: ['夕', '乌有'],
+  // })
+  // await updateEnemies()
+  // await updateMap()
+  // await updateActMap()
+  const res = await ins.get('/data/enemy/list', {
+    // id: 'char_1001_amiya2',
+    params: {
+      id: 'enemy_1058_traink',
+    },
   })
-  console.log(res.data)
-  const { data } = await getChar('char_1001_amiya2')
-  // const { data: skills } = await getSkill('skcom_atk_up[1]')
-  console.log('data', data)
+  console.log(
+    res.data
+    // res.data.result.stageEnemies.map((e) => e.stageLevelId)
+  )
+
+  // const { data }
+  return
+  // const stages = require('./ArknightsGameData/zh_CN/gamedata/excel/stage_table.json')
+  //   .stages
+  // const map = require('./ArknightsGameData/zh_CN/gamedata/levels/obt/main/level_main_00-01.json')
+
+  // // return
+  // const res = await ins.post('/update/map', {
+  //   // id: 'char_1001_amiya2',
+  //   levelId: 'level_main_00-01',
+  //   data: map,
+  // })
+
+  // const infoRes = await ins.post('/update/map/info', {
+  //   levelId: 'level_main_00-01',
+  //   info: stages['main_00-01'],
+  // })
+  // console.log('res.info', infoRes.data)
+
+  // // const res
+  // const { data: mapData } = await ins.get('/update/map', {
+  //   params: { levelId: 'level_main_00-01' },
+  // })
+  // // const { data } = await getChar('char_1001_amiya2')
+  // // const { data: skills } = await getSkill('skcom_atk_up[1]')
+  // console.log('data', mapData)
   // console.log('skill', skills)
 })()
 
@@ -206,6 +244,88 @@ async function updateAct() {
   const q = Queue.of(12)
   Object.values(acts).forEach((data) => {
     q.pushTask(() => ins.post('/update/activity', data))
+  })
+  await q.allDone()
+}
+
+async function updateGachaPool() {
+  const acts = require('./ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
+    .gachaPoolClient
+  const q = Queue.of(12)
+  Object.values(acts).forEach((data) => {
+    q.pushTask(() =>
+      ins
+        .post('/update/gachaPool', data)
+        .then((e) => console.log('push', data.gachaIndex))
+    )
+  })
+  await q.allDone()
+}
+
+async function updateEnemies() {
+  const enemyInfo = require('./ArknightsGameData/zh_CN/gamedata/excel/enemy_handbook_table.json')
+  const enemies = require('./ArknightsGameData/zh_CN/gamedata/levels/enemydata/enemy_database.json')
+    .enemies
+  const q = Queue.of(12)
+  Object.values(enemies).forEach((data) => {
+    q.pushTask(() => {
+      const info = enemyInfo[data.Key]
+      if (!info) {
+        console.error('key', data.Key)
+        return Promise.resolve()
+      }
+      return ins
+        .post('/update/enemy', { data, info })
+        .then((e) => console.log('push', info.name))
+    })
+  })
+  await q.allDone()
+}
+
+async function updateMap() {
+  const lvs = fs.readdirSync(
+    './ArknightsGameData/zh_CN/gamedata/levels/obt/main/'
+  )
+  const q = Queue.of(12)
+  lvs.forEach((p) => {
+    const levelId = p.slice(0, -5)
+    q.pushTask(() => {
+      const map = JSON.parse(
+        fs.readFileSync(
+          `./ArknightsGameData/zh_CN/gamedata/levels/obt/main/${levelId}.json`
+        )
+      )
+      return ins
+        .post('/update/map', {
+          levelId,
+          data: map,
+        })
+        .then((e) => console.log('push', levelId))
+    })
+  })
+  await q.allDone()
+}
+
+async function updateActMap() {
+  const root = './ArknightsGameData/zh_CN/gamedata/levels/activities/'
+  const lvs = fs.readdirSync(root)
+  const q = Queue.of(12)
+  lvs.forEach((subp) => {
+    const son = fs.readdirSync(path.join(root, subp))
+    son.forEach((p) => {
+      const levelId = p.slice(0, -5)
+      q.pushTask(() => {
+        const map = JSON.parse(
+          fs.readFileSync(path.join(root, subp, `/${levelId}.json`))
+        )
+        return ins
+          .post('/update/map', {
+            levelId,
+            data: map,
+          })
+          .then((e) => console.log('push', levelId))
+      })
+    })
   })
   await q.allDone()
 }

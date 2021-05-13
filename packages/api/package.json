@@ -14,6 +14,7 @@
   },
   "author": "odex",
   "dependencies": {
+    "@kkdy/build": "1",
     "@kkdy/data": "1.0",
     "axios": "^0.21.1"
   },

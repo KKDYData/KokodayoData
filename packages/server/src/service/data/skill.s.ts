@@ -14,7 +14,7 @@ export class SkillService {
   @InjectEntityModel(Skill)
   model: Repository<Skill>
 
-  async createOrUpdate (data: ISkill.ISkill) {
+  async createOrUpdate(data: ISkill.ISkill) {
     const skill = await getOrCreateModel(this.model, {
       where: { skillId: data.skillId },
     })
@@ -27,11 +27,17 @@ export class SkillService {
     this.coreLogger.info('save skill ' + skill.skillId)
   }
 
-  async getSkillById (skillId: string) {
+  async getSkillById(skillId: string) {
     return this.model.findOne({ where: { skillId } })
   }
 
-  async getSkillByIdWithChars (skillId: string) {
-    return this.model.findOne({ where: { skillId }, relations: [ 'chars' ] })
+  async getSkillByIdWithChars(skillId: string) {
+    return this.model.findOne({ where: { skillId }, relations: ['chars'] })
+  }
+
+  async updateSkillComment(skillId: string, comment: string[]) {
+    const target = await this.model.findOne({ where: { skillId } })
+    target.comments = comment
+    await this.model.save(target)
   }
 }

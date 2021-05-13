@@ -15,30 +15,17 @@ export interface IData {
     enemies:               any[];
     enemyDbRefs:           EnemyDBRef[];
     waves:                 Wave[];
-    branches?:             Branches | null;
+    branches?:             { [key: string]: Branch } | null;
     predefines:            Predefines | null;
     excludeCharIdList:     null;
     randomSeed:            number;
     environmentSe?:        EnvironmentSE | null;
     hardPredefines?:       Predefines | null;
     operaConfig?:          null | string;
-    extraRoutes?:          Route[];
+    extraRoutes?:          Array<Route | null>;
 }
 
-export interface Branches {
-    faust_ballis?:     Branch1;
-    frstar_frosts?:    Branch1;
-    bsnake_flame?:     Branch1;
-    frosts?:           Branch1;
-    branch_1?:         Branch1;
-    branch_2?:         Branch1;
-    branch_3?:         Branch1;
-    default?:          Branch1;
-    factory_summon_1?: Branch1;
-    factory_summon_2?: Branch1;
-}
-
-export interface Branch1 {
+export interface Branch {
     phases: Phase[];
 }
 
@@ -58,11 +45,16 @@ export interface Action {
     blockFragment:                     boolean;
     autoPreviewRoute:                  boolean;
     isUnharmfulAndAlwaysCountAsKilled: boolean;
-    hiddenGroup?:                      null | string;
+    hiddenGroup?:                      HiddenGroup | null;
     randomSpawnGroupKey?:              RandomSpawnGroupKey | null;
     weight?:                           number;
     dontBlockWave?:                    boolean;
     weightValue?:                      number;
+}
+
+export enum HiddenGroup {
+    Normal = "normal",
+    RAID = "raid",
 }
 
 export enum RandomSpawnGroupKey {
@@ -112,6 +104,7 @@ export interface Attributes {
     stunImmune:       Immune;
     silenceImmune:    Immune;
     sleepImmune?:     Immune;
+    tauntLevel?:      LifePointReduce;
 }
 
 export interface LifePointReduce {
@@ -157,15 +150,16 @@ export enum EnvironmentSE {
 }
 
 export interface Route {
-    motionMode:           number;
-    startPosition:        Position;
-    endPosition:          Position;
-    spawnRandomRange:     SpawnOffset;
-    spawnOffset:          SpawnOffset;
-    checkpoints:          Checkpoint[];
-    allowDiagonalMove:    boolean;
-    visitEveryTileCenter: boolean;
-    visitEveryNodeCenter: boolean;
+    motionMode:            number;
+    startPosition:         Position;
+    endPosition:           Position;
+    spawnRandomRange:      SpawnOffset;
+    spawnOffset:           SpawnOffset;
+    checkpoints:           Checkpoint[];
+    allowDiagonalMove:     boolean;
+    visitEveryTileCenter:  boolean;
+    visitEveryNodeCenter:  boolean;
+    visitEveryCheckPoint?: boolean;
 }
 
 export interface Checkpoint {
@@ -284,6 +278,7 @@ export enum TileKey {
     TileTelin = "tile_telin",
     TileTelout = "tile_telout",
     TileVolcano = "tile_volcano",
+    TileVolcanoEmp = "tile_volcano_emp",
     TileVolspread = "tile_volspread",
     TileWall = "tile_wall",
     TileWoodenWall = "tile_wooden_wall",

@@ -1,4 +1,12 @@
-import { IActivityInfo, ITeamInfo } from '@kkdy/data'
+import {
+  IActivityInfo,
+  IChar,
+  IEnemyData,
+  IEnemyInfo,
+  IGachaPoolInfo,
+  ITeamInfo,
+} from '@kkdy/data'
+import { BaseEntityType } from './utilsType'
 
 export interface GetCharacterList {
   path: '/data/list'
@@ -22,6 +30,26 @@ export interface GetActivityList {
   response: IActivityInfo.IInfo[]
 }
 
+export interface GetGachaPoolList {
+  path: '/data/gachaPools'
+  method: 'get'
+
+  response: { data: IGachaPoolInfo.IInfo; id: number }[]
+}
+
+export interface GetGachaPoolListByIds {
+  path: '/data/gachaPools/ids'
+  method: 'post'
+
+  data: {
+    ids: number[]
+  }
+
+  response: (BaseEntityType<IGachaPoolInfo.IInfo> & {
+    relativeChars: BaseEntityType<any>[] | null
+  })[]
+}
+
 export interface UpdateRelativeChar {
   path: '/data/char/relative'
   method: 'post'
@@ -39,7 +67,7 @@ export interface UpdateCharSkillComment {
   method: 'post'
 
   data: {
-    comment: string
+    comments: string[]
     id: string
   }
 
@@ -56,4 +84,27 @@ export interface UpdateCharCharComment {
   }
 
   response: true
+}
+
+export interface UpdateEnemyComments {
+  path: '/data/enemy/comments'
+  method: 'post'
+
+  data: {
+    comments: string[]
+    id: string
+  }
+
+  response: true
+}
+
+export interface ListEnemies {
+  path: '/data/enemy/list'
+  method: 'get'
+
+  response: (BaseEntityType<IEnemyData.IData> & {
+    info: IEnemyInfo.IInfo
+    enemyId: string
+    comments: null | string[]
+  })[]
 }

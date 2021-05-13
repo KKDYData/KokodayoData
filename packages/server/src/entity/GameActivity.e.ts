@@ -7,7 +7,7 @@ import { IActivityInfo } from '@kkdy/data'
 import { Provide } from '@midwayjs/decorator'
 
 @EntityModel()
-export class Activity extends BaseEntity {
+export class GameActivity extends BaseEntity {
   @Column({
     unique: true,
     comment: '类似于 act17.5 这样的',
