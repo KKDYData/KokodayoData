@@ -12,6 +12,8 @@ import { EnemyService } from './enemy.s'
 import { StageEnemyService } from './stageEnemy.s'
 import { RedisService } from '../redis.s'
 
+const { StageType } = IStageInfo
+
 const MAP_LIST = 'MAP_LIST'
 
 @Provide()
@@ -134,6 +136,13 @@ export class MapService extends BaseService {
 
       hardStagedId = stageInfos.find(info => info.data.hardStagedId)?.data
         .hardStagedId
+
+      if (stageType === StageType.Campaign) {
+        this.coreLogger.info(
+          'label: ' + label + '__%j',
+          stageInfos.find(info => info.data.stageType)
+        )
+      }
 
       return {
         levelId,
