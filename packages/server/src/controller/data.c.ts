@@ -113,13 +113,11 @@ export class DataController {
 
   @Get('/map/list')
   async listMap(): Promise<GetResType<ApiData.ListMap>> {
-    const list = await this.mapService.listMap()
-    return list
+    return this.mapService.listMap()
   }
 
   @Get('/map')
   async getMapByLevelId(@Query(ALL) q: { id: string }) {
-    const data = await this.mapService.getMapByLevelId(q.id)
-    return data
+    return this.mapService.getMapByLevelId(q.id)
   }
 }

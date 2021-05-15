@@ -114,7 +114,7 @@ export class MapService extends BaseService {
       label: string
       stageType: IStageInfo.StageType | (string & {})
       hardStagedId: string
-    }[] = JSON.parse(await this.redisService.getJson(MAP_LIST, '.')) ?? []
+    }[] = JSON.parse(await this.redisService.client.get(MAP_LIST)) ?? []
 
     if (list?.length) {
       return list
@@ -137,13 +137,6 @@ export class MapService extends BaseService {
       hardStagedId = stageInfos.find(info => info.data.hardStagedId)?.data
         .hardStagedId
 
-      if (stageType === StageType.Campaign) {
-        this.coreLogger.info(
-          'label: ' + label + '  __%j',
-          stageInfos.find(info => info.data.stageType)
-        )
-      }
-
       return {
         levelId,
         label,
@@ -152,7 +145,7 @@ export class MapService extends BaseService {
       }
     })
 
-    this.redisService.setJson(MAP_LIST, '.', list, 60 * 5)
+    this.redisService.client.setex(MAP_LIST, 60 * 5, JSON.stringify(list))
 
     return list
   }
