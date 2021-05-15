@@ -114,7 +114,6 @@ export class DataController {
   @Get('/map/list')
   async listMap(): Promise<GetResType<ApiData.ListMap>> {
     const list = await this.mapService.listMap()
-    console.log(list.filter(s => s.stageType === IStageInfo.StageType.Campaign))
     return list
   }
 

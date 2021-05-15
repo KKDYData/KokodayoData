@@ -139,7 +139,7 @@ export class MapService extends BaseService {
 
       if (stageType === StageType.Campaign) {
         this.coreLogger.info(
-          'label: ' + label + '__%j',
+          'label: ' + label + '  __%j',
           stageInfos.find(info => info.data.stageType)
         )
       }
