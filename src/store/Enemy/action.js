@@ -62,7 +62,12 @@ const actions = {
     }
   },
   async choseMap({ commit, state, dispatch }, data) {
-    const exData = await getMapDataListVer(data.levelId.replace('level_', ''))
+    const exData = await getMapDataListVer(
+      data.levelId.replace('level_', '')
+    ).catch((err) => {
+      Message.error('获取地图信息失败')
+      return {}
+    })
     /**
      * 匹配常驻图id
      * 当初应该用levelId当索引才对的，万万没想到，StageId会对不上
@@ -94,7 +99,10 @@ const actions = {
       } else return res
     }, {})
     commit(SET_DATA, { key: 'data', value: enemyData })
-    commit(SET_DATA, { key: 'selectedMap', value: data.label })
+    commit(SET_DATA, {
+      key: 'selectedMap',
+      value: data.label || data.levelId.replace('level_', ''),
+    })
     commit(SET_DATA, { key: 'selMapData', value: mapData })
     commit(SET_DATA, { key: 'selMapDataEx', value: exData })
 

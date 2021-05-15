@@ -5,12 +5,27 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const { VueLoaderPlugin } = require('vue-loader')
 const webpack = require('webpack')
+const WorkboxPlugin = require('workbox-webpack-plugin')
 
 const isProduction = process.env.NODE_ENV == 'production'
 
 const stylesHandler = isProduction
   ? MiniCssExtractPlugin.loader
   : 'style-loader'
+
+const swPlugins = [
+  new WorkboxPlugin.InjectManifest({
+    swSrc: './src/sw.js',
+    swDest: 'sw.js',
+    exclude: [
+      /\.map$/,
+      /manifest$/,
+      /\.htaccess$/,
+      /service-worker\.js$/,
+      /sw\.js$/,
+    ],
+  }),
+]
 
 const config = {
   entry: './src/main.js',
@@ -56,7 +71,7 @@ const config = {
           },
         },
         {
-          from: /^\/enemydata\/(main|hard|camp)?/,
+          from: /^\/enemydata\/level_(.*)/,
           to: (context) => {
             return '/index.html'
           },
@@ -80,12 +95,6 @@ const config = {
             return '/' + context.parsedUrl.path
           },
         },
-        {
-          from: /./,
-          to: (context) => {
-            return '/views/error.pug'
-          },
-        },
       ],
     },
   },
@@ -98,10 +107,14 @@ const config = {
       process: 'process/browser',
     }),
     new webpack.DefinePlugin({
-      'process.env.PRODUCTION': JSON.stringify('beta'),
-      'import.meta.env.VITE_API_URL': JSON.stringify('/test-api'),
+      // 'process.env.PRODUCTION': JSON.stringify('beta'),
+      // 'import.meta.env.VITE_API_URL': JSON.stringify('/test-api'),
+      'process.env.PRODUCTION': JSON.stringify('stable'),
+      'import.meta.env.VITE_API_URL': JSON.stringify(
+        'https://test.api.kokodayo.fun'
+      ),
     }),
-
+    ...swPlugins,
     // Add your plugins here
     // Learn more about plugins from https://webpack.js.org/configuration/plugins/
   ],

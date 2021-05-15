@@ -93,6 +93,10 @@ const actions = {
       if (!data.ok) return
       commit('setMapList', data.result, { root: true })
       const arr = change(data.result).sort(naturalSort)
+      arr.forEach((a) => {
+        console.log('x', a)
+        a.children = a.children.sort(naturalSort)
+      })
       commit('setStageTree', arr, { root: true })
     }
   },

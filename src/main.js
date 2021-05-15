@@ -9,12 +9,9 @@ import VueMeta from 'vue-meta'
 import store from '@/store'
 import App from './App'
 import { router } from './router'
-import { Data } from '@kkdy/api'
 
 Vue.use(VueRouter)
 Vue.use(VueMeta)
-
-Data.ListMap()
 
 Vue.config.productionTip = false
 

@@ -11,7 +11,7 @@
     "start": "webpack serve --config config/webpack.dev.js",
     "dev": "webpack --config config/webpack.dev.js --profile --json > stats.json",
     "pub-b": "yarn build-beta && node script/publish.js test",
-    "pub-s": "yarn build-stable && node script/publish.js prod",
+    "pub-s": "yarn build && node script/publish.js prod",
     "snyk-protect": "snyk protect",
     "prepare": "yarn run snyk-protect",
     "build:dev": "webpack --mode=development",
