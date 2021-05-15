@@ -68,7 +68,10 @@ export class MapService extends BaseService {
   }
 
   async couStageInfo(levelId: string, info: IStageInfo.IStage) {
-    const dataModel = await this.dataModel.findOne({ where: { levelId } })
+    const dataModel = await this.dataModel.findOne({
+      where: { levelId },
+      relations: ['stageInfos'],
+    })
 
     const infoModel = await getOrCreateModel(this.infoModel, {
       where: { stageId: info.stageId },
@@ -107,11 +110,11 @@ export class MapService extends BaseService {
     let list: {
       levelId: string
       label: string
-      stageType: IStageInfo.StageType
+      stageType: IStageInfo.StageType | (string & {})
       hardStagedId: string
     }[] = JSON.parse(await this.redisService.getJson(MAP_LIST, '.')) ?? []
 
-    if (list.length) {
+    if (list?.length) {
       return list
     }
 
@@ -119,15 +122,18 @@ export class MapService extends BaseService {
     list = stages.map(stage => {
       const { levelId, stageInfos, data } = stage
       let label = ''
-      let stageType: IStageInfo.StageType
+      let stageType: IStageInfo.StageType | (string & {})
       let hardStagedId = ''
 
-      if (stageInfos.length) {
-        const info = stageInfos[0]
-        label = info.data.code
-        stageType = info.data.stageType
-        hardStagedId = info.data.hardStagedId
-      }
+      label = stageInfos.find(info => info.data.code)?.data.code
+      stageType =
+        stageInfos.find(info => info.data.stageType)?.data.stageType ||
+        (levelId.includes('act')
+          ? IStageInfo.StageType.Activity
+          : levelId.split('_')[1])
+
+      hardStagedId = stageInfos.find(info => info.data.hardStagedId)?.data
+        .hardStagedId
 
       return {
         levelId,

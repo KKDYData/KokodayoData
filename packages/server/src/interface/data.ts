@@ -118,7 +118,7 @@ export interface ListMap {
   response: {
     levelId: string
     label: string
-    stageType: IStageInfo.StageType
+    stageType: IStageInfo.StageType | (string & {})
     hardStagedId: string
   }[]
 }
