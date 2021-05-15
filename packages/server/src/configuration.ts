@@ -26,7 +26,7 @@ export class AutoConfiguration implements ILifeCycle {
 
     this.app.use(
       cors({
-        origin: ctx => ctx.origin,
+        origin: ctx => 'https://kokodayo.fun',
         credentials: true,
       })
     )
