@@ -125,17 +125,18 @@ export class MapService extends BaseService {
       const { levelId, stageInfos, data } = stage
       let label = ''
       let stageType: IStageInfo.StageType | (string & {})
-      let hardStagedId = ''
+      let hardStagedId: string | undefined
 
-      label = stageInfos.find(info => info.data.code)?.data.code
-      stageType =
-        stageInfos.find(info => info.data.stageType)?.data.stageType ||
-        (levelId.includes('act')
+      const labelInfoData = stageInfos.find(info => info.data.code)?.data
+      if (labelInfoData) {
+        label = labelInfoData.code + ' ' + labelInfoData.name
+        stageType = labelInfoData.stageType
+        hardStagedId = labelInfoData.hardStagedId ?? ''
+      } else {
+        stageType = levelId.includes('act')
           ? IStageInfo.StageType.Activity
-          : levelId.split('_')[1])
-
-      hardStagedId = stageInfos.find(info => info.data.hardStagedId)?.data
-        .hardStagedId
+          : levelId.split('_')[1]
+      }
 
       return {
         levelId,
