@@ -10,7 +10,8 @@
     "build": "lerna run --stream --sort build",
     "dev:h5": "",
     "postinstall": "husky install",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "tcdnpm": "yarn --registry=https://registry.npm.taobao.org"
   },
   "devDependencies": {
     "husky": "^5.1.3",

@@ -1877,6 +1877,13 @@
   resolved "https://registry.npm.taobao.org/@kkdy/queue/download/@kkdy/queue-0.0.3.tgz#2d7f9c54acb1cb1ba2f586b15e20f71eeba3c41c"
   integrity sha1-LX+cVKyxyxui9YaxXiD3HuujxBw=
 
+"@koa/cors@^3.0.0":
+  version "3.1.0"
+  resolved "https://registry.npm.taobao.org/@koa/cors/download/@koa/cors-3.1.0.tgz#618bb073438cfdbd3ebd0e648a76e33b84f3a3b2"
+  integrity sha1-YYuwc0OM/b0+vQ5kinbjO4Tzo7I=
+  dependencies:
+    vary "^1.1.2"
+
 "@koa/router@^10.0.0":
   version "10.0.0"
   resolved "https://registry.npm.taobao.org/@koa/router/download/@koa/router-10.0.0.tgz#699115561afbd2740e2848ba299fc76b9e058ad6"
@@ -9909,6 +9916,13 @@ egg-core@^4.18.0:
     node-homedir "^1.1.1"
     ready-callback "^2.1.0"
     utility "^1.16.1"
+
+egg-cors@*:
+  version "2.2.3"
+  resolved "https://registry.nlark.com/egg-cors/download/egg-cors-2.2.3.tgz#a21a0f6b2dc627a4e778a7282c1adf99aa63f88f"
+  integrity sha1-ohoPay3GJ6TneKcoLBrfmapj+I8=
+  dependencies:
+    "@koa/cors" "^3.0.0"
 
 egg-development@^2.4.2:
   version "2.7.0"

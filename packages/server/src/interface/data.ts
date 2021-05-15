@@ -111,7 +111,7 @@ export interface ListEnemies {
 }
 
 export interface ListMap {
-  path: '/data/enemy/list'
+  path: '/data/map/list'
 
   method: 'get'
 

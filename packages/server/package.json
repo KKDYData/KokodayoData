@@ -20,7 +20,8 @@
     "redis-json": "^5.0.0",
     "redis-modules-sdk": "^0.4.4",
     "socket.io": "^3.1.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "egg-cors": "*"
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.55",

@@ -87,5 +87,5 @@ export function ListMap() {
         hardStagedId: string
       }[]
     >
-  >('/data/enemy/list')
+  >('/data/map/list')
 }

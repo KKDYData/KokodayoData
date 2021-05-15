@@ -22,6 +22,12 @@ export default (appInfo: EggAppInfo) => {
   // add your config here
   config.middleware = []
 
+  config.cors = {
+    credentials: true,
+    origin: ctx => ctx.get('origin'),
+    allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
+  }
+
   config.midwayFeature = {
     // true 代表使用 midway logger
     // false 或者为空代表使用 egg-logger
