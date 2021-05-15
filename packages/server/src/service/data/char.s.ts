@@ -4,7 +4,6 @@ import { Inject, Logger } from '@midwayjs/decorator/dist'
 import { Provide } from '@midwayjs/decorator/dist'
 import { ILogger } from '@midwayjs/logger'
 import { InjectEntityModel } from '@midwayjs/orm'
-import { IMidwayWebContext } from '@midwayjs/web'
 import { Repository } from 'typeorm'
 import { CharacterData } from '../../entity/Character.e'
 import { Skill } from '../../entity/Skill.e'
@@ -16,6 +15,7 @@ import { OssService } from '../oss.s'
 import { SkillService } from './skill.s'
 import { omit, pick } from 'ramda'
 import { TeamInfoService } from './teamInfo.s'
+import { Context } from '@midwayjs/koa'
 
 @Provide()
 export class CharService {
@@ -38,7 +38,7 @@ export class CharService {
   teamInfoService: TeamInfoService
 
   @Inject()
-  ctx: IMidwayWebContext
+  ctx: Context
 
   @Inject()
   oss: OssService

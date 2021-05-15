@@ -6,7 +6,7 @@ import {
   Query,
   Get,
 } from '@midwayjs/decorator'
-import { Context } from 'egg'
+import { Context } from '@midwayjs/koa'
 import { IndexListService } from '../service/indexList.s'
 import { UserService } from '../service/user'
 

@@ -1,7 +1,7 @@
 import { IMidwayLogger } from '@midwayjs/logger'
-import { IMidwayWebContext } from '@midwayjs/web'
+import { Context } from '@midwayjs/koa'
 
-export type LoginCtx = IMidwayWebContext & {
+export type LoginCtx = Context & {
   loginToken: string
   loginData: LoginData
   logger: IMidwayLogger
