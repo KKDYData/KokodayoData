@@ -1,5 +1,8 @@
-import { Api, Assets } from '@/Api'
+import { Api } from '@/Api'
 import { change } from './utils'
+import { Data, request } from '@kkdy/api'
+
+if (process.env.NODE_ENV === 'development') request.defaults.baseURL = '/api'
 
 const namespaced = true
 
@@ -79,6 +82,7 @@ const naturalSort = (a, b) => {
 
 const actions = {
   async getInfo({ state, commit }) {
+    const { data } = await Data.ListMap()
     state.info = await Api.getInfo()
     commit(
       'setListVer',
@@ -87,8 +91,13 @@ const actions = {
     )
 
     if (state.info?.level?.stage) {
-      const data = await Assets.getStageList(state.info.level.stage.key)
-      const arr = change(data).sort(naturalSort)
+      // const data = await Assets.getStageList(state.info.level.stage.key)
+      if (!data.ok) return
+      commit('setMapList', data.result, { root: true })
+      const arr = change(data.result).sort(naturalSort)
+      arr.forEach((a) => {
+        a.children = a.children.sort(naturalSort)
+      })
       commit('setStageTree', arr, { root: true })
     }
   },

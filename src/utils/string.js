@@ -1,3 +1,7 @@
+import { IStageInfo } from '@kkdy/data'
+
+const IStageType = IStageInfo.StageType
+
 const getKey = (keys) => (key) => (keys[key] ? keys[key] : key)
 const getKeyWithNull = (keys) => (key) => (keys[key] ? keys[key] : null)
 
@@ -413,7 +417,10 @@ const statusToCh_M3 = {
 }
 
 const StageType = {
-  main: '主线',
+  [IStageType.Main]: '主线',
+  [IStageType.Activity]: '活动',
+  [IStageType.Campaign]: '剿灭作战',
+  [IStageType.Daily]: '日常',
   tr: 'TR',
   hard: '困难',
   wk: '物资筹备',

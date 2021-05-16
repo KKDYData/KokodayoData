@@ -3,7 +3,7 @@ import {
   getMapDataListVer,
   getCharItem,
   getItem,
-  getFurn
+  getFurn,
 } from '@/utils/fetch'
 import { Message } from 'element-ui'
 import { initSomeMap } from '@/components/EnemyData/initData'
@@ -15,17 +15,17 @@ import { Assets } from '@/Api'
 //! const data = this.selMapData.predefines;
 //! this.preData = { tokenInsts, tokenCards, characterInsts, characterCards };
 
-const getItemList = list => {
+const getItemList = (list) => {
   if (!list) return Promise.resolve([])
   return Promise.all(
-    list.map(async el => ({
+    list.map(async (el) => ({
       data: await (el.type === 'FURN'
         ? getFurn(el.id)
         : el.type === 'CHAR'
-          ? getCharItem(el.id)
-          : getItem(el.id)),
+        ? getCharItem(el.id)
+        : getItem(el.id)),
       type: el.type,
-      dropType: el.dropType
+      dropType: el.dropType,
     }))
   )
 }
@@ -37,37 +37,46 @@ const actions = {
       console.log('await')
       await sleep(50)
     }
-    console.log('await')
+
     const data = await Assets.getEnemyList(key)
     commit(SET_DATA, { key: 'rawData', value: data })
+
     if (rootState.stageTree) dispatch('loadMap')
     else commit(SET_DATA, { key: 'watchTree', value: true })
   },
   async loadMap({ commit, dispatch, rootState }, map) {
     const parent = map || router.currentRoute.params.map
     if (!parent || !rootState.stageTree) return
-    const target = findStage(parent, rootState.stageTree)
+
+    const target = rootState.mapList.find((e) => e.levelId === parent)
+
+    commit(SET_DATA, { key: 'mapCode', value: parent })
     if (target) {
-      const value = target.path
-        // .replace('weekly', 'wk')
-        .replace('promote', 'pro')
-        // .level
-      commit(SET_DATA, { key: 'mapCode', value })
+      // const value = target.path
+      // .replace('weekly', 'wk')
+      // .replace('promote', 'pro')
+      // .level
       dispatch('choseMap', target)
-    } else {  
+    } else {
       console.log('没有这个地图，路由失败')
     }
   },
   async choseMap({ commit, state, dispatch }, data) {
-    const exData = await getMapDataListVer(state.mapCode)
+    const exData = await getMapDataListVer(
+      data.levelId.replace('level_', '')
+    ).catch((err) => {
+      Message.error('获取地图信息失败')
+      return {}
+    })
     /**
      * 匹配常驻图id
      * 当初应该用levelId当索引才对的，万万没想到，StageId会对不上
      */
-    const id = exData.stageId.replace('wk', 'weekly').replace('kc', 'killcost').replace('pro', 'promote')
-    const mapData = await getMapData(`level_${id}`).catch(
-      err => null
-    )
+    // const id = exData.stageId
+    //   .replace('wk', 'weekly')
+    //   .replace('kc', 'killcost')
+    //   .replace('pro', 'promote')
+    const mapData = await getMapData(data.levelId).catch((err) => null)
 
     if (!mapData) {
       Message.error('获取数据失败')
@@ -75,7 +84,7 @@ const actions = {
     }
 
     exData.stageDropInfo &&
-      getItemList(exData.stageDropInfo.displayDetailRewards).then(value =>
+      getItemList(exData.stageDropInfo.displayDetailRewards).then((value) =>
         commit(SET_DATA, { key: 'detailsDropList', value })
       )
 
@@ -83,14 +92,17 @@ const actions = {
     // ! if (this.$refs.layout) this.$refs.layout.clearRoutes(true);
 
     const enemyData = Object.entries(state.rawData).reduce((res, [k, v]) => {
-      const target = mapData.enemyDbRefs.find(el => el.id === k)
+      const target = mapData.enemyDbRefs.find((el) => el.id === k)
       if (target) {
         res[k] = Object.assign({}, v, target)
         return res
       } else return res
     }, {})
     commit(SET_DATA, { key: 'data', value: enemyData })
-    commit(SET_DATA, { key: 'selectedMap', value: data.label })
+    commit(SET_DATA, {
+      key: 'selectedMap',
+      value: data.label || data.levelId.replace('level_', ''),
+    })
     commit(SET_DATA, { key: 'selMapData', value: mapData })
     commit(SET_DATA, { key: 'selMapDataEx', value: exData })
 
@@ -102,7 +114,7 @@ const actions = {
     const canvas = document.getElementById('map-canvas-container')
     commit(SET_DATA, {
       key: 'map',
-      value: initSomeMap(mapData, canvas, state.preData)
+      value: initSomeMap(mapData, canvas, state.preData),
     })
   },
   async getPreData({ state, commit }) {
@@ -115,17 +127,17 @@ const actions = {
       preDefineGet('tokenInsts', data),
       preDefineGet('tokenCards', data),
       preDefineGet('characterInsts', data),
-      preDefineGet('characterCards', data)
+      preDefineGet('characterCards', data),
     ]
     const [
       tokenInsts,
       tokenCards,
       characterInsts,
-      characterCards
+      characterCards,
     ] = await Promise.all(tasks)
     commit(SET_DATA, {
       key: 'preData',
-      value: { tokenInsts, tokenCards, characterInsts, characterCards }
+      value: { tokenInsts, tokenCards, characterInsts, characterCards },
     })
   },
   async loadRunes({ state, dispatch, commit, getters }) {
@@ -133,7 +145,7 @@ const actions = {
     if (!state.runesMode) {
       const runesData = await getMapDataListVer(
         state.mapCode + '%23f%23'
-      ).catch(err => {
+      ).catch((err) => {
         console.log('可能没索引，但就是有突袭数据')
         return {}
       })
@@ -145,6 +157,6 @@ const actions = {
       commit(SET_DATA, { key: 'selMapDataEx', value: data })
       commit(SET_DATA, { key: 'runesMode', value: false })
     }
-  }
+  },
 }
 export { actions }

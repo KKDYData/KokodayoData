@@ -1,5 +1,8 @@
 <template>
-  <div class="home-wrapper" element-loading-background="rgba(168, 168, 168, 0.1)">
+  <div
+    class="home-wrapper"
+    element-loading-background="rgba(168, 168, 168, 0.1)"
+  >
     <!-- 地图选择的抽屉 -->
     <h-drawer
       ref="chapter-selecter"
@@ -12,7 +15,13 @@
     >
       <template v-slot:title>
         <span>章节选择</span>
-        <el-button v-if="selMapData" type="danger" size="small" @click="clearMapChose">取消选择</el-button>
+        <el-button
+          v-if="selMapData"
+          type="danger"
+          size="small"
+          @click="clearMapChose"
+          >取消选择</el-button
+        >
       </template>
       <div class="chapter-wrapper">
         <el-tree
@@ -39,26 +48,34 @@
 
         <div v-if="selMapDataEx" class="title-button-wrapper">
           <div
-            v-if=" (selMapDataEx.hardStagedId || selMapDataEx.difficulty === 'FOUR_STAR' || selMapData.runes)"
+            v-if="
+              selMapDataEx.hardStagedId ||
+                selMapDataEx.difficulty === 'FOUR_STAR' ||
+                selMapData.runes
+            "
           >
             <el-button
-              :type="!runesMode ? '': 'warning'"
+              :type="!runesMode ? '' : 'warning'"
               :plain="!runesMode"
               class="runes-mode-button"
               @click="loadRunes"
-            >突袭</el-button>
+              >突袭</el-button
+            >
           </div>
           <div>
             <el-button
-              :type="!showMap ? '': 'warning'"
+              :type="!showMap ? '' : 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
               @click="openMap"
-            >地图</el-button>
+              >地图</el-button
+            >
           </div>
           <div>
             <h-tooltip v-if="mapCode && showMap" placement="bottom">
-              <el-button class="runes-mode-button" type="info">地图说明</el-button>
+              <el-button class="runes-mode-button" type="info"
+                >地图说明</el-button
+              >
               <template v-slot:content>
                 <p>点击地板砖，会有砖的基本说明。</p>
               </template>
@@ -66,17 +83,24 @@
           </div>
           <div class="long-button">
             <el-button
-              :type="!loopAll ? '': 'warning'"
+              :type="!loopAll ? '' : 'warning'"
               :plain="!showMap"
               class="runes-mode-button"
               @click="loopAllRoutes"
-            >加载所有路线</el-button>
+              >加载所有路线</el-button
+            >
           </div>
         </div>
       </div>
       <!--! 地图 kkdy-somemap -->
       <div v-if="selectedMap" class="left-panel">
-        <canvas v-show="showMap" id="map-canvas-container" ref="canvas" width="890" height="500" />
+        <canvas
+          v-show="showMap"
+          id="map-canvas-container"
+          ref="canvas"
+          width="890"
+          height="500"
+        />
       </div>
       <div v-if="selectedMap" class="left-bottom">
         <div v-if="selMapDataEx" ref="map-desc" style="margin-left: 5px">
@@ -97,11 +121,11 @@
                   v-if="mapCode"
                   size="mini"
                   type="info"
-                  :plain="simpleShow ? false: true"
+                  :plain="simpleShow ? false : true"
                   @click="simpleShow = !simpleShow"
                 >
                   <i class="el-icon-refresh" />
-                  {{ simpleShow ? '简要显示': '路线模式' }}
+                  {{ simpleShow ? '简要显示' : '路线模式' }}
                 </el-button>
                 <el-button
                   v-if="!simpleShow && mapCode"
@@ -109,7 +133,8 @@
                   type="danger"
                   class="clear-route-button"
                   @click="clearRoutes"
-                >清空路线</el-button>
+                  >清空路线</el-button
+                >
                 <h-tooltip v-if="mapCode && !simpleShow">
                   <el-button type="info" size="mini">说明</el-button>
                   <template v-slot:content>
@@ -119,7 +144,8 @@
                     <p>方块:</p>
                     <p>
                       第2波
-                      <i class="el-icon-position" />2分, 数量2，间隔30s， 出发2分4秒
+                      <i class="el-icon-position" />2分, 数量2，间隔30s，
+                      出发2分4秒
                     </p>
                     <p>
                       第2波
@@ -127,7 +153,9 @@
                     </p>
                     <p>数量2，间隔30秒</p>
                     <p>就是2分44秒之后会有第2个一样的敌人也走这一条线路</p>
-                    <p>出发，相对于这一批次的出发时间，普通图只有一个批次，剿灭有多个批次，一个批次的敌人全部消灭会提前进入下一个批次。超过最大等待时间则开始下一批次，不论上次批次是否全部被消灭。</p>
+                    <p>
+                      出发，相对于这一批次的出发时间，普通图只有一个批次，剿灭有多个批次，一个批次的敌人全部消灭会提前进入下一个批次。超过最大等待时间则开始下一批次，不论上次批次是否全部被消灭。
+                    </p>
                   </template>
                 </h-tooltip>
               </div>
@@ -135,7 +163,7 @@
             <enemy-data-layout
               v-if="!load && data"
               ref="layout"
-              :style="mapCode? 'padding-top: 40px':''"
+              :style="mapCode ? 'padding-top: 40px' : ''"
               :data="data"
               :map-data="selMapData"
               :runes-mode="runesMode"
@@ -201,7 +229,12 @@
         </accordion-panel>
       </div>
       <div v-if="!selectedMap" class="enemy-all">
-        <enemy-data-layout v-if="rawData" ref="layout" :data="rawData" :simple-show="true" />
+        <enemy-data-layout
+          v-if="rawData"
+          ref="layout"
+          :data="rawData"
+          :simple-show="true"
+        />
       </div>
     </div>
   </div>
@@ -216,20 +249,23 @@ import SlidePanel from '@/components/Base/AccrordionPanel/SlidePanel'
 import HDrawer from '@/components/Base/Drawer'
 import HTooltip from '@/components/Base/Tooltip'
 
-
 import { Tree, Button, Loading, Slider } from 'element-ui'
 
 import Vue from 'vue'
 import { SET_DATA } from '../../store/Enemy/mutations'
 import { createNamespacedHelpers, mapState as Root } from 'vuex'
 import { debounce } from '../../utils'
-const { mapState, mapActions, mapGetters, mapMutations } = createNamespacedHelpers('enemy')
+const {
+  mapState,
+  mapActions,
+  mapGetters,
+  mapMutations,
+} = createNamespacedHelpers('enemy')
 
 Vue.use(Loading)
 Vue.use(Button)
 Vue.use(Tree)
 Vue.use(Slider)
-
 
 const EnemyDataLayout = () => ({
   component: import(
@@ -238,22 +274,24 @@ const EnemyDataLayout = () => ({
   loading: loadingC,
   error: loadingC,
   delay: 200,
-  timeout: 5000
+  timeout: 5000,
 })
 
 export default {
   metaInfo() {
     return {
-      titleTemplate: `${this.selectedMap ? this.selectedMap + ' |' : ''}敌人图鉴 | 明日方舟`,
+      titleTemplate: `${
+        this.selectedMap ? this.selectedMap + ' |' : ''
+      }敌人图鉴 | 明日方舟`,
       meta: [
         {
           vmid: 'description',
           name: 'Description',
           content: this.selectedMap
             ? this.mapDesc
-            : '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长'
-        }
-      ]
+            : '霜星 塔露拉 梅菲斯特 浮士德 弑君者 碎骨 W 粉碎攻坚组长',
+        },
+      ],
     }
   },
   components: {
@@ -264,7 +302,7 @@ export default {
     SlidePanel,
     AccordionPanel,
     HDrawer,
-    HTooltip
+    HTooltip,
   },
   data() {
     return {
@@ -274,7 +312,7 @@ export default {
       drawer: false,
       loopAll: false,
       t: 140,
-      p: 3000
+      p: 3000,
     }
   },
   computed: {
@@ -292,29 +330,39 @@ export default {
       'selMapNode',
       'path',
       'map',
-      'rawData'
+      'rawData',
     ]),
-    ...Root(['stageTree', 'short',]),
+    ...Root(['stageTree', 'short']),
     ...mapGetters([
       'mapDesc',
       'options',
       'globalBuffs',
       'waveTime',
       'showPredefine',
-      'drawerSize'
+      'drawerSize',
     ]),
     theta() {
       console.log('theta', this.t)
       return (this.t / 360) * Math.PI
-    }
+    },
   },
   mounted() {
     if (this.$route.params) this.clearMap()
-    this.linkStart()
-    window.addEventListener('resize', debounce(() => {
-      this.linkStart()
-      console.log('resize & reinit somemap')
-    }, 1000))
+
+    const once = this.$watch('stageTree', () => {
+      if (this.stageTree) {
+        this.linkStart()
+        once()
+      }
+    })
+
+    window.addEventListener(
+      'resize',
+      debounce(() => {
+        this.linkStart()
+        console.log('resize & reinit somemap')
+      }, 1000)
+    )
   },
   methods: {
     ...mapActions(['linkStart', 'loadRunes']),
@@ -323,31 +371,28 @@ export default {
       this.$refs['chapter-selecter'].closeDrawer()
       this.$router.push(this.path)
     },
-    openMap() {
-
-    },
+    openMap() {},
     clearRoutes() {
       this.map.deleteAll()
       this.$refs.layout.clearRoutes()
       this.loopAll = false
-
     },
     loopAllRoutes() {
       if (!this.loopAll) {
         this.map.loopRoutes()
         this.loopAll = true
-      }
-      else {
+      } else {
         this.loopAll = false
         this.map.deleteAll()
       }
     },
     changeMapCode(data) {
-      if (!data.children) {
-        let codeFromPath = data.path
-        let shortCode = codeFromPath
-          .replace('weekly', 'wk')
-          .replace('promote', 'pro')
+      if (!data.children.length) {
+        let codeFromPath = data.levelId
+        // console.log(data, 'codeFromPath', codeFromPath)
+        // let shortCode = codeFromPath
+        //   .replace('weekly', 'wk')
+        //   .replace('promote', 'pro')
 
         this.$refs['chapter-selecter'].closeDrawer()
 
@@ -358,12 +403,12 @@ export default {
         this[SET_DATA]({ key: 'runesMode', value: false })
         // this.runesMode = false;
         this[SET_DATA]({ key: 'selMapNode', value: data })
-        this[SET_DATA]({ key: 'mapCode', value: shortCode })
+        this[SET_DATA]({ key: 'mapCode', value: codeFromPath })
 
         // this.selMapNode = data;
         // this.mapCode = shortCode;
-        console.log(this.path, shortCode)
-        this.$router.push(this.path + shortCode)
+        console.log(this.path, codeFromPath)
+        this.$router.push(this.path + codeFromPath)
 
         //! 没看懂
         setTimeout(() => {
@@ -378,9 +423,8 @@ export default {
     },
     updatePerspective() {
       this.map.setPerspective({ perspective: { PERSPECTIVE: +this.p } })
-    }
-
-  }
+    },
+  },
 }
 </script>
 
@@ -576,4 +620,3 @@ filter() {
   }
 }
 </style>
-

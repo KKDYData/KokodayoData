@@ -1,40 +1,32 @@
-module.exports = function (api) {
+module.exports = function(api) {
   api.cache(true)
 
   const presets = [
     [
       '@babel/preset-env',
       {
-        useBuiltIns: 'usage',
+        modules: 'commonjs',
         targets: {
-          esmodules: true
+          esmodules: true,
         },
-        corejs: {
-          version: 3,
-          proposals: true
-        }
-      }
+      },
     ],
-    ['@vue/babel-preset-jsx']
+    ['@vue/babel-preset-jsx'],
   ]
   const plugins = [
-    [
-      '@babel/plugin-proposal-class-properties',
-    ],
-    [
-      '@babel/plugin-syntax-dynamic-import'
-    ],
+    ['@babel/plugin-proposal-class-properties'],
+    ['@babel/plugin-syntax-dynamic-import'],
     [
       'component',
       {
-        'libraryName': 'element-ui',
-        'styleLibraryName': '~theme'
-      }
-    ]
+        libraryName: 'element-ui',
+        styleLibraryName: '~theme',
+      },
+    ],
   ]
 
   return {
     presets,
-    plugins
+    plugins,
   }
 }
