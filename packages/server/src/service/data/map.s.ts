@@ -143,8 +143,8 @@ export class MapService extends BaseService {
         label,
         stageType,
         hardStagedId,
-        apCost: labelInfoData.apCost,
-        etCost: labelInfoData.etCost,
+        apCost: labelInfoData?.apCost,
+        etCost: labelInfoData?.etCost,
       }
     })
 
