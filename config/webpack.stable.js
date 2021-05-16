@@ -18,6 +18,9 @@ module.exports = merge(prod, {
     new webpack.DefinePlugin({
       'process.env.PRODUCTION': JSON.stringify('stable'),
       'process.env.PUBLIC_PATH': JSON.stringify(publicPath),
+      'import.meta.env.VITE_API_URL': JSON.stringify(
+        'https://test.api.kokodayo.fun'
+      ),
     }),
   ],
 })

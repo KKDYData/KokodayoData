@@ -83,7 +83,6 @@ class TaskQueue {
       this.running++
     }
     if (this.running === 0 && this.queue.length === 0) {
-      console.log('Task is over')
       this.finalTask()
     }
   }

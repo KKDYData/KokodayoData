@@ -16,21 +16,19 @@ export const change = (list) => {
   const chapterMap = {}
   const actMap = {}
 
+  map[StageType.Main] = creatBranch(getStageType(StageType.Main))
+  map[StageType.Activity] = creatBranch(getStageType(StageType.Activity))
+  console.log(JSON.stringify(map))
+
   list.forEach((stage) => {
     const { stageType, label, levelId } = stage
     const [, _st, ..._code] = levelId.split('_')
     const st = stageType ?? _st
 
-    console.log('sss? ', getStageType(st), st)
-
-    if (!map[st]) {
-      // map[st] = creatBranch((chapterMap[st] = creatBranch(getStageType(st))))
-      map[st] = creatBranch(getStageType(st))
-    }
-
-    // 分章节
-    if (['sub', 'main'].includes(_st)) {
-      const chapter = _code[0].split('-')[0]
+    // 合并 SUB 和 MAIN
+    if ([StageType.Main, StageType.Sub].includes(st)) {
+      // 分章节
+      const chapter = ['training'].includes(_st) ? _st : _code[0].split('-')[0]
       if (!chapterMap[chapter]) {
         chapterMap[chapter] = creatBranch(chapter)
       }
@@ -41,14 +39,17 @@ export const change = (list) => {
         actMap[act] = creatBranch(getStageType(act), stage)
       }
       actMap[act].children.push(creatBranch(label, stage))
-    } else {
+    } else if (!['level_main_01', 'level_main_00'].includes(levelId)) {
+      if (!map[st]) {
+        map[st] = creatBranch(getStageType(st))
+      }
       map[st].children.push(creatBranch(label || _code.join(' | '), stage))
     }
   })
 
   map[StageType.Main].children = Object.values(chapterMap)
   map[StageType.Activity].children = Object.values(actMap)
-  console.log(map)
+
   return Object.values(map)
 }
 

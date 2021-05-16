@@ -7,7 +7,6 @@
 // const enemyListVer = enemy //1574138107584
 // const buildingListVer = building
 
-console.log('xx', process.env.PRODUCTION, import.meta.env.VITE_API_URL)
 const api = '/api/arknights/'
 const dataPath =
   process.env.PRODUCTION === 'beta'

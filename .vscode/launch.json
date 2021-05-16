@@ -19,6 +19,18 @@
       "name": "Launch Chrome against localhost",
       "url": "http://localhost:8080",
       "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "attach firefox",
+      "url": "http://localhost:8899",
+      "type": "firefox",
+      "request": "attach",
+      "pathMappings": [
+        {
+          "url": "webpack:///src",
+          "path": "${workspaceFolder}/src"
+        }
+      ]
     }
   ]
 }

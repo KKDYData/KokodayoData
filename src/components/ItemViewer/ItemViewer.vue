@@ -28,7 +28,12 @@
     </div>
     <div slot="reference" style="text-align: center">
       <div>
-        <h-tooltip :disabled="!toolTip" effect="dark" :content="data.name" placement="top-start">
+        <h-tooltip
+          :disabled="!toolTip"
+          effect="dark"
+          :content="data.name"
+          placement="top-start"
+        >
           <h-item
             class="click"
             :item-pic="itemPic"
@@ -47,8 +52,12 @@
       </div>
     </div>
     <div v-if="!noPopover">
-      <p v-if="type === 'FURN'" style="color: #828282">氛围 {{ data.comfort }}</p>
-      <p v-if="type === 'FURN'" style="color: #828282">{{ data.obtainApproach }}</p>
+      <p v-if="type === 'FURN'" style="color: #828282">
+        氛围 {{ data.comfort }}
+      </p>
+      <p v-if="type === 'FURN'" style="color: #828282">
+        {{ data.obtainApproach }}
+      </p>
       <p>{{ data.usage }}</p>
       <p>{{ data.description }}</p>
       <div v-if="targetStageDrop">
@@ -58,7 +67,8 @@
             v-if="showDropInfo"
             :style="short ? 'right: -144px' : ''"
             class="item-divider-extra"
-          >统计次数</span>
+            >统计次数</span
+          >
         </el-divider>
         <div class="item-stage-container">
           <drop-line :data="targetStageDrop" />
@@ -72,12 +82,15 @@
               v-if="showDropInfo"
               :style="short ? 'top: 10px; right: -165px' : ''"
               class="item-divider-extra"
-            >统计次数</span>
+              >统计次数</span
+            >
           </el-divider>
           <div class="item-drop-info">
             <span v-if="dropList.length > 20">
               当前排序方式 {{ sortFunc.name }}
-              <el-button size="mini" type="primary" @click="switchSortFunc">切换</el-button>
+              <el-button size="mini" type="primary" @click="switchSortFunc"
+                >切换</el-button
+              >
             </span>
             <h-tooltip placement="left">
               <el-button size="mini" type="primary">说明</el-button>
@@ -89,7 +102,11 @@
             </h-tooltip>
           </div>
           <div class="item-stage-container">
-            <drop-line v-for="stage in dropList" :key="stage.stageId" :data="stage" />
+            <drop-line
+              v-for="stage in dropList"
+              :key="stage.stageId"
+              :data="stage"
+            />
           </div>
         </div>
         <div v-if="data.buildingProductList.length > 0 && formula.length > 0">
@@ -126,7 +143,12 @@
               </el-divider>
               <div class="item-formula-container">
                 <div v-for="rd in extraOutcomeGroup" :key="rd.id">
-                  <just-viewer :tool-tip="true" :no-popover="true" :item="rd.itemId" small />
+                  <just-viewer
+                    :tool-tip="true"
+                    :no-popover="true"
+                    :item="rd.itemId"
+                    small
+                  />
                 </div>
               </div>
             </div>
@@ -137,7 +159,6 @@
   </h-popping>
 </template>
 
-
 <script>
 import { findStage, sort, getfontSize } from '../../utils'
 import { path } from '../../utils/listVer'
@@ -147,7 +168,7 @@ import {
   itemBackground,
   occPer_chinese,
   roomType,
-  GOLD
+  GOLD,
 } from '../..//utils/string'
 
 import { mapState } from 'vuex'
@@ -158,25 +179,28 @@ Vue.use(Divider)
 import DropLine from './DropLine'
 import Color from '../Base/Color'
 
-
 import { getItem } from '../../utils/fetch'
 import HPopping from '@/components/Base/Popping'
 import HTooltip from '@/components/Base/Tooltip'
 import HItem from './Item'
 
-
-const getItmeDropData = (el, stageTree, list) => {
+/**
+ * @param mapList {{apCost:number; etCost:number; levelId: string; label: string }[]}
+ */
+const getItmeDropData = (el, mapList, list) => {
   let res = Object.assign({}, el)
-  const stageData = findStage(el.stageId, stageTree)
+  const stageData = mapList.find((m) => m.levelId.includes(el.stageId))
   if (stageData) {
     const temp = stageData.label.split(' ')
-    res.stageCode = temp[ 0 ]
+    res.stageCode = temp[0]
     if (list) {
-      const dropInfo = list.find(dropInfo => dropInfo.stageId === el.stageId)
+      const dropInfo = list.find((dropInfo) => dropInfo.stageId === el.stageId)
       if (dropInfo) {
         res = Object.assign(res, dropInfo)
         res.rate = Math.round((dropInfo.quantity / dropInfo.times) * 100)
-        res.dropCost = dropInfo.quantity ? Math.round((dropInfo.times / dropInfo.quantity) * stageData.apCost) : '∞'
+        res.dropCost = dropInfo.quantity
+          ? Math.round((dropInfo.times / dropInfo.quantity) * stageData.apCost)
+          : '∞'
         res.apCost = stageData.apCost
         if (res.dropCost < 1) {
           res.etCost = stageData.etCost
@@ -196,12 +220,12 @@ const sortFunc1 = {
 const sortFunc2 = {
   key: 1,
   func: (pre, cur) => pre.times > cur.times,
-  name: '样本数量'
+  name: '样本数量',
 }
 
 const sortFuncArr = {
   0: sortFunc1,
-  1: sortFunc2
+  1: sortFunc2,
 }
 
 export default {
@@ -211,49 +235,49 @@ export default {
     Color,
     HPopping,
     HItem,
-    HTooltip
+    HTooltip,
   },
   props: {
     item: {
       required: true,
-      type: [ String, Object ]
+      type: [String, Object],
     },
     num: {
       type: Number,
-      default: null
+      default: null,
     },
     type: {
       type: String,
-      default: null
+      default: null,
     },
     targetStage: {
       type: String,
-      default: null
+      default: null,
     },
     noPopover: {
       default: false,
-      type: Boolean
+      type: Boolean,
     },
     small: {
       type: Boolean,
-      default: false
+      default: false,
     },
     weight: {
       default: null,
-      type: Number
+      type: Number,
     },
     listMode: {
       default: false,
-      type: Boolean
+      type: Boolean,
     },
     toolTip: {
       type: Boolean,
-      default: false
+      default: false,
     },
     drawerSize: {
       type: Number,
-      default: 80
-    }
+      default: 80,
+    },
   },
   data() {
     return {
@@ -262,27 +286,27 @@ export default {
       data: typeof this.item !== 'string' ? this.item : undefined,
       GOLD,
       show: false,
-      sortFunc: sortFuncArr[ 1 ],
-      zIndex: 0
+      sortFunc: sortFuncArr[1],
+      zIndex: 0,
     }
   },
 
   computed: {
-    ...mapState([ 'stageTree', 'short' ]),
+    ...mapState(['stageTree', 'short', 'mapList']),
     formula() {
       if (!this.data) return []
       return this.data.buildingProductList
-        .filter(el => el.roomType === 'WORKSHOP')
-        .map(el => formula[ el.formulaId ])
-        .filter(e => e)
+        .filter((el) => el.roomType === 'WORKSHOP')
+        .map((el) => formula[el.formulaId])
+        .filter((e) => e)
     },
     itemBackground() {
-      return this.type !== 'FURN' ? itemBackground[ this.data.rarity ] : {}
+      return this.type !== 'FURN' ? itemBackground[this.data.rarity] : {}
     },
     itemPic() {
       if (this.type === 'FURN')
-        return `${ path }custom/furnitures/pic/${ this.data.id }.png`
-      else return `${ path }item/pic/${ this.data.iconId }.png`
+        return `${path}custom/furnitures/pic/${this.data.id}.png`
+      else return `${path}item/pic/${this.data.iconId}.png`
     },
 
     dropListRow() {
@@ -292,24 +316,24 @@ export default {
       if (!this.targetStage || !this.dropListRow || !this.stageTree) return
       else {
         const tempRes = this.dropList.find(
-          el => el.stageId === this.targetStage
+          (el) => el.stageId === this.targetStage
         )
         if (tempRes > -1) {
           // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-          const temp = this.dropList.splice(tempRes, 1)[ 0 ]
+          const temp = this.dropList.splice(tempRes, 1)[0]
           return temp
         }
         // ?这是随机掉落，上面是主掉落,主掉落需要从所有掉落里分割出当前地图的掉落。
         // ?因为这里不显示随机掉落（概率）的内容（有几十个）
         // 找不到的情况， 先不改成etCost（活动）!!!
         const target = this.dropListRow.find(
-          el => el.stageId === this.targetStage
+          (el) => el.stageId === this.targetStage
         )
         if (!target) return
         const res = Object.assign({}, target)
         const stageData = findStage(target.stageId, this.stageTree)
         const temp = stageData.label.split(' ')
-        res.stageCode = temp[ 0 ]
+        res.stageCode = temp[0]
         res.rate = Math.round((target.quantity / target.times) * 100)
         res.dropCost = Math.round(
           (target.times / target.quantity) * stageData.apCost
@@ -319,32 +343,38 @@ export default {
     },
     dropList() {
       const list = this.dropListRow
-      if(!this.stageTree) {
+      if (!this.stageTree) {
         return []
       }
       if (this.stageTree && list) {
         if (this.data.itemId === 'randomMaterial_2') {
-          return sort(list.map((el => getItmeDropData(el, this.stageTree, list))).filter(el => el.dropCost !== '∞'), this.sortFunc.func)
-        } else return this.data.stageDropList.map(el => {
-          return getItmeDropData(el, this.stageTree, list)
-        })
+          return sort(
+            list
+              .map((el) => getItmeDropData(el, this.mapList, list))
+              .filter((el) => el.dropCost !== '∞'),
+            this.sortFunc.func
+          )
+        } else
+          return this.data.stageDropList.map((el) => {
+            return getItmeDropData(el, this.mapList, list)
+          })
       } else {
-        return this.data.stageDropList.map(el => {
-          return getItmeDropData(el, this.stageTree)
+        return this.data.stageDropList.map((el) => {
+          return getItmeDropData(el, this.mapList)
         })
       }
     },
     showDropInfo() {
-      return this.dropList.filter(el => el.times)
+      return this.dropList.filter((el) => el.times)
     },
     fontSize() {
       return getfontSize(this.data.name, 30, 15, 6)
-    }
+    },
   },
   watch: {
     item(v) {
       if (typeof this.item === 'string') {
-        getItem(this.item).then(el => (this.data = el))
+        getItem(this.item).then((el) => (this.data = el))
       } else {
         this.data = v
       }
@@ -352,176 +382,175 @@ export default {
   },
   created() {
     if (typeof this.item === 'string') {
-      getItem(this.item).then(el => (this.data = el))
+      getItem(this.item).then((el) => (this.data = el))
     }
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     occper(occ) {
-      return occPer_chinese[ occ ]
+      return occPer_chinese[occ]
     },
     roomName(id) {
-      return roomType[ id ]
+      return roomType[id]
     },
     switchSortFunc() {
-      if (this.sortFunc.key === 0) this.sortFunc = sortFuncArr[ 1 ]
-      else this.sortFunc = sortFuncArr[ 0 ]
-    }
-  }
+      if (this.sortFunc.key === 0) this.sortFunc = sortFuncArr[1]
+      else this.sortFunc = sortFuncArr[0]
+    },
+  },
 }
 </script>
 
- <style lang="stylus" scoped>
- // ?popping slot 里的类
- .item-formula-container {
-   display: flex
-   flex-wrap: wrap
- }
+<style lang="stylus" scoped>
+// ?popping slot 里的类
+.item-formula-container {
+  display: flex
+  flex-wrap: wrap
+}
 
- .title-item {
-   margin: 0
-   margin-right: 20px
- }
+.title-item {
+  margin: 0
+  margin-right: 20px
+}
 
- .item-drop-info {
-   text-align: right
-   font-size: 14px
- }
+.item-drop-info {
+  text-align: right
+  font-size: 14px
+}
 
- .item-viewer-container {
-   margin: 10px
+.item-viewer-container {
+  margin: 10px
 
-   &.small {
-     margin: 8px
-   }
+  &.small {
+    margin: 8px
+  }
 
-   .item-popover {
-     &.el-divider__text.is-left {
-       left: 20px
-       padding: 0
-     }
-   }
+  .item-popover {
+    &.el-divider__text.is-left {
+      left: 20px
+      padding: 0
+    }
+  }
 
-   .item-divider-extra {
-     display: inline-block
-     background-color: #fff
-     padding: 0 10px
-     position: absolute
-     top: 0
-     right: - 242px
-   }
+  .item-divider-extra {
+    display: inline-block
+    background-color: #fff
+    padding: 0 10px
+    position: absolute
+    top: 0
+    right: - 242px
+  }
 
-   .item-stage-container {
-     padding-left: 40px
-   }
+  .item-stage-container {
+    padding-left: 40px
+  }
 
-   .weekly {
-     width: auto
-   }
+  .weekly {
+    width: auto
+  }
 
-   .item-formula-item {
-     margin: 0
-     width: 80px
-   }
+  .item-formula-item {
+    margin: 0
+    width: 80px
+  }
 
-   .item-name {
-     word-break: keep-all
-     white-space: nowrap
-   }
+  .item-name {
+    word-break: keep-all
+    white-space: nowrap
+  }
 
-   .short-force { // 强制缩小
-     .evolvcost-item-contianer {
-       width: 45px
-       height: 45px
-     }
+  .short-force { // 强制缩小
+    .evolvcost-item-contianer {
+      width: 45px
+      height: 45px
+    }
 
-     .item-name {
-       font-size: 13px
-     }
+    .item-name {
+      font-size: 13px
+    }
 
-     .item-stage-container {
-       padding-left: 30px
-     }
+    .item-stage-container {
+      padding-left: 30px
+    }
 
-     .item-popover {
-       overflow-x: hidden
-       max-height: 300px
-     }
+    .item-popover {
+      overflow-x: hidden
+      max-height: 300px
+    }
 
-     .item-popover .el-divider__text.is-left {
-       padding: 10px
-     }
+    .item-popover .el-divider__text.is-left {
+      padding: 10px
+    }
 
-     .item-popover .el-divider--horizontal {
-       width: calc(100% - 10px)
-     }
-   }
- }
+    .item-popover .el-divider--horizontal {
+      width: calc(100% - 10px)
+    }
+  }
+}
 
- @media screen and (max-width: 700px) {
-   .title-item {
-     margin-right: vw(20)
-   }
+@media screen and (max-width: 700px) {
+  .title-item {
+    margin-right: vw(20)
+  }
 
-   .item-viewer-container {
-     margin: vw(10)
+  .item-viewer-container {
+    margin: vw(10)
 
-     &.small {
-       margin: vw(5)
-     }
+    &.small {
+      margin: vw(5)
+    }
 
-     .item-name {
-       font-size: 14px
-     }
+    .item-name {
+      font-size: 14px
+    }
 
-     .item-stage-container {
-       padding-left: vw(60)
-     }
+    .item-stage-container {
+      padding-left: vw(60)
+    }
 
-     .item-popover {
-       overflow-x: hidden
-     }
+    .item-popover {
+      overflow-x: hidden
+    }
 
-     .item-popover .el-divider__text.is-left {
-       padding: vw(20)
-     }
+    .item-popover .el-divider__text.is-left {
+      padding: vw(20)
+    }
 
-     .item-popover .el-divider--horizontal {
-       width: 100%
-     }
-   }
- }
+    .item-popover .el-divider--horizontal {
+      width: 100%
+    }
+  }
+}
 
- @media screen and (max-width: 500px) {
-   .item-drop-info {
-     text-align: right
-     font-size: vw(28)
+@media screen and (max-width: 500px) {
+  .item-drop-info {
+    text-align: right
+    font-size: vw(28)
 
-     .el-button--mini {
-       padding: vw(7) vw(20)
-       font-size: vw(28)
-     }
+    .el-button--mini {
+      padding: vw(7) vw(20)
+      font-size: vw(28)
+    }
 
-     .el-button + .el-button[data-v-8949beae] {
-       margin-left: vw(10)
-     }
-   }
+    .el-button + .el-button[data-v-8949beae] {
+      margin-left: vw(10)
+    }
+  }
 
-   .item-viewer-container {
-     margin: vw(10)
+  .item-viewer-container {
+    margin: vw(10)
 
-     &.small {
-       margin: vw(5)
-     }
+    &.small {
+      margin: vw(5)
+    }
 
-     .item-name {
-       font-size: vw(28)
-     }
-   }
+    .item-name {
+      font-size: vw(28)
+    }
+  }
 
-   .item-formula-item {
-     width: vw(135)
-   }
- }
+  .item-formula-item {
+    width: vw(135)
+  }
+}
 </style>

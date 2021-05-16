@@ -37,9 +37,10 @@ const actions = {
       console.log('await')
       await sleep(50)
     }
-    console.log('await', key)
+
     const data = await Assets.getEnemyList(key)
     commit(SET_DATA, { key: 'rawData', value: data })
+
     if (rootState.stageTree) dispatch('loadMap')
     else commit(SET_DATA, { key: 'watchTree', value: true })
   },
@@ -47,10 +48,9 @@ const actions = {
     const parent = map || router.currentRoute.params.map
     if (!parent || !rootState.stageTree) return
 
-    console.log('parent ?', parent)
     const target = rootState.mapList.find((e) => e.levelId === parent)
 
-    commit(SET_DATA, { key: 'mapCode', parent })
+    commit(SET_DATA, { key: 'mapCode', value: parent })
     if (target) {
       // const value = target.path
       // .replace('weekly', 'wk')
