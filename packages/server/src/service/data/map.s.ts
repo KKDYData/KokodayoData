@@ -126,12 +126,13 @@ export class MapService extends BaseService {
       let label = ''
       let stageType: IStageInfo.StageType | (string & {})
       let hardStagedId: string | undefined
-
       const labelInfoData = stageInfos.find(info => info.data.code)?.data
+
       if (labelInfoData) {
-        label = labelInfoData.code + ' ' + labelInfoData.name
+        let { code, name, hardStagedId } = labelInfoData
+        label = code + ' ' + name
         stageType = labelInfoData.stageType
-        hardStagedId = labelInfoData.hardStagedId ?? ''
+        hardStagedId = hardStagedId ?? ''
       } else {
         stageType = levelId.includes('act')
           ? IStageInfo.StageType.Activity
@@ -148,7 +149,11 @@ export class MapService extends BaseService {
       }
     })
 
-    this.redisService.client.setex(MAP_LIST, 60 * 5, JSON.stringify(list))
+    this.redisService.client.setex(
+      MAP_LIST,
+      60 * 60 * 24 * 30,
+      JSON.stringify(list)
+    )
 
     return list
   }
