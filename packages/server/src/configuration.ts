@@ -1,9 +1,10 @@
 import { App, Configuration, Inject, Logger } from '@midwayjs/decorator'
-import { ILifeCycle, IMidwayApplication, IMidwayContext } from '@midwayjs/core'
+import { ILifeCycle, IMidwayContext } from '@midwayjs/core'
 import { ILogger, IMidwayLogger } from '@midwayjs/logger'
-import { Application, Context } from 'egg'
 import * as orm from '@midwayjs/orm'
-import aliOss from 'ali-oss'
+import bodyParser from 'koa-bodyparser'
+import { Application, Context } from '@midwayjs/koa'
+import cors from '@koa/cors'
 
 @Configuration({
   imports: [orm],
@@ -11,7 +12,7 @@ import aliOss from 'ali-oss'
 })
 export class AutoConfiguration implements ILifeCycle {
   @App()
-  app: IMidwayApplication
+  app: Application
 
   @Logger()
   coreLogger: IMidwayLogger
@@ -22,5 +23,14 @@ export class AutoConfiguration implements ILifeCycle {
   async onReady() {
     // this.app.sockets.
     this.coreLogger.updateConsoleLevel('info')
+
+    this.app.use(
+      cors({
+        origin: ctx => 'https://kokodayo.fun',
+        credentials: true,
+      })
+    )
+
+    this.app.use(bodyParser())
   }
 }

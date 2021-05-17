@@ -4,6 +4,7 @@ import {
   IEnemyData,
   IEnemyInfo,
   IGachaPoolInfo,
+  IStageInfo,
   ITeamInfo,
 } from '@kkdy/data'
 import { BaseEntityType } from './utilsType'
@@ -107,4 +108,17 @@ export interface ListEnemies {
     enemyId: string
     comments: null | string[]
   })[]
+}
+
+export interface ListMap {
+  path: '/data/map/list'
+
+  method: 'get'
+
+  response: {
+    levelId: string
+    label: string
+    stageType: IStageInfo.StageType | (string & {})
+    hardStagedId: string
+  }[]
 }

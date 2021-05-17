@@ -1,10 +1,6 @@
 import { Inject, Provide } from '@midwayjs/decorator'
 
-import {
-  IWebMiddleware,
-  IMidwayWebNext,
-  IMidwayWebContext,
-} from '@midwayjs/web'
+import { IWebMiddleware, IMidwayKoaNext, Context } from '@midwayjs/koa'
 import { RedisService } from '../service/redis.s'
 import { BaseError } from '../utils/error'
 import { ErrorMap } from '../utils/ErrorMap'
@@ -22,7 +18,7 @@ export class LoginMiddleware implements IWebMiddleware {
   redisService: RedisService
 
   resolve() {
-    return async (ctx: IMidwayWebContext, next: IMidwayWebNext) => {
+    return async (ctx: Context, next: IMidwayKoaNext) => {
       // 控制器前执行的逻辑
 
       const token = ctx.headers['x-token']
