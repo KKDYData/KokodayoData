@@ -32,6 +32,7 @@ export class Enemy extends BaseEntity {
   @Column({
     comment: '评论、注释',
     type: 'json',
+    nullable: true,
   })
   comments: string[]
 }

@@ -1,26 +1,29 @@
 {
   "name": "@kkdy/data",
-  "version": "1.0.0",
+  "version": "1.0.1-beta.1",
   "description": "",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "typings": "dist/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "rollup -c"
+    "build": "rollup -c",
+    "init-data": "node script/update.js"
   },
+  "files": [
+    "lib",
+    "src",
+    "dist"
+  ],
   "author": "",
   "license": "GPL-3.0-or-later",
-  "dependencies": {
-    "@kkdy/api": "1.0.0",
+  "devDependencies": {
     "@kkdy/queue": "^0.0.3",
     "axios": "^0.21.1",
     "execa": "^5.0.0",
     "minimist": "^1.2.5",
     "quicktype-core": "^6.0.69",
-    "ramda": "^0.27.1"
-  },
-  "devDependencies": {
+    "ramda": "^0.27.1",
     "rollup-plugin-typescript2": "^0.30.0"
   }
 }

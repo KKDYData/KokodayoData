@@ -1,6 +1,6 @@
 {
   "name": "@kkdy/api",
-  "version": "1.0.0",
+  "version": "1.0.1-beta.1",
   "description": "",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
@@ -14,11 +14,11 @@
   },
   "author": "odex",
   "dependencies": {
-    "@kkdy/build": "1",
-    "@kkdy/data": "1.0",
+    "@kkdy/data": "^1.0.0",
     "axios": "^0.21.1"
   },
   "devDependencies": {
+    "@kkdy/build": "^1.0.0",
     "@types/lodash": "^4.14.168",
     "@types/prettier": "^2.2.2",
     "@types/rimraf": "^3.0.0",

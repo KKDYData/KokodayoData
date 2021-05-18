@@ -8,6 +8,7 @@ import {
   Validate,
   ALL,
   Query,
+  Logger,
 } from '@midwayjs/decorator'
 import { GetResType } from '../dto/utils'
 import { ApiData } from '../interface'
@@ -23,6 +24,9 @@ import {
 import { GachaPoolService } from '../service/data/gachaPool.s'
 import { EnemyService } from '../service/data/enemy.s'
 import { SkillService } from '../service/data/skill.s'
+import { MapService } from '../service/data/map.s'
+import { ILogger } from '@midwayjs/logger'
+import { IStageInfo } from '@kkdy/data'
 
 @Provide()
 @Controller('/data')
@@ -41,6 +45,12 @@ export class DataController {
 
   @Inject()
   skillService: SkillService
+
+  @Inject()
+  mapService: MapService
+
+  @Logger()
+  coreLogger: ILogger
 
   @Get('/list')
   async listCharacters(): Promise<GetResType<ApiData.GetCharacterList>> {
@@ -99,5 +109,15 @@ export class DataController {
   @Validate()
   async updateEnemyComments(@Body(ALL) data: DataUpdateEnemyCommentsDTO) {
     return this.enemyService.updateEnemyComments(data.id, data.comments)
+  }
+
+  @Get('/map/list')
+  async listMap(): Promise<GetResType<ApiData.ListMap>> {
+    return this.mapService.listMap()
+  }
+
+  @Get('/map')
+  async getMapByLevelId(@Query(ALL) q: { id: string }) {
+    return this.mapService.getMapByLevelId(q.id)
   }
 }

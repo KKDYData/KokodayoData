@@ -10,6 +10,11 @@ import { BaseError } from '../../utils/error'
 import { ErrorMap } from '../../utils/ErrorMap'
 import { EnemyService } from './enemy.s'
 import { StageEnemyService } from './stageEnemy.s'
+import { RedisService } from '../redis.s'
+
+const { StageType } = IStageInfo
+
+const MAP_LIST = 'MAP_LIST'
 
 @Provide()
 export class MapService extends BaseService {
@@ -24,6 +29,9 @@ export class MapService extends BaseService {
 
   @Inject()
   stageEnemyService: StageEnemyService
+
+  @Inject()
+  redisService: RedisService
 
   async couData(levelId: string, data: IStageData.IData) {
     const dataModel = await getOrCreateModel(this.dataModel, {
@@ -62,7 +70,10 @@ export class MapService extends BaseService {
   }
 
   async couStageInfo(levelId: string, info: IStageInfo.IStage) {
-    const dataModel = await this.dataModel.findOne({ where: { levelId } })
+    const dataModel = await this.dataModel.findOne({
+      where: { levelId },
+      relations: ['stageInfos'],
+    })
 
     const infoModel = await getOrCreateModel(this.infoModel, {
       where: { stageId: info.stageId },
@@ -73,11 +84,19 @@ export class MapService extends BaseService {
     infoModel.data = info
     const res = await this.infoModel.save(infoModel)
 
+    if (!dataModel) {
+      throw BaseError.create({
+        code: -406,
+        msg: `找不到地图，请确认levelId:${levelId}`,
+      })
+    }
+
     // 放置数据
     if (!dataModel.stageInfos) dataModel.stageInfos = []
     dataModel.stageInfos.push(res)
 
     await this.dataModel.save(dataModel)
+    console.log('link ', levelId)
   }
 
   async getMapByLevelId(levelId: string) {
@@ -87,5 +106,55 @@ export class MapService extends BaseService {
     })
     if (!data) throw BaseError.create(ErrorMap['NO_DATA'])
     return data
+  }
+
+  async listMap() {
+    let list: {
+      levelId: string
+      label: string
+      stageType: IStageInfo.StageType | (string & {})
+      hardStagedId: string
+    }[] = JSON.parse(await this.redisService.client.get(MAP_LIST)) ?? []
+
+    if (list?.length) {
+      return list
+    }
+
+    const stages = await this.dataModel.find({ relations: ['stageInfos'] })
+    list = stages.map(stage => {
+      const { levelId, stageInfos, data } = stage
+      let label = ''
+      let stageType: IStageInfo.StageType | (string & {})
+      let hardStagedId: string | undefined
+      const labelInfoData = stageInfos.find(info => info.data.code)?.data
+
+      if (labelInfoData) {
+        let { code, name, hardStagedId } = labelInfoData
+        label = code + ' ' + name
+        stageType = labelInfoData.stageType
+        hardStagedId = hardStagedId ?? ''
+      } else {
+        stageType = levelId.includes('act')
+          ? IStageInfo.StageType.Activity
+          : levelId.split('_')[1]
+      }
+
+      return {
+        levelId,
+        label,
+        stageType,
+        hardStagedId,
+        apCost: labelInfoData?.apCost,
+        etCost: labelInfoData?.etCost,
+      }
+    })
+
+    this.redisService.client.setex(
+      MAP_LIST,
+      60 * 60 * 24 * 30,
+      JSON.stringify(list)
+    )
+
+    return list
   }
 }
