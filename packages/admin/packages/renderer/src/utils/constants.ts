@@ -26,4 +26,11 @@ const rarityList = [
   { value: '6', text: '6', checked: false },
 ]
 
-export { tokenSwitch, professionList, rarityList }
+// 敌人级别
+const enemyLevelList = [
+  { value: 'NORMAL', text: '普通', checked: false },
+  { value: 'ELITE', text: '精英', checked: false },
+  { value: 'BOSS', text: 'Boss', checked: false },
+]
+
+export { tokenSwitch, professionList, rarityList, enemyLevelList }

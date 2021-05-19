@@ -30,23 +30,18 @@ ref: routerList = [
     icon: 'el-icon-s-home',
     title: '首页',
   },
-  {
-    url: '/about',
-    icon: 'el-icon-menu',
-    title: '测试页',
-  },
+  // {
+  //   url: '/about',
+  //   icon: 'el-icon-menu',
+  //   title: '测试页',
+  // },
   {
     url: '/charlist',
     icon: 'el-icon-user-solid',
     title: '干员一览',
   },
   {
-    url: '/chardetail/p_char_010_chen',
-    icon: 'el-icon-user-solid',
-    title: '干员详情',
-  },
-  {
-    url: '/',
+    url: '/enemylist',
     icon: 'el-icon-user-solid',
     title: '敌人一览',
   },
