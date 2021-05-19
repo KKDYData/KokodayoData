@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ApiUser } from '@kkdy/api'
+import { User } from '@kkdy/api'
 import { ElButton } from 'element-plus'
 
 ref: count = 0
@@ -32,14 +32,13 @@ ref: count = 0
 ref: data = null as any
 
 const getUserInfo = async () => {
-  const { data: res } = await ApiUser.GetUserInfo()
+  const { data: res } = await User.GetUserInfo()
   if (!res.ok) {
     alert(res.msg)
   } else {
     data = res.result
   }
 }
-ApiUser
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->

@@ -4,6 +4,7 @@
     filterable
     clearable
     :placeholder="'请选择关联活动'"
+    @change="changeSelect"
   >
     <ElOption
       v-for="(item, index) in optionList"
@@ -24,14 +25,24 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps } from 'vue'
+import { defineProps, getCurrentInstance } from 'vue'
 import { ElSelect, ElOption } from 'element-plus'
-import { IActivityInfo } from '@kkdy/data'
+// import { IActivityInfo } from '@kkdy/data'
 
 defineProps<{
-  selectValue: string
-  optionList: Array<IActivityInfo.IInfo>
+  // optionList: Array<IActivityInfo.IInfo>
+  optionList: Array<{ [k: string]: any }>
 }>()
+
+const instance = getCurrentInstance()!
+
+ref: selectValue = ''
+
+function changeSelect(id: string) {
+  instance.emit('change-select', {
+    id: id,
+  })
+}
 </script>
 
 <style lang="css" scoped>

@@ -26,7 +26,7 @@
       />
       <FilterSelect
         condtype="actvs"
-        grouptitle="关联活动"
+        grouptitle="相关活动"
         :select-value="chsActv"
         :option-list="allCond.actvs"
         :tokenflag="tokenflag"
@@ -37,22 +37,23 @@
     <!-- 干员列表 -->
     <div class="char-list-content">
       <div
-        v-for="agent in filteredList"
-        :key="agent.charId"
+        v-for="char in filteredList"
+        :key="char.charId"
         class="char-list-column"
       >
         <div class="char-list-column-item">
-          <router-link :to="'/chardetail/' + agent.charId">
-            <div class="w-28 h-28 bg-gray-300" :alt="agent.name" />
+          <router-link :to="'/chardetail/' + char.charId">
+            <!-- <div class="w-28 h-28 bg-gray-300" :alt="char.name" :style="{backgroundImage: `url(https://andata.somedata.top/dataX/char/profile/${char.charId}.png)`}" /> -->
+            <div class="w-28 h-28 bg-gray-300" :alt="char.name" />
           </router-link>
           <div
             class="char-name box-border absolute pl-2.5 text-white whitespace-nowrap overflow-ellipsis z-10"
           >
             <div
               class="char-name-zh"
-              :style="agent.name.split('').length > 6 ? 'font-size: 14px;' : ''"
+              :style="char.name.split('').length > 6 ? 'font-size: 14px;' : ''"
             >
-              {{ agent.name }}
+              {{ char.name }}
             </div>
           </div>
         </div>
@@ -66,7 +67,7 @@ import { reactive } from 'vue'
 import FilterButtonGroup from '../components/FilterButtonGroup.vue'
 import FilterSelect from '../components/FilterSelect.vue'
 import { tokenSwitch, professionList, rarityList } from '../utils/constants'
-// import { ApiData } from '@kkdy/api'
+import { Data } from '@kkdy/api'
 
 // 测试数据
 import { testCharList } from '../utils/charlist'
@@ -103,13 +104,12 @@ ref: tokenflag = false // 是否选择“召唤物”类别
 ref: chsActv = '' // 选择的活动
 
 // loading = true
-// ApiData.GetCharacterList()
+// Data.GetCharacterList()
 //   .then((res) => {
 //     const resData = res.data
 //     if (resData.ok) {
 //       console.log('char list res', resData.result)
 //       charList = resData.result
-//       filteredList = resData.result
 //       // loading = false
 //     }
 //   })
@@ -240,7 +240,7 @@ function refilterList(switchflag = 'CHAR') {
 }
 </script>
 
-<style lang="css" scoped>
+<style lang="postcss" scoped>
 .char-list-container {
   display: flex;
   flex-wrap: wrap;
