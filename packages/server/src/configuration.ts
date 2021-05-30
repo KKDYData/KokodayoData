@@ -6,6 +6,8 @@ import bodyParser from 'koa-bodyparser'
 import { Application, Context } from '@midwayjs/koa'
 import cors from '@koa/cors'
 
+const ALLOW_ORIGINS = ['https://kokodayo.fun', 'https://www.kokodayo.fun']
+
 @Configuration({
   imports: [orm],
   importConfigs: ['./config'],
@@ -26,7 +28,10 @@ export class AutoConfiguration implements ILifeCycle {
 
     this.app.use(
       cors({
-        origin: ctx => 'https://kokodayo.fun',
+        origin: ctx => {
+          const targetIndex = ALLOW_ORIGINS.indexOf(ctx.headers.origin) ?? 0
+          return ALLOW_ORIGINS[targetIndex]
+        },
         credentials: true,
       })
     )
