@@ -1,9 +1,10 @@
-import { Config, Init, Provide } from '@midwayjs/decorator'
+import { Config, Init, Provide, Scope, ScopeEnum } from '@midwayjs/decorator'
 import { BaseService } from './base.s'
 import redis, { Redis } from 'ioredis'
 import JSONCache from 'redis-json'
 import { ReJSON } from 'redis-modules-sdk'
 @Provide()
+@Scope(ScopeEnum.Singleton)
 export class RedisService extends BaseService {
   reJson: ReJSON
   client: Redis
