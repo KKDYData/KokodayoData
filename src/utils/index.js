@@ -198,6 +198,7 @@ const exSkill2 = new Map([
 
 const changeAttackSpeed = (skill) => {
   const str = changeDesc(skill.description)
+
   let res = str.replace(/(\{)(.*?)(\})/g, (match, p1, p2, p3, p4, p5) => {
     let percent = '',
       scale = 1
@@ -234,7 +235,9 @@ const changeAttackSpeed = (skill) => {
   })
 
   const skill_base_time = findValue(skill, 'blackboard', 'base_attack_time')
-  const AtkBasetimeIndex = decNoValue(res, skill_base_time, '攻击间隔')
+  
+  //! 人太菜，维护不了这个东西
+  const AtkBasetimeIndex =  - 1 // decNoValue(res, skill_base_time, '攻击间隔')
   if (AtkBasetimeIndex > -1) {
     const text = getValueDesc(res, AtkBasetimeIndex, 4)
     let value = skill_base_time.value
