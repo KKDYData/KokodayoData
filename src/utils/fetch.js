@@ -1,9 +1,4 @@
-import {
-  dataPath,
-  target,
-  api,
-  path,
-} from './listVer'
+import { dataPath, target, api, path } from './listVer'
 
 import store from '../store'
 
@@ -38,69 +33,66 @@ const setVer = (name, ver) => {
 const fetchGet = (url) => {
   return fetch(url, {
     method: 'GET',
-    mode: 'cors'
-  }).then(res => {
+    mode: 'cors',
+  }).then((res) => {
     if (res.ok) {
       return res.json()
-    }
-    else {
+    } else {
       return Promise.reject('server error')
     }
   })
 }
 
-
 const fetchGetSliceSet = (key, setKey) => {
   return fetchGet(api + 'data/' + key)
-    .then(res => {
+    .then((res) => {
       if (setKey) setVer(setKey, res.lastModified)
       return fetchGet(path + res.name.slice(6))
     })
-    .catch(err => {
+    .catch((err) => {
       console.error('error', err)
       return []
     })
 }
 
 const fetchByKey = (keyPath) => {
-  return key => fetchGet(`${dataPath}/${target}/${keyPath}/${key}.json`)
-    .catch(err => {
+  return (key) =>
+    fetchGet(`${dataPath}/${target}/${keyPath}/${key}.json`).catch((err) => {
       console.error('error', err)
       return Promise.reject('no data')
     })
 }
 
-
-
 // 遗留api
-const getEneAppearMap = () => fetchGetSliceSet('enemyAppearMap', 'setApperMapVer')
+const getEneAppearMap = () =>
+  fetchGetSliceSet('enemyAppearMap', 'setApperMapVer')
 const getDevList = () => fetchGetSliceSet('devList', 'setListVer')
 
 // 不用找服务器的list
 const getThemeList = () => fetchByKey('custom')('themeslist')
 
-const getHeroData = key => fetchByKey('char/data')(key)
+const getHeroData = (key) => fetchByKey('char/data')(key)
 
-const getEnemyData = key => fetchByKey('enemy')(key)
+const getEnemyData = (key) => fetchByKey('enemy')(key)
 
-const getMapData = key => fetchByKey('map/data')(key)
+const getMapData = (key) => fetchByKey('map/data')(key)
 
-const getMapDataListVer = key => fetchByKey('map/exData')(key)
+const getMapDataListVer = (key) =>
+  fetchByKey('map/exData')(key.replace('level_', ''))
 
-const getCharInfo = key => fetchByKey('char/info')(key)
+const getCharInfo = (key) => fetchByKey('char/info')(key)
 
-const getCharWords = key => fetchByKey('char/words')(key)
+const getCharWords = (key) => fetchByKey('char/words')(key)
 
-const getRange = key => fetchByKey('range')(key)
+const getRange = (key) => fetchByKey('range')(key)
 
-const getSkill = key => fetchByKey('skills')(key)
+const getSkill = (key) => fetchByKey('skills')(key)
 
-const getItem = key => fetchByKey('item')(key)
+const getItem = (key) => fetchByKey('item')(key)
 
-const getFurn = key => fetchByKey('custom/furnitures')(key)
+const getFurn = (key) => fetchByKey('custom/furnitures')(key)
 
-const getCharItem = key => fetchByKey('item')('p_' + key)
-
+const getCharItem = (key) => fetchByKey('item')('p_' + key)
 
 const importScript = (url, init = () => console.log('load')) => {
   const body = document.querySelector('head')
@@ -112,26 +104,25 @@ const importScript = (url, init = () => console.log('load')) => {
 }
 
 const importEcharts = (init) => {
-  importScript('https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.common.min.js', init)
+  importScript(
+    'https://cdn.bootcss.com/echarts/4.3.0-rc.1/echarts.common.min.js',
+    init
+  )
 }
 
 const importSpriteJs = (init) => {
   importScript('https://unpkg.com/spritejs@2/dist/spritejs.min.js', init)
 }
 
-
 export {
   fetchGet,
   fetchByKey,
-
-
   getEnemyData,
   getEneAppearMap,
   getDevList,
   getThemeList,
   importSpriteJs,
   importEcharts,
-
   // api 类，需要提供key
   getHeroData,
   getCharInfo,

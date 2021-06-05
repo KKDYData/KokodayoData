@@ -13,7 +13,8 @@
     "pub-b": "yarn build-beta",
     "pub-s": "yarn build-stable",
     "snyk-protect": "snyk protect",
-    "prepare": "yarn run snyk-protect"
+    "prepare": "yarn run snyk-protect",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@babel/plugin-transform-runtime": "^7.12.10",
@@ -30,7 +31,7 @@
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.2.2",
     "clipboard": "^2.0.4",
-    "core-js": "^3.8.3",
+    "core-js": "^3.14.0",
     "echarts": "^4.9.0",
     "element-theme-chalk": "^2.15.0",
     "element-ui": "^2.15.0",
@@ -55,15 +56,8 @@
     "workbox-window": "^6.1.5"
   },
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.3.3",
-    "@babel/plugin-external-helpers": "^7.2.0",
-    "@babel/plugin-proposal-class-properties": "^7.3.4",
-    "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-async-to-generator": "^7.3.4",
-    "@babel/preset-env": "^7.3.1",
-    "@babel/preset-stage-3": "^7.0.0",
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.4",
     "@types/ramda": "^0.27.0",
     "ali-oss": "^6.2.1",
     "babel-plugin-component": "^1.1.1",

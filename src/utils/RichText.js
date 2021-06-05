@@ -99,7 +99,7 @@ class RichTextNode {
       `<span class="${typeMap[this.tagType]} ${this.tagName}">` +
       this.children.reduce((res, v) => {
         const text =
-          typeof v === 'string' ? v.replace('\\n', '<br />') : v.toHtml()
+          typeof v === 'string' ? v.replaceAll('\\n', '<br />') : v.toHtml()
         return res + text
       }, '') +
       '</span>'

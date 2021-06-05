@@ -2,7 +2,7 @@ import { Api } from '@/Api'
 import { change } from './utils'
 import { Data, request } from '@kkdy/api'
 
-if (process.env.NODE_ENV === 'development') request.defaults.baseURL = '/api'
+if (process.env.NODE_ENV === 'development') request.defaults.baseURL = '/'
 
 const namespaced = true
 

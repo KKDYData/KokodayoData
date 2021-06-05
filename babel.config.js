@@ -8,6 +8,12 @@ module.exports = function(api) {
         modules: 'commonjs',
         targets: {
           esmodules: true,
+          chrome: 76,
+        },
+        useBuiltIns: 'usage',
+        corejs: {
+          proposals: true,
+          version: '3.14',
         },
       },
     ],

@@ -8,7 +8,7 @@ module.exports = merge(common, {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.DefinePlugin({
       'process.env.PRODUCTION': JSON.stringify('beta'),
-      'import.meta.env.VITE_API_URL': JSON.stringify('/api'),
+      // 'import.meta.env.VITE_API_URL': JSON.stringify('/api'),
     }),
   ],
   devtool: 'inline-source-map',
