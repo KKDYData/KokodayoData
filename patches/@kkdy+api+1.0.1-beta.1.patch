@@ -1,0 +1,13 @@
+diff --git a/node_modules/@kkdy/api/dist/index.esm.js b/node_modules/@kkdy/api/dist/index.esm.js
+index a9dd3f0..f2e0946 100644
+--- a/node_modules/@kkdy/api/dist/index.esm.js
++++ b/node_modules/@kkdy/api/dist/index.esm.js
+@@ -1,7 +1,7 @@
+ import axios from 'axios';
+ 
+ const request = axios.create({
+-    baseURL: import.meta.env.VITE_API_URL ?? 'http://127.0.0.1:7001',
++    baseURL: 'https://test.api.kokodayo.fun',
+     withCredentials: true,
+ });
+ const setXToken = (token) => {
