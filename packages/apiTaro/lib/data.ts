@@ -6,6 +6,7 @@ import {
   IEnemyData,
   IEnemyInfo,
   IGachaPoolInfo,
+  IStageInfo,
   ITeamInfo,
 } from '@kkdy/data'
 import { BaseEntityType } from './utilsType'
@@ -75,4 +76,16 @@ export function ListEnemies() {
       })[]
     >
   >('/data/enemy/list')
+}
+export function ListMap() {
+  return request.get<
+    JsonResponse<
+      {
+        levelId: string
+        label: string
+        stageType: IStageInfo.StageType | (string & {})
+        hardStagedId: string
+      }[]
+    >
+  >('/data/map/list')
 }
