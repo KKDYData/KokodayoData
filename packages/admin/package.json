@@ -48,7 +48,7 @@
     "vite-plugin-windicss": "^0.8.2",
     "vue-eslint-parser": "^7.6.0",
     "vue-tsc": "^0.0.14",
-    "windicss": "^2.4.3"
+    "windicss": "^3.1.1"
   },
   "dependencies": {
     "@kkdy/api": "1.0",
