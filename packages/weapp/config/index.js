@@ -1,4 +1,6 @@
 const windicss = require('windicss-webpack-plugin')
+const path = require('path')
+
 const config = {
   projectName: 'kkdy-weapp',
   date: '2021-2-3',
@@ -17,6 +19,9 @@ const config = {
     options: {},
   },
   framework: 'vue3',
+  alias: {
+    '/@': path.resolve(__dirname, '..', 'src'),
+  },
   mini: {
     postcss: {
       pxtransform: {

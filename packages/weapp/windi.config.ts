@@ -1,8 +1,10 @@
 import { defineConfig } from 'windicss-webpack-plugin'
+import colors from 'windicss/colors'
 
 export default defineConfig({
   preflight: false,
   theme: {
+    colors,
     width: {
       auto: 'auto',
       '1_2': '50%',
