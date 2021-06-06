@@ -9,7 +9,7 @@
   "scripts": {
     "build": "lerna run --stream --sort build",
     "dev:h5": "",
-    "postinstall": "husky install",
+    "postinstall": "husky install && patch-package",
     "prepare": "husky install",
     "tnpm": "yarn --registry=https://registry.npm.taobao.org"
   },
