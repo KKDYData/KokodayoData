@@ -5,7 +5,7 @@
       style="filter: drop-shadow(1px 1px 2px #4a4a4a)"
     >
       <KIcon
-        v-for="(v, i) in Array.from({ length: data.rarity })"
+        v-for="(v, i) in Array.from({ length: data.rarity + 1 })"
         :key="i"
         :size="12"
         name="iconxingshu1-01"

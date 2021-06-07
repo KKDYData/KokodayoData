@@ -38,7 +38,9 @@ ref: profileUrl = computed(() => `${baseUrl}/profile/${props.data.charId}.png`)
 const defaultProfile = `${baseUrl}/profile/char_124_kroos.png`
 ref: bgUrl = computed(
   () =>
-    `${baseUrl}/assets/bg/${props.data._skeleton ? 0 : props.data.rarity}.png`
+    `${baseUrl}/assets/bg/${
+      props.data._skeleton ? 0 : props.data.rarity + 1
+    }.png`
 )
 
 ref: show = computed(() => !props.data._skeleton)
