@@ -1,6 +1,6 @@
 import { createApp } from 'vue'
-import store from './store'
 import Taro from '@tarojs/taro'
+import { createPinia } from 'pinia'
 import 'windi.css'
 
 Taro.cloud.init({
@@ -9,13 +9,15 @@ Taro.cloud.init({
 })
 
 import './app.styl'
+import { KIcon } from '/@/components/Icon'
 // import './tailwind.css'
 
-const App = createApp({
-  onShow(options) {},
+const app = createApp({
+  onShow() {},
   // 入口组件不需要实现 render 方法，即使实现了也会被 taro 所覆盖
 })
 
-App.use(store)
+app.use(createPinia())
+app.component('KIcon', KIcon)
 
-export default App
+export default app

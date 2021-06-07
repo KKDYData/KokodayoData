@@ -3,6 +3,9 @@ import colors from 'windicss/colors'
 
 export default defineConfig({
   preflight: false,
+  shortcuts: {
+    card: 'rounded-sm overflow-hidden',
+  },
   theme: {
     colors,
     width: {

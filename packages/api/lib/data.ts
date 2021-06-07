@@ -83,7 +83,7 @@ export function ListMap() {
       {
         levelId: string
         label: string
-        stageType: IStageInfo.StageType
+        stageType: IStageInfo.StageType | (string & {})
         hardStagedId: string
       }[]
     >
