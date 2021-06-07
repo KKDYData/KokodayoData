@@ -1,6 +1,9 @@
 <template>
   <view class="agent-icon">
-    <view class="text-right mb-1 text-0px">
+    <view
+      class="text-right mb-1 text-0px"
+      style="filter: drop-shadow(1px 1px 2px #4a4a4a)"
+    >
       <KIcon
         v-for="(v, i) in Array.from({ length: data.rarity })"
         :key="i"
@@ -22,11 +25,19 @@
         "
       >
         <view
-          class="border-2px rounded-2px h-32px w-32px inline-block"
-          style="
-            border-color: #707070;
-            filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, 0.3));
+          class="
+            flex
+            border-2px
+            rounded-2px
+            h-32px
+            w-32px
+            drop-shadow-base
+            filter
+            inline-block
+            justify-center
+            items-center
           "
+          style="border-color: #707070"
         >
           <KIcon :size="14" :name="professionIcon" class="p-icon" />
         </view>

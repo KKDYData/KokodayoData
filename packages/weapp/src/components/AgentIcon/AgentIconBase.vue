@@ -63,7 +63,7 @@ ref: show = computed(() => !props.data._skeleton)
     content: ''
     width: 100%
     height: 100%
-    box-shadow: 0 2px 4px 1px rgba(0,0,0,.31), inset 0 0px 6px 0px rgba(0,0,0,.1)
+   box-shadow: 0 4px 4px 4px rgba(0,0,0,.31), inset 0 2px 2px 2px rgba(0,0,0,.1)
     @apply border-10px border-white absolute top-0 left-0
   }
 }

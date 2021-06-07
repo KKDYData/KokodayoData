@@ -1,13 +1,23 @@
 import { defineConfig } from 'windicss-webpack-plugin'
 import colors from 'windicss/colors'
+import {} from 'windicss/defaultTheme'
 
 export default defineConfig({
   preflight: false,
   shortcuts: {
     card: 'rounded-sm overflow-hidden',
   },
+
   theme: {
     colors,
+    boxShadow: {
+      base: '1px 1px 1px #4a4a4a',
+      medium: '2px 2px 4px #4a4a4a',
+    },
+    dropShadow: {
+      base: '1px 1px 2px #4a4a4a',
+      medium: '2px 2px 2px #4a4a4a',
+    },
     width: {
       auto: 'auto',
       '1_2': '50%',

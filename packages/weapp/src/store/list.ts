@@ -41,9 +41,9 @@ export const useListStore = defineStore({
         throw new Error('net error')
       }
 
-      setTimeout(() => {
-        this.charList = data.result
-      }, 2300)
+      this.charList = data.result
+      // setTimeout(() => {
+      // }, 2300)
     },
   },
 })
