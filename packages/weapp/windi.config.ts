@@ -15,8 +15,8 @@ export default defineConfig({
       medium: '2px 2px 4px #4a4a4a',
     },
     dropShadow: {
-      base: '1px 1px 2px #4a4a4a',
-      medium: '2px 2px 2px #4a4a4a',
+      base: '1px 1px 2px #808080',
+      medium: '2px 2px 2px #808080',
     },
     width: {
       auto: 'auto',
