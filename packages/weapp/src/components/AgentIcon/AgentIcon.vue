@@ -1,9 +1,6 @@
 <template>
   <view class="agent-icon">
-    <view
-      class="text-right mb-1 text-0px"
-      style="filter: drop-shadow(1px 1px 2px #4a4a4a)"
-    >
+    <view class="text-right mb-1 text-0px filter drop-shadow-base">
       <KIcon
         v-for="(v, i) in Array.from({ length: data.rarity + 1 })"
         :key="i"
