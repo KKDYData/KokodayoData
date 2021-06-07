@@ -1,86 +1,161 @@
 <template>
-  <view class="index">
-    <view class="border rounded mx-10 text-xl w-80px">hello KOKODAYO</view>
-    <NumberDisplay />
-    <NumberSubmit />
-    <view class="mt-10">
-      <button class="p-3 text-2xl" @tap="qrLogin">扫码登录</button>
+  <view
+    class="index-wrapper main-bg"
+    :style="{
+      paddingTop:
+        status.statusBarHeight > 43 ? status.statusBarHeight + 'px' : 0,
+    }"
+  >
+    <Scan />
+
+    <view style="border: none; padding-top: 0">
+      <Title title-cn="公告板" title-en="BULLETIN BOARD" italic />
+      <swiper
+        class="h-200px mt-3 w-full"
+        indicator-color="#999"
+        indicator-active-color="#333"
+        vertical
+        circular
+        indicator-dots
+        autoplay
+      >
+        <swiper-item v-for="item in banners" :key="item.url">
+          <image mode="aspectFit" :src="item.url" class="card" />
+        </swiper-item>
+      </swiper>
+    </view>
+
+    <view>
+      <Title title-cn="新增干员" title-en="BULLETIN BOARD" italic />
+      <view class="flex mt-3 justify-around">
+        <!-- 用 索引 当key，惊醒 skeleton 的替换动画  -->
+        <AgentIcon v-for="(char, i) in latestChars" :key="i" :data="char" />
+      </view>
+    </view>
+
+    <view>
+      <Title title-cn="新增地图" title-en="BULLETIN BOARD" italic />
+      <view class="h-200px m-3 card">
+        <image mode="aspectFit" :src="banners[0].url" />
+      </view>
+      <Title title-cn="覆潮之下" title-en="Sidesotry" :size="30" class="m-3" />
+    </view>
+
+    <view>
+      <Title title-cn="更新专栏" title-en="BULLETIN BOARD" italic />
+      <view
+        class="bg-white border rounded-15px m-2 mt-6 text-xs py-3 px-2"
+        style="border-color: #707070"
+      >
+        <view class="truncate-overflow" style="--max-lines: 4">
+          6月2日，华为“鸿蒙操作系统”正式发布，这是一款面向全场景的分布式操作系统，和苹果安卓等手机电脑系统不同，鸿蒙系统可用于物联网各种设备。它既能控制手机，同时也能适配PC、平板、手表等智能终端，突破以往不同属性智能终端设备间普遍存在的“兼容性”难题。
+        </view>
+      </view>
+    </view>
+
+    <view>
+      <Title title-cn="全部功能" title-en="BULLETIN BOARD" italic />
+
+      <view class="mx-3 mt-3 grid gap-4 grid-cols-4">
+        <view
+          v-for="(item, i) in navigationItems"
+          :key="i"
+          class="
+            flex
+            font-bold
+            h-80px
+            text-dark-50 text-32px
+            w-140px
+            card
+            items-center
+            justify-center
+          "
+          style="
+            background-color: rgba(179, 179, 179, 1);
+            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.16);
+          "
+        >
+          {{ item.name }}
+        </view>
+      </view>
     </view>
   </view>
 </template>
 
-<script lang="ts">
-import NumberDisplay from '../../components/NumberDisplay.vue'
-import NumberSubmit from '../../components/NumberSubmit.vue'
+<script lang="ts" setup>
 import Taro from '@tarojs/taro'
-import { onMounted } from 'vue'
-import { ApiUser } from '@kkdy/api-taro'
 
-export default {
-  name: 'Index',
-  components: {
-    NumberDisplay,
-    NumberSubmit,
+import { computed } from 'vue'
+import { Scan } from '/@/components/QRCode'
+import Title from '/@/components/Title.vue'
+
+const banners = [
+  { name: '', url: 'https://andata.somedata.top/dataX/assetes/banner2.jpg' },
+  { name: '', url: 'https://andata.somedata.top/dataX/assetes/banner1.jpg' },
+]
+
+import { AgentIcon } from '/@/components/AgentIcon'
+import { useListStore } from '/@/store'
+
+const listStore = useListStore()
+listStore.initList()
+ref: latestChars = computed(() => listStore.latestChars)
+
+const status = Taro.getSystemInfoSync()
+
+const navigationItems = [
+  {
+    name: '干员档案',
   },
-  setup() {
-    let openid = ''
-
-    onMounted(async () => {
-      // const res = await Taro.login()
-      const res = await Taro.cloud.callFunction({
-        name: 'login',
-      })
-      if (res.result && typeof res.result === 'object') {
-        openid = res.result.openid
-      }
-      console.log('res', res)
-    })
-
-    const qrLogin = async () => {
-      console.log('qrcode start')
-
-      const { result: qrcodeKey } = await Taro.scanCode({
-        scanType: ['qrCode'],
-      })
-      // const { data } = a
-      const res = await ApiUser.DecodeQrcode({ qrcodeKey })
-      if (!res.data.ok) {
-        console.error(res.data.msg)
-        return
-      }
-      const { type, token } = res.data.result
-
-      if (type === 'loginQrcode') {
-        const { data: crossLoginRes } = await ApiUser.CrossLogin({
-          qrcodeKey,
-          wxId: openid,
-          token,
-        })
-        if (!crossLoginRes.ok) {
-          console.error(crossLoginRes.message)
-          return
-        }
-
-        console.log('ok')
-      }
-
-      console.log('qrcode result', res.data.result)
-    }
-
-    return {
-      qrLogin,
-    }
+  {
+    name: '材料详情',
   },
-}
+  {
+    name: '后勤技能',
+  },
+  {
+    name: '关卡数据',
+  },
+  {
+    name: '公招计算',
+  },
+  {
+    name: '时装一览',
+  },
+  {
+    name: '经验计算',
+  },
+  {
+    name: '家具一览',
+  },
+  {
+    name: 'DPS计算',
+  },
+  {
+    name: '卡池一览',
+  },
+  {
+    name: '打钱',
+  },
+]
 </script>
 
-<style>
-.index {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+<style lang="styl">
+image {
+  width: 100%
+  height: 100%
+  @apply bg-dark-50
+}
+
+.index-wrapper {
+  @apply py-30px px-36px  relative h-screen overflow-scroll;
+
+   & > view + view {
+      @apply mt-5 border-t-1px pt-5 border-black
+  }
+
+  & > view:last-child {
+    @apply mb-10
+  }
 }
 </style>

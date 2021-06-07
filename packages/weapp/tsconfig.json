@@ -5,6 +5,7 @@
     "removeComments": false,
     "preserveConstEnums": true,
     "moduleResolution": "node",
+    "strict": true,
     "experimentalDecorators": true,
     "noImplicitAny": false,
     "allowSyntheticDefaultImports": true,
@@ -20,7 +21,8 @@
     "resolveJsonModule": true,
     "typeRoots": [
       "node_modules/@types",
-      "global.d.ts"
+      "global.d.ts",
+      "shims-volar.d.ts"
     ],
     "paths": {
       "/@/*": [
