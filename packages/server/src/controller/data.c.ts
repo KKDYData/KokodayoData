@@ -9,6 +9,7 @@ import {
   ALL,
   Query,
   Logger,
+  Param,
 } from '@midwayjs/decorator'
 import { GetResType } from '../dto/utils'
 import { ApiData } from '../interface'
@@ -55,6 +56,13 @@ export class DataController {
   @Get('/list')
   async listCharacters(): Promise<GetResType<ApiData.GetCharacterList>> {
     return this.charService.listCharacters()
+  }
+
+  @Get('/char')
+  async getChar(
+    @Query('id') id: string
+  ): Promise<GetResType<ApiData.GetCharacter>> {
+    return this.charService.buildCharData(id)
   }
 
   @Get('/acts')
