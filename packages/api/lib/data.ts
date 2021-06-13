@@ -2,10 +2,16 @@ import { request } from './instance'
 import { JsonResponse } from './response'
 import {
   IActivityInfo,
+  IBuilding,
+  IBuildingBuff,
   IChar,
+  ICharInfo,
+  ICharWord,
   IEnemyData,
   IEnemyInfo,
   IGachaPoolInfo,
+  IPatchInfo,
+  ISkill,
   IStageInfo,
   ITeamInfo,
 } from '@kkdy/data'
@@ -19,12 +25,32 @@ export function GetCharacterList() {
         version: number
         charId: string
         installId: string
-        teamInfo: ITeamInfo.IInfo[]
+        teamInfo: Omit<ITeamInfo.IInfo, 'color'>[]
         rarity: number
         profession: string
+        tagList: IChar.TagList[]
       }[]
     >
   >('/data/list')
+}
+export function GetCharacter() {
+  return request.get<
+    JsonResponse<{
+      data: IChar.IData
+      patchInfo: IPatchInfo.IInfo
+      skills: {
+        data: ISkill.ISkill
+        comments: string[]
+      }[]
+      buildings: IBuilding.ISkill
+      buildingBuffs: IBuildingBuff.IBuff[]
+      info: ICharInfo.IInfo
+      words: ICharWord.IWord[]
+      teamInfo: ITeamInfo.IInfo[]
+      relativeChars: string[]
+      charComment: string
+    }>
+  >('/data/char')
 }
 export function GetActivityList() {
   return request.get<JsonResponse<IActivityInfo.IInfo[]>>('/data/acts')

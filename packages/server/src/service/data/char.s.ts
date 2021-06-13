@@ -56,9 +56,8 @@ export class CharService {
       )
     )
 
-    char.buildingSkill = await this.buildingSkillService.getBuildingSkillByCharId(
-      id
-    )
+    char.buildingSkill =
+      await this.buildingSkillService.getBuildingSkillByCharId(id)
 
     char.info = await this.infoService.getCharInfoByCharId(id)
 
@@ -118,14 +117,14 @@ export class CharService {
     } = modelData
 
     const res = {
-      ...data,
+      data,
       patchInfo,
       skills: skills.map(s => pick(['comments', 'data'], s)),
       buildings: buildingSkill?.data,
       buildingBuffs: buildingSkill?.buffs.map(b => b.data),
       info: info?.data,
       words: words.map(w => w.data),
-      teamInfo,
+      teamInfo: teamInfo.map(i => i.data),
       relativeChars: relativeChars?.map(c => c.charId),
       charComment,
     }
@@ -136,14 +135,14 @@ export class CharService {
   async listCharacters() {
     const list = await this.model.find({
       select: ['charId', 'updatedDate', 'version', 'installId', 'name', 'data'],
-      relations: ['teamInfo'],
+      relations: ['teamInfo', 'relativeGachPools'],
     })
 
     return list.map(char => ({
       ...omit(['data', 'teamInfo'], char),
-      rarity: char.data.rarity,
-      profession: char.data.profession,
-      teamInfo: char.teamInfo.map(info => info.data),
+      ...pick(['tagList', 'rarity', 'profession'], char.data),
+      teamInfo: char.teamInfo.map(info => omit(['color'], info.data)),
+      enName: char.data.appellation,
     }))
   }
 
