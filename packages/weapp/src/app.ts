@@ -9,6 +9,7 @@ Taro.cloud.init({
 })
 
 import './app.styl'
+import './index.css'
 import { KIcon } from '/@/components/Icon'
 // import './tailwind.css'
 

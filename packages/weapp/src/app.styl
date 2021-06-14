@@ -117,3 +117,25 @@ view {
     transform: translate3d(100%, 0, 0)
   }
 }
+
+.index-wrapper {
+  padding: 30px 36px
+  position: relative
+  height: 100vh
+  overflow: scroll
+
+  & > view + view {
+    margin-top: 20px
+    border-top: 1px solid black
+    padding-top: 20px
+  }
+
+  & > view:last-child {
+    margin-top: 40px
+  }
+
+  & > view:nth-child(2) {
+    border: none
+    padding-top: 0
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "condition": {
+    "plugin": {
+      "list": []
+    },
+    "game": {
+      "list": []
+    },
+    "gamePlugin": {
+      "list": []
+    },
+    "miniprogram": {
+      "list": [
+        {
+          "name": "pages/char/char",
+          "pathName": "pages/char/char",
+          "query": "id=char_263_skadi",
+          "scene": null
+        }
+      ]
+    }
+  }
+}

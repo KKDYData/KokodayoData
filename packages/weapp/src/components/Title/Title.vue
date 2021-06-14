@@ -1,10 +1,13 @@
 <template>
-  <view class="flex font-souce text-left text-dark-50 relative">
+  <view
+    class="flex font-souce text-left text-dark-50 relative"
+    :class="{ 'items-center': isSingleLine }"
+  >
     <view
       class="bg-dark-50 rounded-5px"
       :class="{ 'shadow-medium': !size }"
       :style="{
-        width: size ? '10rpx' : '20rpx',
+        width: size || slimBar ? '10rpx' : '20rpx',
         height: barSize,
       }"
     />
@@ -16,9 +19,12 @@
         :style="{ fontSize: fontEnSize }"
         >{{ titleEn }}</view
       >
-      <view class="font-bold align-baseline" :style="{ fontSize }">{{
-        titleCn
-      }}</view>
+      <view
+        class="align-baseline"
+        :style="{ fontSize }"
+        :class="{ 'font-bold': !slim }"
+        >{{ titleCn }}</view
+      >
     </view>
   </view>
 </template>
@@ -31,6 +37,8 @@ const props =
     titleCn: string
     size?: number
     italic?: boolean
+    slim?: boolean
+    slimBar?: boolean
   }>()
 
 ref: fontSize = computed(() => (props.size ?? 40) / 2 + 'px')
