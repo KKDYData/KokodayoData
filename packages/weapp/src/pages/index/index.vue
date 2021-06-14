@@ -8,7 +8,7 @@
   >
     <Scan />
 
-    <view style="border: none; padding-top: 0">
+    <view>
       <Title title-cn="公告板" title-en="BULLETIN BOARD" italic />
       <swiper
         class="h-200px mt-3 w-full"
@@ -87,7 +87,7 @@ import Taro from '@tarojs/taro'
 
 import { computed } from 'vue'
 import { Scan } from '/@/components/QRCode'
-import Title from '/@/components/Title.vue'
+import { Title } from '/@/components/Title'
 
 const banners = [
   { name: '', url: 'https://andata.somedata.top/dataX/assetes/banner2.jpg' },
@@ -140,22 +140,4 @@ const navigationItems = [
 ]
 </script>
 
-<style lang="styl">
-image {
-  width: 100%
-  height: 100%
-  @apply bg-dark-50
-}
-
-.index-wrapper {
-  @apply py-30px px-36px  relative h-screen overflow-scroll;
-
-   & > view + view {
-      @apply mt-5 border-t-1px pt-5 border-black
-  }
-
-  & > view:last-child {
-    @apply mb-10
-  }
-}
-</style>
+<style lang="styl"></style>

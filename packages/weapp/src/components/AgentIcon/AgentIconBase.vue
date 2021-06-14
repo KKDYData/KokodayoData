@@ -1,5 +1,5 @@
 <template>
-  <view class="h-180px w-full relative">
+  <view class="h-180px w-180px relative">
     <!-- <button class="z-30 relative" @tap="on = !on">tap</button> -->
     <Transition name="no-mode-fade">
       <image
@@ -24,12 +24,9 @@ import { computed, defineProps } from 'vue'
 const props =
   defineProps<{
     data: {
-      profession: string
       rarity: number
-      name: string
-      nameEn: string
       charId: string
-      _skeleton: boolean
+      _skeleton?: boolean
     }
   }>()
 
