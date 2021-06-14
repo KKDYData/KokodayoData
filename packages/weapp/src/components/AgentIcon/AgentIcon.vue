@@ -1,14 +1,6 @@
 <template>
-  <view class="agent-icon">
-    <view class="text-right mb-1 text-0px filter drop-shadow-base">
-      <KIcon
-        v-for="(v, i) in Array.from({ length: data.rarity + 1 })"
-        :key="i"
-        :size="12"
-        name="iconxingshu1-01"
-        color="rgba(128, 128, 128, 1)"
-      />
-    </view>
+  <view class="agent-icon" @tap="go">
+    <CharStar class="text-right mb-1" :rarity="data.rarity" />
     <AgentIconBase :data="data" />
     <view style="color: #6b6b6b" class="mt-1">
       <view
@@ -50,35 +42,31 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineProps } from '@vue/runtime-core'
+import { defineProps } from 'vue'
 import { IChar } from '@kkdy/data'
 import AgentIconBase from './AgentIconBase.vue'
+import Taro from '@tarojs/taro'
+import { useProfessionIcon } from './utils'
+import { CharStar } from '.'
 
 const props =
   defineProps<{
     data: {
-      profession: string
+      profession: IChar.Profession
       rarity: number
       name: string
       nameEn: string
       charId: string
+      _skeleton?: boolean
     }
   }>()
 //char_1012_skadi2
 
-ref: professionIcon = computed(() => {
-  return professionMap[props.data.profession]
-})
+ref: professionIcon = useProfessionIcon(props.data.profession)
 
-const professionMap = {
-  [IChar.Profession.Caster]: 'icon1ss-01',
-  [IChar.Profession.Tank]: 'icon1zz-01',
-  [IChar.Profession.Medic]: 'icon1yl-01',
-  [IChar.Profession.Pioneer]: 'icon1xf-01',
-  [IChar.Profession.Special]: 'icon1tz-01',
-  [IChar.Profession.Warrior]: 'icon1jw-01',
-  [IChar.Profession.Sniper]: 'icon1jj-01',
-  [IChar.Profession.Support]: 'icon1fz-01',
+const go = () => {
+  if (!props.data._skeleton)
+    Taro.navigateTo({ url: '/pages/char/char?id=' + props.data.charId })
 }
 </script>
 

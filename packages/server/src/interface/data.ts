@@ -34,6 +34,9 @@ export interface GetCharacterList {
 export interface GetCharacter {
   path: '/data/char'
   method: 'get'
+  params: {
+    id: string
+  }
 
   response: {
     data: IChar.IData

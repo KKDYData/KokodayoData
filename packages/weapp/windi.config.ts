@@ -11,8 +11,8 @@ export default defineConfig({
   theme: {
     colors,
     boxShadow: {
-      base: '1px 1px 1px #4a4a4a',
-      medium: '2px 2px 4px #4a4a4a',
+      base: '2px 2px 4px rgb(214, 214, 214)',
+      medium: '2px 2px 4px rgb(128, 128, 128)',
       DEFAULT:
         '0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)',
       sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
@@ -24,8 +24,8 @@ export default defineConfig({
       none: 'none',
     },
     dropShadow: {
-      base: '1px 1px 2px #808080',
-      medium: '2px 2px 2px #808080',
+      base: '2px 2px 4px rgba(0, 0, 0, 0.16)',
+      medium: '2px 2px 4px rgb(128, 128, 128)',
       DEFAULT: [
         '0 1px 2px rgba(0, 0, 0, 0.1)',
         '0 1px 1px rgba(0, 0, 0, 0.06)',
