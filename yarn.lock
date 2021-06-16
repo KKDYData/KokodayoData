@@ -5062,6 +5062,11 @@ ajv@^8.0.1:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
+akdata@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.nlark.com/akdata/download/akdata-2.1.0.tgz#7c449f831e8dfc3e714069e0e532c9a54d174810"
+  integrity sha1-fESfgx6N/D5xQGng5TLJpU0XSBA=
+
 ali-oss@^6.15.2:
   version "6.15.2"
   resolved "https://registry.npm.taobao.org/ali-oss/download/ali-oss-6.15.2.tgz#276c3bdff5f89460ac9feac8d1d2a0bc32a18d6c"
