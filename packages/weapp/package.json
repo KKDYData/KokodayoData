@@ -39,6 +39,7 @@
     "@tarojs/components": "^3.2.0",
     "@tarojs/runtime": "^3.2.0",
     "@tarojs/taro": "^3.2.0",
+    "akdata": "^2.1.0",
     "pinia": "^2.0.0-beta.2",
     "postcss": "^8.2.4",
     "tailwindcss": "^2.0.2",
