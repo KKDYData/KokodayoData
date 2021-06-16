@@ -58,22 +58,14 @@
 
       <view class="mx-3 mt-3 grid gap-4 grid-cols-4">
         <view
-          v-for="(item, i) in navigationItems"
+          v-for="(item, i) in NavigationItems"
           :key="i"
-          class="
-            flex
-            font-bold
-            h-80px
-            text-dark-50 text-32px
-            w-140px
-            card
-            items-center
-            justify-center
-          "
+          class="flex font-bold h-80px text-dark-50 text-32px w-140px card items-center justify-center"
           style="
             background-color: rgba(179, 179, 179, 1);
             box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.16);
           "
+          @tap="goTo(item)"
         >
           {{ item.name }}
         </view>
@@ -96,6 +88,7 @@ const banners = [
 
 import { AgentIcon } from '/@/components/AgentIcon'
 import { useListStore } from '/@/store'
+import { NavigationItems } from './constants'
 
 const listStore = useListStore()
 listStore.initList()
@@ -103,41 +96,14 @@ ref: latestChars = computed(() => listStore.latestChars)
 
 const status = Taro.getSystemInfoSync()
 
-const navigationItems = [
-  {
-    name: '干员档案',
-  },
-  {
-    name: '材料详情',
-  },
-  {
-    name: '后勤技能',
-  },
-  {
-    name: '关卡数据',
-  },
-  {
-    name: '公招计算',
-  },
-  {
-    name: '时装一览',
-  },
-  {
-    name: '经验计算',
-  },
-  {
-    name: '家具一览',
-  },
-  {
-    name: 'DPS计算',
-  },
-  {
-    name: '卡池一览',
-  },
-  {
-    name: '打钱',
-  },
-]
+const goTo = (item: { name: string; url?: string }) => {
+  console.log('goto', item)
+
+  if (item.url) {
+    // 先用固定个charId 开发着，先接好api，后面角色选择切换选择可以我来做
+    Taro.navigateTo({ url: item.url + '?id=' + 'char_263_skadi' })
+  }
+}
 </script>
 
 <style lang="styl"></style>
