@@ -1,10 +1,7 @@
 <template>
-  <view
-    class="flex font-souce text-left text-dark-50 relative"
-    :class="{ 'items-center': isSingleLine }"
-  >
+  <view class="flex font-souce text-left text-dark-50 relative items-center">
     <view
-      class="bg-dark-50 rounded-5px"
+      class="rounded bg-dark-50"
       :class="{ 'shadow-medium': !size }"
       :style="{
         width: size || slimBar ? '10rpx' : '20rpx',
@@ -16,12 +13,12 @@
         v-if="titleEn"
         class="font-sans text-30px underline"
         :class="{ italic }"
-        :style="{ fontSize: fontEnSize }"
+        :style="{ fontSize: fontEnSize, lineHeight: fontEnSize }"
         >{{ titleEn }}</view
       >
       <view
         class="align-baseline"
-        :style="{ fontSize }"
+        :style="{ fontSize, lineHeight: fontSize }"
         :class="{ 'font-bold': !slim }"
         >{{ titleCn }}</view
       >
@@ -31,22 +28,19 @@
 <script setup lang="ts">
 import { computed, defineProps } from '@vue/runtime-core'
 
-const props =
-  defineProps<{
-    titleEn?: string
-    titleCn: string
-    size?: number
-    italic?: boolean
-    slim?: boolean
-    slimBar?: boolean
-  }>()
+const props = defineProps<{
+  titleEn?: string
+  titleCn: string
+  size?: number
+  italic?: boolean
+  slim?: boolean
+  slimBar?: boolean
+}>()
 
 ref: fontSize = computed(() => (props.size ?? 40) / 2 + 'px')
 ref: fontEnSize = computed(() => ((props.size ?? 30) / 2) * 0.75 + 'px')
 ref: barSize = computed(
-  () =>
-    ((props.size ?? 40) / 2) * (isSingleLine ? 1 : !props.size ? 1.75 : 2) +
-    'px'
+  () => ((props.size ?? 40) / 2) * (isSingleLine ? 1 : 1.75) + 'px'
 )
 
 ref: isSingleLine = computed(() => !props.titleEn)

@@ -49,6 +49,7 @@
     <view>
       <Title slim-bar title-cn="属性" />
     </view>
+    <view>{{ new_op }}</view>
   </view>
 </template>
 <script setup lang="ts">
@@ -62,6 +63,8 @@ import {
   getProfessionIcon,
   getProffessionCn,
 } from '/@/components/AgentIcon/utils'
+
+import { new_op } from '@kkdy/akdata'
 
 // 从路由拿query
 const id = getCurrentInstance().router?.params.id
