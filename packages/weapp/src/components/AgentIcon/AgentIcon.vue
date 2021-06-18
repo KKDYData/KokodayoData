@@ -4,14 +4,7 @@
     <AgentIconBase :data="data" />
     <view style="color: #6b6b6b" class="mt-1">
       <view
-        class="
-          flex
-          font-bold
-          rounded-5px
-          text-28px
-          items-center
-          justify-between
-        "
+        class="rounded flex font-bold text-28px items-center justify-between"
       >
         <view
           class="
@@ -30,13 +23,11 @@
         >
           <KIcon :size="14" :name="professionIcon" class="p-icon" />
         </view>
-        <view class="border-b border-gray-500 pb-1px">
-          {{ data.name }}
-        </view>
+        <view class="border-b border-gray-500 pb-1px">{{ data.name }}</view>
       </view>
-      <view class="mt-1px text-right text-14px whitespace-nowrap">{{
-        data.nameEn ?? 'Skadi the Corrupting Heart'
-      }}</view>
+      <view class="mt-1px text-right text-14px whitespace-nowrap">
+        {{ data.enName ?? 'Skadi the Corrupting Heart' }}
+      </view>
     </view>
   </view>
 </template>
@@ -49,17 +40,16 @@ import Taro from '@tarojs/taro'
 import { useProfessionIcon } from './utils'
 import { CharStar } from '.'
 
-const props =
-  defineProps<{
-    data: {
-      profession: IChar.Profession
-      rarity: number
-      name: string
-      nameEn: string
-      charId: string
-      _skeleton?: boolean
-    }
-  }>()
+const props = defineProps<{
+  data: {
+    profession: IChar.Profession
+    rarity: number
+    name: string
+    enName: string
+    charId: string
+    _skeleton?: boolean
+  }
+}>()
 //char_1012_skadi2
 
 ref: professionIcon = useProfessionIcon(props.data.profession)

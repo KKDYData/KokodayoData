@@ -1,5 +1,6 @@
 <template>
   <iconfont
+    v-if="name"
     :size="size ? size * 2 : 24"
     :color="color"
     :style="style"
