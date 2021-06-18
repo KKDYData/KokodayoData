@@ -1,16 +1,41 @@
 import { defineConfig } from 'windicss-webpack-plugin'
 import colors from 'windicss/colors'
-import {} from 'windicss/defaultTheme'
 
 export default defineConfig({
   preflight: false,
   shortcuts: {
     card: 'rounded-sm overflow-hidden',
   },
-
+  /**
+   * !小程序不知道反斜杠，这些都用不了
+   */
+  exclude: [/\./, /\[|\]/],
   theme: {
-    colors,
+    colors: {
+      ...colors,
+      dark: {
+        /**
+         * !设计稿常用黑色
+         * ? 另一种是50
+         */
+        40: '#707070',
+        ...(colors.dark as any),
+      },
+    },
+    borderRadius: {
+      none: '0',
+      sm: '0.125rem',
+      //! 改5px
+      DEFAULT: '5px',
+      md: '0.375rem',
+      lg: '0.5rem',
+      full: '9999px',
+      large: '12px',
+    },
     boxShadow: {
+      /**
+       * ? 设计稿的两种样式
+       */
       base: '2px 2px 4px rgb(214, 214, 214)',
       medium: '2px 2px 4px rgb(128, 128, 128)',
       DEFAULT:
@@ -24,6 +49,9 @@ export default defineConfig({
       none: 'none',
     },
     dropShadow: {
+      /**
+       * ? 设计稿的两种样式
+       */
       base: '2px 2px 4px rgba(0, 0, 0, 0.16)',
       medium: '2px 2px 4px rgb(128, 128, 128)',
       DEFAULT: [
@@ -38,6 +66,7 @@ export default defineConfig({
       none: '0 0 #0000',
     },
     width: {
+      //!尽量不要用 直接 w-222px
       auto: 'auto',
       '1_2': '50%',
       '1_3': '33.333333%',

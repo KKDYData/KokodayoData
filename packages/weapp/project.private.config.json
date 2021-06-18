@@ -1,4 +1,5 @@
 {
+  "setting": {},
   "condition": {
     "plugin": {
       "list": []
@@ -14,6 +15,12 @@
         {
           "name": "pages/char/char",
           "pathName": "pages/char/char",
+          "query": "id=char_263_skadi",
+          "scene": null
+        },
+        {
+          "name": "pages/dps/dps",
+          "pathName": "pages/dps/dps",
           "query": "id=char_263_skadi",
           "scene": null
         }
