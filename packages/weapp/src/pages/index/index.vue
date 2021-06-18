@@ -24,12 +24,26 @@
         </swiper-item>
       </swiper>
     </view>
-
     <view>
       <Title title-cn="新增干员" title-en="BULLETIN BOARD" italic />
-      <view class="flex mt-3 justify-around">
-        <!-- 用 索引 当key，惊醒 skeleton 的替换动画  -->
-        <AgentIcon v-for="(char, i) in latestChars" :key="i" :data="char" />
+      <view>
+        <scroll-view
+          class="h-300px scroll-view_H"
+          scroll-x="true"
+          bindscroll="scroll"
+          style="width: 100%"
+        >
+          <!-- <view class="flex mt-3 justify-around">
+        </view> -->
+          <!-- 用 索引 当key，惊醒 skeleton 的替换动画  -->
+          <AgentIcon
+            class="mr-40px"
+            :id="'a' + i"
+            v-for="(char, i) in latestChars"
+            :key="i"
+            :data="char"
+          />
+        </scroll-view>
       </view>
     </view>
 
@@ -106,4 +120,9 @@ const goTo = (item: { name: string; url?: string }) => {
 }
 </script>
 
-<style lang="styl"></style>
+<style lang="styl">
+
+.scroll-view_H{
+  white-space: nowrap;
+}
+</style>
