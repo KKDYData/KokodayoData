@@ -7,7 +7,9 @@ parser: vue-eslint-parser
 extends:
 - taro/vue3
 - plugin:vue/vue3-recommended
-- plugin:prettier/recommended
+# 和 2.3.1的prettier 打架了，先用这个
+- prettier/prettier
+# - plugin:prettier/recommended
 parserOptions:
   ecmaVersion: 12
   parser: "@typescript-eslint/parser"
