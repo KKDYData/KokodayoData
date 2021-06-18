@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { Data } from '@kkdy/api-taro'
-import { IChar, IToken } from '@kkdy/data'
+import { IChar, IToken, ITrap } from '@kkdy/data'
 
 export const useListStore = defineStore({
   // name of the store
@@ -11,7 +11,7 @@ export const useListStore = defineStore({
     counter: 0,
     charList: Array.from(
       {
-        length: 3,
+        length: 4,
       },
       () => ({
         charId: 'char_124_kroos',
@@ -25,9 +25,11 @@ export const useListStore = defineStore({
   // optional getters
   getters: {
     latestChars(): BaseCharIndex[] {
-      return this.charList
+      const res = this.charList
         .filter((e) => e.profession !== IToken.Profession.Token)
-        .splice(-3)
+        .splice(-20)
+      console.log('res', res)
+      return res
     },
   },
   // optional actions
@@ -40,10 +42,10 @@ export const useListStore = defineStore({
       if (!data.ok) {
         throw new Error('net error')
       }
-
-      this.charList = data.result
-      // setTimeout(() => {
-      // }, 2300)
+      const available = new Set(Object.values(IChar.Profession))
+      this.charList = data.result.filter((e) =>
+        available.has(e.profession as any)
+      )
     },
   },
 })
