@@ -49,7 +49,7 @@
     <view>
       <Title slim-bar title-cn="属性" />
     </view>
-    <view>{{ new_op }}</view>
+    <view>{{ dps.log }}</view>
   </view>
 </template>
 <script setup lang="ts">
@@ -64,7 +64,7 @@ import {
   getProffessionCn,
 } from '/@/components/AgentIcon/utils'
 
-import { new_op } from '@kkdy/akdata'
+import * as AKDATA from '@kkdy/akdata'
 
 // 从路由拿query
 const id = getCurrentInstance().router?.params.id
@@ -81,11 +81,25 @@ if (!id) {
  * ref 只能在top level 使用，不能再函数内部用
  */
 ref: data = null as null | IChar.IData
+ref: dps = {} as AKDATA.AKObject
 
 Data.GetCharacter({ id }).then((res) => {
   // 接口需要判断 res.data.ok 是否为true，然后访问res.data.result 就是结果值
   if (res.data.ok) {
     data = res.data.result.data
+
+    // AKDATA 使用的是完整的res.data.result
+    AKDATA.Data.loadKkdyChar(res.data.result)
+    console.log(AKDATA.Data._cache)
+    var char: AKCharacter = {
+      charId: 'char_263_skadi',
+      skillId: 'skchr_skadi_3',
+      skillLevel: 9,
+      options: {}
+    }
+    dps = AKDATA.Attributes.calculateDps(char)
+    //console.log(dps)
+    
   }
 })
 </script>

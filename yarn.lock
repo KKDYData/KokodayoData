@@ -1713,7 +1713,7 @@
     "@kkdy/data" "^1.0.0"
     axios "^0.21.1"
 
-"@kkdy/data@1", "@kkdy/data@1.0", "@kkdy/data@^1.0.0":
+"@kkdy/data@1", "@kkdy/data@1.0", "@kkdy/data@^1.0.0", "@kkdy/data@^1.0.1":
   version "1.0.1"
   resolved "https://registry.nlark.com/@kkdy/data/download/@kkdy/data-1.0.1.tgz?cache=0&sync_timestamp=1620844616514&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40kkdy%2Fdata%2Fdownload%2F%40kkdy%2Fdata-1.0.1.tgz#6567a96566b640da27f3608022c76b9b0bb41881"
   integrity sha1-ZWepZWa2QNon82CAIsdrmwu0GIE=
@@ -5053,8 +5053,6 @@ ajv@^8.0.1:
     json-schema-traverse "^1.0.0"
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
-
-
 
 ali-oss@^6.15.2:
   version "6.15.2"

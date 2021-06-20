@@ -1,11 +1,8 @@
-import * as AKDATA from "./loader.js"
+import * as Data from './data.js'
 
 // 获取技能特判标记，存放在dps_specialtags.json中
-function checkSpecs(tag, spec) {
-  let specs = AKDATA.Data.dps_specialtags;
-  if ((tag in specs) && (spec in specs[tag]))
-    return specs[tag][spec];
-  else return false;
+function checkSpecs(id, key) {
+  return Data.getSpec(id, key);
 }
 
 function getCharAttributes(char) {
@@ -33,7 +30,7 @@ function getTokenAtkHp(charAttr, tokenId, log) {
 }
 
 function checkChar(char) {
-  let charData = AKDATA.Data.character_table[char.charId];
+  let charData = Data.get(char.charId);
   if (!('phase' in char)) char.phase = charData.phases.length - 1;
   if (!('level' in char)) char.level = charData.phases[char.phase].maxLevel;
   if (!('favor' in char)) char.favor = 200;
@@ -93,8 +90,8 @@ function calculateDps(char, enemy, raidBuff) {
   displayNames["raidBuff"] = "团辅";
 
   let charId = char.charId;
-  let charData = AKDATA.Data.character_table[charId];
-  let skillData = AKDATA.Data.skill_table[char.skillId];
+  let charData = Data.get(charId);
+  let skillData = Data.get(char.skillId);
   if (char.skillLevel == -1) char.skillLevel = skillData.levels.length - 1;
 
   let levelData = skillData.levels[char.skillLevel];
@@ -190,8 +187,8 @@ function calculateDpsSeries(char, enemy, raidBuff, key, series) {
   displayNames["raidBuff"] = "";
 
   let charId = char.charId;
-  let charData = AKDATA.Data.character_table[charId];
-  let skillData = AKDATA.Data.skill_table[char.skillId];
+  let charData = Data.get(charId);
+  let skillData = Data.get(char.skillId);
   if (char.skillLevel == -1) char.skillLevel = skillData.levels.length - 1;
 
   let levelData = skillData.levels[char.skillLevel];
@@ -1785,7 +1782,7 @@ function calculateAttack(charAttr, enemy, raidBlackboard, isSkill, charData, lev
   // 额外帧数补偿 https://bbs.nga.cn/read.php?tid=20555008
   let corr = checkSpecs(charId, "frame_corr") || 0;
   let corr_s = checkSpecs(blackboard.id, "frame_corr");
-  if ((!(corr_s === false)) && isSkill) corr = corr_s;
+  if ((corr_s || corr_s == 0) && isSkill) corr = corr_s;
   if (corr != 0) {
     let real_frame = Math.ceil(frame); // 有误差时，不舍入而取上界，并增加补正值(一般为1)
     real_frame += corr;
@@ -2680,7 +2677,7 @@ function initBuffFrame() {
 }
 
 function getAttributes(char, log) { //charId, phase = -1, level = -1
-  let charData = AKDATA.Data.character_table[char.charId];
+  let charData = Data.get(char.charId);
   let phaseData = charData.phases[char.phase];
   let attributesKeyFrames = {};
   let buffs = initBuffFrame();

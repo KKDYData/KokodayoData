@@ -1,22 +1,14 @@
-// import * as loader from "./loader.js";
-//import * as Dps from "./dpsv2.js";
-//import * as Actions from "./dps_actions.js";
-// import * as Attributes from './attributes.js'
+import * as Data from './data.js'
+import * as Attributes from './attributes.js'
 
-// export const GameDataRoot = '../resources/gamedata'
-// loader.loadGameData(GameDataRoot)
-// loader.patchAllChars()
-// var _d = loader.Data
-
-var new_op = [
+const new_op = [
   'char_426_billro',
   'char_478_kirara',
   'char_369_bena',
-  'char_469_indigo',
-  'fafdafdfafad',
+  'char_469_indigo'
 ]
 
-var professionNames = {
+const professionNames = {
   PIONEER: '先锋',
   WARRIOR: '近卫',
   SNIPER: '狙击',
@@ -30,4 +22,4 @@ var professionNames = {
 }
 
 // export { _d as Data, Dps, Actions, Attributes, new_op, professionNames };
-export { new_op, professionNames }
+export { new_op, professionNames, Data, Attributes }

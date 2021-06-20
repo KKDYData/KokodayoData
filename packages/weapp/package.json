@@ -37,6 +37,7 @@
     "@babel/runtime": "^7.7.7",
     "@kkdy/akdata": "1.0.0",
     "@kkdy/api-taro": "1",
+    "@kkdy/data": "^1.0.1",
     "@tarojs/components": "^3.2.0",
     "@tarojs/runtime": "^3.2.0",
     "@tarojs/taro": "^3.2.0",
