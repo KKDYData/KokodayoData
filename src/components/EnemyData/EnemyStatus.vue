@@ -355,7 +355,7 @@ export default {
         return {
           key: this.changeTalentsBlackBordtoCh(el.key),
           value: v,
-          text: `key: ${el.key}, value: ${v}`
+          text: `key: ${el.key}, value: ${el.value}`
         }
       })
     }

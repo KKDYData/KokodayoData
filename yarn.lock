@@ -3830,10 +3830,10 @@ core-js@^2.4.0, core-js@^2.6.5:
   resolved "https://registry.nlark.com/core-js/download/core-js-2.6.12.tgz#d9333dfa7b065e347cc5682219d6f690859cc2ec"
   integrity sha1-2TM9+nsGXjR8xWgiGdb2kIWcwuw=
 
-core-js@^3:
-  version "3.14.0"
-  resolved "https://registry.nlark.com/core-js/download/core-js-3.14.0.tgz#62322b98c71cc2018b027971a69419e2425c2a6c"
-  integrity sha1-YjIrmMccwgGLAnlxppQZ4kJcKmw=
+core-js@^3.14.0:
+  version "3.15.2"
+  resolved "https://registry.nlark.com/core-js/download/core-js-3.15.2.tgz?cache=0&sync_timestamp=1624966012065&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fcore-js%2Fdownload%2Fcore-js-3.15.2.tgz#740660d2ff55ef34ce664d7e2455119c5bdd3d61"
+  integrity sha1-dAZg0v9V7zTOZk1+JFURnFvdPWE=
 
 core-js@^3.6.5:
   version "3.11.1"
@@ -5388,6 +5388,13 @@ find-versions@^3.0.0:
   dependencies:
     semver-regex "^2.0.0"
 
+find-yarn-workspace-root@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/find-yarn-workspace-root/download/find-yarn-workspace-root-2.0.0.tgz#f47fb8d239c900eb78179aa81b66673eac88f7bd"
+  integrity sha1-9H+40jnJAOt4F5qoG2ZnPqyI970=
+  dependencies:
+    micromatch "^4.0.2"
+
 findup-sync@^3.0.0:
   version "3.0.0"
   resolved "https://registry.npm.taobao.org/findup-sync/download/findup-sync-3.0.0.tgz#17b108f9ee512dfb7a5c7f3c8b27ea9e1a9c08d1"
@@ -5484,6 +5491,15 @@ fs-constants@^1.0.0:
   version "1.0.0"
   resolved "https://registry.nlark.com/fs-constants/download/fs-constants-1.0.0.tgz#6be0de9be998ce16af8afc24497b9ee9b7ccd9ad"
   integrity sha1-a+Dem+mYzhavivwkSXue6bfM2a0=
+
+fs-extra@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.nlark.com/fs-extra/download/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
+  integrity sha1-TxicRKoSO4lfcigE9V6iPq3DSOk=
+  dependencies:
+    graceful-fs "^4.1.2"
+    jsonfile "^4.0.0"
+    universalify "^0.1.0"
 
 fs-extra@^8.1.0:
   version "8.1.0"
@@ -7150,6 +7166,13 @@ kkdy-somemap@^0.3.13-beta.1:
     pathfinding "^0.4.18"
     serialize-javascript "^2.1.2"
 
+klaw-sync@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.npm.taobao.org/klaw-sync/download/klaw-sync-6.0.0.tgz#1fd2cfd56ebb6250181114f0a581167099c2b28c"
+  integrity sha1-H9LP1W67YlAYERTwpYEWcJnCsow=
+  dependencies:
+    graceful-fs "^4.1.11"
+
 ko-sleep@^1.0.3:
   version "1.0.3"
   resolved "https://registry.nlark.com/ko-sleep/download/ko-sleep-1.0.3.tgz#28a2a0a1485e8b7f415ff488dee17d24788ab082"
@@ -8333,7 +8356,7 @@ onetime@^5.1.0:
   dependencies:
     mimic-fn "^2.1.0"
 
-open@^7.0.3:
+open@^7.0.3, open@^7.4.2:
   version "7.4.2"
   resolved "https://registry.nlark.com/open/download/open-7.4.2.tgz?cache=0&sync_timestamp=1619533187894&other_urls=https%3A%2F%2Fregistry.nlark.com%2Fopen%2Fdownload%2Fopen-7.4.2.tgz#b8147e26dcf3e426316c730089fd71edd29c2321"
   integrity sha1-uBR+Jtzz5CYxbHMAif1x7dKcIyE=
@@ -8682,6 +8705,25 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.npm.taobao.org/pascalcase/download/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
+
+patch-package@^6.4.7:
+  version "6.4.7"
+  resolved "https://registry.npm.taobao.org/patch-package/download/patch-package-6.4.7.tgz#2282d53c397909a0d9ef92dae3fdeb558382b148"
+  integrity sha1-IoLVPDl5CaDZ75La4/3rVYOCsUg=
+  dependencies:
+    "@yarnpkg/lockfile" "^1.1.0"
+    chalk "^2.4.2"
+    cross-spawn "^6.0.5"
+    find-yarn-workspace-root "^2.0.0"
+    fs-extra "^7.0.1"
+    is-ci "^2.0.0"
+    klaw-sync "^6.0.0"
+    minimist "^1.2.0"
+    open "^7.4.2"
+    rimraf "^2.6.3"
+    semver "^5.6.0"
+    slash "^2.0.0"
+    tmp "^0.0.33"
 
 path-browserify@0.0.1:
   version "0.0.1"
@@ -10218,6 +10260,11 @@ simple-swizzle@^0.2.2:
   integrity sha1-pNprY1/8zMoz9w0Xy5JZLeleVXo=
   dependencies:
     is-arrayish "^0.3.1"
+
+slash@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.nlark.com/slash/download/slash-2.0.0.tgz#de552851a1759df3a8f206535442f5ec4ddeab44"
+  integrity sha1-3lUoUaF1nfOo8gZTVEL17E3eq0Q=
 
 slash@^3.0.0:
   version "3.0.0"

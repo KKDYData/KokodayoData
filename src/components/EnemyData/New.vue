@@ -349,12 +349,15 @@ export default {
   mounted() {
     if (this.$route.params) this.clearMap()
 
-    const once = this.$watch('stageTree', () => {
-      if (this.stageTree) {
-        this.linkStart()
-        once()
-      }
-    })
+    this.$watch(
+      'stageTree',
+      () => {
+        if (this.stageTree) {
+          this.linkStart()
+        }
+      },
+      { immediate: true }
+    )
 
     window.addEventListener(
       'resize',
