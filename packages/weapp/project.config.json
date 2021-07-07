@@ -22,8 +22,8 @@
     "checkSiteMap": true,
     "uploadWithSourceMap": true,
     "compileHotReLoad": false,
-    "useMultiFrameRuntime": true,
-    "useApiHook": true,
+    "useMultiFrameRuntime": false,
+    "useApiHook": false,
     "useApiHostProcess": false,
     "babelSetting": {
       "ignore": [],
