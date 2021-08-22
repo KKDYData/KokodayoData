@@ -23,6 +23,7 @@ export interface IData {
     maxPotentialLevel:          number;
     rarity:                     number;
     profession:                 Profession;
+    subProfessionId:            string;
     trait:                      Trait | null;
     phases:                     Phase[];
     skills:                     Skill[];

@@ -16,6 +16,7 @@ export interface IInfo {
     CDSecColor:       null | string;
     LMTGSID:          null | string;
     gachaRuleType:    GachaRuleType;
+    storeTextColor?:  string;
     linkageRuleId?:   string;
     linkageParam?:    LinkageParam;
 }

@@ -45,16 +45,11 @@ export interface Action {
     blockFragment:                     boolean;
     autoPreviewRoute:                  boolean;
     isUnharmfulAndAlwaysCountAsKilled: boolean;
-    hiddenGroup?:                      HiddenGroup | null;
+    hiddenGroup?:                      null | string;
     randomSpawnGroupKey?:              RandomSpawnGroupKey | null;
     weight?:                           number;
     dontBlockWave?:                    boolean;
     weightValue?:                      number;
-}
-
-export enum HiddenGroup {
-    Normal = "normal",
-    RAID = "raid",
 }
 
 export enum RandomSpawnGroupKey {
@@ -256,6 +251,7 @@ export interface Offset {
 export enum TileKey {
     TileBigforce = "tile_bigforce",
     TileCorrosion = "tile_corrosion",
+    TileDeepsea = "tile_deepsea",
     TileDeepwater = "tile_deepwater",
     TileDefbreak = "tile_defbreak",
     TileDefup = "tile_defup",

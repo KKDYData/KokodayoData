@@ -49,6 +49,7 @@ export interface IStage {
     mainStageId:           null | string;
     extraCondition?:       ExtraCondition[];
     extraInfo?:            ExtraInfo[];
+    canUseCharm?:          boolean;
 }
 
 export enum Difficulty {
@@ -83,6 +84,7 @@ export enum Type {
     ActivityItem = "ACTIVITY_ITEM",
     CardExp = "CARD_EXP",
     Char = "CHAR",
+    Charm = "CHARM",
     Diamond = "DIAMOND",
     EtStage = "ET_STAGE",
     Furn = "FURN",
