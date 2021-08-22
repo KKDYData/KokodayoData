@@ -23,6 +23,7 @@ export interface IData {
     maxPotentialLevel:          number;
     rarity:                     number;
     profession:                 Profession;
+    subProfessionId:            SubProfessionID;
     trait:                      Trait | null;
     phases:                     Phase[];
     skills:                     Skill[];
@@ -109,6 +110,11 @@ export interface LevelUpCostCond {
     unlockCond:  UnlockCond;
     lvlUpTime:   number;
     levelUpCost: null;
+}
+
+export enum SubProfessionID {
+    Executor = "executor",
+    Notchar1 = "notchar1",
 }
 
 export interface Talent {
