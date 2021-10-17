@@ -32,8 +32,7 @@ onMounted(async () => {
   if (res.result && typeof res.result === 'object') {
     openid = res.result.openid
   }
-  console.log('res', res)
-  console.log('window', window)
+  console.log('wechat login', res)
 })
 
 const qrLogin = async () => {

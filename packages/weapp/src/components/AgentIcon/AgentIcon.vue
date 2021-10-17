@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+import { defineProps, ref } from 'vue'
 import { IChar } from '@kkdy/data'
 import AgentIconBase from './AgentIconBase.vue'
 import Taro from '@tarojs/taro'
@@ -52,7 +52,7 @@ const props = defineProps<{
 }>()
 //char_1012_skadi2
 
-ref: professionIcon = useProfessionIcon(props.data.profession)
+const professionIcon = ref(useProfessionIcon(props.data.profession))
 
 const go = () => {
   if (!props.data._skeleton)

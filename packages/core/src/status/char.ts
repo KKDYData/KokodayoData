@@ -4,7 +4,6 @@ import {
   assertPotentialType,
   PotentialTypeToStatus,
 } from '../constants/StatusKey'
-import ow from 'ow'
 import { mergeWithKey } from 'ramda'
 
 export function hello() {
@@ -12,15 +11,20 @@ export function hello() {
 }
 
 type DataKey = keyof IChar.Data
-type Status = Record<DataKey, number | boolean>
+export type Status = Record<DataKey, number | boolean>
 
+/**
+ *
+ * @param keyFrames
+ * @param lv
+ * @param isFavor 如果是好感等级从0开始
+ * @returns {Status} Status
+ */
 export function calcStatusWithKeyFrame(
   keyFrames: IChar.KeyFrame[],
   lv: number,
   isFavor = false
 ) {
-  ow(keyFrames, ow.array.length(2))
-
   const [beginStatus, endStatus] = keyFrames
 
   const diffLv =
@@ -30,41 +34,44 @@ export function calcStatusWithKeyFrame(
     Object.keys(beginStatus.data)
       .filter(assertCharStatus)
       .map((bKey) => mergeData(beginStatus.data, endStatus.data, bKey, diffLv))
-  ) as Status | Status
+  ) as Status
 }
 
+/**
+ *
+ * @param data
+ * @param rankKeyFrames
+ * @param rank
+ * @returns {Status} Status
+ */
 export function mergeStatusWithPotential(
-  data: Status | Status,
-  favorKeyFrames: IChar.PotentialRank[],
+  data: Status,
+  rankKeyFrames: IChar.PotentialRank[],
   rank: number
 ) {
-  favorKeyFrames.slice(0, rank).forEach((e) => {
-    e.buff?.attributes.attributeModifiers.forEach((m) => {
-      if (
-        assertPotentialType(m.attributeType) &&
-        assertCharStatus(PotentialTypeToStatus[m.attributeType])
-      ) {
-        const key = PotentialTypeToStatus[m.attributeType]
-        mergeDataToRecord(key, m.value, data)
-      }
+  if (rank > -1)
+    rankKeyFrames.slice(0, rank + 1).forEach((e) => {
+      e.buff?.attributes.attributeModifiers.forEach((m) => {
+        if (
+          assertPotentialType(m.attributeType) &&
+          assertCharStatus(PotentialTypeToStatus[m.attributeType])
+        ) {
+          const key = PotentialTypeToStatus[m.attributeType]
+          mergeDataToRecord(key, m.value, data)
+        }
+      })
     })
-  })
 
   return data
 }
 
 export function mergeStatusWithFavor(
-  r: Status,
+  base: Status,
   favorKeyFrames: IChar.KeyFrame[],
   favorLv: number
 ) {
-  ow(favorKeyFrames, ow.array.length(2))
-  ow(
-    favorLv,
-    ow.number.is((x) => x >= 1 && x <= 50)
-  )
-
-  calcStatusWithKeyFrame(favorKeyFrames, favorLv)
+  const favarStatus = calcStatusWithKeyFrame(favorKeyFrames, favorLv, true)
+  return mergeStatus(base, favarStatus)
 }
 
 export function mergeStatus(status: Status, favorStatus: Status): Status {
@@ -89,7 +96,7 @@ function mergeData(
   const ev = endStatus[key]
 
   if (typeof bv === 'number' && typeof ev === 'number') {
-    return [key, Math.round((ev - bv) * diffLv + bv)]
+    return [key, +((ev - bv) * diffLv + bv).toFixed(2)]
   } else {
     return [key, ev]
   }
@@ -103,7 +110,9 @@ function mergeDataToRecord(
   if (typeof v === 'number' && typeof r[k] === 'number') {
     //@ts-ignore
     r[k] += v
-  } else {
+  } else if (typeof r[k] !== 'undefined') {
     r[k] = r[k] && v
+  } else {
+    r[k] = v
   }
 }

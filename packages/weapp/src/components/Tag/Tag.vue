@@ -13,7 +13,7 @@ const props = defineProps<{
   size?: 'base' | 'mini' | 'large'
 }>()
 
-ref: mode = computed(() => props.size ?? 'base')
+const mode = computed(() => props.size ?? 'base')
 </script>
 
 <style>

@@ -21,26 +21,25 @@
 <script setup lang="ts">
 import { computed, defineProps } from 'vue'
 
-const props =
-  defineProps<{
-    data: {
-      rarity: number
-      charId: string
-      _skeleton?: boolean
-    }
-  }>()
+const props = defineProps<{
+  data: {
+    rarity: number
+    charId: string
+    _skeleton?: boolean
+  }
+}>()
 
 const baseUrl = 'https://andata.somedata.top/dataX/char'
-ref: profileUrl = computed(() => `${baseUrl}/profile/${props.data.charId}.png`)
+const profileUrl = computed(() => `${baseUrl}/profile/${props.data.charId}.png`)
 const defaultProfile = `${baseUrl}/profile/char_124_kroos.png`
-ref: bgUrl = computed(
+const bgUrl = computed(
   () =>
     `${baseUrl}/assets/bg/${
       props.data._skeleton ? 0 : props.data.rarity + 1
     }.png`
 )
 
-ref: show = computed(() => !props.data._skeleton)
+const show = computed(() => !props.data._skeleton)
 </script>
 
 <style lang="styl">
