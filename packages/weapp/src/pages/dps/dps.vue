@@ -65,6 +65,7 @@ import {
 } from '/@/components/AgentIcon/utils'
 
 import { new_op } from '@kkdy/akdata'
+import { ref } from 'vue-demi'
 
 // 从路由拿query
 const id = getCurrentInstance().router?.params.id
@@ -80,12 +81,12 @@ if (!id) {
  * 一般来说，如果需要响应式，例如需要更新在模板(html)，就用ref 标记
  * ref 只能在top level 使用，不能再函数内部用
  */
-ref: data = null as null | IChar.IData
+const data = ref<null | IChar.IData>(null)
 
 Data.GetCharacter({ id }).then((res) => {
   // 接口需要判断 res.data.ok 是否为true，然后访问res.data.result 就是结果值
   if (res.data.ok) {
-    data = res.data.result.data
+    data.value = res.data.result.data
   }
 })
 </script>

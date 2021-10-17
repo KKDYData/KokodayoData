@@ -74,7 +74,16 @@
         <view
           v-for="(item, i) in NavigationItems"
           :key="i"
-          class="flex font-bold h-80px text-dark-50 text-32px w-140px card items-center justify-center"
+          class="
+            flex
+            font-bold
+            h-80px
+            text-dark-50 text-32px
+            w-140px
+            card
+            items-center
+            justify-center
+          "
           style="
             background-color: rgba(179, 179, 179, 1);
             box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.16);
@@ -106,7 +115,7 @@ import { NavigationItems } from './constants'
 
 const listStore = useListStore()
 listStore.initList()
-ref: latestChars = computed(() => listStore.latestChars)
+const latestChars = computed(() => listStore.latestChars)
 
 const status = Taro.getSystemInfoSync()
 

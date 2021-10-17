@@ -1,14 +1,9 @@
 import { IChar } from '@kkdy/data'
-import { calcStatusWithKeyFrame, hello, mergeStatus } from '../char'
+import { mergeStatusWithFavor } from '..'
+import { calcStatusWithKeyFrame } from '../char'
 import CharData from './CharData.json'
 
 const char = CharData.char_242_otter as IChar.IData
-
-describe('hello', () => {
-  it('world', () => {
-    expect(hello()).toBe('world')
-  })
-})
 
 describe('calc char status', () => {
   it('calc level 1', () => {
@@ -61,8 +56,8 @@ describe('calc char status', () => {
 
   it('calc level 50 with favor lv50', () => {
     const sts = calcStatusWithKeyFrame(char.phases[0].attributesKeyFrames, 50)
-    const favorStatus = calcStatusWithKeyFrame(char.favorKeyFrames, 50, true)
-    expect(mergeStatus(sts, favorStatus)).toStrictEqual({
+    const favorStatus = mergeStatusWithFavor(sts, char.favorKeyFrames, 50)
+    expect(favorStatus).toStrictEqual({
       maxHp: 849,
       atk: 320,
       def: 80,

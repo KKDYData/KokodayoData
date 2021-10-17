@@ -1,1 +1,1 @@
-console.log('hello core')
+export * from './status/index'

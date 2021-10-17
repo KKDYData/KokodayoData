@@ -37,11 +37,11 @@ const props = defineProps<{
   slimBar?: boolean
 }>()
 
-ref: fontSize = computed(() => (props.size ?? 40) / 2 + 'px')
-ref: fontEnSize = computed(() => ((props.size ?? 30) / 2) * 0.75 + 'px')
-ref: barSize = computed(
-  () => ((props.size ?? 40) / 2) * (isSingleLine ? 1 : 1.75) + 'px'
+const fontSize = computed(() => (props.size ?? 40) / 2 + 'px')
+const fontEnSize = computed(() => ((props.size ?? 30) / 2) * 0.75 + 'px')
+const barSize = computed(
+  () => ((props.size ?? 40) / 2) * (isSingleLine.value ? 1 : 1.75) + 'px'
 )
 
-ref: isSingleLine = computed(() => !props.titleEn)
+const isSingleLine = computed(() => !props.titleEn)
 </script>
