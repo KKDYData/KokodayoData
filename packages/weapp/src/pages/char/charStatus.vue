@@ -37,6 +37,17 @@
     <Title slim-bar title-cn="攻击范围" slim :size="30" />
     <view class="flex justify-center"> <RangeItem :range-id="rangeId" /> </view>
   </view>
+  <view>
+    <Title slim-bar title-cn="天赋" slim :size="30" />
+    <Talent
+      v-for="(t, i) in data.talents"
+      :key="i"
+      :data="t"
+      :level="lv"
+      :phase="phase"
+      :rank="rank"
+    />
+  </view>
 </template>
 <script setup lang="ts">
 import { IChar } from '@kkdy/data'
@@ -47,6 +58,7 @@ import { useStatus } from 'core'
 import { NumberSelector } from '/@/components/NumberSelector'
 import { computed } from 'vue'
 import { RangeItem } from '/@/components/RangeItem'
+import Talent from './talent.vue'
 
 const props = defineProps<{
   data: IChar.IData
