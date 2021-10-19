@@ -44,13 +44,13 @@
           <CharStar :size="10" :rarity="data.rarity" />
           <view class="mt-10px ml-10px text-dark-50">
             <view class="text-xl mb-1 text-20px">
-              {{ data.description }}
+              <rich-text :nodes="convert(data.description).toHtml()" />
             </view>
             <view class="text-xl text-18px">
-              {{ data.itemDesc }}
+              <rich-text :nodes="convert(data.itemDesc).toHtml()" />
             </view>
             <view class="text-xl text-18px">
-              {{ data.itemUsage }}
+              <rich-text :nodes="convert(data.itemUsage).toHtml()" />
             </view>
           </view>
         </view>
@@ -74,6 +74,7 @@ import { LabelText } from '/@/components/LabelText'
 import { ref } from 'vue'
 import { Tag } from '/@/components/Tag'
 import ChatStatus from './charStatus.vue'
+import { convert } from './RichText'
 
 const id = getCurrentInstance().router?.params.id
 if (!id) {

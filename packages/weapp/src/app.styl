@@ -7,7 +7,7 @@ view, ::before, ::after {
 }
 
 view {
-  --tw-ring-inset: var(--tw-empty, /**/ /**/)
+  --tw-ring-inset: var(--tw-empty, /*  */ /*  */)
   --tw-ring-offset-width: 0
   --tw-ring-offset-color: #fff
   --tw-ring-color: rgba(59, 130, 246, 0.5)
@@ -20,7 +20,7 @@ view {
   --tc-left: 4px
 }
 
-//毛玻璃
+// 毛玻璃
 .glass {
   background: hsla(0, 0%, 100%, 0.75)
   backdrop-filter: blur(5px)
@@ -94,7 +94,7 @@ view {
   opacity: 0.5
   filter: grayscale(1)
 
-  //background: red
+  // background: red
   &::after {
     content: ''
     position: absolute
@@ -137,5 +137,31 @@ view {
   & > view:nth-child(2) {
     border: none
     padding-top: 0
+  }
+}
+
+.rich-color {
+  &[class*=down], &[class*=pn], &[class*=talpu] {
+    color: #FF6237
+  }
+
+  &[class*=vup] {
+    color: #0098DC
+  }
+
+  &[class*=rem] {
+    color: #F49800
+  }
+
+  &[class*=kw] {
+    color: #00B0FF
+  }
+
+  &[class*=lv] {
+    color: #049cb8
+  }
+
+  &[class*=act] {
+    color: #ff5500
   }
 }
