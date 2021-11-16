@@ -4,11 +4,15 @@ const { Queue } = require('@kkdy/queue')
 const { instance } = require('./instance')
 const fs = require('fs')
 
-async function updateActMap(root) {
+async function updateActMap(root, filter = '') {
   const lvs = fs.readdirSync(path.resolve(__dirname, root))
   const q = Queue.of(12)
   lvs.forEach((subp) => {
     const son = fs.readdirSync(path.resolve(__dirname, path.join(root, subp)))
+    if (filter && ![filter].includes(subp)) {
+      return
+    }
+
     son.forEach((p) => {
       const levelId = p.slice(0, -5)
       q.pushTask(() => {
@@ -32,11 +36,11 @@ async function updateActMap(root) {
   await q.allDone()
 }
 
-async function updateStageInfo() {
+async function updateStageInfo(filter = '') {
   const infos = require('../ArknightsGameData/zh_CN/gamedata/excel/stage_table.json')
   const q = Queue.of(12)
   Object.values(infos.stages)
-    .filter((e) => e.levelId)
+    .filter((e) => e.levelId && e.levelId.indexOf(filter) > -1)
     .forEach((info) => {
       const levelId = info.levelId.split('/').pop()
       q.pushTask(
