@@ -21,7 +21,7 @@
             <div>
               <b>能力</b>
             </div>
-            <p>{{ currEnemy.ability }}</p>
+            <p v-html="abilityTexy">{{ abilityTexy }}</p>
           </div>
         </enemy-status>
       </template>
@@ -50,7 +50,7 @@
         <p
           v-if="
             waveData.length > 1 &&
-            (postDelay || preDelay || maxTimeWaitingForNextWave)
+              (postDelay || preDelay || maxTimeWaitingForNextWave)
           "
         >
           最大等待时间：{{ maxTimeWaitingForNextWave }}s | 延迟：{{ preDelay }}s
@@ -67,10 +67,14 @@
             <span>
               <i class="el-icon-position" />
               {{ time | time }}
-              <span style="margin-left: 10px">{{ enemyNum }}/{{
+              <span style="margin-left: 10px"
+                >{{ enemyNum }}/{{
                   fragments[fragments.length - 1].enemyNum
-                }}</span>
-              <span v-if="_preDelay" style="margin-left: 10px">距离上一波{{ _preDelay }}s</span>
+                }}</span
+              >
+              <span v-if="_preDelay" style="margin-left: 10px"
+                >距离上一波{{ _preDelay }}s</span
+              >
             </span>
           </p>
 
@@ -104,7 +108,7 @@
                 class="wave-enemy-single"
                 style="height: 100px; margin: 30px 0"
               >
-                <p>{{ key.replace("trap_007_ballis", "弩炮") }}</p>
+                <p>{{ key.replace('trap_007_ballis', '弩炮') }}</p>
               </div>
               <div style class="enemy-cube-wave-info">
                 <div>数量:{{ count }} 间隔:{{ interval }}s</div>
@@ -143,6 +147,7 @@ import { path } from '@/utils/listVer'
 
 import { createNamespacedHelpers, mapState as Root } from 'vuex'
 import { sort } from '../../utils'
+import { convert } from '@/utils/RichText'
 const { mapState } = createNamespacedHelpers('enemy')
 
 export default {
@@ -203,6 +208,10 @@ export default {
     waveData() {
       if (!this.mapData) return
       return this.mapData.waves
+    },
+    abilityTexy() {
+      if (!this.currEnemy) return ''
+      return convert(this.currEnemy.ability).toHtml()
     },
   },
   watch: {
@@ -265,8 +274,7 @@ export default {
                 (res, key) => {
                   if (v.overwrittenData.attributes[key].m_defined) {
                     res[key].m_defined = true
-                    res[key].m_value =
-                      v.overwrittenData.attributes[key].m_value
+                    res[key].m_value = v.overwrittenData.attributes[key].m_value
                   }
                   return res
                 },
