@@ -13,3 +13,4 @@ package-lock.json
 node_modules
 
 element
+.DS_Store
