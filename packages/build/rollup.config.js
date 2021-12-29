@@ -1,4 +1,4 @@
-import typescript from 'rollup-plugin-typescript2'
+import typescript from '@rollup/plugin-typescript'
 import clear from 'rollup-plugin-clear'
 
 export default {
@@ -18,14 +18,6 @@ export default {
       targets: ['dist'],
       watch: true,
     }),
-    typescript({
-      tsconfigOverride: {
-        compilerOptions: {
-          module: 'ESNext',
-          declarationDir: 'dist',
-        },
-        include: ['src'],
-      },
-    }),
+    typescript({ tsconfig: './tsconfig.json' }),
   ],
 }

@@ -48,9 +48,21 @@
       :rank="rank"
     />
   </view>
+  <view>
+    <Suspense>
+      <Skill
+        v-for="(s, i) in skills"
+        :key="i"
+        :data="s"
+        :level="lv"
+        :phase="phase"
+        :rank="rank"
+      />
+    </Suspense>
+  </view>
 </template>
 <script setup lang="ts">
-import { IChar } from '@kkdy/data'
+import { IChar, ISkill } from '@kkdy/data'
 import { Title } from '/@/components/Title'
 
 import { LabelText } from '/@/components/LabelText'
@@ -59,9 +71,12 @@ import { NumberSelector } from '/@/components/NumberSelector'
 import { computed } from 'vue'
 import { RangeItem } from '/@/components/RangeItem'
 import Talent from './talent.vue'
+import Skill from './skill.vue'
+import { BaseEntityType } from '@kkdy/api-taro'
 
 const props = defineProps<{
   data: IChar.IData
+  skills: BaseEntityType<ISkill.ISkill>[]
 }>()
 
 const {

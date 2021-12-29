@@ -33,7 +33,7 @@ export function GetCharacterList() {
     >
   >('/data/list')
 }
-export function GetCharacter() {
+export function GetCharacter(params: { id: string }) {
   return request.get<
     JsonResponse<{
       data: IChar.IData
@@ -50,7 +50,7 @@ export function GetCharacter() {
       relativeChars: string[]
       charComment: string
     }>
-  >('/data/char')
+  >('/data/char', { params })
 }
 export function GetActivityList() {
   return request.get<JsonResponse<IActivityInfo.IInfo[]>>('/data/acts')

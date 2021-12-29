@@ -8,48 +8,44 @@ const changeDesc = (desc: string) => {
 
 export const changeAttackSpeed = (skill: {
   description: any
-  prefabId?: string
+  prefabId?: string | null
 }) => {
   const str = changeDesc(skill.description)
 
-  let res = str.replace(
-    /(\{)(.*?)(\})/g,
-    (match: any, p1: any, p2: string, p3: any, p4: any, p5: any) => {
-      let percent = '',
-        scale = 1
-      let minus = false
-      let res = ''
+  let res = str.replace(/(\{)(.*?)(\})/g, (match: any, p1: any, p2: string) => {
+    let percent = '',
+      scale = 1
+    let minus = false
+    let res = 0
 
-      if (p2.match(/:0%/)) {
-        p2 = p2.slice(0, -3)
-        percent = '%'
-      }
-      if (p2.match(/:0\.0%/)) {
-        p2 = p2.slice(0, -5)
-        percent = '%'
-        scale = 2
-      }
-      if (p2.match(/:0\.0/)) {
-        p2 = p2.slice(0, -4)
-        percent = ''
-      } else if (p2.match(/:0/)) {
-        p2 = p2.slice(0, -2)
-        percent = ''
-      }
-      if (p2.match(/-/)) {
-        p2 = p2.slice(1)
-        minus = true
-      }
-      let temp = findValue(skill, 'blackboard', p2.toLowerCase())
-      if (temp) {
-        res = temp.value
-        if (minus) res *= -1
-        if (percent)
-          res = Math.round(res * 10 ** (scale + 1)) / 10 ** (scale - 1)
-      }
-      return res + percent
+    if (p2.match(/:0%/)) {
+      p2 = p2.slice(0, -3)
+      percent = '%'
     }
-  )
+    if (p2.match(/:0\.0%/)) {
+      p2 = p2.slice(0, -5)
+      percent = '%'
+      scale = 2
+    }
+    if (p2.match(/:0\.0/)) {
+      p2 = p2.slice(0, -4)
+      percent = ''
+    } else if (p2.match(/:0/)) {
+      p2 = p2.slice(0, -2)
+      percent = ''
+    }
+    if (p2.match(/-/)) {
+      p2 = p2.slice(1)
+      minus = true
+    }
+    const temp = findValue(skill, 'blackboard', p2.toLowerCase())
+    if (temp) {
+      res = temp.value
+      if (minus) res *= -1
+      if (percent) res = Math.round(res * 10 ** (scale + 1)) / 10 ** (scale - 1)
+    }
+    return res + percent
+  })
 
   const skill_base_time = findValue(skill, 'blackboard', 'base_attack_time')
 
@@ -118,12 +114,15 @@ export const changeAttackSpeed = (skill: {
   return res
 }
 
-const findValue = (data: { [x: string]: any }, attr: string, key: string) => {
+const findValue = (
+  data: { [x: string]: any },
+  attr: string,
+  key: string
+): { key: string; value: number } => {
   if (data && data[attr]) {
     return data[attr].find((el: { key: any }) => el.key === key)
   } else {
-    console.error(`There is no Attr ${attr} in `, data)
-    return 0
+    throw new Error(`There is no Attr ${attr} in data`)
   }
 }
 

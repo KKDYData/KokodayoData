@@ -1,1 +1,1 @@
-export * from './status/index'
+export * from './status'

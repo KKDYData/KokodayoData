@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "typescript": "^4.5.4",
     "wx-server-sdk": "~2.0.3"
   }
 }

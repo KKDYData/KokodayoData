@@ -7,14 +7,16 @@ export const AxiosDeclartion = factory.createImportDeclaration(
     false,
     undefined,
     factory.createNamedImports([
-      factory.createImportSpecifier(undefined,
+      factory.createImportSpecifier(
+        false,
+        undefined,
         factory.createIdentifier('request')
-      )
-    ]),
+      ),
+    ])
   ),
-  factory.createStringLiteral('./instance')
+  factory.createStringLiteral('./instance'),
+  undefined
 )
-
 
 export const ResponseDEclartion = factory.createImportDeclaration(
   undefined,
@@ -22,10 +24,14 @@ export const ResponseDEclartion = factory.createImportDeclaration(
   factory.createImportClause(
     false,
     undefined,
-    factory.createNamedImports([ factory.createImportSpecifier(
-      undefined,
-      factory.createIdentifier("JsonResponse")
-    ) ])
+    factory.createNamedImports([
+      factory.createImportSpecifier(
+        false,
+        undefined,
+        factory.createIdentifier('JsonResponse')
+      ),
+    ])
   ),
-  factory.createStringLiteral("./response")
+  factory.createStringLiteral('./response'),
+  undefined
 )

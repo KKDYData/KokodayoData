@@ -1,13 +1,12 @@
 <template>
-  <view>
-    <view> {{ state.name }}</view>
-    <rich-text :nodes="changeAttackSpeed(state)" />
+  <view class="my-20px">
+    <view class="text-blue"> {{ state.name }}</view>
+    <rich-text class="text-xs" :nodes="changeAttackSpeed(state)" />
   </view>
 </template>
 <script setup lang="ts">
 import { IChar } from '@kkdy/data'
 import { computed } from 'vue'
-import { convert } from './RichText'
 import { changeAttackSpeed } from './utils'
 
 const props = defineProps<{

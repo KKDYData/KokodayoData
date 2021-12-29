@@ -56,14 +56,14 @@
         </view>
       </view>
     </view>
-    <ChatStatus v-if="data" :data="data" />
+    <ChatStatus v-if="data" :data="data" :skills="skills" />
   </view>
 </template>
 <script setup lang="ts">
 import { Scan } from '/@/components/QRCode'
 import { getCurrentInstance } from '@tarojs/taro'
 import { Data } from '@kkdy/api-taro'
-import { IChar } from '@kkdy/data'
+import { IChar, ISkill } from '@kkdy/data'
 import { AgentIconBase, CharStar } from '/@/components/AgentIcon'
 import { Title } from '/@/components/Title'
 import {
@@ -82,11 +82,18 @@ if (!id) {
 }
 
 const data = ref<null | IChar.IData>(null)
+const skills = ref<
+  {
+    data: ISkill.ISkill
+    comments: string[]
+  }[]
+>([])
 // ref: pIconId = useProfessionIcon(data?.profession)
 
 Data.GetCharacter({ id }).then((res) => {
   if (res.data.ok) {
     data.value = res.data.result.data
+    skills.value = res.data.result.skills
   }
 })
 </script>

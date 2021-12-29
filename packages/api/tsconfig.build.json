@@ -1,26 +1,25 @@
 {
-  "extends": "../../tsconfig.json",
   "compileOnSave": true,
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
+    "module": "ESNext",
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "inlineSourceMap": true,
     "noImplicitThis": true,
     "noUnusedLocals": false,
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "outDir": "."
+    "outDir": ".",
+    "skipLibCheck": true,
+    "declarationDir": ".",
   },
-  "exclude": [
-    "dist",
-    "node_modules",
-    "test"
-  ],
   "include": [
     "lib"
   ],
+  "exclude": [
+    "dist"
+  ]
 }

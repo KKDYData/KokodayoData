@@ -3,6 +3,7 @@ import path from 'path'
 import { extractApi, copyFile } from '@kkdy/build'
 import _ from 'lodash'
 import rimraf from 'rimraf'
+export * from './utilsType'
 
 const outDir = path.resolve(__dirname, '../lib')
 const sourceDir = path.resolve(__dirname, '../../server/src/interface')
@@ -32,7 +33,9 @@ rimraf(outDir, () => {
     path.resolve(__dirname, '../lib/index.ts'),
     exportList
       .map((name) => `export * as ${_.upperFirst(name)} from './${name}'`)
-      .join('\n') + `\nexport * from './instance'`
+      .join('\n') +
+      `\nexport * from './instance'` +
+      `\nexport * from './utilsType'`
   )
 
   const responseType = 'response.ts'

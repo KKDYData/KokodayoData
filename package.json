@@ -2,9 +2,6 @@
   "name": "kokodayo-data",
   "version": "1.0.0",
   "main": "main.js",
-  "workspaces": [
-    "packages/**"
-  ],
   "private": "true",
   "scripts": {
     "build": "lerna run --stream --sort build",
@@ -17,8 +14,8 @@
     "husky": "^5.1.3",
     "lerna": "^4.0.0",
     "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
-    "patch-package": "^6.4.7"
+    "patch-package": "^6.4.7",
+    "prettier": "^2.2.1"
   },
   "author": "odex_2100@outlook.com",
   "license": "ISC",
@@ -29,5 +26,8 @@
     ""
   ],
   "bugs": {},
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "typescript": "^4.5.4"
+  }
 }

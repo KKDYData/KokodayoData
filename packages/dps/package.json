@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/xulai1001/akdata/issues"
   },
-  "homepage": "http://viktorlab.cn/akdata/"
+  "homepage": "http://viktorlab.cn/akdata/",
+  "dependencies": {
+    "typescript": "^4.5.4"
+  }
 }

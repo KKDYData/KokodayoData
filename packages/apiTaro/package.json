@@ -10,16 +10,22 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "ts-node src/index.ts && rollup -c"
+    "build": "ts-node src/index.ts && rollup -c",
+    "preinstall": "pnpm build"
   },
   "author": "odex",
   "devDependencies": {
+    "@rollup/plugin-typescript": "^8.3.0",
     "prettier": "^2.2.1",
     "rollup": "^2.40.0",
-    "rollup-plugin-clear": "^2.0.7",
-    "rollup-plugin-typescript2": "^0.30.0"
+    "rollup-plugin-clear": "^2.0.7"
   },
   "dependencies": {
-    "@kkdy/build": "1"
+    "@kkdy/build": "workspace:^1.0.0",
+    "@kkdy/data": "workspace:^1.0.0",
+    "lodash": "^4.17.21",
+    "rimraf": "^3.0.2",
+    "taro-axios": "^1.1.1",
+    "typescript": "^4.5.4"
   }
 }
