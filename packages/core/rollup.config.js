@@ -1,5 +1,6 @@
-import typescript from 'rollup-plugin-typescript2'
+import typescript from '@rollup/plugin-typescript'
 import clear from 'rollup-plugin-clear'
+import path from 'path'
 
 const output = [
   {
@@ -11,6 +12,7 @@ const output = [
     format: 'cjs',
   },
 ]
+const external = ['vue', 'vue-router', 'ramda', 'mitt']
 
 const plugins = [
   clear({
@@ -18,8 +20,9 @@ const plugins = [
     watch: true,
   }),
   typescript({
-    tsconfig: 'tsconfig.json',
+    tsconfig: path.resolve(__dirname, './tsconfig.json'),
   }),
+  external,
 ]
 
 export default {

@@ -65,7 +65,7 @@ import {
 } from '/@/components/AgentIcon/utils'
 
 import { new_op } from '@kkdy/akdata'
-import { ref } from 'vue-demi'
+import { ref } from 'vue'
 
 // 从路由拿query
 const id = getCurrentInstance().router?.params.id

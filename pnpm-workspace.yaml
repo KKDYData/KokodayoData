@@ -1,0 +1,6 @@
+packages:
+  # 所有在 packages/ 和 components/ 子目录下的 package
+  - 'packages/**'
+  - 'packages/components/**'
+  # 不包括在 test 文件夹下的 package
+  - '!**/test/**'

@@ -2,21 +2,18 @@
   "compileOnSave": true,
   "compilerOptions": {
     "target": "ES2020",
-    "module": "CommonJS",
+    "module": "ESNext",
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "inlineSourceMap": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
-    "stripInternal": true,
-    "pretty": true,
     "declaration": true,
     "outDir": "dist",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "declarationDir": ".",
   },
+  "exclude": [
+    "dist"
+  ],
   "include": [
-    "src"
-  ]
+    "src/**/*"
+  ],
 }

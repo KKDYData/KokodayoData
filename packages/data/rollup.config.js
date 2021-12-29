@@ -1,4 +1,4 @@
-import typescript from 'rollup-plugin-typescript2'
+import typescript from '@rollup/plugin-typescript'
 import clear from 'rollup-plugin-clear'
 
 const output = [
@@ -18,7 +18,7 @@ const plugins = [
     watch: true,
   }),
   typescript({
-    tsconfig: 'tsconfig.json',
+    tsconfig: './tsconfig.json',
   }),
 ]
 

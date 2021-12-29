@@ -36,7 +36,15 @@ export function extractApi(file: string): string {
     let name = ''
 
     if (ts.isImportDeclaration(node)) {
-      importNodeList.push(node)
+      importNodeList.push(
+        factory.createImportDeclaration(
+          undefined,
+          undefined,
+          node.importClause,
+          factory.createStringLiteral((node.moduleSpecifier as any).text)
+        )
+      )
+      console.log('import node', node.moduleSpecifier)
     } else if (ts.isInterfaceDeclaration(node)) {
       name = node.name.text
 

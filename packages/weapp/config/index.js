@@ -46,10 +46,16 @@ const config = {
       chain.merge({
         plugin: {
           windicss: {
-            plugin: new windicss.default(),
+            plugin: new windicss(),
           },
         },
       })
+      chain.module // fixes https://github.com/graphql/graphql-js/issues/1272
+        .rule('mjs$')
+        .test(/\.mjs$/)
+        .include.add(/node_modules/)
+        .end()
+        .type('javascript/auto')
     },
   },
   h5: {

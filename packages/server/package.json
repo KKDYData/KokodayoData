@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "@kkdy/data": "^1.0.0",
+    "@kkdy/data": "workspace:^1.0.0",
     "@koa/cors": "^3.1.0",
     "@midwayjs/bootstrap": "^2.3.0",
     "@midwayjs/cache": "^2.11.4",
@@ -41,7 +41,7 @@
     "jest": "^26.4.0",
     "mwts": "^1.0.5",
     "ts-jest": "^26.2.0",
-    "typescript": "^4.0.0"
+    "typescript": "^4.5.4"
   },
   "engines": {
     "node": ">=12.0.0"

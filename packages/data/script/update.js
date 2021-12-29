@@ -28,17 +28,28 @@ const { instance: ins } = require('./instance')
   //   chars: ['夕', '乌有'],
   // })
   // await updateEnemies()
-  await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/activities/')
-  await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/obt/')
-  await updateStageInfo()
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
+  //   'act13side'
+  // )
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/',
+  //   'memory'
+  // )
+  await updateActMap(
+    '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
+    'act14side'
+  )
+  await updateStageInfo('act14side')
+  // await updateStageInfo('memory')
   // return
-  const res = await ins.get('/data/map/list', {
-    // id: 'char_1001_amiya2',
-    params: {
-      id: 'enemy_1058_traink',
-    },
-  })
-  res.data.result.map((s) => console.log(s.levelId, s.stageInfos.length))
+  // const res = await ins.get('/data/map/list', {
+  //   // id: 'char_1001_amiya2',
+  //   params: {
+  //     id: 'enemy_1058_traink',
+  //   },
+  // })
+  // res.data.result.map((s) => console.log(s.levelId, s.stageInfos.length))
   // console.log(
   //   // res.data.result.stageEnemies.map((e) => e.stageLevelId)
   // )
@@ -73,8 +84,8 @@ const { instance: ins } = require('./instance')
 })()
 
 async function updateBuildingBuff() {
-  const hook_book = require('../ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
-    .buffs
+  const hook_book =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/building_data.json').buffs
 
   const list = Object.values(hook_book)
 
@@ -91,8 +102,8 @@ async function updateBuildingBuff() {
 }
 
 async function updateBuildingSkill() {
-  const hook_book = require('../ArknightsGameData/zh_CN/gamedata/excel/building_data.json')
-    .chars
+  const hook_book =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/building_data.json').chars
 
   const list = Object.values(hook_book)
 
@@ -109,8 +120,8 @@ async function updateBuildingSkill() {
 }
 
 function updateCharInfo() {
-  const hook_book = require('../ArknightsGameData/zh_CN/gamedata/excel/handbook_info_table.json')
-    .handbookDict
+  const hook_book =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/handbook_info_table.json').handbookDict
 
   const list = Object.values(hook_book)
 
@@ -188,8 +199,8 @@ function updateTeamInfo() {
 
 function updateChars() {
   const character_table = require('../ArknightsGameData/zh_CN/gamedata/excel/character_table.json')
-  const patchChars = require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
-    .patchChars
+  const patchChars =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json').patchChars
   const list = [
     ...Object.entries(character_table),
     ...Object.entries(patchChars),
@@ -225,8 +236,8 @@ function getChar(charId) {
 
 function updatePatchInfo() {
   return new Promise(async (resolve) => {
-    const patchInfos = require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json')
-      .patchDetailInfoList
+    const patchInfos =
+      require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json').patchDetailInfoList
     const list = Object.entries(patchInfos)
 
     const queue = Queue.of(512)
@@ -243,8 +254,8 @@ function getSkill(skillId) {
 }
 
 async function updateAct() {
-  const acts = require('../ArknightsGameData/zh_CN/gamedata/excel/activity_table.json')
-    .basicInfo
+  const acts =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/activity_table.json').basicInfo
   const q = Queue.of(12)
   Object.values(acts).forEach((data) => {
     q.pushTask(() => ins.post('/update/activity', data))
@@ -253,8 +264,8 @@ async function updateAct() {
 }
 
 async function updateGachaPool() {
-  const acts = require('../ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
-    .gachaPoolClient
+  const acts =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json').gachaPoolClient
   const q = Queue.of(12)
   Object.values(acts).forEach((data) => {
     q.pushTask(() =>
