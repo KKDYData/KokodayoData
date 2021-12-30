@@ -33,21 +33,24 @@ import { localStore } from '@/localStore'
 import { mapState } from 'vuex'
 import { Assets } from '../Api'
 
-
 const HomeLayout = () => ({
-  component: import(/* webpackChunkName: "HomeLayout" */ '../components/homeLayout'),
+  component: import(
+    /* webpackChunkName: "HomeLayout" */ '../components/homeLayout'
+  ),
   loading: loadingC,
   error: loadingC,
   delay: 200,
-  timeout: 5000
+  timeout: 5000,
 })
 
 const Activity = () => ({
-  component: import(/* webpackChunkName: "HomeLayout" */ '../components/Activity'),
+  component: import(
+    /* webpackChunkName: "HomeLayout" */ '../components/Activity'
+  ),
   loading: loadingC,
   error: loadingC,
   delay: 200,
-  timeout: 5000
+  timeout: 5000,
 })
 
 export default {
@@ -55,9 +58,9 @@ export default {
     HomeLayout,
     MyTitle,
     Activity,
-    SlideTitle
+    SlideTitle,
   },
-  data () {
+  data() {
     return {
       data: [],
       token: [],
@@ -65,37 +68,37 @@ export default {
       isBeta: devMode === 'beta',
       activityState: 'unset',
       store: localStore(),
-      innerWidth: window.innerWidth
+      innerWidth: window.innerWidth,
     }
   },
   computed: {
-    ...mapState([ 'short' ]),
+    ...mapState(['short']),
     ...mapState({
-      info: state => state.Base.info
-    })
+      info: (state) => state.Base.info,
+    }),
   },
   watch: {
-    info (v) {
+    info(v) {
       this.linkStart()
-
-    }
+    },
   },
-  created () {
+  created() {
     this.linkStart()
   },
-  mounted () {
+  mounted() {
     this.store.getItem('home-activity-state').then((state) => {
       this.activityState = state === null ? true : state
       console.log('act ', state)
     })
+    this.store.setItem('home-activity-state', true)
   },
   methods: {
-    linkStart () {
+    linkStart() {
       if (this.info?.agent?.char) {
-        this.getData(this.info.agent.char.key).then(data => {
+        this.getData(this.info.agent.char.key).then((data) => {
           const agent = [],
             token = []
-          data.forEach(el => {
+          data.forEach((el) => {
             if (el.class !== 'TOKEN') agent.push(el)
             else token.push(el)
           })
@@ -105,8 +108,8 @@ export default {
         })
       }
     },
-    getData (key) {
-      return Assets.getProfileList(key).then(source => {
+    getData(key) {
+      return Assets.getProfileList(key).then((source) => {
         source.forEach((el, index, arr) => {
           el.index = index
           el.tagHit = 0
@@ -115,11 +118,11 @@ export default {
         return source.reverse()
       })
     },
-    handleActivity (el) {
+    handleActivity(el) {
       console.log(el, el.value)
       this.store.setItem('home-activity-state', el.value)
-    }
-  }
+    },
+  },
 }
 </script>
 
@@ -163,5 +166,3 @@ export default {
   }
 }
 </style>
-
-

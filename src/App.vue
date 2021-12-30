@@ -22,62 +22,62 @@
   </div>
 </template>
 <script>
-import TopMenu from "@/components/TopMenu"
+import TopMenu from '@/components/TopMenu'
 
-import { mapState } from "vuex"
-import { devMode } from "./stats"
+import { mapState } from 'vuex'
+import { devMode } from './stats'
 // import Vue from 'vue'
 
 const Footer = () =>
-  import(/* webpackChunkName: "Footer" */ "./components/Footer")
+  import(/* webpackChunkName: "Footer" */ './components/Footer')
 const MyShare = () =>
-  import(/* webpackChunkName: "MyShare" */ "@/components/Share")
+  import(/* webpackChunkName: "MyShare" */ '@/components/Share')
 
-const forceUnregister = 210116
-import localforage from "localforage"
-import { Button } from "element-ui"
-import Vue from "vue"
+const forceUnregister = 211231
+import localforage from 'localforage'
+import { Button } from 'element-ui'
+import Vue from 'vue'
 Vue.use(Button)
 
-console.log("当前版本日期", process.env.VERSION)
+console.log('当前版本日期', process.env.VERSION)
 
 export default {
   components: {
     Footer,
     TopMenu,
-    MyShare
+    MyShare,
   },
   data() {
     return {
       isOrientation: false,
       loading: true,
-      dev: devMode === "beta" || process.env.NODE_ENV === "development",
-      status: "",
-      unregistHit: 0
+      dev: devMode === 'beta' || process.env.NODE_ENV === 'development',
+      status: '',
+      unregistHit: 0,
     }
   },
   computed: {
     ...mapState({
-      info: state => state.Base.info
+      info: (state) => state.Base.info,
     }),
     isNeedUpdate() {
       if (!this.info) return false
       return this.info.base?.web.key > process.env.VERSION && !this.dev
-    }
+    },
   },
   mounted() {
     if (!navigator.serviceWorker) return
     const store = localforage.createInstance({
-      name: "testDB"
+      name: 'testDB',
     })
-    store.getItem("forceUnregister").then(date => {
+    store.getItem('forceUnregister').then((date) => {
       if (!date || date < forceUnregister) {
         console.log(
           `强制注销serverWorker, 当前记录：${date}, 目标记录${forceUnregister}`
         )
-        navigator.serviceWorker.getRegistrations().then(registrations => {
-          registrations.forEach(el => el.unregister())
-          store.setItem("forceUnregister", forceUnregister)
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          registrations.forEach((el) => el.unregister())
+          store.setItem('forceUnregister', forceUnregister)
         })
       }
     })
@@ -88,17 +88,17 @@ export default {
     },
     refresh() {
       if (++this.unregistHit < 3) return
-      console.log("强制注销serverWorker")
+      console.log('强制注销serverWorker')
       const store = localforage.createInstance({
-        name: "testDB"
+        name: 'testDB',
       })
-      navigator.serviceWorker.getRegistrations().then(registrations => {
-        registrations.forEach(el => el.unregister())
-        store.setItem("forceUnregister", forceUnregister)
+      navigator.serviceWorker.getRegistrations().then((registrations) => {
+        registrations.forEach((el) => el.unregister())
+        store.setItem('forceUnregister', forceUnregister)
         window.location.reload()
       })
-    }
-  }
+    },
+  },
 }
 </script>
 <style lang="stylus" scoped>
