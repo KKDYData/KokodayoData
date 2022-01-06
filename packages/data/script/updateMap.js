@@ -61,7 +61,36 @@ async function updateStageInfo(filter = '') {
   await q.allDone()
 }
 
+async function updateRogueStageInfo(filter = '') {
+  const infos =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/roguelike_topic_table.json')
+      .details.rogue_1.stages
+  const q = Queue.of(12)
+  const list = Object.values(infos)
+    .filter((e) => e.levelId && e.id.indexOf(filter) > -1)
+    .forEach((info) => {
+      const levelId = info.levelId.split('/').pop()
+      console.log('levelId', levelId)
+      info.stageId = info.id
+      q.pushTask(() =>
+        instance
+          .post('/update/map/info', {
+            levelId,
+            info,
+          })
+          .then((res) => {
+            if (res.data.code) console.error(res.data)
+            else console.log('done ', levelId)
+          })
+          .catch((err) => console.error('err', levelId, err))
+      )
+    })
+
+  await q.allDone()
+}
+
 module.exports = {
   updateActMap,
   updateStageInfo,
+  updateRogueStageInfo,
 }
