@@ -5,7 +5,11 @@ const { Queue } = require('@kkdy/queue')
 const fs = require('fs')
 const path = require('path')
 const { updateEnemies } = require('./updateEnemies')
-const { updateActMap, updateStageInfo } = require('./updateMap')
+const {
+  updateActMap,
+  updateStageInfo,
+  updateRogueStageInfo,
+} = require('./updateMap')
 
 const { instance: ins } = require('./instance')
 
@@ -33,14 +37,16 @@ const { instance: ins } = require('./instance')
   //   'act13side'
   // )
   // await updateActMap(
-  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/',
-  //   'memory'
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/roguelike/'
+  //   // 'campaign'
   // )
-  await updateActMap(
-    '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
-    'act14side'
-  )
-  await updateStageInfo('act14side')
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
+  //   'act14side'
+  // )
+
+  await updateRogueStageInfo('_n_')
+  // await updateStageInfo('campaign')
   // await updateStageInfo('memory')
   // return
   // const res = await ins.get('/data/map/list', {
