@@ -35,7 +35,7 @@ const enemySkillNameKey = {
   SHIELDBURSTREBORN: '破桎而出[重生]',
   CROSSATTACKMARK: '纬地经天标记',
   CROSSATTACKMARKREBORN: '纬地经天标记[重生]',
-  CHARGEATTACK: '充能攻击',
+  CHARGEATTACK: '蓄力攻击',
   TRIPLEATTACK: '三重射',
   POISONRELEASE: '毒尘释放',
   POISONRELEASE_RAGE: '毒尘释放_愤怒',
@@ -45,27 +45,77 @@ const enemySkillNameKey = {
   ARMORPIERCING: '装甲穿刺',
   REFRESHSHIELD: '护盾刷新',
   OCCUPY: '夺取',
-  TAKEOFF: '起飞'
+  TAKEOFF: '起飞',
+  SUMMONTOKEN:'召唤衍生物',
+  AIRSUPPORTATK:'攻击空援',
+  AIRSUPPORTDEF:'防御空援',
+  STAB:'刺击',
+  SPEAR:'侵蚀液泡',
+  FLAME:'喷火',
+  DEADBOOM:'死亡自爆',
+  SUMMONFIREBALL:'净浊之焰',
+  BACKSTAB:'恐惧凝集',
+  SWITCHTOMODE2:'进化至进化形态',
+  SWITCHTOMODE3:'进化至完美形态',
+  M1ATTACKWARNING:'攻击预警[初生形态]',
+  M2ATTACKWARNING:'攻击预警[进化形态]',
+  M3ATTACKWARNING:'攻击预警[完美形态]',
+  M1REALATTACK:'真实攻击[初生形态]',
+  M2REALATTACK:'真实攻击[进化形态]',
+  M3REALATTACK:'真实攻击[完美形态]',
+  BLACKRINGP1:'坍缩恐惧[第一形态]',
+  BLACKRINGP2:'坍缩恐惧[第二形态]',
+  TIDEWATER:'大潮[初始]',
+  TIDEWATERG1:'大潮[1阶段]',
+  TIDEWATERG2:'大潮[2阶段]',
+  ROCKFALL:'崩坍[初始]',
+  ROCKFALLG1:'崩坍[1阶段]',
+  ROCKFALLG2:'崩坍[2阶段]',
+  SUMMONTENTAC:'断裂生殖[初始]',
+  SUMMONTENTACG1:'断裂生殖[1阶段]',
+  SUMMONTENTACG2:'断裂生殖[2阶段]',
+  DOOM:'物种爆发[终结技]',
+  SUMMONFCANON:'召唤风筝',
+  SUMMONBMBMOT:'召唤爆破艇',
+  WATERCANNON:'水炮',
+  WHIRLWIND:'旋风斩',
+  BURSTSHOOT:'多段连射',
+  PETRIFIEDRAY:'蔓德拉的注目',
+  REBORN:'重生',
+  SUMMONSTONESKIN:'召唤石之盾',
+  SUMMONSTONESKIN_2:'召唤石之盾[2阶段]',
+  SUMMONDUPILR:'击倒支柱',
+  BLOODPOOL:'血池',
+  BLOODPOOL2:'血池[第二形态]',
+  SUMMONBLDBLD:'召唤血刃[复活姿态]',
+  SUMMONBLDBLD2:'召唤血刃[第二形态]',
+  CIRCLEATTACK:'肆虐风雪',
+  CIRCLEATTACK2:'肆虐风雪[第二阶段]',
+  BLINK2:'闪现[第二阶段]',
+  SHIELD:'召唤护盾',
 }
 
 const ENEMY_TALENT_NAME = {
-  hp_ratio: '触发血线',
-
-  attack: '攻击力',
-  atk: '攻击力',
-  atkup: '攻击力↑',
+  hp_ratio: '生命倍率',
+  attack: '攻击',
+  atk: '攻击',
+  atkup: '攻击↑',
+  AtkUp:'攻击↑',
 
   def: '防御',
-  defup: '防御力↑',
-  defdown: '防御力↓',
+  defup: '防御↑',
+  defdown: '防御↓',
+  DefDown:'防御↓',
 
   attack_speed: '攻速',
   atkSpeedDown: '攻速↓',
 
-  speedup: '移速提升',
-  move_speed: '移动速度',
+  speedup: '移速↑',
+  move_speed: '移速',
+  MoveSpeedUp:'移速↑',
+  movespeedup:'移速↑',
 
-  MagicResistance: '法抗↑',
+  MagicResistance: '法抗',
   magic_resistance: '法抗',
 
   base_attack_time: '攻击间隔',
@@ -143,7 +193,7 @@ const ENEMY_TALENT_NAME = {
   duel: '决斗',
   cchmpn_t_buff_blocker: '阻挡者',
   cchmpn_t_buff_self: '自身',
-  combat: '格斗',
+  combat: '特殊攻击',
   'attack@ccwitch_rage_attack': '巫术狂暴攻击',
   max_cnt: '最大数量',
   Def: '防御力↑',
@@ -184,7 +234,135 @@ const ENEMY_TALENT_NAME = {
   charge: '充能',
   'attack@enemy_mdrock_s_1[charge]': '攻击↑',
   'balloon_s[fly]': '飞行',
-  frstar2_s: '霜星'
+  frstar2_s: '霜星',
+
+  //彩六
+  deathrattle: '亡语',
+  DeathRattle:'亡语',
+  cnt: '数量',
+  delay:'延时',
+  offset_bound:'偏移范围',
+  enemy_key:'召唤编号',
+
+  //进化本质
+  mode_1:'初生形态',
+  mode_2:'进化形态',
+  mode_3:'完美形态',
+  mode_1_summoni:'初生形态分裂',
+  mode_1_summon:'初生形态分裂',
+  mode_2_summon:'进化形态分裂',
+  mode_3_summon:'完美形态分裂',
+  direction:'方向',
+  summoni:'召唤',
+  summon:'召唤',
+  branch_id:'路径ID',
+  evolve_time:'进化时间',
+  invincible_after_skill_duration:'无敌持续时间',
+
+  //遗尘
+  storm:'沙尘闪避',
+  prob:'几率',
+  createGhost:'制造幻影',
+  HalfHPCallDef:'呼叫防御空援',
+  'attack@atk_scale':'伤害倍率',
+  AirSupSpeedUp:'空援无人机移速↑',
+  DefAndHpRecoveryUp:'防御和生命恢复↑',
+  SelfDestruction:'自毁',
+
+  //利刃追猎
+  BlackFogTriggerP1:'国度触发[第一阶段]',
+  BlackFogTriggerP2:'国度触发[第二阶段]',
+  Reborn:'复活',
+  BlackFog:'国度',
+  'attack@combat_atkscale':'特殊攻击倍率',
+
+  //深海
+  epdamage:'元素损伤攻击',
+  EpDamage:'元素损伤攻击',
+  'attack@ep_damage_ratio':'损伤倍率',
+  ep_damage_ratio:'元素损伤倍率',
+  sleepwalking:'待命',
+  scream:'尖啸',
+  damage_trigger:'刺击',
+
+  //昆图斯
+  value:'目标生命值',
+  atkup1:'攻击力提升[1阶段]',
+  atkup2:'攻击力提升[2阶段]',
+  growup1:'成长至1阶段',
+  growup2:'成长至2阶段',
+
+  //多索雷斯
+  Swim:'潜水',
+  Evade:'闪避',
+  evade:'闪避',
+  Drown:'水蚀',
+  Crash:'泥头船创击',
+  Bleed:'流血',
+
+  //潘乔
+  Encourage:'鼓舞',
+  DeathEncourage:'死亡时鼓舞',
+  hit_duration:'持续时长',
+
+  //深池
+  refracting:'折射',
+  auraDefup:'防御战阵',
+  stone:'石化',
+  'duspfr_flame[cd]':'喷火',
+  cooldown:'冷却',
+  hit_interval:'伤害频率',
+  traitAbility:'伙友立场',
+
+  //蔓德拉
+  StoneSkin:'石之盾',
+  StoneSkin_2:'石之盾[2阶段]',
+  ReSummonStoneSkin:'重新召唤石之盾',
+  hp_ratio_offset:'当损失生命比率超过',
+  mandra_p2_invinsible:'无敌时间',
+  'mandra_ray[cd]':'蔓德拉射线',
+  'dupilr_t[auto_collapse]':'击倒支柱延时',
+
+  //长夜临光
+  NightBuff:'无视野',
+  SleepBuff:'待命',
+  sleep_duration:'持续时间',
+
+  //血骑士
+  Passive:'减伤',
+  Passive2:'减伤[第二形态]',
+  CheckTrigger:'一阶段复活检测',
+  Devour:'吞噬',
+  invincible_time:'无敌时间',
+
+  //雪境
+  unbalanced_bleed:'失衡流血',
+  cold:'寒冷',
+  'enemy_krgbsk_t[frozen]':'对冻结目标',
+
+  //锏
+  enemy_blkswb_t_1:'降雪',
+  'enemy_blkswb_t_1[reborn]':'降雪[第二阶段]',
+  DefPenetrate:'穿甲',
+  enemy_blkswb_t_2:'阻挡',
+  'enemy_blkswb_t_2[reborn]':'阻挡[第二阶段]',
+  ClearSp:'瞬息杀机',
+
+  //傀影肉鸽
+  AttackSpeedUp:'攻速提升',
+  stack_cnt:'需要次数',
+  warning_stack_cnt:'显示攻击预警需要次数',
+  'attack@freeze':'寒冷',
+  damagescaletofrozen:'攻击冻结目标伤害倍率',
+  summon:'召唤',
+  'csdoll_summon[1]':'维持时间和召唤间隔[1阶段]',
+  'csdoll_summon[2]':'维持时间和召唤间隔[2阶段]',
+  'csdoll_summon[3]':'召唤间隔[3阶段]',
+  aoetrigger:'触发群攻',
+  TokenInvincible:'召唤物无敌',
+  token:'召唤物',
+  hprecovery:'生命恢复',
+  hp_recovery_per_sec_by_max_hp_ratio:'每秒恢复最大生命百分比',
 }
 
 export { enemySkillNameKey, ENEMY_TALENT_NAME }
