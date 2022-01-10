@@ -25,7 +25,7 @@ export function extractApi(file: string): string {
   // To print the AST, we'll use TypeScript's printer
   const printer = ts.createPrinter({ newLine: ts.NewLineKind.LineFeed })
 
-  const importNodeList: ts.ImportDeclaration[] = [
+  const importNodeList: (ts.ImportDeclaration | ts.InterfaceDeclaration)[] = [
     AxiosDeclartion,
     ResponseDEclartion,
   ]
@@ -47,6 +47,10 @@ export function extractApi(file: string): string {
       console.log('import node', node.moduleSpecifier)
     } else if (ts.isInterfaceDeclaration(node)) {
       name = node.name.text
+      if (name.startsWith('T')) {
+        importNodeList.push(node)
+        return
+      }
 
       const apiName = factory.createIdentifier(name)
       const param = factory.createIdentifier('params')
