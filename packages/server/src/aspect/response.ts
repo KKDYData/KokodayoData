@@ -6,12 +6,13 @@ import {
   Logger,
 } from '@midwayjs/decorator'
 import { ILogger } from '@midwayjs/logger'
+import { ArkController } from '../controller/ads.c'
 import { DataController } from '../controller/data.c'
 import { UpdateController } from '../controller/update.c'
 import { UserController } from '../controller/user.c'
 
 @Provide()
-@Aspect([UserController, UpdateController, DataController])
+@Aspect([UserController, UpdateController, DataController, ArkController])
 export class ResponseJson implements IMethodAspect {
   @Logger()
   coreLogger: ILogger

@@ -1,3 +1,4 @@
+export * as Ads from './ads'
 export * as Data from './data'
 export * as Home from './home'
 export * as Update from './update'

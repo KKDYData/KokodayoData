@@ -18,17 +18,13 @@
     "types": [
       "jest"
     ],
-    "typeRoots": [
-      "./typings"
-    ],
     "outDir": "dist",
     "lib": [
-      "ES2020"
+      "ES2020",
     ]
   },
-  "exclude": [
-    "dist",
-    "node_modules",
+  "include": [
+    "src",
     "test"
   ]
 }

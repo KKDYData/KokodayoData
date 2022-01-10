@@ -25,6 +25,7 @@ export class AutoConfiguration implements ILifeCycle {
   async onReady() {
     // this.app.sockets.
     this.coreLogger.updateConsoleLevel('info')
+    this.coreLogger.info('on ready')
 
     this.app.use(
       cors({

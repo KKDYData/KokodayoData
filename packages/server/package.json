@@ -4,7 +4,7 @@
   "description": "",
   "private": true,
   "dependencies": {
-    "@kkdy/data": "workspace:^1.0.0",
+    "@kkdy/data": "workspace:^1.0.1",
     "@koa/cors": "^3.1.0",
     "@midwayjs/bootstrap": "^2.3.0",
     "@midwayjs/cache": "^2.11.4",
@@ -29,11 +29,13 @@
   },
   "devDependencies": {
     "@midwayjs/cli": "^1.2.55",
+    "@midwayjs/command-core": "^1.2.93",
     "@midwayjs/luckyeye": "^1.0.2",
     "@midwayjs/mock": "^2.8.11",
     "@types/ali-oss": "^6.0.7",
     "@types/ioredis": "^4.22.0",
-    "@types/jest": "^26.0.10",
+    "@types/jest": "^26.0.24",
+    "@types/js-yaml": "^4.0.5",
     "@types/koa-bodyparser": "^4.3.0",
     "@types/node": "14",
     "@types/ramda": "^0.27.39",

@@ -8,7 +8,6 @@ export interface Hello {
     skillId: string
   }
 
-
   response: {
     skillId: string
     data: ISkill.ISkill
@@ -16,13 +15,11 @@ export interface Hello {
   }
 }
 
-
 export interface HelloPost {
   path: '/api/hello'
   method: 'post'
 
   data: IChar.IData
-
 
   response: {
     skillId: string

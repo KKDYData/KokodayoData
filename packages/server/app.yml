@@ -10,6 +10,6 @@ apps:
     # instances: max
     #     # exec_mode: cluster
     env:
-      NODE_ENV: production
+      NODE_ENV: test
       ENABLE_NODE_LOG: YES
       PORT: 7001

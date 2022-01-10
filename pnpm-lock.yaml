@@ -324,11 +324,12 @@ importers:
 
   packages/server:
     specifiers:
-      '@kkdy/data': workspace:^1.0.0
+      '@kkdy/data': workspace:^1.0.1
       '@koa/cors': ^3.1.0
       '@midwayjs/bootstrap': ^2.3.0
       '@midwayjs/cache': ^2.11.4
       '@midwayjs/cli': ^1.2.55
+      '@midwayjs/command-core': ^1.2.93
       '@midwayjs/core': ^2.3.0
       '@midwayjs/decorator': ^2.3.0
       '@midwayjs/koa': ^2.3.0
@@ -339,7 +340,8 @@ importers:
       '@midwayjs/typegoose': ^2.13.2
       '@types/ali-oss': ^6.0.7
       '@types/ioredis': ^4.22.0
-      '@types/jest': ^26.0.10
+      '@types/jest': ^26.0.24
+      '@types/js-yaml': ^4.0.5
       '@types/koa__cors': ^3.0.2
       '@types/koa-bodyparser': ^4.3.0
       '@types/node': '14'
@@ -386,11 +388,13 @@ importers:
       uuid: 8.3.2
     devDependencies:
       '@midwayjs/cli': 1.2.93_e1c06acd88f1171458992883f002b8e1
+      '@midwayjs/command-core': 1.2.93
       '@midwayjs/luckyeye': 1.0.3
       '@midwayjs/mock': 2.14.0
       '@types/ali-oss': 6.16.2
       '@types/ioredis': 4.28.5
       '@types/jest': 26.0.24
+      '@types/js-yaml': 4.0.5
       '@types/koa-bodyparser': 4.3.5
       '@types/node': 14.18.3
       '@types/ramda': 0.27.62
@@ -4936,6 +4940,10 @@ packages:
     dependencies:
       jest-diff: 26.6.2
       pretty-format: 26.6.2
+    dev: true
+
+  /@types/js-yaml/4.0.5:
+    resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==, tarball: '@types/js-yaml/download/@types/js-yaml-4.0.5.tgz'}
     dev: true
 
   /@types/json-schema/7.0.9:

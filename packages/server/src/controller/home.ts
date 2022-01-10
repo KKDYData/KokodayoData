@@ -9,7 +9,7 @@ export class HomeController {
 
   @Get('/')
   async home(ctx) {
-    console.log(this.ctx.response)
+    // console.log(this.ctx.response)
     return 'Hello Midwayjs!'
   }
 }
