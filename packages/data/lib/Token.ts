@@ -69,6 +69,7 @@ export interface Data {
     stunImmune:       boolean;
     silenceImmune:    boolean;
     sleepImmune:      boolean;
+    frozenImmune:     boolean;
 }
 
 export interface Phase {
@@ -145,6 +146,6 @@ export interface TraitCandidate {
     requiredPotentialRank: number;
     blackboard:            Blackboard[];
     overrideDescripton:    string;
-    prefabKey:             string;
+    prefabKey:             null | string;
     rangeId:               null;
 }

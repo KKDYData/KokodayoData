@@ -14,14 +14,16 @@
         class="font-sans text-30px underline"
         :class="{ italic }"
         :style="{ fontSize: fontEnSize, lineHeight: fontEnSize }"
-        >{{ titleEn }}</view
       >
+        {{ titleEn }}
+      </view>
       <view
-        class="align-baseline"
+        class="align-baseline mt-6rpx"
         :style="{ fontSize, lineHeight: fontSize }"
         :class="{ 'font-bold': !slim }"
-        >{{ titleCn }}</view
       >
+        {{ titleCn }}
+      </view>
     </view>
   </view>
 </template>

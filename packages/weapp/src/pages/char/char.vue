@@ -10,7 +10,7 @@
         title-en="Operator Details"
       />
       <view class="flex">
-        <AgentIconBase :data="{ charId: id, rarity: data.rarity }" />
+        <AgentBase :data="{ charId: id, rarity: data.rarity }" />
         <view class="flex-1 ml-15px">
           <view class="flex font-0px items-start">
             <view class="flex items-stretch">
@@ -64,7 +64,7 @@ import { Scan } from '/@/components/QRCode'
 import { getCurrentInstance } from '@tarojs/taro'
 import { Data } from '@kkdy/api-taro'
 import { IChar, ISkill } from '@kkdy/data'
-import { AgentIconBase, CharStar } from '/@/components/AgentIcon'
+import { AgentBase, CharStar } from '/@/components/AgentIcon'
 import { Title } from '/@/components/Title'
 import {
   getProfessionIcon,

@@ -7,7 +7,7 @@ view, ::before, ::after {
 }
 
 view {
-  --tw-ring-inset: var(--tw-empty, /*  */ /*  */)
+  --tw-ring-inset: var(--tw-empty, /**/ /**/)
   --tw-ring-offset-width: 0
   --tw-ring-offset-color: #fff
   --tw-ring-color: rgba(59, 130, 246, 0.5)
@@ -20,7 +20,7 @@ view {
   --tc-left: 4px
 }
 
-// 毛玻璃
+//毛玻璃
 .glass {
   background: hsla(0, 0%, 100%, 0.75)
   backdrop-filter: blur(5px)
@@ -80,11 +80,12 @@ view {
 
 .no-mode-fade-enter-active, .no-mode-fade-leave-active {
   transition: opacity 3s ease-in-out
-  transform: translateX(0px)
+  //transform: translateX(0px)
+  opacity: 1
 }
 
 .no-mode-fade-enter-from, .no-mode-fade-leave-to {
-  transform: translateX(-20px)
+  //transform: translateX(-20px)
   opacity: 0
 }
 
@@ -94,7 +95,7 @@ view {
   opacity: 0.5
   filter: grayscale(1)
 
-  // background: red
+  //background: red
   &::after {
     content: ''
     position: absolute
@@ -110,11 +111,11 @@ view {
 
 @keyframes progress {
   0% {
-    transform: translate3d(-100%, 0, 0)
+    transform: translate3d(-250px, 0, 0)
   }
 
   100% {
-    transform: translate3d(100%, 0, 0)
+    transform: translate3d(100% + 250px, 0, 0)
   }
 }
 

@@ -9,4 +9,7 @@ export default {
   usingComponents: {
     iconfont: 'components/Icon/weapp/weapp',
   },
+  useExtendedLib: {
+    weui: true,
+  },
 }

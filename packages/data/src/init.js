@@ -28,10 +28,10 @@ if (skipPull) {
       }
     )
   } else {
-    console.log('pull...')
+    console.log('pull...', path.resolve(__dirname, '../ArknightsGameData/'))
 
     execa.commandSync('git pull', {
-      execPath: __dirname,
+      execPath: path.resolve(__dirname, '../ArknightsGameData/'),
       stdout: 'inherit',
     })
   }
@@ -128,6 +128,9 @@ build('Info', activityTable.basicInfo, 'ActivityInfo')
 
 const gachaTable = require('../ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json')
 build('Info', gachaTable.gachaPoolClient, 'GachaPoolInfo')
+
+const ItemTable = require('../ArknightsGameData/zh_CN/gamedata/excel/item_table.json')
+build('Data', ItemTable.items, 'Item')
 
 fs.writeFileSync(
   path.resolve(__dirname, '../lib/index.ts'),

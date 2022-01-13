@@ -4,7 +4,10 @@
     <Transition name="no-mode-fade">
       <image
         v-if="show"
-        :style="{ transitionDuration: '1s' }"
+        :style="{
+          transitionDuration: '1s',
+          backgroundColor: 'transparent',
+        }"
         class="profile"
         :src="profileUrl"
       />
@@ -44,13 +47,7 @@ const show = computed(() => !props.data._skeleton)
 
 <style lang="styl">
 .profile {
-  background-color: transparent;
   @apply z-10 relative;
-
-
-  .skeleton {
-
-  }
 }
 
 .profile-bg {

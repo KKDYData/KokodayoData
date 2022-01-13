@@ -1,5 +1,5 @@
 .icon {
   background-repeat: no-repeat;
   display: inline-block;
-  vertical-align: bottom;
+  vertical-align: middle;
 }
