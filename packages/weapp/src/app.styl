@@ -7,7 +7,7 @@ view, ::before, ::after {
 }
 
 view {
-  --tw-ring-inset: var(--tw-empty, /*  */ /*  */)
+  --tw-ring-inset: var(--tw-empty, /**/ /**/)
   --tw-ring-offset-width: 0
   --tw-ring-offset-color: #fff
   --tw-ring-color: rgba(59, 130, 246, 0.5)
@@ -18,9 +18,10 @@ view {
   --lh: 1rem
   --max-lines: 3
   --tc-left: 4px
+  color: #4A4A4A
 }
 
-// 毛玻璃
+//毛玻璃
 .glass {
   background: hsla(0, 0%, 100%, 0.75)
   backdrop-filter: blur(5px)
@@ -78,23 +79,14 @@ view {
   }
 }
 
-.no-mode-fade-enter-active, .no-mode-fade-leave-active {
-  transition: opacity 3s ease-in-out
-  transform: translateX(0px)
-}
-
-.no-mode-fade-enter-from, .no-mode-fade-leave-to {
-  transform: translateX(-20px)
-  opacity: 0
-}
-
 .skeleton {
   position: relative
   overflow: hidden
-  opacity: 0.5
+  //opacity: 0.5
   filter: grayscale(1)
+  z-index: 11
 
-  // background: red
+  //background: red
   &::after {
     content: ''
     position: absolute
@@ -103,18 +95,37 @@ view {
     width: 100%
     height: 100%
     background: linear-gradient(90deg, rgba(204, 204, 204, 0.5), rgba(222, 222, 222, 0.5), rgba(204, 204, 204, 0.5))
-    animation: progress 1s ease-in-out infinite
+    animation: progress 1s cubic-bezier(0.4, 0, 1, 1) infinite
     z-index: 20
   }
 }
 
 @keyframes progress {
   0% {
-    transform: translate3d(-100%, 0, 0)
+    transform: translate3d(-250px, 0, 0)
   }
 
   100% {
-    transform: translate3d(100%, 0, 0)
+    transform: translate3d(100% + 250px, 0, 0)
+  }
+}
+
+//taro 用动画必须设置duration参数
+.fade-leave-active {
+  animation: fade 0.5s
+}
+
+.fade-enter-active {
+  animation: fade 0.5s reverse
+}
+
+@keyframes fade {
+  from {
+    opacity: 1
+  }
+
+  to {
+    opacity: 0
   }
 }
 

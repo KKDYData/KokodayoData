@@ -21,6 +21,7 @@ export const useListStore = defineStore({
         _skeleton: true,
       })
     ) as BaseCharIndex[],
+    t: [],
   }),
   // optional getters
   getters: {
@@ -43,9 +44,15 @@ export const useListStore = defineStore({
         throw new Error('net error')
       }
       const available = new Set(Object.values(IChar.Profession))
+      this.t = [...this.charList]
       this.charList = data.result.filter((e) =>
         available.has(e.profession as any)
       )
+    },
+    switchList() {
+      const l = [...this.t]
+      this.t = [...this.charList] as any
+      this.charList = [...l]
     },
   },
 })

@@ -1,25 +1,13 @@
 <template>
   <view class="h-180px w-180px relative">
-    <!-- <button class="z-30 relative" @tap="on = !on">tap</button> -->
-    <Transition name="no-mode-fade">
-      <image
-        v-if="show"
-        :style="{ transitionDuration: '1s' }"
-        class="profile"
-        :src="profileUrl"
-      />
-      <image
-        v-else
-        class="profile skeleton"
-        :style="{ transitionDuration: '0.2s' }"
-        :src="defaultProfile"
-      />
-    </Transition>
+    <Skeleton :skeleton-url="defaultProfile" :src="profileUrl" :show="data._skeleton" />
     <image class="profile-bg" :src="bgUrl" />
   </view>
 </template>
 <script setup lang="ts">
 import { computed, defineProps } from 'vue'
+import { Skeleton } from '../Skeleton'
+
 
 const props = defineProps<{
   data: {
@@ -34,23 +22,15 @@ const profileUrl = computed(() => `${baseUrl}/profile/${props.data.charId}.png`)
 const defaultProfile = `${baseUrl}/profile/char_124_kroos.png`
 const bgUrl = computed(
   () =>
-    `${baseUrl}/assets/bg/${
-      props.data._skeleton ? 0 : props.data.rarity + 1
+    `${baseUrl}/assets/bg/${props.data._skeleton ? 0 : props.data.rarity + 1
     }.png`
 )
 
-const show = computed(() => !props.data._skeleton)
 </script>
 
 <style lang="styl">
 .profile {
-  background-color: transparent;
   @apply z-10 relative;
-
-
-  .skeleton {
-
-  }
 }
 
 .profile-bg {

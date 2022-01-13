@@ -41,6 +41,7 @@ export enum AttackType {
     近战 = "近战",
     近战法术 = "近战 法术",
     近战远程 = "近战 远程",
+    近战远程法术 = "近战 远程 法术",
     远程 = "远程",
     远程法术 = "远程 法术",
 }
@@ -55,6 +56,7 @@ export enum EnemyRace {
     宿主 = "宿主",
     感染生物 = "感染生物",
     无人机 = "无人机",
+    法术造物 = "法术造物",
     海怪 = "海怪",
     萨卡兹 = "萨卡兹",
 }
@@ -63,6 +65,7 @@ export enum EnemyTag {
     Drone = "drone",
     Infection = "infection",
     Mutant = "mutant",
+    Originiumartscraft = "originiumartscraft",
     Sarkaz = "sarkaz",
     Seamonster = "seamonster",
 }

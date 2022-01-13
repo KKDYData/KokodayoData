@@ -1,6 +1,7 @@
 <template>
   <view class="flex font-souce text-left text-dark-50 relative items-center">
     <view
+      v-if="!slider"
       class="rounded bg-dark-50"
       :class="{ 'shadow-medium': !size }"
       :style="{
@@ -8,20 +9,22 @@
         height: barSize,
       }"
     />
-    <view class="text-shadow-md ml-6px">
+    <view class="text-shadow-md ml-6px" :class="{ 'flex-1': slider }">
       <view
-        v-if="titleEn"
-        class="font-sans text-30px underline"
+        v-if="titleEn && !slider"
+        class="title-content__extra"
         :class="{ italic }"
         :style="{ fontSize: fontEnSize, lineHeight: fontEnSize }"
-        >{{ titleEn }}</view
       >
+        {{ titleEn }}
+      </view>
       <view
-        class="align-baseline"
+        class="title-content"
         :style="{ fontSize, lineHeight: fontSize }"
-        :class="{ 'font-bold': !slim }"
-        >{{ titleCn }}</view
+        :class="{ 'font-bold': !slim, slider, slim }"
       >
+        {{ titleCn }}
+      </view>
     </view>
   </view>
 </template>
@@ -35,6 +38,7 @@ const props = defineProps<{
   italic?: boolean
   slim?: boolean
   slimBar?: boolean
+  slider?: boolean
 }>()
 
 const fontSize = computed(() => (props.size ?? 40) / 2 + 'px')

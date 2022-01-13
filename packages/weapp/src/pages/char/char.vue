@@ -10,7 +10,7 @@
         title-en="Operator Details"
       />
       <view class="flex">
-        <AgentIconBase :data="{ charId: id, rarity: data.rarity }" />
+        <AgentBase :data="{ charId: id, rarity: data.rarity }" />
         <view class="flex-1 ml-15px">
           <view class="flex font-0px items-start">
             <view class="flex items-stretch">
@@ -57,6 +57,7 @@
       </view>
     </view>
     <ChatStatus v-if="data" :data="data" :skills="skills" />
+    <ItemPopup />
   </view>
 </template>
 <script setup lang="ts">
@@ -64,7 +65,7 @@ import { Scan } from '/@/components/QRCode'
 import { getCurrentInstance } from '@tarojs/taro'
 import { Data } from '@kkdy/api-taro'
 import { IChar, ISkill } from '@kkdy/data'
-import { AgentIconBase, CharStar } from '/@/components/AgentIcon'
+import { AgentBase, CharStar } from '/@/components/AgentIcon'
 import { Title } from '/@/components/Title'
 import {
   getProfessionIcon,
@@ -75,6 +76,8 @@ import { ref } from 'vue'
 import { Tag } from '/@/components/Tag'
 import ChatStatus from './charStatus.vue'
 import { convert } from './RichText'
+import { ItemPopup, providePopupState } from '/@/components/Popup'
+providePopupState()
 
 const id = getCurrentInstance().router?.params.id
 if (!id) {

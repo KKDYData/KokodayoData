@@ -50,6 +50,20 @@ export function useStatus(data: IChar.IData) {
     return mergeStatus(res, extraStatus.value)
   })
 
+  const { value: skillLv, range: skillRange } = useSafeNumber(0, 9)
+  const skillCostList = data.skills.map((s) => {
+    return data.allSkillLvlup
+      .map<Omit<IChar.LevelUpCostCond, 'lvlUpTime'> & { lvUpTime?: number }>(
+        (e) => ({
+          ...e,
+          levelUpCost: e.lvlUpCost,
+        })
+      )
+      .concat(s.levelUpCostCond)
+  })
+
+  const skillCost = computed(() => skillCostList.map((s) => s[skillLv.value]))
+
   return {
     status,
     lv,
@@ -61,5 +75,9 @@ export function useStatus(data: IChar.IData) {
     favorLv,
     favorRange,
     extraStatus,
+    skillLv,
+    skillCostList,
+    skillCost,
+    skillRange,
   }
 }

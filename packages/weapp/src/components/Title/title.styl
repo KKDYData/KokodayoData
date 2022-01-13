@@ -1,0 +1,40 @@
+
+.title-content {
+  margin-top 6rpx
+  align-items baseline
+
+  &__extra {
+    font-size 30rpx
+    text-decoration underline
+    margin-bottom 6rpx
+  }
+
+  &.slider {
+    display flex
+    align-items center
+
+    &:before {
+      content ''
+      position relative
+      width 70rpx
+      height 100%
+      margin-right 20rpx
+    }
+
+    &:after {
+      content ''
+      position relative
+      height 1rpx
+      flex 1
+      height 100%
+      margin-left 20rpx
+    }
+
+    &.slim {
+      &:before, &:after {
+        height 1rpx
+        background #4a4a4a
+      }
+    }
+  }
+}

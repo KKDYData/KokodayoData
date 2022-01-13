@@ -45,11 +45,21 @@ export interface Action {
     blockFragment:                     boolean;
     autoPreviewRoute:                  boolean;
     isUnharmfulAndAlwaysCountAsKilled: boolean;
-    hiddenGroup?:                      null | string;
+    hiddenGroup?:                      HiddenGroup | null;
     randomSpawnGroupKey?:              RandomSpawnGroupKey | null;
     weight?:                           number;
     dontBlockWave?:                    boolean;
     weightValue?:                      number;
+}
+
+export enum HiddenGroup {
+    HiddenFstar = "hidden_fstar",
+    HiddenWave1 = "hidden_wave_1",
+    HiddenWave2 = "hidden_wave_2",
+    HiddenWave3 = "hidden_wave_3",
+    HiddenWave4 = "hidden_wave_4",
+    Normal = "normal",
+    RAID = "raid",
 }
 
 export enum RandomSpawnGroupKey {
@@ -100,6 +110,7 @@ export interface Attributes {
     silenceImmune:    Immune;
     sleepImmune?:     Immune;
     tauntLevel?:      LifePointReduce;
+    frozenImmune?:    Immune;
 }
 
 export interface LifePointReduce {
@@ -177,9 +188,16 @@ export interface SpawnOffset {
 }
 
 export interface GlobalBuff {
-    prefabKey:            string;
-    blackboard:           Blackboard[];
-    overrideCameraEffect: null;
+    prefabKey:               PrefabKey;
+    blackboard:              Blackboard[] | null;
+    overrideCameraEffect:    null;
+    passProfessionMaskFlag?: boolean;
+    professionMask?:         number;
+}
+
+export enum PrefabKey {
+    NightMapDefault = "night_map_default",
+    PeriodicDamage = "periodic_damage",
 }
 
 export interface Predefines {
@@ -198,6 +216,7 @@ export interface CharacterCard {
     skinId:                   null;
     tmplId?:                  null;
     overrideSkillBlackboard?: Blackboard[] | null;
+    uniEquipIds?:             null;
     position?:                Position;
     direction?:               number;
     initialCnt?:              number;
@@ -223,6 +242,7 @@ export interface MapData {
 }
 
 export enum Tag {
+    Night = "night",
     Water = "water",
 }
 
@@ -265,11 +285,17 @@ export enum TileKey {
     TileGrass = "tile_grass",
     TileHealing = "tile_healing",
     TileHole = "tile_hole",
+    TileIcestr = "tile_icestr",
+    TileIceturLB = "tile_icetur_lb",
+    TileIceturLt = "tile_icetur_lt",
+    TileIceturRb = "tile_icetur_rb",
+    TileIceturRt = "tile_icetur_rt",
     TileInfection = "tile_infection",
     TilePoison = "tile_poison",
     TileRcmCrate = "tile_rcm_crate",
     TileRcmOperator = "tile_rcm_operator",
     TileRoad = "tile_road",
+    TileSmog = "tile_smog",
     TileStart = "tile_start",
     TileTelin = "tile_telin",
     TileTelout = "tile_telout",
