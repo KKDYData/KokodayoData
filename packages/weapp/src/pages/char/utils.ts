@@ -91,13 +91,13 @@ export const changeAttackSpeed = (skill: {
   }
 
   // 只有白面
-  const spUp = res.match(/技力回复速度/)
-  if (spUp) {
-    const temp = res.split('')
-    const value = findValue(skill, 'blackboard', 'sp_recovery_per_sec').value
-    temp.splice(spUp.index + 6, 0, wrapColor(`(${value * 100}%)`, '#F49800')) //`<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`)
-    res = temp.join('')
-  }
+  // const spUp = res.match(/技力回复速度/)
+  // if (spUp) {
+  //   const temp = res.split('')
+  //   const value = findValue(skill, 'blackboard', 'sp_recovery_per_sec').value
+  //   temp.splice(spUp.index + 6, 0, wrapColor(`(${value * 100}%)`, '#F49800')) //`<i style="color:#F49800;font-style: normal;">(${value * 100}%)</i>`)
+  //   res = temp.join('')
+  // }
 
   // 阿
   if (res.match(/生命(.{1,9})减少/)) {

@@ -44,6 +44,7 @@ export interface Attributes {
     stunImmune:       Immune;
     silenceImmune:    Immune;
     sleepImmune:      Immune;
+    frozenImmune:     Immune;
 }
 
 export interface LifePointReduce {

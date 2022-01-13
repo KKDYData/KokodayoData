@@ -23,6 +23,9 @@ const config = {
     '/@': path.resolve(__dirname, '..', 'src'),
   },
   mini: {
+    miniCssExtractPluginOption: {
+      ignoreOrder: true,
+    },
     postcss: {
       pxtransform: {
         enable: true,
@@ -56,6 +59,15 @@ const config = {
         .include.add(/node_modules/)
         .end()
         .type('javascript/auto')
+
+      chain.module
+        .rule('vue')
+        .use('vueLoader')
+        .tap((options) => {
+          options.compilerOptions.isCustomElement = (tag) =>
+            ['iconfont'].includes(tag)
+          return options
+        })
     },
   },
   h5: {

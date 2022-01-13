@@ -34,7 +34,7 @@
           style="width: 100%"
         >
           <!-- <view class="flex mt-3 justify-around">
-        </view> -->
+          </view>-->
           <!-- 用 索引 当key，惊醒 skeleton 的替换动画  -->
           <AgentIcon
             class="mr-40px"
@@ -61,9 +61,9 @@
         class="bg-white border rounded-15px m-2 mt-6 text-xs py-3 px-2"
         style="border-color: #707070"
       >
-        <view class="truncate-overflow" style="--max-lines: 4">
-          6月2日，华为“鸿蒙操作系统”正式发布，这是一款面向全场景的分布式操作系统，和苹果安卓等手机电脑系统不同，鸿蒙系统可用于物联网各种设备。它既能控制手机，同时也能适配PC、平板、手表等智能终端，突破以往不同属性智能终端设备间普遍存在的“兼容性”难题。
-        </view>
+        <view class="truncate-overflow" style="--max-lines: 4"
+          >6月2日，华为“鸿蒙操作系统”正式发布，这是一款面向全场景的分布式操作系统，和苹果安卓等手机电脑系统不同，鸿蒙系统可用于物联网各种设备。它既能控制手机，同时也能适配PC、平板、手表等智能终端，突破以往不同属性智能终端设备间普遍存在的“兼容性”难题。</view
+        >
       </view>
     </view>
 
@@ -74,24 +74,14 @@
         <view
           v-for="(item, i) in NavigationItems"
           :key="i"
-          class="
-            flex
-            font-bold
-            h-80px
-            text-dark-50 text-32px
-            w-140px
-            card
-            items-center
-            justify-center
-          "
+          class="flex font-bold h-80px text-dark-50 text-32px w-140px card items-center justify-center"
           style="
             background-color: rgba(179, 179, 179, 1);
             box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.16);
           "
           @tap="goTo(item)"
+          >{{ item.name }}</view
         >
-          {{ item.name }}
-        </view>
       </view>
     </view>
   </view>

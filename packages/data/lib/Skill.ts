@@ -30,6 +30,7 @@ export enum RangeID {
     The11 = "1-1",
     The12 = "1-2",
     The13 = "1-3",
+    The21 = "2-1",
     The22 = "2-2",
     The23 = "2-3",
     The25 = "2-5",

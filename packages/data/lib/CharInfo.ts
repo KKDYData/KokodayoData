@@ -5,9 +5,10 @@
 export interface IInfo {
     charID:          string;
     drawName:        string;
-    infoName:        string;
+    infoName:        InfoName;
     storyTextAudio:  StoryTextAudio[];
     handbookAvgList: HandbookAvgList[];
+    isLimited?:      boolean;
 }
 
 export interface HandbookAvgList {
@@ -36,6 +37,10 @@ export interface UnlockParam {
     unlockParam1: string;
     unlockParam2: null | string;
     unlockParam3: null;
+}
+
+export enum InfoName {
+    Unknown = "Unknown",
 }
 
 export interface StoryTextAudio {

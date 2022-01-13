@@ -5,39 +5,40 @@ env:
   node: false
 parser: vue-eslint-parser
 extends:
-- taro/vue3
-- plugin:vue/vue3-recommended
-# 和 2.3.1的prettier 打架了，先用这个
-- prettier/prettier
+  - taro/vue3
+  - plugin:vue/vue3-recommended
+  # 和 2.3.1的prettier 打架了，先用这个
+  - prettier/prettier
 # - plugin:prettier/recommended
 parserOptions:
   ecmaVersion: 12
-  parser: "@typescript-eslint/parser"
+  parser: '@typescript-eslint/parser'
   sourceType: module
 plugins:
-- vue
-- "@typescript-eslint"
-- prettier
+  - vue
+  - '@typescript-eslint'
+  - prettier
 rules:
   vue/max-attributes-per-line: 0
   vue/html-closing-bracket-newline: 0
   vue/html-closing-bracket-spacing: 0
   vue/html-indent: 0
   quotes:
-  - error
-  - single
+    - error
+    - single
   semi:
-  - error
-  - never
+    - error
+    - never
   no-unused-labels: 0
-  "@typescript-eslint/no-unused-vars": 0
+  '@typescript-eslint/no-unused-vars': 0
   vue/singleline-html-element-content-newline: 0
-  "@typescript-eslint/explicit-module-boundary-types": 'off'
+  '@typescript-eslint/explicit-module-boundary-types': 'off'
   vue/html-self-closing:
-  - error
-  - html:
-      void: always
-      normal: always
-      component: always
-    svg: always
-    math: always
+    - error
+    - html:
+        void: always
+        normal: always
+        component: always
+      svg: always
+      math: always
+  vue/require-default-prop: 0

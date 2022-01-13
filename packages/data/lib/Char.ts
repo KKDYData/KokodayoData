@@ -79,6 +79,7 @@ export interface Data {
     stunImmune:       boolean;
     silenceImmune:    boolean;
     sleepImmune:      boolean;
+    frozenImmune:     boolean;
 }
 
 export enum ItemObtainApproach {
@@ -90,6 +91,7 @@ export enum ItemObtainApproach {
     招募寻访见习任务 = "招募寻访、见习任务",
     活动获得 = "活动获得",
     限时礼包 = "限时礼包",
+    集成战略获得 = "集成战略获得",
 }
 
 export interface Phase {
@@ -212,5 +214,5 @@ export interface TraitCandidate {
     blackboard:            Blackboard[];
     overrideDescripton:    null | string;
     prefabKey:             null | string;
-    rangeId:               null;
+    rangeId:               null | string;
 }

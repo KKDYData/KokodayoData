@@ -12,7 +12,12 @@
     "skipLibCheck": true, /* Skip type checking of declaration files. */
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
-    "outDir": "."
+    "outDir": ".",
+    "paths": {
+      "@vueuse/*": [
+        "./node_modules/@vueuse/*"
+      ]
+    }
   },
   "include": [
     "src"

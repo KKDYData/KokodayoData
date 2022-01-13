@@ -19,9 +19,16 @@ export interface IInfo {
     storeTextColor?:  string;
     linkageRuleId?:   string;
     linkageParam?:    LinkageParam;
+    dynMeta?:         DynMeta;
+}
+
+export interface DynMeta {
+    attainRare6Num:      number;
+    attainRare6CharList: string[];
 }
 
 export enum GachaRuleType {
+    Attain = "ATTAIN",
     Limited = "LIMITED",
     Linkage = "LINKAGE",
     Normal = "NORMAL",

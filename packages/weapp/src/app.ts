@@ -11,7 +11,6 @@ Taro.cloud.init({
 import './app.styl'
 import './index.css'
 import { KIcon } from '/@/components/Icon'
-// import './tailwind.css'
 
 const app = createApp({
   onShow() {},
@@ -20,5 +19,7 @@ const app = createApp({
 
 app.use(createPinia())
 app.component('KIcon', KIcon)
+
+// app.use(Input).use(Icon)
 
 export default app

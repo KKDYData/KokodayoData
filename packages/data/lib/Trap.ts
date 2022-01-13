@@ -67,6 +67,7 @@ export interface Data {
     stunImmune:       boolean;
     silenceImmune:    boolean;
     sleepImmune:      boolean;
+    frozenImmune:     boolean;
 }
 
 export enum Position {
@@ -103,7 +104,7 @@ export interface Candidate {
     requiredPotentialRank: number;
     prefabKey:             string;
     name:                  null;
-    description:           Description | null;
+    description:           null | string;
     rangeId:               null | string;
     blackboard:            Blackboard[];
 }
@@ -111,10 +112,4 @@ export interface Candidate {
 export interface Blackboard {
     key:   string;
     value: number;
-}
-
-export enum Description {
-    Empty = "-",
-    摧毁时扣除1点关卡生命值 = "摧毁时扣除1点关卡生命值",
-    每4秒回复友方单位3点技力 = "每4秒回复友方单位3点技力",
 }

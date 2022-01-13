@@ -11,7 +11,7 @@
       />
       <view class="flex">
         <!-- 头像组件 -->
-        <AgentIconBase :data="{ charId: id, rarity: data.rarity }" />
+        <AgentBase :data="{ charId: id, rarity: data.rarity }" />
         <view class="ml-15px">
           <view class="flex items-center">
             <!-- 标题组件 -->
@@ -57,7 +57,7 @@ import { Scan } from '/@/components/QRCode'
 import { getCurrentInstance } from '@tarojs/taro'
 import { Data } from '@kkdy/api-taro'
 import { IChar } from '@kkdy/data'
-import { AgentIconBase, CharStar } from '/@/components/AgentIcon'
+import { AgentBase, CharStar } from '/@/components/AgentIcon'
 import { Title } from '/@/components/Title'
 import {
   getProfessionIcon,
