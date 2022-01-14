@@ -7,9 +7,10 @@
           <template #value>
             <text class="font-bold text-dark-50">
               {{ format(v) }}
-              <text v-if="extraStatus[i]" class="text-hex-cc5900">
-                [{{ Math.round(+extraStatus[i]) }}]
-              </text>
+              <text
+                v-if="extraStatus[ i ]"
+                class="text-hex-cc5900"
+              >[{{ Math.round(+extraStatus[ i ]) }}]</text>
             </text>
           </template>
         </LabelText>
@@ -35,7 +36,9 @@
   </view>
   <view>
     <Title slim-bar title-cn="攻击范围" slim :size="30" />
-    <view class="flex justify-center"> <RangeItem :range-id="rangeId" /> </view>
+    <view class="flex justify-center">
+      <RangeItem :range-id="rangeId" />
+    </view>
   </view>
   <view>
     <Title slim-bar title-cn="天赋" slim :size="30" />
@@ -50,29 +53,26 @@
   </view>
   <view>
     <Title slim-bar title-cn="技能" slim :size="30" />
-    <view>
+    <view class="flex">
       <view>
         showSkillCost
         <switch :checked="showSkillCost" @change="handleChange" />
       </view>
-
-      <view>
-        <NumberSelector
-          v-model="skillLv"
-          class="w-230rpx ml-auto"
-          :range="skillRange"
-          label="等级"
-          :label-width="90"
-          controls
-          :range-fn="
-            (v) => ({
-              value: v + skillRange.min,
-              label: String(v + skillRange.min + 1),
-              index: v,
-            })
-          "
-        />
-      </view>
+      <NumberSelector
+        v-model="skillLv"
+        class="w-230rpx ml-auto"
+        :range="skillRange"
+        label="等级"
+        :label-width="90"
+        controls
+        :range-fn="
+          (v) => ({
+            value: v + skillRange.min,
+            label: String(v + skillRange.min + 1),
+            index: v,
+          })
+        "
+      />
     </view>
     <Skill
       v-for="(s, i) in skillList"
@@ -81,31 +81,18 @@
       :level="skillLv"
       :phase="phase"
       :rank="rank"
-      :skill-cost="skillCost[i]"
+      :skill-cost="skillCost[ i ]"
       :show-cost="showSkillCost"
     />
   </view>
   <view v-if="data">
     <Title slim-bar title-cn="精英化材料" slim :size="30" />
     <view>
-      <view
-        v-for="(p, i) in data.phases.slice(1)"
-        :key="p.maxLevel"
-        class="my-30rpx pl-20rpx"
-      >
+      <view v-for="(p, i) in data.phases.slice(1)" :key="p.maxLevel" class="my-30rpx pl-20rpx">
         <Title slim-bar :title-cn="'精英化材料 ' + i" slim :size="24" />
         <view class="flex">
-          <Item
-            id="4001"
-            :count="evolveGoldCost[data.rarity][i]"
-            class="mr-50rpx"
-          />
-          <Item
-            v-for="item in p.evolveCost"
-            :id="item.id"
-            :key="item.id"
-            :count="item.count"
-          />
+          <Item id="4001" :count="evolveGoldCost[ data.rarity ][ i ]" class="mr-50rpx" />
+          <Item v-for="item in p.evolveCost" :id="item.id" :key="item.id" :count="item.count" />
         </view>
       </view>
     </view>
@@ -147,7 +134,7 @@ const {
 } = useStatus(props.data)
 const skillList = useSkill(skillLv, props.skills)
 
-const rangeId = computed(() => props.data.phases[phase.value].rangeId)
+const rangeId = computed(() => props.data.phases[ phase.value ].rangeId)
 
 favorLv.value = 200
 
@@ -159,12 +146,12 @@ const handleChange = () => {
 console.log('list', skillCost.value)
 
 const evolveGoldCost = [
-  [-1, -1],
-  [-1, -1],
-  [10000, -1],
-  [15000, 60000],
-  [20000, 120000],
-  [30000, 180000],
+  [ -1, -1 ],
+  [ -1, -1 ],
+  [ 10000, -1 ],
+  [ 15000, 60000 ],
+  [ 20000, 120000 ],
+  [ 30000, 180000 ],
 ]
 
 const format = (v: any) => {

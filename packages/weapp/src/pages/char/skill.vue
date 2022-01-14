@@ -2,36 +2,30 @@
   <view v-if="state" class="mb-40rpx my-20rpx min-h-240rpx">
     <view class="flex">
       <view class="flex-shrink-0">
-        <Skeleton class="mx-25rpx" :src="skillIconUrl" :size="120" show />
-        <view class="text-center"> {{ state.name }} </view>
+        <Skeleton class="mx-25rpx" :src="skillIconUrl" :size="120" />
+        <view class="text-center">{{ state.name }}</view>
       </view>
       <view class="text-20rpx">
         <view>
-          <Tag :style="spType.style">
-            {{ spType.value }}
-          </Tag>
-          <Tag class="ml-15rpx">
-            {{ skillType.value }}
-          </Tag>
+          <Tag :style="spType.style">{{ spType.value }}</Tag>
+          <Tag class="ml-15rpx">{{ skillType.value }}</Tag>
         </view>
         <view class="flex mb-8rpx mt-15rpx">
           <view class="w-90rpx">
-            <KIcon name="iconbofang" /> {{ state.spData.initSp }}
+            <KIcon name="iconbofang" />
+            {{ state.spData.initSp }}
           </view>
           <view class="w-90rpx">
-            <KIcon name="iconshandian" /> {{ state.spData.spCost }}
+            <KIcon name="iconshandian" />
+            {{ state.spData.spCost }}
           </view>
           <view class="w-90rpx">
             <KIcon name="iconshijianlishijilujishizhongbiaoxianxing" />
             {{ state.duration }}
           </view>
         </view>
-        <rich-text
-          v-if="!showCost"
-          class="text-xs"
-          :nodes="changeAttackSpeed(state)"
-        />
-        <view v-else>
+        <rich-text v-show="!showCost" class="text-xs" :nodes="changeAttackSpeed(state)" />
+        <view v-show="showCost">
           <view v-if="skillCost">
             <view
               v-for="item in skillCost.levelUpCost"
@@ -41,7 +35,7 @@
               <Item :id="item.id" :count="item.count" />
             </view>
           </view>
-          <view v-else> 满级了 </view>
+          <view v-else>满级了</view>
         </view>
       </view>
     </view>

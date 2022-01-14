@@ -1,21 +1,24 @@
 <template>
   <view class="relative" :style="{ width, height }">
-    <slot v-if="show && src">
-      <image
-        :style="{ transitionDuration: '1s', width, height }"
-        class="profile show"
-        :src="src"
-        mode="heightFix"
+    <slot v-if="src && show">
+      <view
+        :style="{ backgroundImage: `url(${src})` }"
+        class="profile bg-contain show"
+        key="data"
       />
     </slot>
-    <slot v-else name="skeleton">
-      <image
-        v-if="skeletonUrl"
-        class="profile skeleton"
-        :style="{ transitionDuration: '0.2s' }"
-        :src="skeletonUrl"
-      />
-      <view v-else class="profile skeleton bg-gray-300" />
+    <slot v-if="!show" name="skeleton">
+      <view key="skel" class="absolute top-0 left-0" :style="{ width, height }">
+        <view
+          class="profile skeleton"
+          :style="{
+            backgroundImage: skeletonUrl ? `url(${skeletonUrl})` : 'none',
+            backgroundColor: skeletonUrl
+              ? 'transparent'
+              : 'rgba(212, 212, 216)',
+          }"
+        />
+      </view>
     </slot>
   </view>
 </template>
@@ -33,6 +36,7 @@ const props = withDefaults(
   {
     _skeleton: false,
     size: 180,
+    show: true,
   }
 )
 
@@ -42,14 +46,11 @@ const width = computed(() => `${props.width ?? props.size}rpx`)
 
 <style lang="styl">
 .profile {
-  @apply z-1 relative h-full w-full;
+  @apply relative h-full w-full bg-contain overflow-hidden;
+
 
   &.show {
     background-color: transparent;
-  }
-
-  &:image {
-    height: auto
   }
 }
 </style>
