@@ -11,6 +11,7 @@ Taro.cloud.init({
 import './app.styl'
 import './index.css'
 import { KIcon } from '/@/components/Icon'
+import { i18n } from './locale'
 
 const app = createApp({
   onShow() {},
@@ -19,6 +20,7 @@ const app = createApp({
 
 app.use(createPinia())
 app.component('KIcon', KIcon)
+app.use(i18n)
 
 // app.use(Input).use(Icon)
 

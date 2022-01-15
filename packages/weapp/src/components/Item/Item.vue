@@ -6,8 +6,10 @@
       v-if="itemState.state?.id === innerId && !son"
       :to="'#item-popup'"
     >
-      <view v-if="chlidrenList.length" @touchend="back"> back </view>
-      <ItemDetailVue v-if="curData" :key="curData.itemId" :data="curData" />
+      <view class="h-60vh">
+        <view v-if="chlidrenList.length" @touchend="back"> back </view>
+        <ItemDetailVue v-if="curData" :key="curData.itemId" :data="curData" />
+      </view>
     </Teleport>
   </view>
 </template>

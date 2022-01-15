@@ -464,7 +464,7 @@ importers:
       vue: ^3.2.26
       vue-eslint-parser: ^7.6.0
       vue-global-api: ^0.4.1
-      vue-i18n: ^8.26.8
+      vue-i18n: ^9.2.0-beta.26
       vue-loader: ^16.0.0-beta.8
       vuex: ^4.0.0-beta.4
       windicss: ^3.4.1
@@ -494,7 +494,7 @@ importers:
       uuid: 8.3.2
       vue: 3.2.26
       vue-global-api: 0.4.1_vue@3.2.26
-      vue-i18n: 8.26.8
+      vue-i18n: 9.2.0-beta.26_vue@3.2.26
       vuex: 4.0.2_vue@3.2.26
     devDependencies:
       '@babel/core': 7.16.5
@@ -2370,6 +2370,16 @@ packages:
       '@intlify/vue-devtools': 9.1.9
     dev: true
 
+  /@intlify/core-base/9.2.0-beta.26:
+    resolution: {integrity: sha512-4OXSF0zC70UElev6gam4FdWfC7u4l2ouNK9Hc6R44QlpEXkzhbwwbpZn9gIGB2l11zQnJkAwaovfYyiNJ/JvkA==, tarball: '@intlify/core-base/download/@intlify/core-base-9.2.0-beta.26.tgz'}
+    engines: {node: '>= 12'}
+    dependencies:
+      '@intlify/devtools-if': 9.2.0-beta.26
+      '@intlify/message-compiler': 9.2.0-beta.26
+      '@intlify/shared': 9.2.0-beta.26
+      '@intlify/vue-devtools': 9.2.0-beta.26
+    dev: false
+
   /@intlify/core/9.1.9:
     resolution: {integrity: sha1-d05zmiq0rEYKNIo16wJg54fVBVY=, tarball: '@intlify/core/download/@intlify/core-9.1.9.tgz'}
     engines: {node: '>= 10'}
@@ -2384,6 +2394,13 @@ packages:
       '@intlify/shared': 9.1.9
     dev: true
 
+  /@intlify/devtools-if/9.2.0-beta.26:
+    resolution: {integrity: sha512-7GiF7v2jlHf7g5hoLF6sKlrX5Di2INfHN4PEAeVr2ashgoSaq1EYIRouBVAnJkOrDOJzCOEY7y53me7+gIbeTw==, tarball: '@intlify/devtools-if/download/@intlify/devtools-if-9.2.0-beta.26.tgz'}
+    engines: {node: '>= 12'}
+    dependencies:
+      '@intlify/shared': 9.2.0-beta.26
+    dev: false
+
   /@intlify/message-compiler/9.1.9:
     resolution: {integrity: sha1-EZPL0iSnHC+5gUVbhTSjx2bSlI0=, tarball: '@intlify/message-compiler/download/@intlify/message-compiler-9.1.9.tgz'}
     engines: {node: '>= 10'}
@@ -2392,6 +2409,14 @@ packages:
       '@intlify/shared': 9.1.9
       source-map: 0.6.1
     dev: true
+
+  /@intlify/message-compiler/9.2.0-beta.26:
+    resolution: {integrity: sha512-qtDgHCMqrXNTekKXGzm0Dm6r3+/X7/jFXP+E07hx+PJbPMv7DzK1iU8h5LlAMQ1/jr2UIRBgXvR5wh35OKoGrA==, tarball: '@intlify/message-compiler/download/@intlify/message-compiler-9.2.0-beta.26.tgz'}
+    engines: {node: '>= 12'}
+    dependencies:
+      '@intlify/shared': 9.2.0-beta.26
+      source-map: 0.6.1
+    dev: false
 
   /@intlify/message-resolver/9.1.9:
     resolution: {integrity: sha1-MVXM0vXm0NwWyti38djpf82gW/w=, tarball: '@intlify/message-resolver/download/@intlify/message-resolver-9.1.9.tgz'}
@@ -2412,6 +2437,11 @@ packages:
     engines: {node: '>= 10'}
     dev: true
 
+  /@intlify/shared/9.2.0-beta.26:
+    resolution: {integrity: sha512-MjUlkjNThqkqy8yXUcFKBiW/hIfqAn5cP3Vd0b4wdOHS8rPCEbvSbAnF08uiZDkVv8gTcsLyymX21GaU6oYyyQ==, tarball: '@intlify/shared/download/@intlify/shared-9.2.0-beta.26.tgz'}
+    engines: {node: '>= 12'}
+    dev: false
+
   /@intlify/vue-devtools/9.1.9:
     resolution: {integrity: sha1-K+j02+f37UEVZ26zI0gUHUEeQms=, tarball: '@intlify/vue-devtools/download/@intlify/vue-devtools-9.1.9.tgz'}
     engines: {node: '>= 10'}
@@ -2420,6 +2450,14 @@ packages:
       '@intlify/runtime': 9.1.9
       '@intlify/shared': 9.1.9
     dev: true
+
+  /@intlify/vue-devtools/9.2.0-beta.26:
+    resolution: {integrity: sha512-Ghe2xTSezRzL2fBdIbZEus5+5spE2RMxgjBg6GyvbsDy1M05o2OvukBninJ4/Tc2I5A30lYgAsF1gQlOyfmv1g==, tarball: '@intlify/vue-devtools/download/@intlify/vue-devtools-9.2.0-beta.26.tgz'}
+    engines: {node: '>= 12'}
+    dependencies:
+      '@intlify/core-base': 9.2.0-beta.26
+      '@intlify/shared': 9.2.0-beta.26
+    dev: false
 
   /@istanbuljs/load-nyc-config/1.1.0:
     resolution: {integrity: sha1-/T2x1Z7PfPEh6AZQu4ZxL5tV7O0=, tarball: '@istanbuljs/load-nyc-config/download/@istanbuljs/load-nyc-config-1.1.0.tgz'}
@@ -25039,8 +25077,17 @@ packages:
       - vue
     dev: false
 
-  /vue-i18n/8.26.8:
-    resolution: {integrity: sha512-BN2OXolO15AKS95yNF8oOtARibaO6RxyKkAYNV4XpOmL7S4eVZYMIDtyvDv+XGZaiUmBJSH9mdNqzexvGMnK2A==, tarball: vue-i18n/download/vue-i18n-8.26.8.tgz}
+  /vue-i18n/9.2.0-beta.26_vue@3.2.26:
+    resolution: {integrity: sha512-xZgisyirT9hXFyXBL8pO8bYgdG7m98NLAUhbb1O9hMQS1qOXYU902+LIJA5k3BtoeiEIfjkGADHhSAlJTTzc9A==, tarball: vue-i18n/download/vue-i18n-9.2.0-beta.26.tgz}
+    engines: {node: '>= 12'}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@intlify/core-base': 9.2.0-beta.26
+      '@intlify/shared': 9.2.0-beta.26
+      '@intlify/vue-devtools': 9.2.0-beta.26
+      '@vue/devtools-api': 6.0.0-beta.21.1
+      vue: 3.2.26
     dev: false
 
   /vue-lazyload/1.3.3:

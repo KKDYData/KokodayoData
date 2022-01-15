@@ -1,0 +1,15 @@
+{
+  "maxHp": "生命上限",
+  "atk": "攻击",
+  "def": "防御",
+  "moveSpeed": "移动速度",
+  "magicResistance": "法术抵抗",
+  "baseAttackTime": "攻击间隔",
+  "hpRecoveryPerSec": "生命回复/秒",
+  "spRecoveryPerSec": "每秒Sp回复",
+  "maxDeployCount": "最大部署数",
+  "massLevel": "重量等级",
+  "stunImmune": "免疫打断",
+  "silenceImmune": "免疫沉默",
+  "baseForeLevel": "力量等级"
+}
