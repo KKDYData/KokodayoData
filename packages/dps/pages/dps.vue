@@ -11,7 +11,7 @@
       />
       <view class="flex">
         <!-- 头像组件 -->
-        <AgentIcon :data="{ charId: id, rarity: data.rarity }" />
+        <AgentIconBase :data="{ charId: id, rarity: data.rarity }" />
         <view class="ml-15px">
           <view class="flex items-center">
             <!-- 标题组件 -->
@@ -99,12 +99,11 @@
 </template>
 <script setup lang="ts">
 import Taro from '@tarojs/taro'
-import { ref } from 'vue'
 import { Scan } from '/@/components/QRCode'
 import { getCurrentInstance } from '@tarojs/taro'
 import { Data } from '@kkdy/api-taro'
 import { IChar } from '@kkdy/data'
-import { AgentIcon, CharStar } from '/@/components/AgentIcon'
+import { AgentIconBase, CharStar } from '/@/components/AgentIcon'
 import { Title } from '/@/components/Title'
 import { LabelText } from '/@/components/LabelText'
 import {
@@ -137,16 +136,15 @@ if (!id) {
  * 一般来说，如果需要响应式，例如需要更新在模板(html)，就用ref 标记
  * ref 只能在top level 使用，不能再函数内部用
  */
-var data = ref(null) as null | IChar.IData
-var dps = ref({skillName: '', skill: { dps: 0 }, normal: {dps: 0}, globalDps: 0 }) as AKDATA.AKObject
-var skillName = ref('') as string
-console.log(id)
-// 这个似乎没有调用
+ref: data = null as null | IChar.IData
+ref: dps = {skillName: '', skill: { dps: 0 }, normal: {dps: 0}, globalDps: 0 } as AKDATA.AKObject
+ref: skillName = '' as string
+
 Data.GetCharacter({ id }).then((res) => {
   // 接口需要判断 res.data.ok 是否为true，然后访问res.data.result 就是结果值
   if (res.data.ok) {
     data = res.data.result.data
-    console.log(data)
+
     // AKDATA 使用的是完整的res.data.result
     AKDATA.Data.loadKkdyChar(res.data.result)
     console.log(res.data.result)

@@ -1,5 +1,5 @@
 export default {
-  pages: ['pages/index/index', 'pages/char/char', 'pages/dps/dps'],
+  pages: ['pages/index/index', 'pages/char/char', 'pages/dps/dps', 'pages/dps/char_select'],
   window: {
     backgroundTextStyle: 'light',
     navigationBarBackgroundColor: '#fff',

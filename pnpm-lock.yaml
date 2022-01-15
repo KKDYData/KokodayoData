@@ -287,9 +287,9 @@ importers:
 
   packages/dps:
     specifiers:
-      typescript: ^4.5.4
+      '@kkdy/data': ^1.0.1
     dependencies:
-      typescript: 4.5.4
+      '@kkdy/data': link:../data
 
   packages/h5:
     specifiers:
@@ -17872,7 +17872,7 @@ packages:
     dev: false
 
   /mime/1.6.0:
-    resolution: {integrity: sha1-Ms2eXGRVO9WNGaVor0Uqz/BJgbE=, tarball: mime/download/mime-1.6.0.tgz?cache=0&sync_timestamp=1636373388207&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fmime%2Fdownload%2Fmime-1.6.0.tgz}
+    resolution: {integrity: sha1-Ms2eXGRVO9WNGaVor0Uqz/BJgbE=, tarball: mime/download/mime-1.6.0.tgz?cache=0&sync_timestamp=1636370946189&other_urls=https%3A%2F%2Fregistry.npmmirror.com%2Fmime%2Fdownload%2Fmime-1.6.0.tgz}
     engines: {node: '>=4'}
     hasBin: true
 
