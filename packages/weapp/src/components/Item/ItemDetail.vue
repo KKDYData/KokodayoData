@@ -1,6 +1,8 @@
 <template>
-  <view class="">
-    <view class="flex items-center sticky bg-white mb-10rpx top-0 z-99">
+  <view>
+    <view
+      class="flex items-center sticky bg-white mb-10rpx top-0 z-99 pt-20rpx"
+    >
       <Skeleton :src="itemImg" :size="100" class="mr-30rpx" />
       <Title slim-bar :title-cn="data.name" slim :size="30" />
     </view>
