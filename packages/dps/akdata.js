@@ -2,10 +2,7 @@ import * as Data from './data.js'
 import * as Attributes from './attributes.js'
 
 const new_op = [
-  'char_426_billro',
-  'char_478_kirara',
-  'char_369_bena',
-  'char_469_indigo'
+  "char_206_gnosis", "char_422_aurora", "char_4013_kjera", "char_4025_aprot2", "char_4019_ncdeer"
 ]
 
 const professionNames = {

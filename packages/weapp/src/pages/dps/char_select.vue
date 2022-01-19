@@ -11,25 +11,19 @@
       />
     </view>
     <view v-for="k in profKeys">
-      <Title slim-bar :title-cn="AKDATA.professionNames[k]" />
-      <LabelText
-        v-for="item in charGroup[k]"
-        :label="item.name"
-        @tap="goTo({ url: '/pages/dps/dps?id=' + item.charId })"
-        width="160rpx"
-      />
+      <Title slim-bar :title-cn="AKDATA.professionNames[k]" class="p-2" />
+      <view class="grid grid-cols-4">
+        <LabelText
+          v-for="item in charGroup[k]"
+          :label="item.name"
+          @tap="goTo({ url: '/pages/dps/dps?id=' + item.charId })"
+          width="160rpx"
+          class="p-2"
+        />
+      </view>
     </view>
     <view
-      class="
-        flex
-        font-bold
-        h-80px
-        text-dark-50 text-32px
-        w-140px
-        card
-        items-center
-        justify-center
-      "
+      class="flex font-bold h-80px text-dark-50 text-32px w-140px card items-center justify-center"
       style="
         background-color: rgba(179, 179, 179, 1);
         box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.16);
@@ -71,22 +65,15 @@ const goTo = (item: { name: string; url?: string }) => {
 }
 
 const profKeys = Object.keys(AKDATA.professionNames)
-var charList = null as any
-/**
- * ref label 标记的变量，会变成响应式的值
- * 等价于 const data = ref(null)
- * 一般来说，如果需要响应式，例如需要更新在模板(html)，就用ref 标记
- * ref 只能在top level 使用，不能再函数内部用
- */
-var charGroup = {} as any
-var id = ref('')
+let charList = null as any
+const charGroup = ref({}) as any
 
 // useful keys are: 'name', 'charId', 'rarity', 'profession', 'enName'
 Data.GetCharacterList().then((x) => {
   charList = x.data.result
   charList.forEach((item) => {
-    if (!charGroup[item.profession]) charGroup[item.profession] = []
-    if (item.rarity > 1) charGroup[item.profession].push(item)
+    if (!charGroup.value[item.profession]) charGroup.value[item.profession] = []
+    if (item.rarity > 1) charGroup.value[item.profession].push(item)
   })
 })
 </script>

@@ -131,21 +131,20 @@ if (!id) {
   throw new Error('no id')
 }
 
-/**
- * ref label 标记的变量，会变成响应式的值
- * 等价于 const data = ref(null)
- * 一般来说，如果需要响应式，例如需要更新在模板(html)，就用ref 标记
- * ref 只能在top level 使用，不能再函数内部用
- */
-var data = ref(null) as null | IChar.IData
-var dps = ref({skillName: '', skill: { dps: 0 }, normal: {dps: 0}, globalDps: 0 }) as AKDATA.AKObject
-var skillName = ref('') as string
+const data = ref<null | IChar.IData>(null)
+const dps = ref<AKDATA.AKObject>(
+  {
+    skillName: '',
+    skill:  { dps: 0 },
+    normal: { dps: 0 }, 
+    globalDps: 0 
+  })
 console.log(id)
 // 这个似乎没有调用
 Data.GetCharacter({ id }).then((res) => {
   // 接口需要判断 res.data.ok 是否为true，然后访问res.data.result 就是结果值
   if (res.data.ok) {
-    data = res.data.result.data
+    data.value = res.data.result.data
     console.log(data)
     // AKDATA 使用的是完整的res.data.result
     AKDATA.Data.loadKkdyChar(res.data.result)
@@ -160,7 +159,7 @@ Data.GetCharacter({ id }).then((res) => {
       options: { cond: true, crit: true }
     }
 
-    dps = AKDATA.Attributes.calculateDps(char)
+    dps.value = AKDATA.Attributes.calculateDps(char)
     console.log(dps)
     
   }
