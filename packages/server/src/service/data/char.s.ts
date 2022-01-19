@@ -93,6 +93,7 @@ export class CharService {
         'info',
         'teamInfo',
         'relativeChars',
+        'equips',
       ],
     })
   }
@@ -120,6 +121,7 @@ export class CharService {
       teamInfo,
       relativeChars,
       charComment,
+      equips,
     } = modelData
 
     const res = {
@@ -133,6 +135,7 @@ export class CharService {
       teamInfo: teamInfo.map(i => i.data),
       relativeChars: relativeChars?.map(c => c.charId),
       charComment,
+      equips,
     }
 
     return res

@@ -23,6 +23,7 @@ export class EquipService {
     equip.info = info
     equip.data = data
     equip.charId = info.charId
+    equip.equipId = info.uniEquipId
 
     await this.model.save(equip)
 
