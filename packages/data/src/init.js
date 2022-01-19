@@ -132,6 +132,12 @@ build('Info', gachaTable.gachaPoolClient, 'GachaPoolInfo')
 const ItemTable = require('../ArknightsGameData/zh_CN/gamedata/excel/item_table.json')
 build('Data', ItemTable.items, 'Item')
 
+const EquipTable = require('../ArknightsGameData/zh_CN/gamedata/excel/battle_equip_table.json')
+build('Data', Object.values(EquipTable), 'BattleEquip')
+
+const UniEquipTable = require('../ArknightsGameData/zh_CN/gamedata/excel/uniequip_table.json')
+build('Info', Object.values(UniEquipTable.equipDict), 'UniEquip')
+
 fs.writeFileSync(
   path.resolve(__dirname, '../lib/index.ts'),
   exportList.map((name) => `export * as I${name} from './${name}'`).join('\n')
