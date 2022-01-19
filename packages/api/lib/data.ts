@@ -2,6 +2,7 @@ import { request } from './instance'
 import { JsonResponse } from './response'
 import {
   IActivityInfo,
+  IBattleEquip,
   IBuilding,
   IBuildingBuff,
   IChar,
@@ -14,6 +15,7 @@ import {
   ISkill,
   IStageInfo,
   ITeamInfo,
+  IUniEquip,
 } from '@kkdy/data'
 import { BaseEntityType } from './utilsType'
 
@@ -49,6 +51,10 @@ export function GetCharacter(params: { id: string }) {
       teamInfo: ITeamInfo.IInfo[]
       relativeChars: string[]
       charComment: string
+      equips: {
+        info: IUniEquip.IInfo
+        data: IBattleEquip.IData
+      }
     }>
   >('/data/char', { params })
 }

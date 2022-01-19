@@ -1,5 +1,6 @@
 import {
   IActivityInfo,
+  IBattleEquip,
   IBuilding,
   IBuildingBuff,
   IChar,
@@ -12,6 +13,7 @@ import {
   ISkill,
   IStageInfo,
   ITeamInfo,
+  IUniEquip,
 } from '@kkdy/data'
 import { BaseEntityType } from './utilsType'
 
@@ -49,6 +51,10 @@ export interface GetCharacter {
     teamInfo: ITeamInfo.IInfo[]
     relativeChars: string[]
     charComment: string
+    equips: {
+      info: IUniEquip.IInfo
+      data: IBattleEquip.IData
+    }
   }
 }
 
