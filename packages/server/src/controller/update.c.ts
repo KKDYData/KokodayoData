@@ -13,6 +13,8 @@ import {
   IGachaPoolInfo,
   IEnemyInfo,
   IEnemyData,
+  IUniEquip,
+  IBattleEquip,
 } from '@kkdy/data'
 import { ALL, Get, Query, Validate } from '@midwayjs/decorator'
 import { Body, Controller, Inject, Post, Provide } from '@midwayjs/decorator'
@@ -35,6 +37,7 @@ import {
   UpdateGachaPoolByNameDTO,
 } from '../dto/update'
 import { EnemyService } from '../service/data/enemy.s'
+import { EquipService } from '../service/data/equip.s'
 
 @Provide()
 @Controller('/update')
@@ -59,6 +62,9 @@ export class UpdateController {
 
   @Inject()
   teamInfoService: TeamInfoService
+
+  @Inject()
+  equipService: EquipService
 
   @Inject()
   activityService: GameActivityService
@@ -102,6 +108,15 @@ export class UpdateController {
   @Post('/skill')
   async updateSkill(@Body(ALL) data: ISkill.ISkill) {
     await this.skillService.createOrUpdate(data)
+
+    return true
+  }
+
+  @Post('/equip')
+  async updateEquip(
+    @Body(ALL) data: { info: IUniEquip.IInfo; data: IBattleEquip.IData }
+  ) {
+    await this.equipService.createOrUpdate(data.info, data.data)
 
     return true
   }

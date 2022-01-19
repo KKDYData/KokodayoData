@@ -16,6 +16,7 @@ import { SkillService } from './skill.s'
 import { omit, pick } from 'ramda'
 import { TeamInfoService } from './teamInfo.s'
 import { Context } from '@midwayjs/koa'
+import { EquipService } from './equip.s'
 
 @Provide()
 export class CharService {
@@ -36,6 +37,9 @@ export class CharService {
 
   @Inject()
   teamInfoService: TeamInfoService
+
+  @Inject()
+  equipService: EquipService
 
   @Inject()
   ctx: Context
@@ -66,6 +70,8 @@ export class CharService {
         .filter(e => e)
         .map(id => this.teamInfoService.getTeamInfoById(id))
     )
+
+    char.equips = await this.equipService.getEquipByCharId(id)
 
     try {
       await this.model.save(char)
@@ -140,7 +146,10 @@ export class CharService {
 
     return list.map(char => ({
       ...omit(['data', 'teamInfo'], char),
-      ...pick(['tagList', 'rarity', 'profession'], char.data),
+      ...pick(
+        ['tagList', 'rarity', 'profession', 'subProfessionId'],
+        char.data
+      ),
       teamInfo: char.teamInfo.map(info => omit(['color'], info.data)),
       enName: char.data.appellation,
     }))

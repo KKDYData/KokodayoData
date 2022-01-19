@@ -1,11 +1,10 @@
 import { ITeamInfo } from '@kkdy/data'
-import { Inject, Provide } from '@midwayjs/decorator'
+import { Provide } from '@midwayjs/decorator'
 import { InjectEntityModel } from '@midwayjs/orm'
 import { TeamInfo } from '../../entity/TeamInfo.e'
 import { BaseService } from '../base.s'
 import { Repository, Raw } from 'typeorm'
 import { getOrCreateModel } from '../../utils/entity'
-import { CharService } from './char.s'
 import { CharacterData } from '../../entity/Character.e'
 
 const PowerLevelMap = {

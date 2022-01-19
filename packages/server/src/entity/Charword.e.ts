@@ -15,10 +15,7 @@ export class Charword extends BaseEntity {
   @Column()
   charId: string
 
-  @ManyToOne(
-    () => CharacterData,
-    char => char.words
-  )
+  @ManyToOne(() => CharacterData, char => char.words)
   character: CharacterData
 
   @Column({
