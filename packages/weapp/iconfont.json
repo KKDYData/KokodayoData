@@ -1,0 +1,12 @@
+{
+    "symbol_url": "//at.alicdn.com/t/font_2358781_6asstvnivp9.js",
+    "save_dir": "./src/components/Icon",
+    "use_typescript": false,
+    "platforms": [
+        "weapp"
+    ],
+    "use_rpx": true,
+    "trim_icon_prefix": "icon",
+    "default_icon_size": 18,
+    "design_width": 750
+}
