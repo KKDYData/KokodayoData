@@ -24,8 +24,7 @@
 		"dev:h5": "pnpm build:h5 -- --watch",
 		"dev:rn": "pnpm build:rn -- --watch",
 		"dev:qq": "pnpm build:qq -- --watch",
-		"dev:quickapp": "pnpm build:quickapp -- --watch",
-		"postinstall": "patch-package"
+		"dev:quickapp": "pnpm build:quickapp -- --watch"
 	},
 	"browserslist": [
 		"last 3 versions",
@@ -51,7 +50,7 @@
 		"babel-plugin-import": "^1.13.3",
 		"core": "1.0.0",
 		"lodash-es": "^4.17.21",
-		"pinia": "^2.0.9",
+		"pinia": "^2.0.11",
 		"postcss": "^8.2.4",
 		"ramda": "^0.27.1",
 		"taro": "^0.0.7",
