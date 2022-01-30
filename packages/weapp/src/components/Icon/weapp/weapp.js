@@ -1,6 +1,6 @@
 Component({
   properties: {
-    // saoma | xiangqing | gouxuan | bianji | cangpeitubiao_shanchu | shangbian | ziyuan23 | chuizi | leaf-line | huidaodingbu | qidongtuguanli- | guanbi | qiehuan | ren | bofang | shijianlishijilujishizhongbiaoxianxing | shandian | renwutouxiangkuang_huaban1 | zoumadengtiaotiao_huaban1 | yemianqiehuan-youjiantou | yemianqiehuan-zuojiantou | 2jw-01 | 2zz-01 | 2fz-01 | 2tz-01 | 2jj-01 | 2xf-01 | 2yl-01 | 2ss-01 | 1zz-01 | 1yl-01 | 1xf-01 | 1tz-01 | 1ss-01 | 1jw-01 | 1jj-01 | 1fz-01 | qita | sport_09 | ditu | xingshu1-01
+    // zhuye | jiahao | jianhao | saoma | xiangqing | gouxuan | bianji | cangpeitubiao_shanchu | shangbian | ziyuan23 | chuizi | leaf-line | huidaodingbu | qidongtuguanli- | guanbi | qiehuan | ren | bofang | shijianlishijilujishizhongbiaoxianxing | shandian | renwutouxiangkuang_huaban1 | zoumadengtiaotiao_huaban1 | yemianqiehuan-youjiantou | yemianqiehuan-zuojiantou | 2jw-01 | 2zz-01 | 2fz-01 | 2tz-01 | 2jj-01 | 2xf-01 | 2yl-01 | 2ss-01 | 1zz-01 | 1yl-01 | 1xf-01 | 1tz-01 | 1ss-01 | 1jw-01 | 1jj-01 | 1fz-01 | qita | sport_09 | ditu | xingshu1-01
     name: {
       type: String,
     },

@@ -86,6 +86,7 @@
 		"eslint-config-taro": "3.3.19",
 		"eslint-plugin-prettier": "^3.4.0",
 		"eslint-plugin-vue": "^7.8.0",
+		"mini-program-iconfont-cli": "^0.6.1",
 		"patch-package": "^6.4.7",
 		"prettier": "^2.3.1",
 		"stylelint": "9.3.0",
