@@ -11,6 +11,7 @@
     "jest": true
   },
   "rules": {
-    "@typescript-eslint/member-delimiter-style": 0
+    "@typescript-eslint/member-delimiter-style": 0,
+    "@typescript-eslint/ban-types": 0
   }
 }
