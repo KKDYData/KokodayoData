@@ -54,7 +54,7 @@ export interface GetCharacter {
     equips: {
       info: IUniEquip.IInfo
       data: IBattleEquip.IData
-    }
+    }[]
   }
 }
 
@@ -152,7 +152,7 @@ export interface ListMap {
   response: {
     levelId: string
     label: string
-    stageType: IStageInfo.StageType | (string & {})
+    stageType: IStageInfo.StageType | string
     hardStagedId: string
   }[]
 }
