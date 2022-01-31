@@ -30,8 +30,16 @@ export class GachaPoolService {
   }
 
   async listGachaPool() {
-    const acts = await this.model.find()
-    return acts.map(a => pick(['id', 'data'], a))
+    const acts = await this.model.find({
+      relations: ['relativeChars'],
+    })
+
+    return acts
+      .map(a => ({
+        ...pick(['id', 'data', 'link'], a),
+        relativeChars: a.relativeChars.map(e => e.charId),
+      }))
+      .filter(e => e.data.gachaPoolName.length === 4)
   }
 
   async updateByGachaPoolName(
