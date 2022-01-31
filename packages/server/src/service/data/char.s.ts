@@ -1,12 +1,10 @@
-import { IChar, IPatchInfo } from '@kkdy/data'
-import { IWord } from '@kkdy/data/lib/CharWord'
+import { IChar, IPatchInfo, ICharWordDict } from '@kkdy/data'
 import { Inject, Logger } from '@midwayjs/decorator/dist'
 import { Provide } from '@midwayjs/decorator/dist'
 import { ILogger } from '@midwayjs/logger'
 import { InjectEntityModel } from '@midwayjs/orm'
 import { Repository } from 'typeorm'
 import { CharacterData } from '../../entity/Character.e'
-import { Skill } from '../../entity/Skill.e'
 import { getOrCreateModel } from '../../utils/entity'
 import { BuildingSkillService } from './buildingSkill.s'
 import { CharInfoService } from './charInfo.s'
@@ -47,11 +45,16 @@ export class CharService {
   @Inject()
   oss: OssService
 
-  async createOrUpdate(id: string, data: IChar.IData) {
+  async createOrUpdate(
+    id: string,
+    data: IChar.IData,
+    voiceLangDict: ICharWordDict.IDict
+  ) {
     const char = await getOrCreateModel(this.model, { where: { charId: id } })
 
     char.charId = id
     char.data = data
+    char.voiceLangDict = voiceLangDict
     char.name = data.name
     char.words = await this.charwordService.getWordsByCharId(char.charId)
     char.skills = await Promise.all(
@@ -125,6 +128,7 @@ export class CharService {
       relativeChars,
       charComment,
       equips,
+      voiceLangDict,
     } = modelData
 
     const res = {
@@ -139,6 +143,7 @@ export class CharService {
       relativeChars: relativeChars?.map(c => c.charId),
       charComment,
       equips,
+      voiceLangDict,
     }
 
     return res

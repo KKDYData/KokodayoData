@@ -21,6 +21,7 @@ export interface AttributeBlackboard {
 export interface Part {
     resKey:                        null | string;
     target:                        Target;
+    isToken:                       boolean;
     addOrOverrideTalentDataBundle: AddOrOverrideTalentDataBundle;
     overrideTraitDataBundle:       OverrideTraitDataBundle;
 }
@@ -68,4 +69,7 @@ export enum Target {
 
 export interface TokenAttributeBlackboard {
     token_10001_deepcl_tentac?: AttributeBlackboard[];
+    token_10020_ling_soul1?:    AttributeBlackboard[];
+    token_10020_ling_soul2?:    AttributeBlackboard[];
+    token_10020_ling_soul3?:    AttributeBlackboard[];
 }

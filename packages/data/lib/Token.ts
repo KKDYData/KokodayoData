@@ -83,6 +83,7 @@ export interface Phase {
 export enum RangeID {
     The01 = "0-1",
     The11 = "1-1",
+    The31 = "3-1",
     The32 = "3-2",
     The36 = "3-6",
     X4 = "x-4",
@@ -127,7 +128,7 @@ export interface TalentCandidate {
     requiredPotentialRank: number;
     prefabKey:             string;
     name:                  null | string;
-    description:           string;
+    description:           null | string;
     rangeId:               RangeID | null;
     blackboard:            Blackboard[];
 }

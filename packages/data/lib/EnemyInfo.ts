@@ -53,6 +53,7 @@ export enum EnemyLevel {
 }
 
 export enum EnemyRace {
+    化物 = "化物",
     宿主 = "宿主",
     感染生物 = "感染生物",
     无人机 = "无人机",
@@ -62,6 +63,7 @@ export enum EnemyRace {
 }
 
 export enum EnemyTag {
+    Animated = "animated",
     Drone = "drone",
     Infection = "infection",
     Mutant = "mutant",
