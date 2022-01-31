@@ -70,6 +70,9 @@ export class CharService {
         .filter(e => e)
         .map(id => this.teamInfoService.getTeamInfoById(id))
     )
+    char.teamInfo.forEach(t => {
+      this.ctx.logger.warn(t.powerId, t.id)
+    })
 
     char.equips = await this.equipService.getEquipByCharId(id)
 
@@ -144,7 +147,7 @@ export class CharService {
   async listCharacters() {
     const list = await this.model.find({
       select: ['charId', 'updatedDate', 'version', 'installId', 'name', 'data'],
-      relations: ['teamInfo', 'relativeGachPools'],
+      relations: ['teamInfo'],
     })
 
     return list.map(char => ({
