@@ -13,82 +13,82 @@ const {
 
 const { instance: ins } = require('./instance')
 
-  ; (async () => {
-    // const { data } = await ins.get('/')
-    // await updateBuildingBuff()
-    // await updateBuildingSkill()
-    // await updateCharInfo()
-    // await updateCharword()
-    // await updateSkill()
-    // await updatePatchInfo()
-    // await updateTeamInfo()
-    await updateEquip()
-    // await updateChars()
-    // await updateAct()
-    // await updateGachaPool()
-    // const res = await ins.post('/update/gachaPool/name', {
-    //   // startDate: new Date('2021/02/05 16:00:00'),
-    //   // endDate: new Date('2021/02/19 03:59:59'),
-    //   name: '地生五金',
-    //   chars: ['夕', '乌有'],
-    // })
-    // await updateEnemies()
-    // await updateActMap(
-    //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
-    //   'act13side'
-    // )
-    // await updateActMap(
-    //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/roguelike/'
-    //   // 'campaign'
-    // )
-    // await updateActMap(
-    //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
-    //   'act14side'
-    // )
+;(async () => {
+  // const { data } = await ins.get('/')
+  // await updateBuildingBuff()
+  // await updateBuildingSkill()
+  // await updateCharInfo()
+  // await updateCharword()
+  // await updateSkill()
+  // await updatePatchInfo()
+  // await updateTeamInfo()
+  // await updateEquip()
+  await updateChars()
+  // await updateAct()
+  // await updateGachaPool()
+  // const res = await ins.post('/update/gachaPool/name', {
+  //   // startDate: new Date('2021/02/05 16:00:00'),
+  //   // endDate: new Date('2021/02/19 03:59:59'),
+  //   name: '地生五金',
+  //   chars: ['夕', '乌有'],
+  // })
+  // await updateEnemies()
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
+  //   'act13side'
+  // )
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/roguelike/'
+  //   // 'campaign'
+  // )
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
+  //   'act14side'
+  // )
 
-    // await updateRogueStageInfo('_n_')
-    // await updateStageInfo('campaign')
-    // await updateStageInfo('memory')
-    // return
-    // const res = await ins.get('/data/map/list', {
-    //   // id: 'char_1001_amiya2',
-    //   params: {
-    //     id: 'enemy_1058_traink',
-    //   },
-    // })
-    // res.data.result.map((s) => console.log(s.levelId, s.stageInfos.length))
-    // console.log(
-    //   // res.data.result.stageEnemies.map((e) => e.stageLevelId)
-    // )
+  // await updateRogueStageInfo('_n_')
+  // await updateStageInfo('campaign')
+  // await updateStageInfo('memory')
+  // return
+  // const res = await ins.get('/data/map/list', {
+  //   // id: 'char_1001_amiya2',
+  //   params: {
+  //     id: 'enemy_1058_traink',
+  //   },
+  // })
+  // res.data.result.map((s) => console.log(s.levelId, s.stageInfos.length))
+  // console.log(
+  //   // res.data.result.stageEnemies.map((e) => e.stageLevelId)
+  // )
 
-    // const { data }
-    return
-    // const stages = require('./ArknightsGameData/zh_CN/gamedata/excel/stage_table.json')
-    //   .stages
-    // const map = require('./ArknightsGameData/zh_CN/gamedata/levels/obt/main/level_main_00-01.json')
+  // const { data }
+  return
+  // const stages = require('./ArknightsGameData/zh_CN/gamedata/excel/stage_table.json')
+  //   .stages
+  // const map = require('./ArknightsGameData/zh_CN/gamedata/levels/obt/main/level_main_00-01.json')
 
-    // // return
-    // const res = await ins.post('/update/map', {
-    //   // id: 'char_1001_amiya2',
-    //   levelId: 'level_main_00-01',
-    //   data: map,
-    // })
+  // // return
+  // const res = await ins.post('/update/map', {
+  //   // id: 'char_1001_amiya2',
+  //   levelId: 'level_main_00-01',
+  //   data: map,
+  // })
 
-    // const infoRes = await ins.post('/update/map/info', {
-    //   levelId: 'level_main_00-01',
-    //   info: stages['main_00-01'],
-    // })
-    // console.log('res.info', infoRes.data)
+  // const infoRes = await ins.post('/update/map/info', {
+  //   levelId: 'level_main_00-01',
+  //   info: stages['main_00-01'],
+  // })
+  // console.log('res.info', infoRes.data)
 
-    // // const res
-    // const { data: mapData } = await ins.get('/update/map', {
-    //   params: { levelId: 'level_main_00-01' },
-    // })
-    // // const { data } = await getChar('char_1001_amiya2')
-    // // const { data: skills } = await getSkill('skcom_atk_up[1]')
-    // console.log('data', mapData)
-    // console.log('skill', skills)
-  })()
+  // // const res
+  // const { data: mapData } = await ins.get('/update/map', {
+  //   params: { levelId: 'level_main_00-01' },
+  // })
+  // // const { data } = await getChar('char_1001_amiya2')
+  // // const { data: skills } = await getSkill('skcom_atk_up[1]')
+  // console.log('data', mapData)
+  // console.log('skill', skills)
+})()
 
 async function updateBuildingBuff() {
   const hook_book =
@@ -207,13 +207,12 @@ function updateTeamInfo() {
 function updateEquip() {
   const uniequip_table = require('../ArknightsGameData/zh_CN/gamedata/excel/uniequip_table.json')
   const battle_equip_table = require('../ArknightsGameData/zh_CN/gamedata/excel/battle_equip_table.json')
-  const list = Object.values(uniequip_table.equipDict)
-    .map((info) => {
-      return {
-        info,
-        data: battle_equip_table[info.uniEquipId] ?? {}
-      }
-    })
+  const list = Object.values(uniequip_table.equipDict).map((info) => {
+    return {
+      info,
+      data: battle_equip_table[info.uniEquipId] ?? {},
+    }
+  })
 
   const queue = Queue.of(512)
   list.forEach((e) => {
@@ -230,6 +229,9 @@ function updateChars() {
   const character_table = require('../ArknightsGameData/zh_CN/gamedata/excel/character_table.json')
   const patchChars =
     require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json').patchChars
+  const voideDict =
+    require('../ArknightsGameData/zh_CN/gamedata/excel/charword_table.json').voiceLangDict
+
   const list = [
     ...Object.entries(character_table),
     ...Object.entries(patchChars),
@@ -240,7 +242,7 @@ function updateChars() {
     // if (i > 0) return
     const t = () =>
       ins
-        .post('/update/char', { id, data })
+        .post('/update/char', { id, data, voiceLangDict: voideDict[id] })
         .then(() => {
           console.log('char', queue.total, queue.done)
         })

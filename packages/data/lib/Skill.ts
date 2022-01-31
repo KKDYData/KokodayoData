@@ -12,7 +12,7 @@ export interface ISkill {
 export interface Level {
     name:        string;
     rangeId:     RangeID | null;
-    description: string;
+    description: null | string;
     skillType:   number;
     spData:      SPData;
     prefabId:    null | string;

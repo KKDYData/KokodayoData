@@ -15,6 +15,7 @@ import {
   IEnemyData,
   IUniEquip,
   IBattleEquip,
+  ICharWordDict,
 } from '@kkdy/data'
 import { ALL, Get, Query, Validate } from '@midwayjs/decorator'
 import { Body, Controller, Inject, Post, Provide } from '@midwayjs/decorator'
@@ -89,8 +90,19 @@ export class UpdateController {
   }
 
   @Post('/char')
-  async updateChar(@Body(ALL) data: { id: string; data: IChar.IData }) {
-    await this.charService.createOrUpdate(data.id, data.data)
+  async updateChar(
+    @Body(ALL)
+    data: {
+      id: string
+      data: IChar.IData
+      voiceLangDict: ICharWordDict.IDict
+    }
+  ) {
+    await this.charService.createOrUpdate(
+      data.id,
+      data.data,
+      data.voiceLangDict
+    )
 
     return true
   }

@@ -1,4 +1,4 @@
-import { IChar, IPatchInfo } from '@kkdy/data'
+import { IChar, ICharWordDict, IPatchInfo } from '@kkdy/data'
 import { EntityModel } from '@midwayjs/orm'
 import {
   Column,
@@ -62,6 +62,13 @@ export class CharacterData extends BaseEntity {
   @OneToMany(() => Charword, word => word.character)
   @JoinColumn()
   words: Charword[]
+
+  @Column({
+    comment: '配音信息',
+    nullable: true,
+    type: 'json',
+  })
+  voiceLangDict: ICharWordDict.IDict
 
   @OneToOne(() => CharInfo)
   @JoinColumn()

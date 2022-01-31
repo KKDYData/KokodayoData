@@ -213,7 +213,7 @@ export interface CharacterCard {
     inst:                     Inst;
     skillIndex:               number;
     mainSkillLvl:             number;
-    skinId:                   null;
+    skinId:                   null | string;
     tmplId?:                  null;
     overrideSkillBlackboard?: Blackboard[] | null;
     uniEquipIds?:             null;

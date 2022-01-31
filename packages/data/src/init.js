@@ -64,7 +64,8 @@ build('Data', trap, 'Trap')
 
 const charword_table = require('../ArknightsGameData/zh_CN/gamedata/excel/charword_table.json')
 build('Word', charword_table.charWords, 'CharWord')
-
+build('Dict', Object.values(charword_table.voiceLangDict), 'CharWordDict')
+// /voiceLangDict
 const skill_table = require('../ArknightsGameData/zh_CN/gamedata/excel/skill_table.json')
 build('Skill', skill_table, 'Skill')
 
