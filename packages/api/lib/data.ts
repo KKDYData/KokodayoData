@@ -54,7 +54,7 @@ export function GetCharacter(params: { id: string }) {
       equips: {
         info: IUniEquip.IInfo
         data: IBattleEquip.IData
-      }
+      }[]
     }>
   >('/data/char', { params })
 }
@@ -115,7 +115,7 @@ export function ListMap() {
       {
         levelId: string
         label: string
-        stageType: IStageInfo.StageType | (string & {})
+        stageType: IStageInfo.StageType | string
         hardStagedId: string
       }[]
     >
