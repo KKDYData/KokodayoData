@@ -14,8 +14,8 @@ const messages = {
 
 // 2. Create i18n instance with options
 export const i18n = createI18n({
-  locale: 'ja', // set locale
-  fallbackLocale: 'en', // set fallback locale
+  locale: 'zh', // set locale
+  fallbackLocale: 'zh', // set fallback locale
   messages, // set locale messages
   // If you need to specify other options, you can set other options
   // ...

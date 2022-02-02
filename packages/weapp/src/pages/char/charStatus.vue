@@ -1,9 +1,9 @@
 <template>
   <view>
     <Title slim-bar title-cn="属性" slim :size="30" />
-    <view class="mt-20px ml-10px grid gap-y-10px grid-cols-2">
+    <view class="mt-20rpx ml-10rpx grid gap-y-10rpx grid-cols-2">
       <template v-for="v in statusList" :key="v.key">
-        <LabelText :label="t(v.key)" width="200rpx">
+        <LabelText :label="t(`status.${v.key}`)" width="200rpx">
           <template #value>
             <text class="font-bold text-dark-50">
               {{ format(v.value) }}
@@ -130,7 +130,7 @@ const props = defineProps<{
   skills: { data: ISkill.ISkill; comments: string[] }[]
 }>()
 const { t } = useI18n()
-
+console.log('t', t)
 const {
   favorLv,
   favorRange,

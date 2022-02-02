@@ -63,6 +63,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.8.0",
+		"@intlify/vue-i18n-loader": "^4.1.0",
 		"@tarojs/cli": "3.3.19",
 		"@tarojs/mini-runner": "3.3.19",
 		"@tarojs/plugin-platform-alipay": "^3.3.19",

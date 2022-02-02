@@ -21,6 +21,7 @@ const config = {
   framework: 'vue3',
   alias: {
     '/@': path.resolve(__dirname, '..', 'src'),
+    'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
   },
   mini: {
     miniCssExtractPluginOption: {
@@ -68,6 +69,21 @@ const config = {
             ['iconfont'].includes(tag)
           return options
         })
+      chain.module
+        .rule('i18n')
+        .resourceQuery(/blockType=i18n/)
+        .type('javascript/auto')
+        .use('i18n')
+        .loader('@intlify/vue-i18n-loader')
+
+      chain.module
+        .rule('i18n-resource')
+        .test(/\.(json5?|ya?ml)$/)
+        .include.add(path.resolve(__dirname, '../src/locale'))
+        .end()
+        .type('javascript/auto')
+        .use('i18n-resource')
+        .loader('@intlify/vue-i18n-loader')
     },
   },
   h5: {
