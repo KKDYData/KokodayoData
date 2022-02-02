@@ -12,5 +12,5 @@ export const provideRootItemState = (e: E) => {
 }
 
 export const useRootItemState = () => {
-  return inject(RootItemKey)
+  return inject(RootItemKey, null)
 }
