@@ -1,0 +1,284 @@
+  {
+    "subProfDict": {
+      "notchar1": {
+        "subProfessionId": "notchar1",
+        "subProfessionName": "干员附带单位",
+        "subProfessionCatagory": 1
+      },
+      "notchar2": {
+        "subProfessionId": "notchar2",
+        "subProfessionName": "无职业陷阱",
+        "subProfessionCatagory": 2
+      },
+      "none1": {
+        "subProfessionId": "none1",
+        "subProfessionName": "预留1",
+        "subProfessionCatagory": 3
+      },
+      "none2": {
+        "subProfessionId": "none2",
+        "subProfessionName": "预留1",
+        "subProfessionCatagory": 4
+      },
+      "pioneer": {
+        "subProfessionId": "pioneer",
+        "subProfessionName": "尖兵",
+        "subProfessionCatagory": 5
+      },
+      "charger": {
+        "subProfessionId": "charger",
+        "subProfessionName": "冲锋手",
+        "subProfessionCatagory": 6
+      },
+      "tactician": {
+        "subProfessionId": "tactician",
+        "subProfessionName": "战术家",
+        "subProfessionCatagory": 7
+      },
+      "bearer": {
+        "subProfessionId": "bearer",
+        "subProfessionName": "执旗手",
+        "subProfessionCatagory": 8
+      },
+      "centurion": {
+        "subProfessionId": "centurion",
+        "subProfessionName": "强攻手",
+        "subProfessionCatagory": 9
+      },
+      "fighter": {
+        "subProfessionId": "fighter",
+        "subProfessionName": "斗士",
+        "subProfessionCatagory": 10
+      },
+      "artsfghter": {
+        "subProfessionId": "artsfghter",
+        "subProfessionName": "术战者",
+        "subProfessionCatagory": 11
+      },
+      "instructor": {
+        "subProfessionId": "instructor",
+        "subProfessionName": "教官",
+        "subProfessionCatagory": 12
+      },
+      "lord": {
+        "subProfessionId": "lord",
+        "subProfessionName": "领主",
+        "subProfessionCatagory": 13
+      },
+      "sword": {
+        "subProfessionId": "sword",
+        "subProfessionName": "剑豪",
+        "subProfessionCatagory": 14
+      },
+      "musha": {
+        "subProfessionId": "musha",
+        "subProfessionName": "武者",
+        "subProfessionCatagory": 15
+      },
+      "fearless": {
+        "subProfessionId": "fearless",
+        "subProfessionName": "无畏者",
+        "subProfessionCatagory": 16
+      },
+      "reaper": {
+        "subProfessionId": "reaper",
+        "subProfessionName": "收割者",
+        "subProfessionCatagory": 17
+      },
+      "librator": {
+        "subProfessionId": "librator",
+        "subProfessionName": "解放者",
+        "subProfessionCatagory": 18
+      },
+      "protector": {
+        "subProfessionId": "protector",
+        "subProfessionName": "铁卫",
+        "subProfessionCatagory": 19
+      },
+      "guardian": {
+        "subProfessionId": "guardian",
+        "subProfessionName": "守护者",
+        "subProfessionCatagory": 20
+      },
+      "unyield": {
+        "subProfessionId": "unyield",
+        "subProfessionName": "不屈者",
+        "subProfessionCatagory": 21
+      },
+      "artsprotector": {
+        "subProfessionId": "artsprotector",
+        "subProfessionName": "驭法铁卫",
+        "subProfessionCatagory": 22
+      },
+      "duelist": {
+        "subProfessionId": "duelist",
+        "subProfessionName": "决战者",
+        "subProfessionCatagory": 23
+      },
+      "fortress": {
+        "subProfessionId": "fortress",
+        "subProfessionName": "要塞",
+        "subProfessionCatagory": 24
+      },
+      "fastshot": {
+        "subProfessionId": "fastshot",
+        "subProfessionName": "速射手",
+        "subProfessionCatagory": 25
+      },
+      "closerange": {
+        "subProfessionId": "closerange",
+        "subProfessionName": "重射手",
+        "subProfessionCatagory": 26
+      },
+      "aoesniper": {
+        "subProfessionId": "aoesniper",
+        "subProfessionName": "炮手",
+        "subProfessionCatagory": 27
+      },
+      "longrange": {
+        "subProfessionId": "longrange",
+        "subProfessionName": "神射手",
+        "subProfessionCatagory": 28
+      },
+      "reaperrange": {
+        "subProfessionId": "reaperrange",
+        "subProfessionName": "散射手",
+        "subProfessionCatagory": 29
+      },
+      "siegesniper": {
+        "subProfessionId": "siegesniper",
+        "subProfessionName": "攻城手",
+        "subProfessionCatagory": 30
+      },
+      "bombarder": {
+        "subProfessionId": "bombarder",
+        "subProfessionName": "投掷手",
+        "subProfessionCatagory": 31
+      },
+      "corecaster": {
+        "subProfessionId": "corecaster",
+        "subProfessionName": "中坚术师",
+        "subProfessionCatagory": 32
+      },
+      "splashcaster": {
+        "subProfessionId": "splashcaster",
+        "subProfessionName": "扩散术师",
+        "subProfessionCatagory": 33
+      },
+      "funnel": {
+        "subProfessionId": "funnel",
+        "subProfessionName": "驭械术师",
+        "subProfessionCatagory": 34
+      },
+      "phalanx": {
+        "subProfessionId": "phalanx",
+        "subProfessionName": "阵法术师",
+        "subProfessionCatagory": 35
+      },
+      "mystic": {
+        "subProfessionId": "mystic",
+        "subProfessionName": "秘术师",
+        "subProfessionCatagory": 36
+      },
+      "chain": {
+        "subProfessionId": "chain",
+        "subProfessionName": "链术师",
+        "subProfessionCatagory": 37
+      },
+      "blastcaster": {
+        "subProfessionId": "blastcaster",
+        "subProfessionName": "轰击术师",
+        "subProfessionCatagory": 38
+      },
+      "physician": {
+        "subProfessionId": "physician",
+        "subProfessionName": "医师",
+        "subProfessionCatagory": 39
+      },
+      "ringhealer": {
+        "subProfessionId": "ringhealer",
+        "subProfessionName": "群愈师",
+        "subProfessionCatagory": 40
+      },
+      "healer": {
+        "subProfessionId": "healer",
+        "subProfessionName": "疗养师",
+        "subProfessionCatagory": 41
+      },
+      "wandermedic": {
+        "subProfessionId": "wandermedic",
+        "subProfessionName": "行医",
+        "subProfessionCatagory": 42
+      },
+      "slower": {
+        "subProfessionId": "slower",
+        "subProfessionName": "凝滞师",
+        "subProfessionCatagory": 43
+      },
+      "underminer": {
+        "subProfessionId": "underminer",
+        "subProfessionName": "削弱者",
+        "subProfessionCatagory": 44
+      },
+      "bard": {
+        "subProfessionId": "bard",
+        "subProfessionName": "吟游者",
+        "subProfessionCatagory": 45
+      },
+      "blessing": {
+        "subProfessionId": "blessing",
+        "subProfessionName": "护佑者",
+        "subProfessionCatagory": 46
+      },
+      "summoner": {
+        "subProfessionId": "summoner",
+        "subProfessionName": "召唤师",
+        "subProfessionCatagory": 47
+      },
+      "craftsman": {
+        "subProfessionId": "craftsman",
+        "subProfessionName": "工匠",
+        "subProfessionCatagory": 48
+      },
+      "executor": {
+        "subProfessionId": "executor",
+        "subProfessionName": "处决者",
+        "subProfessionCatagory": 49
+      },
+      "pusher": {
+        "subProfessionId": "pusher",
+        "subProfessionName": "推击手",
+        "subProfessionCatagory": 50
+      },
+      "stalker": {
+        "subProfessionId": "stalker",
+        "subProfessionName": "伏击客",
+        "subProfessionCatagory": 51
+      },
+      "hookmaster": {
+        "subProfessionId": "hookmaster",
+        "subProfessionName": "钩索师",
+        "subProfessionCatagory": 52
+      },
+      "geek": {
+        "subProfessionId": "geek",
+        "subProfessionName": "怪杰",
+        "subProfessionCatagory": 53
+      },
+      "merchant": {
+        "subProfessionId": "merchant",
+        "subProfessionName": "行商",
+        "subProfessionCatagory": 54
+      },
+      "traper": {
+        "subProfessionId": "traper",
+        "subProfessionName": "陷阱师",
+        "subProfessionCatagory": 55
+      },
+      "dollkeeper": {
+        "subProfessionId": "dollkeeper",
+        "subProfessionName": "傀儡师",
+        "subProfessionCatagory": 56
+      }
+    }
+  }

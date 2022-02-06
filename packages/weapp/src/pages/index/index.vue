@@ -33,9 +33,6 @@
           bindscroll="scroll"
           style="width: 100%"
         >
-          <!-- <view class="flex mt-3 justify-around">
-          </view>-->
-          <!-- 用 索引 当key，惊醒 skeleton 的替换动画  -->
           <AgentIcon
             class="mr-40px"
             :id="'a' + i"
@@ -75,13 +72,10 @@
           v-for="(item, i) in NavigationItems"
           :key="i"
           class="flex font-bold h-80px text-dark-50 text-32px w-140px card items-center justify-center"
-          style="
-            background-color: rgba(179, 179, 179, 1);
-            box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.16);
-          "
           @tap="goTo(item)"
-          >{{ item.name }}</view
         >
+          {{ item.name }}
+        </view>
       </view>
     </view>
   </view>
@@ -93,15 +87,14 @@ import Taro from '@tarojs/taro'
 import { computed } from 'vue'
 import { Scan } from '/@/components/QRCode'
 import { Title } from '/@/components/Title'
+import { AgentIcon } from '/@/components/AgentIcon'
+import { useListStore } from '/@/store'
+import { NavigationItems } from './constants'
 
 const banners = [
   { name: '', url: 'https://andata.somedata.top/dataX/assetes/banner2.jpg' },
   { name: '', url: 'https://andata.somedata.top/dataX/assetes/banner1.jpg' },
 ]
-
-import { AgentIcon } from '/@/components/AgentIcon'
-import { useListStore } from '/@/store'
-import { NavigationItems } from './constants'
 
 const listStore = useListStore()
 listStore.initList()

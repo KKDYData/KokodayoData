@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compileOnSave": true,
   "compilerOptions": {
     "target": "ES2020",
@@ -13,7 +12,15 @@
     "stripInternal": true,
     "pretty": true,
     "declaration": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "esModuleInterop": true,
+    "typeRoots": [
+      "./typings"
+    ],
+    "types": [
+      "vite/client",
+      "node"
+    ],
   },
   "exclude": [
     "dist",

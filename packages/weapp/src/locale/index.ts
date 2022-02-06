@@ -1,5 +1,6 @@
 import { createI18n } from 'vue-i18n'
 import base from './base.json'
+import subProfile from './subProfDict.json'
 
 const messages = {
   en: {
@@ -9,6 +10,7 @@ const messages = {
   },
   zh: {
     ...base,
+    ...subProfile,
   },
 }
 

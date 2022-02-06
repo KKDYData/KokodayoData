@@ -50,6 +50,7 @@
       :phase="phase"
     />
   </view>
+  <Equip :data="equips" />
   <view>
     <Title slim-bar title-cn="技能" slim :size="30" />
     <view class="flex">
@@ -111,7 +112,7 @@
   </view>
 </template>
 <script setup lang="ts">
-import { IChar, ISkill } from '@kkdy/data'
+import { IBattleEquip, IChar, ISkill, IUniEquip } from '@kkdy/data'
 import { Title } from '/@/components/Title'
 
 import { LabelText } from '/@/components/LabelText'
@@ -121,6 +122,7 @@ import { computed, ref } from 'vue'
 import { RangeItem } from '/@/components/RangeItem'
 import Talent from './talent.vue'
 import Skill from './skill.vue'
+import Equip from './Equip.vue'
 import { Item } from '/@/components/Item'
 import { reactify } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
@@ -128,6 +130,11 @@ import { useI18n } from 'vue-i18n'
 const props = defineProps<{
   data: IChar.IData
   skills: { data: ISkill.ISkill; comments: string[] }[]
+  equips: {
+    info: IUniEquip.IInfo
+    equipId: string
+    data: IBattleEquip.IData
+  }[]
 }>()
 const { t } = useI18n()
 console.log('t', t)

@@ -23,7 +23,7 @@ const { instance: ins } = require('./instance')
   // await updatePatchInfo()
   // await updateTeamInfo()
   // await updateEquip()
-  await updateChars()
+  // await updateChars()
   // await updateAct()
   // await updateGachaPool()
   // const res = await ins.post('/update/gachaPool/name', {
@@ -35,20 +35,21 @@ const { instance: ins } = require('./instance')
   // await updateEnemies()
   // await updateActMap(
   //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
-  //   'act13side'
+  //   'act16side'
   // )
   // await updateActMap(
   //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/roguelike/'
   //   // 'campaign'
   // )
+  // await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/obt/', 'rune')
   // await updateActMap(
-  //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
-  //   'act14side'
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/',
+  //   'campaign'
   // )
 
   // await updateRogueStageInfo('_n_')
   // await updateStageInfo('campaign')
-  // await updateStageInfo('memory')
+  await updateStageInfo('act16side')
   // return
   // const res = await ins.get('/data/map/list', {
   //   // id: 'char_1001_amiya2',

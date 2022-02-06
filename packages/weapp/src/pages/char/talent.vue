@@ -4,13 +4,21 @@
       <view class="underline" style="text-underline-position: under">
         {{ state.name }}
       </view>
+      <Tag class="ml-3">
+        需求 精英{{ state.unlockCondition.phase }}/
+        {{ state.unlockCondition.level }}级
+      </Tag>
       <Tag
         v-if="nextState"
-        class="ml-auto"
+        class="ml-auto whitespace-nowrap"
         :type="isNext ? 'light' : ''"
         @touchend="toggle"
       >
         潜能 {{ nextState.requiredPotentialRank + 1 }} 级提升
+        <view
+          class="w-17rpx h-17rpx bg-white transform mx-5rpx inline-block transition ease"
+          :class="{ 'rotate-15': isNext }"
+        />
       </Tag>
     </view>
     <rich-text class="text-xs mt-3" :nodes="changeAttackSpeed(state)" />

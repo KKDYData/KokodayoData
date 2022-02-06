@@ -24,6 +24,7 @@ const config = {
     'vue-i18n': 'vue-i18n/dist/vue-i18n.runtime.esm-bundler.js',
   },
   mini: {
+    hot: true,
     miniCssExtractPluginOption: {
       ignoreOrder: true,
     },

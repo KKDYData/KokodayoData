@@ -1,31 +1,35 @@
 <template>
-  <view class="flex items-center h-60px" :label="label" :width="width">
+  <view
+    class="flex items-center h-60px text-dark-40"
+    :label="label"
+    :width="width"
+  >
     <view class="overflow-hidden">
       <Title :size="24" :style="{ width }" :title-cn="label" />
     </view>
     <view class="flex-1 ml-15px flex items-center">
-      <view class="self-stretch" @touchend="add(-1)">
-        <KIcon v-if="controls" name="iconyemianqiehuan-zuojiantou" />
+      <view v-if="controls" class="num-btn" @touchend="add(-1)">
+        <KIcon :size="24" name="iconjianhao" color="#707070" />
       </view>
       <view
-        class="text-22px flex-1 mx-10rpx border-2 border-gray-700 rounded bg-white"
+        class="text-50rpx w-100rpx h-50rpx flex-1 mx-10rpx rounded-7rpx bg-white shadow"
       >
         <picker
-          class="w-full"
+          class="w-full h-full"
           :value="__value"
           :range="__range"
           range-key="label"
           @change="handleChagne"
         >
-          <view class="text-xs text-center">
+          <view class="text-35rpx leading-50rpx text-center">
             <slot v-bind="{ value: __value, getLabel }">
               {{ getLabel(__value) }}
             </slot>
           </view>
         </picker>
       </view>
-      <view v-if="controls" @touchend="add(1)">
-        <KIcon name="iconyemianqiehuan-youjiantou" />
+      <view v-if="controls" class="num-btn" @touchend="add(1)">
+        <KIcon color="#707070" :size="24" name="iconjiahao" />
       </view>
     </view>
   </view>
@@ -105,3 +109,10 @@ const add = (v: number) => {
   emit('update:modelValue', __range.value[target + v].value)
 }
 </script>
+
+<style lang="styl">
+.num-btn {
+  @apply border shadow rounded-7rpx bg-white h-50rpx w-50rpx
+  font-size: 0
+}
+</style>

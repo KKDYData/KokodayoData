@@ -32,6 +32,9 @@
     "lib": [
       "ES2021",
       "DOM"
+    ],
+    "types": [
+      "@dcloudio/types"
     ]
   },
   "exclude": [

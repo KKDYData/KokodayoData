@@ -1,37 +1,37 @@
 view, ::before, ::after {
-  -webkit-box-sizing: border-box
-  box-sizing: border-box
-  border-width: 0
-  border-style: solid
-  border-color: #e5e7eb
+  -webkit-box-sizing border-box
+  box-sizing border-box
+  border-width 0
+  border-style solid
+  border-color #e5e7eb
 }
 
 view {
-  --tw-ring-inset: var(--tw-empty, /**/ /**/)
-  --tw-ring-offset-width: 0
-  --tw-ring-offset-color: #fff
-  --tw-ring-color: rgba(59, 130, 246, 0.5)
-  --tw-ring-offset-shadow: 0 0 #0000
-  --tw-ring-shadow: 0 0 #0000
-  --tw-shadow: 0 0 #0000
-  font-family: 'SourceHanSansSC'
-  --lh: 1rem
-  --max-lines: 3
-  --tc-left: 4px
-  color: #4A4A4A
+  --tw-ring-inset var(--tw-empty, /*  */ /*  */)
+  --tw-ring-offset-width 0
+  --tw-ring-offset-color #fff
+  --tw-ring-color rgba(59, 130, 246, 0.5)
+  --tw-ring-offset-shadow 0 0 #0000
+  --tw-ring-shadow 0 0 #0000
+  --tw-shadow 0 0 #0000
+  font-family 'SourceHanSansSC'
+  --lh 1rem
+  --max-lines 3
+  --tc-left 4px
+  color #4A4A4A
 }
 
-//毛玻璃
+// 毛玻璃
 .glass {
-  background: hsla(0, 0%, 100%, 0.75)
-  backdrop-filter: blur(5px)
-  width: 100%
+  background hsla(0, 0%, 100%, 0.75)
+  backdrop-filter blur(5px)
+  width 100%
 }
 
 .main-bg {
-  background-image: url('https://andata.somedata.top/dataX/assetes/bk.png')
-  background-repeat: repeat
-  background-size: cover
+  background-image url('https://andata.somedata.top/dataX/assetes/bk.png')
+  background-repeat repeat
+  background-size cover
 }
 
 /*
@@ -39,11 +39,11 @@ view {
  * https://css-tricks.com/line-clampin/
  */
 .truncate-overflow {
-  position: relative
-  overflow: hidden
-  display: -webkit-box
-  -webkit-line-clamp: var(--max-lines)
-  -webkit-box-orient: vertical
+  position relative
+  overflow hidden
+  display -webkit-box
+  -webkit-line-clamp var(--max-lines)
+  -webkit-box-orient vertical
   /*
    * for firefox ? https://bugzilla.mozilla.org/show_bug.cgi?id=WebKit-line-clamp
     max-height: calc(var(--lh) * var(--max-lines))
@@ -70,109 +70,108 @@ view {
 }
 
 .clean-button {
-  background: none !important
-  margin: 0
-  padding: 0
+  background none !important
+  margin 0
+  padding 0
 
   &::after {
-    border: none
+    border none
   }
 }
 
 .skeleton {
-  position: relative
-  overflow: hidden
-  //opacity: 0.5
-  filter: grayscale(1)
-  z-index: 11
+  position relative
+  overflow hidden
+  // opacity: 0.5
+  filter grayscale(1)
+  z-index 11
 
-  //background: red
+  // background: red
   &::after {
-    content: ''
-    position: absolute
-    top: 0
-    left: 0
-    width: 100%
-    height: 100%
-    background: linear-gradient(90deg, rgba(204, 204, 204, 0.5), rgba(222, 222, 222, 0.5), rgba(204, 204, 204, 0.5))
-    animation: progress 1s cubic-bezier(0.4, 0, 1, 1) infinite
-    z-index: 20
+    content ''
+    position absolute
+    top 0
+    left 0
+    width 100%
+    height 100%
+    background linear-gradient(90deg, rgba(204, 204, 204, 0.5), rgba(222, 222, 222, 0.5), rgba(204, 204, 204, 0.5))
+    animation progress 1s cubic-bezier(0.4, 0, 1, 1) infinite
+    z-index 20
   }
 }
 
-@keyframes progress {
-  0% {
-    transform: translate3d(-250px, 0, 0)
-  }
+// @keyframes progress {
+// 0% {
+// transform: translate3d(-250px, 0, 0)
+// }
 
-  100% {
-    transform: translate3d(100% + 250px, 0, 0)
-  }
-}
+// 100% {
+// transform: translate3d(100% + 250px, 0, 0)
+// }
+// }
 
-//taro 用动画必须设置duration参数
+// taro 用动画必须设置duration参数
 .fade-leave-active {
-  animation: fade 0.5s
+  animation fade 0.5s
 }
 
 .fade-enter-active {
-  animation: fade 0.5s reverse
+  animation fade 0.5s reverse
 }
 
-@keyframes fade {
-  from {
-    opacity: 1
-  }
+// @keyframes fade {
+// from {
+// opacity 1
+// }
 
-  to {
-    opacity: 0
-  }
-}
-
+// to {
+// opacity 0
+// }
+// }
 .index-wrapper {
-  padding: 30px 36px
-  position: relative
-  height: 100vh
-  overflow: scroll
+  padding 30px 36px
+  position relative
+  height 100vh
+  overflow scroll
 
   & > view + view {
-    margin-top: 20px
-    border-top: 1px solid black
-    padding-top: 20px
+    margin-top 20px
+    border-top 1px solid black
+    padding-top 20px
   }
 
   & > view:last-child {
-    margin-top: 40px
+    margin-top 40px
   }
 
   & > view:nth-child(2) {
-    border: none
-    padding-top: 0
+    border none
+    padding-top 0
   }
 }
 
 .rich-color {
   &[class*=down], &[class*=pn], &[class*=talpu] {
-    color: #FF6237
+    color #FF6237
   }
 
   &[class*=vup] {
-    color: #0098DC
+    color #0098DC
   }
 
   &[class*=rem] {
-    color: #F49800
+    color #F49800
   }
 
   &[class*=kw] {
-    color: #00B0FF
+    color #00B0FF
   }
 
   &[class*=lv] {
-    color: #049cb8
+    color #049cb8
   }
 
   &[class*=act] {
-    color: #ff5500
+    color #ff5500
   }
 }
