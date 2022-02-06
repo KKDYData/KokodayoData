@@ -2,7 +2,7 @@
   <view
     :style="{
       height: status.statusBarHeight + 'px',
-      marginTop: status.safeArea.top - 10 + 'px',
+      marginTop: status.safeArea?.top ?? 100 - 10 + 'px',
     }"
     class="flex items-center"
   >
@@ -17,11 +17,10 @@
 </template>
 <script setup lang="ts">
 import Taro from '@tarojs/taro'
-
-const status = Taro.getSystemInfoSync()
-
 import { User } from '@kkdy/api-taro'
 import { onMounted } from '@vue/runtime-core'
+const status = Taro.getSystemInfoSync()
+
 let openid = ''
 
 onMounted(async () => {

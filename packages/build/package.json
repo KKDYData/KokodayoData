@@ -21,7 +21,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.3.0",
-    "@tarojs/taro": "^3.2.0",
+    "@tarojs/taro": "^3.4.3",
     "@types/lodash": "^4.14.168",
     "@types/prettier": "^2.2.2",
     "@types/rimraf": "^3.0.0",

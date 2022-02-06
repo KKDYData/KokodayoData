@@ -34,14 +34,20 @@
                 <KIcon :size="20" :name="getProfessionIcon(data.profession)" />
               </view>
             </view>
-            <view class="ml-15px">
+
+            <view class="ml-auto">
               <view class="text-dark-50 text-40px">{{ data.name }}</view>
               <view class="text-right text-14px italic underline">
                 {{ data.appellation }}
               </view>
             </view>
           </view>
-          <CharStar :size="10" :rarity="data.rarity" />
+          <view class="flex">
+            <CharStar :size="15" :rarity="data.rarity" />
+            <view class="ml-auto">
+              {{ t(`subProfDict.${data.subProfessionId}.subProfessionName`) }}
+            </view>
+          </view>
           <view class="mt-10px ml-10px text-dark-50">
             <view class="text-xl mb-1 text-20px">
               <rich-text :nodes="convert(data.description).toHtml()" />
@@ -56,7 +62,7 @@
         </view>
       </view>
     </view>
-    <ChatStatus v-if="data" :data="data" :skills="skills" />
+    <ChatStatus v-if="data" :data="data" :skills="skills" :equips="equips" />
     <ItemPopup />
   </view>
 </template>
@@ -71,13 +77,16 @@ import {
   getProfessionIcon,
   getProffessionCn,
 } from '/@/components/AgentIcon/utils'
-import { LabelText } from '/@/components/LabelText'
+// import { LabelText } from '/@/components/LabelText'
 import { ref } from 'vue'
-import { Tag } from '/@/components/Tag'
+// import { Tag } from '/@/components/Tag'
 import ChatStatus from './charStatus.vue'
 import { convert } from './RichText'
 import { ItemPopup, providePopupState } from '/@/components/Popup'
+import { useI18n } from 'vue-i18n'
+
 providePopupState()
+const { t } = useI18n()
 
 const id = getCurrentInstance().router?.params.id
 if (!id) {
@@ -91,12 +100,14 @@ const skills = ref<
     comments: string[]
   }[]
 >([])
+const equips = ref([])
 // ref: pIconId = useProfessionIcon(data?.profession)
 
 Data.GetCharacter({ id }).then((res) => {
   if (res.data.ok) {
     data.value = res.data.result.data
     skills.value = res.data.result.skills
+    equips.value = res.data.result.equips
   }
 })
 </script>

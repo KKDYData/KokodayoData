@@ -53,8 +53,8 @@
   "dependencies": {
     "@kkdy/api": "workspace:^1.0.1",
     "@kkdy/data": "workspace:^1.0.0",
-    "@vueuse/core": "^4.4.1",
-    "@vueuse/integrations": "^4.4.1",
+    "@vueuse/core": "^7.6.2",
+    "@vueuse/integrations": "^7.6.2",
     "electron-updater": "^4.3.8",
     "element-plus": "^1.0.2-beta.35",
     "qrcode": "^1.4.4",

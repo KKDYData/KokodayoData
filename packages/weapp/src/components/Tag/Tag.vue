@@ -51,7 +51,7 @@ const mode = computed(() => {
   }
 
   &.light {
-    @apply bg-yellow-500
+    @apply bg-hex-F28100
   }
 }
 </style>
