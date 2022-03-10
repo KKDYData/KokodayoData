@@ -19,6 +19,7 @@ module.exports = merge(common, {
     proxy: {
       'https://test.api.kokodayo.fun': {
         target: 'https://test.api.kokodayo.fun',
+        // target: 'http://127.0.0.1:7001',
         changeOrigin: true,
       },
     },

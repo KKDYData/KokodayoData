@@ -29,7 +29,7 @@
           @click="go"
         />
         <p>
-          <a target="_blank" :href="link" @click="log">
+          <a target="_blank" :href="adsLink" @click="log">
             点这里支持kkdy
           </a>
         </p>
@@ -37,16 +37,10 @@
       <div style="margin-top: 20px">
         <p class="activity-info-need">
           <span>
-            2021 12/30
+            {{ adsDate }}
           </span>
         </p>
-        <p class="activity-info-need">
-          竟然接到了商单，想支持kkdy继续下去的话，可以点击上面看看
-          <span style="color: #d5656c">
-            （要注册，邀请码填kkdy）
-          </span>
-          直接支持可以点击关于里面有收款码，或者小程序搜kkdy（海珠店那个），直接点一个请od喝冷萃。
-        </p>
+        <p class="activity-info-need" v-html="text"></p>
         <p class="activity-info-need"><del>小程序开发中...</del> 快了</p>
         <p class="activity-info-need">
           2021 2/18 更新敌人属性的翻译，并且点击、悬浮会显示原始值
@@ -72,6 +66,8 @@
 import RImage from '@/components/Base/RImage'
 import { dataPath } from '@/utils/listVer'
 import { mapState } from 'vuex'
+import { Ads } from '@kkdy/api'
+import { convert } from '@/utils/RichText'
 
 export default {
   components: {
@@ -87,6 +83,9 @@ export default {
       ],
       link:
         'http://mp.weixin.qq.com/s?__biz=Mzg3NDY0NjUzNg==&mid=100002319&idx=1&sn=5ae6f886858d74feb56a9b571ec97ab8&chksm=4eccd76879bb5e7e0c44226a2dcad8a1407f2bca9d8d56b01d60c5ce18e80fc63358a6d063c9#rd',
+      text: '',
+      adsDate: '',
+      adsLink: '',
     }
   },
   computed: {
@@ -116,6 +115,18 @@ export default {
         event_label: 'ads',
       })
     },
+  },
+  async mounted() {
+    const link = (url) => `${dataPath}${url}`
+    const { data } = await Ads.GetAds()
+    if (data.ok && data.result.length) {
+      const ads = data.result[0]
+      this.activityPic = ads.pics.map(link)
+      this.adsPicM = ads.pics_m.map(link)
+      this.text = convert(ads.text).toHtml()
+      this.adsLink = ads.link
+      this.adsDate = new Date(ads.date).toLocaleDateString()
+    }
   },
 }
 </script>

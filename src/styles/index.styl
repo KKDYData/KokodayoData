@@ -181,36 +181,35 @@ textarea {
 }
 
 .rich-style {
-  &[class*=ba] {
-    text-decoration: underline
-    text-decoration-color: red
-    text-underline-position: under
-    color: #ff5500
-  }
+  text-decoration-color: var(--color)
+  text-decoration: underline
+  text-underline-position: under
 }
 
-.rich-color {
+.rich-style, .rich-color {
+  color: var(--color)
+
   &[class*=down], &[class*=pn], &[class*=talpu] {
-    color: #FF6237
+    --color: #FF6237
   }
 
   &[class*=vup] {
-    color: #0098DC
+    --color: #0098DC
   }
 
   &[class*=rem] {
-    color: #F49800
+    --color: #F49800
   }
 
   &[class*=kw] {
-    color: #00B0FF
+    --color: #00B0FF
   }
 
   &[class*=lv] {
-    color: #049cb8
+    --color: #049cb8
   }
 
   &[class*=act] {
-    color: #ff5500
+    --color: #ff5500
   }
 }

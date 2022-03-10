@@ -1316,18 +1316,24 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@kkdy/api@^1.0.1-beta.1":
-  version "1.0.1-beta.1"
-  resolved "https://registry.nlark.com/@kkdy/api/download/@kkdy/api-1.0.1-beta.1.tgz?cache=0&sync_timestamp=1620846056650&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40kkdy%2Fapi%2Fdownload%2F%40kkdy%2Fapi-1.0.1-beta.1.tgz#8cbf5605ddafbcab54effca9ad4accfa1ca63ba5"
-  integrity sha1-jL9WBd2vvKtU7/yprUrM+hymO6U=
+"@kkdy/api@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/@kkdy/api/-/api-1.0.2.tgz#32d3e43a46dad229752c0c366cfafc3bcabcb00b"
+  integrity sha512-FRZ1CWdztUTr/mVM+ZXiisjIMDm0geOGfDBrE1/qYJSiARf/xD+xPbcuMMZvy1bz1W4jXQLZB+1ocPd05ar9XQ==
   dependencies:
-    "@kkdy/data" "^1.0.0"
+    "@kkdy/data" "workspace:^1.0.0"
     axios "^0.21.1"
+    typescript "^4.5.4"
 
-"@kkdy/data@^1.0.0", "@kkdy/data@^1.0.1":
+"@kkdy/data@^1.0.1":
   version "1.0.1"
   resolved "https://registry.nlark.com/@kkdy/data/download/@kkdy/data-1.0.1.tgz?cache=0&sync_timestamp=1620844616514&other_urls=https%3A%2F%2Fregistry.nlark.com%2F%40kkdy%2Fdata%2Fdownload%2F%40kkdy%2Fdata-1.0.1.tgz#6567a96566b640da27f3608022c76b9b0bb41881"
   integrity sha1-ZWepZWa2QNon82CAIsdrmwu0GIE=
+
+"@kkdy/data@workspace:^1.0.0":
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/@kkdy/data/-/data-1.0.1.tgz#6567a96566b640da27f3608022c76b9b0bb41881"
+  integrity sha512-jfz6UMb0XSqHsMa3JUH0w4vnlJmhyYZZeG4QqguKSc5T4xPf3tDSIAgShbbSMFWkQZ5B8MgED45Gs8NJNH354w==
 
 "@nodelib/fs.scandir@2.1.4":
   version "2.1.4"
@@ -11709,6 +11715,11 @@ typescript@^3.9.7:
   version "3.9.9"
   resolved "https://registry.nlark.com/typescript/download/typescript-3.9.9.tgz#e69905c54bc0681d0518bd4d587cc6f2d0b1a674"
   integrity sha1-5pkFxUvAaB0FGL1NWHzG8tCxpnQ=
+
+typescript@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.npmjs.org/typescript/-/typescript-4.5.4.tgz#a17d3a0263bf5c8723b9c52f43c5084edf13c2e8"
+  integrity sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==
 
 ua-parser-js@^0.7.24:
   version "0.7.28"
