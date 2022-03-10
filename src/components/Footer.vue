@@ -20,13 +20,20 @@
           </a>
         </div>
         <div>
-          <a style="color: white" href="https://kokodayo.fun/info" target="_blank">关于&捐款</a>
+          <a
+            style="color: white"
+            href="https://kokodayo.fun/info"
+            target="_blank"
+            >关于&捐款</a
+          >
         </div>
       </div>
     </li>
     <li>
       <div>
-        <a href="http://www.beian.miit.gov.cn">粤ICP备19019286号</a>
+        <a href="https://beian.miit.gov.cn/" target="_blank">
+          粤ICP备19019286号
+        </a>
       </div>
     </li>
     <li>
@@ -43,12 +50,12 @@ import { mapState } from 'vuex'
 
 export default {
   computed: {
-    ...mapState(['listVer', 'pageVer', 'webVer'])
-  }
+    ...mapState(['listVer', 'pageVer', 'webVer']),
+  },
 }
 </script>
 
-<style lang="stylus" >
+<style lang="stylus">
 a {
   color: #818181
   cursor: pointer
@@ -108,4 +115,3 @@ a {
   }
 }
 </style>
-
