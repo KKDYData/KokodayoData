@@ -455,11 +455,14 @@ const StageType = {
   act9mini:'Act·13.5·红松林',
   act13side:'Act·14·长夜临光',
   act14side:'Act·15·风雪过境',
+  act15side:'Act·16·将进酒',
+  act10mini:'Act·16.5·阴云火花',
+  act16side:'Act·17·吾导先路',
   ro: 'Ro_刻俄柏的灰蕈迷境',
   rune: '危机合约',
   memory:'干员密录',
   rogue:'刻俄柏的灰蕈迷境[集成战略]',
-  rogue1: '傀影与猩红狐钻[集成战略]',
+  rogue1: '傀影与猩红孤钻[集成战略]',
 }
 
 const Directions = {

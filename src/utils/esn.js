@@ -93,6 +93,11 @@ const enemySkillNameKey = {
   CIRCLEATTACK2:'肆虐风雪[第二阶段]',
   BLINK2:'闪现[第二阶段]',
   SHIELD:'召唤护盾',
+  POWERATTACK:'强力击',
+  INVISIBLESHIELD:'隐匿护盾',
+  BOUNCEATTACKP1:'弹射攻击[一阶段]',
+  BOUNCEATTACKP2:'弹射攻击[二阶段]',
+  NOONARRIVED:'皆为尘土',
 }
 
 const ENEMY_TALENT_NAME = {
@@ -101,6 +106,7 @@ const ENEMY_TALENT_NAME = {
   atk: '攻击',
   atkup: '攻击↑',
   AtkUp:'攻击↑',
+  Atkup:'攻击↑',
 
   def: '防御',
   defup: '防御↑',
@@ -348,7 +354,7 @@ const ENEMY_TALENT_NAME = {
   'enemy_blkswb_t_2[reborn]':'阻挡[第二阶段]',
   ClearSp:'瞬息杀机',
 
-  //傀影肉鸽
+  //猩红孤钻
   AttackSpeedUp:'攻速提升',
   stack_cnt:'需要次数',
   warning_stack_cnt:'显示攻击预警需要次数',
@@ -363,6 +369,45 @@ const ENEMY_TALENT_NAME = {
   token:'召唤物',
   hprecovery:'生命恢复',
   hp_recovery_per_sec_by_max_hp_ratio:'每秒恢复最大生命百分比',
+
+  //将进酒
+  DeadSpawn:'本体现身',
+  DeadBoom:'亡语',
+  atk_scale_init:'初始伤害倍率',
+  atk_scale_add:'伤害倍率增加',
+  InvisibleShield:'隐匿护盾',
+
+  //岁相
+  AppearMode:'现世',
+  AppearS1:'现世[一阶段]',
+  hp_ratio_per_fire:'磷火回复生命倍率',
+  Bristleback:'侧背',
+  NormalAttackS3:'普通攻击[三阶段]',
+  DevourMsfsui:'吸收磷火',
+  delay_to_appear:'延时出现',
+  wait_other_finish:'需求离场敌人数量',
+
+//吾先导咯
+shotbuff:'使用弹药',
+'attack@headshot_sp':'持有弹药量',
+'attack@headshot_atk_scale':'弹药射击攻击倍率',
+'attack@headshot_ep_damage_ratio':'弹药射击元素损伤倍率',
+shottrap:'射击装置',
+'attack@trapdamage':'对装置伤害',
+'attack@headshot_trapdamage':'弹药射击对装置伤害',
+'attack@combat_atk_scale':'特殊攻击倍率',
+'attack@headshot_disarmed_duration':'弹药射击缴械时长',
+'attack@s2mode_boom_atk':'爆炸倍率',
+'attack@s2mode_boom_atk_totrap':'爆炸对装置伤害',
+'attack@s2mode_ep_fire_damage':'爆炸元素损伤值',
+
+//安多恩
+SmokeBombTriggerP1:'释放光赐予苦[一阶段]',
+SmokeBombTriggerP2:'释放光赐予苦[二阶段]',
+SmokeBomb:'光赐予苦闪避几率与减伤倍率',
+PassiveP2:'第二形态',
+recovery_time:'无敌时间',
+martyr_bounce_to_wpnsts:'跳到冰淇淋机的伤害'
 }
 
 export { enemySkillNameKey, ENEMY_TALENT_NAME }
