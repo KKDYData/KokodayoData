@@ -50,7 +50,7 @@
       :phase="phase"
     />
   </view>
-  <Equip :data="equips" />
+  <Equip v-if="equips.length" :data="equips" />
   <view>
     <Title slim-bar title-cn="技能" slim :size="30" />
     <view class="flex">
