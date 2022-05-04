@@ -4,7 +4,7 @@ const { Queue } = require('@kkdy/queue')
 const { instance } = require('./instance')
 const fs = require('fs')
 
-async function updateActMap(root, filter = '') {
+async function updateActMap(root, filter = '', filterFile = '') {
   const lvs = fs.readdirSync(path.resolve(__dirname, root))
   const q = Queue.of(12)
   lvs.forEach((subp) => {
@@ -13,25 +13,30 @@ async function updateActMap(root, filter = '') {
       return
     }
 
-    son.forEach((p) => {
-      const levelId = p.slice(0, -5)
-      q.pushTask(() => {
-        const map = JSON.parse(
-          fs.readFileSync(
-            path.resolve(__dirname, path.join(root, subp, `/${levelId}.json`)),
-            {
-              encoding: 'utf-8',
-            }
+    son
+      .filter((e) => e.includes(filterFile))
+      .forEach((p) => {
+        const levelId = p.slice(0, -5)
+        q.pushTask(() => {
+          const map = JSON.parse(
+            fs.readFileSync(
+              path.resolve(
+                __dirname,
+                path.join(root, subp, `/${levelId}.json`)
+              ),
+              {
+                encoding: 'utf-8',
+              }
+            )
           )
-        )
-        return instance
-          .post('/update/map', {
-            levelId,
-            data: map,
-          })
-          .then((e) => console.log('push', levelId))
+          return instance
+            .post('/update/map', {
+              levelId,
+              data: map,
+            })
+            .then((e) => console.log('push', levelId))
+        })
       })
-    })
   })
   await q.allDone()
 }
