@@ -26,9 +26,10 @@ export const useListStore = defineStore({
   // optional getters
   getters: {
     latestChars(): BaseCharIndex[] {
+      const newList = ['艾丽妮', '流明', '归溟幽灵鲨', '掠风']
       const res = this.charList
         .filter((e) => e.profession !== IToken.Profession.Token)
-        .splice(-20)
+        .filter((e) => newList.includes(e.name))
       console.log('res', res)
       return res
     },
