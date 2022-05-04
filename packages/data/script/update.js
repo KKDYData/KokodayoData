@@ -23,7 +23,7 @@ const { instance: ins } = require('./instance')
   // await updatePatchInfo()
   // await updateTeamInfo()
   // await updateEquip()
-  // await updateChars()
+  await updateChars()
   // await updateAct()
   // await updateGachaPool()
   // const res = await ins.post('/update/gachaPool/name', {
@@ -35,21 +35,33 @@ const { instance: ins } = require('./instance')
   // await updateEnemies()
   // await updateActMap(
   //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
-  //   'act16side'
+  //   'act17side'
   // )
   // await updateActMap(
-  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/roguelike/'
-  //   // 'campaign'
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt',
+  //   'hard',
+  //   '9'
   // )
   // await updateActMap('../ArknightsGameData/zh_CN/gamedata/levels/obt/', 'rune')
   // await updateActMap(
   //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/',
   //   'campaign'
   // )
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/',
+  //   'memory'
+  // )
+
+  // await updateActMap(
+  //   '../ArknightsGameData/zh_CN/gamedata/levels/obt/',
+  //   'weekly'
+  // )
 
   // await updateRogueStageInfo('_n_')
-  // await updateStageInfo('campaign')
-  await updateStageInfo('act16side')
+  // await updateStageInfo('hard_09')
+  // await updateStageInfo('act17side')
+  // await updateStageInfo('camp')
+  // await updateStageInfo('weekly')
   // return
   // const res = await ins.get('/data/map/list', {
   //   // id: 'char_1001_amiya2',
@@ -239,21 +251,24 @@ function updateChars() {
   ] //.filter(([key]) => key === 'char_502_nblade')
 
   const queue = Queue.of(12)
-  list.forEach(([id, data], i) => {
-    // if (i > 0) return
-    const t = () =>
-      ins
-        .post('/update/char', { id, data, voiceLangDict: voideDict[id] })
-        .then(() => {
-          console.log('char', queue.total, queue.done)
-        })
-        .catch((err) => {
-          console.log('err', id, err)
-          queue.pushTask(t)
-        })
 
-    queue.pushTask(t)
-  })
+  list
+    // .filter((e) => newList.includes(e[1].name))
+    .forEach(([id, data], i) => {
+      // if (i > 0) return
+      const t = () =>
+        ins
+          .post('/update/char', { id, data, voiceLangDict: voideDict[id] })
+          .then(() => {
+            console.log('char', queue.total, queue.done)
+          })
+          .catch((err) => {
+            console.log('err', id, err)
+            queue.pushTask(t)
+          })
+
+      queue.pushTask(t)
+    })
 
   return queue.allDone()
 }
