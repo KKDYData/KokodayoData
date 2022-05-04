@@ -34,10 +34,10 @@
           style="width: 100%"
         >
           <AgentIcon
-            class="mr-40px"
-            :id="'a' + i"
             v-for="(char, i) in latestChars"
+            :id="'a' + i"
             :key="i"
+            class="mr-40px"
             :data="char"
           />
         </scroll-view>
@@ -58,9 +58,7 @@
         class="bg-white border rounded-15px m-2 mt-6 text-xs py-3 px-2"
         style="border-color: #707070"
       >
-        <view class="truncate-overflow" style="--max-lines: 4">
-          emmm，功能还在慢慢更新
-        </view>
+        <UpdateMessage class="truncate-overflow" style="--max-lines: 4" />
       </view>
     </view>
 
@@ -78,6 +76,7 @@
         </view>
       </view>
     </view>
+    <ItemPopup />
   </view>
 </template>
 
@@ -90,6 +89,10 @@ import { Title } from '/@/components/Title'
 import { AgentIcon } from '/@/components/AgentIcon'
 import { useListStore } from '/@/store'
 import { NavigationItems } from './constants'
+import UpdateMessage from './UpdateMessage.vue'
+import { ItemPopup, providePopupState } from '/@/components/Popup'
+
+providePopupState()
 
 const banners = [
   { name: '', url: 'https://andata.somedata.top/dataX/assetes/banner2.jpg' },
