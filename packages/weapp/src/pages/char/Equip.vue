@@ -22,7 +22,16 @@
         />
       </view>
     </view>
-    <view>{{ cur }}</view>
+    <view v-if="selectedEquip">
+      <Title
+        :title-cn="selectedEquip.info.typeName"
+        slim
+        :size="24"
+        class="mr-auto"
+      />
+      <view>{{ selectedEquip.info.uniEquipDesc }}</view>
+    </view>
+    <Waiting />
   </view>
 </template>
 
@@ -30,10 +39,11 @@
 import { IBattleEquip, IUniEquip } from '@kkdy/data'
 import { Skeleton } from '/@/components/Skeleton'
 import { Title } from '/@/components/Title'
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
+import Waiting from '/@/components/Waiting/Waiting.vue'
 const baseUrl = 'https://andata.somedata.top/dataX/char/equip'
 
-defineProps<{
+const props = defineProps<{
   data: {
     info: IUniEquip.IInfo
     equipId: string
@@ -42,4 +52,7 @@ defineProps<{
 }>()
 
 const cur = ref('')
+const selectedEquip = computed(() => {
+  return props.data.find((e) => e.equipId === cur.value)
+})
 </script>

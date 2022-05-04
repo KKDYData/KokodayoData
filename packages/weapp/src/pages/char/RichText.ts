@@ -9,17 +9,16 @@ export function convert(text: string, index = 0, tagName?: string) {
     const cur = text[i]
     if (cur === '<') {
       matchingTag.push(cur)
+      // 准备转移到子节点处理
+      if (normalText) {
+        content.push(normalText)
+        normalText = ''
+      }
     } else if (cur === '>' && matchingTag.length) {
       const curTagName = matchingTag.slice(1).join('')
       if (curTagName !== '/') {
         // 判断是否是tag
         if (['@', '$'].includes(curTagName[0])) {
-          // 准备转移到子节点处理
-          if (normalText) {
-            content.push(normalText)
-            normalText = ''
-          }
-
           // 创建子节点
           const node = convert(text, i + 1, curTagName)
           content.push(node)
