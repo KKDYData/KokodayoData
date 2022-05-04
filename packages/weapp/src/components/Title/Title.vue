@@ -21,7 +21,7 @@
       <view
         class="title-content"
         :style="{ fontSize, lineHeight: fontSize }"
-        :class="{ 'font-bold': !slim, slider, slim }"
+        :class="{ 'font-bold': !slim, slider, slim, without_en: !titleEn }"
       >
         {{ titleCn }}
       </view>

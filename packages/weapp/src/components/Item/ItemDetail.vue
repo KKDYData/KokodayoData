@@ -6,6 +6,7 @@
       <Skeleton :src="itemImg" :size="100" class="mr-30rpx" />
       <Title slim-bar :title-cn="data.name" slim :size="30" />
     </view>
+    <Waiting />
     <view class="text-24rpx">
       <view class="px-24rpx">
         <view class="mb-16rpx">
@@ -20,7 +21,7 @@
         <Title title-cn="合成配方" slider slim :size="24" />
         <view class="flex items-center">
           <view
-            v-for="{ costs, formulaId, goldCost, extraOutcomeGroup } in formula"
+            v-for="{ costs, formulaId, goldCost } in formula"
             :key="formulaId"
           >
             <Item v-if="goldCost" id="4001" :count="goldCost" son />
@@ -39,11 +40,11 @@
           <view
             v-for="drop in dropList"
             :key="drop.stageId"
-            class="flex justify-around my-10rpx"
+            class="flex my-10rpx items-center"
           >
-            <view>{{ drop.stageId }}</view>
-            <view>{{ drop.times }}</view>
-            <view>{{ percent(drop) }}</view>
+            <Title :title-cn="drop.stageId" slim :size="28" />
+            <text class="drop-item-label">统计次数{{ drop.times }}</text>
+            <text class="drop-item-label">掉率{{ percent(drop) }}</text>
           </view>
         </view>
       </view>
@@ -56,6 +57,7 @@ import { storeToRefs } from 'pinia'
 import { computed, defineAsyncComponent } from 'vue'
 import { Skeleton } from '../Skeleton'
 import { Title } from '../Title'
+import Waiting from '/@/components/Waiting/Waiting.vue'
 import { useFormula } from './formula'
 import { useItemImg } from './itemImg'
 import { MatrixElement, useItemsStore } from '/@/store/items'
@@ -77,3 +79,8 @@ const dropList = computed(() => dropMap.value.get(props.data.itemId))
 const percent = (dropInfo: MatrixElement) =>
   Math.round((dropInfo.quantity / dropInfo.times) * 100) + '%'
 </script>
+<style lang="styl">
+.drop-item-label {
+  @apply bg-hex-707070  ml-10rpx text-white px-27rpx py-10rpx overflow-hidden rounded
+}
+</style>

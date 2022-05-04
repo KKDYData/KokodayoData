@@ -26,7 +26,7 @@ export default defineConfig({
       none: '0',
       sm: '0.125rem',
       //! 改5px
-      DEFAULT: '5px',
+      DEFAULT: '10rpx',
       md: '0.375rem',
       lg: '0.5rem',
       full: '9999px',
