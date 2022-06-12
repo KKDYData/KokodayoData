@@ -29,7 +29,13 @@
         :size="24"
         class="mr-auto"
       />
-      <view>{{ selectedEquip.info.uniEquipDesc }}</view>
+      <view
+        class="truncate-overflow"
+        style="--max-lines: 4"
+        @touchend="openEquip"
+      >
+        {{ selectedEquip.info.uniEquipDesc }}
+      </view>
     </view>
     <Waiting />
   </view>
@@ -55,4 +61,6 @@ const cur = ref('')
 const selectedEquip = computed(() => {
   return props.data.find((e) => e.equipId === cur.value)
 })
+
+const openEquip = () => {}
 </script>

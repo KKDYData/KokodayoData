@@ -1,12 +1,15 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
   <view @touchend="open">
-    <view v-html="content" />
-    <Teleport v-if="itemState.state?.id === innerId" :to="'#item-popup'">
+    <rich-text :nodes="content" />
+    <Teleport
+      v-if="itemState.state?.id === innerId && itemState"
+      :to="itemState.state.el"
+    >
       <view class="h-60vh p-5">
         <Title title-cn="预告？" italic />
         <view class="mt-20rpx">
-          <view v-html="content" />
+          <rich-text :nodes="content" />
         </view>
       </view>
     </Teleport>
@@ -23,7 +26,7 @@ const innerId = genPopupId()
 const itemState = usePopupState()
 
 const content = `
-<h2 id="todo-list">Todo List</h2>
+<h2 id="todo-list">待完成</h2>
 <ol>
 <li>[ ] 干员列表入口，现在只能看最新的几个</li>
 <li>[ ] 首页信息动态更新</li>

@@ -53,10 +53,15 @@
   <Equip v-if="equips.length" :data="equips" />
   <view>
     <Title slim-bar title-cn="技能" slim :size="30" />
-    <view class="flex">
+    <view class="flex justify-between items-center">
       <view>
-        showSkillCost
-        <switch :checked="showSkillCost" @change="handleChange" />
+        <RadioButtonGroup
+          v-model="showType"
+          :options="[
+            { label: '技能数据', value: 'data' },
+            { value: 'cost', label: '升级消耗' },
+          ]"
+        />
       </view>
       <NumberSelector
         v-model="skillLv"
@@ -82,7 +87,7 @@
       :phase="phase"
       :rank="rank"
       :skill-cost="skillCost[i]"
-      :show-cost="showSkillCost"
+      :show-type="showType"
     />
   </view>
   <view v-if="data">
@@ -126,6 +131,7 @@ import Equip from './Equip.vue'
 import { Item } from '/@/components/Item'
 import { reactify } from '@vueuse/core'
 import { useI18n } from 'vue-i18n'
+import { RadioButtonGroup } from '/@/components/RadioButtonGroup'
 
 const props = defineProps<{
   data: IChar.IData
@@ -137,7 +143,6 @@ const props = defineProps<{
   }[]
 }>()
 const { t } = useI18n()
-console.log('t', t)
 const {
   favorLv,
   favorRange,
@@ -150,7 +155,6 @@ const {
   status,
   extraStatus,
   skillCost,
-  skillCostList,
   skillLv,
   skillRange,
 } = useStatus(props.data)
@@ -163,11 +167,8 @@ const buildStatus = buildStatusArray(statusToCnChar)
 
 const statusList = reactify(buildStatus)(status)
 
-const showSkillCost = ref(false)
+const showType = ref<'data' | 'cost'>('data')
 
-const handleChange = () => {
-  showSkillCost.value = !showSkillCost.value
-}
 console.log('list', skillCost.value)
 
 const evolveGoldCost = [

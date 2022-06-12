@@ -10,7 +10,7 @@
           <Tag :style="spType.style">{{ spType.value }}</Tag>
           <Tag class="ml-15rpx">{{ skillType.value }}</Tag>
         </view>
-        <view class="flex mb-8rpx mt-15rpx">
+        <view class="flex mb-8rpx mt-15rpx items-center">
           <view class="w-90rpx">
             <KIcon name="iconbofang" />
             {{ state.spData.initSp }}
@@ -24,8 +24,12 @@
             {{ state.duration }}
           </view>
         </view>
-        <rich-text v-show="!showCost" class="text-xs" :nodes="changeAttackSpeed(state)" />
-        <view v-show="showCost">
+        <rich-text
+          v-show="showType === 'data'"
+          class="text-xs"
+          :nodes="changeAttackSpeed(state)"
+        />
+        <view v-show="showType === 'cost'">
           <view v-if="skillCost">
             <view
               v-for="item in skillCost.levelUpCost"
@@ -46,10 +50,11 @@ import { IChar, ISkill } from '@kkdy/data'
 import { computed, toRef } from 'vue'
 import { changeAttackSpeed } from './utils'
 import { Skeleton } from '/@/components/Skeleton'
-const baseUrl = 'https://andata.somedata.top/dataX/skills/pics'
 import { useSpType, useSkillType } from 'core'
 import { Tag } from '/@/components/Tag'
-import { Item } from '/@/components/Item'
+import { Item } from '/@/components/Item/'
+
+const baseUrl = 'https://andata.somedata.top/dataX/skills/pics'
 
 const props = defineProps<{
   data: { lvData: ISkill.Level; skillId: string }
@@ -57,7 +62,7 @@ const props = defineProps<{
   phase: number
   level: number
   skillCost: Omit<IChar.LevelUpCostCond, 'lvlUpTime'> & { lvUpTime?: number }
-  showCost: boolean
+  showType: 'data' | 'cost'
 }>()
 
 const state = computed(() => {

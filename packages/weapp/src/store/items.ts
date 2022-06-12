@@ -8,18 +8,6 @@ const AssetsOrigin = 'https://andata.somedata.top'
 const target = 'data-2020'
 
 export const useItemsStore = defineStore('items', () => {
-  // id: 'items',
-  // state: (): {
-  //   itemMap: Map<string, IItem.IData>
-  //   dropMap: Map<string, any>
-  // } => {
-  //   return {
-  //     itemMap: new Map(),
-  //     dropMap: new Map(),
-  //   }
-  // },
-  // actions: {
-
   const itemMap = ref(new Map<string, IItem.IData>())
   const dropMap = ref(new Map<string, MatrixElement[]>())
 
@@ -51,11 +39,14 @@ export const useItemsStore = defineStore('items', () => {
     }
   }, 50)
 
+  const itemList = ref<string[]>([])
+
   return {
     itemMap,
     dropMap,
     getItem,
     initItemsStore,
+    itemList,
   }
 })
 

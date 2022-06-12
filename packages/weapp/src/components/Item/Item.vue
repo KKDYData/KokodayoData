@@ -2,29 +2,19 @@
   <view class="relative inline-block" @touchend="open">
     <Skeleton :src="itemImg" show :size="120" />
     <Tag v-if="count" class="item-count-tag">{{ count }}</Tag>
-    <Teleport
-      v-if="itemState.state?.id === innerId && !son"
-      :to="'#item-popup'"
-    >
-      <view class="h-60vh">
-        <view v-if="chlidrenList.length" @touchend="back"> back </view>
-        <ItemDetailVue v-if="curData" :key="curData.itemId" :data="curData" />
-      </view>
-    </Teleport>
   </view>
 </template>
 
 <script setup lang="ts">
 import { IItem } from '@kkdy/data'
-import { computed, ref } from 'vue'
+import { markRaw, ref } from 'vue'
 import { Skeleton } from '../Skeleton'
 import { Tag } from '../Tag'
 import { usePopupState } from '/@/components/Popup/inject'
 import { useItemsStore } from '/@/store/items'
 import { useItemImg } from './itemImg'
 import ItemDetailVue from './ItemDetail.vue'
-import { provideRootItemState, useRootItemState } from './rootItem'
-import { genPopupId } from '/@/components/Popup/genPopupId'
+import { usePopupStore } from '../Popup/popupStore'
 
 const props = defineProps<{
   id: string
@@ -32,25 +22,17 @@ const props = defineProps<{
   son?: boolean
 }>()
 
-const innerId = genPopupId()
-
 const pushChild = (data: IItem.IData) => {
-  chlidrenList.value.push(data)
+  itemsStore.itemList.push(data.itemId)
+  store.props = {
+    data: { ...data },
+  }
 }
-if (!props.son) provideRootItemState(pushChild)
-const rootItemState = useRootItemState()
-
-const chlidrenList = ref<IItem.IData[]>([])
 
 const data = ref<IItem.IData | null>(null)
-const curData = computed(() => {
-  if (chlidrenList.value.length)
-    return chlidrenList.value[chlidrenList.value.length - 1]
-  else return data.value
-})
 
 const itemsStore = useItemsStore()
-const itemState = usePopupState()
+const popupState = usePopupState()
 
 itemsStore.initItemsStore()
 itemsStore.getItem(props.id).then((res) => {
@@ -59,18 +41,20 @@ itemsStore.getItem(props.id).then((res) => {
 
 const itemImg = useItemImg(data)
 
+const store = usePopupStore()
 const open = () => {
   if (!data.value) return
   if (!props.son) {
-    itemState.setPopupId(innerId)
-    chlidrenList.value = []
-  } else if (rootItemState) {
-    rootItemState.emit(data.value)
+    store.comp = markRaw(ItemDetailVue)
+    store.props = {
+      data,
+    }
+    popupState.state!.show = true
+    itemsStore.itemList = [props.id]
+  } else {
+    console.log('emit', props.son, data.value)
+    pushChild(data.value)
   }
-}
-
-const back = () => {
-  chlidrenList.value.pop()
 }
 </script>
 

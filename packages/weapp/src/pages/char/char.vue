@@ -77,9 +77,7 @@ import {
   getProfessionIcon,
   getProffessionCn,
 } from '/@/components/AgentIcon/utils'
-// import { LabelText } from '/@/components/LabelText'
 import { ref } from 'vue'
-// import { Tag } from '/@/components/Tag'
 import ChatStatus from './charStatus.vue'
 import { convert } from './RichText'
 import { ItemPopup, providePopupState } from '/@/components/Popup'

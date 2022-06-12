@@ -3,7 +3,7 @@
     class="index-wrapper main-bg"
     :style="{
       paddingTop:
-        status.statusBarHeight > 43 ? status.statusBarHeight + 'px' : 0,
+        status.statusBarHeight! > 43 ? status.statusBarHeight + 'px' : 0,
     }"
   >
     <Scan />
