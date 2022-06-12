@@ -1,0 +1,17 @@
+# .github/workflows/git-sync.yml
+
+on: push
+jobs:
+  git-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: git-sync
+        uses: wei/git-sync@v3
+        with:
+          source_repo: "https://github.com/KKDYData/KokodayoData"
+          source_branch: "refs/remotes/source/*"
+          destination_branch: "refs/heads/*"
+          destination_repo: "git@codeup.aliyun.com:5f9bca5193de782518725af6/kkdy.git"
+          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }} # optional
+          source_ssh_private_key: ${{ secrets.SOURCE_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
+          destination_ssh_private_key: ${{ secrets.DESTINATION_SSH_PRIVATE_KEY }} # optional, will override `SSH_PRIVATE_KEY`
