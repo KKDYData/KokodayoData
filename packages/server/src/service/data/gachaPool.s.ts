@@ -39,7 +39,7 @@ export class GachaPoolService {
         ...pick(['id', 'data', 'link'], a),
         relativeChars: a.relativeChars.map(e => e.charId),
       }))
-      .filter(e => e.data.gachaPoolName.length === 4)
+      .filter(e => e.data.gachaPoolId.endsWith('_1'))
   }
 
   async updateByGachaPoolName(

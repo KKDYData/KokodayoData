@@ -100,6 +100,7 @@ export class CharService {
         'teamInfo',
         'relativeChars',
         'equips',
+        'relativeGachPools',
       ],
     })
   }
