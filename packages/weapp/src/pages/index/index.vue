@@ -58,7 +58,7 @@
         class="bg-white border rounded-15px m-2 mt-6 text-xs py-3 px-2"
         style="border-color: #707070"
       >
-        <UpdateMessage class="truncate-overflow" style="--max-lines: 4" />
+        <UpdateMessage />
       </view>
     </view>
 
