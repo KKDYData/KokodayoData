@@ -152,14 +152,28 @@ export class CharService {
 
   async listCharacters() {
     const list = await this.model.find({
-      select: ['charId', 'updatedDate', 'version', 'installId', 'name', 'data'],
+      select: [
+        'charId',
+        'updatedDate',
+        'version',
+        'installId',
+        'name',
+        'data',
+        'relativeGachPools',
+      ],
       relations: ['teamInfo'],
     })
 
     return list.map(char => ({
       ...omit(['data', 'teamInfo'], char),
       ...pick(
-        ['tagList', 'rarity', 'profession', 'subProfessionId'],
+        [
+          'tagList',
+          'rarity',
+          'profession',
+          'subProfessionId',
+          'relativeGachPools',
+        ],
         char.data
       ),
       teamInfo: char.teamInfo.map(info => omit(['color'], info.data)),
