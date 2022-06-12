@@ -1,8 +1,8 @@
 <template>
   <!-- eslint-disable vue/no-v-html -->
-  <view @touchend="open">
+  <view>
     <rich-text :nodes="content" />
-    <Teleport
+    <!-- <Teleport
       v-if="itemState.state?.id === innerId && itemState"
       :to="itemState.state.el"
     >
@@ -12,14 +12,14 @@
           <rich-text :nodes="content" />
         </view>
       </view>
-    </Teleport>
+    </Teleport> -->
   </view>
 </template>
 
 <script setup lang="ts">
 import { usePopupState } from '/@/components/Popup/inject'
 import { genPopupId } from '/@/components/Popup/genPopupId'
-import Title from '/@/components/Title/Title.vue'
+// import Title from '/@/components/Title/Title.vue'
 
 const innerId = genPopupId()
 

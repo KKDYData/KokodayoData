@@ -5,7 +5,7 @@ import { useSafeNumber } from '../utils/safeNumber'
 
 export const useSkill = (
   skillLv: Ref<number>,
-  data: { comment: string[]; data: ISkill.ISkill }[]
+  data: { comments: string[]; data: ISkill.ISkill }[]
 ) => {
   const lv = ref(0)
   biSyncRef(skillLv, lv)

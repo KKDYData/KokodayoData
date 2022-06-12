@@ -1,9 +1,8 @@
 module.exports = {
   env: {
-    NODE_ENV: '"production"'
+    NODE_ENV: '"production"',
   },
-  defineConstants: {
-  },
+  defineConstants: {},
   mini: {},
   h5: {
     /**
@@ -14,5 +13,9 @@ module.exports = {
      *     .use(require('webpack-bundle-analyzer').BundleAnalyzerPlugin, [])
      * }
      */
-  }
+  },
+  terser: {
+    //不能压缩，压缩之后组件会有问题
+    enable: false,
+  },
 }

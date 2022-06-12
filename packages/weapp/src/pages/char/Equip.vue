@@ -29,12 +29,8 @@
         :size="24"
         class="mr-auto"
       />
-      <view
-        class="truncate-overflow"
-        style="--max-lines: 4"
-        @touchend="openEquip"
-      >
-        {{ selectedEquip.info.uniEquipDesc }}
+      <view @touchend="openEquip">
+        {{ truncate(selectedEquip.info.uniEquipDesc, 4, 20) }}
       </view>
     </view>
     <Waiting />
@@ -47,6 +43,8 @@ import { Skeleton } from '/@/components/Skeleton'
 import { Title } from '/@/components/Title'
 import { computed, ref } from 'vue'
 import Waiting from '/@/components/Waiting/Waiting.vue'
+import { truncate } from '/@/utils'
+
 const baseUrl = 'https://andata.somedata.top/dataX/char/equip'
 
 const props = defineProps<{
@@ -57,7 +55,7 @@ const props = defineProps<{
   }[]
 }>()
 
-const cur = ref('')
+const cur = ref(props.data[0].equipId)
 const selectedEquip = computed(() => {
   return props.data.find((e) => e.equipId === cur.value)
 })
