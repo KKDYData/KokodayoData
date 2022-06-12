@@ -30,7 +30,7 @@ const mode = computed(() => {
 
 <style lang="styl">
 .tag {
-  @apply bg-dark-50 rounded-10px text-white  px-2 inline-block overflow-hidden text-center;
+  @apply bg-dark-50 rounded-5rpx text-white  px-2 inline-block overflow-hidden text-center;
 
   /* &.large {
     @apply text-32px leading-40px;

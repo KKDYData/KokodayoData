@@ -5,7 +5,6 @@
     :color="color"
     :style="style"
     :name="name.replace('icon', '')"
-    style="vertical-align: -0.3em"
   />
 </template>
 

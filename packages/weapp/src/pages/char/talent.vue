@@ -73,10 +73,6 @@ const isNext = computed(() => {
 })
 
 const toggle = () => {
-  console.log('toggle ?')
-  if (isNext.value) return
-  else {
-    emit('update:rank', nextState.value.requiredPotentialRank)
-  }
+  emit('update:rank', nextState.value.requiredPotentialRank)
 }
 </script>

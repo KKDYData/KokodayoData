@@ -5,6 +5,13 @@
     >
       <Skeleton :src="itemImg" :size="100" class="mr-30rpx" />
       <Title slim-bar :title-cn="data.name" slim :size="30" />
+      <view
+        v-if="itemList.length > 1"
+        class="text-28rpx ml-auto mr-10rpx"
+        @touchend="back"
+      >
+        返回
+      </view>
     </view>
     <Waiting />
     <view class="text-24rpx">
@@ -40,10 +47,12 @@
           <view
             v-for="drop in dropList"
             :key="drop.stageId"
-            class="flex my-10rpx items-center"
+            class="flex m-10rpx items-center"
           >
             <Title :title-cn="drop.stageId" slim :size="28" />
-            <text class="drop-item-label">统计次数{{ drop.times }}</text>
+            <text class="drop-item-label" style="margin-left: auto">
+              统计次数{{ drop.times }}
+            </text>
             <text class="drop-item-label">掉率{{ percent(drop) }}</text>
           </view>
         </view>
@@ -54,31 +63,45 @@
 <script setup lang="ts">
 import { IItem } from '@kkdy/data'
 import { storeToRefs } from 'pinia'
-import { computed, defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent, toRef } from 'vue'
 import { Skeleton } from '../Skeleton'
 import { Title } from '../Title'
 import Waiting from '/@/components/Waiting/Waiting.vue'
 import { useFormula } from './formula'
 import { useItemImg } from './itemImg'
 import { MatrixElement, useItemsStore } from '/@/store/items'
-
+import { usePopupStore } from '../Popup/popupStore'
+// import Item from './Item.vue'
 const Item = defineAsyncComponent(() => import('./Item.vue')) as any
 
 const props = defineProps<{
   data: IItem.IData
 }>()
 
-const itemImg = useItemImg(props.data)
-const formula = useFormula(props.data)
+const itemImg = useItemImg(toRef(props, 'data'))
+const formula = useFormula(toRef(props, 'data'))
 
 const itemsStore = useItemsStore()
-const { dropMap } = storeToRefs(itemsStore)
+const { dropMap, itemList } = storeToRefs(itemsStore)
 
 const dropList = computed(() => dropMap.value.get(props.data.itemId))
 
 const percent = (dropInfo: MatrixElement) =>
   Math.round((dropInfo.quantity / dropInfo.times) * 100) + '%'
+
+const store = usePopupStore()
+
+const back = async () => {
+  if (itemList.value.length < 1) return
+  itemList.value.pop()
+  const target = itemList.value[itemList.value.length - 1]
+  const data = await itemsStore.getItem(target)
+  store.props = {
+    data,
+  }
+}
 </script>
+
 <style lang="styl">
 .drop-item-label {
   @apply bg-hex-707070  ml-10rpx text-white px-27rpx py-10rpx overflow-hidden rounded

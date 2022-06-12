@@ -1,7 +1,7 @@
 import { IItem } from '@kkdy/data'
 import { inject, InjectionKey, provide } from 'vue'
 
-type E = (data: IItem.IData) => void
+type E = (data: IItem.IData, id: string | number) => void
 
 const RootItemKey: InjectionKey<{
   emit: E

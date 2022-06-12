@@ -1,14 +1,16 @@
-import { inject, InjectionKey, provide, reactive } from 'vue'
+import { inject, InjectionKey, provide, reactive, Ref } from 'vue'
 
 const PopupInjectionKey: InjectionKey<{
   id: string | number
   show: boolean
+  el: HTMLElement | null
 }> = Symbol('ItemInjectionKey')
 
 export const providePopupState = () => {
   const state = reactive({
     id: '',
     show: false,
+    el: null,
   })
   provide(PopupInjectionKey, state)
   return state
