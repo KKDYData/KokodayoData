@@ -23,7 +23,7 @@ const { instance: ins } = require('./instance')
   // await updatePatchInfo()
   // await updateTeamInfo()
   // await updateEquip()
-  await updateChars()
+  // await updateChars()
   // await updateAct()
   // await updateGachaPool()
   // const res = await ins.post('/update/gachaPool/name', {

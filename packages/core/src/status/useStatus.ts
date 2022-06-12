@@ -28,7 +28,7 @@ export function useStatus(data: IChar.IData) {
   )
 
   const { value: favorLv, range: favorRange } = useSafeNumber(0, 200)
-  const { value: rank, range: rankRange } = useSafeNumber(-1, 5)
+  const { value: rank, range: rankRange } = useSafeNumber(-1, 4)
 
   const favarStatus = computed(() =>
     calcStatusWithKeyFrame(data.favorKeyFrames, favorLv.value, true)

@@ -24,7 +24,7 @@
         :range-fn="
           (v) => ({
             value: v + rankRange.min,
-            label: String(v + rankRange.min + 1),
+            label: String(v + rankRange.min + 2),
             index: v,
           })
         "
