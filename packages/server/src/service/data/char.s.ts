@@ -100,6 +100,7 @@ export class CharService {
         'teamInfo',
         'relativeChars',
         'equips',
+        'relativeGachPools',
       ],
     })
   }
@@ -152,7 +153,7 @@ export class CharService {
   async listCharacters() {
     const list = await this.model.find({
       select: ['charId', 'updatedDate', 'version', 'installId', 'name', 'data'],
-      relations: ['teamInfo'],
+      relations: ['teamInfo', 'relativeGachPools'],
     })
 
     return list.map(char => ({
@@ -163,6 +164,7 @@ export class CharService {
       ),
       teamInfo: char.teamInfo.map(info => omit(['color'], info.data)),
       enName: char.data.appellation,
+      relativeGachPools: char.relativeGachPools.map(e => e.id),
     }))
   }
 

@@ -23,15 +23,15 @@ const { instance: ins } = require('./instance')
   // await updatePatchInfo()
   // await updateTeamInfo()
   // await updateEquip()
-  await updateChars()
+  // await updateChars()
   // await updateAct()
-  // await updateGachaPool()
-  // const res = await ins.post('/update/gachaPool/name', {
-  //   // startDate: new Date('2021/02/05 16:00:00'),
-  //   // endDate: new Date('2021/02/19 03:59:59'),
-  //   name: '地生五金',
-  //   chars: ['夕', '乌有'],
-  // })
+  await updateGachaPool()
+  const res = await ins.post('/update/gachaPool/name', {
+    // startDate: new Date('2021/02/05 16:00:00'),
+    // endDate: new Date('2021/02/19 03:59:59'),
+    name: '不协和音程',
+    chars: ['黑键', '濯尘芙蓉'],
+  })
   // await updateEnemies()
   // await updateActMap(
   //   '../ArknightsGameData/zh_CN/gamedata/levels/activities/',
@@ -238,7 +238,7 @@ function updateEquip() {
   return queue.allDone()
 }
 
-function updateChars() {
+function updateChars(newList = []) {
   const character_table = require('../ArknightsGameData/zh_CN/gamedata/excel/character_table.json')
   const patchChars =
     require('../ArknightsGameData/zh_CN/gamedata/excel/char_patch_table.json').patchChars
@@ -251,16 +251,17 @@ function updateChars() {
   ] //.filter(([key]) => key === 'char_502_nblade')
 
   const queue = Queue.of(12)
+  // const newList = ['濯尘芙蓉']
 
   list
-    // .filter((e) => newList.includes(e[1].name))
+    .filter((e) => !newList.length || newList.includes(e[1].name))
     .forEach(([id, data], i) => {
       // if (i > 0) return
       const t = () =>
         ins
           .post('/update/char', { id, data, voiceLangDict: voideDict[id] })
           .then(() => {
-            console.log('char', queue.total, queue.done)
+            console.log('char', queue.total, queue.done, data.name)
           })
           .catch((err) => {
             console.log('err', id, err)
@@ -314,12 +315,14 @@ async function updateGachaPool() {
   const acts =
     require('../ArknightsGameData/zh_CN/gamedata/excel/gacha_table.json').gachaPoolClient
   const q = Queue.of(12)
-  Object.values(acts).forEach((data) => {
-    q.pushTask(() =>
-      ins
-        .post('/update/gachaPool', data)
-        .then((e) => console.log('push', data.gachaIndex))
-    )
-  })
+  Object.values(acts)
+    .filter((e) => e.gachaPoolName === '不协和音程')
+    .forEach((data) => {
+      q.pushTask(() =>
+        ins
+          .post('/update/gachaPool', data)
+          .then((e) => console.log('push', data.gachaPoolName, data.gachaIndex))
+      )
+    })
   await q.allDone()
 }
